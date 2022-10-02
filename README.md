@@ -1,5 +1,7 @@
 # Swagger Parser
-
+[![pub package](https://img.shields.io/pub/v/carapacik_lints.svg)](https://pub.dev/packages/carapacik_lints)
+[![Style](https://img.shields.io/badge/style-carapacik_lints-40c4ff.svg)](https://github.com/Carapacik/carapacik_lints)
+[![Star on Github](https://img.shields.io/github/stars/Carapacik/swagger_parser.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/Carapacik/swagger_parser)
 <a href="https://omega-r.com/"><img src="./.github/readme/omega_logo.png" width="200" align="right"/></a>
 
 ## Dart package that generates REST clients and data classes from swagger json file
