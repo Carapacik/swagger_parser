@@ -1,4 +1,5 @@
 name: Tests
+
 on:
   push:
     branches:
@@ -6,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+
 jobs:
   test:
     name: "Run tests"
@@ -20,10 +22,10 @@ jobs:
           - 2.17.6
     steps:
       - uses: actions/checkout@v3
-      - name: Install dependencies
-        uses: dart-lang/setup-dart@v1.3
+      - uses: dart-lang/setup-dart@v1.3
         with:
           sdk: "${{ matrix.sdk }}"
+      - name: Install dependencies
         run: dart pub get
       - name: Analyze
         run: dart analyze
