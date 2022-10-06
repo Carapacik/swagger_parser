@@ -1,3 +1,8 @@
+## 0.2.1
+
+- Fixed README
+- Fixed workflow files
+
 ## 0.2.0
 
 - Fixed errors with generation of data classes containing "allOf"

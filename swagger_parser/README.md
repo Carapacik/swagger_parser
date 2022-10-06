@@ -2,7 +2,7 @@
 [![pub package](https://img.shields.io/pub/v/swagger_parser.svg)](https://pub.dev/packages/swagger_parser)
 [![Style](https://img.shields.io/badge/style-carapacik_lints-40c4ff.svg)](https://pub.dev/packages/carapacik_lints)
 [![Star on Github](https://img.shields.io/github/stars/Carapacik/swagger_parser.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/Carapacik/swagger_parser)
-[![build](https://github.com/Carapacik/swagger_parser/workflows/tests.yml/badge.svg)](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml)
+[![Tests](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml/badge.svg)](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml)
 
 ## Dart package that generates REST clients and data classes from swagger json file
 
@@ -27,7 +27,7 @@ An example of YAML is shown below
 ### Configure package
 ```yaml
 dev_dependencies:
-  swagger_parser: ^0.2.0
+  swagger_parser: ^0.2.1
 
 swagger_parser:
   json_path: assets/swagger.json # Required. Sets the json path directory for generated files
