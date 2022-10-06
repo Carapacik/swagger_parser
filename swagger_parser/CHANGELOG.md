@@ -1,3 +1,8 @@
+## 0.2.2
+
+- Remove swagger_parser section from pubspec.yaml
+- Update dependencies in example
+
 ## 0.2.1
 
 - Fixed README
