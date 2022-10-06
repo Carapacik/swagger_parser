@@ -12,7 +12,8 @@ String dartRetrofitClientTemplate({
 }) {
   final name = postfix != null ? restClient.name.toPascal + postfix : 'Client';
 
-  final sb = StringBuffer('''
+  final sb = StringBuffer(
+    '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../shared_models/')}
@@ -21,7 +22,8 @@ part '${postfix != null ? restClient.name.toSnake : 'rest_client'}.g.dart';
 @RestApi()
 abstract class $name {
   factory $name(Dio dio, {required String baseUrl}) = _$name;
-''');
+''',
+  );
   for (final request in restClient.requests) {
     sb.write(_toClientRequest(request));
   }
@@ -30,10 +32,12 @@ abstract class $name {
 }
 
 String _toClientRequest(UniversalRequest request) {
-  final sb = StringBuffer('''
+  final sb = StringBuffer(
+    '''
 
   ${request.isMultiPart ? '@MultiPart()\n  ' : ''}@${request.requestType.name.toUpperCase()}('${request.route}')
-  Future<${request.returnType == null ? 'void' : toSuitableType(request.returnType!, ProgrammingLanguage.dart)}> ${request.name}(''');
+  Future<${request.returnType == null ? 'void' : toSuitableType(request.returnType!, ProgrammingLanguage.dart)}> ${request.name}(''',
+  );
   if (request.parameters.isNotEmpty) {
     sb.write('{\n');
   }
