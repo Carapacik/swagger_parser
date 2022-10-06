@@ -1,0 +1,126 @@
+import '../config/yaml_config.dart';
+import '../parser/parser.dart';
+import '../utils/case_utils.dart';
+import '../utils/file_utils.dart';
+import 'fill_controller.dart';
+import 'generator_exception.dart';
+import 'models/generated_file.dart';
+import 'models/programming_lang.dart';
+import 'models/universal_data_class.dart';
+import 'models/universal_rest_client.dart';
+
+/// Handles whole cycle of generation.
+/// Can be provided with arguments
+/// to specify custom path to yaml config.
+class Generator {
+  /// Applies parameters set from yaml config file
+  /// and sets them to default if not found
+  Generator.fromYamlConfig(List<String> arguments) {
+    final yamlConfig = YamlConfig(arguments);
+
+    _outputDirectory = yamlConfig.outputDirectory;
+
+    final jsonPath = yamlConfig.jsonPath;
+    final configFile = jsonFile(jsonPath);
+    if (configFile == null) {
+      throw GeneratorException("Can't find json file at $jsonPath");
+    }
+    _jsonContent = configFile.readAsStringSync();
+
+    _programmingLanguage = ProgrammingLanguage.dart;
+    if (yamlConfig.language != null) {
+      final parsedLang = ProgrammingLanguage.fromString(yamlConfig.language);
+      if (parsedLang == null) {
+        throw GeneratorException(
+          "'language' field must be contained in ${ProgrammingLanguage.values}",
+        );
+      }
+      _programmingLanguage = parsedLang;
+    }
+
+    if (yamlConfig.freezed != null) {
+      _freezed = yamlConfig.freezed!;
+    }
+
+    if (yamlConfig.squishClients != null) {
+      _squishClients = yamlConfig.squishClients!;
+    }
+
+    _clientPostfix = 'Client';
+    if (yamlConfig.clientPostfix != null) {
+      _clientPostfix = yamlConfig.clientPostfix!;
+    }
+  }
+
+  /// Applies parameters directly from constructor
+  /// without Yaml file
+  Generator.fromString({
+    required String jsonContent,
+    required ProgrammingLanguage language,
+    String? clientPostfix,
+    bool freezed = false,
+    bool squishClients = false,
+  }) {
+    _jsonContent = jsonContent;
+    _outputDirectory = '';
+    _clientPostfix = clientPostfix ?? 'Client';
+    _programmingLanguage = language;
+    _squishClients = squishClients;
+    _freezed = freezed;
+  }
+
+  late final String _jsonContent;
+  late final String _outputDirectory;
+  late String _clientPostfix;
+  late ProgrammingLanguage _programmingLanguage;
+  bool _freezed = false;
+  bool _squishClients = false;
+
+  late final Iterable<UniversalDataClass> _dataClasses;
+  late final Iterable<UniversalRestClient> _restClients;
+
+  /// Generates files based on swagger json
+  Future<void> generateFiles() async {
+    _parseSwaggerJson();
+    await _generateFiles();
+  }
+
+  /// Generates content
+  /// and return list of [GeneratedFile]
+  Future<List<GeneratedFile>> generateContent() async {
+    _parseSwaggerJson();
+    return _fillContent();
+  }
+
+  /// Parse json content and fill list of [UniversalRestClient]
+  /// and list of [UniversalDataClass]
+  void _parseSwaggerJson() {
+    final parser = OpenApiJsonParser(_jsonContent);
+    _restClients = parser.parseRestClients();
+    _dataClasses = parser.parseDataClasses();
+  }
+
+  Future<void> _generateFiles() async {
+    final files = await _fillContent();
+    for (final file in files) {
+      await generateFile(_outputDirectory, file);
+    }
+  }
+
+  Future<List<GeneratedFile>> _fillContent() async {
+    final writeController = FillController(
+      clientPostfix: _clientPostfix.toPascal,
+      programmingLanguage: _programmingLanguage,
+      freezed: _freezed,
+      squishClients: _squishClients,
+    );
+    final files = <GeneratedFile>[];
+    for (final client in _restClients) {
+      files.add(await writeController.fillRestClientContent(client));
+    }
+    for (final dataClass in _dataClasses) {
+      files.add(await writeController.fillDtoContent(dataClass));
+    }
+    return files;
+  }
+}
