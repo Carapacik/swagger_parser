@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:swagger_parser_pages/utils/file_utils.dart';
@@ -18,6 +16,13 @@ class _GeneratorContentState extends State<GeneratorContent> {
   bool _isFreezed = false;
   bool _squishClients = false;
   ProgrammingLanguage _language = ProgrammingLanguage.dart;
+
+  @override
+  void dispose() {
+    _jsonController.dispose();
+    _clientPostfix.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
