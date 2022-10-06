@@ -1,0 +1,31 @@
+name: Tests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  test:
+    name: "Run tests"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./swagger_parser
+    strategy:
+      matrix:
+        sdk:
+          - stable
+          - 2.17.6
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: "${{ matrix.sdk }}"
+        run: dart pub get
+      - name: Analyze
+        run: dart analyze
+      - name: Run tests
+        run: dart run test
