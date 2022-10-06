@@ -12,10 +12,12 @@ String kotlinRetrofitClientTemplate({
   String? postfix,
 }) {
   final name = postfix != null ? restClient.name.toPascal + postfix : 'Client';
-  final sb = StringBuffer('''
+  final sb = StringBuffer(
+    '''
 import retrofit2.http.*
 
-interface $name {''');
+interface $name {''',
+  );
   for (final request in restClient.requests) {
     sb.write(_toClientRequest(request));
   }
@@ -24,10 +26,12 @@ interface $name {''');
 }
 
 String _toClientRequest(UniversalRequest request) {
-  final sb = StringBuffer('''
+  final sb = StringBuffer(
+    '''
 
     ${request.isMultiPart ? '@MultiPart\n    ' : ''}@${request.requestType.name.toUpperCase()}("${request.route}")
-    suspend fun ${request.name}(''');
+    suspend fun ${request.name}(''',
+  );
   if (request.parameters.isEmpty) {
     sb.write(')\n');
     return sb.toString();
