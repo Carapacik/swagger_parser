@@ -18,7 +18,9 @@ dev_dependencies:
   freezed: ^2.0.0
   json_serializable: ^6.0.0
   retrofit_generator: ^4.0.0
-  swagger_parser: ^0.2.0
+  swagger_parser:
+    path:
+      ../
 
 flutter:
   uses-material-design: true
