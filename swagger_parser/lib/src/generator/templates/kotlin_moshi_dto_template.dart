@@ -17,7 +17,8 @@ data class ${dataClass.name.toPascal}(${_parameters(dataClass.parameters)}${data
 
 String _parameters(List<UniversalType> parameters) => parameters
     .map(
-      (e) => '${e.name != e.jsonKey ? '\n    @Json("${e.jsonKey}")' : ''}\n    '
+      (e) =>
+          '${e.jsonKey != null && e.name != e.jsonKey ? '\n    @Json("${e.jsonKey}")' : ''}\n    '
           'var ${e.name}: ${toSuitableType(e, ProgrammingLanguage.kotlin)}',
     )
     .join(',');

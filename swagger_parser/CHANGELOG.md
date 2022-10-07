@@ -1,3 +1,7 @@
+## 0.2.3
+
+- Fixed error in MultiPart with single $ref
+
 ## 0.2.2
 
 - Remove swagger_parser section from pubspec.yaml

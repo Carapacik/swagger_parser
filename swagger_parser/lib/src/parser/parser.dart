@@ -146,11 +146,10 @@ class OpenApiJsonParser {
           throw ParserException('Response must always have a content type');
         }
         if (isMultiPart) {
-          for (final e in (contentType[_schemaVar][_propertiesVar]
-                  as Map<String, dynamic>)
-              .entries) {
+          if ((contentType[_schemaVar] as Map<String, dynamic>)
+              .containsKey(_refVar)) {
             final typeWithImport = _arrayWithDepth(
-              e.value as Map<String, dynamic>,
+              contentType[_schemaVar] as Map<String, dynamic>,
             );
             final currentType = typeWithImport.type;
             if (typeWithImport.import != null) {
@@ -162,13 +161,39 @@ class OpenApiJsonParser {
                 type: UniversalType(
                   type: currentType.type,
                   arrayDepth: currentType.arrayDepth,
-                  name: e.key,
+                  name: 'file',
                   isRequired: currentType.isRequired,
                   format: currentType.format,
                 ),
-                name: e.key,
               ),
             );
+          }
+          if ((contentType[_schemaVar] as Map<String, dynamic>)
+              .containsKey(_propertiesVar)) {
+            for (final e in (contentType[_schemaVar][_propertiesVar]
+                    as Map<String, dynamic>)
+                .entries) {
+              final typeWithImport = _arrayWithDepth(
+                e.value as Map<String, dynamic>,
+              );
+              final currentType = typeWithImport.type;
+              if (typeWithImport.import != null) {
+                imports.add(typeWithImport.import!);
+              }
+              types.add(
+                UniversalRequestType(
+                  parameterType: HttpParameterType.part,
+                  type: UniversalType(
+                    type: currentType.type,
+                    arrayDepth: currentType.arrayDepth,
+                    name: e.key,
+                    isRequired: currentType.isRequired,
+                    format: currentType.format,
+                  ),
+                  name: e.key,
+                ),
+              );
+            }
           }
         } else {
           final typeWithImport = _arrayWithDepth(
@@ -248,7 +273,7 @@ class OpenApiJsonParser {
         final request = UniversalRequest(
           isMultiPart: isMultiPart,
           name: (key + path).toCamel,
-          requestType: HTTPRequestType.fromString(key)!,
+          requestType: HttpRequestType.fromString(key)!,
           route: path,
           returnType:
               (_version == OpenApiVersion.v3_1 || _version == OpenApiVersion.v3)
@@ -380,7 +405,7 @@ class OpenApiJsonParser {
 
   bool _checkForBody(Map<String, dynamic> map) => map[_nameVar] == _bodyVar;
 
-  String _formatRef(String ref) => ref.split('/').last;
+  String _formatRef(String ref) => ref.split('/').last.toPascal;
 
   TypeWithImport _arrayWithDepth(
     Map<String, dynamic> map, {

@@ -38,7 +38,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                 controller: _jsonController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: 'Paste your JSON here',
+                  hintText: 'Paste your Swagger JSON here',
                   hintStyle: TextStyle(fontSize: 18),
                 ),
                 keyboardType: TextInputType.multiline,
@@ -148,12 +148,12 @@ class _GeneratorContentState extends State<GeneratorContent> {
                 ),
                 onPressed: () async {
                   await generateOutputs(
+                    context,
                     json: _jsonController.text,
                     clientPostfix: _clientPostfix.text,
                     language: _language,
                     useFreezed: _isFreezed,
                     squishClients: _squishClients,
-                    context: context,
                   );
                 },
               ),
@@ -165,13 +165,13 @@ class _GeneratorContentState extends State<GeneratorContent> {
   }
 }
 
-Future<void> generateOutputs({
+Future<void> generateOutputs(
+  BuildContext context, {
   required String json,
   required String clientPostfix,
   required ProgrammingLanguage language,
   required bool useFreezed,
   required bool squishClients,
-  required BuildContext context,
 }) async {
   final generator = Generator.fromString(
     jsonContent: json,

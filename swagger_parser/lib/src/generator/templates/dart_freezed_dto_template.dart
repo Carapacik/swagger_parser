@@ -24,7 +24,7 @@ class $className with _\$$className {
 String _parametersToString(List<UniversalType> parameters) => parameters
     .map(
       (e) =>
-          '${e.name != e.jsonKey ? "\n    @JsonKey(name: '${e.jsonKey}') " : '\n    '}required '
-          '${toSuitableType(e, ProgrammingLanguage.dart)} ${e.name},',
+          '${e.jsonKey != null && e.name != e.jsonKey ? "\n    @JsonKey(name: '${e.jsonKey}') " : '\n    '}'
+          'required ${toSuitableType(e, ProgrammingLanguage.dart)} ${e.name},',
     )
     .join();
