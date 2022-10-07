@@ -1,6 +1,6 @@
 {
-    "name": "swagger_parser_pages",
-    "short_name": "swagger_parser_pages",
+    "name": "SwaggerParser",
+    "short_name": "SwaggerParser",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
