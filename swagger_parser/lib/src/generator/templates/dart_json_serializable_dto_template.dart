@@ -17,7 +17,7 @@ class $className {
   $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersInConstructor(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''});
   
   factory $className.fromJson(Map<String, dynamic> json) => _\$${className}FromJson(json);
-  ${_parametersInClass(dataClass.parameters)}
+  ${_parametersInClass(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n' : ''}
   Map<String, dynamic> toJson() => _\$${className}ToJson(this);
 }
 ''';
@@ -26,8 +26,8 @@ class $className {
 String _parametersInClass(List<UniversalType> parameters) => parameters
     .map(
       (e) =>
-          '${e.name != e.jsonKey ? "\n  @JsonKey(name: '${e.jsonKey}')" : ''}\n  final '
-          '${toSuitableType(e, ProgrammingLanguage.dart)} ${e.name};',
+          '${e.jsonKey != null && e.name != e.jsonKey ? "\n  @JsonKey(name: '${e.jsonKey}')" : ''}\n'
+          '  final ${toSuitableType(e, ProgrammingLanguage.dart)} ${e.name};',
     )
     .join();
 

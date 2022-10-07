@@ -18,7 +18,7 @@ class UniversalRequest {
   final String name;
 
   /// HTTP type of request
-  final HTTPRequestType requestType;
+  final HttpRequestType requestType;
 
   /// Request route
   final String route;
@@ -33,7 +33,7 @@ class UniversalRequest {
   final bool isMultiPart;
 }
 
-enum HTTPRequestType {
+enum HttpRequestType {
   get,
   post,
   head,
@@ -44,8 +44,8 @@ enum HTTPRequestType {
   options,
   trace;
 
-  const HTTPRequestType();
+  const HttpRequestType();
 
-  static HTTPRequestType? fromString(final String type) =>
-      HTTPRequestType.values.firstWhereOrNull((e) => e.name == type);
+  static HttpRequestType? fromString(String type) =>
+      HttpRequestType.values.firstWhereOrNull((e) => e.name == type);
 }

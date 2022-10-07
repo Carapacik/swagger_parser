@@ -33,20 +33,22 @@ String _toClientRequest(UniversalRequest request) {
     suspend fun ${request.name}(''',
   );
   if (request.parameters.isEmpty) {
-    sb.write(')\n');
-    return sb.toString();
-  }
-  if (request.parameters.isNotEmpty) {
+    sb.write(')');
+  } else {
     final queryParameters =
         request.parameters.map((e) => '\n${_toQueryParameter(e)}').join(',');
     sb.write(queryParameters);
   }
   if (request.returnType == null) {
-    sb.write('\n    )\n');
+    if (request.parameters.isEmpty) {
+      sb.write('\n');
+    } else {
+      sb.write('\n    )\n');
+    }
     return sb.toString();
   }
   sb.write(
-    '\n    ): ${toSuitableType(request.returnType!, ProgrammingLanguage.kotlin)}\n',
+    ': ${toSuitableType(request.returnType!, ProgrammingLanguage.kotlin)}\n',
   );
   return sb.toString();
 }
