@@ -13,10 +13,10 @@ dependencies:
   retrofit: ^3.3.1
 
 dev_dependencies:
-  build_runner: ^2.2.1
+  build_runner: ^2.3.0
   carapacik_lints: ^1.2.2
   freezed: ^2.1.1
-  json_serializable: ^6.4.1
+  json_serializable: ^6.5.1
   retrofit_generator: ^4.2.0
   swagger_parser:
     path:

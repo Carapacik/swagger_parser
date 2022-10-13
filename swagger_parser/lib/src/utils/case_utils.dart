@@ -6,7 +6,7 @@ class CaseUtils {
 
   late List<String> _words;
 
-  static const _caseSymbolsList = ['_', '-', '/', '{', '}', ' '];
+  static const _caseSymbolsList = ['_', '-', '/', '{', '}', ' ', '.', ',', '#'];
   static const _upperRegex = r'[A-Z]$';
 
   List<String> _groupIntoWords(String text) {
