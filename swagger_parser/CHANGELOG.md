@@ -1,6 +1,10 @@
+## 0.2.4
+
+- Fixed error with '.' and ',' in url path
+
 ## 0.2.3
 
-- Fixed error in MultiPart with single $ref
+- Fixed error in MultiPart with single '$ref'
 
 ## 0.2.2
 
