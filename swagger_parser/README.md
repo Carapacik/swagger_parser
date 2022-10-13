@@ -28,7 +28,7 @@ An example of YAML is shown below
 ### Configure package
 ```yaml
 dev_dependencies:
-  swagger_parser: ^0.2.3
+  swagger_parser: ^0.2.4
 
 swagger_parser:
   json_path: assets/swagger.json # Required. Sets the json path directory for generated files
