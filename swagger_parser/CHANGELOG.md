@@ -1,3 +1,7 @@
+## 0.3.0
+
+- Add support for required annotations
+
 ## 0.2.4
 
 - Fixed error with '.' and ',' in url path
