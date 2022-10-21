@@ -54,4 +54,4 @@ String _toClientRequest(UniversalRequest request) {
 
 String _toQueryParameter(UniversalRequestType parameter) =>
     "    @${parameter.parameterType.type}(${parameter.name != null ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
-    'required ${toSuitableType(parameter.type, ProgrammingLanguage.dart)} ${parameter.type.name!.toCamel},';
+    '${parameter.type.isRequired ? 'required ' : ''}${toSuitableType(parameter.type, ProgrammingLanguage.dart)} ${parameter.type.name!.toCamel},';
