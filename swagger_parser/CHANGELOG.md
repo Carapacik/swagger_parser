@@ -1,6 +1,7 @@
 ## 0.3.0
 
 - Add support for required annotations
+- Fixed error with rest client parameters type in OpenApi v2
 
 ## 0.2.4
 
