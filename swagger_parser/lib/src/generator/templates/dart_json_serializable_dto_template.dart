@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import '../../utils/case_utils.dart';
 import '../../utils/utils.dart';
 import '../models/programming_lang.dart';
@@ -27,9 +29,14 @@ String _parametersInClass(List<UniversalType> parameters) => parameters
     .map(
       (e) =>
           '${e.jsonKey != null && e.name != e.jsonKey ? "\n  @JsonKey(name: '${e.jsonKey}')" : ''}\n'
-          '  final ${toSuitableType(e, ProgrammingLanguage.dart)} ${e.name};',
+          '  final ${toSuitableType(e, ProgrammingLanguage.dart, isRequired: e.isRequired)} ${e.name};',
     )
     .join();
 
-String _parametersInConstructor(List<UniversalType> parameters) =>
-    parameters.map((e) => '\n    required this.${e.name},').join();
+String _parametersInConstructor(List<UniversalType> parameters) {
+  final sortedByRequired =
+      List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)));
+  return sortedByRequired
+      .map((e) => '\n    ${e.isRequired ? 'required ' : ''}this.${e.name},')
+      .join();
+}

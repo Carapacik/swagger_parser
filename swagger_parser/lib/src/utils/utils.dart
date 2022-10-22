@@ -13,9 +13,13 @@ String dartImports({required Set<String> imports, String? pathPrefix}) =>
         .join();
 
 /// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
-String toSuitableType(UniversalType type, ProgrammingLanguage lang) {
+String toSuitableType(
+  UniversalType type,
+  ProgrammingLanguage lang, {
+  bool isRequired = true,
+}) {
   if (type.arrayDepth == 0) {
-    return type.byLang(lang);
+    return type.byLang(lang, isRequired: isRequired);
   }
   final sb = StringBuffer();
   for (var i = 0; i < type.arrayDepth; i++) {
@@ -24,6 +28,9 @@ String toSuitableType(UniversalType type, ProgrammingLanguage lang) {
   sb.write(type.byLang(lang));
   for (var i = 0; i < type.arrayDepth; i++) {
     sb.write('>');
+  }
+  if (!isRequired) {
+    sb.write('?');
   }
   return sb.toString();
 }

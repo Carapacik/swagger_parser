@@ -522,27 +522,29 @@ data class ClassName(
     });
   });
 
-  group('JsonKey', () {
+  group('Required parameters', () {
     test('dart + json_serializable', () async {
       const dataClass = UniversalDataClass(
         name: 'ClassName',
-        imports: {},
+        imports: {'Another'},
         parameters: [
-          UniversalType(type: 'integer', name: 'intType', jsonKey: 'int_type'),
+          UniversalType(type: 'integer', name: 'intType', isRequired: false),
           UniversalType(
             type: 'string',
-            name: 'stringType',
-            jsonKey: 'stringType',
-          ),
-          UniversalType(
-            type: 'boolean',
-            name: 'boolType',
-            jsonKey: 'bool-type',
+            arrayDepth: 1,
+            name: 'list',
+            isRequired: false,
           ),
           UniversalType(
             type: 'Another',
-            name: 'anotherType',
-            jsonKey: 'another',
+            name: 'another',
+            isRequired: false,
+          ),
+          UniversalType(
+            type: 'Another',
+            arrayDepth: 2,
+            name: 'anotherList',
+            isRequired: false,
           ),
         ],
       );
@@ -550,27 +552,25 @@ data class ClassName(
       final filledContent = await fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
+import 'another.dart';
 
 part 'class_name.g.dart';
 
 @JsonSerializable()
 class ClassName {
   ClassName({
-    required this.intType,
-    required this.stringType,
-    required this.boolType,
-    required this.anotherType,
+    this.intType,
+    this.list,
+    this.another,
+    this.anotherList,
   });
   
   factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
   
-  @JsonKey(name: 'int_type')
-  final int intType;
-  final String stringType;
-  @JsonKey(name: 'bool-type')
-  final bool boolType;
-  @JsonKey(name: 'another')
-  final Another anotherType;
+  final int? intType;
+  final List<String>? list;
+  final Another? another;
+  final List<List<Another>>? anotherList;
 
   Map<String, dynamic> toJson() => _$ClassNameToJson(this);
 }
@@ -581,23 +581,25 @@ class ClassName {
     test('dart + freezed', () async {
       const dataClass = UniversalDataClass(
         name: 'ClassName',
-        imports: {},
+        imports: {'Another'},
         parameters: [
-          UniversalType(type: 'integer', name: 'intType', jsonKey: 'int_type'),
+          UniversalType(type: 'integer', name: 'intType', isRequired: false),
           UniversalType(
             type: 'string',
-            name: 'stringType',
-            jsonKey: 'stringType',
-          ),
-          UniversalType(
-            type: 'boolean',
-            name: 'boolType',
-            jsonKey: 'bool-type',
+            arrayDepth: 1,
+            name: 'list',
+            isRequired: false,
           ),
           UniversalType(
             type: 'Another',
-            name: 'anotherType',
-            jsonKey: 'another',
+            name: 'another',
+            isRequired: false,
+          ),
+          UniversalType(
+            type: 'Another',
+            arrayDepth: 2,
+            name: 'anotherList',
+            isRequired: false,
           ),
         ],
       );
@@ -605,6 +607,7 @@ class ClassName {
       final filledContent = await fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'another.dart';
 
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
@@ -612,10 +615,10 @@ part 'class_name.g.dart';
 @freezed
 class ClassName with _$ClassName {
   const factory ClassName({
-    @JsonKey(name: 'int_type') required int intType,
-    required String stringType,
-    @JsonKey(name: 'bool-type') required bool boolType,
-    @JsonKey(name: 'another') required Another anotherType,
+    int? intType,
+    List<String>? list,
+    Another? another,
+    List<List<Another>>? anotherList,
   }) = _ClassName;
   
   factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
@@ -627,23 +630,25 @@ class ClassName with _$ClassName {
     test('kotlin + moshi', () async {
       const dataClass = UniversalDataClass(
         name: 'ClassName',
-        imports: {},
+        imports: {'Another'},
         parameters: [
-          UniversalType(type: 'integer', name: 'intType', jsonKey: 'int_type'),
+          UniversalType(type: 'integer', name: 'intType', isRequired: false),
           UniversalType(
             type: 'string',
-            name: 'stringType',
-            jsonKey: 'stringType',
-          ),
-          UniversalType(
-            type: 'boolean',
-            name: 'boolType',
-            jsonKey: 'bool-type',
+            arrayDepth: 1,
+            name: 'list',
+            isRequired: false,
           ),
           UniversalType(
             type: 'Another',
-            name: 'anotherType',
-            jsonKey: 'another',
+            name: 'another',
+            isRequired: false,
+          ),
+          UniversalType(
+            type: 'Another',
+            arrayDepth: 2,
+            name: 'anotherList',
+            isRequired: false,
           ),
         ],
       );
@@ -656,16 +661,109 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ClassName(
-    @Json("int_type")
-    var intType: Int,
-    var stringType: String,
-    @Json("bool-type")
-    var boolType: Boolean,
-    @Json("another")
-    var anotherType: Another
+    var intType: Int?,
+    var list: List<String>?,
+    var another: Another?,
+    var anotherList: List<List<Another>>?
 )
 ''';
       expect(filledContent.contents, expectedContents);
     });
+  });
+
+  group('Put required parameters first', () {
+    test('dart + json_serializable', () async {
+      const dataClass = UniversalDataClass(
+        name: 'ClassName',
+        imports: {'Another'},
+        parameters: [
+          UniversalType(
+            type: 'integer',
+            name: 'intNotRequired',
+            isRequired: false,
+          ),
+          UniversalType(type: 'integer', name: 'intRequired'),
+          UniversalType(
+            type: 'Another',
+            name: 'anotherNotRequired',
+            isRequired: false,
+          ),
+          UniversalType(type: 'Another', name: 'list', arrayDepth: 1),
+        ],
+      );
+      const fillController = FillController();
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContents = r'''
+import 'package:json_annotation/json_annotation.dart';
+import 'another.dart';
+
+part 'class_name.g.dart';
+
+@JsonSerializable()
+class ClassName {
+  ClassName({
+    required this.intRequired,
+    required this.list,
+    this.intNotRequired,
+    this.anotherNotRequired,
+  });
+  
+  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  
+  final int? intNotRequired;
+  final int intRequired;
+  final Another? anotherNotRequired;
+  final List<Another> list;
+
+  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('dart + freezed', () async {
+      const dataClass = UniversalDataClass(
+        name: 'ClassName',
+        imports: {'Another'},
+        parameters: [
+          UniversalType(
+            type: 'integer',
+            name: 'intNotRequired',
+            isRequired: false,
+          ),
+          UniversalType(type: 'integer', name: 'intRequired'),
+          UniversalType(
+            type: 'Another',
+            name: 'anotherNotRequired',
+            isRequired: false,
+          ),
+          UniversalType(type: 'Another', name: 'list', arrayDepth: 1),
+        ],
+      );
+      const fillController = FillController(freezed: true);
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContents = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'another.dart';
+
+part 'class_name.freezed.dart';
+part 'class_name.g.dart';
+
+@freezed
+class ClassName with _$ClassName {
+  const factory ClassName({
+    required int intRequired,
+    required List<Another> list,
+    int? intNotRequired,
+    Another? anotherNotRequired,
+  }) = _ClassName;
+  
+  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    // In Kotlin this is optional
   });
 }

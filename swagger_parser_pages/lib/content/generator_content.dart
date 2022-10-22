@@ -11,11 +11,18 @@ class GeneratorContent extends StatefulWidget {
 }
 
 class _GeneratorContentState extends State<GeneratorContent> {
-  final TextEditingController _jsonController = TextEditingController();
-  final TextEditingController _clientPostfix = TextEditingController();
+  late final TextEditingController _jsonController;
+  late final TextEditingController _clientPostfix;
+  ProgrammingLanguage _language = ProgrammingLanguage.dart;
   bool _isFreezed = false;
   bool _squishClients = false;
-  ProgrammingLanguage _language = ProgrammingLanguage.dart;
+
+  @override
+  void initState() {
+    super.initState();
+    _jsonController = TextEditingController();
+    _clientPostfix = TextEditingController();
+  }
 
   @override
   void dispose() {
@@ -25,57 +32,55 @@ class _GeneratorContentState extends State<GeneratorContent> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
+  Widget build(BuildContext context) => Center(
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          runSpacing: 20,
           children: [
-            SizedBox(
-              height: 400,
-              width: 400,
-              child: TextField(
-                controller: _jsonController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Paste your Swagger JSON here',
-                  hintStyle: TextStyle(fontSize: 18),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400, maxHeight: 300),
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    hintText: 'Paste your Swagger JSON here',
+                    hintStyle: const TextStyle(fontSize: 18),
+                  ),
+                  controller: _jsonController,
+                  keyboardType: TextInputType.multiline,
+                  textAlignVertical: TextAlignVertical.top,
+                  maxLines: null,
+                  expands: true,
+                  style: const TextStyle(fontSize: 18),
                 ),
-                keyboardType: TextInputType.multiline,
-                textAlignVertical: TextAlignVertical.top,
-                maxLines: null,
-                expands: true,
-                style: const TextStyle(fontSize: 18),
               ),
             ),
-          ],
-        ),
-        Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              width: 400,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Change config parameters',
-                    style: TextStyle(
-                      fontSize: 32,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w400,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Config parameters',
+                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
                     ),
-                  ),
-                  const SizedBox(height: 30),
-                  ButtonTheme(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                    ),
-                    child: DropdownButton<String>(
-                      value: _language.name,
+                    const SizedBox(height: 24),
+                    TextField(
+                      controller: _clientPostfix,
+                      decoration: const InputDecoration(
+                        labelStyle: TextStyle(fontSize: 24),
+                        hintText: 'Postfix for client classes',
+                        hintStyle: TextStyle(fontSize: 24),
+                        border: InputBorder.none,
+                      ),
                       style: const TextStyle(fontSize: 24),
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButton<String>(
+                      value: _language.name,
+                      style: const TextStyle(fontSize: 24, color: Colors.white),
                       isExpanded: true,
                       icon: const RotatedBox(
                         quarterTurns: 1,
@@ -83,86 +88,67 @@ class _GeneratorContentState extends State<GeneratorContent> {
                       ),
                       underline: const SizedBox.shrink(),
                       elevation: 16,
-                      onChanged: (value) {
-                        setState(() {
-                          _language = ProgrammingLanguage.fromString(
-                            value,
-                          )!;
-                        });
-                      },
+                      onChanged: (value) =>
+                          setState(() => _language = ProgrammingLanguage.fromString(value)!),
                       items: ProgrammingLanguage.values
-                          .map<DropdownMenuItem<String>>((value) {
-                        return DropdownMenuItem<String>(
-                          value: value.name,
-                          child: Text(value.name),
-                        );
-                      }).toList(),
+                          .map<DropdownMenuItem<String>>(
+                            (value) => DropdownMenuItem<String>(
+                              value: value.name,
+                              child: Text(value.name),
+                            ),
+                          )
+                          .toList(),
                     ),
-                  ),
-                  const Divider(),
-                  TextField(
-                    controller: _clientPostfix,
-                    decoration: const InputDecoration(
-                      labelStyle: TextStyle(fontSize: 24),
-                      hintText: 'Postfix for client files',
-                      hintStyle: TextStyle(fontSize: 24),
-                      border: InputBorder.none,
-                    ),
-                    style: const TextStyle(fontSize: 24),
-                  ),
-                  const Divider(),
-                  LabeledCheckbox(
-                    label: 'Squish client folders into one?',
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    value: _squishClients,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _squishClients = newValue;
-                      });
-                    },
-                  ),
-                  if (_language == ProgrammingLanguage.dart) ...<Widget>[
-                    const Divider(),
+                    const SizedBox(height: 16),
                     LabeledCheckbox(
-                      label: 'Use freezed?',
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      value: _isFreezed,
+                      label: 'Squish client folders into one?',
+                      value: _squishClients,
                       onChanged: (newValue) {
                         setState(() {
-                          _isFreezed = newValue;
+                          _squishClients = newValue;
                         });
                       },
                     ),
+                    if (_language == ProgrammingLanguage.dart) ...[
+                      const SizedBox(height: 16),
+                      LabeledCheckbox(
+                        label: 'Use freezed?',
+                        value: _isFreezed,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _isFreezed = newValue;
+                          });
+                        },
+                      ),
+                    ],
+                    const SizedBox(height: 32),
+                    SizedBox(
+                      width: 300,
+                      height: 40,
+                      child: OutlinedButton(
+                        child: const Text(
+                          'Generate and download',
+                          style: TextStyle(fontSize: 24),
+                        ),
+                        onPressed: () async {
+                          await generateOutputs(
+                            context,
+                            json: _jsonController.text,
+                            clientPostfix: _clientPostfix.text,
+                            language: _language,
+                            useFreezed: _isFreezed,
+                            squishClients: _squishClients,
+                          );
+                        },
+                      ),
+                    ),
                   ],
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: 300,
-              height: 40,
-              child: ElevatedButton(
-                child: const Text(
-                  'Generate and download',
-                  style: TextStyle(fontSize: 24),
                 ),
-                onPressed: () async {
-                  await generateOutputs(
-                    context,
-                    json: _jsonController.text,
-                    clientPostfix: _clientPostfix.text,
-                    language: _language,
-                    useFreezed: _isFreezed,
-                    squishClients: _squishClients,
-                  );
-                },
               ),
-            ),
+            )
           ],
-        )
-      ],
-    );
-  }
+        ),
+      );
 }
 
 Future<void> generateOutputs(
@@ -186,9 +172,7 @@ Future<void> generateOutputs(
   } on Object catch (e) {
     debugPrint(e.toString());
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(e.toString()),
-      ),
+      SnackBar(content: Text(e.toString()), behavior: SnackBarBehavior.floating),
     );
   }
 }

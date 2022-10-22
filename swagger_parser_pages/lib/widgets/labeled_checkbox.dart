@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 class LabeledCheckbox extends StatelessWidget {
   const LabeledCheckbox({
     required this.label,
-    required this.padding,
     required this.value,
     required this.onChanged,
     super.key,
   });
 
   final String label;
-  final EdgeInsets padding;
   final bool value;
   final ValueChanged<bool> onChanged;
 
@@ -20,24 +18,22 @@ class LabeledCheckbox extends StatelessWidget {
       onTap: () {
         onChanged(!value);
       },
-      child: Padding(
-        padding: padding,
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                label,
-                style: const TextStyle(fontSize: 24),
-              ),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(fontSize: 24),
             ),
-            Checkbox(
-              value: value,
-              onChanged: (newValue) {
-                onChanged(newValue!);
-              },
-            ),
-          ],
-        ),
+          ),
+          Checkbox(
+            fillColor: MaterialStateProperty.all(const Color(0xFFD0BCFF)),
+            value: value,
+            onChanged: (newValue) {
+              onChanged(newValue!);
+            },
+          ),
+        ],
       ),
     );
   }

@@ -4,7 +4,7 @@ import 'programming_lang.dart';
 class UniversalType {
   const UniversalType({
     required this.type,
-    this.isRequired = false,
+    this.isRequired = true,
     this.arrayDepth = 0,
     this.name,
     this.jsonKey,
@@ -30,16 +30,25 @@ class UniversalType {
   /// Object format
   /// example: type = String, format = binary
   final String? format;
+
+  int compareTo(UniversalType other) {
+    if (isRequired == other.isRequired) {
+      return 0;
+    } else if (isRequired) {
+      return -1;
+    }
+    return 1;
+  }
 }
 
 /// Converts [UniversalType] to type from specified language
 extension SuitableType on UniversalType {
-  String byLang(ProgrammingLanguage lang) {
+  String byLang(ProgrammingLanguage lang, {bool isRequired = true}) {
     switch (lang) {
       case ProgrammingLanguage.dart:
-        return _dartType;
+        return _dartType + (isRequired ? '' : '?');
       case ProgrammingLanguage.kotlin:
-        return _kotlinType;
+        return _kotlinType + (isRequired ? '' : '?');
     }
   }
 

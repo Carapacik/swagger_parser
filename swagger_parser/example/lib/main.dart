@@ -16,6 +16,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   @override
-  Widget build(BuildContext context) =>
-      const MaterialApp(home: Scaffold(body: SizedBox.shrink()));
+  Widget build(BuildContext context) => const MaterialApp(
+        home: Scaffold(body: SizedBox.shrink()),
+      );
 }
