@@ -1060,4 +1060,62 @@ interface Client {
       expect(filledContent.contents, expectedContents);
     });
   });
+
+  group('Required parameters', () {
+    test('dart + retrofit', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {},
+        requests: [
+          UniversalRequest(
+            name: 'getRequest',
+            requestType: HttpRequestType.get,
+            route: '/',
+            returnType: null,
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 1,
+                  name: 'list',
+                  isRequired: false,
+                ),
+                name: 'list',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.body,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'stringType',
+                  isRequired: false,
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+      const fillController = FillController();
+      final filledContent =
+          await fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'rest_client.g.dart';
+
+@RestApi()
+abstract class Client {
+  factory Client(Dio dio, {required String baseUrl}) = _Client;
+
+  @GET('/')
+  Future<void> getRequest({
+    @Query('list') List<String>? list,
+    @Body() String? stringType,
+  });
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+  });
 }
