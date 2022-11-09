@@ -18,9 +18,9 @@ jobs:
     strategy:
       matrix:
         sdk:
-          - 2.17.7
-          - 2.18.4
           - stable
+          - 2.18.4
+          - 2.17.7
     steps:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.3
@@ -28,7 +28,9 @@ jobs:
           sdk: "${{ matrix.sdk }}"
       - name: Install dependencies
         run: dart pub get
-      - name: Analyze
-        run: dart analyze
+      - name: Analyze lib
+        run: dart analyze lib
+      - name: Analyze test
+        run: dart analyze test
       - name: Run tests
         run: dart run test
