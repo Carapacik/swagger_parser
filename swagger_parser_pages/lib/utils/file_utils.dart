@@ -16,6 +16,7 @@ void generateArchive(List<GeneratedFile> files) {
   final blob = html.Blob(<List<int>?>[bytes]);
   final url = html.Url.createObjectUrlFromBlob(blob);
   final anchor = html.document.createElement('a') as html.AnchorElement
+    // ignore: unsafe_html
     ..href = url
     ..style.display = 'none'
     ..download = 'generated.zip';

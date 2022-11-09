@@ -1,4 +1,4 @@
-name: Tests
+name: tests
 
 on:
   push:
@@ -18,7 +18,8 @@ jobs:
     strategy:
       matrix:
         sdk:
-          - 2.17.6
+          - 2.17.7
+          - 2.18.4
           - stable
     steps:
       - uses: actions/checkout@v3
@@ -27,9 +28,7 @@ jobs:
           sdk: "${{ matrix.sdk }}"
       - name: Install dependencies
         run: dart pub get
-      - name: Analyze lib
-        run: dart analyze lib
-      - name: Analyze test
-        run: dart analyze test
+      - name: Analyze
+        run: dart analyze
       - name: Run tests
         run: dart run test
