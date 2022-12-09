@@ -2,7 +2,7 @@ name: swagger_parser
 description: Generate REST clients and data classes from swagger json file
 version: 0.3.0
 repository: https://github.com/Carapacik/swagger_parser
-homepage: https://omega-r.com/
+homepage: https://omega-r.com
 environment:
   sdk: '>=2.17.0 <3.0.0'
 
