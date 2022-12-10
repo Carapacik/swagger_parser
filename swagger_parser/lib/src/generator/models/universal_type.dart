@@ -54,6 +54,10 @@ extension SuitableType on UniversalType {
 
   String get _dartType {
     switch (type) {
+      case 'object':
+        return 'Object';
+      case 'number':
+        return 'double';
       case 'integer':
         return 'int';
       case 'string':
