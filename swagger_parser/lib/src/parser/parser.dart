@@ -62,6 +62,8 @@ class OpenApiJsonParser {
   static const _schemasVar = 'schemas';
   static const _pathsVar = 'paths';
   static const _allOfVar = 'allOf';
+  static const _oneOfVar = 'oneOf';
+  static const _anyOfVar = 'anyOf';
 
   /// Parses rest clients from "paths" section of json file into universal models
   Iterable<UniversalRestClient> parseRestClients() {
