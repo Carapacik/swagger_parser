@@ -42,7 +42,7 @@ This is the configuration file that will be read for running the parser accordin
 
 ```yaml
 swagger_parser:
-  json_path: api_definition/openapi.json # Required. Sets the json path directory for api definition. This is just a suggestion for path
+  json_path: assets/swagger.json # Required. Sets the json path directory for api definition. This is just a suggestion for path
   output_directory: lib/api # Required. Sets output directory for generated files (api clients and models)
   language: dart # Optional. Sets the programming language. Current available languages are: dart, kotlin. Default: dart
   squish_clients: true # Optional. Set 'true' to put all clients in one folder. Default: false
@@ -69,16 +69,8 @@ you will need to specify the name of the YAML file as an argument.
 dart run swagger_parser:generate -f <path to your config file>
 ```
 
-Now run the builder with:
+Now run the builder for retrofit, json_serializable and freezed:
 
 ```shell
 dart run build_runner build
 ```
-
-## TODOS
-
-- Dart Types:
-  - Fix problem with oneOf, anyOf which creates a "List\<Null\>" and adds: import "null.dart"
-- Attribute naming:
-  - Fix problem mapping properties on swagger named "default" as this is keyword in Flutter and causes crashes.
-- Support URL for definition
