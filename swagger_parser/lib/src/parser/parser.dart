@@ -358,9 +358,13 @@ class OpenApiJsonParser {
       void findParamsAndImports(Map<String, dynamic> map) {
         (map[_propertiesVar] as Map<String, dynamic>).forEach(
           (propertyName, propertyValue) {
+            if (propertyName == 'default') {
+              print('$key   >>>>>>>>>>>>>>>>>>>>>>>>    $map');
+            }
             final typeWithImport = _arrayWithDepth(
               propertyValue as Map<String, dynamic>,
-              name: propertyName,
+              name: propertyName == 'default' ? 'defaultValue' : propertyName,
+              jsonKey: propertyName == 'default' ? 'default' : null,
               isRequired: requiredParameters.contains(propertyName) ||
                   requiredParameters.isEmpty,
             );
@@ -375,6 +379,7 @@ class OpenApiJsonParser {
       if (value.containsKey(_propertiesVar)) {
         findParamsAndImports(value);
       } else if (value.containsKey(_allOfVar)) {
+        // print(value);
         for (final element in value[_allOfVar] as List) {
           if ((element as Map<String, dynamic>).containsKey(_refVar)) {
             refs.add(_formatRef(element[_refVar].toString()));
@@ -426,13 +431,14 @@ class OpenApiJsonParser {
     String? name,
     bool useSchema = false,
     bool isRequired = true,
+    String? jsonKey,
   }) {
     if (map.containsKey(_typeVar) && map[_typeVar] == 'array') {
       final arrayType = _arrayWithDepth(map['items'] as Map<String, dynamic>);
       return TypeWithImport(
         type: UniversalType(
           name: name?.toCamel,
-          jsonKey: name,
+          jsonKey: jsonKey ?? name,
           type: arrayType.type.type,
           arrayDepth: arrayType.type.arrayDepth + 1,
           format: arrayType.type.format,
@@ -444,7 +450,7 @@ class OpenApiJsonParser {
     return TypeWithImport(
       type: UniversalType(
         name: name?.toCamel,
-        jsonKey: name,
+        jsonKey: jsonKey ?? name,
         format: map.containsKey(_formatVar) ? map[_formatVar].toString() : null,
         type: map.containsKey(_typeVar)
             ? map[_typeVar].toString()
