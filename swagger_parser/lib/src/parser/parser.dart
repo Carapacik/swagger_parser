@@ -364,7 +364,7 @@ class OpenApiJsonParser {
             final typeWithImport = _arrayWithDepth(
               propertyValue as Map<String, dynamic>,
               name: propertyName == 'default' ? 'defaultValue' : propertyName,
-              jsonKey: propertyName == 'default' ? 'default' : null,
+              jsonKey: propertyName,
               isRequired: requiredParameters.contains(propertyName) ||
                   requiredParameters.isEmpty,
             );
