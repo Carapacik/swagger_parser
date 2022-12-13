@@ -358,9 +358,6 @@ class OpenApiJsonParser {
       void findParamsAndImports(Map<String, dynamic> map) {
         (map[_propertiesVar] as Map<String, dynamic>).forEach(
           (propertyName, propertyValue) {
-            if (propertyName == 'default') {
-              print('$key   >>>>>>>>>>>>>>>>>>>>>>>>    $map');
-            }
             final typeWithImport = _arrayWithDepth(
               propertyValue as Map<String, dynamic>,
               name: propertyName == 'default' ? 'defaultValue' : propertyName,
@@ -379,7 +376,6 @@ class OpenApiJsonParser {
       if (value.containsKey(_propertiesVar)) {
         findParamsAndImports(value);
       } else if (value.containsKey(_allOfVar)) {
-        // print(value);
         for (final element in value[_allOfVar] as List) {
           if ((element as Map<String, dynamic>).containsKey(_refVar)) {
             refs.add(_formatRef(element[_refVar].toString()));
