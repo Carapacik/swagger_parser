@@ -29,8 +29,7 @@ class OpenApiJsonParser {
         return;
       }
     }
-    if (_jsonContent.containsKey('swagger') &&
-        _jsonContent['swagger'].toString().startsWith('2.0')) {
+    if (_jsonContent.containsKey('swagger') && _jsonContent['swagger'].toString().startsWith('2.0')) {
       _version = OpenApiVersion.v2;
       return;
     }
@@ -71,12 +70,10 @@ class OpenApiJsonParser {
 
     /// Parses return type for client Query for OpenApi v3
     UniversalType? returnTypeV3(Map<String, dynamic> map) {
-      if (!map.containsKey('200') ||
-          !(map['200'] as Map<String, dynamic>).containsKey(_contentVar)) {
+      if (!map.containsKey('200') || !(map['200'] as Map<String, dynamic>).containsKey(_contentVar)) {
         return null;
       }
-      final contentType =
-          (map['200'][_contentVar] as Map<String, dynamic>).entries.firstOrNull;
+      final contentType = (map['200'][_contentVar] as Map<String, dynamic>).entries.firstOrNull;
       if (contentType == null) {
         throw ParserException('Response must always have a content type');
       }
@@ -99,15 +96,13 @@ class OpenApiJsonParser {
     /// Parses query parameters (parameters and requestBody)
     /// into universal models for OpenApi v3
     List<UniversalRequestType> parametersV3(Map<String, dynamic> map) {
-      if (!map.containsKey(_parametersVar) &&
-          !map.containsKey(_requestBodyVar)) {
+      if (!map.containsKey(_parametersVar) && !map.containsKey(_requestBodyVar)) {
         return [];
       }
       final types = <UniversalRequestType>[];
       if (map.containsKey(_parametersVar)) {
         for (final rawParameter in map[_parametersVar] as List<dynamic>) {
-          final isRequired =
-              (rawParameter as Map<String, dynamic>)[_requiredVar] as bool?;
+          final isRequired = (rawParameter as Map<String, dynamic>)[_requiredVar] as bool?;
           final typeWithImport = _arrayWithDepth(
             rawParameter[_schemaVar] as Map<String, dynamic>,
             name: rawParameter[_nameVar].toString(),
@@ -122,39 +117,29 @@ class OpenApiJsonParser {
                 (e) => e.name == (rawParameter[_inVar].toString()),
               ),
               type: typeWithImport.type,
-              name: _checkForBody(rawParameter)
-                  ? null
-                  : rawParameter[_nameVar].toString(),
+              name: _checkForBody(rawParameter) ? null : rawParameter[_nameVar].toString(),
             ),
           );
         }
       }
       if (map.containsKey(_requestBodyVar)) {
-        if (!(map[_requestBodyVar] as Map<String, dynamic>)
-            .containsKey(_contentVar)) {
+        if (!(map[_requestBodyVar] as Map<String, dynamic>).containsKey(_contentVar)) {
           throw ParserException('requestBody must always have content');
         }
-        final contentTypes =
-            map[_requestBodyVar][_contentVar] as Map<String, dynamic>;
+        final contentTypes = map[_requestBodyVar][_contentVar] as Map<String, dynamic>;
         Map<String, dynamic>? contentType;
         if (contentTypes.containsKey(_multipartVar)) {
-          contentType = map[_requestBodyVar][_contentVar][_multipartVar]
-              as Map<String, dynamic>;
+          contentType = map[_requestBodyVar][_contentVar][_multipartVar] as Map<String, dynamic>;
           isMultiPart = true;
         } else {
-          final content =
-              (map[_requestBodyVar][_contentVar] as Map<String, dynamic>)
-                  .entries
-                  .firstOrNull;
-          contentType =
-              content == null ? null : content.value as Map<String, dynamic>;
+          final content = (map[_requestBodyVar][_contentVar] as Map<String, dynamic>).entries.firstOrNull;
+          contentType = content == null ? null : content.value as Map<String, dynamic>;
         }
         if (contentType == null) {
           throw ParserException('Response must always have a content type');
         }
         if (isMultiPart) {
-          if ((contentType[_schemaVar] as Map<String, dynamic>)
-              .containsKey(_refVar)) {
+          if ((contentType[_schemaVar] as Map<String, dynamic>).containsKey(_refVar)) {
             final isRequired = map[_requestBodyVar][_requiredVar] as bool?;
             final typeWithImport = _arrayWithDepth(
               contentType[_schemaVar] as Map<String, dynamic>,
@@ -177,11 +162,8 @@ class OpenApiJsonParser {
               ),
             );
           }
-          if ((contentType[_schemaVar] as Map<String, dynamic>)
-              .containsKey(_propertiesVar)) {
-            for (final e in (contentType[_schemaVar][_propertiesVar]
-                    as Map<String, dynamic>)
-                .entries) {
+          if ((contentType[_schemaVar] as Map<String, dynamic>).containsKey(_propertiesVar)) {
+            for (final e in (contentType[_schemaVar][_propertiesVar] as Map<String, dynamic>).entries) {
               final typeWithImport = _arrayWithDepth(
                 e.value as Map<String, dynamic>,
               );
@@ -233,12 +215,10 @@ class OpenApiJsonParser {
 
     /// Parses return type for client query for OpenApi v2
     UniversalType? returnTypeV2(Map<String, dynamic> map) {
-      if (!map.containsKey('200') ||
-          !(map['200'] as Map<String, dynamic>).containsKey(_schemaVar)) {
+      if (!map.containsKey('200') || !(map['200'] as Map<String, dynamic>).containsKey(_schemaVar)) {
         return null;
       }
-      final typeWithImport =
-          _arrayWithDepth(map['200'][_schemaVar] as Map<String, dynamic>);
+      final typeWithImport = _arrayWithDepth(map['200'][_schemaVar] as Map<String, dynamic>);
       if (typeWithImport.import != null) {
         imports.add(typeWithImport.import!);
       }
@@ -255,13 +235,11 @@ class OpenApiJsonParser {
       if (!map.containsKey(_parametersVar)) {
         return types;
       }
-      if (map.containsKey(_consumesVar) &&
-          (map[_consumesVar] as List<dynamic>).contains(_multipartVar)) {
+      if (map.containsKey(_consumesVar) && (map[_consumesVar] as List<dynamic>).contains(_multipartVar)) {
         isMultiPart = true;
       }
       for (final rawParameter in map[_parametersVar] as List<dynamic>) {
-        final isRequired =
-            (rawParameter as Map<String, dynamic>)[_requiredVar] as bool?;
+        final isRequired = (rawParameter as Map<String, dynamic>)[_requiredVar] as bool?;
         final typeWithImport = _arrayWithDepth(
           rawParameter,
           name: rawParameter[_nameVar].toString(),
@@ -273,20 +251,16 @@ class OpenApiJsonParser {
         }
         types.add(
           UniversalRequestType(
-            parameterType: HttpParameterType.values
-                .firstWhere((e) => e.name == (rawParameter[_inVar].toString())),
+            parameterType: HttpParameterType.values.firstWhere((e) => e.name == (rawParameter[_inVar].toString())),
             type: typeWithImport.type,
-            name: _checkForBody(rawParameter)
-                ? null
-                : rawParameter[_nameVar].toString(),
+            name: _checkForBody(rawParameter) ? null : rawParameter[_nameVar].toString(),
           ),
         );
       }
       return types;
     }
 
-    (_jsonContent[_pathsVar] as Map<String, dynamic>)
-        .forEach((path, pathValue) {
+    (_jsonContent[_pathsVar] as Map<String, dynamic>).forEach((path, pathValue) {
       (pathValue as Map<String, dynamic>).forEach((key, requestPath) {
         final returnType = _version == OpenApiVersion.v2
             ? returnTypeV2(requestPath[_responsesVar] as Map<String, dynamic>)
@@ -303,8 +277,7 @@ class OpenApiJsonParser {
           parameters: parameters,
         );
         final currentTag = _getTag(requestPath);
-        final sameTagIndex =
-            restClients.indexWhere((e) => e.name == currentTag);
+        final sameTagIndex = restClients.indexWhere((e) => e.name == currentTag);
         if (sameTagIndex == -1) {
           restClients.add(
             UniversalRestClient(
@@ -330,12 +303,10 @@ class OpenApiJsonParser {
     late Map<String, dynamic> entities;
     if (_version == OpenApiVersion.v3_1 || _version == OpenApiVersion.v3) {
       if (!_jsonContent.containsKey(_componentsVar) ||
-          !(_jsonContent[_componentsVar] as Map<String, dynamic>)
-              .containsKey(_schemasVar)) {
+          !(_jsonContent[_componentsVar] as Map<String, dynamic>).containsKey(_schemasVar)) {
         return dataClasses;
       }
-      entities =
-          _jsonContent[_componentsVar][_schemasVar] as Map<String, dynamic>;
+      entities = _jsonContent[_componentsVar][_schemasVar] as Map<String, dynamic>;
     } else if (_version == OpenApiVersion.v2) {
       if (!_jsonContent.containsKey(_definitionsVar)) {
         return dataClasses;
@@ -346,9 +317,7 @@ class OpenApiJsonParser {
     entities.forEach((key, value) {
       var requiredParameters = <String>[];
       if ((value as Map<String, dynamic>).containsKey(_requiredVar)) {
-        requiredParameters = (value[_requiredVar] as List<dynamic>)
-            .map((e) => e.toString())
-            .toList();
+        requiredParameters = (value[_requiredVar] as List<dynamic>).map((e) => e.toString()).toList();
       }
 
       final refs = <String>[];
@@ -361,8 +330,7 @@ class OpenApiJsonParser {
             final typeWithImport = _arrayWithDepth(
               propertyValue as Map<String, dynamic>,
               name: propertyName,
-              isRequired: requiredParameters.contains(propertyName) ||
-                  requiredParameters.isEmpty,
+              isRequired: requiredParameters.contains(propertyName) || requiredParameters.isEmpty,
             );
             parameters.add(typeWithImport.type);
             if (typeWithImport.import != null) {
@@ -375,6 +343,7 @@ class OpenApiJsonParser {
       if (value.containsKey(_propertiesVar)) {
         findParamsAndImports(value);
       } else if (value.containsKey(_allOfVar)) {
+        print(value);
         for (final element in value[_allOfVar] as List) {
           if ((element as Map<String, dynamic>).containsKey(_refVar)) {
             refs.add(_formatRef(element[_refVar].toString()));
@@ -386,8 +355,7 @@ class OpenApiJsonParser {
         }
       }
 
-      final allOf =
-          refs.isNotEmpty ? AllOf(refs: refs, properties: parameters) : null;
+      final allOf = refs.isNotEmpty ? AllOf(refs: refs, properties: parameters) : null;
       dataClasses.add(
         UniversalDataClass(
           name: key,
@@ -401,8 +369,7 @@ class OpenApiJsonParser {
     final allOfClasses = dataClasses.where((element) => element.allOf != null);
     for (final allOfClass in allOfClasses) {
       final refs = allOfClass.allOf!.refs;
-      final foundClasses =
-          dataClasses.where((element) => refs.contains(element.name)).toList();
+      final foundClasses = dataClasses.where((element) => refs.contains(element.name)).toList();
       for (final element in foundClasses) {
         allOfClass.parameters.addAll(element.parameters);
         allOfClass.imports.addAll(element.imports);
@@ -413,9 +380,8 @@ class OpenApiJsonParser {
     return dataClasses;
   }
 
-  String _getTag(Map<String, dynamic> map) => map.containsKey(_tagsVar)
-      ? (map[_tagsVar] as List<dynamic>).first.toString()
-      : _defaultClientTag;
+  String _getTag(Map<String, dynamic> map) =>
+      map.containsKey(_tagsVar) ? (map[_tagsVar] as List<dynamic>).first.toString() : _defaultClientTag;
 
   bool _checkForBody(Map<String, dynamic> map) => map[_nameVar] == _bodyVar;
 
@@ -449,18 +415,14 @@ class OpenApiJsonParser {
         type: map.containsKey(_typeVar)
             ? map[_typeVar].toString()
             : _formatRef(
-                useSchema
-                    ? map[_schemaVar][_refVar].toString()
-                    : map[_refVar].toString(),
+                useSchema ? map[_schemaVar][_refVar].toString() : map[_refVar].toString(),
               ),
         isRequired: isRequired,
       ),
       import: map.containsKey(_typeVar)
           ? null
           : _formatRef(
-              useSchema
-                  ? map[_schemaVar][_refVar].toString()
-                  : map[_refVar].toString(),
+              useSchema ? map[_schemaVar][_refVar].toString() : map[_refVar].toString(),
             ),
     );
   }

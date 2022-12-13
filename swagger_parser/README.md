@@ -36,6 +36,8 @@ dev_dependencies:
   retrofit_generator: ^4.2.0
 ```
 
+Obs: versions above are just an initial reference and can be removed if conflicting with your versions.
+
 ### Create swagger_parser.yaml
 
 This is the configuration file that will be read for running the parser according to your needs.
