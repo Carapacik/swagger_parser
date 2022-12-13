@@ -61,9 +61,9 @@ extension SuitableType on UniversalType {
       case 'integer':
         return 'int';
       case 'string':
-        // if (format != null && format == 'binary') {
-        //   return 'MultipartFile';
-        // }
+        if (format != null && format == 'binary') {
+          return 'MultipartFile';
+        }
         return 'String';
       case 'boolean':
         return 'bool';
