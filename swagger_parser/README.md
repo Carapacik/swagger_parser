@@ -76,3 +76,11 @@ Now run the builder for retrofit, json_serializable and freezed:
 ```shell
 dart run build_runner build
 ```
+
+## TODOS
+
+- Dart output:
+  - Inheritance mapped reading from "allOf" on model definition (could be a fix for the next item if ancestor class is used as the type).
+  - Fix problem with oneOf, anyOf which creates a "List\<Null\>" and adds: import "null.dart"
+  - Fix problem mapping properties on swagger named "default" as this is keyword in Flutter and causes crashes.
+- Support URL for definition
