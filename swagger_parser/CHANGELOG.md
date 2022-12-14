@@ -1,5 +1,5 @@
 ## 0.3.2
-- Fix problem with attributes named "default" (dart keywork incompatibility)
+- Fix problem with attributes named with dart keywords like "default" (dart keywork incompatibility)
 
 ## 0.3.1
 - Fix the problem with APIs with @
