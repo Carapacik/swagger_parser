@@ -10,6 +10,7 @@ import '../generator/models/universal_request_type.dart';
 import '../generator/models/universal_rest_client.dart';
 import '../generator/models/universal_type.dart';
 import '../utils/case_utils.dart';
+import '../utils/dart_keywords.dart';
 import 'parser_exception.dart';
 
 // ignore_for_file: avoid_dynamic_calls
@@ -62,6 +63,7 @@ class OpenApiJsonParser {
   static const _schemasVar = 'schemas';
   static const _pathsVar = 'paths';
   static const _allOfVar = 'allOf';
+  static const _dartKeywords = dartKeywords;
 
   /// Parses rest clients from "paths" section of json file into universal models
   Iterable<UniversalRestClient> parseRestClients() {
@@ -360,7 +362,9 @@ class OpenApiJsonParser {
           (propertyName, propertyValue) {
             final typeWithImport = _arrayWithDepth(
               propertyValue as Map<String, dynamic>,
-              name: propertyName == 'default' ? 'defaultValue' : propertyName,
+              name: _dartKeywords.contains(propertyName)
+                  ? '${propertyName}Value'
+                  : propertyName,
               jsonKey: propertyName,
               isRequired: requiredParameters.contains(propertyName) ||
                   requiredParameters.isEmpty,
