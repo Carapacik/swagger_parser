@@ -1,13 +1,15 @@
 import 'package:swagger_parser/src/generator/fill_controller.dart';
+import 'package:swagger_parser/src/generator/models/generated_file.dart';
 import 'package:swagger_parser/src/generator/models/programming_lang.dart';
-import 'package:swagger_parser/src/generator/models/universal_data_class.dart';
+import 'package:swagger_parser/src/generator/models/universal_component_class.dart';
+import 'package:swagger_parser/src/generator/models/universal_enum_class.dart';
 import 'package:swagger_parser/src/generator/models/universal_type.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Empty data class', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [],
@@ -32,7 +34,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [],
@@ -56,7 +58,7 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [],
@@ -77,7 +79,7 @@ data class ClassName()
 
   group('Imports', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {
           'camelClass',
@@ -113,7 +115,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {
           'camelClass',
@@ -147,16 +149,29 @@ class ClassName with _$ClassName {
       expect(filledContent.contents, expectedContents);
     });
 
-    // Imports in Kotlin are not supported yet. You can always add PR
+    test('kotlin + moshi', () async {
+      // Imports in Kotlin are not supported yet. You can always add PR
+    });
   });
 
   group('Parameters', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
           UniversalType(type: 'integer', name: 'intType'),
+          UniversalType(type: 'number', name: 'numberType'),
+          UniversalType(
+            type: 'number',
+            format: 'double',
+            name: 'doubleNumberType',
+          ),
+          UniversalType(
+            type: 'number',
+            format: 'float',
+            name: 'floatNumberType',
+          ),
           UniversalType(type: 'string', name: 'stringType'),
           UniversalType(
             type: 'string',
@@ -165,6 +180,7 @@ class ClassName with _$ClassName {
           ),
           UniversalType(type: 'file', name: 'fileType'),
           UniversalType(type: 'boolean', name: 'boolType'),
+          UniversalType(type: 'object', name: 'objectType'),
           UniversalType(type: 'Another', name: 'anotherType'),
         ],
       );
@@ -179,20 +195,28 @@ part 'class_name.g.dart';
 class ClassName {
   ClassName({
     required this.intType,
+    required this.numberType,
+    required this.doubleNumberType,
+    required this.floatNumberType,
     required this.stringType,
     required this.binaryStringType,
     required this.fileType,
     required this.boolType,
+    required this.objectType,
     required this.anotherType,
   });
   
   factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
   
   final int intType;
+  final num numberType;
+  final double doubleNumberType;
+  final double floatNumberType;
   final String stringType;
-  final MultipartFile binaryStringType;
-  final MultipartFile fileType;
+  final List<MultipartFile> binaryStringType;
+  final List<MultipartFile> fileType;
   final bool boolType;
+  final Object objectType;
   final Another anotherType;
 
   Map<String, dynamic> toJson() => _$ClassNameToJson(this);
@@ -202,11 +226,22 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
           UniversalType(type: 'integer', name: 'intType'),
+          UniversalType(type: 'number', name: 'numberType'),
+          UniversalType(
+            type: 'number',
+            format: 'double',
+            name: 'doubleNumberType',
+          ),
+          UniversalType(
+            type: 'number',
+            format: 'float',
+            name: 'floatNumberType',
+          ),
           UniversalType(type: 'string', name: 'stringType'),
           UniversalType(
             type: 'string',
@@ -215,6 +250,7 @@ class ClassName {
           ),
           UniversalType(type: 'file', name: 'fileType'),
           UniversalType(type: 'boolean', name: 'boolType'),
+          UniversalType(type: 'object', name: 'objectType'),
           UniversalType(type: 'Another', name: 'anotherType'),
         ],
       );
@@ -230,10 +266,14 @@ part 'class_name.g.dart';
 class ClassName with _$ClassName {
   const factory ClassName({
     required int intType,
+    required num numberType,
+    required double doubleNumberType,
+    required double floatNumberType,
     required String stringType,
-    required MultipartFile binaryStringType,
-    required MultipartFile fileType,
+    required List<MultipartFile> binaryStringType,
+    required List<MultipartFile> fileType,
     required bool boolType,
+    required Object objectType,
     required Another anotherType,
   }) = _ClassName;
   
@@ -244,7 +284,7 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -277,7 +317,7 @@ data class ClassName(
 
   group('Array type', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -315,7 +355,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -348,7 +388,7 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -375,9 +415,9 @@ data class ClassName(
     });
   });
 
-  group('JsonKey', () {
+  group('JsonKey name', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -432,7 +472,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -465,10 +505,13 @@ part 'class_name.g.dart';
 @freezed
 class ClassName with _$ClassName {
   const factory ClassName({
-    @JsonKey(name: 'int_type') required int intType,
+    @JsonKey(name: 'int_type')
+    required int intType,
     required String stringType,
-    @JsonKey(name: 'bool-type') required bool boolType,
-    @JsonKey(name: 'another') required Another anotherType,
+    @JsonKey(name: 'bool-type')
+    required bool boolType,
+    @JsonKey(name: 'another')
+    required Another anotherType,
   }) = _ClassName;
   
   factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
@@ -478,7 +521,7 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -522,9 +565,106 @@ data class ClassName(
     });
   });
 
+  group('JsonKey defaultValue', () {
+    test('dart + json_serializable', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        parameters: [
+          UniversalType(type: 'integer', name: 'intType', defaultValue: '1'),
+          UniversalType(
+            type: 'string',
+            name: 'stringType',
+            defaultValue: 'str',
+          ),
+          UniversalType(
+            type: 'boolean',
+            name: 'boolType',
+            defaultValue: 'false',
+          ),
+        ],
+      );
+      const fillController = FillController();
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContents = r'''
+import 'package:json_annotation/json_annotation.dart';
+
+part 'class_name.g.dart';
+
+@JsonSerializable()
+class ClassName {
+  ClassName({
+    required this.intType,
+    required this.stringType,
+    required this.boolType,
+  });
+  
+  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  
+  @JsonKey(defaultValue: 1)
+  final int intType;
+  @JsonKey(defaultValue: 'str')
+  final String stringType;
+  @JsonKey(defaultValue: false)
+  final bool boolType;
+
+  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('dart + freezed', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        parameters: [
+          UniversalType(type: 'integer', name: 'intType', defaultValue: '1'),
+          UniversalType(
+            type: 'string',
+            name: 'stringType',
+            defaultValue: 'str',
+          ),
+          UniversalType(
+            type: 'boolean',
+            name: 'boolType',
+            defaultValue: 'false',
+          ),
+        ],
+      );
+      const fillController = FillController(freezed: true);
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContents = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'class_name.freezed.dart';
+part 'class_name.g.dart';
+
+@freezed
+class ClassName with _$ClassName {
+  const factory ClassName({
+    @JsonKey(defaultValue: 1)
+    required int intType,
+    @JsonKey(defaultValue: 'str')
+    required String stringType,
+    @JsonKey(defaultValue: false)
+    required bool boolType,
+  }) = _ClassName;
+  
+  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('kotlin + moshi', () async {
+      // Default values in Kotlin are not supported yet. You can always add PR
+    });
+  });
+
   group('Required parameters', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -579,7 +719,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -628,7 +768,7 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -673,7 +813,7 @@ data class ClassName(
 
   group('Put required parameters first', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -722,7 +862,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalDataClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -765,5 +905,168 @@ class ClassName with _$ClassName {
     });
 
     // In Kotlin this is optional
+  });
+
+  group('Enum', () {
+    test('dart + json_serializable', () async {
+      const dataClassed = [
+        UniversalEnumClass(
+          name: 'EnumName',
+          type: 'int',
+          items: {
+            '1',
+            '2',
+            '3',
+          },
+        ),
+        UniversalEnumClass(
+          name: 'EnumNameString',
+          type: 'string',
+          items: {
+            'itemOne',
+            'ItemTwo',
+            'item_three',
+            'ITEM-FOUR',
+          },
+        ),
+      ];
+
+      const fillController = FillController();
+      final files = <GeneratedFile>[];
+      for (final enumClass in dataClassed) {
+        files.add(await fillController.fillDtoContent(enumClass));
+      }
+      const expectedContent0 = r'''
+import 'package:json_annotation/json_annotation.dart';
+
+enum EnumName {
+  value1,
+  value2,
+  value3;
+
+  const EnumName();
+
+  factory EnumName.fromJson(Map<String, dynamic> json) =>
+      $enumDecode(_$EnumNameEnumMap, json);
+
+  int toJson() => _$EnumNameEnumMap[this]!;
+}
+
+const _$EnumNameEnumMap = {
+  EnumName.value1: 1,
+  EnumName.value2: 2,
+  EnumName.value3: 3,
+};
+''';
+
+      const expectedContent1 = r'''
+import 'package:json_annotation/json_annotation.dart';
+
+enum EnumNameString {
+  itemOne,
+  itemTwo,
+  itemThree,
+  itemFour;
+
+  const EnumNameString();
+
+  factory EnumNameString.fromJson(Map<String, dynamic> json) =>
+      $enumDecode(_$EnumNameStringEnumMap, json);
+
+  String toJson() => _$EnumNameStringEnumMap[this]!;
+}
+
+const _$EnumNameStringEnumMap = {
+  EnumNameString.itemOne: 'itemOne',
+  EnumNameString.itemTwo: 'ItemTwo',
+  EnumNameString.itemThree: 'item_three',
+  EnumNameString.itemFour: 'ITEM-FOUR',
+};
+''';
+      expect(files[0].contents, expectedContent0);
+      expect(files[1].contents, expectedContent1);
+    });
+
+    test('dart + freezed', () async {
+      const dataClassed = [
+        UniversalEnumClass(
+          name: 'EnumName',
+          type: 'int',
+          items: {
+            '1',
+            '2',
+            '3',
+          },
+        ),
+        UniversalEnumClass(
+          name: 'EnumNameString',
+          type: 'string',
+          items: {
+            'itemOne',
+            'ItemTwo',
+            'item_three',
+            'ITEM-FOUR',
+          },
+        ),
+      ];
+      const fillController = FillController(freezed: true);
+      final files = <GeneratedFile>[];
+      for (final enumClass in dataClassed) {
+        files.add(await fillController.fillDtoContent(enumClass));
+      }
+      const expectedContent0 = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+enum EnumName {
+  value1,
+  value2,
+  value3;
+
+  const EnumName();
+
+  factory EnumName.fromJson(Map<String, dynamic> json) =>
+      $enumDecode(_$EnumNameEnumMap, json);
+
+  int toJson() => _$EnumNameEnumMap[this]!;
+}
+
+const _$EnumNameEnumMap = {
+  EnumName.value1: 1,
+  EnumName.value2: 2,
+  EnumName.value3: 3,
+};
+''';
+
+      const expectedContent1 = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+enum EnumNameString {
+  itemOne,
+  itemTwo,
+  itemThree,
+  itemFour;
+
+  const EnumNameString();
+
+  factory EnumNameString.fromJson(Map<String, dynamic> json) =>
+      $enumDecode(_$EnumNameStringEnumMap, json);
+
+  String toJson() => _$EnumNameStringEnumMap[this]!;
+}
+
+const _$EnumNameStringEnumMap = {
+  EnumNameString.itemOne: 'itemOne',
+  EnumNameString.itemTwo: 'ItemTwo',
+  EnumNameString.itemThree: 'item_three',
+  EnumNameString.itemFour: 'ITEM-FOUR',
+};
+''';
+      expect(files[0].contents, expectedContent0);
+      expect(files[1].contents, expectedContent1);
+    });
+
+    test('kotlin + moshi', () async {
+      // Enums in Kotlin are not supported yet. You can always add PR
+    });
   });
 }

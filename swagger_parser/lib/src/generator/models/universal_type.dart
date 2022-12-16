@@ -1,3 +1,4 @@
+import '../../utils/type_utils.dart';
 import 'programming_lang.dart';
 
 /// Universal template for containing information about type
@@ -9,6 +10,7 @@ class UniversalType {
     this.name,
     this.jsonKey,
     this.format,
+    this.defaultValue,
   });
 
   /// Object type
@@ -27,10 +29,14 @@ class UniversalType {
   /// Object json key
   final String? jsonKey;
 
-  /// Object format
-  /// example: type = String, format = binary
+  /// Format for object
+  /// Example: type = number, format = double
   final String? format;
 
+  /// Holding object default value
+  final String? defaultValue;
+
+  /// Function for compare to put required named parameters first
   int compareTo(UniversalType other) {
     if (isRequired == other.isRequired) {
       return 0;
@@ -46,42 +52,9 @@ extension SuitableType on UniversalType {
   String byLang(ProgrammingLanguage lang, {bool isRequired = true}) {
     switch (lang) {
       case ProgrammingLanguage.dart:
-        return _dartType + (isRequired ? '' : '?');
+        return type.toDartType(format) + (isRequired ? '' : '?');
       case ProgrammingLanguage.kotlin:
-        return _kotlinType + (isRequired ? '' : '?');
+        return type.toKotlinType(format) + (isRequired ? '' : '?');
     }
-  }
-
-  String get _dartType {
-    switch (type) {
-      case 'object':
-        return 'Object';
-      case 'number':
-        return 'double';
-      case 'integer':
-        return 'int';
-      case 'string':
-        if (format != null && format == 'binary') {
-          return 'MultipartFile';
-        }
-        return 'String';
-      case 'boolean':
-        return 'bool';
-      case 'file':
-        return 'MultipartFile';
-    }
-    return type;
-  }
-
-  String get _kotlinType {
-    switch (type) {
-      case 'integer':
-        return 'Int';
-      case 'string':
-        return 'String';
-      case 'boolean':
-        return 'Boolean';
-    }
-    return type;
   }
 }

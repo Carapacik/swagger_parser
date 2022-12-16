@@ -1,13 +1,14 @@
 import 'package:collection/collection.dart';
 
 import '../../utils/case_utils.dart';
+import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
 import '../models/programming_lang.dart';
-import '../models/universal_data_class.dart';
+import '../models/universal_component_class.dart';
 import '../models/universal_type.dart';
 
 /// Provides template for generating dart DTO using JSON serializable
-String dartJsonSerializableDtoTemplate(UniversalDataClass dataClass) {
+String dartJsonSerializableDtoTemplate(UniversalComponentClass dataClass) {
   final className = dataClass.name.toPascal;
   return '''
 import 'package:json_annotation/json_annotation.dart';
@@ -28,8 +29,7 @@ class $className {
 String _parametersInClass(List<UniversalType> parameters) => parameters
     .map(
       (e) =>
-          '${e.jsonKey != null && e.name != e.jsonKey ? "\n  @JsonKey(name: '${e.jsonKey}')" : ''}\n'
-          '  final ${toSuitableType(e, ProgrammingLanguage.dart, isRequired: e.isRequired)} ${e.name};',
+          '${_jsonKey(e)}\n  final ${toSuitableType(e, ProgrammingLanguage.dart, isRequired: e.isRequired)} ${e.name};',
     )
     .join();
 
@@ -39,4 +39,26 @@ String _parametersInConstructor(List<UniversalType> parameters) {
   return sortedByRequired
       .map((e) => '\n    ${e.isRequired ? 'required ' : ''}this.${e.name},')
       .join();
+}
+
+String _jsonKey(UniversalType t) {
+  final sb = StringBuffer();
+  if ((t.jsonKey == null || t.name == t.jsonKey) && t.defaultValue == null) {
+    return '';
+  }
+  sb.write('\n  @JsonKey(');
+  if (t.defaultValue != null) {
+    sb.write(
+      'defaultValue: ${t.type.quoterForStringType()}${t.defaultValue}${t.type.quoterForStringType()}',
+    );
+  }
+
+  if (t.defaultValue != null && (t.jsonKey != null && t.name != t.jsonKey)) {
+    sb.write(', ');
+  }
+  if (t.jsonKey != null && t.name != t.jsonKey) {
+    sb.write("name: '${t.jsonKey}'");
+  }
+  sb.write(')');
+  return sb.toString();
 }
