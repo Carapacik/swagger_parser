@@ -964,8 +964,8 @@ abstract class Client {
   Future<void> sendMultiPart({
     @Header('Authorization') required String token,
     @Part(name: 'name') required String alex,
-    @Part(name: 'file') required MultipartFile file,
-    @Part(name: 'file2') required MultipartFile secondFile,
+    @Part(name: 'file') required List<MultipartFile> file,
+    @Part(name: 'file2') required List<MultipartFile> secondFile,
     @Part(name: 'parsed-if') required bool parsed,
   });
 
@@ -1022,20 +1022,6 @@ abstract class Client {
               ),
             ],
           ),
-          // I don't know what MultipartFile in Kotlin looks like
-          // UniversalRequest(
-          //   name: 'singleEntity',
-          //   requestType: HttpRequestType.post,
-          //   route: '/single',
-          //   returnType: UniversalType(type: 'boolean'),
-          //   isMultiPart: true,
-          //   parameters: [
-          //     UniversalRequestType(
-          //       parameterType: HttpParameterType.path,
-          //       type: UniversalType(type: 'AnotherFile', name: 'file'),
-          //     ),
-          //   ],
-          // ),
         ],
       );
       const fillController =
@@ -1051,8 +1037,8 @@ interface Client {
     suspend fun sendMultiPart(
         @Header("Authorization") token: String,
         @Part("name") alex: String,
-        @Part("file") file: String,
-        @Part("file2") secondFile: file,
+        @Part("file") file: MultipartBody.Part,
+        @Part("file2") secondFile: MultipartBody.Part,
         @Part("parsed-if") parsed: Boolean
     )
 }
@@ -1116,6 +1102,80 @@ abstract class Client {
 }
 ''';
       expect(filledContent.contents, expectedContents);
+    });
+  });
+
+  group('Default parameters', () {
+    test('dart + retrofit', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {'AnotherFile'},
+        requests: [
+          UniversalRequest(
+            name: 'sendGagaga',
+            requestType: HttpRequestType.post,
+            route: '/send',
+            returnType: null,
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.header,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'token',
+                  defaultValue: 'gagaga123',
+                ),
+                name: 'Authorization',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'number',
+                  format: 'double',
+                  name: 'age',
+                  defaultValue: '17',
+                ),
+                name: 'age',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'boolean',
+                  name: 'adult',
+                  defaultValue: 'false',
+                ),
+                name: 'adult',
+              ),
+            ],
+          ),
+        ],
+      );
+      const fillController = FillController();
+      final filledContent =
+          await fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+import '../shared_models/another_file.dart';
+
+part 'rest_client.g.dart';
+
+@RestApi()
+abstract class Client {
+  factory Client(Dio dio, {required String baseUrl}) = _Client;
+
+  @POST('/send')
+  Future<void> sendGagaga({
+    @Header('Authorization') String token = 'gagaga123',
+    @Query('age') double age = 17,
+    @Query('adult') bool adult = false,
+  });
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('kotlin + retrofit', () async {
+      // Default values in Kotlin are not supported yet. You can always add PR
     });
   });
 }
