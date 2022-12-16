@@ -40,10 +40,13 @@ class _GeneratorContentState extends State<GeneratorContent> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 400, maxHeight: 300),
+                constraints:
+                    const BoxConstraints(maxWidth: 400, maxHeight: 300),
                 child: TextField(
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     hintText: 'Paste your Swagger JSON here',
                     hintStyle: const TextStyle(fontSize: 18),
                   ),
@@ -64,7 +67,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
                   children: [
                     const Text(
                       'Config parameters',
-                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
+                      style:
+                          TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 24),
                     TextField(
@@ -88,8 +92,10 @@ class _GeneratorContentState extends State<GeneratorContent> {
                       ),
                       underline: const SizedBox.shrink(),
                       elevation: 16,
-                      onChanged: (value) =>
-                          setState(() => _language = ProgrammingLanguage.fromString(value)!),
+                      onChanged: (value) => setState(
+                        () =>
+                            _language = ProgrammingLanguage.fromString(value)!,
+                      ),
                       items: ProgrammingLanguage.values
                           .map<DropdownMenuItem<String>>(
                             (value) => DropdownMenuItem<String>(
@@ -172,7 +178,10 @@ Future<void> generateOutputs(
   } on Object catch (e) {
     debugPrint(e.toString());
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(e.toString()), behavior: SnackBarBehavior.floating),
+      SnackBar(
+        content: Text(e.toString()),
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 }
