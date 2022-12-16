@@ -69,7 +69,8 @@ class InformationBox extends StatelessWidget {
             children: [
               TextSpan(
                 style: const TextStyle(fontSize: 18),
-                text: 'Paste your JSON file into text box and configure given parameters: \n',
+                text:
+                    'Paste your JSON file into text box and configure given parameters: \n',
                 children: [
                   const WidgetSpan(
                     alignment: PlaceholderAlignment.aboveBaseline,
