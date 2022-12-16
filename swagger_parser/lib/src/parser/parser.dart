@@ -43,33 +43,34 @@ class OpenApiJsonParser {
   late final Map<String, dynamic> _jsonContent;
   late final OpenApiVersion _version;
 
-  static const _defaultClientTag = 'client';
-  static const _code200Var = '200';
-  static const _formatVar = 'format';
-  static const _contentVar = 'content';
-  static const _responsesVar = 'responses';
-  static const _multipartVar = 'multipart/form-data';
-  static const _typeVar = 'type';
-  static const _itemsVar = 'items';
+  static const _allOfVar = 'allOf';
   static const _arrayVar = 'array';
   static const _bodyVar = 'body';
+  static const _code200Var = '200';
+  static const _componentsVar = 'components';
+  static const _consumesVar = 'consumes';
+  static const _contentVar = 'content';
+  static const _defaultClientTag = 'client';
+  static const _defaultVar = 'default';
+  static const _definitionsVar = 'definitions';
+  static const _enumVar = 'enum';
+  static const _formatVar = 'format';
+  static const _inVar = 'in';
+  static const _itemsVar = 'items';
+  static const _multipartVar = 'multipart/form-data';
   static const _nameVar = 'name';
   static const _parametersVar = 'parameters';
-  static const _schemaVar = 'schema';
-  static const _requestBodyVar = 'requestBody';
-  static const _inVar = 'in';
-  static const _propertiesVar = 'properties';
-  static const _definitionsVar = 'definitions';
-  static const _requiredVar = 'required';
-  static const _componentsVar = 'components';
-  static const _refVar = r'$ref';
-  static const _tagsVar = 'tags';
-  static const _consumesVar = 'consumes';
-  static const _schemasVar = 'schemas';
   static const _pathsVar = 'paths';
-  static const _allOfVar = 'allOf';
-  static const _defaultVar = 'default';
-  static const _enumVar = 'enum';
+  static const _propertiesVar = 'properties';
+  static const _refVar = r'$ref';
+  static const _requestBodyVar = 'requestBody';
+  static const _requiredVar = 'required';
+  static const _responsesVar = 'responses';
+  static const _schemaVar = 'schema';
+  static const _schemasVar = 'schemas';
+  static const _tagsVar = 'tags';
+  static const _typeVar = 'type';
+  static const _valueVar = 'value';
 
   /// Parses rest clients from 'paths' section of json file into universal models
   Iterable<UniversalRestClient> parseRestClients() {
@@ -374,10 +375,7 @@ class OpenApiJsonParser {
           (propertyName, propertyValue) {
             final typeWithImport = _arrayWithDepth(
               propertyValue as Map<String, dynamic>,
-              name: dartKeywords.contains(propertyName)
-                  ? '${propertyName}Value'
-                  : propertyName,
-              jsonKey: propertyName,
+              name: propertyName,
               isRequired: requiredParameters.contains(propertyName) ||
                   requiredParameters.isEmpty,
             );
@@ -462,30 +460,25 @@ class OpenApiJsonParser {
     String? name,
     bool useSchema = false,
     bool isRequired = true,
-    String? jsonKey,
   }) {
     if (map.containsKey(_typeVar) && map[_typeVar] == _arrayVar) {
       final arrayType = _arrayWithDepth(map[_itemsVar] as Map<String, dynamic>);
       return TypeWithImport(
         type: UniversalType(
-          name: name?.toCamel,
-          defaultValue: arrayType.type.defaultValue,
-          jsonKey: jsonKey ?? name,
           type: arrayType.type.type,
-          arrayDepth: arrayType.type.arrayDepth + 1,
           format: arrayType.type.format,
+          name:
+              (dartKeywords.contains(name) ? '$name$_valueVar' : name)?.toCamel,
+          jsonKey: name,
+          defaultValue: arrayType.type.defaultValue,
           isRequired: isRequired,
+          arrayDepth: arrayType.type.arrayDepth + 1,
         ),
         import: arrayType.import,
       );
     }
     return TypeWithImport(
       type: UniversalType(
-        name: name?.toCamel,
-        jsonKey: jsonKey ?? name,
-        defaultValue:
-            map.containsKey(_defaultVar) ? map[_defaultVar].toString() : null,
-        format: map.containsKey(_formatVar) ? map[_formatVar].toString() : null,
         type: map.containsKey(_typeVar)
             ? map[_typeVar].toString()
             : _formatRef(
@@ -493,6 +486,11 @@ class OpenApiJsonParser {
                     ? map[_schemaVar][_refVar].toString()
                     : map[_refVar].toString(),
               ),
+        format: map.containsKey(_formatVar) ? map[_formatVar].toString() : null,
+        name: (dartKeywords.contains(name) ? '$name$_valueVar' : name)?.toCamel,
+        jsonKey: name,
+        defaultValue:
+            map.containsKey(_defaultVar) ? map[_defaultVar].toString() : null,
         isRequired: isRequired,
       ),
       import: map.containsKey(_typeVar)
