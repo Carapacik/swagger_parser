@@ -1,3 +1,7 @@
+## 0.4.1
+- Fixed a problem with parameters whose names are similar to dart keywords
+- Fixed a problem with postfix in file import
+
 ## 0.4.0
 - Add support for ` default ` annotations
 - Add enum support for dart

@@ -7,7 +7,7 @@ import 'models/universal_rest_client.dart';
 /// Handles generating files
 class FillController {
   const FillController({
-    String clientPostfix = 'Client',
+    String clientPostfix = 'ApiClient',
     ProgrammingLanguage programmingLanguage = ProgrammingLanguage.dart,
     bool squishClients = false,
     bool freezed = false,
@@ -36,10 +36,10 @@ class FillController {
     UniversalRestClient restClient,
   ) async {
     final fileName = _programmingLanguage == ProgrammingLanguage.dart
-        ? _squishClients
+        ? _squishClients || _clientPostfix != 'ApiClient'
             ? (restClient.name + _clientPostfix).toSnake
             : 'rest_client'
-        : _squishClients
+        : _squishClients || _clientPostfix != 'ApiClient'
             ? restClient.name.toPascal + _clientPostfix
             : 'RestClient';
     final folderName =
@@ -48,7 +48,7 @@ class FillController {
       name: '$folderName$fileName.${_programmingLanguage.fileExtension}',
       contents: _programmingLanguage.restClientFileContent(
         restClient,
-        _squishClients ? _clientPostfix : null,
+        _squishClients || _clientPostfix != 'ApiClient' ? _clientPostfix : null,
       ),
     );
   }

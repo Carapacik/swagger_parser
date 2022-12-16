@@ -64,11 +64,11 @@ interface Client {}
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'class_name.g.dart';
+part 'class_name_api_client.g.dart';
 
 @RestApi()
-abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {required String baseUrl}) = _ClassNameClient;
+abstract class ClassNameApiClient {
+  factory ClassNameApiClient(Dio dio, {required String baseUrl}) = _ClassNameApiClient;
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -89,7 +89,7 @@ abstract class ClassNameClient {
       const expectedContents = '''
 import retrofit2.http.*
 
-interface ClassNameClient {}
+interface ClassNameApiClient {}
 ''';
       expect(filledContent.contents, expectedContents);
     });
@@ -110,7 +110,7 @@ interface ClassNameClient {}
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'class_name.g.dart';
+part 'class_name_api.g.dart';
 
 @RestApi()
 abstract class ClassNameApi {

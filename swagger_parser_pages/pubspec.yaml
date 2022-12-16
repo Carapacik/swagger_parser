@@ -6,13 +6,13 @@ environment:
   sdk: '>=2.18.0 <3.0.0'
 
 dependencies:
-  archive: ^3.3.2
+  archive: ^3.3.5
   flutter:
     sdk: flutter
   swagger_parser:
     path:
       ../swagger_parser
-  url_launcher: ^6.1.6
+  url_launcher: ^6.1.7
   url_strategy: ^0.2.0
 
 dev_dependencies:

@@ -5,23 +5,20 @@ import 'programming_lang.dart';
 class UniversalType {
   const UniversalType({
     required this.type,
-    this.isRequired = true,
-    this.arrayDepth = 0,
+    this.format,
     this.name,
     this.jsonKey,
-    this.format,
     this.defaultValue,
+    this.isRequired = true,
+    this.arrayDepth = 0,
   });
 
   /// Object type
   final String type;
 
-  /// Array depth, 0 if not a list
-  /// Example: arrayDepth = 2 -> List<List<Object>>
-  final int arrayDepth;
-
-  /// Whether or not this field is required.
-  final bool isRequired;
+  /// Format for object
+  /// Example: type = number, format = double
+  final String? format;
 
   /// Object name
   final String? name;
@@ -29,12 +26,15 @@ class UniversalType {
   /// Object json key
   final String? jsonKey;
 
-  /// Format for object
-  /// Example: type = number, format = double
-  final String? format;
-
   /// Holding object default value
   final String? defaultValue;
+
+  /// Whether or not this field is required.
+  final bool isRequired;
+
+  /// Array depth, 0 if not a list
+  /// Example: arrayDepth = 2 -> List<List<Object>>
+  final int arrayDepth;
 
   /// Function for compare to put required named parameters first
   int compareTo(UniversalType other) {
