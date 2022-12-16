@@ -4,9 +4,8 @@ class CaseUtils {
     _words = _groupIntoWords(text);
   }
 
-  late List<String> _words;
-
-  static const _caseSymbolsList = ['_', '-', '/', '{', '}', ' ', '.', ',', '#', '@'];
+  late final List<String> _words;
+  static const _separateSymbolsList = r' #,-./@\_{}';
   static const _upperRegex = r'[A-Z]$';
 
   List<String> _groupIntoWords(String text) {
@@ -17,15 +16,13 @@ class CaseUtils {
     for (var i = 0; i < text.length; i++) {
       final char = text[i];
       final nextChar = i + 1 == text.length ? null : text[i + 1];
-
-      if (_caseSymbolsList.contains(char)) {
+      if (_separateSymbolsList.contains(char)) {
         continue;
       }
       sb.write(char);
       final isEndOfWord = nextChar == null ||
           (RegExp(_upperRegex).hasMatch(nextChar) && !isAllCaps) ||
-          _caseSymbolsList.contains(nextChar);
-
+          _separateSymbolsList.contains(nextChar);
       if (isEndOfWord) {
         words.add(sb.toString());
         sb.clear();

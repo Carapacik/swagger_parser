@@ -27,4 +27,3 @@ flutter:
 swagger_parser:
   json_path: assets/swagger.json
   output_directory: lib/api
-  freezed: true
