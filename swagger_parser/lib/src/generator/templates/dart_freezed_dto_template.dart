@@ -1,13 +1,14 @@
 import 'package:collection/collection.dart';
 
 import '../../utils/case_utils.dart';
+import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
 import '../models/programming_lang.dart';
-import '../models/universal_data_class.dart';
+import '../models/universal_component_class.dart';
 import '../models/universal_type.dart';
 
 /// Provides template for generating dart DTO using freezed
-String dartFreezedDtoTemplate(UniversalDataClass dataClass) {
+String dartFreezedDtoTemplate(UniversalComponentClass dataClass) {
   final className = dataClass.name.toPascal;
   return '''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -28,9 +29,30 @@ String _parametersToString(List<UniversalType> parameters) {
       List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)));
   return sortedByRequired
       .map(
-        (e) =>
-            '${e.jsonKey != null && e.name != e.jsonKey ? "\n    @JsonKey(name: '${e.jsonKey}') " : '\n    '}'
-            '${e.isRequired ? 'required ' : ''}${toSuitableType(e, ProgrammingLanguage.dart, isRequired: e.isRequired)} ${e.name},',
+        (e) => '${_jsonKey(e)}\n    ${e.isRequired ? 'required ' : ''}'
+            '${toSuitableType(e, ProgrammingLanguage.dart, isRequired: e.isRequired)} ${e.name},',
       )
       .join();
+}
+
+String _jsonKey(UniversalType t) {
+  final sb = StringBuffer();
+  if ((t.jsonKey == null || t.name == t.jsonKey) && t.defaultValue == null) {
+    return '';
+  }
+  sb.write('\n    @JsonKey(');
+  if (t.defaultValue != null) {
+    sb.write(
+      'defaultValue: ${t.type.quoterForStringType()}${t.defaultValue}${t.type.quoterForStringType()}',
+    );
+  }
+
+  if (t.defaultValue != null && (t.jsonKey != null && t.name != t.jsonKey)) {
+    sb.write(', ');
+  }
+  if (t.jsonKey != null && t.name != t.jsonKey) {
+    sb.write("name: '${t.jsonKey}'");
+  }
+  sb.write(')');
+  return sb.toString();
 }

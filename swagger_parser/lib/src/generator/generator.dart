@@ -23,7 +23,7 @@ class Generator {
     final jsonPath = yamlConfig.jsonPath;
     final configFile = jsonFile(jsonPath);
     if (configFile == null) {
-      throw GeneratorException("Can't find json file at $jsonPath");
+      throw GeneratorException("Can't find json file at $jsonPath.");
     }
     _jsonContent = configFile.readAsStringSync();
 
@@ -32,7 +32,7 @@ class Generator {
       final parsedLang = ProgrammingLanguage.fromString(yamlConfig.language);
       if (parsedLang == null) {
         throw GeneratorException(
-          "'language' field must be contained in ${ProgrammingLanguage.values}",
+          "'language' field must be contained in ${ProgrammingLanguage.values}.",
         );
       }
       _programmingLanguage = parsedLang;
@@ -46,7 +46,6 @@ class Generator {
       _squishClients = yamlConfig.squishClients!;
     }
 
-    _clientPostfix = 'Client';
     if (yamlConfig.clientPostfix != null) {
       _clientPostfix = yamlConfig.clientPostfix!;
     }
@@ -57,22 +56,22 @@ class Generator {
   Generator.fromString({
     required String jsonContent,
     required ProgrammingLanguage language,
-    String? clientPostfix,
+    String clientPostfix = 'ApiClient',
     bool freezed = false,
     bool squishClients = false,
   }) {
     _jsonContent = jsonContent;
-    _outputDirectory = '';
-    _clientPostfix = clientPostfix ?? 'Client';
     _programmingLanguage = language;
+    _outputDirectory = '';
+    _clientPostfix = clientPostfix;
     _squishClients = squishClients;
     _freezed = freezed;
   }
 
   late final String _jsonContent;
   late final String _outputDirectory;
-  late String _clientPostfix;
   late ProgrammingLanguage _programmingLanguage;
+  String _clientPostfix = 'ApiClient';
   bool _freezed = false;
   bool _squishClients = false;
 
@@ -100,6 +99,7 @@ class Generator {
     _dataClasses = parser.parseDataClasses();
   }
 
+  /// Generate files with content
   Future<void> _generateFiles() async {
     final files = await _fillContent();
     for (final file in files) {
@@ -107,6 +107,7 @@ class Generator {
     }
   }
 
+  /// Get files content
   Future<List<GeneratedFile>> _fillContent() async {
     final writeController = FillController(
       clientPostfix: _clientPostfix.toPascal,

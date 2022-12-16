@@ -42,14 +42,14 @@ class YamlConfig {
       _jsonPath = yamlConfig['json_path'] as String?;
     }
     if (_jsonPath == null) {
-      throw ConfigException("Config parameter 'json_path' is required");
+      throw ConfigException("Config parameter 'json_path' is required.");
     }
 
     if (yamlConfig.containsKey('output_directory')) {
       _outputDirectory = yamlConfig['output_directory'] as String?;
     }
     if (_outputDirectory == null) {
-      throw ConfigException("Config parameter '_outputDirectory' is required");
+      throw ConfigException("Config parameter '_outputDirectory' is required.");
     }
 
     if (yamlConfig.containsKey('language')) {
@@ -62,14 +62,16 @@ class YamlConfig {
 
     if (yamlConfig.containsKey('squish_clients')) {
       if (yamlConfig['squish_clients'] is! bool?) {
-        throw ConfigException("Config parameter 'squish_clients' must be bool");
+        throw ConfigException(
+          "Config parameter 'squish_clients' must be bool.",
+        );
       }
       _squishClients = yamlConfig['squish_clients'] as bool?;
     }
 
     if (yamlConfig.containsKey('freezed')) {
       if (yamlConfig['freezed'] is! bool?) {
-        throw ConfigException("Config parameter 'freezed' must be bool");
+        throw ConfigException("Config parameter 'freezed' must be bool.");
       }
       _freezed = yamlConfig['freezed'] as bool?;
     }

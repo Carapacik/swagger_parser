@@ -1,4 +1,5 @@
 import '../../utils/case_utils.dart';
+import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
 import '../models/programming_lang.dart';
 import '../models/universal_request.dart';
@@ -11,7 +12,6 @@ String dartRetrofitClientTemplate({
   String? postfix,
 }) {
   final name = postfix != null ? restClient.name.toPascal + postfix : 'Client';
-
   final sb = StringBuffer(
     '''
 import 'package:dio/dio.dart';
@@ -54,4 +54,6 @@ String _toClientRequest(UniversalRequest request) {
 
 String _toQueryParameter(UniversalRequestType parameter) =>
     "    @${parameter.parameterType.type}(${parameter.name != null ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
-    '${parameter.type.isRequired ? 'required ' : ''}${toSuitableType(parameter.type, ProgrammingLanguage.dart, isRequired: parameter.type.isRequired)} ${parameter.type.name!.toCamel},';
+    '${parameter.type.isRequired && parameter.type.defaultValue == null ? 'required ' : ''}'
+    '${toSuitableType(parameter.type, ProgrammingLanguage.dart, isRequired: parameter.type.isRequired)} '
+    '${parameter.type.name!.toCamel}${parameter.type.defaultValue != null ? ' = ${parameter.type.type.quoterForStringType()}${parameter.type.defaultValue}${parameter.type.type.quoterForStringType()}' : ''},';

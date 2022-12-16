@@ -1,11 +1,11 @@
 import '../../utils/case_utils.dart';
 import '../../utils/utils.dart';
 import '../models/programming_lang.dart';
-import '../models/universal_data_class.dart';
+import '../models/universal_component_class.dart';
 import '../models/universal_type.dart';
 
 /// Provides template for generating kotlin DTO using Moshi
-String kotlinMoshiDtoTemplate(UniversalDataClass dataClass) {
+String kotlinMoshiDtoTemplate(UniversalComponentClass dataClass) {
   return '''
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
