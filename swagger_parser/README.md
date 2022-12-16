@@ -27,6 +27,7 @@ dependencies:
   dio: ^4.0.0
   json_annotation: ^4.7.0
   retrofit: ^3.3.0
+  freezed_annotation: ^2.2.0 # Only if using Freezed
 
 dev_dependencies:
   # ...
@@ -34,6 +35,7 @@ dev_dependencies:
   build_runner: ^2.3.0
   json_serializable: ^6.5.0
   retrofit_generator: ^4.2.0
+  freezed: ^2.3.2 # Only if using Freezed
 ```
 
 Obs: versions above are just an initial reference and can be removed if conflicting with your versions.
@@ -76,11 +78,3 @@ Now run the builder for retrofit, json_serializable and freezed:
 ```shell
 dart run build_runner build
 ```
-
-## TODOS
-
-- Dart output:
-  - Inheritance mapped reading from "allOf" on model definition (could be a fix for the next item if ancestor class is used as the type).
-  - Fix problem with oneOf, anyOf which creates a "List\<Null\>" and adds: import "null.dart"
-  - Fix problem mapping properties on swagger named "default" as this is keyword in Flutter and causes crashes.
-- Support URL for definition

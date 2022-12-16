@@ -17,7 +17,7 @@ String dartRetrofitClientTemplate({
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../shared_models/')}
-part '${postfix != null ? restClient.name.toSnake : 'rest_client'}.g.dart';
+part '${postfix != null ? restClient.name.toSnake + '_' + postfix.toSnake : 'rest_client'}.g.dart';
 
 @RestApi()
 abstract class $name {

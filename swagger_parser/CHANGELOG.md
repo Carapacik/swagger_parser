@@ -1,7 +1,13 @@
+## 0.3.3
+
+- Fix problem with naming the generated parts when a postfix was provided
+
 ## 0.3.2
+
 - Fix problem with attributes named with dart keywords like "default" (dart keywork incompatibility)
 
 ## 0.3.1
+
 - Fix the problem with APIs with @
 - Fix the problem with "number" type to map "double"
 - Fix the problem with "object" type to map Dart "Object"
