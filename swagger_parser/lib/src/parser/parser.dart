@@ -374,7 +374,7 @@ class OpenApiJsonParser {
           (propertyName, propertyValue) {
             final typeWithImport = _arrayWithDepth(
               propertyValue as Map<String, dynamic>,
-              name: _dartKeywords.contains(propertyName)
+              name: dartKeywords.contains(propertyName)
                   ? '${propertyName}Value'
                   : propertyName,
               jsonKey: propertyName,
