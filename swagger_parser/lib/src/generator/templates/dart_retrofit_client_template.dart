@@ -12,12 +12,15 @@ String dartRetrofitClientTemplate({
   String? postfix,
 }) {
   final name = postfix != null ? restClient.name.toPascal + postfix : 'Client';
+  final partFile = postfix != null
+      ? '${restClient.name.toSnake}_${postfix.toSnake}'
+      : 'rest_client';
   final sb = StringBuffer(
     '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../shared_models/')}
-part '${postfix != null ? '${restClient.name.toSnake}_${postfix.toSnake}' : 'rest_client'}.g.dart';
+part '$partFile.g.dart';
 
 @RestApi()
 abstract class $name {
