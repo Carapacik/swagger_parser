@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 
 import '../generator/models/all_of.dart';
+import '../generator/models/universal_component_class.dart';
 import '../generator/models/universal_data_class.dart';
+import '../generator/models/universal_enum_class.dart';
 import '../generator/models/universal_request.dart';
 import '../generator/models/universal_request_type.dart';
 import '../generator/models/universal_rest_client.dart';
@@ -41,11 +43,14 @@ class OpenApiJsonParser {
   late final OpenApiVersion _version;
 
   static const _defaultClientTag = 'client';
+  static const _code200Var = '200';
   static const _formatVar = 'format';
   static const _contentVar = 'content';
   static const _responsesVar = 'responses';
   static const _multipartVar = 'multipart/form-data';
   static const _typeVar = 'type';
+  static const _itemsVar = 'items';
+  static const _arrayVar = 'array';
   static const _bodyVar = 'body';
   static const _nameVar = 'name';
   static const _parametersVar = 'parameters';
@@ -62,23 +67,28 @@ class OpenApiJsonParser {
   static const _schemasVar = 'schemas';
   static const _pathsVar = 'paths';
   static const _allOfVar = 'allOf';
+  static const _defaultVar = 'default';
+  static const _enumVar = 'enum';
 
-  /// Parses rest clients from "paths" section of json file into universal models
+  /// Parses rest clients from 'paths' section of json file into universal models
   Iterable<UniversalRestClient> parseRestClients() {
     final restClients = <UniversalRestClient>[];
     final imports = SplayTreeSet<String>();
     var isMultiPart = false;
 
-    /// Parses return type for client Query for OpenApi v3
+    /// Parses return type for client query for OpenApi v3
     UniversalType? returnTypeV3(Map<String, dynamic> map) {
-      if (!map.containsKey('200') ||
-          !(map['200'] as Map<String, dynamic>).containsKey(_contentVar)) {
+      if (!map.containsKey(_code200Var) ||
+          !(map[_code200Var] as Map<String, dynamic>)
+              .containsKey(_contentVar)) {
         return null;
       }
       final contentType =
-          (map['200'][_contentVar] as Map<String, dynamic>).entries.firstOrNull;
+          (map[_code200Var][_contentVar] as Map<String, dynamic>)
+              .entries
+              .firstOrNull;
       if (contentType == null) {
-        throw ParserException('Response must always have a content type');
+        throw ParserException('Response must always have a content type.');
       }
       // When content/{content type} exists but empty
       if ((contentType.value as Map<String, dynamic>).isEmpty) {
@@ -132,7 +142,7 @@ class OpenApiJsonParser {
       if (map.containsKey(_requestBodyVar)) {
         if (!(map[_requestBodyVar] as Map<String, dynamic>)
             .containsKey(_contentVar)) {
-          throw ParserException('requestBody must always have content');
+          throw ParserException('requestBody must always have content.');
         }
         final contentTypes =
             map[_requestBodyVar][_contentVar] as Map<String, dynamic>;
@@ -150,7 +160,7 @@ class OpenApiJsonParser {
               content == null ? null : content.value as Map<String, dynamic>;
         }
         if (contentType == null) {
-          throw ParserException('Response must always have a content type');
+          throw ParserException('Response must always have a content type.');
         }
         if (isMultiPart) {
           if ((contentType[_schemaVar] as Map<String, dynamic>)
@@ -171,6 +181,7 @@ class OpenApiJsonParser {
                   type: currentType.type,
                   arrayDepth: currentType.arrayDepth,
                   name: 'file',
+                  defaultValue: currentType.defaultValue,
                   isRequired: currentType.isRequired,
                   format: currentType.format,
                 ),
@@ -196,6 +207,7 @@ class OpenApiJsonParser {
                     type: currentType.type,
                     arrayDepth: currentType.arrayDepth,
                     name: e.key,
+                    defaultValue: currentType.defaultValue,
                     isRequired: currentType.isRequired,
                     format: currentType.format,
                   ),
@@ -218,9 +230,10 @@ class OpenApiJsonParser {
             UniversalRequestType(
               parameterType: HttpParameterType.body,
               type: UniversalType(
+                name: _bodyVar,
                 type: currentType.type,
                 arrayDepth: currentType.arrayDepth,
-                name: _bodyVar,
+                defaultValue: currentType.defaultValue,
                 isRequired: currentType.isRequired,
                 format: currentType.format,
               ),
@@ -233,12 +246,12 @@ class OpenApiJsonParser {
 
     /// Parses return type for client query for OpenApi v2
     UniversalType? returnTypeV2(Map<String, dynamic> map) {
-      if (!map.containsKey('200') ||
-          !(map['200'] as Map<String, dynamic>).containsKey(_schemaVar)) {
+      if (!map.containsKey(_code200Var) ||
+          !(map[_code200Var] as Map<String, dynamic>).containsKey(_schemaVar)) {
         return null;
       }
       final typeWithImport =
-          _arrayWithDepth(map['200'][_schemaVar] as Map<String, dynamic>);
+          _arrayWithDepth(map[_code200Var][_schemaVar] as Map<String, dynamic>);
       if (typeWithImport.import != null) {
         imports.add(typeWithImport.import!);
       }
@@ -324,10 +337,10 @@ class OpenApiJsonParser {
     return restClients;
   }
 
-  /// Parses data classes from "components" of json file to universal models
+  /// Parses data classes from 'components' of json file to universal models
   Iterable<UniversalDataClass> parseDataClasses() {
     final dataClasses = <UniversalDataClass>[];
-    late Map<String, dynamic> entities;
+    late final Map<String, dynamic> entities;
     if (_version == OpenApiVersion.v3_1 || _version == OpenApiVersion.v3) {
       if (!_jsonContent.containsKey(_componentsVar) ||
           !(_jsonContent[_componentsVar] as Map<String, dynamic>)
@@ -374,6 +387,18 @@ class OpenApiJsonParser {
 
       if (value.containsKey(_propertiesVar)) {
         findParamsAndImports(value);
+      } else if (value.containsKey(_enumVar)) {
+        final items =
+            (value[_enumVar] as List).map((e) => e.toString()).toSet();
+        dataClasses.add(
+          UniversalEnumClass(
+            name: key,
+            items: items,
+            type: value[_typeVar].toString(),
+            defaultValue: value[_defaultVar]?.toString(),
+          ),
+        );
+        return;
       } else if (value.containsKey(_allOfVar)) {
         for (final element in value[_allOfVar] as List) {
           if ((element as Map<String, dynamic>).containsKey(_refVar)) {
@@ -389,7 +414,7 @@ class OpenApiJsonParser {
       final allOf =
           refs.isNotEmpty ? AllOf(refs: refs, properties: parameters) : null;
       dataClasses.add(
-        UniversalDataClass(
+        UniversalComponentClass(
           name: key,
           imports: imports,
           parameters: allOf != null ? [] : parameters,
@@ -397,15 +422,22 @@ class OpenApiJsonParser {
         ),
       );
     });
-    // allOf check
-    final allOfClasses = dataClasses.where((element) => element.allOf != null);
+
+    // check for 'allOf'
+    final allOfClasses = dataClasses
+        .where((dc) => dc is UniversalComponentClass && dc.allOf != null);
     for (final allOfClass in allOfClasses) {
+      if (allOfClass is! UniversalComponentClass) {
+        continue;
+      }
       final refs = allOfClass.allOf!.refs;
       final foundClasses =
-          dataClasses.where((element) => refs.contains(element.name)).toList();
+          dataClasses.where((e) => refs.contains(e.name)).toList();
       for (final element in foundClasses) {
-        allOfClass.parameters.addAll(element.parameters);
-        allOfClass.imports.addAll(element.imports);
+        if (element is UniversalComponentClass) {
+          allOfClass.parameters.addAll(element.parameters);
+          allOfClass.imports.addAll(element.imports);
+        }
       }
       allOfClass.parameters.addAll(allOfClass.allOf!.properties);
     }
@@ -427,12 +459,13 @@ class OpenApiJsonParser {
     bool useSchema = false,
     bool isRequired = true,
   }) {
-    if (map.containsKey(_typeVar) && map[_typeVar] == 'array') {
-      final arrayType = _arrayWithDepth(map['items'] as Map<String, dynamic>);
+    if (map.containsKey(_typeVar) && map[_typeVar] == _arrayVar) {
+      final arrayType = _arrayWithDepth(map[_itemsVar] as Map<String, dynamic>);
       return TypeWithImport(
         type: UniversalType(
           name: name?.toCamel,
           jsonKey: name,
+          defaultValue: arrayType.type.defaultValue,
           type: arrayType.type.type,
           arrayDepth: arrayType.type.arrayDepth + 1,
           format: arrayType.type.format,
@@ -445,6 +478,8 @@ class OpenApiJsonParser {
       type: UniversalType(
         name: name?.toCamel,
         jsonKey: name,
+        defaultValue:
+            map.containsKey(_defaultVar) ? map[_defaultVar].toString() : null,
         format: map.containsKey(_formatVar) ? map[_formatVar].toString() : null,
         type: map.containsKey(_typeVar)
             ? map[_typeVar].toString()
@@ -466,13 +501,17 @@ class OpenApiJsonParser {
   }
 }
 
-/// Class that contains Certain type and imports associated with it
-/// Imports are created when $ref is found while determining type
+/// Class that contains Certain [type] and imports associated with it
+/// [import] are created when $ref is found while determining type
 class TypeWithImport {
   TypeWithImport({required this.type, this.import});
 
+  /// Type
   UniversalType type;
+
+  /// Import for type, if you need a separate class
   String? import;
 }
 
+/// All versions of the OpenApi that this package supports
 enum OpenApiVersion { v3_1, v3, v2 }
