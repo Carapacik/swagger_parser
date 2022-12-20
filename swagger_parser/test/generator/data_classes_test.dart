@@ -47,7 +47,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@freezed
+@Freezed()
 class ClassName with _$ClassName {
   const factory ClassName() = _ClassName;
   
@@ -139,7 +139,7 @@ import 'space_class.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@freezed
+@Freezed()
 class ClassName with _$ClassName {
   const factory ClassName() = _ClassName;
   
@@ -262,7 +262,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@freezed
+@Freezed()
 class ClassName with _$ClassName {
   const factory ClassName({
     required int intType,
@@ -373,7 +373,7 @@ import 'another.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@freezed
+@Freezed()
 class ClassName with _$ClassName {
   const factory ClassName({
     required List<int> list0,
@@ -502,7 +502,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@freezed
+@Freezed()
 class ClassName with _$ClassName {
   const factory ClassName({
     @JsonKey(name: 'int_type')
@@ -640,7 +640,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@freezed
+@Freezed()
 class ClassName with _$ClassName {
   const factory ClassName({
     @JsonKey(defaultValue: 1)
@@ -752,7 +752,7 @@ import 'another.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@freezed
+@Freezed()
 class ClassName with _$ClassName {
   const factory ClassName({
     int? intType,
@@ -889,7 +889,7 @@ import 'another.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@freezed
+@Freezed()
 class ClassName with _$ClassName {
   const factory ClassName({
     required int intRequired,

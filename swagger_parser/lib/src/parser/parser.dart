@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_dynamic_calls
 import 'dart:collection';
 import 'dart:convert';
 
@@ -15,14 +16,13 @@ import '../utils/case_utils.dart';
 import '../utils/dart_keywords.dart';
 import 'parser_exception.dart';
 
-// ignore_for_file: avoid_dynamic_calls
 /// General class for parsing OpenApi json files into universal models
 class OpenApiJsonParser {
   OpenApiJsonParser(String jsonContent) {
     _jsonContent = jsonDecode(jsonContent) as Map<String, dynamic>;
 
-    if (_jsonContent.containsKey('openapi')) {
-      final version = _jsonContent['openapi'].toString();
+    if (_jsonContent.containsKey(_openApiVar)) {
+      final version = _jsonContent[_openApiVar].toString();
       if (version.startsWith('3.1')) {
         _version = OpenApiVersion.v3_1;
         return;
@@ -32,18 +32,21 @@ class OpenApiJsonParser {
         return;
       }
     }
-    if (_jsonContent.containsKey('swagger') &&
-        _jsonContent['swagger'].toString().startsWith('2.0')) {
+    if (_jsonContent.containsKey(_swaggerVar) &&
+        _jsonContent[_swaggerVar].toString().startsWith('2.0')) {
       _version = OpenApiVersion.v2;
       return;
     }
-    throw ParserException('Unknown version of OpenAPI.');
+    throw const ParserException('Unknown version of OpenAPI.');
   }
 
   late final Map<String, dynamic> _jsonContent;
   late final OpenApiVersion _version;
 
+  late final List<UniversalComponentClass> objectClasses;
+
   static const _allOfVar = 'allOf';
+  static const _anyOfVar = 'anyOf';
   static const _arrayVar = 'array';
   static const _bodyVar = 'body';
   static const _code200Var = '200';
@@ -59,6 +62,9 @@ class OpenApiJsonParser {
   static const _itemsVar = 'items';
   static const _multipartVar = 'multipart/form-data';
   static const _nameVar = 'name';
+  static const _objectVar = 'object';
+  static const _oneOfVar = 'oneOf';
+  static const _openApiVar = 'openapi';
   static const _parametersVar = 'parameters';
   static const _pathsVar = 'paths';
   static const _propertiesVar = 'properties';
@@ -68,6 +74,7 @@ class OpenApiJsonParser {
   static const _responsesVar = 'responses';
   static const _schemaVar = 'schema';
   static const _schemasVar = 'schemas';
+  static const _swaggerVar = 'swagger';
   static const _tagsVar = 'tags';
   static const _typeVar = 'type';
   static const _valueVar = 'value';
@@ -90,13 +97,17 @@ class OpenApiJsonParser {
               .entries
               .firstOrNull;
       if (contentType == null) {
-        throw ParserException('Response must always have a content type.');
+        throw const ParserException(
+          'Response must always have a content type.',
+        );
       }
-      // When content/{content type} exists but empty
-      if ((contentType.value as Map<String, dynamic>).isEmpty) {
+      final contentTypeValue = contentType.value as Map<String, dynamic>;
+      if (contentTypeValue.isEmpty ||
+          !contentTypeValue.containsKey(_schemasVar) ||
+          (contentTypeValue[_schemaVar] as Map<String, dynamic>).isEmpty) {
         return null;
       }
-      final typeWithImport = _arrayWithDepth(
+      final typeWithImport = _findType(
         contentType.value[_schemaVar] as Map<String, dynamic>,
       );
       if (typeWithImport.import != null) {
@@ -120,10 +131,12 @@ class OpenApiJsonParser {
         for (final rawParameter in map[_parametersVar] as List<dynamic>) {
           final isRequired =
               (rawParameter as Map<String, dynamic>)[_requiredVar] as bool?;
-          final typeWithImport = _arrayWithDepth(
+          final typeWithImport = _findType(
             rawParameter[_schemaVar] as Map<String, dynamic>,
             name: rawParameter[_nameVar].toString(),
             isRequired: isRequired ?? true,
+            allOfObject: (rawParameter[_schemaVar] as Map<String, dynamic>)
+                .containsKey(_allOfVar),
           );
           if (typeWithImport.import != null) {
             imports.add(typeWithImport.import!);
@@ -144,7 +157,7 @@ class OpenApiJsonParser {
       if (map.containsKey(_requestBodyVar)) {
         if (!(map[_requestBodyVar] as Map<String, dynamic>)
             .containsKey(_contentVar)) {
-          throw ParserException('requestBody must always have content.');
+          throw const ParserException('Request body must always have content.');
         }
         final contentTypes =
             map[_requestBodyVar][_contentVar] as Map<String, dynamic>;
@@ -162,13 +175,15 @@ class OpenApiJsonParser {
               content == null ? null : content.value as Map<String, dynamic>;
         }
         if (contentType == null) {
-          throw ParserException('Response must always have a content type.');
+          throw const ParserException(
+            'Response must always have a content type.',
+          );
         }
         if (isMultiPart) {
           if ((contentType[_schemaVar] as Map<String, dynamic>)
               .containsKey(_refVar)) {
             final isRequired = map[_requestBodyVar][_requiredVar] as bool?;
-            final typeWithImport = _arrayWithDepth(
+            final typeWithImport = _findType(
               contentType[_schemaVar] as Map<String, dynamic>,
               isRequired: isRequired ?? true,
             );
@@ -195,7 +210,7 @@ class OpenApiJsonParser {
             for (final e in (contentType[_schemaVar][_propertiesVar]
                     as Map<String, dynamic>)
                 .entries) {
-              final typeWithImport = _arrayWithDepth(
+              final typeWithImport = _findType(
                 e.value as Map<String, dynamic>,
               );
               final currentType = typeWithImport.type;
@@ -220,7 +235,7 @@ class OpenApiJsonParser {
           }
         } else {
           final isRequired = map[_requestBodyVar][_requiredVar] as bool?;
-          final typeWithImport = _arrayWithDepth(
+          final typeWithImport = _findType(
             contentType[_schemaVar] as Map<String, dynamic>,
             isRequired: isRequired ?? true,
           );
@@ -253,7 +268,7 @@ class OpenApiJsonParser {
         return null;
       }
       final typeWithImport =
-          _arrayWithDepth(map[_code200Var][_schemaVar] as Map<String, dynamic>);
+          _findType(map[_code200Var][_schemaVar] as Map<String, dynamic>);
       if (typeWithImport.import != null) {
         imports.add(typeWithImport.import!);
       }
@@ -277,7 +292,7 @@ class OpenApiJsonParser {
       for (final rawParameter in map[_parametersVar] as List<dynamic>) {
         final isRequired =
             (rawParameter as Map<String, dynamic>)[_requiredVar] as bool?;
-        final typeWithImport = _arrayWithDepth(
+        final typeWithImport = _findType(
           rawParameter,
           name: rawParameter[_nameVar].toString(),
           isRequired: isRequired ?? true,
@@ -358,6 +373,7 @@ class OpenApiJsonParser {
       entities = _jsonContent[_definitionsVar] as Map<String, dynamic>;
     }
 
+    objectClasses = [];
     entities.forEach((key, value) {
       var requiredParameters = <String>[];
       if ((value as Map<String, dynamic>).containsKey(_requiredVar)) {
@@ -373,7 +389,7 @@ class OpenApiJsonParser {
       void findParamsAndImports(Map<String, dynamic> map) {
         (map[_propertiesVar] as Map<String, dynamic>).forEach(
           (propertyName, propertyValue) {
-            final typeWithImport = _arrayWithDepth(
+            final typeWithImport = _findType(
               propertyValue as Map<String, dynamic>,
               name: propertyName,
               isRequired: requiredParameters.contains(propertyName) ||
@@ -397,7 +413,7 @@ class OpenApiJsonParser {
             name: key,
             items: items,
             type: value[_typeVar].toString(),
-            defaultValue: value[_defaultVar]?.toString(),
+            defaultValue: _defaultValueCheck(value),
           ),
         );
         return;
@@ -425,6 +441,8 @@ class OpenApiJsonParser {
       );
     });
 
+    dataClasses.addAll(objectClasses);
+
     // check for 'allOf'
     final allOfClasses = dataClasses
         .where((dc) => dc is UniversalComponentClass && dc.allOf != null);
@@ -433,12 +451,16 @@ class OpenApiJsonParser {
         continue;
       }
       final refs = allOfClass.allOf!.refs;
-      final foundClasses =
-          dataClasses.where((e) => refs.contains(e.name)).toList();
+      final foundClasses = dataClasses.where((e) => refs.contains(e.name));
       for (final element in foundClasses) {
         if (element is UniversalComponentClass) {
           allOfClass.parameters.addAll(element.parameters);
           allOfClass.imports.addAll(element.imports);
+        } else if (element is UniversalEnumClass) {
+          allOfClass.parameters.add(
+            UniversalType(type: element.name, name: element.name.toCamel),
+          );
+          allOfClass.imports.add(element.name);
         }
       }
       allOfClass.parameters.addAll(allOfClass.allOf!.properties);
@@ -455,20 +477,26 @@ class OpenApiJsonParser {
 
   String _formatRef(String ref) => ref.split('/').last.toPascal;
 
-  TypeWithImport _arrayWithDepth(
+  String? _defaultValueCheck(Map<String, dynamic> map) =>
+      map.containsKey(_defaultVar) ? map[_defaultVar].toString() : null;
+
+  TypeWithImport _findType(
     Map<String, dynamic> map, {
     String? name,
-    bool useSchema = false,
     bool isRequired = true,
+    bool useSchema = false,
+    bool allOfObject = false,
+    String? arrayName,
   }) {
     if (map.containsKey(_typeVar) && map[_typeVar] == _arrayVar) {
-      final arrayType = _arrayWithDepth(map[_itemsVar] as Map<String, dynamic>);
+      final arrayType =
+          _findType(map[_itemsVar] as Map<String, dynamic>, arrayName: name);
       return TypeWithImport(
         type: UniversalType(
           type: arrayType.type.type,
           format: arrayType.type.format,
-          name:
-              (dartKeywords.contains(name) ? '$name$_valueVar' : name)?.toCamel,
+          name: (dartKeywords.contains(name) ? '$name $_valueVar' : name)
+              ?.toCamel,
           jsonKey: name,
           defaultValue: arrayType.type.defaultValue,
           isRequired: isRequired,
@@ -476,30 +504,77 @@ class OpenApiJsonParser {
         ),
         import: arrayType.import,
       );
+    } else if (map.containsKey(_typeVar) &&
+        map[_typeVar] == _objectVar &&
+        map.containsKey(_propertiesVar) &&
+        (map[_propertiesVar] as Map<String, dynamic>).isNotEmpty) {
+      final newName = arrayName ?? name ?? '';
+      final typeWithImports = <TypeWithImport>[];
+      (map[_propertiesVar] as Map<String, dynamic>).forEach((key, value) {
+        typeWithImports
+            .add(_findType(value as Map<String, dynamic>, name: key));
+      });
+      if (objectClasses
+          .where((element) => element.name == '$newName $_valueVar'.toPascal)
+          .isEmpty) {
+        objectClasses.add(
+          UniversalComponentClass(
+            name: '$newName $_valueVar'.toPascal,
+            imports: typeWithImports
+                .where((e) => e.import != null)
+                .map((e) => e.import!)
+                .toSet(),
+            parameters: typeWithImports.map((e) => e.type).toList(),
+          ),
+        );
+      }
+      return TypeWithImport(
+        type: UniversalType(
+          type: '$newName $_valueVar'.toPascal,
+          format:
+              map.containsKey(_formatVar) ? map[_formatVar].toString() : null,
+          name:
+              (dartKeywords.contains(newName) ? '$newName $_valueVar' : newName)
+                  .toCamel,
+          jsonKey: newName,
+          defaultValue: _defaultValueCheck(map),
+          isRequired: isRequired,
+        ),
+        import: '$newName $_valueVar',
+      );
     }
-    return TypeWithImport(
-      type: UniversalType(
-        type: map.containsKey(_typeVar)
-            ? map[_typeVar].toString()
+    final type = map.containsKey(_typeVar)
+        ? map[_typeVar].toString()
+        : map.containsKey(_anyOfVar) ||
+                map.containsKey(_oneOfVar) ||
+                allOfObject
+            ? _objectVar
             : _formatRef(
                 useSchema
                     ? map[_schemaVar][_refVar].toString()
                     : map[_refVar].toString(),
-              ),
+              );
+    final import = map.containsKey(_typeVar) ||
+            map.containsKey(_anyOfVar) ||
+            map.containsKey(_oneOfVar) ||
+            allOfObject
+        ? null
+        : _formatRef(
+            useSchema
+                ? map[_schemaVar][_refVar].toString()
+                : map[_refVar].toString(),
+          );
+    return TypeWithImport(
+      type: UniversalType(
+        type: type,
         format: map.containsKey(_formatVar) ? map[_formatVar].toString() : null,
-        name: (dartKeywords.contains(name) ? '$name$_valueVar' : name)?.toCamel,
+        name:
+            (dartKeywords.contains(name) ? '$name $_valueVar' : name)?.toCamel,
         jsonKey: name,
-        defaultValue:
-            map.containsKey(_defaultVar) ? map[_defaultVar].toString() : null,
+        defaultValue: _defaultValueCheck(map),
         isRequired: isRequired,
       ),
-      import: map.containsKey(_typeVar)
-          ? null
-          : _formatRef(
-              useSchema
-                  ? map[_schemaVar][_refVar].toString()
-                  : map[_refVar].toString(),
-            ),
+      import: import,
     );
   }
 }
@@ -507,13 +582,13 @@ class OpenApiJsonParser {
 /// Class that contains Certain [type] and imports associated with it
 /// [import] are created when $ref is found while determining type
 class TypeWithImport {
-  TypeWithImport({required this.type, this.import});
+  const TypeWithImport({required this.type, this.import});
 
   /// Type
-  UniversalType type;
+  final UniversalType type;
 
   /// Import for type, if you need a separate class
-  String? import;
+  final String? import;
 }
 
 /// All versions of the OpenApi that this package supports
