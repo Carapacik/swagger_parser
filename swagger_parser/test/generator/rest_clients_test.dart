@@ -9,11 +9,8 @@ import 'package:test/test.dart';
 void main() {
   group('Empty rest client', () {
     test('dart + retrofit', () async {
-      const restClient = UniversalRestClient(
-        name: 'ClassName',
-        imports: {},
-        requests: [],
-      );
+      const restClient =
+          UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
       const fillController = FillController();
       final filledContent =
           await fillController.fillRestClientContent(restClient);
@@ -25,18 +22,15 @@ part 'rest_client.g.dart';
 
 @RestApi()
 abstract class Client {
-  factory Client(Dio dio, {required String baseUrl}) = _Client;
+  factory Client(Dio dio, {String baseUrl}) = _Client;
 }
 ''';
       expect(filledContent.contents, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
-      const restClient = UniversalRestClient(
-        name: 'ClassName',
-        imports: {},
-        requests: [],
-      );
+      const restClient =
+          UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent =
@@ -52,11 +46,8 @@ interface Client {}
 
   group('Empty rest client with squish clients', () {
     test('dart + retrofit', () async {
-      const restClient = UniversalRestClient(
-        name: 'ClassName',
-        imports: {},
-        requests: [],
-      );
+      const restClient =
+          UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
       const fillController = FillController(squishClients: true);
       final filledContent =
           await fillController.fillRestClientContent(restClient);
@@ -68,18 +59,15 @@ part 'class_name_api_client.g.dart';
 
 @RestApi()
 abstract class ClassNameApiClient {
-  factory ClassNameApiClient(Dio dio, {required String baseUrl}) = _ClassNameApiClient;
+  factory ClassNameApiClient(Dio dio, {String baseUrl}) = _ClassNameApiClient;
 }
 ''';
       expect(filledContent.contents, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
-      const restClient = UniversalRestClient(
-        name: 'ClassName',
-        imports: {},
-        requests: [],
-      );
+      const restClient =
+          UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
       const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
         squishClients: true,
@@ -97,11 +85,8 @@ interface ClassNameApiClient {}
 
   group('Client postfix', () {
     test('dart + retrofit', () async {
-      const restClient = UniversalRestClient(
-        name: 'ClassName',
-        imports: {},
-        requests: [],
-      );
+      const restClient =
+          UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
       const fillController =
           FillController(squishClients: true, clientPostfix: 'Api');
       final filledContent =
@@ -114,18 +99,15 @@ part 'class_name_api.g.dart';
 
 @RestApi()
 abstract class ClassNameApi {
-  factory ClassNameApi(Dio dio, {required String baseUrl}) = _ClassNameApi;
+  factory ClassNameApi(Dio dio, {String baseUrl}) = _ClassNameApi;
 }
 ''';
       expect(filledContent.contents, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
-      const restClient = UniversalRestClient(
-        name: 'ClassName',
-        imports: {},
-        requests: [],
-      );
+      const restClient =
+          UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
       const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
         squishClients: true,
@@ -151,7 +133,7 @@ interface ClassNameApi {}
           'snake_class',
           'kebab-class',
           'PascalClass',
-          'Space class',
+          'Space class'
         },
         requests: [],
       );
@@ -171,13 +153,14 @@ part 'rest_client.g.dart';
 
 @RestApi()
 abstract class Client {
-  factory Client(Dio dio, {required String baseUrl}) = _Client;
+  factory Client(Dio dio, {String baseUrl}) = _Client;
 }
 ''';
       expect(filledContent.contents, expectedContents);
     });
-
-    // Imports in Kotlin are not supported yet. You can always add PR
+    test('kotlin + retrofit', () async {
+      // Imports in Kotlin are not supported yet. You can always add PR
+    });
   });
 
   group('One empty request', () {
@@ -192,7 +175,7 @@ abstract class Client {
             route: '/',
             returnType: null,
             parameters: [],
-          ),
+          )
         ],
       );
       const fillController = FillController();
@@ -206,7 +189,7 @@ part 'rest_client.g.dart';
 
 @RestApi()
 abstract class Client {
-  factory Client(Dio dio, {required String baseUrl}) = _Client;
+  factory Client(Dio dio, {String baseUrl}) = _Client;
 
   @GET('/')
   Future<void> getRequest();
@@ -226,7 +209,7 @@ abstract class Client {
             route: '/',
             returnType: null,
             parameters: [],
-          ),
+          )
         ],
       );
       const fillController =
@@ -313,7 +296,7 @@ interface Client {
             route: '/',
             returnType: null,
             parameters: [],
-          ),
+          )
         ],
       );
       const fillController = FillController();
@@ -327,7 +310,7 @@ part 'rest_client.g.dart';
 
 @RestApi()
 abstract class Client {
-  factory Client(Dio dio, {required String baseUrl}) = _Client;
+  factory Client(Dio dio, {String baseUrl}) = _Client;
 
   @GET('/')
   Future<void> getRequest();
@@ -427,7 +410,7 @@ abstract class Client {
             route: '/',
             returnType: null,
             parameters: [],
-          ),
+          )
         ],
       );
       const fillController =
@@ -496,7 +479,7 @@ interface Client {
             route: '/boolean',
             returnType: UniversalType(type: 'boolean'),
             parameters: [],
-          ),
+          )
         ],
       );
       const fillController = FillController();
@@ -510,7 +493,7 @@ part 'rest_client.g.dart';
 
 @RestApi()
 abstract class Client {
-  factory Client(Dio dio, {required String baseUrl}) = _Client;
+  factory Client(Dio dio, {String baseUrl}) = _Client;
 
   @GET('/')
   Future<void> getRequest();
@@ -550,7 +533,7 @@ abstract class Client {
             route: '/boolean',
             returnType: UniversalType(type: 'boolean'),
             parameters: [],
-          ),
+          )
         ],
       );
       const fillController =
@@ -589,15 +572,21 @@ interface Client {
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
-                type:
-                    UniversalType(type: 'string', arrayDepth: 1, name: 'list1'),
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 1,
+                  name: 'list1',
+                ),
                 name: 'list1',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
-                type:
-                    UniversalType(type: 'string', arrayDepth: 3, name: 'list2'),
-              ),
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 3,
+                  name: 'list2',
+                ),
+              )
             ],
           ),
           UniversalRequest(
@@ -606,7 +595,7 @@ interface Client {
             route: '/list-of-list',
             returnType: UniversalType(type: 'string', arrayDepth: 2),
             parameters: [],
-          ),
+          )
         ],
       );
       const fillController = FillController();
@@ -620,7 +609,7 @@ part 'rest_client.g.dart';
 
 @RestApi()
 abstract class Client {
-  factory Client(Dio dio, {required String baseUrl}) = _Client;
+  factory Client(Dio dio, {String baseUrl}) = _Client;
 
   @GET('/')
   Future<void> getRequest({
@@ -648,15 +637,21 @@ abstract class Client {
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
-                type:
-                    UniversalType(type: 'string', arrayDepth: 1, name: 'list1'),
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 1,
+                  name: 'list1',
+                ),
                 name: 'list1',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
-                type:
-                    UniversalType(type: 'string', arrayDepth: 3, name: 'list2'),
-              ),
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 3,
+                  name: 'list2',
+                ),
+              )
             ],
           ),
           UniversalRequest(
@@ -665,7 +660,7 @@ abstract class Client {
             route: '/list-of-list',
             returnType: UniversalType(type: 'string', arrayDepth: 2),
             parameters: [],
-          ),
+          )
         ],
       );
       const fillController =
@@ -679,7 +674,7 @@ interface Client {
     @GET("/")
     suspend fun getRequest(
         @Query("list1") list1: List<String>,
-        @Body list2: List<List<List<String>>>
+        @Body list2: List<List<List<String>>>,
     )
 
     @GET("/list-of-list")
@@ -706,9 +701,9 @@ interface Client {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(type: 'string', name: 'alex'),
                 name: 'name',
-              ),
+              )
             ],
-          ),
+          )
         ],
       );
       const fillController = FillController();
@@ -722,7 +717,7 @@ part 'rest_client.g.dart';
 
 @RestApi()
 abstract class Client {
-  factory Client(Dio dio, {required String baseUrl}) = _Client;
+  factory Client(Dio dio, {String baseUrl}) = _Client;
 
   @GET('/')
   Future<void> getRequest({
@@ -748,9 +743,9 @@ abstract class Client {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(type: 'string', name: 'alex'),
                 name: 'name',
-              ),
+              )
             ],
-          ),
+          )
         ],
       );
       const fillController =
@@ -763,7 +758,7 @@ import retrofit2.http.*
 interface Client {
     @GET("/")
     suspend fun getRequest(
-        @Query("name") alex: String
+        @Query("name") alex: String,
     )
 }
 ''';
@@ -801,9 +796,9 @@ interface Client {
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
                 type: UniversalType(type: 'Another', name: 'another'),
-              ),
+              )
             ],
-          ),
+          )
         ],
       );
       const fillController = FillController();
@@ -817,7 +812,7 @@ part 'rest_client.g.dart';
 
 @RestApi()
 abstract class Client {
-  factory Client(Dio dio, {required String baseUrl}) = _Client;
+  factory Client(Dio dio, {String baseUrl}) = _Client;
 
   @GET('/{id}')
   Future<void> getRequest({
@@ -860,9 +855,9 @@ abstract class Client {
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
                 type: UniversalType(type: 'Another', name: 'another'),
-              ),
+              )
             ],
-          ),
+          )
         ],
       );
       const fillController =
@@ -878,7 +873,7 @@ interface Client {
         @Header("Authorization") token: String,
         @Query("name") alex: String,
         @Path("id") id: int,
-        @Body another: Another
+        @Body another: Another,
     )
 }
 ''';
@@ -927,7 +922,7 @@ interface Client {
                 parameterType: HttpParameterType.part,
                 type: UniversalType(type: 'boolean', name: 'parsed'),
                 name: 'parsed-if',
-              ),
+              )
             ],
           ),
           UniversalRequest(
@@ -940,9 +935,9 @@ interface Client {
               UniversalRequestType(
                 parameterType: HttpParameterType.path,
                 type: UniversalType(type: 'AnotherFile', name: 'file'),
-              ),
+              )
             ],
-          ),
+          )
         ],
       );
       const fillController = FillController();
@@ -957,7 +952,7 @@ part 'rest_client.g.dart';
 
 @RestApi()
 abstract class Client {
-  factory Client(Dio dio, {required String baseUrl}) = _Client;
+  factory Client(Dio dio, {String baseUrl}) = _Client;
 
   @MultiPart()
   @POST('/send')
@@ -1019,9 +1014,9 @@ abstract class Client {
                 parameterType: HttpParameterType.part,
                 type: UniversalType(type: 'boolean', name: 'parsed'),
                 name: 'parsed-if',
-              ),
+              )
             ],
-          ),
+          )
         ],
       );
       const fillController =
@@ -1039,7 +1034,7 @@ interface Client {
         @Part("name") alex: String,
         @Part("file") file: MultipartBody.Part,
         @Part("file2") secondFile: MultipartBody.Part,
-        @Part("parsed-if") parsed: Boolean
+        @Part("parsed-if") parsed: Boolean,
     )
 }
 ''';
@@ -1056,7 +1051,7 @@ interface Client {
           UniversalRequest(
             name: 'getRequest',
             requestType: HttpRequestType.get,
-            route: '/',
+            route: '/{id}',
             returnType: null,
             parameters: [
               UniversalRequestType(
@@ -1070,15 +1065,25 @@ interface Client {
                 name: 'list',
               ),
               UniversalRequestType(
-                parameterType: HttpParameterType.body,
+                parameterType: HttpParameterType.path,
+                type: UniversalType(
+                  type: 'int',
+                  name: 'id',
+                  // ignore: avoid_redundant_argument_values
+                  isRequired: true,
+                ),
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
                   name: 'stringType',
                   isRequired: false,
                 ),
+                name: 'type',
               ),
             ],
-          ),
+          )
         ],
       );
       const fillController = FillController();
@@ -1092,12 +1097,13 @@ part 'rest_client.g.dart';
 
 @RestApi()
 abstract class Client {
-  factory Client(Dio dio, {required String baseUrl}) = _Client;
+  factory Client(Dio dio, {String baseUrl}) = _Client;
 
-  @GET('/')
+  @GET('/{id}')
   Future<void> getRequest({
+    @Path() required int id,
     @Query('list') List<String>? list,
-    @Body() String? stringType,
+    @Query('type') String? stringType,
   });
 }
 ''';
@@ -1144,9 +1150,9 @@ abstract class Client {
                   defaultValue: 'false',
                 ),
                 name: 'adult',
-              ),
+              )
             ],
-          ),
+          )
         ],
       );
       const fillController = FillController();
@@ -1161,7 +1167,7 @@ part 'rest_client.g.dart';
 
 @RestApi()
 abstract class Client {
-  factory Client(Dio dio, {required String baseUrl}) = _Client;
+  factory Client(Dio dio, {String baseUrl}) = _Client;
 
   @POST('/send')
   Future<void> sendGagaga({
@@ -1175,7 +1181,7 @@ abstract class Client {
     });
 
     test('kotlin + retrofit', () async {
-      // Default values in Kotlin are not supported yet. You can always add PR
+      // Default values in Kotlin templates are not supported yet. You can always add PR
     });
   });
 }
