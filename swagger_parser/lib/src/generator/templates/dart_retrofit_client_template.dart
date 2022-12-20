@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
@@ -44,7 +46,10 @@ String _toClientRequest(UniversalRequest request) {
   if (request.parameters.isNotEmpty) {
     sb.write('{\n');
   }
-  for (final parameter in request.parameters) {
+  final sortedByRequired = List<UniversalRequestType>.from(
+    request.parameters.sorted((a, b) => a.type.compareTo(b.type)),
+  );
+  for (final parameter in sortedByRequired) {
     sb.write('${_toQueryParameter(parameter)}\n');
   }
   if (request.parameters.isNotEmpty) {

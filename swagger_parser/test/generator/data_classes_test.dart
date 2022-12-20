@@ -86,7 +86,7 @@ data class ClassName()
           'snake_class',
           'kebab-class',
           'PascalClass',
-          'Space class',
+          'Space class'
         },
         parameters: [],
       );
@@ -122,7 +122,7 @@ class ClassName {
           'snake_class',
           'kebab-class',
           'PascalClass',
-          'Space class',
+          'Space class'
         },
         parameters: [],
       );
@@ -181,7 +181,7 @@ class ClassName with _$ClassName {
           UniversalType(type: 'file', name: 'fileType'),
           UniversalType(type: 'boolean', name: 'boolType'),
           UniversalType(type: 'object', name: 'objectType'),
-          UniversalType(type: 'Another', name: 'anotherType'),
+          UniversalType(type: 'Another', name: 'anotherType')
         ],
       );
       const fillController = FillController();
@@ -251,7 +251,7 @@ class ClassName {
           UniversalType(type: 'file', name: 'fileType'),
           UniversalType(type: 'boolean', name: 'boolType'),
           UniversalType(type: 'object', name: 'objectType'),
-          UniversalType(type: 'Another', name: 'anotherType'),
+          UniversalType(type: 'Another', name: 'anotherType')
         ],
       );
       const fillController = FillController(freezed: true);
@@ -290,10 +290,14 @@ class ClassName with _$ClassName {
         parameters: [
           UniversalType(type: 'integer', name: 'intType'),
           UniversalType(type: 'string', name: 'stringType'),
-          // UniversalType(type: 'string', format: 'binary', name: 'binaryStringType'),
-          // UniversalType(type: 'file', name: 'fileType'),
+          UniversalType(
+            type: 'string',
+            format: 'binary',
+            name: 'binaryStringType',
+          ),
+          UniversalType(type: 'file', name: 'fileType'),
           UniversalType(type: 'boolean', name: 'boolType'),
-          UniversalType(type: 'Another', name: 'anotherType'),
+          UniversalType(type: 'Another', name: 'anotherType')
         ],
       );
       const fillController =
@@ -307,8 +311,10 @@ import com.squareup.moshi.JsonClass
 data class ClassName(
     var intType: Int,
     var stringType: String,
+    var binaryStringType: MultipartBody.Part,
+    var fileType: MultipartBody.Part,
     var boolType: Boolean,
-    var anotherType: Another
+    var anotherType: Another,
 )
 ''';
       expect(filledContent.contents, expectedContents);
@@ -323,7 +329,7 @@ data class ClassName(
         parameters: [
           UniversalType(type: 'integer', name: 'list0', arrayDepth: 1),
           UniversalType(type: 'string', name: 'list1', arrayDepth: 2),
-          UniversalType(type: 'Another', name: 'list5', arrayDepth: 5),
+          UniversalType(type: 'Another', name: 'list5', arrayDepth: 5)
         ],
       );
       const fillController = FillController();
@@ -361,7 +367,7 @@ class ClassName {
         parameters: [
           UniversalType(type: 'integer', name: 'list0', arrayDepth: 1),
           UniversalType(type: 'string', name: 'list1', arrayDepth: 2),
-          UniversalType(type: 'Another', name: 'list5', arrayDepth: 5),
+          UniversalType(type: 'Another', name: 'list5', arrayDepth: 5)
         ],
       );
       const fillController = FillController(freezed: true);
@@ -394,7 +400,7 @@ class ClassName with _$ClassName {
         parameters: [
           UniversalType(type: 'integer', name: 'list0', arrayDepth: 1),
           UniversalType(type: 'string', name: 'list1', arrayDepth: 2),
-          UniversalType(type: 'Another', name: 'list5', arrayDepth: 5),
+          UniversalType(type: 'Another', name: 'list5', arrayDepth: 5)
         ],
       );
       const fillController =
@@ -408,7 +414,7 @@ import com.squareup.moshi.JsonClass
 data class ClassName(
     var list0: List<Int>,
     var list1: List<List<String>>,
-    var list5: List<List<List<List<List<Another>>>>>
+    var list5: List<List<List<List<List<Another>>>>>,
 )
 ''';
       expect(filledContent.contents, expectedContents);
@@ -436,7 +442,7 @@ data class ClassName(
             type: 'Another',
             name: 'anotherType',
             jsonKey: 'another',
-          ),
+          )
         ],
       );
       const fillController = FillController();
@@ -491,7 +497,7 @@ class ClassName {
             type: 'Another',
             name: 'anotherType',
             jsonKey: 'another',
-          ),
+          )
         ],
       );
       const fillController = FillController(freezed: true);
@@ -540,7 +546,7 @@ class ClassName with _$ClassName {
             type: 'Another',
             name: 'anotherType',
             jsonKey: 'another',
-          ),
+          )
         ],
       );
       const fillController =
@@ -558,7 +564,7 @@ data class ClassName(
     @Json("bool-type")
     var boolType: Boolean,
     @Json("another")
-    var anotherType: Another
+    var anotherType: Another,
 )
 ''';
       expect(filledContent.contents, expectedContents);
@@ -581,7 +587,7 @@ data class ClassName(
             type: 'boolean',
             name: 'boolType',
             defaultValue: 'false',
-          ),
+          )
         ],
       );
       const fillController = FillController();
@@ -629,7 +635,7 @@ class ClassName {
             type: 'boolean',
             name: 'boolType',
             defaultValue: 'false',
-          ),
+          )
         ],
       );
       const fillController = FillController(freezed: true);
@@ -675,17 +681,14 @@ class ClassName with _$ClassName {
             name: 'list',
             isRequired: false,
           ),
-          UniversalType(
-            type: 'Another',
-            name: 'another',
-            isRequired: false,
-          ),
+          UniversalType(type: 'Another', name: 'another', isRequired: false),
           UniversalType(
             type: 'Another',
             arrayDepth: 2,
             name: 'anotherList',
-            isRequired: false,
-          ),
+            // ignore: avoid_redundant_argument_values
+            isRequired: true,
+          )
         ],
       );
       const fillController = FillController();
@@ -699,10 +702,10 @@ part 'class_name.g.dart';
 @JsonSerializable()
 class ClassName {
   ClassName({
+    required this.anotherList,
     this.intType,
     this.list,
     this.another,
-    this.anotherList,
   });
   
   factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
@@ -710,7 +713,7 @@ class ClassName {
   final int? intType;
   final List<String>? list;
   final Another? another;
-  final List<List<Another>>? anotherList;
+  final List<List<Another>> anotherList;
 
   Map<String, dynamic> toJson() => _$ClassNameToJson(this);
 }
@@ -730,17 +733,14 @@ class ClassName {
             name: 'list',
             isRequired: false,
           ),
-          UniversalType(
-            type: 'Another',
-            name: 'another',
-            isRequired: false,
-          ),
+          UniversalType(type: 'Another', name: 'another', isRequired: false),
           UniversalType(
             type: 'Another',
             arrayDepth: 2,
             name: 'anotherList',
-            isRequired: false,
-          ),
+            // ignore: avoid_redundant_argument_values
+            isRequired: true,
+          )
         ],
       );
       const fillController = FillController(freezed: true);
@@ -755,10 +755,10 @@ part 'class_name.g.dart';
 @Freezed()
 class ClassName with _$ClassName {
   const factory ClassName({
+    required List<List<Another>> anotherList,
     int? intType,
     List<String>? list,
     Another? another,
-    List<List<Another>>? anotherList,
   }) = _ClassName;
   
   factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
@@ -779,17 +779,14 @@ class ClassName with _$ClassName {
             name: 'list',
             isRequired: false,
           ),
-          UniversalType(
-            type: 'Another',
-            name: 'another',
-            isRequired: false,
-          ),
+          UniversalType(type: 'Another', name: 'another', isRequired: false),
           UniversalType(
             type: 'Another',
             arrayDepth: 2,
             name: 'anotherList',
-            isRequired: false,
-          ),
+            // ignore: avoid_redundant_argument_values
+            isRequired: true,
+          )
         ],
       );
       const fillController =
@@ -804,7 +801,7 @@ data class ClassName(
     var intType: Int?,
     var list: List<String>?,
     var another: Another?,
-    var anotherList: List<List<Another>>?
+    var anotherList: List<List<Another>>,
 )
 ''';
       expect(filledContent.contents, expectedContents);
@@ -828,7 +825,7 @@ data class ClassName(
             name: 'anotherNotRequired',
             isRequired: false,
           ),
-          UniversalType(type: 'Another', name: 'list', arrayDepth: 1),
+          UniversalType(type: 'Another', name: 'list', arrayDepth: 1)
         ],
       );
       const fillController = FillController();
@@ -877,7 +874,7 @@ class ClassName {
             name: 'anotherNotRequired',
             isRequired: false,
           ),
-          UniversalType(type: 'Another', name: 'list', arrayDepth: 1),
+          UniversalType(type: 'Another', name: 'list', arrayDepth: 1)
         ],
       );
       const fillController = FillController(freezed: true);
@@ -913,22 +910,13 @@ class ClassName with _$ClassName {
         UniversalEnumClass(
           name: 'EnumName',
           type: 'int',
-          items: {
-            '1',
-            '2',
-            '3',
-          },
+          items: {'1', '2', '3'},
         ),
         UniversalEnumClass(
           name: 'EnumNameString',
           type: 'string',
-          items: {
-            'itemOne',
-            'ItemTwo',
-            'item_three',
-            'ITEM-FOUR',
-          },
-        ),
+          items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+        )
       ];
 
       const fillController = FillController();
@@ -992,22 +980,13 @@ const _$EnumNameStringEnumMap = {
         UniversalEnumClass(
           name: 'EnumName',
           type: 'int',
-          items: {
-            '1',
-            '2',
-            '3',
-          },
+          items: {'1', '2', '3'},
         ),
         UniversalEnumClass(
           name: 'EnumNameString',
           type: 'string',
-          items: {
-            'itemOne',
-            'ItemTwo',
-            'item_three',
-            'ITEM-FOUR',
-          },
-        ),
+          items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+        )
       ];
       const fillController = FillController(freezed: true);
       final files = <GeneratedFile>[];
