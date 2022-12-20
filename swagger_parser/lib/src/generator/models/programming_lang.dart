@@ -14,9 +14,13 @@ import 'universal_rest_client.dart';
 
 /// Enumerates supported programming languages to determine templates
 enum ProgrammingLanguage {
+  /// Dart lang
   dart('dart'),
+
+  /// Kotlin lang
   kotlin('kt');
 
+  /// Constructor with file extension for lang
   const ProgrammingLanguage(this.fileExtension);
 
   /// Extension for generated files

@@ -1,5 +1,5 @@
 class ConfigException implements Exception {
-  ConfigException(this.message);
+  const ConfigException(this.message);
 
   final String message;
 

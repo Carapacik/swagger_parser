@@ -1,3 +1,9 @@
+## 0.5.0
+- Objects are now recognized and are being generated as DTO's
+- Fixed some problems with defaultValue
+- Fixed some problems with return type
+- Fixed some problems with naming parameters whose names are similar to dart keywords
+
 ## 0.4.1
 - Fixed a problem with parameters whose names are similar to dart keywords
 - Fixed a problem with postfix in file import
