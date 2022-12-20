@@ -29,7 +29,7 @@ String toSuitableType(
   for (var i = 0; i < type.arrayDepth; i++) {
     sb.write('>');
   }
-  if (!isRequired) {
+  if (!isRequired && type.defaultValue == null) {
     sb.write('?');
   }
   return sb.toString();

@@ -1,5 +1,5 @@
 class ParserException implements Exception {
-  ParserException(this.message);
+  const ParserException(this.message);
 
   final String message;
 

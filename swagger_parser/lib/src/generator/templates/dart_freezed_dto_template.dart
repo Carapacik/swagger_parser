@@ -16,7 +16,7 @@ ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';
 
-@freezed
+@Freezed()
 class $className with _\$$className {
   const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;
   \n  factory $className.fromJson(Map<String, dynamic> json) => _\$${className}FromJson(json);

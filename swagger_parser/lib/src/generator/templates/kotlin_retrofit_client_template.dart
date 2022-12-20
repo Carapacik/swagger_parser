@@ -36,7 +36,7 @@ String _toClientRequest(UniversalRequest request) {
     sb.write(')');
   } else {
     final queryParameters =
-        request.parameters.map((e) => '\n${_toQueryParameter(e)}').join(',');
+        request.parameters.map((e) => '\n${_toQueryParameter(e)},').join();
     sb.write(queryParameters);
   }
   if (request.returnType == null) {

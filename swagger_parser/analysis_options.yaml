@@ -6,4 +6,3 @@ analyzer:
 linter:
   rules:
     always_use_package_imports: false
-    avoid_relative_lib_imports: false
