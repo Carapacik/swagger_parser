@@ -649,11 +649,11 @@ part 'class_name.g.dart';
 @Freezed()
 class ClassName with _$ClassName {
   const factory ClassName({
-    @JsonKey(defaultValue: 1)
+    @Default(1)
     required int intType,
-    @JsonKey(defaultValue: 'str')
+    @Default('str')
     required String stringType,
-    @JsonKey(defaultValue: false)
+    @Default(false)
     required bool boolType,
   }) = _ClassName;
   

@@ -1,3 +1,6 @@
+## 0.5.1
+- Fixed problem with default value in freezed template
+
 ## 0.5.0
 - Objects are now recognized and are being generated as DTO's
 - Fixed some problems with defaultValue
