@@ -40,19 +40,13 @@ String _jsonKey(UniversalType t) {
   if ((t.jsonKey == null || t.name == t.jsonKey) && t.defaultValue == null) {
     return '';
   }
-  sb.write('\n    @JsonKey(');
+  if (t.jsonKey != null && t.name != t.jsonKey) {
+    sb.write("\n    @JsonKey(name: '${t.jsonKey}')");
+  }
   if (t.defaultValue != null) {
-    sb.write(
-      'defaultValue: ${t.type.quoterForStringType()}${t.defaultValue}${t.type.quoterForStringType()}',
-    );
+    sb.write('\n    @Default(${t.type.quoterForStringType()}'
+        '${t.defaultValue}${t.type.quoterForStringType()})');
   }
 
-  if (t.defaultValue != null && (t.jsonKey != null && t.name != t.jsonKey)) {
-    sb.write(', ');
-  }
-  if (t.jsonKey != null && t.name != t.jsonKey) {
-    sb.write("name: '${t.jsonKey}'");
-  }
-  sb.write(')');
   return sb.toString();
 }
