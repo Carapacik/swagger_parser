@@ -38,19 +38,21 @@ class YamlConfig {
         "`${configFile.path}` file does not contain a 'swagger_parser' section.",
       );
     }
-    if (yamlConfig.containsKey('json_path')) {
-      _jsonPath = yamlConfig['json_path'] as String?;
+    if (yamlConfig.containsKey('schema_path')) {
+      _schemaFilePath = yamlConfig['schema_path'].toString();
     }
-    if (_jsonPath == null) {
-      throw const ConfigException("Config parameter 'json_path' is required.");
+    if (_schemaFilePath == null) {
+      throw const ConfigException(
+        "Config parameter 'schema_path' is required.",
+      );
     }
 
     if (yamlConfig.containsKey('output_directory')) {
-      _outputDirectory = yamlConfig['output_directory'] as String?;
+      _outputDirectory = yamlConfig['output_directory'].toString();
     }
     if (_outputDirectory == null) {
       throw const ConfigException(
-        "Config parameter '_outputDirectory' is required.",
+        "Config parameter 'output_directory' is required.",
       );
     }
 
@@ -80,7 +82,7 @@ class YamlConfig {
   }
 
   String? _outputDirectory;
-  String? _jsonPath;
+  String? _schemaFilePath;
   String? _language;
   String? _clientPostfix;
   bool? _squishClients;
@@ -88,7 +90,7 @@ class YamlConfig {
 
   String get outputDirectory => _outputDirectory!;
 
-  String get jsonPath => _jsonPath!;
+  String get schemaFilePath => _schemaFilePath!;
 
   String? get language => _language;
 

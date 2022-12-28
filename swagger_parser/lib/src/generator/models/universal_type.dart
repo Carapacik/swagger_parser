@@ -48,7 +48,7 @@ class UniversalType {
 }
 
 /// Converts [UniversalType] to type from specified language
-extension SuitableType on UniversalType {
+extension UniversalTypeX on UniversalType {
   String byLang(ProgrammingLanguage lang, {bool isRequired = true}) {
     switch (lang) {
       case ProgrammingLanguage.dart:
