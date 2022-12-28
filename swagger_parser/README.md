@@ -6,7 +6,7 @@
 [![Tests](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml)
 <a href="https://omega-r.com/"><img src="https://raw.githubusercontent.com/Carapacik/swagger_parser/main/.github/readme/omega_logo.png" width="200" align="right"/></a>
 
-## Dart package that generates REST clients and data classes from swagger json file
+## Dart package that generates REST clients and data classes from OpenApi definition file
 
 ## Features
 

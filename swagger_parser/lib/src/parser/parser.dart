@@ -46,7 +46,8 @@ class OpenApiParser {
   late final Map<String, dynamic> _jsonContent;
   late final OpenApiVersion _version;
 
-  late final List<UniversalComponentClass> objectClasses;
+  final List<UniversalComponentClass> objectClasses =
+      <UniversalComponentClass>[];
 
   static const _allOfVar = 'allOf';
   static const _anyOfVar = 'anyOf';
@@ -237,7 +238,8 @@ class OpenApiParser {
             }
           }
         } else {
-          final isRequired = map[_requestBodyVar][_requiredVar] as bool?;
+          final isRequired =
+              map[_requestBodyVar][_requiredVar]?.toString().toBool();
           final typeWithImport = _findType(
             contentType[_schemaVar] as Map<String, dynamic>,
             isRequired: isRequired ?? true,
@@ -376,7 +378,6 @@ class OpenApiParser {
       entities = _jsonContent[_definitionsVar] as Map<String, dynamic>;
     }
 
-    objectClasses = [];
     entities.forEach((key, value) {
       var requiredParameters = <String>[];
       if ((value as Map<String, dynamic>).containsKey(_requiredVar)) {
@@ -594,20 +595,25 @@ class TypeWithImport {
   final String? import;
 }
 
-/// Extension for [YamlMap] for convert it to dart Map
-extension YamlMapX on YamlMap {
+extension _YamlMapX on YamlMap {
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{};
 
     for (final entry in entries) {
       if (entry.value is YamlMap || entry.value is Map) {
         map[entry.key.toString()] = (entry.value as YamlMap).toMap();
+      } else if (entry.value is YamlList) {
+        print(entry.value);
       } else {
         map[entry.key.toString()] = entry.value.toString();
       }
     }
     return map;
   }
+}
+
+extension _StringToBoolX on String {
+  bool toBool() => toLowerCase() == 'true';
 }
 
 /// All versions of the OpenApi that this package supports
