@@ -6,11 +6,12 @@
 [![Tests](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml)
 <a href="https://omega-r.com/"><img src="https://raw.githubusercontent.com/Carapacik/swagger_parser/main/.github/readme/omega_logo.png" width="200" align="right"/></a>
 
-## Dart package that generates REST clients and data classes from swagger json file
+## Dart package that generates REST clients and data classes from OpenApi definition file
 
 ## Features
 
 - Supports OpenApi v2, v3.0 and v3.1
+- Support JSON and YAML format
 - Generate REST client files based on Retrofit
 - Generate data classes (also on [freezed](https://pub.dev/packages/freezed))
 - Support for multiple languages (Dart, Kotlin)
@@ -42,11 +43,11 @@ An example of YAML is shown below
 
 ```yaml
 swagger_parser:
-  json_path: assets/swagger.json # Required. Sets the json path directory for api definition. This is just a suggestion for path
+  schema_path: assets/openapi.json # Required. Sets the open api schema path directory for api definition
   output_directory: lib/api # Required. Sets output directory for generated files (api clients and models)
   language: dart # Optional. Sets the programming language. Current available languages are: dart, kotlin. Default: dart
   squish_clients: false # Optional. Set 'true' to put all clients in one folder. Default: false
-  client_postfix: ApiClient # Optional. Set postfix for client folder and Class. Works if there is only a single class or squish is true. Default: Client
+  client_postfix: ApiClient # Optional. Set postfix for client folder and Class. Works if there is only a single class or squish is true. Default: ApiClient
   freezed: false # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
 ```
 

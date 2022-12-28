@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:yaml/yaml.dart';
 
 import '../generator/models/all_of.dart';
 import '../generator/models/universal_component_class.dart';
@@ -17,9 +18,11 @@ import '../utils/dart_keywords.dart';
 import 'parser_exception.dart';
 
 /// General class for parsing OpenApi json files into universal models
-class OpenApiJsonParser {
-  OpenApiJsonParser(String jsonContent) {
-    _jsonContent = jsonDecode(jsonContent) as Map<String, dynamic>;
+class OpenApiParser {
+  OpenApiParser(String fileContent, {bool isYaml = false}) {
+    _jsonContent = isYaml
+        ? (loadYaml(fileContent) as YamlMap).toMap()
+        : jsonDecode(fileContent) as Map<String, dynamic>;
 
     if (_jsonContent.containsKey(_openApiVar)) {
       final version = _jsonContent[_openApiVar].toString();
@@ -43,7 +46,8 @@ class OpenApiJsonParser {
   late final Map<String, dynamic> _jsonContent;
   late final OpenApiVersion _version;
 
-  late final List<UniversalComponentClass> objectClasses;
+  final List<UniversalComponentClass> objectClasses =
+      <UniversalComponentClass>[];
 
   static const _allOfVar = 'allOf';
   static const _anyOfVar = 'anyOf';
@@ -130,7 +134,9 @@ class OpenApiJsonParser {
       if (map.containsKey(_parametersVar)) {
         for (final rawParameter in map[_parametersVar] as List<dynamic>) {
           final isRequired =
-              (rawParameter as Map<String, dynamic>)[_requiredVar] as bool?;
+              (rawParameter as Map<String, dynamic>)[_requiredVar]
+                  ?.toString()
+                  .toBool();
           final typeWithImport = _findType(
             rawParameter[_schemaVar] as Map<String, dynamic>,
             name: rawParameter[_nameVar].toString(),
@@ -182,7 +188,8 @@ class OpenApiJsonParser {
         if (isMultiPart) {
           if ((contentType[_schemaVar] as Map<String, dynamic>)
               .containsKey(_refVar)) {
-            final isRequired = map[_requestBodyVar][_requiredVar] as bool?;
+            final isRequired =
+                map[_requestBodyVar][_requiredVar]?.toString().toBool();
             final typeWithImport = _findType(
               contentType[_schemaVar] as Map<String, dynamic>,
               isRequired: isRequired ?? true,
@@ -234,7 +241,8 @@ class OpenApiJsonParser {
             }
           }
         } else {
-          final isRequired = map[_requestBodyVar][_requiredVar] as bool?;
+          final isRequired =
+              map[_requestBodyVar][_requiredVar]?.toString().toBool();
           final typeWithImport = _findType(
             contentType[_schemaVar] as Map<String, dynamic>,
             isRequired: isRequired ?? true,
@@ -290,8 +298,9 @@ class OpenApiJsonParser {
         isMultiPart = true;
       }
       for (final rawParameter in map[_parametersVar] as List<dynamic>) {
-        final isRequired =
-            (rawParameter as Map<String, dynamic>)[_requiredVar] as bool?;
+        final isRequired = (rawParameter as Map<String, dynamic>)[_requiredVar]
+            ?.toString()
+            .toBool();
         final typeWithImport = _findType(
           rawParameter,
           name: rawParameter[_nameVar].toString(),
@@ -373,7 +382,6 @@ class OpenApiJsonParser {
       entities = _jsonContent[_definitionsVar] as Map<String, dynamic>;
     }
 
-    objectClasses = [];
     entities.forEach((key, value) {
       var requiredParameters = <String>[];
       if ((value as Map<String, dynamic>).containsKey(_requiredVar)) {
@@ -589,6 +597,29 @@ class TypeWithImport {
 
   /// Import for type, if you need a separate class
   final String? import;
+}
+
+extension _YamlMapX on YamlMap {
+  Map<String, dynamic> toMap() {
+    final map = <String, dynamic>{};
+
+    for (final entry in entries) {
+      if (entry.value is YamlMap || entry.value is Map) {
+        map[entry.key.toString()] = (entry.value as YamlMap).toMap();
+      } else if (entry.value is YamlList) {
+        map[entry.key.toString()] = (entry.value as YamlList)
+            .map((e) => e is YamlMap ? e.toMap() : e)
+            .toList(growable: false);
+      } else {
+        map[entry.key.toString()] = entry.value.toString();
+      }
+    }
+    return map;
+  }
+}
+
+extension _StringToBoolX on String {
+  bool toBool() => toLowerCase() == 'true';
 }
 
 /// All versions of the OpenApi that this package supports

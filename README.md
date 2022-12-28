@@ -6,11 +6,12 @@
 [![Tests](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml)
 <a href="https://omega-r.com/"><img src="https://raw.githubusercontent.com/Carapacik/swagger_parser/main/.github/readme/omega_logo.png" width="200" align="right"/></a>
 
-## Dart package that generates REST clients and data classes from swagger json file
+## Dart package that generates REST clients and data classes from OpenApi definition file
 
 ## Features
 
 - Supports OpenApi v2, v3.0 and v3.1
+- Support JSON and YAML format
 - Generate REST client files based on Retrofit
 - Generate data classes (also on [freezed](https://pub.dev/packages/freezed))
 - Support for multiple languages (Dart, Kotlin)

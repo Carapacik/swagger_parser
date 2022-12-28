@@ -1,8 +1,12 @@
+## 0.6.0
+- Add support for ` yaml ` files
+- Rename ` json_path ` in pubspec.yaml to ` schema_path `
+
 ## 0.5.1
 - Fixed problem with default value in freezed template
 
 ## 0.5.0
-- Objects are now recognized and are being generated as DTO's
+- Objects are now recognized and are being generated as DTOs
 - Fixed some problems with defaultValue
 - Fixed some problems with return type
 - Fixed some problems with naming parameters whose names are similar to dart keywords
