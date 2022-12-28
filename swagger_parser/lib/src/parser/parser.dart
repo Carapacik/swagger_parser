@@ -134,7 +134,9 @@ class OpenApiParser {
       if (map.containsKey(_parametersVar)) {
         for (final rawParameter in map[_parametersVar] as List<dynamic>) {
           final isRequired =
-              (rawParameter as Map<String, dynamic>)[_requiredVar] as bool?;
+              (rawParameter as Map<String, dynamic>)[_requiredVar]
+                  ?.toString()
+                  .toBool();
           final typeWithImport = _findType(
             rawParameter[_schemaVar] as Map<String, dynamic>,
             name: rawParameter[_nameVar].toString(),
@@ -186,7 +188,8 @@ class OpenApiParser {
         if (isMultiPart) {
           if ((contentType[_schemaVar] as Map<String, dynamic>)
               .containsKey(_refVar)) {
-            final isRequired = map[_requestBodyVar][_requiredVar] as bool?;
+            final isRequired =
+                map[_requestBodyVar][_requiredVar]?.toString().toBool();
             final typeWithImport = _findType(
               contentType[_schemaVar] as Map<String, dynamic>,
               isRequired: isRequired ?? true,
@@ -295,8 +298,9 @@ class OpenApiParser {
         isMultiPart = true;
       }
       for (final rawParameter in map[_parametersVar] as List<dynamic>) {
-        final isRequired =
-            (rawParameter as Map<String, dynamic>)[_requiredVar] as bool?;
+        final isRequired = (rawParameter as Map<String, dynamic>)[_requiredVar]
+            ?.toString()
+            .toBool();
         final typeWithImport = _findType(
           rawParameter,
           name: rawParameter[_nameVar].toString(),
@@ -603,7 +607,9 @@ extension _YamlMapX on YamlMap {
       if (entry.value is YamlMap || entry.value is Map) {
         map[entry.key.toString()] = (entry.value as YamlMap).toMap();
       } else if (entry.value is YamlList) {
-        print(entry.value);
+        map[entry.key.toString()] = (entry.value as YamlList)
+            .map((e) => e is YamlMap ? e.toMap() : e)
+            .toList(growable: false);
       } else {
         map[entry.key.toString()] = entry.value.toString();
       }
