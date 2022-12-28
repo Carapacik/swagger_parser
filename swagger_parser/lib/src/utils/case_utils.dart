@@ -51,7 +51,7 @@ class CaseUtils {
       '${word.substring(0, 1).toUpperCase()}${word.substring(1).toLowerCase()}';
 }
 
-extension StringToCase on String {
+extension StringToCaseX on String {
   String get toCamel => CaseUtils(this).camelCase;
 
   String get toPascal => CaseUtils(this).pascalCase;

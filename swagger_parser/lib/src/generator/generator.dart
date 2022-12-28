@@ -20,12 +20,13 @@ class Generator {
 
     _outputDirectory = yamlConfig.outputDirectory;
 
-    final jsonPath = yamlConfig.jsonPath;
-    final configFile = jsonFile(jsonPath);
+    final schemaFilePath = yamlConfig.schemaFilePath;
+    final configFile = jsonFile(schemaFilePath);
     if (configFile == null) {
-      throw GeneratorException("Can't find json file at $jsonPath.");
+      throw GeneratorException("Can't find json file at $schemaFilePath.");
     }
-    _jsonContent = configFile.readAsStringSync();
+    _isYaml = schemaFilePath.split('.').last.toLowerCase() == 'yaml';
+    _schemaContent = configFile.readAsStringSync();
 
     _programmingLanguage = ProgrammingLanguage.dart;
     if (yamlConfig.language != null) {
@@ -59,21 +60,24 @@ class Generator {
     String clientPostfix = 'ApiClient',
     bool freezed = false,
     bool squishClients = false,
+    bool isYaml = false,
   }) {
-    _jsonContent = jsonContent;
+    _schemaContent = jsonContent;
     _programmingLanguage = language;
     _outputDirectory = '';
     _clientPostfix = clientPostfix;
     _squishClients = squishClients;
     _freezed = freezed;
+    _isYaml = isYaml;
   }
 
-  late final String _jsonContent;
+  late final String _schemaContent;
   late final String _outputDirectory;
   late ProgrammingLanguage _programmingLanguage;
   String _clientPostfix = 'ApiClient';
   bool _freezed = false;
   bool _squishClients = false;
+  bool _isYaml = false;
 
   late final Iterable<UniversalDataClass> _dataClasses;
   late final Iterable<UniversalRestClient> _restClients;
@@ -94,7 +98,7 @@ class Generator {
   /// Parse json content and fill list of [UniversalRestClient]
   /// and list of [UniversalDataClass]
   void _parseSwaggerJson() {
-    final parser = OpenApiJsonParser(_jsonContent);
+    final parser = OpenApiParser(_schemaContent, isYaml: _isYaml);
     _restClients = parser.parseRestClients();
     _dataClasses = parser.parseDataClasses();
   }
