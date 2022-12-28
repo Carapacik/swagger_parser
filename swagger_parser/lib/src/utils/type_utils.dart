@@ -1,4 +1,4 @@
-extension StringTypeExt on String {
+extension StringTypeX on String {
   String toDartType([String? format]) {
     switch (this) {
       case 'integer':

@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:yaml/yaml.dart';
 
 import '../generator/models/all_of.dart';
 import '../generator/models/universal_component_class.dart';
@@ -17,9 +18,11 @@ import '../utils/dart_keywords.dart';
 import 'parser_exception.dart';
 
 /// General class for parsing OpenApi json files into universal models
-class OpenApiJsonParser {
-  OpenApiJsonParser(String jsonContent) {
-    _jsonContent = jsonDecode(jsonContent) as Map<String, dynamic>;
+class OpenApiParser {
+  OpenApiParser(String fileContent, {bool isYaml = false}) {
+    _jsonContent = isYaml
+        ? (loadYaml(fileContent) as YamlMap).toMap()
+        : jsonDecode(fileContent) as Map<String, dynamic>;
 
     if (_jsonContent.containsKey(_openApiVar)) {
       final version = _jsonContent[_openApiVar].toString();
@@ -589,6 +592,22 @@ class TypeWithImport {
 
   /// Import for type, if you need a separate class
   final String? import;
+}
+
+/// Extension for [YamlMap] for convert it to dart Map
+extension YamlMapX on YamlMap {
+  Map<String, dynamic> toMap() {
+    final map = <String, dynamic>{};
+
+    for (final entry in entries) {
+      if (entry.value is YamlMap || entry.value is Map) {
+        map[entry.key.toString()] = (entry.value as YamlMap).toMap();
+      } else {
+        map[entry.key.toString()] = entry.value.toString();
+      }
+    }
+    return map;
+  }
 }
 
 /// All versions of the OpenApi that this package supports
