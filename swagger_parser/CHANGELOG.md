@@ -5,7 +5,7 @@
 
 ## 0.6.0
 - Add support for ` yaml ` files
-- Rename ` json_path ` in pubspec.yaml to ` schema_path `
+- BREAKING: Rename ` json_path ` in pubspec.yaml to ` schema_path `
 
 ## 0.5.1
 - Fixed problem with default value in freezed template
