@@ -23,7 +23,7 @@ class MainPage extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Paste your Swagger JSON in the textarea below, click "Generate and download" and get your generated files in zip archive.',
+                  'Paste your OpenApi JSON or YAML file content in the textarea below, click "Generate and download" and get your generated files in zip archive.',
                   style: TextStyle(fontSize: 20, color: Colors.grey),
                 ),
                 SizedBox(height: 24),

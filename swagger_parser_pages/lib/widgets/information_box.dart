@@ -38,7 +38,7 @@ class InformationBox extends StatelessWidget {
               ),
               const TextSpan(
                 text:
-                    '. Swagger parser allows you to generate Data classes and Rest clients from swagger json string.\n',
+                    '. Swagger parser allows you to generate Data classes and Rest clients from OpenApi YAML or JSON definition file content.\n',
               ),
             ],
           ),
@@ -69,8 +69,7 @@ class InformationBox extends StatelessWidget {
             children: [
               TextSpan(
                 style: const TextStyle(fontSize: 18),
-                text:
-                    'Paste your JSON file into text box and configure given parameters: \n',
+                text: 'Paste your JSON file into text box and configure given parameters: \n',
                 children: [
                   const WidgetSpan(
                     alignment: PlaceholderAlignment.aboveBaseline,
