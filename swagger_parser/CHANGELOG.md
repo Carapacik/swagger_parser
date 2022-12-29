@@ -1,3 +1,7 @@
+## 0.6.1
+- Fixed error with Multipart file type in retrofit
+- Update web interface
+
 ## 0.6.0
 - Add support for ` yaml ` files
 - Rename ` json_path ` in pubspec.yaml to ` schema_path `

@@ -15,14 +15,14 @@ extension StringTypeX on String {
       case 'string':
         if (format != null && format == 'binary') {
           // Single MultipartFile is not generated due an error
-          return 'List<MultipartFile>';
+          return 'File';
         }
         return 'String';
-      case 'boolean':
-        return 'bool';
       case 'file':
         // Single MultipartFile is not generated due an error
-        return 'List<MultipartFile>';
+        return 'File';
+      case 'boolean':
+        return 'bool';
       case 'object':
         return 'Object';
     }
@@ -47,10 +47,10 @@ extension StringTypeX on String {
           return 'MultipartBody.Part';
         }
         return 'String';
-      case 'boolean':
-        return 'Boolean';
       case 'file':
         return 'MultipartBody.Part';
+      case 'boolean':
+        return 'Boolean';
       case 'object':
         return 'Any?';
     }
