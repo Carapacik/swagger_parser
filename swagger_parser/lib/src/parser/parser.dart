@@ -17,8 +17,10 @@ import '../utils/case_utils.dart';
 import '../utils/dart_keywords.dart';
 import 'parser_exception.dart';
 
-/// General class for parsing OpenApi json files into universal models
+/// General class for parsing OpenApi files into universal models
 class OpenApiParser {
+  /// Accepts [fileContent] of the schema file
+  /// and the YAML schema format or not
   OpenApiParser(String fileContent, {bool isYaml = false}) {
     _jsonContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
@@ -450,6 +452,7 @@ class OpenApiParser {
     });
 
     dataClasses.addAll(objectClasses);
+    objectClasses.clear();
 
     // check for 'allOf'
     final allOfClasses = dataClasses

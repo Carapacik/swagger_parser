@@ -1,5 +1,6 @@
 ## 0.6.1
 - Fixed error with Multipart file type in retrofit
+- Update dart docs
 - Update web interface
 
 ## 0.6.0
