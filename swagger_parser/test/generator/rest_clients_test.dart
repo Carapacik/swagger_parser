@@ -959,8 +959,8 @@ abstract class Client {
   Future<void> sendMultiPart({
     @Header('Authorization') required String token,
     @Part(name: 'name') required String alex,
-    @Part(name: 'file') required List<MultipartFile> file,
-    @Part(name: 'file2') required List<MultipartFile> secondFile,
+    @Part(name: 'file') required File file,
+    @Part(name: 'file2') required File secondFile,
     @Part(name: 'parsed-if') required bool parsed,
   });
 
