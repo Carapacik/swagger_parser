@@ -14,6 +14,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
   late final TextEditingController _jsonController;
   late final TextEditingController _clientPostfix;
   ProgrammingLanguage _language = ProgrammingLanguage.dart;
+  bool _isYamlFile = false;
   bool _isFreezed = false;
   bool _squishClients = false;
 
@@ -40,14 +41,13 @@ class _GeneratorContentState extends State<GeneratorContent> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ConstrainedBox(
-                constraints:
-                    const BoxConstraints(maxWidth: 400, maxHeight: 300),
+                constraints: const BoxConstraints(maxWidth: 400, maxHeight: 300),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    hintText: 'Paste your Swagger JSON here',
+                    hintText: 'Paste your OpenApi definition file content',
                     hintStyle: const TextStyle(fontSize: 18),
                   ),
                   controller: _jsonController,
@@ -67,21 +67,9 @@ class _GeneratorContentState extends State<GeneratorContent> {
                   children: [
                     const Text(
                       'Config parameters',
-                      style:
-                          TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
+                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 24),
-                    TextField(
-                      controller: _clientPostfix,
-                      decoration: const InputDecoration(
-                        labelStyle: TextStyle(fontSize: 24),
-                        hintText: 'Postfix for client classes',
-                        hintStyle: TextStyle(fontSize: 24),
-                        border: InputBorder.none,
-                      ),
-                      style: const TextStyle(fontSize: 24),
-                    ),
-                    const SizedBox(height: 16),
                     DropdownButton<String>(
                       value: _language.name,
                       style: const TextStyle(fontSize: 24, color: Colors.white),
@@ -93,8 +81,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                       underline: const SizedBox.shrink(),
                       elevation: 16,
                       onChanged: (value) => setState(
-                        () =>
-                            _language = ProgrammingLanguage.fromString(value)!,
+                        () => _language = ProgrammingLanguage.fromString(value)!,
                       ),
                       items: ProgrammingLanguage.values
                           .map<DropdownMenuItem<String>>(
@@ -104,6 +91,27 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             ),
                           )
                           .toList(),
+                    ),
+                    const SizedBox(height: 16),
+                    LabeledCheckbox(
+                      label: 'Is YAML file content',
+                      value: _isYamlFile,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _isYamlFile = newValue;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _clientPostfix,
+                      decoration: const InputDecoration(
+                        labelStyle: TextStyle(fontSize: 24),
+                        hintText: 'Postfix for client classes',
+                        hintStyle: TextStyle(fontSize: 24),
+                        border: InputBorder.none,
+                      ),
+                      style: const TextStyle(fontSize: 24),
                     ),
                     const SizedBox(height: 16),
                     LabeledCheckbox(
@@ -144,6 +152,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             language: _language,
                             useFreezed: _isFreezed,
                             squishClients: _squishClients,
+                            isYaml: _isYamlFile,
                           );
                         },
                       ),
@@ -164,6 +173,7 @@ Future<void> generateOutputs(
   required ProgrammingLanguage language,
   required bool useFreezed,
   required bool squishClients,
+  required bool isYaml,
 }) async {
   final generator = Generator.fromString(
     jsonContent: json,
@@ -171,6 +181,7 @@ Future<void> generateOutputs(
     clientPostfix: clientPostfix,
     freezed: useFreezed,
     squishClients: squishClients,
+    isYaml: isYaml,
   );
   try {
     final files = await generator.generateContent();
