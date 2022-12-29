@@ -213,8 +213,8 @@ class ClassName {
   final double doubleNumberType;
   final double floatNumberType;
   final String stringType;
-  final List<MultipartFile> binaryStringType;
-  final List<MultipartFile> fileType;
+  final File binaryStringType;
+  final File fileType;
   final bool boolType;
   final Object objectType;
   final Another anotherType;
@@ -270,8 +270,8 @@ class ClassName with _$ClassName {
     required double doubleNumberType,
     required double floatNumberType,
     required String stringType,
-    required List<MultipartFile> binaryStringType,
-    required List<MultipartFile> fileType,
+    required File binaryStringType,
+    required File fileType,
     required bool boolType,
     required Object objectType,
     required Another anotherType,
