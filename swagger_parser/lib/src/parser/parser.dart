@@ -20,7 +20,7 @@ import 'parser_exception.dart';
 /// General class for parsing OpenApi files into universal models
 class OpenApiParser {
   /// Accepts [fileContent] of the schema file
-  /// and the YAML schema format or not
+  /// and [isYaml] schema format or not
   OpenApiParser(String fileContent, {bool isYaml = false}) {
     _jsonContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
