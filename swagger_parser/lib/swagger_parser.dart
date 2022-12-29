@@ -1,6 +1,4 @@
-/// Provides generation functions to generate files
-/// from swagger json content
-///
+/// Provides generation functions to generate files from swagger json content
 /// [swagger_parser](https://pub.dev/packages/swagger_parser)
 library swagger_parser;
 

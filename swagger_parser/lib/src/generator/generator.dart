@@ -1,3 +1,5 @@
+import 'package:path/path.dart' as p;
+
 import '../config/yaml_config.dart';
 import '../parser/parser.dart';
 import '../utils/case_utils.dart';
@@ -25,10 +27,9 @@ class Generator {
     if (configFile == null) {
       throw GeneratorException("Can't find json file at $schemaFilePath.");
     }
-    _isYaml = schemaFilePath.split('.').last.toLowerCase() == 'yaml';
+    _isYaml = p.extension(schemaFilePath).toLowerCase() == 'yaml';
     _schemaContent = configFile.readAsStringSync();
 
-    _programmingLanguage = ProgrammingLanguage.dart;
     if (yamlConfig.language != null) {
       final parsedLang = ProgrammingLanguage.fromString(yamlConfig.language);
       if (parsedLang == null) {
@@ -71,12 +72,25 @@ class Generator {
     _isYaml = isYaml;
   }
 
+  /// The contents of your schema file
   late final String _schemaContent;
+
+  /// Output directory
   late final String _outputDirectory;
-  late ProgrammingLanguage _programmingLanguage;
+
+  /// Output directory
+  ProgrammingLanguage _programmingLanguage = ProgrammingLanguage.dart;
+
+  /// Client postfix
   String _clientPostfix = 'ApiClient';
+
+  /// User freezed to generate DTOs
   bool _freezed = false;
+
+  /// Is squish Clients
   bool _squishClients = false;
+
+  /// Is the schema format YAML
   bool _isYaml = false;
 
   late final Iterable<UniversalDataClass> _dataClasses;
