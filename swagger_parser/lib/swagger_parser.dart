@@ -1,4 +1,4 @@
-/// Provides generation functions to generate files from swagger json content
+/// Provides generation functions that generates REST clients and data classes from OpenApi definition file
 /// [swagger_parser](https://pub.dev/packages/swagger_parser)
 library swagger_parser;
 
