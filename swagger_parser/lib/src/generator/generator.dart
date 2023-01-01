@@ -25,8 +25,7 @@ class Generator {
     final schemaFilePath = yamlConfig.schemaFilePath;
     final configFile = schemaFile(schemaFilePath);
     if (configFile == null) {
-      throw GeneratorException(
-          "Can't find definition schema file at $schemaFilePath.");
+      throw GeneratorException("Can't find schema file at $schemaFilePath.");
     }
     _isYaml = p.extension(schemaFilePath).toLowerCase() == 'yaml';
     _schemaContent = configFile.readAsStringSync();
