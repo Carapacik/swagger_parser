@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:swagger_parser_pages/utils/file_utils.dart';
@@ -11,23 +13,23 @@ class GeneratorContent extends StatefulWidget {
 }
 
 class _GeneratorContentState extends State<GeneratorContent> {
-  late final TextEditingController _jsonController;
+  late final TextEditingController _schemaController;
   late final TextEditingController _clientPostfix;
   ProgrammingLanguage _language = ProgrammingLanguage.dart;
-  bool _isYamlFile = false;
-  bool _isFreezed = false;
+  bool _isYaml = false;
+  bool _freezed = false;
   bool _squishClients = false;
 
   @override
   void initState() {
     super.initState();
-    _jsonController = TextEditingController();
+    _schemaController = TextEditingController();
     _clientPostfix = TextEditingController();
   }
 
   @override
   void dispose() {
-    _jsonController.dispose();
+    _schemaController.dispose();
     _clientPostfix.dispose();
     super.dispose();
   }
@@ -50,7 +52,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                     hintText: 'Paste your OpenApi definition file content',
                     hintStyle: const TextStyle(fontSize: 18),
                   ),
-                  controller: _jsonController,
+                  controller: _schemaController,
                   keyboardType: TextInputType.multiline,
                   textAlignVertical: TextAlignVertical.top,
                   maxLines: null,
@@ -70,36 +72,44 @@ class _GeneratorContentState extends State<GeneratorContent> {
                       style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 24),
-                    DropdownButton<String>(
-                      value: _language.name,
-                      style: const TextStyle(fontSize: 24, color: Colors.white),
-                      isExpanded: true,
-                      icon: const RotatedBox(
-                        quarterTurns: 1,
-                        child: Icon(Icons.arrow_forward_ios_sharp),
-                      ),
-                      underline: const SizedBox.shrink(),
-                      elevation: 16,
-                      onChanged: (value) => setState(
-                        () => _language = ProgrammingLanguage.fromString(value)!,
-                      ),
-                      items: ProgrammingLanguage.values
-                          .map<DropdownMenuItem<String>>(
-                            (value) => DropdownMenuItem<String>(
-                              value: value.name,
-                              child: Text(value.name),
-                            ),
-                          )
-                          .toList(),
+                    StatefulBuilder(
+                      builder: (context, setState) {
+                        return DropdownButton<String>(
+                          value: _language.name,
+                          style: const TextStyle(fontSize: 24, color: Colors.white),
+                          isExpanded: true,
+                          icon: const RotatedBox(
+                            quarterTurns: 1,
+                            child: Icon(Icons.arrow_forward_ios_sharp),
+                          ),
+                          underline: const SizedBox.shrink(),
+                          elevation: 16,
+                          onChanged: (value) => setState(
+                            () => _language = ProgrammingLanguage.fromString(value)!,
+                          ),
+                          items: ProgrammingLanguage.values
+                              .map<DropdownMenuItem<String>>(
+                                (value) => DropdownMenuItem<String>(
+                                  value: value.name,
+                                  child: Text(value.name),
+                                ),
+                              )
+                              .toList(),
+                        );
+                      },
                     ),
                     const SizedBox(height: 16),
-                    LabeledCheckbox(
-                      label: 'Is YAML file content',
-                      value: _isYamlFile,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _isYamlFile = newValue;
-                        });
+                    StatefulBuilder(
+                      builder: (context, setState) {
+                        return LabeledCheckbox(
+                          label: 'Is YAML file content',
+                          value: _isYaml,
+                          onChanged: (newValue) {
+                            setState(() {
+                              _isYaml = newValue;
+                            });
+                          },
+                        );
                       },
                     ),
                     const SizedBox(height: 16),
@@ -114,24 +124,32 @@ class _GeneratorContentState extends State<GeneratorContent> {
                       style: const TextStyle(fontSize: 24),
                     ),
                     const SizedBox(height: 16),
-                    LabeledCheckbox(
-                      label: 'Squish client folders into one?',
-                      value: _squishClients,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _squishClients = newValue;
-                        });
+                    StatefulBuilder(
+                      builder: (context, setState) {
+                        return LabeledCheckbox(
+                          label: 'Squish client folders into one?',
+                          value: _squishClients,
+                          onChanged: (newValue) {
+                            setState(() {
+                              _squishClients = newValue;
+                            });
+                          },
+                        );
                       },
                     ),
                     if (_language == ProgrammingLanguage.dart) ...[
                       const SizedBox(height: 16),
-                      LabeledCheckbox(
-                        label: 'Use freezed?',
-                        value: _isFreezed,
-                        onChanged: (newValue) {
-                          setState(() {
-                            _isFreezed = newValue;
-                          });
+                      StatefulBuilder(
+                        builder: (context, setState) {
+                          return LabeledCheckbox(
+                            label: 'Use freezed?',
+                            value: _freezed,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _freezed = newValue;
+                              });
+                            },
+                          );
                         },
                       ),
                     ],
@@ -147,12 +165,12 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         onPressed: () async {
                           await generateOutputs(
                             context,
-                            json: _jsonController.text,
+                            schema: _schemaController.text,
                             clientPostfix: _clientPostfix.text,
                             language: _language,
-                            useFreezed: _isFreezed,
+                            freezed: _freezed,
                             squishClients: _squishClients,
-                            isYaml: _isYamlFile,
+                            isYaml: _isYaml,
                           );
                         },
                       ),
@@ -168,18 +186,18 @@ class _GeneratorContentState extends State<GeneratorContent> {
 
 Future<void> generateOutputs(
   BuildContext context, {
-  required String json,
+  required String schema,
   required String clientPostfix,
   required ProgrammingLanguage language,
-  required bool useFreezed,
+  required bool freezed,
   required bool squishClients,
   required bool isYaml,
 }) async {
   final generator = Generator.fromString(
-    jsonContent: json,
+    schemaContent: schema,
     language: language,
     clientPostfix: clientPostfix,
-    freezed: useFreezed,
+    freezed: freezed,
     squishClients: squishClients,
     isYaml: isYaml,
   );
@@ -187,7 +205,7 @@ Future<void> generateOutputs(
     final files = await generator.generateContent();
     generateArchive(files);
   } on Object catch (e) {
-    debugPrint(e.toString());
+    log(e.toString());
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(e.toString()),

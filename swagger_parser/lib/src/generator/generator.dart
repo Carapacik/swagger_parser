@@ -23,9 +23,10 @@ class Generator {
     _outputDirectory = yamlConfig.outputDirectory;
 
     final schemaFilePath = yamlConfig.schemaFilePath;
-    final configFile = jsonFile(schemaFilePath);
+    final configFile = schemaFile(schemaFilePath);
     if (configFile == null) {
-      throw GeneratorException("Can't find json file at $schemaFilePath.");
+      throw GeneratorException(
+          "Can't find definition schema file at $schemaFilePath.");
     }
     _isYaml = p.extension(schemaFilePath).toLowerCase() == 'yaml';
     _schemaContent = configFile.readAsStringSync();
@@ -56,14 +57,14 @@ class Generator {
   /// Applies parameters directly from constructor
   /// without Yaml file
   Generator.fromString({
-    required String jsonContent,
+    required String schemaContent,
     required ProgrammingLanguage language,
     String clientPostfix = 'ApiClient',
     bool freezed = false,
     bool squishClients = false,
     bool isYaml = false,
   }) {
-    _schemaContent = jsonContent;
+    _schemaContent = schemaContent;
     _programmingLanguage = language;
     _outputDirectory = '';
     _clientPostfix = clientPostfix;
@@ -96,28 +97,28 @@ class Generator {
   late final Iterable<UniversalDataClass> _dataClasses;
   late final Iterable<UniversalRestClient> _restClients;
 
-  /// Generates files based on swagger json
+  /// Generates files based on OpenApi definition file
   Future<void> generateFiles() async {
-    _parseSwaggerJson();
+    _parseOpenApiDefinitionFile();
     await _generateFiles();
   }
 
-  /// Generates content
+  /// Generates content of files based on OpenApi definition file
   /// and return list of [GeneratedFile]
   Future<List<GeneratedFile>> generateContent() async {
-    _parseSwaggerJson();
+    _parseOpenApiDefinitionFile();
     return _fillContent();
   }
 
-  /// Parse json content and fill list of [UniversalRestClient]
+  /// Parse definition file content and fill list of [UniversalRestClient]
   /// and list of [UniversalDataClass]
-  void _parseSwaggerJson() {
+  void _parseOpenApiDefinitionFile() {
     final parser = OpenApiParser(_schemaContent, isYaml: _isYaml);
     _restClients = parser.parseRestClients();
     _dataClasses = parser.parseDataClasses();
   }
 
-  /// Generate files with content
+  /// Generate files based on [_restClients] and [_dataClasses]
   Future<void> _generateFiles() async {
     final files = await _fillContent();
     for (final file in files) {
@@ -125,7 +126,7 @@ class Generator {
     }
   }
 
-  /// Get files content
+  /// Generate files content based on [_restClients] and [_dataClasses]
   Future<List<GeneratedFile>> _fillContent() async {
     final writeController = FillController(
       clientPostfix: _clientPostfix.toPascal,
