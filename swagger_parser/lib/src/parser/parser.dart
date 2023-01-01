@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 import '../generator/models/all_of.dart';
@@ -22,12 +23,12 @@ class OpenApiParser {
   /// Accepts [fileContent] of the schema file
   /// and [isYaml] schema format or not
   OpenApiParser(String fileContent, {bool isYaml = false}) {
-    _jsonContent = isYaml
+    _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
         : jsonDecode(fileContent) as Map<String, dynamic>;
 
-    if (_jsonContent.containsKey(_openApiVar)) {
-      final version = _jsonContent[_openApiVar].toString();
+    if (_definitionFileContent.containsKey(_openApiVar)) {
+      final version = _definitionFileContent[_openApiVar].toString();
       if (version.startsWith('3.1')) {
         _version = OpenApiVersion.v3_1;
         return;
@@ -37,15 +38,15 @@ class OpenApiParser {
         return;
       }
     }
-    if (_jsonContent.containsKey(_swaggerVar) &&
-        _jsonContent[_swaggerVar].toString().startsWith('2.0')) {
+    if (_definitionFileContent.containsKey(_swaggerVar) &&
+        _definitionFileContent[_swaggerVar].toString().startsWith('2.0')) {
       _version = OpenApiVersion.v2;
       return;
     }
     throw const ParserException('Unknown version of OpenAPI.');
   }
 
-  late final Map<String, dynamic> _jsonContent;
+  late final Map<String, dynamic> _definitionFileContent;
   late final OpenApiVersion _version;
 
   final List<UniversalComponentClass> objectClasses =
@@ -85,7 +86,8 @@ class OpenApiParser {
   static const _typeVar = 'type';
   static const _valueVar = 'value';
 
-  /// Parses rest clients from 'paths' section of json file into universal models
+  /// Parses rest clients from `paths` section of definition file
+  /// and return list of [UniversalRestClient]
   Iterable<UniversalRestClient> parseRestClients() {
     final restClients = <UniversalRestClient>[];
     final imports = SplayTreeSet<String>();
@@ -326,7 +328,7 @@ class OpenApiParser {
       return types;
     }
 
-    (_jsonContent[_pathsVar] as Map<String, dynamic>)
+    (_definitionFileContent[_pathsVar] as Map<String, dynamic>)
         .forEach((path, pathValue) {
       (pathValue as Map<String, dynamic>).forEach((key, requestPath) {
         final returnType = _version == OpenApiVersion.v2
@@ -365,23 +367,25 @@ class OpenApiParser {
     return restClients;
   }
 
-  /// Parses data classes from 'components' of json file to universal models
+  /// Parses data classes from `components` of definition file
+  /// to list of [UniversalDataClass]
   Iterable<UniversalDataClass> parseDataClasses() {
     final dataClasses = <UniversalDataClass>[];
     late final Map<String, dynamic> entities;
     if (_version == OpenApiVersion.v3_1 || _version == OpenApiVersion.v3) {
-      if (!_jsonContent.containsKey(_componentsVar) ||
-          !(_jsonContent[_componentsVar] as Map<String, dynamic>)
+      if (!_definitionFileContent.containsKey(_componentsVar) ||
+          !(_definitionFileContent[_componentsVar] as Map<String, dynamic>)
               .containsKey(_schemasVar)) {
         return dataClasses;
       }
-      entities =
-          _jsonContent[_componentsVar][_schemasVar] as Map<String, dynamic>;
+      entities = _definitionFileContent[_componentsVar][_schemasVar]
+          as Map<String, dynamic>;
     } else if (_version == OpenApiVersion.v2) {
-      if (!_jsonContent.containsKey(_definitionsVar)) {
+      if (!_definitionFileContent.containsKey(_definitionsVar)) {
         return dataClasses;
       }
-      entities = _jsonContent[_definitionsVar] as Map<String, dynamic>;
+      entities =
+          _definitionFileContent[_definitionsVar] as Map<String, dynamic>;
     }
 
     entities.forEach((key, value) {
@@ -486,7 +490,7 @@ class OpenApiParser {
 
   bool _checkForBody(Map<String, dynamic> map) => map[_nameVar] == _bodyVar;
 
-  String _formatRef(String ref) => ref.split('/').last.toPascal;
+  String _formatRef(String ref) => p.basename(ref).toPascal;
 
   String? _defaultValueCheck(Map<String, dynamic> map) =>
       map.containsKey(_defaultVar) ? map[_defaultVar].toString() : null;
@@ -590,8 +594,8 @@ class OpenApiParser {
   }
 }
 
-/// Class that contains Certain [type] and imports associated with it
-/// [import] are created when $ref is found while determining type
+/// Class that contains certain [type] and imports associated with it
+/// [import] are created when `$ref` is found while determining type
 class TypeWithImport {
   const TypeWithImport({required this.type, this.import});
 

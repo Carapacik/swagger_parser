@@ -1,11 +1,14 @@
+## 0.6.2
+- Update docs
+
 ## 0.6.1
 - Fixed error with Multipart file type in retrofit
-- Update dart docs
+- Update dart api docs
 - Update web interface
 
 ## 0.6.0
 - Add support for ` yaml ` files
-- BREAKING: Rename ` json_path ` in pubspec.yaml to ` schema_path `
+- **BREAKING**: Rename ` json_path ` in pubspec.yaml to ` schema_path `
 
 ## 0.5.1
 - Fixed problem with default value in freezed template

@@ -24,10 +24,10 @@ File? getConfigFile({String? filePath}) {
   return pubspecFile.existsSync() ? pubspecFile : null;
 }
 
-/// Checks if json file provided in config exists
-File? jsonFile(String jsonPath) {
-  final jsonFile = File(p.join(_rootDirectoryPath, jsonPath));
-  return jsonFile.existsSync() ? jsonFile : null;
+/// Checks if schema file provided in config exists
+File? schemaFile(String filePath) {
+  final file = File(p.join(_rootDirectoryPath, filePath));
+  return file.existsSync() ? file : null;
 }
 
 /// Creates DTO file
