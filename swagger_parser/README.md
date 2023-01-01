@@ -25,7 +25,7 @@ In your pubspec.yaml, add the following dependencies:
 
 ```yaml
 dependencies:
-  # dio: ^4.0.0
+  # dio: ^4.0.6
   # json_annotation: ^4.7.0
   # retrofit: ^3.3.0
 
@@ -33,7 +33,7 @@ dev_dependencies:
   # build_runner: ^2.3.0
   # json_serializable: ^6.5.0
   # retrofit_generator: ^4.2.0
-  swagger_parser: ^0.6.1
+  swagger_parser: ^0.6.2
 ```
 
 ### Configure package
@@ -43,11 +43,11 @@ An example of YAML is shown below
 
 ```yaml
 swagger_parser:
-  schema_path: assets/openapi.json # Required. Sets the open api schema path directory for api definition
+  schema_path: assets/openapi.json # Required. Sets the OpenApi schema path directory for api definition
   output_directory: lib/api # Required. Sets output directory for generated files (api clients and models)
   language: dart # Optional. Sets the programming language. Current available languages are: dart, kotlin. Default: dart
   squish_clients: false # Optional. Set 'true' to put all clients in one folder. Default: false
-  client_postfix: ApiClient # Optional. Set postfix for client folder and Class. Works if there is only a single class or squish is true. Default: ApiClient
+  client_postfix: ApiClient # Optional. Set postfix for client folder and Class. Works if there is only a single class or `squish_clients` is true. Default: ApiClient
   freezed: false # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
 ```
 
