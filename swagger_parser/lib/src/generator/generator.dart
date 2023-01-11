@@ -54,7 +54,7 @@ class Generator {
   }
 
   /// Applies parameters directly from constructor
-  /// without Yaml file
+  /// without config YAML file
   Generator.fromString({
     required String schemaContent,
     required ProgrammingLanguage language,
@@ -117,7 +117,7 @@ class Generator {
     _dataClasses = parser.parseDataClasses();
   }
 
-  /// Generate files based on [_restClients] and [_dataClasses]
+  /// Generate files based on parsed universal models
   Future<void> _generateFiles() async {
     final files = await _fillContent();
     for (final file in files) {
@@ -125,7 +125,7 @@ class Generator {
     }
   }
 
-  /// Generate files content based on [_restClients] and [_dataClasses]
+  /// Generate "virtual" files content
   Future<List<GeneratedFile>> _fillContent() async {
     final writeController = FillController(
       clientPostfix: _clientPostfix.toPascal,
