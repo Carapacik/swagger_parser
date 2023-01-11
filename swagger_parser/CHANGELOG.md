@@ -1,3 +1,6 @@
+## 0.6.3
+- Fixed error with return type in rest client
+
 ## 0.6.2
 - Update docs
 
