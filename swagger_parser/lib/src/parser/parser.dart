@@ -111,7 +111,7 @@ class OpenApiParser {
       }
       final contentTypeValue = contentType.value as Map<String, dynamic>;
       if (contentTypeValue.isEmpty ||
-          !contentTypeValue.containsKey(_schemasVar) ||
+          !contentTypeValue.containsKey(_schemaVar) ||
           (contentTypeValue[_schemaVar] as Map<String, dynamic>).isEmpty) {
         return null;
       }
