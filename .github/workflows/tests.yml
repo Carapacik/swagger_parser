@@ -19,7 +19,7 @@ jobs:
       matrix:
         sdk:
           - stable
-          - 2.18.6
+          - 2.18.7
           - 2.17.7
     steps:
       - uses: actions/checkout@v3.3.0
