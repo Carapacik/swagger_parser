@@ -1,8 +1,9 @@
 # Swagger Parser
-[![pub package](https://img.shields.io/pub/v/swagger_parser.svg)](https://pub.dev/packages/swagger_parser)
-[![Style](https://img.shields.io/badge/style-carapacik_lints-40c4ff.svg)](https://pub.dev/packages/carapacik_lints)
-[![Star on Github](https://img.shields.io/github/stars/Carapacik/swagger_parser.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/Carapacik/swagger_parser)
-[![Last commit on Github](https://img.shields.io/github/last-commit/Carapacik/swagger_parser)](https://github.com/Carapacik/swagger_parser)
+[![pub version](https://img.shields.io/pub/v/swagger_parser?logo=dart)](https://pub.dev/packages/swagger_parser)
+[![pub likes](https://img.shields.io/pub/likes/swagger_parser?logo=dart)](https://pub.dev/packages/swagger_parser)
+[![dart style](https://img.shields.io/badge/style-carapacik__lints%20-brightgreen?logo=dart)](https://pub.dev/packages/carapacik_lints)
+[![Star on Github](https://img.shields.io/github/stars/Carapacik/swagger_parser?logo=github)](https://github.com/Carapacik/swagger_parser)
+[![Last commit on Github](https://img.shields.io/github/last-commit/Carapacik/swagger_parser?logo=github)](https://github.com/Carapacik/swagger_parser)
 [![Tests](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml)
 <a href="https://omega-r.com/"><img src="https://raw.githubusercontent.com/Carapacik/swagger_parser/main/.github/readme/omega_logo.png" width="200" align="right"/></a>
 
@@ -69,9 +70,9 @@ you will need to specify the name of the YAML file as an argument.
 dart run swagger_parser:generate -f <path to your config file>
 ```
 
-### Generate files using build_runner for retrofit, json_serializable and freezed
+### Generate files using [build_runner](https://pub.dev/packages/build_runner) for retrofit, json_serializable and freezed
 
-To run the code generator, execute the following command:
+To run the code generation, execute the following command:
 ```shell
 dart run build_runner build
 ```
