@@ -23,7 +23,7 @@ class YamlConfig {
     }
 
     final yamlFileContent = configFile.readAsStringSync();
-    final yamlFile = loadYaml(yamlFileContent);
+    final dynamic yamlFile = loadYaml(yamlFileContent);
 
     if (yamlFile is! YamlMap) {
       throw ConfigException(

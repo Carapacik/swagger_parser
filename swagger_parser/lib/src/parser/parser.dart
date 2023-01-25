@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_dynamic_calls
+// ignore_for_file: avoid_dynamic_calls, avoid_annotating_with_dynamic
 import 'dart:collection';
 import 'dart:convert';
 
@@ -329,8 +329,8 @@ class OpenApiParser {
     }
 
     (_definitionFileContent[_pathsVar] as Map<String, dynamic>)
-        .forEach((path, pathValue) {
-      (pathValue as Map<String, dynamic>).forEach((key, requestPath) {
+        .forEach((path, dynamic pathValue) {
+      (pathValue as Map<String, dynamic>).forEach((key, dynamic requestPath) {
         final returnType = _version == OpenApiVersion.v2
             ? returnTypeV2(requestPath[_responsesVar] as Map<String, dynamic>)
             : returnTypeV3(requestPath[_responsesVar] as Map<String, dynamic>);
@@ -388,11 +388,11 @@ class OpenApiParser {
           _definitionFileContent[_definitionsVar] as Map<String, dynamic>;
     }
 
-    entities.forEach((key, value) {
+    entities.forEach((key, dynamic value) {
       var requiredParameters = <String>[];
       if ((value as Map<String, dynamic>).containsKey(_requiredVar)) {
         requiredParameters = (value[_requiredVar] as List<dynamic>)
-            .map((e) => e.toString())
+            .map((dynamic e) => e.toString())
             .toList();
       }
 
@@ -402,7 +402,7 @@ class OpenApiParser {
 
       void findParamsAndImports(Map<String, dynamic> map) {
         (map[_propertiesVar] as Map<String, dynamic>).forEach(
-          (propertyName, propertyValue) {
+          (propertyName, dynamic propertyValue) {
             final typeWithImport = _findType(
               propertyValue as Map<String, dynamic>,
               name: propertyName,
@@ -421,7 +421,7 @@ class OpenApiParser {
         findParamsAndImports(value);
       } else if (value.containsKey(_enumVar)) {
         final items =
-            (value[_enumVar] as List).map((e) => e.toString()).toSet();
+            (value[_enumVar] as List).map((dynamic e) => e.toString()).toSet();
         dataClasses.add(
           UniversalEnumClass(
             name: key,
@@ -525,7 +525,8 @@ class OpenApiParser {
         (map[_propertiesVar] as Map<String, dynamic>).isNotEmpty) {
       final newName = arrayName ?? name ?? '';
       final typeWithImports = <TypeWithImport>[];
-      (map[_propertiesVar] as Map<String, dynamic>).forEach((key, value) {
+      (map[_propertiesVar] as Map<String, dynamic>)
+          .forEach((key, dynamic value) {
         typeWithImports
             .add(_findType(value as Map<String, dynamic>, name: key));
       });
@@ -615,7 +616,7 @@ extension _YamlMapX on YamlMap {
         map[entry.key.toString()] = (entry.value as YamlMap).toMap();
       } else if (entry.value is YamlList) {
         map[entry.key.toString()] = (entry.value as YamlList)
-            .map((e) => e is YamlMap ? e.toMap() : e)
+            .map<dynamic>((dynamic e) => e is YamlMap ? e.toMap() : e)
             .toList(growable: false);
       } else {
         map[entry.key.toString()] = entry.value.toString();
