@@ -1,3 +1,7 @@
+## 0.6.4
+- Update example
+- Remove implicit_dynamic for analyzer
+
 ## 0.6.3
 - Fixed error with return type in rest client
 
