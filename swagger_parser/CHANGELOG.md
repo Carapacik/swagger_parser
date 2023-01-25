@@ -1,6 +1,5 @@
 ## 0.6.4
 - Update example
-- Increased the upper version of Dart to 4.0.0
 
 ## 0.6.3
 - Fixed error with return type in rest client

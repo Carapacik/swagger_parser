@@ -27,14 +27,14 @@ In your pubspec.yaml, add the following dependencies:
 ```yaml
 dependencies:
   # dio: ^4.0.6
-  # json_annotation: ^4.7.0
+  # json_annotation: ^4.8.0
   # retrofit: ^3.3.1
 
 dev_dependencies:
   # build_runner: ^2.3.0
-  # json_serializable: ^6.5.4
+  # json_serializable: ^6.6.0
   # retrofit_generator: ^4.2.0
-  swagger_parser: ^0.6.3
+  swagger_parser: ^0.6.4
 ```
 
 ### Configure package
