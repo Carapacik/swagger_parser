@@ -44,8 +44,10 @@ String _jsonKey(UniversalType t) {
     sb.write("\n    @JsonKey(name: '${t.jsonKey}')");
   }
   if (t.defaultValue != null) {
-    sb.write('\n    @Default(${t.type.quoterForStringType()}'
-        '${t.defaultValue}${t.type.quoterForStringType()})');
+    sb.write(
+      '\n    @Default(${t.type.quoterForStringType()}'
+      '${t.defaultValue}${t.type.quoterForStringType()})',
+    );
   }
 
   return sb.toString();
