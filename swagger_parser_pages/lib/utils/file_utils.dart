@@ -8,10 +8,15 @@ void generateArchive(List<GeneratedFile> files) {
   final encoder = ZipEncoder();
   final archive = Archive();
   for (final file in files) {
-    archive.addFile(ArchiveFile(file.name, file.contents.length, file.contents));
+    archive
+        .addFile(ArchiveFile(file.name, file.contents.length, file.contents));
   }
   final outputStream = OutputStream();
-  final bytes = encoder.encode(archive, level: Deflate.BEST_COMPRESSION, output: outputStream);
+  final bytes = encoder.encode(
+    archive,
+    level: Deflate.BEST_COMPRESSION,
+    output: outputStream,
+  );
 
   final blob = html.Blob(<List<int>?>[bytes]);
   final url = html.Url.createObjectUrlFromBlob(blob);

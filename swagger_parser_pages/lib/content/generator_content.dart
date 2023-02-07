@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:swagger_parser_pages/utils/file_utils.dart';
-import 'package:swagger_parser_pages/widgets/labeled_checkbox.dart';
 
 class GeneratorContent extends StatefulWidget {
   const GeneratorContent({super.key});
@@ -43,7 +42,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 400, maxHeight: 300),
+                constraints:
+                    const BoxConstraints(maxWidth: 400, maxHeight: 300),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -69,48 +69,28 @@ class _GeneratorContentState extends State<GeneratorContent> {
                   children: [
                     const Text(
                       'Config parameters',
-                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
+                      style:
+                          TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 24),
-                    StatefulBuilder(
-                      builder: (context, setState) {
-                        return DropdownButton<String>(
-                          value: _language.name,
-                          style: const TextStyle(fontSize: 24, color: Colors.white),
-                          isExpanded: true,
-                          icon: const RotatedBox(
-                            quarterTurns: 1,
-                            child: Icon(Icons.arrow_forward_ios_sharp),
-                          ),
-                          underline: const SizedBox.shrink(),
-                          elevation: 16,
-                          onChanged: (value) => setState(
-                            () => _language = ProgrammingLanguage.fromString(value)!,
-                          ),
-                          items: ProgrammingLanguage.values
-                              .map<DropdownMenuItem<String>>(
-                                (value) => DropdownMenuItem<String>(
-                                  value: value.name,
-                                  child: Text(value.name),
-                                ),
-                              )
-                              .toList(),
-                        );
-                      },
+                    DropdownMenu<ProgrammingLanguage>(
+                      label: const Text('Language'),
+                      width: 368,
+                      initialSelection: ProgrammingLanguage.dart,
+                      dropdownMenuEntries: ProgrammingLanguage.values
+                          .map(
+                            (e) => DropdownMenuEntry(value: e, label: e.name),
+                          )
+                          .toList(growable: false),
+                      onSelected: (value) => setState(() => _language = value!),
                     ),
                     const SizedBox(height: 16),
                     StatefulBuilder(
-                      builder: (context, setState) {
-                        return LabeledCheckbox(
-                          label: 'Is YAML file content',
-                          value: _isYaml,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _isYaml = newValue;
-                            });
-                          },
-                        );
-                      },
+                      builder: (context, setState) => CheckboxListTile(
+                        title: const Text('Is YAML file content'),
+                        value: _isYaml,
+                        onChanged: (value) => setState(() => _isYaml = value!),
+                      ),
                     ),
                     const SizedBox(height: 16),
                     TextField(
@@ -120,39 +100,39 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         hintText: 'Postfix for client classes',
                         hintStyle: TextStyle(fontSize: 24),
                         border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16),
                       ),
                       style: const TextStyle(fontSize: 24),
                     ),
                     const SizedBox(height: 16),
                     StatefulBuilder(
                       builder: (context, setState) {
-                        return LabeledCheckbox(
-                          label: 'Squish client folders into one?',
+                        return CheckboxListTile(
+                          title: const Text('Squish client folders into one?'),
                           value: _squishClients,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _squishClients = newValue;
-                            });
-                          },
+                          onChanged: (value) =>
+                              setState(() => _squishClients = value!),
                         );
                       },
                     ),
-                    if (_language == ProgrammingLanguage.dart) ...[
-                      const SizedBox(height: 16),
-                      StatefulBuilder(
-                        builder: (context, setState) {
-                          return LabeledCheckbox(
-                            label: 'Use freezed?',
-                            value: _freezed,
-                            onChanged: (newValue) {
-                              setState(() {
-                                _freezed = newValue;
-                              });
-                            },
-                          );
-                        },
+                    const SizedBox(height: 16),
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 600),
+                      crossFadeState: _language == ProgrammingLanguage.dart
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      sizeCurve: Curves.fastOutSlowIn,
+                      // for correct animation
+                      firstChild: Container(),
+                      secondChild: StatefulBuilder(
+                        builder: (context, setState) => CheckboxListTile(
+                          title: const Text('Use freezed'),
+                          value: _freezed,
+                          onChanged: (value) =>
+                              setState(() => _freezed = value!),
+                        ),
                       ),
-                    ],
+                    ),
                     const SizedBox(height: 32),
                     SizedBox(
                       width: 300,
@@ -163,7 +143,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                           style: TextStyle(fontSize: 24),
                         ),
                         onPressed: () async {
-                          await generateOutputs(
+                          await _generateOutputs(
                             context,
                             schema: _schemaController.text,
                             clientPostfix: _clientPostfix.text,
@@ -184,7 +164,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
       );
 }
 
-Future<void> generateOutputs(
+Future<void> _generateOutputs(
   BuildContext context, {
   required String schema,
   required String clientPostfix,
