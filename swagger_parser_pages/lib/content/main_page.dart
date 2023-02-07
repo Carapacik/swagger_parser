@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swagger_parser_pages/content/generator_content.dart';
-import 'package:swagger_parser_pages/widgets/information_box.dart';
+import 'package:swagger_parser_pages/content/information_box.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
@@ -23,7 +23,8 @@ class MainPage extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Paste your OpenApi JSON or YAML file content in the textarea below, click "Generate and download" and get your generated files in zip archive.',
+                  'Paste your OpenApi JSON or YAML file content in the textarea below, '
+                  'click "Generate and download" and get your generated files in zip archive.',
                   style: TextStyle(fontSize: 20, color: Colors.grey),
                 ),
                 SizedBox(height: 24),
