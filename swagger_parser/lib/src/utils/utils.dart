@@ -5,12 +5,12 @@ import '../generator/models/universal_type.dart';
 import '../utils/case_utils.dart';
 
 /// Provides imports as String from list of imports
-String dartImports({required Set<String> imports, String? pathPrefix}) =>
-    imports
-        .map(
-          (import) => "import '${pathPrefix ?? ''}${import.toSnake}.dart';\n",
-        )
-        .join();
+String dartImports({required Set<String> imports, String? pathPrefix}) {
+  if (imports.isEmpty) {
+    return '';
+  }
+  return '\n${imports.map((import) => "import '${pathPrefix ?? ''}${import.toSnake}.dart';").join('\n')}\n';
+}
 
 /// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
 String toSuitableType(

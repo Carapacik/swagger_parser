@@ -48,10 +48,10 @@ class OpenApiParser {
 
   late final Map<String, dynamic> _definitionFileContent;
   late final OpenApiVersion _version;
+  final List<UniversalComponentClass> _objectClasses = [];
+  int _uniqueNameCount = 0;
 
-  final List<UniversalComponentClass> objectClasses =
-      <UniversalComponentClass>[];
-
+  static const _additionalPropertiesVar = 'additionalProperties';
   static const _allOfVar = 'allOf';
   static const _anyOfVar = 'anyOf';
   static const _arrayVar = 'array';
@@ -455,8 +455,8 @@ class OpenApiParser {
       );
     });
 
-    dataClasses.addAll(objectClasses);
-    objectClasses.clear();
+    dataClasses.addAll(_objectClasses);
+    _objectClasses.clear();
 
     // check for 'allOf'
     final allOfClasses = dataClasses
@@ -495,6 +495,12 @@ class OpenApiParser {
   String? _defaultValueCheck(Map<String, dynamic> map) =>
       map.containsKey(_defaultVar) ? map[_defaultVar].toString() : null;
 
+  String get _uniqueName {
+    final name = '$_objectVar$_uniqueNameCount'.toPascal;
+    _uniqueNameCount++;
+    return name;
+  }
+
   TypeWithImport _findType(
     Map<String, dynamic> map, {
     String? name,
@@ -520,20 +526,33 @@ class OpenApiParser {
         import: arrayType.import,
       );
     } else if (map.containsKey(_typeVar) &&
-        map[_typeVar] == _objectVar &&
-        map.containsKey(_propertiesVar) &&
-        (map[_propertiesVar] as Map<String, dynamic>).isNotEmpty) {
-      final newName = arrayName ?? name ?? '';
+            map[_typeVar] == _objectVar &&
+            (map.containsKey(_propertiesVar) &&
+                (map[_propertiesVar] as Map<String, dynamic>).isNotEmpty) ||
+        (map.containsKey(_additionalPropertiesVar) &&
+            (map[_additionalPropertiesVar] as Map<String, dynamic>)
+                .isNotEmpty)) {
+      final newName = arrayName ?? name ?? _uniqueName;
       final typeWithImports = <TypeWithImport>[];
-      (map[_propertiesVar] as Map<String, dynamic>)
-          .forEach((key, dynamic value) {
-        typeWithImports
-            .add(_findType(value as Map<String, dynamic>, name: key));
-      });
-      if (objectClasses
-          .where((element) => element.name == '$newName $_valueVar'.toPascal)
+      if (map.containsKey(_propertiesVar)) {
+        (map[_propertiesVar] as Map<String, dynamic>)
+            .forEach((key, dynamic value) {
+          typeWithImports
+              .add(_findType(value as Map<String, dynamic>, name: key));
+        });
+      }
+      if (map.containsKey(_additionalPropertiesVar)) {
+        typeWithImports.add(
+          _findType(
+            map[_additionalPropertiesVar] as Map<String, dynamic>,
+            name: _additionalPropertiesVar,
+          ),
+        );
+      }
+      if (_objectClasses
+          .where((oc) => oc.name == '$newName $_valueVar'.toPascal)
           .isEmpty) {
-        objectClasses.add(
+        _objectClasses.add(
           UniversalComponentClass(
             name: '$newName $_valueVar'.toPascal,
             imports: typeWithImports

@@ -21,7 +21,6 @@ String dartRetrofitClientTemplate({
     '''
 ${_fileImport(restClient)}import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
-
 ${dartImports(imports: restClient.imports, pathPrefix: '../shared_models/')}
 part '$partFile.g.dart';
 
