@@ -143,6 +143,7 @@ interface ClassNameApi {}
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
+
 import '../shared_models/camel_class.dart';
 import '../shared_models/snake_class.dart';
 import '../shared_models/kebab_class.dart';
@@ -944,8 +945,11 @@ interface Client {
       final filledContent =
           await fillController.fillRestClientContent(restClient);
       const expectedContents = '''
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
+
 import '../shared_models/another_file.dart';
 
 part 'rest_client.g.dart';
@@ -1161,6 +1165,7 @@ abstract class Client {
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
+
 import '../shared_models/another_file.dart';
 
 part 'rest_client.g.dart';

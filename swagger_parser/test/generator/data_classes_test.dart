@@ -23,7 +23,7 @@ part 'class_name.g.dart';
 
 @JsonSerializable()
 class ClassName {
-  ClassName();
+  const ClassName();
   
   factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
   
@@ -94,6 +94,7 @@ data class ClassName()
       final filledContent = await fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
+
 import 'camel_class.dart';
 import 'snake_class.dart';
 import 'kebab_class.dart';
@@ -104,7 +105,7 @@ part 'class_name.g.dart';
 
 @JsonSerializable()
 class ClassName {
-  ClassName();
+  const ClassName();
   
   factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
   
@@ -130,6 +131,7 @@ class ClassName {
       final filledContent = await fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'camel_class.dart';
 import 'snake_class.dart';
 import 'kebab_class.dart';
@@ -193,7 +195,7 @@ part 'class_name.g.dart';
 
 @JsonSerializable()
 class ClassName {
-  ClassName({
+  const ClassName({
     required this.intType,
     required this.numberType,
     required this.doubleNumberType,
@@ -336,13 +338,14 @@ data class ClassName(
       final filledContent = await fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
+
 import 'another.dart';
 
 part 'class_name.g.dart';
 
 @JsonSerializable()
 class ClassName {
-  ClassName({
+  const ClassName({
     required this.list0,
     required this.list1,
     required this.list5,
@@ -374,6 +377,7 @@ class ClassName {
       final filledContent = await fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'another.dart';
 
 part 'class_name.freezed.dart';
@@ -454,7 +458,7 @@ part 'class_name.g.dart';
 
 @JsonSerializable()
 class ClassName {
-  ClassName({
+  const ClassName({
     required this.intType,
     required this.stringType,
     required this.boolType,
@@ -599,7 +603,7 @@ part 'class_name.g.dart';
 
 @JsonSerializable()
 class ClassName {
-  ClassName({
+  const ClassName({
     required this.intType,
     required this.stringType,
     required this.boolType,
@@ -695,13 +699,14 @@ class ClassName with _$ClassName {
       final filledContent = await fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
+
 import 'another.dart';
 
 part 'class_name.g.dart';
 
 @JsonSerializable()
 class ClassName {
-  ClassName({
+  const ClassName({
     required this.anotherList,
     this.intType,
     this.list,
@@ -747,6 +752,7 @@ class ClassName {
       final filledContent = await fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'another.dart';
 
 part 'class_name.freezed.dart';
@@ -832,13 +838,14 @@ data class ClassName(
       final filledContent = await fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
+
 import 'another.dart';
 
 part 'class_name.g.dart';
 
 @JsonSerializable()
 class ClassName {
-  ClassName({
+  const ClassName({
     required this.intRequired,
     required this.list,
     this.intNotRequired,
@@ -881,6 +888,7 @@ class ClassName {
       final filledContent = await fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'another.dart';
 
 part 'class_name.freezed.dart';
