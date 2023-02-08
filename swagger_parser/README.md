@@ -32,9 +32,9 @@ dependencies:
 
 dev_dependencies:
   # build_runner: ^2.3.0
-  # json_serializable: ^6.6.0
+  # json_serializable: ^6.6.1
   # retrofit_generator: ^4.2.0
-  swagger_parser: ^0.6.4
+  swagger_parser: ^0.6.5
 ```
 
 ### Configure package

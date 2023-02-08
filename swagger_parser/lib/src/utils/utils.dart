@@ -35,6 +35,23 @@ String toSuitableType(
   return sb.toString();
 }
 
+void introMessage() {
+  stdout.writeln('''
+═══════════════════════════════
+   Welcome to swagger_parser   
+═══════════════════════════════
+''');
+}
+
+void generateMessage() {
+  stdout.writeln('Generate...');
+}
+
+void successMessage() {
+  stdout.writeln('The generation was completed successfully. '
+      'You can run the generation using build_runner.');
+}
+
 void exitWithError(String message) {
   stderr.writeln('ERROR: $message');
   exit(2);

@@ -1,3 +1,6 @@
+## 0.6.5
+- Fixed error with import for File type
+
 ## 0.6.4
 - Update example
 - Remove implicit_dynamic for analyzer

@@ -19,8 +19,9 @@ String dartRetrofitClientTemplate({
       : 'rest_client';
   final sb = StringBuffer(
     '''
-import 'package:dio/dio.dart';
+${_fileImport(restClient)}import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
+
 ${dartImports(imports: restClient.imports, pathPrefix: '../shared_models/')}
 part '$partFile.g.dart';
 
@@ -59,6 +60,20 @@ String _toClientRequest(UniversalRequest request) {
   }
   return sb.toString();
 }
+
+String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
+      (r) => r.parameters.any(
+        (p) =>
+            toSuitableType(
+              p.type,
+              ProgrammingLanguage.dart,
+              isRequired: p.type.isRequired,
+            ) ==
+            'File',
+      ),
+    )
+        ? "import 'dart:io';\n\n"
+        : '';
 
 String _toQueryParameter(UniversalRequestType parameter) =>
     "    @${parameter.parameterType.type}(${parameter.name != null ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
