@@ -27,7 +27,7 @@ class Generator {
     if (configFile == null) {
       throw GeneratorException("Can't find schema file at $schemaFilePath.");
     }
-    _isYaml = p.extension(schemaFilePath).toLowerCase() == 'yaml';
+    _isYaml = p.extension(schemaFilePath).toLowerCase() == '.yaml';
     _schemaContent = configFile.readAsStringSync();
 
     if (yamlConfig.language != null) {

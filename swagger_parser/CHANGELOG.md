@@ -1,3 +1,9 @@
+## 0.7.0
+- Fixed error with import for File type
+- Add support for ` additionalProperties ` annotations
+- Fixed templates
+- Fixed error with yaml files
+
 ## 0.6.4
 - Update example
 - Remove implicit_dynamic for analyzer
