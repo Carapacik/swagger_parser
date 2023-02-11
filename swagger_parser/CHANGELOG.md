@@ -1,3 +1,6 @@
+## 0.7.1-dev
+- Downgraded the lower bound of dependencies to support Flutter 3.0
+
 ## 0.7.0
 - Fixed error with import for File type
 - Add support for ` additionalProperties ` annotations
