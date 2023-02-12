@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:developer' show log;
 
 import 'package:flutter/material.dart';
 import 'package:swagger_parser/swagger_parser.dart';
@@ -66,6 +66,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 400),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
                       'Config parameters',
@@ -73,16 +74,18 @@ class _GeneratorContentState extends State<GeneratorContent> {
                           TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 24),
-                    DropdownMenu<ProgrammingLanguage>(
-                      label: const Text('Language'),
-                      width: 368,
-                      initialSelection: ProgrammingLanguage.dart,
-                      dropdownMenuEntries: ProgrammingLanguage.values
-                          .map(
-                            (e) => DropdownMenuEntry(value: e, label: e.name),
-                          )
-                          .toList(growable: false),
-                      onSelected: (value) => setState(() => _language = value!),
+                    Center(
+                      child: DropdownMenu<ProgrammingLanguage>(
+                        label: const Text('Language'),
+                        width: 300,
+                        initialSelection: ProgrammingLanguage.dart,
+                        dropdownMenuEntries: ProgrammingLanguage.values
+                            .map(
+                              (e) => DropdownMenuEntry(value: e, label: e.name),
+                            )
+                            .toList(growable: false),
+                        onSelected: (lng) => setState(() => _language = lng!),
+                      ),
                     ),
                     const SizedBox(height: 16),
                     StatefulBuilder(
