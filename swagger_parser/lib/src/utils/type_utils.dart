@@ -52,7 +52,7 @@ extension StringTypeX on String {
       case 'boolean':
         return 'Boolean';
       case 'object':
-        return 'Any?';
+        return 'Any';
     }
     return this;
   }

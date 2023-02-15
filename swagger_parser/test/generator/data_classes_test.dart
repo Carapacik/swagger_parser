@@ -189,6 +189,8 @@ class ClassName with _$ClassName {
       const fillController = FillController();
       final filledContent = await fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
+import 'dart:io';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'class_name.g.dart';
@@ -259,6 +261,8 @@ class ClassName {
       const fillController = FillController(freezed: true);
       final filledContent = await fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
+import 'dart:io';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'class_name.freezed.dart';
@@ -291,6 +295,17 @@ class ClassName with _$ClassName {
         imports: {},
         parameters: [
           UniversalType(type: 'integer', name: 'intType'),
+          UniversalType(type: 'number', name: 'numberType'),
+          UniversalType(
+            type: 'number',
+            format: 'double',
+            name: 'doubleNumberType',
+          ),
+          UniversalType(
+            type: 'number',
+            format: 'float',
+            name: 'floatNumberType',
+          ),
           UniversalType(type: 'string', name: 'stringType'),
           UniversalType(
             type: 'string',
@@ -299,6 +314,7 @@ class ClassName with _$ClassName {
           ),
           UniversalType(type: 'file', name: 'fileType'),
           UniversalType(type: 'boolean', name: 'boolType'),
+          UniversalType(type: 'object', name: 'objectType'),
           UniversalType(type: 'Another', name: 'anotherType')
         ],
       );
@@ -312,10 +328,14 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class ClassName(
     var intType: Int,
+    var numberType: Double,
+    var doubleNumberType: Double,
+    var floatNumberType: Float,
     var stringType: String,
     var binaryStringType: MultipartBody.Part,
     var fileType: MultipartBody.Part,
     var boolType: Boolean,
+    var objectType: Any,
     var anotherType: Another,
 )
 ''';
@@ -668,7 +688,38 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      // Default values in Kotlin are not supported yet. You can always add PR
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        parameters: [
+          UniversalType(type: 'integer', name: 'intType', defaultValue: '1'),
+          UniversalType(
+            type: 'string',
+            name: 'stringType',
+            defaultValue: 'str',
+          ),
+          UniversalType(
+            type: 'boolean',
+            name: 'boolType',
+            defaultValue: 'false',
+          )
+        ],
+      );
+      const fillController =
+          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContents = '''
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+data class ClassName(
+    var intType: Int = 1,
+    var stringType: String = "str",
+    var boolType: Boolean = false,
+)
+''';
+      expect(filledContent.contents, expectedContents);
     });
   });
 
@@ -909,7 +960,9 @@ class ClassName with _$ClassName {
       expect(filledContent.contents, expectedContents);
     });
 
-    // In Kotlin this is optional
+    test('kotlin + moshi', () async {
+      // In Kotlin this is optional
+    });
   });
 
   group('Enum', () {
@@ -1053,7 +1106,53 @@ const _$EnumNameStringEnumMap = {
     });
 
     test('kotlin + moshi', () async {
-      // Enums in Kotlin are not supported yet. You can always add PR
+      const dataClassed = [
+        UniversalEnumClass(
+          name: 'EnumName',
+          type: 'int',
+          items: {'1', '2', '3'},
+        ),
+        UniversalEnumClass(
+          name: 'EnumNameString',
+          type: 'string',
+          items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+        ),
+      ];
+      const fillController = FillController(freezed: true);
+      final files = <GeneratedFile>[];
+      for (final enumClass in dataClassed) {
+        files.add(await fillController.fillDtoContent(enumClass));
+      }
+      const expectedContent0 = '''
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+enum class EnumName {
+    @Json("1")
+    VALUE1,
+    @Json("2")
+    VALUE2,
+    @Json("3")
+    VALUE3,
+}
+''';
+      const expectedContent1 = '''
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+enum class EnumNameString {
+    @Json("itemOne")
+    ITEM_ONE,
+    @Json("ItemTwo")
+    ITEM_TWO,
+    @Json("item_three")
+    ITEM_THREE,
+    @Json("ITEM-FOUR")
+    ITEM_FOUR,
+}
+''';
+      expect(files[0].contents, expectedContent0);
+      expect(files[1].contents, expectedContent1);
     });
   });
 }
