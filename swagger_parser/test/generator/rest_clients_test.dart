@@ -696,7 +696,7 @@ interface Client {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/',
-            returnType: null,
+            returnType: UniversalType(type: 'string'),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -721,7 +721,7 @@ abstract class Client {
   factory Client(Dio dio, {String baseUrl}) = _Client;
 
   @GET('/')
-  Future<void> getRequest({
+  Future<String> getRequest({
     @Query('name') required String alex,
   });
 }
@@ -738,7 +738,7 @@ abstract class Client {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/',
-            returnType: null,
+            returnType: UniversalType(type: 'string'),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -760,7 +760,7 @@ interface Client {
     @GET("/")
     suspend fun getRequest(
         @Query("name") alex: String,
-    )
+    ): String
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -934,7 +934,7 @@ interface Client {
             isMultiPart: true,
             parameters: [
               UniversalRequestType(
-                parameterType: HttpParameterType.path,
+                parameterType: HttpParameterType.body,
                 type: UniversalType(type: 'AnotherFile', name: 'file'),
               )
             ],
@@ -971,7 +971,7 @@ abstract class Client {
   @MultiPart()
   @POST('/single')
   Future<bool> singleEntity({
-    @Path() required AnotherFile file,
+    @Body() required AnotherFile file,
   });
 }
 ''';
@@ -981,7 +981,7 @@ abstract class Client {
     test('kotlin + retrofit', () async {
       const restClient = UniversalRestClient(
         name: 'ClassName',
-        imports: {},
+        imports: {'AnotherFile'},
         requests: [
           UniversalRequest(
             name: 'sendMultiPart',
@@ -1020,6 +1020,19 @@ abstract class Client {
                 name: 'parsed-if',
               )
             ],
+          ),
+          UniversalRequest(
+            name: 'singleEntity',
+            requestType: HttpRequestType.post,
+            route: '/single',
+            returnType: UniversalType(type: 'boolean'),
+            isMultiPart: true,
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.body,
+                type: UniversalType(type: 'AnotherFile', name: 'file'),
+              )
+            ],
           )
         ],
       );
@@ -1040,6 +1053,12 @@ interface Client {
         @Part("file2") secondFile: MultipartBody.Part,
         @Part("parsed-if") parsed: Boolean,
     )
+
+    @MultiPart
+    @POST("/single")
+    suspend fun singleEntity(
+        @Body file: AnotherFile,
+    ): Boolean
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -1056,7 +1075,7 @@ interface Client {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/{id}',
-            returnType: null,
+            returnType: UniversalType(type: 'string'),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1071,11 +1090,12 @@ interface Client {
               UniversalRequestType(
                 parameterType: HttpParameterType.path,
                 type: UniversalType(
-                  type: 'int',
+                  type: 'integer',
                   name: 'id',
                   // ignore: avoid_redundant_argument_values
                   isRequired: true,
                 ),
+                name: 'id',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1104,11 +1124,74 @@ abstract class Client {
   factory Client(Dio dio, {String baseUrl}) = _Client;
 
   @GET('/{id}')
-  Future<void> getRequest({
-    @Path() required int id,
+  Future<String> getRequest({
+    @Path('id') required int id,
     @Query('list') List<String>? list,
     @Query('type') String? stringType,
   });
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('kotlin + retrofit', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {},
+        requests: [
+          UniversalRequest(
+            name: 'getRequest',
+            requestType: HttpRequestType.get,
+            route: '/{id}',
+            returnType: UniversalType(type: 'string'),
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 1,
+                  name: 'list',
+                  isRequired: false,
+                ),
+                name: 'list',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.path,
+                type: UniversalType(
+                  type: 'integer',
+                  name: 'id',
+                  // ignore: avoid_redundant_argument_values
+                  isRequired: true,
+                ),
+                name: 'id',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'stringType',
+                  isRequired: false,
+                ),
+                name: 'type',
+              ),
+            ],
+          )
+        ],
+      );
+      const fillController =
+          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      final filledContent =
+          await fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import retrofit2.http.*
+
+interface Client {
+    @GET("/{id}")
+    suspend fun getRequest(
+        @Query("list") list: List<String>?,
+        @Path("id") id: Int,
+        @Query("type") stringType: String?,
+    ): String
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -1186,7 +1269,65 @@ abstract class Client {
     });
 
     test('kotlin + retrofit', () async {
-      // Default values in Kotlin templates are not supported yet. You can always add PR
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {'AnotherFile'},
+        requests: [
+          UniversalRequest(
+            name: 'sendGagaga',
+            requestType: HttpRequestType.post,
+            route: '/send',
+            returnType: null,
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.header,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'token',
+                  defaultValue: 'gagaga123',
+                ),
+                name: 'Authorization',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'number',
+                  format: 'double',
+                  name: 'age',
+                  defaultValue: '17',
+                ),
+                name: 'age',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'boolean',
+                  name: 'adult',
+                  defaultValue: 'false',
+                ),
+                name: 'adult',
+              )
+            ],
+          )
+        ],
+      );
+      const fillController =
+          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      final filledContent =
+          await fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import retrofit2.http.*
+
+interface Client {
+    @POST("/send")
+    suspend fun sendGagaga(
+        @Header("Authorization") token: String = "gagaga123",
+        @Query("age") age: Double = 17,
+        @Query("adult") adult: Boolean = false,
+    )
+}
+''';
+      expect(filledContent.contents, expectedContents);
     });
   });
 }
