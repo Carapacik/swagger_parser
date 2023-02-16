@@ -1090,7 +1090,7 @@ interface Client {
               UniversalRequestType(
                 parameterType: HttpParameterType.path,
                 type: UniversalType(
-                  type: 'int',
+                  type: 'integer',
                   name: 'id',
                   // ignore: avoid_redundant_argument_values
                   isRequired: true,
@@ -1158,7 +1158,7 @@ abstract class Client {
               UniversalRequestType(
                 parameterType: HttpParameterType.path,
                 type: UniversalType(
-                  type: 'int',
+                  type: 'integer',
                   name: 'id',
                   // ignore: avoid_redundant_argument_values
                   isRequired: true,

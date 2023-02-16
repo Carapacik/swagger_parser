@@ -57,5 +57,9 @@ extension StringTypeX on String {
     return this;
   }
 
-  String quoterForStringType() => this == 'string' ? "'" : '';
+  String quoterForStringType({bool isDart = true}) => this == 'string'
+      ? isDart
+          ? "'"
+          : '"'
+      : '';
 }

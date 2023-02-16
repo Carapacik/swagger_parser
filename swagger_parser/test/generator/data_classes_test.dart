@@ -1118,7 +1118,8 @@ const _$EnumNameStringEnumMap = {
           items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
         ),
       ];
-      const fillController = FillController(freezed: true);
+      const fillController =
+          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
       final files = <GeneratedFile>[];
       for (final enumClass in dataClassed) {
         files.add(await fillController.fillDtoContent(enumClass));
@@ -1127,19 +1128,21 @@ const _$EnumNameStringEnumMap = {
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 enum class EnumName {
     @Json("1")
-    VALUE1,
+    VALUE_1,
     @Json("2")
-    VALUE2,
+    VALUE_2,
     @Json("3")
-    VALUE3,
+    VALUE_3,
 }
 ''';
       const expectedContent1 = '''
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 enum class EnumNameString {
     @Json("itemOne")
     ITEM_ONE,
