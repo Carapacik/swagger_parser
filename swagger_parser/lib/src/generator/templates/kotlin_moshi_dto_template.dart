@@ -1,4 +1,5 @@
 import '../../utils/case_utils.dart';
+import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
 import '../models/programming_lang.dart';
 import '../models/universal_component_class.dart';
@@ -19,6 +20,8 @@ String _parameters(List<UniversalType> parameters) => parameters
     .map(
       (e) =>
           '${e.jsonKey != null && e.name != e.jsonKey ? '\n    @Json("${e.jsonKey}")' : ''}\n    '
-          'var ${e.name}: ${toSuitableType(e, ProgrammingLanguage.kotlin, isRequired: e.isRequired)},',
+          'var ${e.name}: ${toSuitableType(e, ProgrammingLanguage.kotlin, isRequired: e.isRequired)}'
+          '${e.defaultValue != null ? ' = ${e.type.quoterForStringType(isDart: false)}'
+              '${e.defaultValue}${e.type.quoterForStringType(isDart: false)}' : ''},',
     )
     .join();

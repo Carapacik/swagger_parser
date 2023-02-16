@@ -1,4 +1,4 @@
-- ### Put your json file from swagger and add the path to it in pubspec.yaml
+- ### Put your schema file from swagger and add the path to it in pubspec.yaml
 - ### Set the output directory in pubspec.yaml
 - ### Run command below to generate rest clients and data classes:
 ```shell

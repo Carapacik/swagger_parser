@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import '../generator/models/programming_lang.dart';
+import '../generator/models/universal_component_class.dart';
 import '../generator/models/universal_type.dart';
 import '../utils/case_utils.dart';
 
@@ -35,11 +36,24 @@ String toSuitableType(
   return sb.toString();
 }
 
+String fileImport(UniversalComponentClass dataClass) =>
+    dataClass.parameters.any(
+      (p) =>
+          toSuitableType(
+            p,
+            ProgrammingLanguage.dart,
+            isRequired: p.isRequired,
+          ) ==
+          'File',
+    )
+        ? "import 'dart:io';\n\n"
+        : '';
+
 void introMessage() {
   stdout.writeln('''
-═══════════════════════════════
-   Welcome to swagger_parser   
-═══════════════════════════════
+  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  ┃   Welcome to swagger_parser   ┃
+  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ''');
 }
 
@@ -48,8 +62,10 @@ void generateMessage() {
 }
 
 void successMessage() {
-  stdout.writeln('The generation was completed successfully. '
-      'You can run the generation using build_runner.');
+  stdout.writeln(
+    'The generation was completed successfully. '
+    'You can run the generation using build_runner.',
+  );
 }
 
 void exitWithError(String message) {

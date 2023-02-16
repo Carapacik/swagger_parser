@@ -1,15 +1,17 @@
-## 0.7.1-dev
+## 0.8.0
+- Support for dio 5
 - Downgraded the lower bound of dependencies to support Flutter 3.0
+- Complete templates for Kotlin
 
 ## 0.7.0
-- Fixed error with import for File type
+- Fixed error with import for ` File ` type
 - Add support for ` additionalProperties ` annotations
 - Fixed templates
 - Fixed error with yaml files
 
 ## 0.6.4
 - Update example
-- Remove implicit_dynamic for analyzer
+- Remove ` implicit_dynamic ` field for analyzer
 
 ## 0.6.3
 - Fixed error with return type in rest client
