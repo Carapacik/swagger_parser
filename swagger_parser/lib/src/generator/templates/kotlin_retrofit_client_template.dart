@@ -1,4 +1,5 @@
 import '../../utils/case_utils.dart';
+import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
 import '../models/programming_lang.dart';
 import '../models/universal_request.dart';
@@ -47,6 +48,10 @@ String _toClientRequest(UniversalRequest request) {
     }
     return sb.toString();
   }
+  if (request.parameters.isNotEmpty) {
+    sb.write('\n    )');
+  }
+
   sb.write(
     ': ${toSuitableType(request.returnType!, ProgrammingLanguage.kotlin)}\n',
   );
@@ -54,4 +59,7 @@ String _toClientRequest(UniversalRequest request) {
 }
 
 String _toQueryParameter(UniversalRequestType parameter) =>
-    '        @${parameter.parameterType.type}${parameter.parameterType.isBody ? '' : '("${parameter.name}")'} ${parameter.type.name!.toCamel}: ${toSuitableType(parameter.type, ProgrammingLanguage.kotlin)}';
+    '        @${parameter.parameterType.type}${parameter.parameterType.isBody ? '' : '("${parameter.name}")'} '
+    '${parameter.type.name!.toCamel}: ${toSuitableType(parameter.type, ProgrammingLanguage.kotlin, isRequired: parameter.type.isRequired)}'
+    '${parameter.type.defaultValue != null ? ' = ${parameter.type.type.quoterForStringType(isDart: false)}'
+        '${parameter.type.defaultValue}${parameter.type.type.quoterForStringType(isDart: false)}' : ''}';

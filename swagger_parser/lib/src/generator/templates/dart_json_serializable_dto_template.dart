@@ -11,7 +11,7 @@ import '../models/universal_type.dart';
 String dartJsonSerializableDtoTemplate(UniversalComponentClass dataClass) {
   final className = dataClass.name.toPascal;
   return '''
-import 'package:json_annotation/json_annotation.dart';
+${fileImport(dataClass)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.g.dart';
 
@@ -49,7 +49,8 @@ String _jsonKey(UniversalType t) {
   sb.write('\n  @JsonKey(');
   if (t.defaultValue != null) {
     sb.write(
-      'defaultValue: ${t.type.quoterForStringType()}${t.defaultValue}${t.type.quoterForStringType()}',
+      'defaultValue: ${t.type.quoterForStringType()}'
+      '${t.defaultValue}${t.type.quoterForStringType()}',
     );
   }
 

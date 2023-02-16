@@ -52,10 +52,14 @@ extension StringTypeX on String {
       case 'boolean':
         return 'Boolean';
       case 'object':
-        return 'Any?';
+        return 'Any';
     }
     return this;
   }
 
-  String quoterForStringType() => this == 'string' ? "'" : '';
+  String quoterForStringType({bool isDart = true}) => this == 'string'
+      ? isDart
+          ? "'"
+          : '"'
+      : '';
 }
