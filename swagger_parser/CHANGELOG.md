@@ -1,3 +1,6 @@
+## 0.8.1
+- Added DateTime to the format for processing types ([#16](https://github.com/Carapacik/swagger_parser/issues/16))
+
 ## 0.8.0
 - Support for dio 5
 - Downgraded the lower bound of dependencies to support Flutter 3.0

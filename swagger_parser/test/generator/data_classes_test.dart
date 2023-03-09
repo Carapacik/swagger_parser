@@ -180,6 +180,16 @@ class ClassName with _$ClassName {
             format: 'binary',
             name: 'binaryStringType',
           ),
+          UniversalType(
+            type: 'string',
+            format: 'date',
+            name: 'dateStringType',
+          ),
+          UniversalType(
+            type: 'string',
+            format: 'date-time',
+            name: 'dateTimeStringType',
+          ),
           UniversalType(type: 'file', name: 'fileType'),
           UniversalType(type: 'boolean', name: 'boolType'),
           UniversalType(type: 'object', name: 'objectType'),
@@ -204,6 +214,8 @@ class ClassName {
     required this.floatNumberType,
     required this.stringType,
     required this.binaryStringType,
+    required this.dateStringType,
+    required this.dateTimeStringType,
     required this.fileType,
     required this.boolType,
     required this.objectType,
@@ -218,6 +230,8 @@ class ClassName {
   final double floatNumberType;
   final String stringType;
   final File binaryStringType;
+  final DateTime dateStringType;
+  final DateTime dateTimeStringType;
   final File fileType;
   final bool boolType;
   final Object objectType;
@@ -252,6 +266,16 @@ class ClassName {
             format: 'binary',
             name: 'binaryStringType',
           ),
+          UniversalType(
+            type: 'string',
+            format: 'date',
+            name: 'dateStringType',
+          ),
+          UniversalType(
+            type: 'string',
+            format: 'date-time',
+            name: 'dateTimeStringType',
+          ),
           UniversalType(type: 'file', name: 'fileType'),
           UniversalType(type: 'boolean', name: 'boolType'),
           UniversalType(type: 'object', name: 'objectType'),
@@ -277,6 +301,8 @@ class ClassName with _$ClassName {
     required double floatNumberType,
     required String stringType,
     required File binaryStringType,
+    required DateTime dateStringType,
+    required DateTime dateTimeStringType,
     required File fileType,
     required bool boolType,
     required Object objectType,
@@ -312,6 +338,16 @@ class ClassName with _$ClassName {
             format: 'binary',
             name: 'binaryStringType',
           ),
+          UniversalType(
+            type: 'string',
+            format: 'date',
+            name: 'dateStringType',
+          ),
+          UniversalType(
+            type: 'string',
+            format: 'date-time',
+            name: 'dateTimeStringType',
+          ),
           UniversalType(type: 'file', name: 'fileType'),
           UniversalType(type: 'boolean', name: 'boolType'),
           UniversalType(type: 'object', name: 'objectType'),
@@ -333,6 +369,8 @@ data class ClassName(
     var floatNumberType: Float,
     var stringType: String,
     var binaryStringType: MultipartBody.Part,
+    var dateStringType: Date,
+    var dateTimeStringType: Date,
     var fileType: MultipartBody.Part,
     var boolType: Boolean,
     var objectType: Any,

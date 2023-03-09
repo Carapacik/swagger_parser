@@ -13,13 +13,15 @@ extension StringTypeX on String {
         }
         return 'num';
       case 'string':
-        if (format != null && format == 'binary') {
-          // Single MultipartFile is not generated due an error
-          return 'File';
+        switch (format) {
+          case 'binary':
+            return 'File';
+          case 'date':
+          case 'date-time':
+            return 'DateTime';
         }
         return 'String';
       case 'file':
-        // Single MultipartFile is not generated due an error
         return 'File';
       case 'boolean':
         return 'bool';
@@ -43,8 +45,12 @@ extension StringTypeX on String {
         }
         return 'Double';
       case 'string':
-        if (format != null && format == 'binary') {
-          return 'MultipartBody.Part';
+        switch (format) {
+          case 'binary':
+            return 'MultipartBody.Part';
+          case 'date':
+          case 'date-time':
+            return 'Date';
         }
         return 'String';
       case 'file':
