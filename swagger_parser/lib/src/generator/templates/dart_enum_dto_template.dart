@@ -11,13 +11,9 @@ String dartEnumDtoTemplate(
   return '''
 import '${freezed ? 'package:freezed_annotation/freezed_annotation.dart' : 'package:json_annotation/json_annotation.dart'}';
 
+@JsonEnum()
 enum $className {
-  ${dataClass.items.map((e) => _valuePrefixForEnumItems(dataClass.type, e)).join(',\n  ')};
-
-  const $className();
-
-  factory $className.fromJson(Map<String, dynamic> json) =>
-      \$enumDecode(_\$${className}EnumMap, json);
+${dataClass.items.map((e) => _valuePrefixForEnumValueItems(dataClass.type, e)).join(',\n')};
 
   ${dataClass.type.toDartType()} toJson() => _\$${className}EnumMap[this]!;
 }
@@ -29,6 +25,12 @@ const _\$${className}EnumMap = {
           ).join(',\n  ')},
 };
 ''';
+}
+
+String _valuePrefixForEnumValueItems(String type, String item) {
+  return '''
+  @JsonValue(${type == 'string' ? "'$item'" : item})
+  ${_valuePrefixForEnumItems(type, item)}''';
 }
 
 String _valuePrefixForEnumItems(String type, String item) =>

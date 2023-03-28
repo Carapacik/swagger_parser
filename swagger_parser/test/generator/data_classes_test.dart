@@ -1026,15 +1026,14 @@ class ClassName with _$ClassName {
       const expectedContent0 = r'''
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum()
 enum EnumName {
+  @JsonValue(1)
   value1,
+  @JsonValue(2)
   value2,
+  @JsonValue(3)
   value3;
-
-  const EnumName();
-
-  factory EnumName.fromJson(Map<String, dynamic> json) =>
-      $enumDecode(_$EnumNameEnumMap, json);
 
   int toJson() => _$EnumNameEnumMap[this]!;
 }
@@ -1049,16 +1048,16 @@ const _$EnumNameEnumMap = {
       const expectedContent1 = r'''
 import 'package:json_annotation/json_annotation.dart';
 
+@JsonEnum()
 enum EnumNameString {
+  @JsonValue('itemOne')
   itemOne,
+  @JsonValue('ItemTwo')
   itemTwo,
+  @JsonValue('item_three')
   itemThree,
+  @JsonValue('ITEM-FOUR')
   itemFour;
-
-  const EnumNameString();
-
-  factory EnumNameString.fromJson(Map<String, dynamic> json) =>
-      $enumDecode(_$EnumNameStringEnumMap, json);
 
   String toJson() => _$EnumNameStringEnumMap[this]!;
 }
@@ -1095,15 +1094,14 @@ const _$EnumNameStringEnumMap = {
       const expectedContent0 = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+@JsonEnum()
 enum EnumName {
+  @JsonValue(1)
   value1,
+  @JsonValue(2)
   value2,
+  @JsonValue(3)
   value3;
-
-  const EnumName();
-
-  factory EnumName.fromJson(Map<String, dynamic> json) =>
-      $enumDecode(_$EnumNameEnumMap, json);
 
   int toJson() => _$EnumNameEnumMap[this]!;
 }
@@ -1118,16 +1116,16 @@ const _$EnumNameEnumMap = {
       const expectedContent1 = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+@JsonEnum()
 enum EnumNameString {
+  @JsonValue('itemOne')
   itemOne,
+  @JsonValue('ItemTwo')
   itemTwo,
+  @JsonValue('item_three')
   itemThree,
+  @JsonValue('ITEM-FOUR')
   itemFour;
-
-  const EnumNameString();
-
-  factory EnumNameString.fromJson(Map<String, dynamic> json) =>
-      $enumDecode(_$EnumNameStringEnumMap, json);
 
   String toJson() => _$EnumNameStringEnumMap[this]!;
 }
