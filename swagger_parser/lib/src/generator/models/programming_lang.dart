@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:swagger_parser/src/generator/templates/kotlin_typedef_template.dart';
 
 import '../templates/dart_enum_dto_template.dart';
 import '../templates/dart_freezed_dto_template.dart';
@@ -9,6 +8,7 @@ import '../templates/dart_typedef_template.dart';
 import '../templates/kotlin_enum_dto_template.dart';
 import '../templates/kotlin_moshi_dto_template.dart';
 import '../templates/kotlin_retrofit_client_template.dart';
+import '../templates/kotlin_typedef_template.dart';
 import 'universal_component_class.dart';
 import 'universal_data_class.dart';
 import 'universal_enum_class.dart';
@@ -36,7 +36,12 @@ enum ProgrammingLanguage {
   String dtoFileContent(UniversalDataClass dataClass, {bool freezed = false}) {
     switch (this) {
       case ProgrammingLanguage.dart:
-        if (dataClass is UniversalComponentClass) {
+        if (dataClass is UniversalEnumClass) {
+          return dartEnumDtoTemplate(
+            dataClass,
+            freezed: freezed,
+          );
+        } else if (dataClass is UniversalComponentClass) {
           if (dataClass.typeDef) {
             return dartTypeDefTemplate(dataClass);
           }
@@ -45,18 +50,17 @@ enum ProgrammingLanguage {
           }
           return dartJsonSerializableDtoTemplate(dataClass);
         }
-        return dartEnumDtoTemplate(
-          dataClass as UniversalEnumClass,
-          freezed: freezed,
-        );
+        throw Exception('Unknown type exception');
       case ProgrammingLanguage.kotlin:
-        if (dataClass is UniversalComponentClass) {
+        if (dataClass is UniversalEnumClass) {
+          return kotlinEnumDtoTemplate(dataClass);
+        } else if (dataClass is UniversalComponentClass) {
           if (dataClass.typeDef) {
             return kotlinTypeDefTemplate(dataClass);
           }
           return kotlinMoshiDtoTemplate(dataClass);
         }
-        return kotlinEnumDtoTemplate(dataClass as UniversalEnumClass);
+        throw Exception('Unknown type exception');
     }
   }
 
