@@ -5,12 +5,11 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
+    types: [review_requested]
 
 jobs:
   test:
-    name: "Run tests"
+    name: "Tests"
     runs-on: ubuntu-latest
     defaults:
       run:
