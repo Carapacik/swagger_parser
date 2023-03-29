@@ -9,7 +9,17 @@ class UniversalComponentClass extends UniversalDataClass {
     required this.imports,
     required this.parameters,
     this.allOf,
+    this.typeDef = false,
   });
+
+  /// Whether or not this schema is a basic type
+  /// For example
+  /// "Date": {
+  //         "type": "string",
+  //         "format": "date"
+  //       }
+  //  must be DateTime instead of its own class
+  final bool typeDef;
 
   /// List of additional references to components
   final Set<String> imports;
