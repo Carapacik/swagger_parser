@@ -13,7 +13,7 @@ import '${freezed ? 'package:freezed_annotation/freezed_annotation.dart' : 'pack
 
 @JsonEnum()
 enum $className {
-${dataClass.items.map((e) => _valuePrefixForEnumValueItems(dataClass.type, e)).join(',\n')};
+${dataClass.items.map((e) => _jsonValue(dataClass.type, e)).join(',\n')};
 
   ${dataClass.type.toDartType()} toJson() => _\$${className}EnumMap[this]!;
 }
@@ -27,11 +27,9 @@ const _\$${className}EnumMap = {
 ''';
 }
 
-String _valuePrefixForEnumValueItems(String type, String item) {
-  return '''
+String _jsonValue(String type, String item) => '''
   @JsonValue(${type == 'string' ? "'$item'" : item})
   ${_valuePrefixForEnumItems(type, item)}''';
-}
 
 String _valuePrefixForEnumItems(String type, String item) =>
     type != 'string' ? 'value$item'.toCamel : item.toCamel;
