@@ -584,21 +584,25 @@ class OpenApiParser {
                 map.containsKey(_oneOfVar) ||
                 allOfObject
             ? _objectVar
-            : _formatRef(
-                useSchema
-                    ? map[_schemaVar][_refVar].toString()
-                    : map[_refVar].toString(),
-              );
+            : map.containsKey(_refVar)
+                ? _formatRef(
+                    useSchema
+                        ? map[_schemaVar][_refVar].toString()
+                        : map[_refVar].toString(),
+                  )
+                : _objectVar;
     final import = map.containsKey(_typeVar) ||
             map.containsKey(_anyOfVar) ||
             map.containsKey(_oneOfVar) ||
             allOfObject
         ? null
-        : _formatRef(
-            useSchema
-                ? map[_schemaVar][_refVar].toString()
-                : map[_refVar].toString(),
-          );
+        : map.containsKey(_refVar)
+            ? _formatRef(
+                useSchema
+                    ? map[_schemaVar][_refVar].toString()
+                    : map[_refVar].toString(),
+              )
+            : null;
     return TypeWithImport(
       type: UniversalType(
         type: type,
