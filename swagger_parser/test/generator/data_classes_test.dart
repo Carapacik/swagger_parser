@@ -1005,7 +1005,7 @@ class ClassName with _$ClassName {
 
   group('Enum', () {
     test('dart + json_serializable', () async {
-      const dataClassed = [
+      const dataClasses = [
         UniversalEnumClass(
           name: 'EnumName',
           type: 'int',
@@ -1020,7 +1020,7 @@ class ClassName with _$ClassName {
 
       const fillController = FillController();
       final files = <GeneratedFile>[];
-      for (final enumClass in dataClassed) {
+      for (final enumClass in dataClasses) {
         files.add(await fillController.fillDtoContent(enumClass));
       }
       const expectedContent0 = r'''
@@ -1075,7 +1075,7 @@ const _$EnumNameStringEnumMap = {
     });
 
     test('dart + freezed', () async {
-      const dataClassed = [
+      const dataClasses = [
         UniversalEnumClass(
           name: 'EnumName',
           type: 'int',
@@ -1089,7 +1089,7 @@ const _$EnumNameStringEnumMap = {
       ];
       const fillController = FillController(freezed: true);
       final files = <GeneratedFile>[];
-      for (final enumClass in dataClassed) {
+      for (final enumClass in dataClasses) {
         files.add(await fillController.fillDtoContent(enumClass));
       }
       const expectedContent0 = r'''
