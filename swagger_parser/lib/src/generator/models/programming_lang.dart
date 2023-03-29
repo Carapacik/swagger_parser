@@ -1,9 +1,11 @@
 import 'package:collection/collection.dart';
+import 'package:swagger_parser/src/generator/templates/kotlin_typedef_template.dart';
 
 import '../templates/dart_enum_dto_template.dart';
 import '../templates/dart_freezed_dto_template.dart';
 import '../templates/dart_json_serializable_dto_template.dart';
 import '../templates/dart_retrofit_client_template.dart';
+import '../templates/dart_typedef_template.dart';
 import '../templates/kotlin_enum_dto_template.dart';
 import '../templates/kotlin_moshi_dto_template.dart';
 import '../templates/kotlin_retrofit_client_template.dart';
@@ -35,9 +37,13 @@ enum ProgrammingLanguage {
     switch (this) {
       case ProgrammingLanguage.dart:
         if (dataClass is UniversalComponentClass) {
-          return freezed
-              ? dartFreezedDtoTemplate(dataClass)
-              : dartJsonSerializableDtoTemplate(dataClass);
+          if (dataClass.typeDef) {
+            return dartTypeDefTemplate(dataClass);
+          }
+          if (freezed) {
+            return dartFreezedDtoTemplate(dataClass);
+          }
+          return dartJsonSerializableDtoTemplate(dataClass);
         }
         return dartEnumDtoTemplate(
           dataClass as UniversalEnumClass,
@@ -45,6 +51,9 @@ enum ProgrammingLanguage {
         );
       case ProgrammingLanguage.kotlin:
         if (dataClass is UniversalComponentClass) {
+          if (dataClass.typeDef) {
+            return kotlinTypeDefTemplate(dataClass);
+          }
           return kotlinMoshiDtoTemplate(dataClass);
         }
         return kotlinEnumDtoTemplate(dataClass as UniversalEnumClass);

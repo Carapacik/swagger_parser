@@ -441,6 +441,26 @@ class OpenApiParser {
             findParamsAndImports(element);
           }
         }
+      } else if (value.containsKey(_typeVar) || value.containsKey(_refVar)) {
+        final typeWithImport = _findType(
+          value,
+          name: key,
+          isRequired:
+              requiredParameters.contains(key) || requiredParameters.isEmpty,
+        );
+        parameters.add(typeWithImport.type);
+        if (typeWithImport.import != null) {
+          imports.add(typeWithImport.import!);
+        }
+        dataClasses.add(
+          UniversalComponentClass(
+            name: key,
+            imports: imports,
+            parameters: parameters,
+            typeDef: true,
+          ),
+        );
+        return;
       }
 
       final allOf =

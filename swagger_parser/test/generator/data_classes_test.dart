@@ -1144,7 +1144,7 @@ const _$EnumNameStringEnumMap = {
     });
 
     test('kotlin + moshi', () async {
-      const dataClassed = [
+      const dataClasses = [
         UniversalEnumClass(
           name: 'EnumName',
           type: 'int',
@@ -1159,7 +1159,7 @@ const _$EnumNameStringEnumMap = {
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
       final files = <GeneratedFile>[];
-      for (final enumClass in dataClassed) {
+      for (final enumClass in dataClasses) {
         files.add(await fillController.fillDtoContent(enumClass));
       }
       const expectedContent0 = '''
@@ -1194,6 +1194,104 @@ enum class EnumNameString {
 ''';
       expect(files[0].contents, expectedContent0);
       expect(files[1].contents, expectedContent1);
+    });
+  });
+
+  group('Typedef data class', () {
+    test('dart', () async {
+      const dataClasses = [
+        UniversalComponentClass(
+          name: 'Date',
+          imports: {},
+          parameters: [
+            UniversalType(type: 'string', format: 'date'),
+          ],
+          typeDef: true,
+        ),
+        UniversalComponentClass(
+          name: 'BooleanList',
+          imports: {},
+          parameters: [
+            UniversalType(type: 'boolean', arrayDepth: 1),
+          ],
+          typeDef: true,
+        ),
+        UniversalComponentClass(
+          name: 'AnotherValue',
+          imports: {'Another'},
+          parameters: [
+            UniversalType(type: 'Another'),
+          ],
+          typeDef: true,
+        ),
+      ];
+      const fillController = FillController();
+      final files = <GeneratedFile>[];
+      for (final enumClass in dataClasses) {
+        files.add(await fillController.fillDtoContent(enumClass));
+      }
+      const expectedContent0 = '''
+typedef Date = DateTime;
+''';
+      const expectedContent1 = '''
+typedef BooleanList = List<bool>;
+''';
+      const expectedContent2 = '''
+import 'another.dart';
+
+typedef AnotherValue = Another;
+''';
+      expect(files[0].contents, expectedContent0);
+      expect(files[1].contents, expectedContent1);
+      expect(files[2].contents, expectedContent2);
+    });
+
+    test('kotlin', () async {
+      const dataClasses = [
+        UniversalComponentClass(
+          name: 'Date',
+          imports: {},
+          parameters: [
+            UniversalType(type: 'string', format: 'date'),
+          ],
+          typeDef: true,
+        ),
+        UniversalComponentClass(
+          name: 'BooleanList',
+          imports: {},
+          parameters: [
+            UniversalType(type: 'boolean', arrayDepth: 1),
+          ],
+          typeDef: true,
+        ),
+        UniversalComponentClass(
+          name: 'AnotherValue',
+          imports: {'Another'},
+          parameters: [
+            UniversalType(type: 'Another'),
+          ],
+          typeDef: true,
+        ),
+      ];
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
+      final files = <GeneratedFile>[];
+      for (final enumClass in dataClasses) {
+        files.add(await fillController.fillDtoContent(enumClass));
+      }
+      const expectedContent0 = '''
+typealias Date = Date;
+''';
+      const expectedContent1 = '''
+typealias BooleanList = List<Boolean>;
+''';
+      const expectedContent2 = '''
+typealias AnotherValue = Another;
+''';
+      expect(files[0].contents, expectedContent0);
+      expect(files[1].contents, expectedContent1);
+      expect(files[2].contents, expectedContent2);
     });
   });
 }

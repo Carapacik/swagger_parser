@@ -1,5 +1,5 @@
 ## 0.9.0
-- 
+- Single ref sibling elements are now defined as typedefs instead of generating excess classes
 - Fix error with ` Null ` type with empty type in schema
 
 ## 0.8.1
