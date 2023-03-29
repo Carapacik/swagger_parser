@@ -1,3 +1,7 @@
+## 0.9.0
+- Single ref sibling elements are now defined as typedefs instead of generating excess classes
+- Fix error with ` Null ` type with empty type in schema
+
 ## 0.8.1
 - Added DateTime to the format for processing types ([#16](https://github.com/Carapacik/swagger_parser/issues/16))
 
