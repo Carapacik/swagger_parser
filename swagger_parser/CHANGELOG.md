@@ -1,3 +1,6 @@
+## 0.9.2
+- Type string with format 'date' produce yyyy-MM-dd when using toJson from Retrofit ([documentation](https://swagger.io/docs/specification/data-models/data-types/#format))
+
 ## 0.9.1
 - Use ` JsonEnum ` and ` JsonValue ` on generated enum
 

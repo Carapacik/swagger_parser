@@ -201,6 +201,7 @@ class ClassName with _$ClassName {
       const expectedContents = r'''
 import 'dart:io';
 
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'class_name.g.dart';
@@ -230,6 +231,7 @@ class ClassName {
   final double floatNumberType;
   final String stringType;
   final File binaryStringType;
+  @JsonKey(toJson: _formatDateToJson)
   final DateTime dateStringType;
   final DateTime dateTimeStringType;
   final File fileType;
@@ -238,6 +240,10 @@ class ClassName {
   final Another anotherType;
 
   Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+}
+
+String _formatDateToJson(DateTime dateTime) {
+  return DateFormat('yyyy-MM-dd').format(dateTime);
 }
 ''';
       expect(filledContent.contents, expectedContents);

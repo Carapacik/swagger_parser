@@ -49,6 +49,13 @@ String fileImport(UniversalComponentClass dataClass) =>
         ? "import 'dart:io';\n\n"
         : '';
 
+String intlImport(UniversalComponentClass dataClass) =>
+    dataClass.parameters.any(
+      (p) => p.format == 'date',
+    )
+        ? "import 'package:intl/intl.dart';\n"
+        : '';
+
 void introMessage() {
   stdout.writeln('''
   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓

@@ -10,8 +10,19 @@ import '../models/universal_type.dart';
 /// Provides template for generating dart DTO using JSON serializable
 String dartJsonSerializableDtoTemplate(UniversalComponentClass dataClass) {
   final className = dataClass.name.toPascal;
+
+  final formatDateToJsonFunction =
+      dataClass.parameters.any((p) => p.format == 'date')
+          ? '''
+
+String _formatDateToJson(DateTime dateTime) {
+  return DateFormat('yyyy-MM-dd').format(dateTime);
+}
+'''
+          : '';
+
   return '''
-${fileImport(dataClass)}import 'package:json_annotation/json_annotation.dart';
+${fileImport(dataClass)}${intlImport(dataClass)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.g.dart';
 
@@ -23,7 +34,7 @@ class $className {
   ${_parametersInClass(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n' : ''}
   Map<String, dynamic> toJson() => _\$${className}ToJson(this);
 }
-''';
+$formatDateToJsonFunction''';
 }
 
 String _parametersInClass(List<UniversalType> parameters) => parameters
@@ -42,24 +53,23 @@ String _parametersInConstructor(List<UniversalType> parameters) {
 }
 
 String _jsonKey(UniversalType t) {
-  final sb = StringBuffer();
-  if ((t.jsonKey == null || t.name == t.jsonKey) && t.defaultValue == null) {
+  final hasDefaultValue = t.defaultValue != null;
+  final hasJsonKeyAndDifferentFromName =
+      t.jsonKey != null && t.name != t.jsonKey;
+  final hasStringAsDate = t.type == 'string' && t.format == 'date';
+
+  if (!hasDefaultValue && !hasJsonKeyAndDifferentFromName && !hasStringAsDate) {
     return '';
   }
-  sb.write('\n  @JsonKey(');
-  if (t.defaultValue != null) {
-    sb.write(
-      'defaultValue: ${t.type.quoterForStringType()}'
-      '${t.defaultValue}${t.type.quoterForStringType()}',
-    );
-  }
 
-  if (t.defaultValue != null && (t.jsonKey != null && t.name != t.jsonKey)) {
-    sb.write(', ');
-  }
-  if (t.jsonKey != null && t.name != t.jsonKey) {
-    sb.write("name: '${t.jsonKey}'");
-  }
-  sb.write(')');
-  return sb.toString();
+  final quote = t.type.quoterForStringType();
+  final jsonKeyAttr = <String>[
+    if (hasDefaultValue) 'defaultValue: $quote${t.defaultValue}$quote',
+    if (hasJsonKeyAndDifferentFromName) "name: '${t.jsonKey}'",
+    if (hasStringAsDate) 'toJson: _formatDateToJson'
+  ];
+
+  return jsonKeyAttr.isNotEmpty
+      ? '\n  @JsonKey(${jsonKeyAttr.join(', ')})'
+      : '';
 }
