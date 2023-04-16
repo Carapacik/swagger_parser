@@ -422,8 +422,8 @@ class OpenApiParser {
         dataClasses.add(
           UniversalEnumClass(
             name: key,
-            items: items,
             type: value[_typeVar].toString(),
+            items: items,
             defaultValue: _defaultValueCheck(value),
           ),
         );
@@ -478,7 +478,7 @@ class OpenApiParser {
     dataClasses.addAll(_enumClasses);
     _enumClasses.clear();
 
-    // check for 'allOf'
+    // check for `allOf`
     final allOfClasses = dataClasses
         .where((dc) => dc is UniversalComponentClass && dc.allOf != null);
     for (final allOfClass in allOfClasses) {
@@ -504,6 +504,7 @@ class OpenApiParser {
     return dataClasses;
   }
 
+  /// Return map[2xx] if code 2xx contains in map
   Map<String, dynamic>? _code2xxMap(Map<String, dynamic> map) {
     const codes2xx = [
       '200',
@@ -515,33 +516,38 @@ class OpenApiParser {
       '206',
       '207',
       '208',
-      '226',
+      '226'
     ];
-    for (final code in codes2xx) {
-      if (map.containsKey(code)) {
-        return map[code] as Map<String, dynamic>;
-      }
+    final key = map.keys.where(codes2xx.contains).firstOrNull;
+    if (key == null) {
+      return null;
     }
-    return null;
+    return map[key] as Map<String, dynamic>;
   }
 
+  /// Get tag for name
   String _getTag(Map<String, dynamic> map) => map.containsKey(_tagsVar)
       ? (map[_tagsVar] as List<dynamic>).first.toString()
       : _defaultClientTag;
 
+  /// Check map for name key equals to body
   bool _checkForBody(Map<String, dynamic> map) => map[_nameVar] == _bodyVar;
 
+  /// Format `$ref` type
   String _formatRef(String ref) => p.basename(ref).toPascal;
 
+  /// Check default value of map
   String? _defaultValueCheck(Map<String, dynamic> map) =>
       map.containsKey(_defaultVar) ? map[_defaultVar].toString() : null;
 
+  /// Get a unique name for objects without a specific name
   String get _uniqueName {
     final name = '$_objectVar$_uniqueNameCounter'.toPascal;
     _uniqueNameCounter++;
     return name;
   }
 
+  /// Find type of map
   TypeWithImport _findType(
     Map<String, dynamic> map, {
     String? name,
@@ -551,6 +557,7 @@ class OpenApiParser {
     bool allOfObject = false,
   }) {
     if (map.containsKey(_typeVar) && map[_typeVar] == _arrayVar) {
+      // `array`
       final arrayType =
           _findType(map[_itemsVar] as Map<String, dynamic>, arrayName: name);
       return TypeWithImport(
@@ -567,8 +574,32 @@ class OpenApiParser {
         import: arrayType.import,
       );
     } else if (map.containsKey(_enumVar)) {
-      // TODO(Carapacik): _enumClasses like _objectClasses
-      throw UnimplementedError();
+      // `enum`
+      final newName = name ?? _uniqueName;
+      final items =
+          (map[_enumVar] as List).map((dynamic e) => e.toString()).toSet();
+      _enumClasses.add(
+        UniversalEnumClass(
+          name: newName,
+          type: map[_typeVar].toString(),
+          items: items,
+          defaultValue: _defaultValueCheck(map),
+        ),
+      );
+      return TypeWithImport(
+        type: UniversalType(
+          type: newName.toPascal,
+          format:
+              map.containsKey(_formatVar) ? map[_formatVar].toString() : null,
+          name:
+              (dartKeywords.contains(newName) ? '$newName $_enumVar' : newName)
+                  .toCamel,
+          jsonKey: newName,
+          defaultValue: _defaultValueCheck(map),
+          isRequired: isRequired,
+        ),
+        import: newName,
+      );
     } else if (map.containsKey(_typeVar) &&
             map[_typeVar] == _objectVar &&
             (map.containsKey(_propertiesVar) &&
@@ -576,6 +607,7 @@ class OpenApiParser {
         (map.containsKey(_additionalPropertiesVar) &&
             (map[_additionalPropertiesVar] as Map<String, dynamic>)
                 .isNotEmpty)) {
+      // `object` or `additionalProperties`
       final newName = arrayName ?? name ?? _uniqueName;
       final typeWithImports = <TypeWithImport>[];
       if (map.containsKey(_propertiesVar)) {
@@ -621,44 +653,46 @@ class OpenApiParser {
         ),
         import: '$newName $_valueVar',
       );
+    } else {
+      final type = map.containsKey(_typeVar)
+          ? map[_typeVar].toString()
+          : map.containsKey(_anyOfVar) ||
+                  map.containsKey(_oneOfVar) ||
+                  allOfObject
+              ? _objectVar
+              : map.containsKey(_refVar)
+                  ? _formatRef(
+                      useSchema
+                          ? map[_schemaVar][_refVar].toString()
+                          : map[_refVar].toString(),
+                    )
+                  : _objectVar;
+      final import = map.containsKey(_typeVar) ||
+              map.containsKey(_anyOfVar) ||
+              map.containsKey(_oneOfVar) ||
+              allOfObject
+          ? null
+          : map.containsKey(_refVar)
+              ? _formatRef(
+                  useSchema
+                      ? map[_schemaVar][_refVar].toString()
+                      : map[_refVar].toString(),
+                )
+              : null;
+      return TypeWithImport(
+        type: UniversalType(
+          type: type,
+          format:
+              map.containsKey(_formatVar) ? map[_formatVar].toString() : null,
+          name: (dartKeywords.contains(name) ? '$name $_valueVar' : name)
+              ?.toCamel,
+          jsonKey: name,
+          defaultValue: _defaultValueCheck(map),
+          isRequired: isRequired,
+        ),
+        import: import,
+      );
     }
-    final type = map.containsKey(_typeVar)
-        ? map[_typeVar].toString()
-        : map.containsKey(_anyOfVar) ||
-                map.containsKey(_oneOfVar) ||
-                allOfObject
-            ? _objectVar
-            : map.containsKey(_refVar)
-                ? _formatRef(
-                    useSchema
-                        ? map[_schemaVar][_refVar].toString()
-                        : map[_refVar].toString(),
-                  )
-                : _objectVar;
-    final import = map.containsKey(_typeVar) ||
-            map.containsKey(_anyOfVar) ||
-            map.containsKey(_oneOfVar) ||
-            allOfObject
-        ? null
-        : map.containsKey(_refVar)
-            ? _formatRef(
-                useSchema
-                    ? map[_schemaVar][_refVar].toString()
-                    : map[_refVar].toString(),
-              )
-            : null;
-    return TypeWithImport(
-      type: UniversalType(
-        type: type,
-        format: map.containsKey(_formatVar) ? map[_formatVar].toString() : null,
-        name:
-            (dartKeywords.contains(name) ? '$name $_valueVar' : name)?.toCamel,
-        jsonKey: name,
-        defaultValue: _defaultValueCheck(map),
-        isRequired: isRequired,
-      ),
-      import: import,
-    );
   }
 }
 
