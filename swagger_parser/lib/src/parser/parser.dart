@@ -49,14 +49,14 @@ class OpenApiParser {
   late final Map<String, dynamic> _definitionFileContent;
   late final OpenApiVersion _version;
   final List<UniversalComponentClass> _objectClasses = [];
-  int _uniqueNameCount = 0;
+  final List<UniversalEnumClass> _enumClasses = [];
+  int _uniqueNameCounter = 0;
 
   static const _additionalPropertiesVar = 'additionalProperties';
   static const _allOfVar = 'allOf';
   static const _anyOfVar = 'anyOf';
   static const _arrayVar = 'array';
   static const _bodyVar = 'body';
-  static const _code200Var = '200';
   static const _componentsVar = 'components';
   static const _consumesVar = 'consumes';
   static const _contentVar = 'content';
@@ -95,15 +95,12 @@ class OpenApiParser {
 
     /// Parses return type for client query for OpenApi v3
     UniversalType? returnTypeV3(Map<String, dynamic> map) {
-      if (!map.containsKey(_code200Var) ||
-          !(map[_code200Var] as Map<String, dynamic>)
-              .containsKey(_contentVar)) {
+      final code2xxMap = _code2xxMap(map);
+      if (code2xxMap == null || !code2xxMap.containsKey(_contentVar)) {
         return null;
       }
       final contentType =
-          (map[_code200Var][_contentVar] as Map<String, dynamic>)
-              .entries
-              .firstOrNull;
+          (code2xxMap[_contentVar] as Map<String, dynamic>).entries.firstOrNull;
       if (contentType == null) {
         throw const ParserException(
           'Response must always have a content type.',
@@ -275,12 +272,12 @@ class OpenApiParser {
 
     /// Parses return type for client query for OpenApi v2
     UniversalType? returnTypeV2(Map<String, dynamic> map) {
-      if (!map.containsKey(_code200Var) ||
-          !(map[_code200Var] as Map<String, dynamic>).containsKey(_schemaVar)) {
+      final code2xxMap = _code2xxMap(map);
+      if (code2xxMap == null || !code2xxMap.containsKey(_schemaVar)) {
         return null;
       }
       final typeWithImport =
-          _findType(map[_code200Var][_schemaVar] as Map<String, dynamic>);
+          _findType(code2xxMap[_schemaVar] as Map<String, dynamic>);
       if (typeWithImport.import != null) {
         imports.add(typeWithImport.import!);
       }
@@ -478,6 +475,9 @@ class OpenApiParser {
     dataClasses.addAll(_objectClasses);
     _objectClasses.clear();
 
+    dataClasses.addAll(_enumClasses);
+    _enumClasses.clear();
+
     // check for 'allOf'
     final allOfClasses = dataClasses
         .where((dc) => dc is UniversalComponentClass && dc.allOf != null);
@@ -504,6 +504,27 @@ class OpenApiParser {
     return dataClasses;
   }
 
+  Map<String, dynamic>? _code2xxMap(Map<String, dynamic> map) {
+    const codes2xx = [
+      '200',
+      '201',
+      '202',
+      '203',
+      '204',
+      '205',
+      '206',
+      '207',
+      '208',
+      '226',
+    ];
+    for (final code in codes2xx) {
+      if (map.containsKey(code)) {
+        return map[code] as Map<String, dynamic>;
+      }
+    }
+    return null;
+  }
+
   String _getTag(Map<String, dynamic> map) => map.containsKey(_tagsVar)
       ? (map[_tagsVar] as List<dynamic>).first.toString()
       : _defaultClientTag;
@@ -516,18 +537,18 @@ class OpenApiParser {
       map.containsKey(_defaultVar) ? map[_defaultVar].toString() : null;
 
   String get _uniqueName {
-    final name = '$_objectVar$_uniqueNameCount'.toPascal;
-    _uniqueNameCount++;
+    final name = '$_objectVar$_uniqueNameCounter'.toPascal;
+    _uniqueNameCounter++;
     return name;
   }
 
   TypeWithImport _findType(
     Map<String, dynamic> map, {
     String? name,
+    String? arrayName,
     bool isRequired = true,
     bool useSchema = false,
     bool allOfObject = false,
-    String? arrayName,
   }) {
     if (map.containsKey(_typeVar) && map[_typeVar] == _arrayVar) {
       final arrayType =
@@ -545,6 +566,9 @@ class OpenApiParser {
         ),
         import: arrayType.import,
       );
+    } else if (map.containsKey(_enumVar)) {
+      // TODO(Carapacik): _enumClasses like _objectClasses
+      throw UnimplementedError();
     } else if (map.containsKey(_typeVar) &&
             map[_typeVar] == _objectVar &&
             (map.containsKey(_propertiesVar) &&

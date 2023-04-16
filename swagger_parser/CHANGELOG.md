@@ -1,3 +1,7 @@
+## Next
+- Fix error with ` enum ` values not parsed in object properties
+- Use 2xx codes if code 200 not found
+
 ## 0.9.1
 - Use ` JsonEnum ` and ` JsonValue ` on generated enum
 
