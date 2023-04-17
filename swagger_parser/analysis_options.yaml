@@ -3,3 +3,4 @@ include: package:carapacik_lints/core.yaml
 linter:
   rules:
     always_use_package_imports: false
+    package_api_docs: true
