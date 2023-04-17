@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_dynamic_calls, avoid_annotating_with_dynamic
 import 'dart:collection';
 import 'dart:convert';
 
@@ -49,14 +48,14 @@ class OpenApiParser {
   late final Map<String, dynamic> _definitionFileContent;
   late final OpenApiVersion _version;
   final List<UniversalComponentClass> _objectClasses = [];
-  int _uniqueNameCount = 0;
+  final List<UniversalEnumClass> _enumClasses = [];
+  int _uniqueNameCounter = 0;
 
   static const _additionalPropertiesVar = 'additionalProperties';
   static const _allOfVar = 'allOf';
   static const _anyOfVar = 'anyOf';
   static const _arrayVar = 'array';
   static const _bodyVar = 'body';
-  static const _code200Var = '200';
   static const _componentsVar = 'components';
   static const _consumesVar = 'consumes';
   static const _contentVar = 'content';
@@ -95,15 +94,12 @@ class OpenApiParser {
 
     /// Parses return type for client query for OpenApi v3
     UniversalType? returnTypeV3(Map<String, dynamic> map) {
-      if (!map.containsKey(_code200Var) ||
-          !(map[_code200Var] as Map<String, dynamic>)
-              .containsKey(_contentVar)) {
+      final code2xxMap = _code2xxMap(map);
+      if (code2xxMap == null || !code2xxMap.containsKey(_contentVar)) {
         return null;
       }
       final contentType =
-          (map[_code200Var][_contentVar] as Map<String, dynamic>)
-              .entries
-              .firstOrNull;
+          (code2xxMap[_contentVar] as Map<String, dynamic>).entries.firstOrNull;
       if (contentType == null) {
         throw const ParserException(
           'Response must always have a content type.',
@@ -116,7 +112,7 @@ class OpenApiParser {
         return null;
       }
       final typeWithImport = _findType(
-        contentType.value[_schemaVar] as Map<String, dynamic>,
+        contentTypeValue[_schemaVar] as Map<String, dynamic>,
       );
       if (typeWithImport.import != null) {
         imports.add(typeWithImport.import!);
@@ -165,22 +161,19 @@ class OpenApiParser {
         }
       }
       if (map.containsKey(_requestBodyVar)) {
-        if (!(map[_requestBodyVar] as Map<String, dynamic>)
-            .containsKey(_contentVar)) {
+        final requestBody = map[_requestBodyVar] as Map<String, dynamic>;
+        if (!requestBody.containsKey(_contentVar)) {
           throw const ParserException('Request body must always have content.');
         }
-        final contentTypes =
-            map[_requestBodyVar][_contentVar] as Map<String, dynamic>;
+        final contentTypes = requestBody[_contentVar] as Map<String, dynamic>;
         Map<String, dynamic>? contentType;
         if (contentTypes.containsKey(_multipartVar)) {
-          contentType = map[_requestBodyVar][_contentVar][_multipartVar]
-              as Map<String, dynamic>;
+          contentType = contentTypes[_multipartVar] as Map<String, dynamic>;
           isMultiPart = true;
         } else {
-          final content =
-              (map[_requestBodyVar][_contentVar] as Map<String, dynamic>)
-                  .entries
-                  .firstOrNull;
+          final content = (requestBody[_contentVar] as Map<String, dynamic>)
+              .entries
+              .firstOrNull;
           contentType =
               content == null ? null : content.value as Map<String, dynamic>;
         }
@@ -192,8 +185,7 @@ class OpenApiParser {
         if (isMultiPart) {
           if ((contentType[_schemaVar] as Map<String, dynamic>)
               .containsKey(_refVar)) {
-            final isRequired =
-                map[_requestBodyVar][_requiredVar]?.toString().toBool();
+            final isRequired = requestBody[_requiredVar]?.toString().toBool();
             final typeWithImport = _findType(
               contentType[_schemaVar] as Map<String, dynamic>,
               isRequired: isRequired ?? true,
@@ -216,14 +208,13 @@ class OpenApiParser {
               ),
             );
           }
-          if ((contentType[_schemaVar] as Map<String, dynamic>)
-              .containsKey(_propertiesVar)) {
-            for (final e in (contentType[_schemaVar][_propertiesVar]
-                    as Map<String, dynamic>)
-                .entries) {
-              final typeWithImport = _findType(
-                e.value as Map<String, dynamic>,
-              );
+          final schemaContentType =
+              contentType[_schemaVar] as Map<String, dynamic>;
+          if (schemaContentType.containsKey(_propertiesVar)) {
+            for (final e
+                in (schemaContentType[_propertiesVar] as Map<String, dynamic>)
+                    .entries) {
+              final typeWithImport = _findType(e.value as Map<String, dynamic>);
               final currentType = typeWithImport.type;
               if (typeWithImport.import != null) {
                 imports.add(typeWithImport.import!);
@@ -245,8 +236,7 @@ class OpenApiParser {
             }
           }
         } else {
-          final isRequired =
-              map[_requestBodyVar][_requiredVar]?.toString().toBool();
+          final isRequired = requestBody[_requiredVar]?.toString().toBool();
           final typeWithImport = _findType(
             contentType[_schemaVar] as Map<String, dynamic>,
             isRequired: isRequired ?? true,
@@ -275,12 +265,12 @@ class OpenApiParser {
 
     /// Parses return type for client query for OpenApi v2
     UniversalType? returnTypeV2(Map<String, dynamic> map) {
-      if (!map.containsKey(_code200Var) ||
-          !(map[_code200Var] as Map<String, dynamic>).containsKey(_schemaVar)) {
+      final code2xxMap = _code2xxMap(map);
+      if (code2xxMap == null || !code2xxMap.containsKey(_schemaVar)) {
         return null;
       }
       final typeWithImport =
-          _findType(map[_code200Var][_schemaVar] as Map<String, dynamic>);
+          _findType(code2xxMap[_schemaVar] as Map<String, dynamic>);
       if (typeWithImport.import != null) {
         imports.add(typeWithImport.import!);
       }
@@ -329,14 +319,15 @@ class OpenApiParser {
     }
 
     (_definitionFileContent[_pathsVar] as Map<String, dynamic>)
-        .forEach((path, dynamic pathValue) {
-      (pathValue as Map<String, dynamic>).forEach((key, dynamic requestPath) {
+        .forEach((path, pathValue) {
+      (pathValue as Map<String, Map<String, dynamic>>)
+          .forEach((key, requestPath) {
         final returnType = _version == OpenApiVersion.v2
             ? returnTypeV2(requestPath[_responsesVar] as Map<String, dynamic>)
             : returnTypeV3(requestPath[_responsesVar] as Map<String, dynamic>);
         final parameters = _version == OpenApiVersion.v2
-            ? parametersV2(requestPath as Map<String, dynamic>)
-            : parametersV3(requestPath as Map<String, dynamic>);
+            ? parametersV2(requestPath)
+            : parametersV3(requestPath);
         final request = UniversalRequest(
           name: (key + path).toCamel,
           requestType: HttpRequestType.fromString(key)!,
@@ -378,8 +369,8 @@ class OpenApiParser {
               .containsKey(_schemasVar)) {
         return dataClasses;
       }
-      entities = _definitionFileContent[_componentsVar][_schemasVar]
-          as Map<String, dynamic>;
+      entities = (_definitionFileContent[_componentsVar]
+          as Map<String, dynamic>)[_schemasVar] as Map<String, dynamic>;
     } else if (_version == OpenApiVersion.v2) {
       if (!_definitionFileContent.containsKey(_definitionsVar)) {
         return dataClasses;
@@ -388,11 +379,11 @@ class OpenApiParser {
           _definitionFileContent[_definitionsVar] as Map<String, dynamic>;
     }
 
-    entities.forEach((key, dynamic value) {
+    entities.forEach((key, value) {
       var requiredParameters = <String>[];
       if ((value as Map<String, dynamic>).containsKey(_requiredVar)) {
         requiredParameters = (value[_requiredVar] as List<dynamic>)
-            .map((dynamic e) => e.toString())
+            .map((e) => e.toString())
             .toList();
       }
 
@@ -402,7 +393,7 @@ class OpenApiParser {
 
       void findParamsAndImports(Map<String, dynamic> map) {
         (map[_propertiesVar] as Map<String, dynamic>).forEach(
-          (propertyName, dynamic propertyValue) {
+          (propertyName, propertyValue) {
             final typeWithImport = _findType(
               propertyValue as Map<String, dynamic>,
               name: propertyName,
@@ -421,12 +412,12 @@ class OpenApiParser {
         findParamsAndImports(value);
       } else if (value.containsKey(_enumVar)) {
         final items =
-            (value[_enumVar] as List).map((dynamic e) => e.toString()).toSet();
+            (value[_enumVar] as List).map((e) => e.toString()).toSet();
         dataClasses.add(
           UniversalEnumClass(
             name: key,
-            items: items,
             type: value[_typeVar].toString(),
+            items: items,
             defaultValue: _defaultValueCheck(value),
           ),
         );
@@ -478,7 +469,10 @@ class OpenApiParser {
     dataClasses.addAll(_objectClasses);
     _objectClasses.clear();
 
-    // check for 'allOf'
+    dataClasses.addAll(_enumClasses);
+    _enumClasses.clear();
+
+    // check for `allOf`
     final allOfClasses = dataClasses
         .where((dc) => dc is UniversalComponentClass && dc.allOf != null);
     for (final allOfClass in allOfClasses) {
@@ -504,32 +498,60 @@ class OpenApiParser {
     return dataClasses;
   }
 
+  /// Return map[2xx] if code 2xx contains in map
+  Map<String, dynamic>? _code2xxMap(Map<String, dynamic> map) {
+    const codes2xx = {
+      '200',
+      '201',
+      '202',
+      '203',
+      '204',
+      '205',
+      '206',
+      '207',
+      '208',
+      '226'
+    };
+    final key = map.keys.where(codes2xx.contains).firstOrNull;
+    if (key == null) {
+      return null;
+    }
+    return map[key] as Map<String, dynamic>;
+  }
+
+  /// Get tag for name
   String _getTag(Map<String, dynamic> map) => map.containsKey(_tagsVar)
       ? (map[_tagsVar] as List<dynamic>).first.toString()
       : _defaultClientTag;
 
+  /// Check map for name key equals to body
   bool _checkForBody(Map<String, dynamic> map) => map[_nameVar] == _bodyVar;
 
+  /// Format `$ref` type
   String _formatRef(String ref) => p.basename(ref).toPascal;
 
+  /// Check default value of map
   String? _defaultValueCheck(Map<String, dynamic> map) =>
       map.containsKey(_defaultVar) ? map[_defaultVar].toString() : null;
 
+  /// Get a unique name for objects without a specific name
   String get _uniqueName {
-    final name = '$_objectVar$_uniqueNameCount'.toPascal;
-    _uniqueNameCount++;
+    final name = '$_objectVar$_uniqueNameCounter'.toPascal;
+    _uniqueNameCounter++;
     return name;
   }
 
+  /// Find type of map
   TypeWithImport _findType(
     Map<String, dynamic> map, {
     String? name,
+    String? arrayName,
     bool isRequired = true,
     bool useSchema = false,
     bool allOfObject = false,
-    String? arrayName,
   }) {
     if (map.containsKey(_typeVar) && map[_typeVar] == _arrayVar) {
+      // `array`
       final arrayType =
           _findType(map[_itemsVar] as Map<String, dynamic>, arrayName: name);
       return TypeWithImport(
@@ -545,6 +567,32 @@ class OpenApiParser {
         ),
         import: arrayType.import,
       );
+    } else if (map.containsKey(_enumVar)) {
+      // `enum`
+      final newName = name ?? _uniqueName;
+      final items = (map[_enumVar] as List).map((e) => e.toString()).toSet();
+      _enumClasses.add(
+        UniversalEnumClass(
+          name: newName,
+          type: map[_typeVar].toString(),
+          items: items,
+          defaultValue: _defaultValueCheck(map),
+        ),
+      );
+      return TypeWithImport(
+        type: UniversalType(
+          type: newName.toPascal,
+          format:
+              map.containsKey(_formatVar) ? map[_formatVar].toString() : null,
+          name:
+              (dartKeywords.contains(newName) ? '$newName $_enumVar' : newName)
+                  .toCamel,
+          jsonKey: newName,
+          defaultValue: _defaultValueCheck(map),
+          isRequired: isRequired,
+        ),
+        import: newName,
+      );
     } else if (map.containsKey(_typeVar) &&
             map[_typeVar] == _objectVar &&
             (map.containsKey(_propertiesVar) &&
@@ -552,11 +600,11 @@ class OpenApiParser {
         (map.containsKey(_additionalPropertiesVar) &&
             (map[_additionalPropertiesVar] as Map<String, dynamic>)
                 .isNotEmpty)) {
+      // `object` or `additionalProperties`
       final newName = arrayName ?? name ?? _uniqueName;
       final typeWithImports = <TypeWithImport>[];
       if (map.containsKey(_propertiesVar)) {
-        (map[_propertiesVar] as Map<String, dynamic>)
-            .forEach((key, dynamic value) {
+        (map[_propertiesVar] as Map<String, dynamic>).forEach((key, value) {
           typeWithImports
               .add(_findType(value as Map<String, dynamic>, name: key));
         });
@@ -597,44 +645,48 @@ class OpenApiParser {
         ),
         import: '$newName $_valueVar',
       );
+    } else {
+      final type = map.containsKey(_typeVar)
+          ? map[_typeVar].toString()
+          : map.containsKey(_anyOfVar) ||
+                  map.containsKey(_oneOfVar) ||
+                  allOfObject
+              ? _objectVar
+              : map.containsKey(_refVar)
+                  ? _formatRef(
+                      useSchema
+                          ? (map[_schemaVar] as Map<String, dynamic>)[_refVar]
+                              .toString()
+                          : map[_refVar].toString(),
+                    )
+                  : _objectVar;
+      final import = map.containsKey(_typeVar) ||
+              map.containsKey(_anyOfVar) ||
+              map.containsKey(_oneOfVar) ||
+              allOfObject
+          ? null
+          : map.containsKey(_refVar)
+              ? _formatRef(
+                  useSchema
+                      ? (map[_schemaVar] as Map<String, dynamic>)[_refVar]
+                          .toString()
+                      : map[_refVar].toString(),
+                )
+              : null;
+      return TypeWithImport(
+        type: UniversalType(
+          type: type,
+          format:
+              map.containsKey(_formatVar) ? map[_formatVar].toString() : null,
+          name: (dartKeywords.contains(name) ? '$name $_valueVar' : name)
+              ?.toCamel,
+          jsonKey: name,
+          defaultValue: _defaultValueCheck(map),
+          isRequired: isRequired,
+        ),
+        import: import,
+      );
     }
-    final type = map.containsKey(_typeVar)
-        ? map[_typeVar].toString()
-        : map.containsKey(_anyOfVar) ||
-                map.containsKey(_oneOfVar) ||
-                allOfObject
-            ? _objectVar
-            : map.containsKey(_refVar)
-                ? _formatRef(
-                    useSchema
-                        ? map[_schemaVar][_refVar].toString()
-                        : map[_refVar].toString(),
-                  )
-                : _objectVar;
-    final import = map.containsKey(_typeVar) ||
-            map.containsKey(_anyOfVar) ||
-            map.containsKey(_oneOfVar) ||
-            allOfObject
-        ? null
-        : map.containsKey(_refVar)
-            ? _formatRef(
-                useSchema
-                    ? map[_schemaVar][_refVar].toString()
-                    : map[_refVar].toString(),
-              )
-            : null;
-    return TypeWithImport(
-      type: UniversalType(
-        type: type,
-        format: map.containsKey(_formatVar) ? map[_formatVar].toString() : null,
-        name:
-            (dartKeywords.contains(name) ? '$name $_valueVar' : name)?.toCamel,
-        jsonKey: name,
-        defaultValue: _defaultValueCheck(map),
-        isRequired: isRequired,
-      ),
-      import: import,
-    );
   }
 }
 
@@ -659,7 +711,7 @@ extension _YamlMapX on YamlMap {
         map[entry.key.toString()] = (entry.value as YamlMap).toMap();
       } else if (entry.value is YamlList) {
         map[entry.key.toString()] = (entry.value as YamlList)
-            .map<dynamic>((dynamic e) => e is YamlMap ? e.toMap() : e)
+            .map<dynamic>((e) => e is YamlMap ? e.toMap() : e)
             .toList(growable: false);
       } else {
         map[entry.key.toString()] = entry.value.toString();

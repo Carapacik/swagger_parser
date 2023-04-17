@@ -5,7 +5,8 @@ on:
     branches:
       - main
   pull_request:
-    types: [review_requested]
+    types: 
+      - review_requested
 
 jobs:
   test:
@@ -18,10 +19,11 @@ jobs:
       matrix:
         sdk:
           - stable
+          - 2.19.6
           - 2.18.7
           - 2.17.7
     steps:
-      - uses: actions/checkout@v3.5.0
+      - uses: actions/checkout@v3.5.2
       - uses: dart-lang/setup-dart@v1.5.0
         with:
           sdk: "${{ matrix.sdk }}"

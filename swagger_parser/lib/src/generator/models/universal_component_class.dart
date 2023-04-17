@@ -12,21 +12,21 @@ class UniversalComponentClass extends UniversalDataClass {
     this.typeDef = false,
   });
 
-  /// Whether or not this schema is a basic type
-  /// For example
-  /// "Date": {
-  //         "type": "string",
-  //         "format": "date"
-  //       }
-  //  must be DateTime instead of its own class
-  final bool typeDef;
-
   /// List of additional references to components
   final Set<String> imports;
 
   /// List of class fields
   final List<UniversalType> parameters;
 
-  /// Temp field for containing info about allOf for future processing
+  /// Temp field for containing info about `allOf` for future processing
   final AllOf? allOf;
+
+  /// Whether or not this schema is a basic type
+  /// For example
+  /// "Date": {
+  ///   "type": "string",
+  ///   "format": "date"
+  /// }
+  ///  must be DateTime instead of its own class
+  final bool typeDef;
 }

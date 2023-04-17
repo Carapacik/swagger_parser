@@ -1,4 +1,4 @@
-/// https://github.com/dart-lang/site-www/blob/main/src/_guides/language/language-tour.md#keywords
+/// https://dart.dev/language/keywords
 /// Set of keywords to check for the variable name
 const dartKeywords = {
   'abstract',

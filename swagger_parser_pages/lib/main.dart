@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:swagger_parser_pages/app.dart';
-import 'package:url_strategy/url_strategy.dart';
 
 void main() {
-  setPathUrlStrategy();
+  setUrlStrategy(PathUrlStrategy());
   runApp(const App());
 }
