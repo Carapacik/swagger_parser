@@ -50,11 +50,15 @@ String fileImport(UniversalComponentClass dataClass) =>
         : '';
 
 void introMessage() {
-  stdout.writeln('''
+  stdout.writeln(
+    '''
   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  ┃                               ┃
   ┃   Welcome to swagger_parser   ┃
+  ┃                               ┃
   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-''');
+''',
+  );
 }
 
 void generateMessage() {
