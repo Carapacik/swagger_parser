@@ -506,7 +506,7 @@ class OpenApiParser {
 
   /// Return map[2xx] if code 2xx contains in map
   Map<String, dynamic>? _code2xxMap(Map<String, dynamic> map) {
-    const codes2xx = [
+    const codes2xx = {
       '200',
       '201',
       '202',
@@ -517,7 +517,7 @@ class OpenApiParser {
       '207',
       '208',
       '226'
-    ];
+    };
     final key = map.keys.where(codes2xx.contains).firstOrNull;
     if (key == null) {
       return null;
