@@ -1,4 +1,5 @@
 import '../../utils/case_utils.dart';
+import '../../utils/dart_keywords.dart';
 import '../models/universal_enum_class.dart';
 
 /// Provides template for generating kotlin enum DTO
@@ -22,4 +23,6 @@ String _parameters(UniversalEnumClass dataClass) => dataClass.items
     .join();
 
 String _valuePrefixForEnumItems(String type, String item) =>
-    (type != 'string' ? 'VALUE_$item' : item).toSnake.toUpperCase();
+    (type != 'string' || dartKeywords.contains(item) ? 'value $item' : item)
+        .toSnake
+        .toUpperCase();
