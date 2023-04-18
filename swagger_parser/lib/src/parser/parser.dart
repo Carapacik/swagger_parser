@@ -320,11 +320,12 @@ class OpenApiParser {
 
     (_definitionFileContent[_pathsVar] as Map<String, dynamic>)
         .forEach((path, pathValue) {
-      (pathValue as Map<String, Map<String, dynamic>>)
-          .forEach((key, requestPath) {
+      (pathValue as Map<String, dynamic>).forEach((key, requestPath) {
+        final requestPathResponses = (requestPath
+            as Map<String, dynamic>)[_responsesVar] as Map<String, dynamic>;
         final returnType = _version == OpenApiVersion.v2
-            ? returnTypeV2(requestPath[_responsesVar] as Map<String, dynamic>)
-            : returnTypeV3(requestPath[_responsesVar] as Map<String, dynamic>);
+            ? returnTypeV2(requestPathResponses)
+            : returnTypeV3(requestPathResponses);
         final parameters = _version == OpenApiVersion.v2
             ? parametersV2(requestPath)
             : parametersV3(requestPath);
