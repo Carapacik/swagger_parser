@@ -1015,7 +1015,12 @@ class ClassName with _$ClassName {
           name: 'EnumNameString',
           type: 'string',
           items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
-        )
+        ),
+        UniversalEnumClass(
+          name: 'KeywordsName',
+          type: 'string',
+          items: {'false', 'for', 'do'},
+        ),
       ];
 
       const fillController = FillController();
@@ -1069,8 +1074,30 @@ const _$EnumNameStringEnumMap = {
   EnumNameString.itemFour: 'ITEM-FOUR',
 };
 ''';
+      const expectedContent2 = r'''
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum()
+enum KeywordsName {
+  @JsonValue('false')
+  valueFalse,
+  @JsonValue('for')
+  valueFor,
+  @JsonValue('do')
+  valueDo;
+
+  String toJson() => _$KeywordsNameEnumMap[this]!;
+}
+
+const _$KeywordsNameEnumMap = {
+  KeywordsName.valueFalse: 'false',
+  KeywordsName.valueFor: 'for',
+  KeywordsName.valueDo: 'do',
+};
+''';
       expect(files[0].contents, expectedContent0);
       expect(files[1].contents, expectedContent1);
+      expect(files[2].contents, expectedContent2);
     });
 
     test('dart + freezed', () async {
@@ -1084,7 +1111,12 @@ const _$EnumNameStringEnumMap = {
           name: 'EnumNameString',
           type: 'string',
           items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
-        )
+        ),
+        UniversalEnumClass(
+          name: 'KeywordsName',
+          type: 'string',
+          items: {'false', 'for', 'do'},
+        ),
       ];
       const fillController = FillController(freezed: true);
       final files = <GeneratedFile>[];
@@ -1137,8 +1169,30 @@ const _$EnumNameStringEnumMap = {
   EnumNameString.itemFour: 'ITEM-FOUR',
 };
 ''';
+      const expectedContent2 = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+@JsonEnum()
+enum KeywordsName {
+  @JsonValue('false')
+  valueFalse,
+  @JsonValue('for')
+  valueFor,
+  @JsonValue('do')
+  valueDo;
+
+  String toJson() => _$KeywordsNameEnumMap[this]!;
+}
+
+const _$KeywordsNameEnumMap = {
+  KeywordsName.valueFalse: 'false',
+  KeywordsName.valueFor: 'for',
+  KeywordsName.valueDo: 'do',
+};
+''';
       expect(files[0].contents, expectedContent0);
       expect(files[1].contents, expectedContent1);
+      expect(files[2].contents, expectedContent2);
     });
 
     test('kotlin + moshi', () async {
@@ -1152,6 +1206,11 @@ const _$EnumNameStringEnumMap = {
           name: 'EnumNameString',
           type: 'string',
           items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+        ),
+        UniversalEnumClass(
+          name: 'KeywordsName',
+          type: 'string',
+          items: {'false', 'for', 'do'},
         ),
       ];
       const fillController =
@@ -1190,8 +1249,23 @@ enum class EnumNameString {
     ITEM_FOUR,
 }
 ''';
+      const expectedContent2 = '''
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+enum class KeywordsName {
+    @Json("false")
+    VALUE_FALSE,
+    @Json("for")
+    VALUE_FOR,
+    @Json("do")
+    VALUE_DO,
+}
+''';
       expect(files[0].contents, expectedContent0);
       expect(files[1].contents, expectedContent1);
+      expect(files[2].contents, expectedContent2);
     });
   });
 
