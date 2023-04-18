@@ -10,6 +10,7 @@ class UniversalType {
     this.jsonKey,
     this.defaultValue,
     this.isRequired = true,
+    this.nullable = false,
     this.arrayDepth = 0,
   });
 
@@ -29,12 +30,15 @@ class UniversalType {
   /// Holding object default value
   final String? defaultValue;
 
-  /// Whether or not this field is required.
+  /// Whether or not this field is required
   final bool isRequired;
 
   /// Array depth, 0 if not a list
   /// Example: arrayDepth = 2 -> List<List<Object>>
   final int arrayDepth;
+
+  /// Whether or not this field is nullable
+  final bool nullable;
 
   /// Function for compare to put required named parameters first
   int compareTo(UniversalType other) {
@@ -49,7 +53,7 @@ class UniversalType {
 
 /// Converts [UniversalType] to type from specified language
 extension UniversalTypeX on UniversalType {
-  String byLang(ProgrammingLanguage lang, {bool isRequired = true}) {
+  String byLang(ProgrammingLanguage lang) {
     switch (lang) {
       case ProgrammingLanguage.dart:
         return type.toDartType(format) + (isRequired ? '' : '?');
