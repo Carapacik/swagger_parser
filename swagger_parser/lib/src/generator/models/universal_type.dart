@@ -57,10 +57,18 @@ extension UniversalTypeX on UniversalType {
     switch (lang) {
       case ProgrammingLanguage.dart:
         return type.toDartType(format) +
-            (isRequired || arrayDepth > 0 ? '' : '?');
+            (!nullable || arrayDepth > 0
+                ? isRequired || arrayDepth > 0
+                    ? ''
+                    : '?'
+                : '?');
       case ProgrammingLanguage.kotlin:
         return type.toKotlinType(format) +
-            (isRequired || arrayDepth > 0 ? '' : '?');
+            (!nullable || arrayDepth > 0
+                ? isRequired || arrayDepth > 0
+                    ? ''
+                    : '?'
+                : '?');
     }
   }
 }

@@ -1292,4 +1292,83 @@ typealias AnotherValue = Another;
       expect(files[2].contents, expectedContent2);
     });
   });
+
+  group('Nullable', () {
+    test('dart + json_serializable', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {
+          'camelClass',
+          'snake_class',
+          'kebab-class',
+          'PascalClass',
+          'Space class'
+        },
+        parameters: [],
+      );
+      const fillController = FillController();
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContents = r'''
+import 'package:json_annotation/json_annotation.dart';
+
+import 'camel_class.dart';
+import 'snake_class.dart';
+import 'kebab_class.dart';
+import 'pascal_class.dart';
+import 'space_class.dart';
+
+part 'class_name.g.dart';
+
+@JsonSerializable()
+class ClassName {
+  const ClassName();
+  
+  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  
+  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('dart + freezed', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {
+          'camelClass',
+          'snake_class',
+          'kebab-class',
+          'PascalClass',
+          'Space class'
+        },
+        parameters: [],
+      );
+      const fillController = FillController(freezed: true);
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContents = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'camel_class.dart';
+import 'snake_class.dart';
+import 'kebab_class.dart';
+import 'pascal_class.dart';
+import 'space_class.dart';
+
+part 'class_name.freezed.dart';
+part 'class_name.g.dart';
+
+@Freezed()
+class ClassName with _$ClassName {
+  const factory ClassName() = _ClassName;
+  
+  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('kotlin + moshi', () async {
+      // Imports in Kotlin are not supported yet. You can always add PR
+    });
+  });
 }
