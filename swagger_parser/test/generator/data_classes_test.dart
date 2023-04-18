@@ -1019,7 +1019,7 @@ class ClassName with _$ClassName {
         UniversalEnumClass(
           name: 'KeywordsName',
           type: 'string',
-          items: {'false', 'for', 'do'},
+          items: {'FALSE', 'for', 'do'},
         ),
       ];
 
@@ -1079,7 +1079,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
 enum KeywordsName {
-  @JsonValue('false')
+  @JsonValue('FALSE')
   valueFalse,
   @JsonValue('for')
   valueFor,
@@ -1090,7 +1090,7 @@ enum KeywordsName {
 }
 
 const _$KeywordsNameEnumMap = {
-  KeywordsName.valueFalse: 'false',
+  KeywordsName.valueFalse: 'FALSE',
   KeywordsName.valueFor: 'for',
   KeywordsName.valueDo: 'do',
 };
@@ -1115,7 +1115,7 @@ const _$KeywordsNameEnumMap = {
         UniversalEnumClass(
           name: 'KeywordsName',
           type: 'string',
-          items: {'false', 'for', 'do'},
+          items: {'FALSE', 'for', 'do'},
         ),
       ];
       const fillController = FillController(freezed: true);
@@ -1174,7 +1174,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 @JsonEnum()
 enum KeywordsName {
-  @JsonValue('false')
+  @JsonValue('FALSE')
   valueFalse,
   @JsonValue('for')
   valueFor,
@@ -1185,7 +1185,7 @@ enum KeywordsName {
 }
 
 const _$KeywordsNameEnumMap = {
-  KeywordsName.valueFalse: 'false',
+  KeywordsName.valueFalse: 'FALSE',
   KeywordsName.valueFor: 'for',
   KeywordsName.valueDo: 'do',
 };
@@ -1210,7 +1210,7 @@ const _$KeywordsNameEnumMap = {
         UniversalEnumClass(
           name: 'KeywordsName',
           type: 'string',
-          items: {'false', 'for', 'do'},
+          items: {'FALSE', 'for', 'do'},
         ),
       ];
       const fillController =
@@ -1255,7 +1255,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 enum class KeywordsName {
-    @Json("false")
+    @Json("FALSE")
     VALUE_FALSE,
     @Json("for")
     VALUE_FOR,
