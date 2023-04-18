@@ -23,6 +23,8 @@ String _parameters(UniversalEnumClass dataClass) => dataClass.items
     .join();
 
 String _valuePrefixForEnumItems(String type, String item) =>
-    (type != 'string' || dartKeywords.contains(item) ? 'value $item' : item)
+    (type != 'string' || dartKeywords.contains(item.toCamel)
+            ? 'value ${item.toSnake}'
+            : item)
         .toSnake
         .toUpperCase();

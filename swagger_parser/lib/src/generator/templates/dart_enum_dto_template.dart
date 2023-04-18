@@ -33,6 +33,6 @@ String _jsonValue(String type, String item) => '''
   ${_valuePrefixForEnumItems(type, item)}''';
 
 String _valuePrefixForEnumItems(String type, String item) =>
-    type != 'string' || dartKeywords.contains(item)
-        ? 'value $item'.toCamel
+    type != 'string' || dartKeywords.contains(item.toCamel)
+        ? 'value ${item.toCamel}'.toCamel
         : item.toCamel;
