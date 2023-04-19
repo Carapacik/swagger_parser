@@ -1329,10 +1329,80 @@ interface Client {
 ''';
       expect(filledContent.contents, expectedContents);
     });
+
+    test('Dart + retrofit nullability of request parameters', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {},
+        requests: [
+          UniversalRequest(
+            name: 'getRequest',
+            requestType: HttpRequestType.get,
+            route: '/request',
+            returnType: UniversalType(type: 'string', nullable: true),
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 4,
+                  name: 'deepList',
+                  isRequired: false,
+                  nullable: true,
+                ),
+                name: 'deepArrayNullable',
+              ),
+            ],
+          ),
+          UniversalRequest(
+            name: 'getRequest2',
+            requestType: HttpRequestType.get,
+            route: '/request2',
+            returnType: UniversalType(type: 'string', nullable: false),
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 4,
+                  name: 'deepList',
+                  isRequired: false,
+                  nullable: true,
+                ),
+                name: 'deepArrayNullable',
+              ),
+            ],
+          )
+        ],
+      );
+      const fillController = FillController();
+      final filledContent =
+          await fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'rest_client.g.dart';
+
+@RestApi()
+abstract class Client {
+  factory Client(Dio dio, {String baseUrl}) = _Client;
+
+  @GET('/request')
+  Future<String?> getRequest({
+    @Query('deepArrayNullable') List<List<List<List<String>>>>? deepList,
   });
 
-  group('Nullable', () {
-    test('dart + retrofit', () async {
+  @GET('/request2')
+  Future<String> getRequest2({
+    @Query('deepArrayNullable') List<List<List<List<String>>>>? deepList,
+  });
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('dart + retrofit nullable parameters', () async {
       const restClient = UniversalRestClient(
         name: 'ClassName',
         imports: {},
@@ -1424,7 +1494,74 @@ abstract class Client {
       expect(filledContent.contents, expectedContents);
     });
 
-    test('kotlin + retrofit', () async {
+    test('Kotlin nullability of request parameters', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {},
+        requests: [
+          UniversalRequest(
+            name: 'getRequest',
+            requestType: HttpRequestType.get,
+            route: '/request',
+            returnType: UniversalType(type: 'string', nullable: true),
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 4,
+                  name: 'deepList',
+                  isRequired: false,
+                  nullable: true,
+                ),
+                name: 'deepArrayNullable',
+              ),
+            ],
+          ),
+          UniversalRequest(
+            name: 'getRequest2',
+            requestType: HttpRequestType.get,
+            route: '/request2',
+            returnType: UniversalType(type: 'string', nullable: false),
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 4,
+                  name: 'deepList',
+                  isRequired: false,
+                  nullable: true,
+                ),
+                name: 'deepArrayNullable',
+              ),
+            ],
+          )
+        ],
+      );
+      const fillController =
+          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      final filledContent =
+          await fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import retrofit2.http.*
+
+interface Client {
+    @GET("/request")
+    suspend fun getRequest(
+        @Query("deepArrayNullable") deepList: List<List<List<List<String>>>>?,
+    ): String?
+
+    @GET("/request2")
+    suspend fun getRequest2(
+        @Query("deepArrayNullable") deepList: List<List<List<List<String>>>>?,
+    ): String
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('kotlin nullable parameters', () async {
       const restClient = UniversalRestClient(
         name: 'ClassName',
         imports: {},
