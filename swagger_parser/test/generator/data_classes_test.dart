@@ -1376,6 +1376,80 @@ class ClassName {
       expect(filledContent.contents, expectedContents);
     });
 
+    test('dart + freezed data class parameters nullability', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {
+          'camelClass',
+          'snake_class',
+          'kebab-class',
+          'PascalClass',
+          'Space class'
+        },
+        parameters: [
+          UniversalType(
+            type: 'string',
+            arrayDepth: 4,
+            name: 'list1',
+            isRequired: false,
+            nullable: true,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list2',
+            isRequired: false,
+            nullable: true,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list3',
+            isRequired: true,
+            nullable: false,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list4',
+            isRequired: false,
+            nullable: false,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list5',
+            isRequired: true,
+            nullable: true,
+          ),
+        ],
+      );
+      const fillController = FillController(freezed: true);
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContents = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'camel_class.dart';
+import 'snake_class.dart';
+import 'kebab_class.dart';
+import 'pascal_class.dart';
+import 'space_class.dart';
+
+part 'class_name.freezed.dart';
+part 'class_name.g.dart';
+
+@Freezed()
+class ClassName with _$ClassName {
+  const factory ClassName({
+    required String list3,
+    required String? list5,
+    List<List<List<List<String>>>>? list1,
+    String? list2,
+    String? list4,
+  }) = _ClassName;
+  
+  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
     test('kotlin + moshi data class parameters nullability', () async {
       const dataClass = UniversalComponentClass(
         name: 'ClassName',
