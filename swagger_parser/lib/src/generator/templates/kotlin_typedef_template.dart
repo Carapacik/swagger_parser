@@ -13,6 +13,6 @@ String kotlinTypeDefTemplate(UniversalComponentClass dataClass) {
     return '';
   }
   return '''
-typealias $className = ${toSuitableType(type, ProgrammingLanguage.kotlin, isRequired: type.isRequired)};
+typealias $className = ${toSuitableType(type, ProgrammingLanguage.kotlin)};
 ''';
 }

@@ -16,11 +16,10 @@ String dartImports({required Set<String> imports, String? pathPrefix}) {
 /// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
 String toSuitableType(
   UniversalType type,
-  ProgrammingLanguage lang, {
-  bool isRequired = true,
-}) {
+  ProgrammingLanguage lang,
+) {
   if (type.arrayDepth == 0) {
-    return type.byLang(lang, isRequired: isRequired);
+    return type.byLang(lang);
   }
   final sb = StringBuffer();
   for (var i = 0; i < type.arrayDepth; i++) {
@@ -30,7 +29,7 @@ String toSuitableType(
   for (var i = 0; i < type.arrayDepth; i++) {
     sb.write('>');
   }
-  if (!isRequired && type.defaultValue == null) {
+  if (type.nullable || (!type.isRequired && type.defaultValue == null)) {
     sb.write('?');
   }
   return sb.toString();
@@ -38,13 +37,7 @@ String toSuitableType(
 
 String fileImport(UniversalComponentClass dataClass) =>
     dataClass.parameters.any(
-      (p) =>
-          toSuitableType(
-            p,
-            ProgrammingLanguage.dart,
-            isRequired: p.isRequired,
-          ) ==
-          'File',
+      (p) => toSuitableType(p, ProgrammingLanguage.dart) == 'File',
     )
         ? "import 'dart:io';\n\n"
         : '';

@@ -68,6 +68,7 @@ class OpenApiParser {
   static const _itemsVar = 'items';
   static const _multipartVar = 'multipart/form-data';
   static const _nameVar = 'name';
+  static const _nullableVar = 'nullable';
   static const _objectVar = 'object';
   static const _oneOfVar = 'oneOf';
   static const _openApiVar = 'openapi';
@@ -550,11 +551,15 @@ class OpenApiParser {
     bool isRequired = true,
     bool useSchema = false,
     bool allOfObject = false,
+    bool root = true,
   }) {
     if (map.containsKey(_typeVar) && map[_typeVar] == _arrayVar) {
       // `array`
-      final arrayType =
-          _findType(map[_itemsVar] as Map<String, dynamic>, arrayName: name);
+      final arrayType = _findType(
+        map[_itemsVar] as Map<String, dynamic>,
+        arrayName: name,
+        root: false,
+      );
       return TypeWithImport(
         type: UniversalType(
           type: arrayType.type.type,
@@ -606,8 +611,13 @@ class OpenApiParser {
       final typeWithImports = <TypeWithImport>[];
       if (map.containsKey(_propertiesVar)) {
         (map[_propertiesVar] as Map<String, dynamic>).forEach((key, value) {
-          typeWithImports
-              .add(_findType(value as Map<String, dynamic>, name: key));
+          typeWithImports.add(
+            _findType(
+              value as Map<String, dynamic>,
+              name: key,
+              root: false,
+            ),
+          );
         });
       }
       if (map.containsKey(_additionalPropertiesVar)) {
@@ -615,6 +625,7 @@ class OpenApiParser {
           _findType(
             map[_additionalPropertiesVar] as Map<String, dynamic>,
             name: _additionalPropertiesVar,
+            root: false,
           ),
         );
       }
@@ -674,6 +685,9 @@ class OpenApiParser {
                       : map[_refVar].toString(),
                 )
               : null;
+      final nullable = root &&
+          map.containsKey(_nullableVar) &&
+          map[_nullableVar]!.toString().toBool();
       return TypeWithImport(
         type: UniversalType(
           type: type,
@@ -684,6 +698,7 @@ class OpenApiParser {
           jsonKey: name,
           defaultValue: _defaultValueCheck(map),
           isRequired: isRequired,
+          nullable: nullable,
         ),
         import: import,
       );

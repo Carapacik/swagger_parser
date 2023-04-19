@@ -30,7 +30,7 @@ String _parametersToString(List<UniversalType> parameters) {
   return sortedByRequired
       .map(
         (e) => '${_jsonKey(e)}\n    ${e.isRequired ? 'required ' : ''}'
-            '${toSuitableType(e, ProgrammingLanguage.dart, isRequired: e.isRequired)} ${e.name},',
+            '${toSuitableType(e, ProgrammingLanguage.dart)} ${e.name},',
       )
       .join();
 }
