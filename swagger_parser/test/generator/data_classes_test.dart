@@ -1322,18 +1322,22 @@ typealias AnotherValue = Another;
           UniversalType(
             type: 'string',
             name: 'list3',
+            // ignore: avoid_redundant_argument_values
             isRequired: true,
+            // ignore: avoid_redundant_argument_values
             nullable: false,
           ),
           UniversalType(
             type: 'string',
             name: 'list4',
             isRequired: false,
+            // ignore: avoid_redundant_argument_values
             nullable: false,
           ),
           UniversalType(
             type: 'string',
             name: 'list5',
+            // ignore: avoid_redundant_argument_values
             isRequired: true,
             nullable: true,
           ),
@@ -1403,18 +1407,22 @@ class ClassName {
           UniversalType(
             type: 'string',
             name: 'list3',
+            // ignore: avoid_redundant_argument_values
             isRequired: true,
+            // ignore: avoid_redundant_argument_values
             nullable: false,
           ),
           UniversalType(
             type: 'string',
             name: 'list4',
             isRequired: false,
+            // ignore: avoid_redundant_argument_values
             nullable: false,
           ),
           UniversalType(
             type: 'string',
             name: 'list5',
+            // ignore: avoid_redundant_argument_values
             isRequired: true,
             nullable: true,
           ),
@@ -1477,18 +1485,22 @@ class ClassName with _$ClassName {
           UniversalType(
             type: 'string',
             name: 'list3',
+            // ignore: avoid_redundant_argument_values
             isRequired: true,
+            // ignore: avoid_redundant_argument_values
             nullable: false,
           ),
           UniversalType(
             type: 'string',
             name: 'list4',
             isRequired: false,
+            // ignore: avoid_redundant_argument_values
             nullable: false,
           ),
           UniversalType(
             type: 'string',
             name: 'list5',
+            // ignore: avoid_redundant_argument_values
             isRequired: true,
             nullable: true,
           ),
