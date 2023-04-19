@@ -62,13 +62,7 @@ String _toClientRequest(UniversalRequest request) {
 
 String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
       (r) => r.parameters.any(
-        (p) =>
-            toSuitableType(
-              p.type,
-              ProgrammingLanguage.dart,
-              isRequired: p.type.isRequired,
-            ) ==
-            'File',
+        (p) => toSuitableType(p.type, ProgrammingLanguage.dart) == 'File',
       ),
     )
         ? "import 'dart:io';\n\n"
@@ -77,6 +71,6 @@ String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
 String _toQueryParameter(UniversalRequestType parameter) =>
     "    @${parameter.parameterType.type}(${parameter.name != null ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
     '${parameter.type.isRequired && parameter.type.defaultValue == null ? 'required ' : ''}'
-    '${toSuitableType(parameter.type, ProgrammingLanguage.dart, isRequired: parameter.type.isRequired)} '
+    '${toSuitableType(parameter.type, ProgrammingLanguage.dart)} '
     '${parameter.type.name!.toCamel}${parameter.type.defaultValue != null ? ' = '
         '${parameter.type.type.quoterForStringType()}${parameter.type.defaultValue}${parameter.type.type.quoterForStringType()}' : ''},';
