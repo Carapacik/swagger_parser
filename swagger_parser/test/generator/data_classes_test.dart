@@ -1366,4 +1366,237 @@ typealias AnotherValue = Another;
       expect(files[2].contents, expectedContent2);
     });
   });
+
+  group('Nullable', () {
+    test('dart + json_serializable data class parameters nullability',
+        () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {
+          'camelClass',
+          'snake_class',
+          'kebab-class',
+          'PascalClass',
+          'Space class'
+        },
+        parameters: [
+          UniversalType(
+            type: 'string',
+            arrayDepth: 4,
+            name: 'list1',
+            isRequired: false,
+            nullable: true,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list2',
+            isRequired: false,
+            nullable: true,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list3',
+            // ignore: avoid_redundant_argument_values
+            isRequired: true,
+            // ignore: avoid_redundant_argument_values
+            nullable: false,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list4',
+            isRequired: false,
+            // ignore: avoid_redundant_argument_values
+            nullable: false,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list5',
+            // ignore: avoid_redundant_argument_values
+            isRequired: true,
+            nullable: true,
+          ),
+        ],
+      );
+      const fillController = FillController();
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContents = r'''
+import 'package:json_annotation/json_annotation.dart';
+
+import 'camel_class.dart';
+import 'snake_class.dart';
+import 'kebab_class.dart';
+import 'pascal_class.dart';
+import 'space_class.dart';
+
+part 'class_name.g.dart';
+
+@JsonSerializable()
+class ClassName {
+  const ClassName({
+    required this.list3,
+    required this.list5,
+    this.list1,
+    this.list2,
+    this.list4,
+  });
+  
+  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  
+  final List<List<List<List<String>>>>? list1;
+  final String? list2;
+  final String list3;
+  final String? list4;
+  final String? list5;
+
+  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('dart + freezed data class parameters nullability', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {
+          'camelClass',
+          'snake_class',
+          'kebab-class',
+          'PascalClass',
+          'Space class'
+        },
+        parameters: [
+          UniversalType(
+            type: 'string',
+            arrayDepth: 4,
+            name: 'list1',
+            isRequired: false,
+            nullable: true,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list2',
+            isRequired: false,
+            nullable: true,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list3',
+            // ignore: avoid_redundant_argument_values
+            isRequired: true,
+            // ignore: avoid_redundant_argument_values
+            nullable: false,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list4',
+            isRequired: false,
+            // ignore: avoid_redundant_argument_values
+            nullable: false,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list5',
+            // ignore: avoid_redundant_argument_values
+            isRequired: true,
+            nullable: true,
+          ),
+        ],
+      );
+      const fillController = FillController(freezed: true);
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContents = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'camel_class.dart';
+import 'snake_class.dart';
+import 'kebab_class.dart';
+import 'pascal_class.dart';
+import 'space_class.dart';
+
+part 'class_name.freezed.dart';
+part 'class_name.g.dart';
+
+@Freezed()
+class ClassName with _$ClassName {
+  const factory ClassName({
+    required String list3,
+    required String? list5,
+    List<List<List<List<String>>>>? list1,
+    String? list2,
+    String? list4,
+  }) = _ClassName;
+  
+  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('kotlin + moshi data class parameters nullability', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {
+          'camelClass',
+          'snake_class',
+          'kebab-class',
+          'PascalClass',
+          'Space class'
+        },
+        parameters: [
+          UniversalType(
+            type: 'string',
+            arrayDepth: 4,
+            name: 'list1',
+            isRequired: false,
+            nullable: true,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list2',
+            isRequired: false,
+            nullable: true,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list3',
+            // ignore: avoid_redundant_argument_values
+            isRequired: true,
+            // ignore: avoid_redundant_argument_values
+            nullable: false,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list4',
+            isRequired: false,
+            // ignore: avoid_redundant_argument_values
+            nullable: false,
+          ),
+          UniversalType(
+            type: 'string',
+            name: 'list5',
+            // ignore: avoid_redundant_argument_values
+            isRequired: true,
+            nullable: true,
+          ),
+        ],
+      );
+      const fillController =
+          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContent = '''
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+data class ClassName(
+    var list1: List<List<List<List<String>>>>?,
+    var list2: String?,
+    var list3: String,
+    var list4: String?,
+    var list5: String?,
+)
+''';
+      expect(filledContent.contents, expectedContent);
+    });
+  });
 }

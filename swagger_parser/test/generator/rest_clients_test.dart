@@ -1329,5 +1329,333 @@ interface Client {
 ''';
       expect(filledContent.contents, expectedContents);
     });
+
+    test('Dart + retrofit nullability of request parameters', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {},
+        requests: [
+          UniversalRequest(
+            name: 'getRequest',
+            requestType: HttpRequestType.get,
+            route: '/request',
+            returnType: UniversalType(type: 'string', nullable: true),
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 4,
+                  name: 'deepList',
+                  isRequired: false,
+                  nullable: true,
+                ),
+                name: 'deepArrayNullable',
+              ),
+            ],
+          ),
+          UniversalRequest(
+            name: 'getRequest2',
+            requestType: HttpRequestType.get,
+            route: '/request2',
+            // ignore: avoid_redundant_argument_values
+            returnType: UniversalType(type: 'string', nullable: false),
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 4,
+                  name: 'deepList',
+                  isRequired: false,
+                  nullable: true,
+                ),
+                name: 'deepArrayNullable',
+              ),
+            ],
+          )
+        ],
+      );
+      const fillController = FillController();
+      final filledContent =
+          await fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'rest_client.g.dart';
+
+@RestApi()
+abstract class Client {
+  factory Client(Dio dio, {String baseUrl}) = _Client;
+
+  @GET('/request')
+  Future<String?> getRequest({
+    @Query('deepArrayNullable') List<List<List<List<String>>>>? deepList,
+  });
+
+  @GET('/request2')
+  Future<String> getRequest2({
+    @Query('deepArrayNullable') List<List<List<List<String>>>>? deepList,
+  });
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('dart + retrofit nullable parameters', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {},
+        requests: [
+          UniversalRequest(
+            name: 'getRequest',
+            requestType: HttpRequestType.get,
+            route: '/request',
+            returnType: UniversalType(type: 'string'),
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 4,
+                  name: 'list1',
+                  isRequired: false,
+                  nullable: true,
+                ),
+                name: 'deepArrayNullable',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'list2',
+                  isRequired: false,
+                  nullable: true,
+                ),
+                name: 'notRequiredButNullable',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'list3',
+                  // ignore: avoid_redundant_argument_values
+                  isRequired: true,
+                  // ignore: avoid_redundant_argument_values
+                  nullable: false,
+                ),
+                name: 'requiredButNotNullable',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'list4',
+                  isRequired: false,
+                  // ignore: avoid_redundant_argument_values
+                  nullable: false,
+                ),
+                name: 'notRequiredAndNotNullable',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'list5',
+                  // ignore: avoid_redundant_argument_values
+                  isRequired: true,
+                  nullable: true,
+                ),
+                name: 'RequiredAndNullable',
+              ),
+            ],
+          )
+        ],
+      );
+      const fillController = FillController();
+      final filledContent =
+          await fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'rest_client.g.dart';
+
+@RestApi()
+abstract class Client {
+  factory Client(Dio dio, {String baseUrl}) = _Client;
+
+  @GET('/request')
+  Future<String> getRequest({
+    @Query('requiredButNotNullable') required String list3,
+    @Query('RequiredAndNullable') required String? list5,
+    @Query('deepArrayNullable') List<List<List<List<String>>>>? list1,
+    @Query('notRequiredButNullable') String? list2,
+    @Query('notRequiredAndNotNullable') String? list4,
+  });
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('Kotlin nullability of request parameters', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {},
+        requests: [
+          UniversalRequest(
+            name: 'getRequest',
+            requestType: HttpRequestType.get,
+            route: '/request',
+            returnType: UniversalType(type: 'string', nullable: true),
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 4,
+                  name: 'deepList',
+                  isRequired: false,
+                  nullable: true,
+                ),
+                name: 'deepArrayNullable',
+              ),
+            ],
+          ),
+          UniversalRequest(
+            name: 'getRequest2',
+            requestType: HttpRequestType.get,
+            route: '/request2',
+            // ignore: avoid_redundant_argument_values
+            returnType: UniversalType(type: 'string', nullable: false),
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 4,
+                  name: 'deepList',
+                  isRequired: false,
+                  nullable: true,
+                ),
+                name: 'deepArrayNullable',
+              ),
+            ],
+          )
+        ],
+      );
+      const fillController =
+          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      final filledContent =
+          await fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import retrofit2.http.*
+
+interface Client {
+    @GET("/request")
+    suspend fun getRequest(
+        @Query("deepArrayNullable") deepList: List<List<List<List<String>>>>?,
+    ): String?
+
+    @GET("/request2")
+    suspend fun getRequest2(
+        @Query("deepArrayNullable") deepList: List<List<List<List<String>>>>?,
+    ): String
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('kotlin nullable parameters', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {},
+        requests: [
+          UniversalRequest(
+            name: 'getRequest',
+            requestType: HttpRequestType.get,
+            route: '/request',
+            returnType: UniversalType(type: 'string'),
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  arrayDepth: 4,
+                  name: 'list1',
+                  isRequired: false,
+                  nullable: true,
+                ),
+                name: 'deepArrayNullable',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'list2',
+                  isRequired: false,
+                  nullable: true,
+                ),
+                name: 'notRequiredButNullable',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'list3',
+                  // ignore: avoid_redundant_argument_values
+                  isRequired: true,
+                  // ignore: avoid_redundant_argument_values
+                  nullable: false,
+                ),
+                name: 'requiredButNotNullable',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'list4',
+                  isRequired: false,
+                  // ignore: avoid_redundant_argument_values
+                  nullable: false,
+                ),
+                name: 'notRequiredAndNotNullable',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'list5',
+                  // ignore: avoid_redundant_argument_values
+                  isRequired: true,
+                  nullable: true,
+                ),
+                name: 'RequiredAndNullable',
+              ),
+            ],
+          )
+        ],
+      );
+      const fillController =
+          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      final filledContent =
+          await fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import retrofit2.http.*
+
+interface Client {
+    @GET("/request")
+    suspend fun getRequest(
+        @Query("deepArrayNullable") list1: List<List<List<List<String>>>>?,
+        @Query("notRequiredButNullable") list2: String?,
+        @Query("requiredButNotNullable") list3: String,
+        @Query("notRequiredAndNotNullable") list4: String?,
+        @Query("RequiredAndNullable") list5: String?,
+    ): String
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
   });
 }
