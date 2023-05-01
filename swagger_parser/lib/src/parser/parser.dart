@@ -81,6 +81,7 @@ class OpenApiParser {
   static const _responsesVar = 'responses';
   static const _schemaVar = 'schema';
   static const _schemasVar = 'schemas';
+  static const _serversVar = 'servers';
   static const _swaggerVar = 'swagger';
   static const _tagsVar = 'tags';
   static const _typeVar = 'type';
@@ -322,39 +323,41 @@ class OpenApiParser {
     (_definitionFileContent[_pathsVar] as Map<String, dynamic>)
         .forEach((path, pathValue) {
       (pathValue as Map<String, dynamic>).forEach((key, requestPath) {
-        final requestPathResponses = (requestPath
-            as Map<String, dynamic>)[_responsesVar] as Map<String, dynamic>;
-        final returnType = _version == OpenApiVersion.v2
-            ? returnTypeV2(requestPathResponses)
-            : returnTypeV3(requestPathResponses);
-        final parameters = _version == OpenApiVersion.v2
-            ? parametersV2(requestPath)
-            : parametersV3(requestPath);
-        final request = UniversalRequest(
-          name: (key + path).toCamel,
-          requestType: HttpRequestType.fromString(key)!,
-          route: path,
-          isMultiPart: isMultiPart,
-          returnType: returnType,
-          parameters: parameters,
-        );
-        final currentTag = _getTag(requestPath);
-        final sameTagIndex =
-            restClients.indexWhere((e) => e.name == currentTag);
-        if (sameTagIndex == -1) {
-          restClients.add(
-            UniversalRestClient(
-              name: currentTag,
-              requests: [request],
-              imports: SplayTreeSet<String>.of(imports),
-            ),
+        if (key != _serversVar) {
+          final requestPathResponses = (requestPath
+              as Map<String, dynamic>)[_responsesVar] as Map<String, dynamic>;
+          final returnType = _version == OpenApiVersion.v2
+              ? returnTypeV2(requestPathResponses)
+              : returnTypeV3(requestPathResponses);
+          final parameters = _version == OpenApiVersion.v2
+              ? parametersV2(requestPath)
+              : parametersV3(requestPath);
+          final request = UniversalRequest(
+            name: (key + path).toCamel,
+            requestType: HttpRequestType.fromString(key)!,
+            route: path,
+            isMultiPart: isMultiPart,
+            returnType: returnType,
+            parameters: parameters,
           );
-        } else {
-          restClients[sameTagIndex].requests.add(request);
-          restClients[sameTagIndex].imports.addAll(imports);
+          final currentTag = _getTag(requestPath);
+          final sameTagIndex =
+              restClients.indexWhere((e) => e.name == currentTag);
+          if (sameTagIndex == -1) {
+            restClients.add(
+              UniversalRestClient(
+                name: currentTag,
+                requests: [request],
+                imports: SplayTreeSet<String>.of(imports),
+              ),
+            );
+          } else {
+            restClients[sameTagIndex].requests.add(request);
+            restClients[sameTagIndex].imports.addAll(imports);
+          }
+          isMultiPart = false;
+          imports.clear();
         }
-        isMultiPart = false;
-        imports.clear();
       });
     });
     return restClients;
