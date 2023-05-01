@@ -72,6 +72,7 @@ class OpenApiParser {
   static const _objectVar = 'object';
   static const _oneOfVar = 'oneOf';
   static const _openApiVar = 'openapi';
+  static const _operationIdVar = 'operationId';
   static const _parametersVar = 'parameters';
   static const _pathsVar = 'paths';
   static const _propertiesVar = 'properties';
@@ -324,16 +325,23 @@ class OpenApiParser {
         .forEach((path, pathValue) {
       (pathValue as Map<String, dynamic>).forEach((key, requestPath) {
         if (key != _serversVar) {
-          final requestPathResponses = (requestPath
-              as Map<String, dynamic>)[_responsesVar] as Map<String, dynamic>;
+          requestPath = requestPath as Map<String, dynamic>;
+          final requestPathResponses =
+              requestPath[_responsesVar] as Map<String, dynamic>;
           final returnType = _version == OpenApiVersion.v2
               ? returnTypeV2(requestPathResponses)
               : returnTypeV3(requestPathResponses);
           final parameters = _version == OpenApiVersion.v2
               ? parametersV2(requestPath)
               : parametersV3(requestPath);
+
+          var requestName = (key + path).toCamel;
+          if (requestPath.containsKey(_operationIdVar)) {
+            requestName = requestPath[_operationIdVar].toString().toCamel;
+          }
+
           final request = UniversalRequest(
-            name: (key + path).toCamel,
+            name: requestName,
             requestType: HttpRequestType.fromString(key)!,
             route: path,
             isMultiPart: isMultiPart,
