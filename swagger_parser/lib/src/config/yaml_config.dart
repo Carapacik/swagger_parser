@@ -61,7 +61,9 @@ class YamlConfig {
     }
 
     if (yamlConfig.containsKey('client_postfix')) {
-      _clientPostfix = yamlConfig['client_postfix'].toString();
+      final postfix = yamlConfig['client_postfix']?.toString();
+      _clientPostfix =
+          postfix == null || postfix.trim().isEmpty ? null : postfix;
     }
 
     if (yamlConfig.containsKey('squish_clients')) {

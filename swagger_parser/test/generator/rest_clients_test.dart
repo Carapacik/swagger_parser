@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_redundant_argument_values
+
 import 'package:swagger_parser/src/generator/fill_controller.dart';
 import 'package:swagger_parser/src/generator/models/programming_lang.dart';
 import 'package:swagger_parser/src/generator/models/universal_request.dart';
@@ -1092,7 +1094,6 @@ interface Client {
                 type: UniversalType(
                   type: 'integer',
                   name: 'id',
-                  // ignore: avoid_redundant_argument_values
                   isRequired: true,
                 ),
                 name: 'id',
@@ -1160,7 +1161,6 @@ abstract class Client {
                 type: UniversalType(
                   type: 'integer',
                   name: 'id',
-                  // ignore: avoid_redundant_argument_values
                   isRequired: true,
                 ),
                 name: 'id',
@@ -1358,7 +1358,6 @@ interface Client {
             name: 'getRequest2',
             requestType: HttpRequestType.get,
             route: '/request2',
-            // ignore: avoid_redundant_argument_values
             returnType: UniversalType(type: 'string', nullable: false),
             parameters: [
               UniversalRequestType(
@@ -1440,9 +1439,7 @@ abstract class Client {
                 type: UniversalType(
                   type: 'string',
                   name: 'list3',
-                  // ignore: avoid_redundant_argument_values
                   isRequired: true,
-                  // ignore: avoid_redundant_argument_values
                   nullable: false,
                 ),
                 name: 'requiredButNotNullable',
@@ -1453,7 +1450,6 @@ abstract class Client {
                   type: 'string',
                   name: 'list4',
                   isRequired: false,
-                  // ignore: avoid_redundant_argument_values
                   nullable: false,
                 ),
                 name: 'notRequiredAndNotNullable',
@@ -1463,7 +1459,6 @@ abstract class Client {
                 type: UniversalType(
                   type: 'string',
                   name: 'list5',
-                  // ignore: avoid_redundant_argument_values
                   isRequired: true,
                   nullable: true,
                 ),
@@ -1527,7 +1522,6 @@ abstract class Client {
             name: 'getRequest2',
             requestType: HttpRequestType.get,
             route: '/request2',
-            // ignore: avoid_redundant_argument_values
             returnType: UniversalType(type: 'string', nullable: false),
             parameters: [
               UniversalRequestType(
@@ -1604,9 +1598,7 @@ interface Client {
                 type: UniversalType(
                   type: 'string',
                   name: 'list3',
-                  // ignore: avoid_redundant_argument_values
                   isRequired: true,
-                  // ignore: avoid_redundant_argument_values
                   nullable: false,
                 ),
                 name: 'requiredButNotNullable',
@@ -1617,7 +1609,6 @@ interface Client {
                   type: 'string',
                   name: 'list4',
                   isRequired: false,
-                  // ignore: avoid_redundant_argument_values
                   nullable: false,
                 ),
                 name: 'notRequiredAndNotNullable',
@@ -1627,7 +1618,6 @@ interface Client {
                 type: UniversalType(
                   type: 'string',
                   name: 'list5',
-                  // ignore: avoid_redundant_argument_values
                   isRequired: true,
                   nullable: true,
                 ),
