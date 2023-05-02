@@ -699,6 +699,7 @@ class OpenApiParser {
       final nullable = root &&
           map.containsKey(_nullableVar) &&
           map[_nullableVar]!.toString().toBool();
+
       return TypeWithImport(
         type: UniversalType(
           type: type,
