@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_redundant_argument_values
+
 import 'package:swagger_parser/src/generator/fill_controller.dart';
 import 'package:swagger_parser/src/generator/models/generated_file.dart';
 import 'package:swagger_parser/src/generator/models/programming_lang.dart';
@@ -639,7 +641,11 @@ data class ClassName(
         name: 'ClassName',
         imports: {},
         parameters: [
-          UniversalType(type: 'integer', name: 'intType', defaultValue: '1'),
+          UniversalType(
+            type: 'integer',
+            name: 'intType',
+            defaultValue: '1',
+          ),
           UniversalType(
             type: 'string',
             name: 'stringType',
@@ -649,7 +655,13 @@ data class ClassName(
             type: 'boolean',
             name: 'boolType',
             defaultValue: 'false',
-          )
+          ),
+          UniversalType(
+            type: 'number',
+            name: 'nullableType',
+            defaultValue: '-1.1',
+            nullable: true,
+          ),
         ],
       );
       const fillController = FillController();
@@ -662,19 +674,18 @@ part 'class_name.g.dart';
 @JsonSerializable()
 class ClassName {
   const ClassName({
-    required this.intType,
-    required this.stringType,
-    required this.boolType,
+    this.intType = 1,
+    this.stringType = str,
+    this.boolType = false,
+    this.nullableType = -1.1,
   });
   
   factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
   
-  @JsonKey(defaultValue: 1)
   final int intType;
-  @JsonKey(defaultValue: 'str')
   final String stringType;
-  @JsonKey(defaultValue: false)
   final bool boolType;
+  final num? nullableType;
 
   Map<String, dynamic> toJson() => _$ClassNameToJson(this);
 }
@@ -687,7 +698,11 @@ class ClassName {
         name: 'ClassName',
         imports: {},
         parameters: [
-          UniversalType(type: 'integer', name: 'intType', defaultValue: '1'),
+          UniversalType(
+            type: 'integer',
+            name: 'intType',
+            defaultValue: '1',
+          ),
           UniversalType(
             type: 'string',
             name: 'stringType',
@@ -697,7 +712,13 @@ class ClassName {
             type: 'boolean',
             name: 'boolType',
             defaultValue: 'false',
-          )
+          ),
+          UniversalType(
+            type: 'number',
+            name: 'nullableType',
+            defaultValue: '-1.1',
+            nullable: true,
+          ),
         ],
       );
       const fillController = FillController(freezed: true);
@@ -717,6 +738,8 @@ class ClassName with _$ClassName {
     required String stringType,
     @Default(false)
     required bool boolType,
+    @Default(-1.1)
+    required num? nullableType,
   }) = _ClassName;
   
   factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
@@ -730,7 +753,11 @@ class ClassName with _$ClassName {
         name: 'ClassName',
         imports: {},
         parameters: [
-          UniversalType(type: 'integer', name: 'intType', defaultValue: '1'),
+          UniversalType(
+            type: 'integer',
+            name: 'intType',
+            defaultValue: '1',
+          ),
           UniversalType(
             type: 'string',
             name: 'stringType',
@@ -740,7 +767,13 @@ class ClassName with _$ClassName {
             type: 'boolean',
             name: 'boolType',
             defaultValue: 'false',
-          )
+          ),
+          UniversalType(
+            type: 'number',
+            name: 'nullableType',
+            defaultValue: '-1.1',
+            nullable: true,
+          ),
         ],
       );
       const fillController =
@@ -755,6 +788,7 @@ data class ClassName(
     var intType: Int = 1,
     var stringType: String = "str",
     var boolType: Boolean = false,
+    var nullableType: Double? = -1.1,
 )
 ''';
       expect(filledContent.contents, expectedContents);
@@ -779,7 +813,6 @@ data class ClassName(
             type: 'Another',
             arrayDepth: 2,
             name: 'anotherList',
-            // ignore: avoid_redundant_argument_values
             isRequired: true,
           )
         ],
@@ -832,7 +865,6 @@ class ClassName {
             type: 'Another',
             arrayDepth: 2,
             name: 'anotherList',
-            // ignore: avoid_redundant_argument_values
             isRequired: true,
           )
         ],
@@ -879,7 +911,6 @@ class ClassName with _$ClassName {
             type: 'Another',
             arrayDepth: 2,
             name: 'anotherList',
-            // ignore: avoid_redundant_argument_values
             isRequired: true,
           )
         ],
@@ -1367,7 +1398,7 @@ typealias AnotherValue = Another;
     });
   });
 
-  group('Nullable', () {
+  group('nullable', () {
     test('dart + json_serializable data class parameters nullability',
         () async {
       const dataClass = UniversalComponentClass(
@@ -1396,22 +1427,18 @@ typealias AnotherValue = Another;
           UniversalType(
             type: 'string',
             name: 'list3',
-            // ignore: avoid_redundant_argument_values
             isRequired: true,
-            // ignore: avoid_redundant_argument_values
             nullable: false,
           ),
           UniversalType(
             type: 'string',
             name: 'list4',
             isRequired: false,
-            // ignore: avoid_redundant_argument_values
             nullable: false,
           ),
           UniversalType(
             type: 'string',
             name: 'list5',
-            // ignore: avoid_redundant_argument_values
             isRequired: true,
             nullable: true,
           ),
@@ -1481,22 +1508,18 @@ class ClassName {
           UniversalType(
             type: 'string',
             name: 'list3',
-            // ignore: avoid_redundant_argument_values
             isRequired: true,
-            // ignore: avoid_redundant_argument_values
             nullable: false,
           ),
           UniversalType(
             type: 'string',
             name: 'list4',
             isRequired: false,
-            // ignore: avoid_redundant_argument_values
             nullable: false,
           ),
           UniversalType(
             type: 'string',
             name: 'list5',
-            // ignore: avoid_redundant_argument_values
             isRequired: true,
             nullable: true,
           ),
@@ -1559,22 +1582,18 @@ class ClassName with _$ClassName {
           UniversalType(
             type: 'string',
             name: 'list3',
-            // ignore: avoid_redundant_argument_values
             isRequired: true,
-            // ignore: avoid_redundant_argument_values
             nullable: false,
           ),
           UniversalType(
             type: 'string',
             name: 'list4',
             isRequired: false,
-            // ignore: avoid_redundant_argument_values
             nullable: false,
           ),
           UniversalType(
             type: 'string',
             name: 'list5',
-            // ignore: avoid_redundant_argument_values
             isRequired: true,
             nullable: true,
           ),

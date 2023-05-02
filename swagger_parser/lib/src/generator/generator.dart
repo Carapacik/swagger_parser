@@ -58,7 +58,7 @@ class Generator {
   Generator.fromString({
     required String schemaContent,
     required ProgrammingLanguage language,
-    String clientPostfix = 'ApiClient',
+    String? clientPostfix = 'ApiClient',
     bool freezed = false,
     bool squishClients = false,
     bool isYaml = false,
@@ -66,7 +66,7 @@ class Generator {
     _schemaContent = schemaContent;
     _programmingLanguage = language;
     _outputDirectory = '';
-    _clientPostfix = clientPostfix;
+    _clientPostfix = clientPostfix ?? 'ApiClient';
     _squishClients = squishClients;
     _freezed = freezed;
     _isYaml = isYaml;

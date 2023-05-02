@@ -179,7 +179,7 @@ Future<void> _generateOutputs(
   final generator = Generator.fromString(
     schemaContent: schema,
     language: language,
-    clientPostfix: clientPostfix,
+    clientPostfix: clientPostfix.trim().isEmpty ? null : clientPostfix,
     freezed: freezed,
     squishClients: squishClients,
     isYaml: isYaml,
