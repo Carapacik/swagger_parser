@@ -72,6 +72,7 @@ class OpenApiParser {
   static const _objectVar = 'object';
   static const _oneOfVar = 'oneOf';
   static const _openApiVar = 'openapi';
+  static const _operationIdVar = 'operationId';
   static const _parametersVar = 'parameters';
   static const _pathsVar = 'paths';
   static const _propertiesVar = 'properties';
@@ -81,6 +82,7 @@ class OpenApiParser {
   static const _responsesVar = 'responses';
   static const _schemaVar = 'schema';
   static const _schemasVar = 'schemas';
+  static const _serversVar = 'servers';
   static const _swaggerVar = 'swagger';
   static const _tagsVar = 'tags';
   static const _typeVar = 'type';
@@ -322,6 +324,11 @@ class OpenApiParser {
     (_definitionFileContent[_pathsVar] as Map<String, dynamic>)
         .forEach((path, pathValue) {
       (pathValue as Map<String, dynamic>).forEach((key, requestPath) {
+        // `servers` contains List<dynamic>
+        if (key == _serversVar) {
+          return;
+        }
+
         final requestPathResponses = (requestPath
             as Map<String, dynamic>)[_responsesVar] as Map<String, dynamic>;
         final returnType = _version == OpenApiVersion.v2
@@ -330,8 +337,11 @@ class OpenApiParser {
         final parameters = _version == OpenApiVersion.v2
             ? parametersV2(requestPath)
             : parametersV3(requestPath);
+        final requestName = requestPath[_operationIdVar]?.toString().toCamel ??
+            (key + path).toCamel;
+
         final request = UniversalRequest(
-          name: (key + path).toCamel,
+          name: requestName,
           requestType: HttpRequestType.fromString(key)!,
           route: path,
           isMultiPart: isMultiPart,
@@ -688,6 +698,7 @@ class OpenApiParser {
       final nullable = root &&
           map.containsKey(_nullableVar) &&
           map[_nullableVar]!.toString().toBool();
+
       return TypeWithImport(
         type: UniversalType(
           type: type,
