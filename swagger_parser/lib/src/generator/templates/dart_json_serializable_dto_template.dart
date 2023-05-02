@@ -36,13 +36,11 @@ String _parametersInClass(List<UniversalType> parameters) => parameters
 String _parametersInConstructor(List<UniversalType> parameters) {
   final sortedByRequired =
       List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)));
-  return sortedByRequired.map((e) {
-    if (e.defaultValue != null && !e.nullable && !e.isRequired) {
-      return '\n    ${e.isRequired ? 'required ' : ''}this.${e.name} = ${e.defaultValue},';
-    } else {
-      return '\n    ${e.isRequired ? 'required ' : ''}this.${e.name},';
-    }
-  }).join();
+  return sortedByRequired
+      .map((e) => sortedByRequired
+          .map((e) => '\n    ${e.isRequired ? 'required ' : ''}this.${e.name},')
+          .join())
+      .join();
 }
 
 String _jsonKey(UniversalType t) {
