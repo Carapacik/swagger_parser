@@ -633,7 +633,7 @@ data class ClassName(
     });
   });
 
-  group('JsonKey defaultValue', () {
+  group('defaultValue', () {
     test('dart + json_serializable', () async {
       const dataClass = UniversalComponentClass(
         name: 'ClassName',
