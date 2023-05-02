@@ -1,3 +1,7 @@
+## 0.10.2
+- ` defaultValue ` now generates in constructor
+- Fix errors with ` client_postfix `
+
 ## 0.10.1
 - Fix error with ` servers ` in requests(thanks to @walsha2)
 - Use ` operationId ` for method name(if such a field exists)

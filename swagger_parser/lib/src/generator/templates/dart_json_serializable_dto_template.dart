@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 
 import '../../utils/case_utils.dart';
-import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
 import '../models/programming_lang.dart';
 import '../models/universal_component_class.dart';
@@ -33,34 +32,22 @@ String _parametersInClass(List<UniversalType> parameters) => parameters
     )
     .join();
 
-String _parametersInConstructor(List<UniversalType> parameters) {
-  final sortedByRequired =
-      List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)));
-  // default values in constructor should be here
-  return sortedByRequired
-      .map((e) => '\n    ${e.isRequired ? 'required ' : ''}this.${e.name},')
-      .join();
-}
+String _parametersInConstructor(List<UniversalType> parameters) =>
+    List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)))
+        .map((e) => '\n    ${_r(e)}this.${e.name}${_d(d: e.defaultValue)},')
+        .join();
 
+/// if jsonKeu is different from the name
 String _jsonKey(UniversalType t) {
-  final sb = StringBuffer();
-  if ((t.jsonKey == null || t.name == t.jsonKey) && t.defaultValue == null) {
+  if (t.jsonKey == null || t.name == t.jsonKey) {
     return '';
   }
-  sb.write('\n  @JsonKey(');
-  if (t.defaultValue != null) {
-    sb.write(
-      'defaultValue: ${t.type.quoterForStringType()}'
-      '${t.defaultValue}${t.type.quoterForStringType()}',
-    );
-  }
-
-  if (t.defaultValue != null && (t.jsonKey != null && t.name != t.jsonKey)) {
-    sb.write(', ');
-  }
-  if (t.jsonKey != null && t.name != t.jsonKey) {
-    sb.write("name: '${t.jsonKey}'");
-  }
-  sb.write(')');
-  return sb.toString();
+  return "\n  @JsonKey(name: '${t.jsonKey}')";
 }
+
+/// return required if required
+String _r(UniversalType t) =>
+    t.isRequired && t.defaultValue == null ? 'required ' : '';
+
+/// return defaultValue if have
+String _d({String? d}) => d != null ? ' = $d' : '';
