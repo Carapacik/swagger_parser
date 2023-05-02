@@ -1,3 +1,7 @@
+## 0.10.1
+- Fix error with ` servers ` in requests(thanks to @walsha2)
+- Use ` operationId ` for method name(if such a field exists)
+
 ## 0.10.0
 - Fix error with ` enum ` values not parsed in object properties
 - Use 2xx codes if code 200 not found

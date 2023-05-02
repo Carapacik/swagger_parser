@@ -58,7 +58,7 @@ extension UniversalTypeX on UniversalType {
       case ProgrammingLanguage.dart:
         return type.toDartType(format) +
             (!nullable || arrayDepth > 0
-                ? isRequired || arrayDepth > 0
+                ? isRequired || arrayDepth > 0 || defaultValue != null
                     ? ''
                     : '?'
                 : '?');

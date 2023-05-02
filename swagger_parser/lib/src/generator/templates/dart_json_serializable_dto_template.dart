@@ -36,6 +36,7 @@ String _parametersInClass(List<UniversalType> parameters) => parameters
 String _parametersInConstructor(List<UniversalType> parameters) {
   final sortedByRequired =
       List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)));
+  // default values in constructor should be here
   return sortedByRequired
       .map((e) => '\n    ${e.isRequired ? 'required ' : ''}this.${e.name},')
       .join();
