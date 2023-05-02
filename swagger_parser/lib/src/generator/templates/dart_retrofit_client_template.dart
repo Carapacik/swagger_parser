@@ -39,6 +39,7 @@ abstract class $name {
 String _toClientRequest(UniversalRequest request) {
   final sb = StringBuffer(
     '''
+
   ${request.isMultiPart ? '@MultiPart()\n  ' : ''}@${request.requestType.name.toUpperCase()}('${request.route}')
   Future<${request.returnType == null ? 'void' : toSuitableType(request.returnType!, ProgrammingLanguage.dart)}> ${request.name}(''',
   );
