@@ -1,13 +1,13 @@
 ## 0.10.2
-- ` defaultValue ` now generates in constructor
-- Fix errors with ` client_postfix `
+- ` defaultValue ` in dart class now generates in constructor
+- Fixed error with empty ` client_postfix `
 
 ## 0.10.1
-- Fix error with ` servers ` in requests(thanks to @walsha2)
+- Fixed error with ` servers ` in requests ([#32](https://github.com/Carapacik/swagger_parser/issues/32))
 - Use ` operationId ` for method name(if such a field exists)
 
 ## 0.10.0
-- Fix error with ` enum ` values not parsed in object properties
+- Fixed error with ` enum ` values not parsed in object properties
 - Use 2xx codes if code 200 not found
 - ` nullable ` types are now supported
 
@@ -16,7 +16,7 @@
 
 ## 0.9.0
 - Single ref sibling elements are now defined as typedefs instead of generating excess classes
-- Fix error with ` Null ` type with empty type in schema
+- Fixed error with ` Null ` type with empty type in schema
 
 ## 0.8.1
 - Added DateTime to the format for processing types ([#16](https://github.com/Carapacik/swagger_parser/issues/16))
@@ -72,8 +72,8 @@
 
 ## 0.3.1
 - Fixed error with ` @ ` in url path
-- Fix the problem with ` number ` type to map ` double `
-- Fix the problem with ` object ` type to map Dart ` Object `
+- Fixed the problem with ` number ` type to map ` double `
+- Fixed the problem with ` object ` type to map Dart ` Object `
 - Updates the README with instructions and steps to generate the code
 
 ## 0.3.0

@@ -37,7 +37,7 @@ String _parametersInConstructor(List<UniversalType> parameters) =>
         .map((e) => '\n    ${_r(e)}this.${e.name}${_d(d: e.defaultValue)},')
         .join();
 
-/// if jsonKeu is different from the name
+/// if jsonKey is different from the name
 String _jsonKey(UniversalType t) {
   if (t.jsonKey == null || t.name == t.jsonKey) {
     return '';
