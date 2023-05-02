@@ -669,7 +669,7 @@ class OpenApiParser {
       );
     } else {
       final type = map.containsKey(_typeVar)
-          ? map.containsKey(_refVar) && (map[_typeVar] as String) == _objectVar
+          ? map.containsKey(_refVar) && (map[_typeVar].toString()) == _objectVar
               ? _formatRef(
                   useSchema
                       ? (map[_schemaVar] as Map<String, dynamic>)[_refVar]
