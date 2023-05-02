@@ -1,5 +1,5 @@
 ## 0.10.3
-- now uses ` ref ` to identify return type of client method if ` type ` also exists
+- Now uses ` ref ` to identify return type of client method if ` type ` also exists
 
 ## 0.10.2
 - ` defaultValue ` in dart class now generates in constructor
