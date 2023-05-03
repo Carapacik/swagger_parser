@@ -685,7 +685,7 @@ class ClassName {
   final int intType;
   final String stringType;
   final bool boolType;
-  final num? nullableType;
+  final num nullableType;
 
   Map<String, dynamic> toJson() => _$ClassNameToJson(this);
 }
@@ -739,7 +739,7 @@ class ClassName with _$ClassName {
     @Default(false)
     required bool boolType,
     @Default(-1.1)
-    required num? nullableType,
+    required num nullableType,
   }) = _ClassName;
   
   factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
@@ -788,7 +788,7 @@ data class ClassName(
     var intType: Int = 1,
     var stringType: String = "str",
     var boolType: Boolean = false,
-    var nullableType: Double? = -1.1,
+    var nullableType: Double = -1.1,
 )
 ''';
       expect(filledContent.contents, expectedContents);

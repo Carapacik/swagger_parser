@@ -1,3 +1,7 @@
+## Next
+- Add support for ` description ` annotation
+- Refactor code related to ` nullable`
+
 ## 0.10.3
 - Now uses ` ref ` to identify return type of client method if ` type ` also exists
 

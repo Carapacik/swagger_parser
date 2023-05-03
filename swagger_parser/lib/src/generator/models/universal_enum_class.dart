@@ -7,6 +7,7 @@ class UniversalEnumClass extends UniversalDataClass {
     required this.type,
     required this.items,
     this.defaultValue,
+    super.description,
   });
 
   /// Enum type
