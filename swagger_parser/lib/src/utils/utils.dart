@@ -21,34 +21,10 @@ String classDescription(String? description) {
   return '\n/// $description';
 }
 
-/// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
-String toSuitableType(
-  UniversalType type,
-  ProgrammingLanguage lang,
-) {
-  if (type.arrayDepth == 0) {
-    return type.byLang(lang);
-  }
-  final sb = StringBuffer();
-  for (var i = 0; i < type.arrayDepth; i++) {
-    sb.write('List<');
-  }
-  sb.write(type.byLang(lang));
-  for (var i = 0; i < type.arrayDepth; i++) {
-    sb.write('>');
-  }
-  if (type.nullable || (!type.isRequired && type.defaultValue == null)) {
-    sb.write('?');
-  }
-  return sb.toString();
-}
-
-String fileImport(UniversalComponentClass dataClass) =>
-    dataClass.parameters.any(
-      (p) => toSuitableType(p, ProgrammingLanguage.dart) == 'File',
-    )
-        ? "import 'dart:io';\n\n"
-        : '';
+String fileImport(UniversalComponentClass dataClass) => dataClass.parameters
+        .any((p) => p.toSuitableType(ProgrammingLanguage.dart) == 'File')
+    ? "import 'dart:io';\n\n"
+    : '';
 
 void introMessage() {
   stdout.writeln(

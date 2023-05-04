@@ -28,7 +28,7 @@ class $className {
 String _parametersInClass(List<UniversalType> parameters) => parameters
     .map(
       (e) =>
-          '${_jsonKey(e)}\n  final ${toSuitableType(e, ProgrammingLanguage.dart)} ${e.name};',
+          '${_jsonKey(e)}\n  final ${e.toSuitableType(ProgrammingLanguage.dart)} ${e.name};',
     )
     .join();
 

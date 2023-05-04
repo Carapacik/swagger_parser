@@ -20,7 +20,7 @@ String _parameters(List<UniversalType> parameters) => parameters
     .map(
       (e) =>
           '${e.jsonKey != null && e.name != e.jsonKey ? '\n    @Json("${e.jsonKey}")' : ''}\n    '
-          'var ${e.name}: ${toSuitableType(e, ProgrammingLanguage.kotlin)}'
+          'var ${e.name}: ${e.toSuitableType(ProgrammingLanguage.kotlin)}'
           '${e.defaultValue != null ? ' = ${e.type.quoterForStringType(isDart: false)}'
               '${e.defaultValue}${e.type.quoterForStringType(isDart: false)}' : ''},',
     )

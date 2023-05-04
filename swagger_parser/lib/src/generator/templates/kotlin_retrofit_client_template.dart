@@ -1,10 +1,10 @@
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
-import '../../utils/utils.dart';
 import '../models/programming_lang.dart';
 import '../models/universal_request.dart';
 import '../models/universal_request_type.dart';
 import '../models/universal_rest_client.dart';
+import '../models/universal_type.dart';
 
 /// Return file contents for kotlin retrofit client
 /// File contents are generated using universal rest client
@@ -53,13 +53,13 @@ String _toClientRequest(UniversalRequest request) {
   }
 
   sb.write(
-    ': ${toSuitableType(request.returnType!, ProgrammingLanguage.kotlin)}\n',
+    ': ${request.returnType!.toSuitableType(ProgrammingLanguage.kotlin)}\n',
   );
   return sb.toString();
 }
 
 String _toQueryParameter(UniversalRequestType parameter) =>
     '        @${parameter.parameterType.type}${parameter.parameterType.isBody ? '' : '("${parameter.name}")'} '
-    '${parameter.type.name!.toCamel}: ${toSuitableType(parameter.type, ProgrammingLanguage.kotlin)}'
+    '${parameter.type.name!.toCamel}: ${parameter.type.toSuitableType(ProgrammingLanguage.kotlin)}'
     '${parameter.type.defaultValue != null ? ' = ${parameter.type.type.quoterForStringType(isDart: false)}'
         '${parameter.type.defaultValue}${parameter.type.type.quoterForStringType(isDart: false)}' : ''}';

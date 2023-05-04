@@ -4,6 +4,7 @@ import '../../utils/case_utils.dart';
 import '../../utils/utils.dart';
 import '../models/programming_lang.dart';
 import '../models/universal_component_class.dart';
+import '../models/universal_type.dart';
 
 /// Provides template for generating dart typedefs using JSON serializable
 String kotlinTypeDefTemplate(UniversalComponentClass dataClass) {
@@ -13,5 +14,5 @@ String kotlinTypeDefTemplate(UniversalComponentClass dataClass) {
     return '';
   }
   return '${classDescription(dataClass.description)}'
-      'typealias $className = ${toSuitableType(type, ProgrammingLanguage.kotlin)};';
+      'typealias $className = ${type.toSuitableType(ProgrammingLanguage.kotlin)};';
 }

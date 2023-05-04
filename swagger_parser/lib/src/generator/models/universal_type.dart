@@ -62,7 +62,26 @@ class UniversalType {
 
 /// Converts [UniversalType] to type from specified language
 extension UniversalTypeX on UniversalType {
-  String byLang(ProgrammingLanguage lang) {
+  /// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
+  String toSuitableType(ProgrammingLanguage lang) {
+    if (arrayDepth == 0) {
+      return _questionMark(lang);
+    }
+    final sb = StringBuffer();
+    for (var i = 0; i < arrayDepth; i++) {
+      sb.write('List<');
+    }
+    sb.write(_questionMark(lang));
+    for (var i = 0; i < arrayDepth; i++) {
+      sb.write('>');
+    }
+    if (nullable || (!isRequired && defaultValue == null)) {
+      sb.write('?');
+    }
+    return sb.toString();
+  }
+
+  String _questionMark(ProgrammingLanguage lang) {
     final questionMark =
         isRequired && !nullable || arrayDepth > 0 || defaultValue != null
             ? ''
