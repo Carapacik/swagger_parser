@@ -158,7 +158,7 @@ class OpenApiParser {
                 (e) => e.name == (rawParameter[_inConst].toString()),
               ),
               type: typeWithImport.type,
-              name: _checkForBody(rawParameter)
+              name: rawParameter[_nameConst] == _bodyConst
                   ? null
                   : rawParameter[_nameConst].toString(),
             ),
@@ -324,7 +324,7 @@ class OpenApiParser {
               (e) => e.name == (rawParameter[_inConst].toString()),
             ),
             type: typeWithImport.type,
-            name: _checkForBody(rawParameter)
+            name: rawParameter[_nameConst] == _bodyConst
                 ? null
                 : rawParameter[_nameConst].toString(),
           ),
@@ -444,6 +444,7 @@ class OpenApiParser {
             type: value[_typeConst].toString(),
             items: items,
             defaultValue: value[_defaultConst]?.toString(),
+            description: value[_descriptionConst]?.toString(),
           ),
         );
         return;
@@ -475,6 +476,7 @@ class OpenApiParser {
             imports: imports,
             parameters: parameters,
             typeDef: true,
+            description: value[_descriptionConst]?.toString(),
           ),
         );
         return;
@@ -550,9 +552,6 @@ class OpenApiParser {
       ? (map[_tagsConst] as List<dynamic>).first.toString()
       : _defaultClientTag;
 
-  /// Check map for name key equals to body
-  bool _checkForBody(Map<String, dynamic> map) => map[_nameConst] == _bodyConst;
-
   /// Format `$ref` type
   String _formatRef(Map<String, dynamic> map, {bool useSchema = false}) => p
       .basename(
@@ -561,10 +560,6 @@ class OpenApiParser {
             : map[_refConst].toString(),
       )
       .toPascal;
-
-  /// Check default value of map
-  String? _defaultValueCheck(Map<String, dynamic> map) =>
-      map[_defaultConst]?.toString();
 
   /// Get a unique name for objects without a specific name
   String get _uniqueName {
@@ -614,7 +609,8 @@ class OpenApiParser {
           name: newName,
           type: map[_typeConst].toString(),
           items: items,
-          defaultValue: _defaultValueCheck(map),
+          defaultValue: map[_defaultConst]?.toString(),
+          description: map[_descriptionConst]?.toString(),
         ),
       );
       return TypeWithImport(
@@ -725,7 +721,7 @@ class OpenApiParser {
           description: map[_descriptionConst]?.toString(),
           format: map[_formatConst]?.toString(),
           jsonKey: name,
-          defaultValue: _defaultValueCheck(map),
+          defaultValue: map[_defaultConst]?.toString(),
           isRequired: isRequired,
           nullable: root &&
               map.containsKey(_nullableConst) &&
