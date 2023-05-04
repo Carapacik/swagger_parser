@@ -490,6 +490,7 @@ class OpenApiParser {
           imports: imports,
           parameters: allOf != null ? [] : parameters,
           allOf: allOf,
+          description: value[_descriptionConst]?.toString(),
         ),
       );
     });

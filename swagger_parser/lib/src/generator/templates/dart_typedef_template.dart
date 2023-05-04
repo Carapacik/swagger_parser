@@ -13,7 +13,7 @@ String dartTypeDefTemplate(UniversalComponentClass dataClass) {
   if (type == null) {
     return '';
   }
-  return '''
-${import != null ? "import '${import.toSnake}.dart';\n\n" : ''}typedef $className = ${toSuitableType(type, ProgrammingLanguage.dart)};
-''';
+  return '${import != null ? "import '${import.toSnake}.dart';\n\n" : ''}'
+      '${classDescription(dataClass.description)}'
+      'typedef $className = ${toSuitableType(type, ProgrammingLanguage.dart)};';
 }

@@ -10,7 +10,7 @@ String kotlinMoshiDtoTemplate(UniversalComponentClass dataClass) {
   return '''
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-
+${classDescription(dataClass.description)}
 @JsonClass(generateAdapter = true)
 data class ${dataClass.name.toPascal}(${_parameters(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n)' : ')'}
 ''';

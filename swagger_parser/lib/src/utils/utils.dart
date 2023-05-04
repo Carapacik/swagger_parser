@@ -13,6 +13,14 @@ String dartImports({required Set<String> imports, String? pathPrefix}) {
   return '\n${imports.map((import) => "import '${pathPrefix ?? ''}${import.toSnake}.dart';").join('\n')}\n';
 }
 
+/// Provides class description
+String classDescription(String? description) {
+  if (description == null || description.isEmpty) {
+    return '';
+  }
+  return '\n/// $description';
+}
+
 /// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
 String toSuitableType(
   UniversalType type,

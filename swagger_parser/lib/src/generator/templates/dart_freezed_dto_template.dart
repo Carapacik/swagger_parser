@@ -15,7 +15,7 @@ ${fileImport(dataClass)}import 'package:freezed_annotation/freezed_annotation.da
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';
-
+${classDescription(dataClass.description)}
 @Freezed()
 class $className with _\$$className {
   const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;

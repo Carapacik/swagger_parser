@@ -13,7 +13,7 @@ String dartJsonSerializableDtoTemplate(UniversalComponentClass dataClass) {
 ${fileImport(dataClass)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.g.dart';
-
+${classDescription(dataClass.description)}
 @JsonSerializable()
 class $className {
   const $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersInConstructor(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''});
