@@ -205,11 +205,13 @@ class OpenApiParser {
                 parameterType: HttpParameterType.part,
                 type: UniversalType(
                   type: currentType.type,
-                  arrayDepth: currentType.arrayDepth,
                   name: 'file',
+                  description: currentType.description,
+                  format: currentType.format,
                   defaultValue: currentType.defaultValue,
                   isRequired: currentType.isRequired,
-                  format: currentType.format,
+                  nullable: currentType.nullable,
+                  arrayDepth: currentType.arrayDepth,
                 ),
               ),
             );
@@ -228,15 +230,17 @@ class OpenApiParser {
               types.add(
                 UniversalRequestType(
                   parameterType: HttpParameterType.part,
+                  name: e.key,
                   type: UniversalType(
                     type: currentType.type,
-                    arrayDepth: currentType.arrayDepth,
                     name: e.key,
+                    description: currentType.description,
+                    format: currentType.format,
                     defaultValue: currentType.defaultValue,
                     isRequired: currentType.isRequired,
-                    format: currentType.format,
+                    nullable: currentType.nullable,
+                    arrayDepth: currentType.arrayDepth,
                   ),
-                  name: e.key,
                 ),
               );
             }
@@ -255,12 +259,14 @@ class OpenApiParser {
             UniversalRequestType(
               parameterType: HttpParameterType.body,
               type: UniversalType(
-                name: _bodyConst,
                 type: currentType.type,
-                arrayDepth: currentType.arrayDepth,
+                name: _bodyConst,
+                description: currentType.description,
+                format: currentType.format,
                 defaultValue: currentType.defaultValue,
                 isRequired: currentType.isRequired,
-                format: currentType.format,
+                nullable: currentType.nullable,
+                arrayDepth: currentType.arrayDepth,
               ),
             ),
           );
@@ -437,18 +443,18 @@ class OpenApiParser {
             name: key,
             type: value[_typeConst].toString(),
             items: items,
-            defaultValue: _defaultValueCheck(value),
+            defaultValue: value[_defaultConst]?.toString(),
           ),
         );
         return;
       } else if (value.containsKey(_allOfConst)) {
-        for (final element in value[_allOfConst] as List) {
-          if ((element as Map<String, dynamic>).containsKey(_refConst)) {
-            refs.add(_formatRef(element[_refConst].toString()));
+        for (final map in value[_allOfConst] as List) {
+          if ((map as Map<String, dynamic>).containsKey(_refConst)) {
+            refs.add(_formatRef(map));
             continue;
           }
-          if (element.containsKey(_propertiesConst)) {
-            findParamsAndImports(element);
+          if (map.containsKey(_propertiesConst)) {
+            findParamsAndImports(map);
           }
         }
       } else if (value.containsKey(_typeConst) ||
@@ -548,11 +554,17 @@ class OpenApiParser {
   bool _checkForBody(Map<String, dynamic> map) => map[_nameConst] == _bodyConst;
 
   /// Format `$ref` type
-  String _formatRef(String ref) => p.basename(ref).toPascal;
+  String _formatRef(Map<String, dynamic> map, {bool useSchema = false}) => p
+      .basename(
+        useSchema
+            ? (map[_schemaConst] as Map<String, dynamic>)[_refConst].toString()
+            : map[_refConst].toString(),
+      )
+      .toPascal;
 
   /// Check default value of map
   String? _defaultValueCheck(Map<String, dynamic> map) =>
-      map.containsKey(_defaultConst) ? map[_defaultConst].toString() : null;
+      map[_defaultConst]?.toString();
 
   /// Get a unique name for objects without a specific name
   String get _uniqueName {
@@ -581,12 +593,14 @@ class OpenApiParser {
       return TypeWithImport(
         type: UniversalType(
           type: arrayType.type.type,
-          format: arrayType.type.format,
           name: (dartKeywords.contains(name) ? '$name $_valueConst' : name)
               ?.toCamel,
+          description: arrayType.type.description,
+          format: arrayType.type.format,
           jsonKey: name,
           defaultValue: arrayType.type.defaultValue,
           isRequired: isRequired,
+          nullable: arrayType.type.nullable,
           arrayDepth: arrayType.type.arrayDepth + 1,
         ),
         import: arrayType.import,
@@ -606,15 +620,16 @@ class OpenApiParser {
       return TypeWithImport(
         type: UniversalType(
           type: newName.toPascal,
-          format: map.containsKey(_formatConst)
-              ? map[_formatConst].toString()
-              : null,
           name: (dartKeywords.contains(newName)
                   ? '$newName $_enumConst'
                   : newName)
               .toCamel,
+          description: map[_descriptionConst]?.toString(),
+          format: map.containsKey(_formatConst)
+              ? map[_formatConst].toString()
+              : null,
           jsonKey: newName,
-          defaultValue: _defaultValueCheck(map),
+          defaultValue: map[_defaultConst]?.toString(),
           isRequired: isRequired,
         ),
         import: newName,
@@ -666,15 +681,16 @@ class OpenApiParser {
       return TypeWithImport(
         type: UniversalType(
           type: '$newName $_valueConst'.toPascal,
-          format: map.containsKey(_formatConst)
-              ? map[_formatConst].toString()
-              : null,
           name: (dartKeywords.contains(newName)
                   ? '$newName $_valueConst'
                   : newName)
               .toCamel,
+          description: map[_descriptionConst]?.toString(),
+          format: map.containsKey(_formatConst)
+              ? map[_formatConst].toString()
+              : null,
           jsonKey: newName,
-          defaultValue: _defaultValueCheck(map),
+          defaultValue: map[_defaultConst]?.toString(),
           isRequired: isRequired,
         ),
         import: '$newName $_valueConst',
@@ -683,25 +699,14 @@ class OpenApiParser {
       final type = map.containsKey(_typeConst)
           ? map.containsKey(_refConst) &&
                   map[_typeConst].toString() == _objectConst
-              ? _formatRef(
-                  useSchema
-                      ? (map[_schemaConst] as Map<String, dynamic>)[_refConst]
-                          .toString()
-                      : map[_refConst].toString(),
-                )
+              ? _formatRef(map)
               : map[_typeConst].toString()
           : map.containsKey(_anyOfConst) ||
                   map.containsKey(_oneOfConst) ||
                   allOfObject
               ? _objectConst
               : map.containsKey(_refConst)
-                  ? _formatRef(
-                      useSchema
-                          ? (map[_schemaConst]
-                                  as Map<String, dynamic>)[_refConst]
-                              .toString()
-                          : map[_refConst].toString(),
-                    )
+                  ? _formatRef(map)
                   : _objectConst;
       final import = map.containsKey(_typeConst) ||
               map.containsKey(_anyOfConst) ||
@@ -709,32 +714,22 @@ class OpenApiParser {
               allOfObject
           ? null
           : map.containsKey(_refConst)
-              ? _formatRef(
-                  useSchema
-                      ? (map[_schemaConst] as Map<String, dynamic>)[_refConst]
-                          .toString()
-                      : map[_refConst].toString(),
-                )
+              ? _formatRef(map)
               : null;
-      final nullable = root &&
-          map.containsKey(_nullableConst) &&
-          map[_nullableConst]!.toString().toBool();
 
       return TypeWithImport(
         type: UniversalType(
           type: type,
-          format: map.containsKey(_formatConst)
-              ? map[_formatConst].toString()
-              : null,
           name: (dartKeywords.contains(name) ? '$name $_valueConst' : name)
               ?.toCamel,
+          description: map[_descriptionConst]?.toString(),
+          format: map[_formatConst]?.toString(),
           jsonKey: name,
           defaultValue: _defaultValueCheck(map),
           isRequired: isRequired,
-          nullable: nullable,
-          description: map.containsKey(_descriptionConst)
-              ? map[_descriptionConst].toString()
-              : null,
+          nullable: root &&
+              map.containsKey(_nullableConst) &&
+              map[_nullableConst].toString().toBool(),
         ),
         import: import,
       );
