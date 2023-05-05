@@ -1,4 +1,5 @@
-## Next
+## 1.0
+- Require Dart >= 2.19
 - Add support for ` description ` annotation
 - Refactor code related to ` nullable`
 
