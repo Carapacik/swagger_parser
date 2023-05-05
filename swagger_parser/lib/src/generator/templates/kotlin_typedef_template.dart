@@ -14,5 +14,5 @@ String kotlinTypeDefTemplate(UniversalComponentClass dataClass) {
     return '';
   }
   return '${descriptionComment(dataClass.description)}'
-      'typealias $className = ${type.toSuitableType(ProgrammingLanguage.kotlin)};';
+      'typealias $className = ${type.toSuitableType(ProgrammingLanguage.kotlin)};\n';
 }
