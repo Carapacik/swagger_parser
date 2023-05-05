@@ -13,8 +13,8 @@ String dartJsonSerializableDtoTemplate(UniversalComponentClass dataClass) {
 ${fileImport(dataClass)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.g.dart';
-${classDescription(dataClass.description)}
-@JsonSerializable()
+
+${descriptionComment(dataClass.description)}@JsonSerializable()
 class $className {
   const $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersInConstructor(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''});
   
@@ -27,8 +27,8 @@ class $className {
 
 String _parametersInClass(List<UniversalType> parameters) => parameters
     .map(
-      (e) =>
-          '${_jsonKey(e)}\n  final ${e.toSuitableType(ProgrammingLanguage.dart)} ${e.name};',
+      (e) => '\n${descriptionComment(e.description, tab: '  ')}'
+          '${_jsonKey(e)}  final ${e.toSuitableType(ProgrammingLanguage.dart)} ${e.name};',
     )
     .join();
 
@@ -42,7 +42,7 @@ String _jsonKey(UniversalType t) {
   if (t.jsonKey == null || t.name == t.jsonKey) {
     return '';
   }
-  return "\n  @JsonKey(name: '${t.jsonKey}')";
+  return "  @JsonKey(name: '${t.jsonKey}')\n";
 }
 
 /// return required if required

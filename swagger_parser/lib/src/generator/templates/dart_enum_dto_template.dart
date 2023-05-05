@@ -12,8 +12,8 @@ String dartEnumDtoTemplate(
   final className = enumClass.name.toPascal;
   return '''
 import '${freezed ? 'package:freezed_annotation/freezed_annotation.dart' : 'package:json_annotation/json_annotation.dart'}';
-${classDescription(enumClass.description)}
-@JsonEnum()
+
+${descriptionComment(enumClass.description)}@JsonEnum()
 enum $className {
 ${enumClass.items.map((e) => _jsonValue(enumClass.type, e)).join(',\n')};
 

@@ -14,11 +14,11 @@ String dartImports({required Set<String> imports, String? pathPrefix}) {
 }
 
 /// Provides class description
-String classDescription(String? description) {
+String descriptionComment(String? description, {String tab = ''}) {
   if (description == null || description.isEmpty) {
     return '';
   }
-  return '\n/// $description';
+  return '$tab/// $description\n';
 }
 
 String fileImport(UniversalComponentClass dataClass) => dataClass.parameters
