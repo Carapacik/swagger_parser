@@ -1399,17 +1399,10 @@ typealias AnotherValue = Another;
   });
 
   group('nullable', () {
-    test('dart + json_serializable data class parameters nullability',
-        () async {
+    test('dart + json_serializable', () async {
       const dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {
-          'camelClass',
-          'snake_class',
-          'kebab-class',
-          'PascalClass',
-          'Space class'
-        },
+        imports: {},
         parameters: [
           UniversalType(
             type: 'string',
@@ -1449,12 +1442,6 @@ typealias AnotherValue = Another;
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
 
-import 'camel_class.dart';
-import 'snake_class.dart';
-import 'kebab_class.dart';
-import 'pascal_class.dart';
-import 'space_class.dart';
-
 part 'class_name.g.dart';
 
 @JsonSerializable()
@@ -1481,16 +1468,10 @@ class ClassName {
       expect(filledContent.contents, expectedContents);
     });
 
-    test('dart + freezed data class parameters nullability', () async {
+    test('dart + freezed', () async {
       const dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {
-          'camelClass',
-          'snake_class',
-          'kebab-class',
-          'PascalClass',
-          'Space class'
-        },
+        imports: {},
         parameters: [
           UniversalType(
             type: 'string',
@@ -1530,12 +1511,6 @@ class ClassName {
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'camel_class.dart';
-import 'snake_class.dart';
-import 'kebab_class.dart';
-import 'pascal_class.dart';
-import 'space_class.dart';
-
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
@@ -1555,16 +1530,10 @@ class ClassName with _$ClassName {
       expect(filledContent.contents, expectedContents);
     });
 
-    test('kotlin + moshi data class parameters nullability', () async {
+    test('kotlin + moshi', () async {
       const dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {
-          'camelClass',
-          'snake_class',
-          'kebab-class',
-          'PascalClass',
-          'Space class'
-        },
+        imports: {},
         parameters: [
           UniversalType(
             type: 'string',
@@ -1613,6 +1582,212 @@ data class ClassName(
     var list3: String,
     var list4: String?,
     var list5: String?,
+)
+''';
+      expect(filledContent.contents, expectedContent);
+    });
+  });
+
+  group('description', () {
+    test('dart + json_serializable', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        description: 'Test class',
+        parameters: [
+          UniversalType(
+            type: 'string',
+            description: 'Some string',
+            name: 'stringType',
+          ),
+          UniversalType(
+            type: 'string',
+            description: 'Default value',
+            name: 'defaultType',
+            defaultValue: 'str',
+          ),
+          UniversalType(
+            type: 'string',
+            description: 'JsonKey here',
+            name: 'jsonKeyValue',
+            jsonKey: 'json_key_value',
+          ),
+          UniversalType(
+            type: 'string',
+            description: 'Mega mind',
+            name: 'megaMind',
+            jsonKey: 'mega_MIND',
+          ),
+          UniversalType(
+            type: 'object',
+            description: '',
+            name: 'emptyDescription',
+          ),
+        ],
+      );
+      const fillController = FillController();
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContents = r'''
+import 'package:json_annotation/json_annotation.dart';
+
+part 'class_name.g.dart';
+
+/// Test class
+@JsonSerializable()
+class ClassName {
+  const ClassName({
+    required this.stringType,
+    required this.jsonKeyValue,
+    required this.megaMind,
+    required this.emptyDescription,
+    this.defaultType = str,
+  });
+  
+  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  
+  /// Some string
+  final String stringType;
+  /// Default value
+  final String defaultType;
+  /// JsonKey here
+  @JsonKey(name: 'json_key_value')
+  final String jsonKeyValue;
+  /// Mega mind
+  @JsonKey(name: 'mega_MIND')
+  final String megaMind;
+  final Object emptyDescription;
+
+  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('dart + freezed', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        description: 'Test class',
+        parameters: [
+          UniversalType(
+            type: 'string',
+            description: 'Some string',
+            name: 'stringType',
+          ),
+          UniversalType(
+            type: 'string',
+            description: 'Default value',
+            name: 'defaultType',
+            defaultValue: 'str',
+          ),
+          UniversalType(
+            type: 'string',
+            description: 'JsonKey here',
+            name: 'jsonKeyValue',
+            jsonKey: 'json_key_value',
+          ),
+          UniversalType(
+            type: 'string',
+            description: 'Mega mind',
+            name: 'megaMind',
+            jsonKey: 'mega_MIND',
+          ),
+          UniversalType(
+            type: 'object',
+            description: '',
+            name: 'emptyDescription',
+          ),
+        ],
+      );
+      const fillController = FillController(freezed: true);
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContents = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'class_name.freezed.dart';
+part 'class_name.g.dart';
+
+/// Test class
+@Freezed()
+class ClassName with _$ClassName {
+  const factory ClassName({
+    /// Some string
+    required String stringType,
+    /// JsonKey here
+    @JsonKey(name: 'json_key_value')
+    required String jsonKeyValue,
+    /// Mega mind
+    @JsonKey(name: 'mega_MIND')
+    required String megaMind,
+    required Object emptyDescription,
+    /// Default value
+    @Default('str')
+    required String defaultType,
+  }) = _ClassName;
+  
+  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('kotlin + moshi ', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        description: 'Test class',
+        parameters: [
+          UniversalType(
+            type: 'string',
+            description: 'Some string',
+            name: 'stringType',
+          ),
+          UniversalType(
+            type: 'string',
+            description: 'Default value',
+            name: 'defaultType',
+            defaultValue: 'str',
+          ),
+          UniversalType(
+            type: 'string',
+            description: 'JsonKey here',
+            name: 'jsonKeyValue',
+            jsonKey: 'json_key_value',
+          ),
+          UniversalType(
+            type: 'string',
+            description: 'Mega mind',
+            name: 'megaMind',
+            jsonKey: 'mega_MIND',
+          ),
+          UniversalType(
+            type: 'object',
+            description: '',
+            name: 'emptyDescription',
+          ),
+        ],
+      );
+      const fillController =
+          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      final filledContent = await fillController.fillDtoContent(dataClass);
+      const expectedContent = '''
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+/// Test class
+@JsonClass(generateAdapter = true)
+data class ClassName(
+    /// Some string
+    var stringType: String,
+    /// Default value
+    var defaultType: String = "str",
+    /// JsonKey here
+    @Json("json_key_value")
+    var jsonKeyValue: String,
+    /// Mega mind
+    @Json("mega_MIND")
+    var megaMind: String,
+    var emptyDescription: Any,
 )
 ''';
       expect(filledContent.contents, expectedContent);

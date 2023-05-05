@@ -32,10 +32,13 @@ String _parametersInClass(List<UniversalType> parameters) => parameters
     )
     .join();
 
-String _parametersInConstructor(List<UniversalType> parameters) =>
-    List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)))
-        .map((e) => '\n    ${_r(e)}this.${e.name}${_d(d: e.defaultValue)},')
-        .join();
+String _parametersInConstructor(List<UniversalType> parameters) {
+  final sortedByRequired =
+      List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)));
+  return sortedByRequired
+      .map((e) => '\n    ${_r(e)}this.${e.name}${_d(d: e.defaultValue)},')
+      .join();
+}
 
 /// if jsonKey is different from the name
 String _jsonKey(UniversalType t) {

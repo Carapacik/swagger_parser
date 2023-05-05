@@ -59,7 +59,6 @@ class OpenApiParser {
   static const _componentsConst = 'components';
   static const _consumesConst = 'consumes';
   static const _contentConst = 'content';
-  static const _defaultClientTag = 'client';
   static const _defaultConst = 'default';
   static const _definitionsConst = 'definitions';
   static const _descriptionConst = 'description';
@@ -551,7 +550,7 @@ class OpenApiParser {
   /// Get tag for name
   String _getTag(Map<String, dynamic> map) => map.containsKey(_tagsConst)
       ? (map[_tagsConst] as List<dynamic>).first.toString()
-      : _defaultClientTag;
+      : 'client';
 
   /// Format `$ref` type
   String _formatRef(Map<String, dynamic> map, {bool useSchema = false}) => p
