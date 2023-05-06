@@ -39,6 +39,9 @@ class Generator {
       }
       _programmingLanguage = parsedLang;
     }
+    if (yamlConfig.rootInterface != null) {
+      _rootInterface = yamlConfig.rootInterface!;
+    }
 
     if (yamlConfig.freezed != null) {
       _freezed = yamlConfig.freezed!;
@@ -60,6 +63,7 @@ class Generator {
     required ProgrammingLanguage language,
     String? clientPostfix = 'ApiClient',
     bool freezed = false,
+    bool rootInterface = true,
     bool squishClients = false,
     bool isYaml = false,
   }) {
@@ -67,6 +71,7 @@ class Generator {
     _programmingLanguage = language;
     _outputDirectory = '';
     _clientPostfix = clientPostfix ?? 'ApiClient';
+    _rootInterface = rootInterface;
     _squishClients = squishClients;
     _freezed = freezed;
     _isYaml = isYaml;
@@ -84,10 +89,13 @@ class Generator {
   /// Client postfix
   String _clientPostfix = 'ApiClient';
 
-  /// User freezed to generate DTOs
+  /// Generate root interface for all Clients
+  bool _rootInterface = true;
+
+  /// Use freezed to generate DTOs
   bool _freezed = false;
 
-  /// Is squish Clients
+  /// Squish Clients in one folder
   bool _squishClients = false;
 
   /// Is the schema format YAML
@@ -130,6 +138,7 @@ class Generator {
     final writeController = FillController(
       clientPostfix: _clientPostfix.toPascal,
       programmingLanguage: _programmingLanguage,
+      rootInterface: _rootInterface,
       freezed: _freezed,
       squishClients: _squishClients,
     );

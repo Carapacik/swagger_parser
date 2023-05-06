@@ -60,6 +60,15 @@ class YamlConfig {
       _language = yamlConfig['language'].toString();
     }
 
+    if (yamlConfig.containsKey('root_interface')) {
+      if (yamlConfig['root_interface'] is! bool?) {
+        throw const ConfigException(
+          "Config parameter 'root_interface' must be bool.",
+        );
+      }
+      _rootInterface = yamlConfig['root_interface'] as bool?;
+    }
+
     if (yamlConfig.containsKey('client_postfix')) {
       final postfix = yamlConfig['client_postfix']?.toString();
       _clientPostfix =
@@ -87,6 +96,7 @@ class YamlConfig {
   String? _schemaFilePath;
   String? _language;
   String? _clientPostfix;
+  bool? _rootInterface;
   bool? _squishClients;
   bool? _freezed;
 
@@ -97,6 +107,8 @@ class YamlConfig {
   String? get language => _language;
 
   String? get clientPostfix => _clientPostfix;
+
+  bool? get rootInterface => _rootInterface;
 
   bool? get squishClients => _squishClients;
 

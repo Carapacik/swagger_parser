@@ -9,15 +9,18 @@ class FillController {
   const FillController({
     String clientPostfix = 'ApiClient',
     ProgrammingLanguage programmingLanguage = ProgrammingLanguage.dart,
+    bool rootInterface = true,
     bool squishClients = false,
     bool freezed = false,
   })  : _clientPostfix = clientPostfix,
         _programmingLanguage = programmingLanguage,
+        _rootInterface = rootInterface,
         _squishClients = squishClients,
         _freezed = freezed;
 
   final ProgrammingLanguage _programmingLanguage;
   final String _clientPostfix;
+  final bool _rootInterface;
   final bool _freezed;
   final bool _squishClients;
 
