@@ -1623,6 +1623,12 @@ data class ClassName(
             description: '',
             name: 'emptyDescription',
           ),
+          UniversalType(
+            type: 'string',
+            description: 'List of data',
+            arrayDepth: 1,
+            name: 'list',
+          ),
         ],
       );
       const fillController = FillController();
@@ -1640,6 +1646,7 @@ class ClassName {
     required this.jsonKeyValue,
     required this.megaMind,
     required this.emptyDescription,
+    required this.list,
     this.defaultType = str,
   });
   
@@ -1656,6 +1663,8 @@ class ClassName {
   @JsonKey(name: 'mega_MIND')
   final String megaMind;
   final Object emptyDescription;
+  /// List of data
+  final List<String> list;
 
   Map<String, dynamic> toJson() => _$ClassNameToJson(this);
 }
@@ -1697,6 +1706,12 @@ class ClassName {
             description: '',
             name: 'emptyDescription',
           ),
+          UniversalType(
+            type: 'string',
+            description: 'List of data',
+            arrayDepth: 1,
+            name: 'list',
+          ),
         ],
       );
       const fillController = FillController(freezed: true);
@@ -1720,6 +1735,8 @@ class ClassName with _$ClassName {
     @JsonKey(name: 'mega_MIND')
     required String megaMind,
     required Object emptyDescription,
+    /// List of data
+    required List<String> list,
     /// Default value
     @Default('str')
     required String defaultType,
@@ -1765,6 +1782,12 @@ class ClassName with _$ClassName {
             description: '',
             name: 'emptyDescription',
           ),
+          UniversalType(
+            type: 'string',
+            description: 'List of data',
+            arrayDepth: 1,
+            name: 'list',
+          ),
         ],
       );
       const fillController =
@@ -1788,6 +1811,8 @@ data class ClassName(
     @Json("mega_MIND")
     var megaMind: String,
     var emptyDescription: Any,
+    /// List of data
+    var list: List<String>,
 )
 ''';
       expect(filledContent.contents, expectedContent);

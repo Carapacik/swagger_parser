@@ -590,7 +590,7 @@ class OpenApiParser {
           type: arrayType.type.type,
           name: (dartKeywords.contains(name) ? '$name $_valueConst' : name)
               ?.toCamel,
-          description: arrayType.type.description,
+          description: map[_descriptionConst]?.toString(),
           format: arrayType.type.format,
           jsonKey: name,
           defaultValue: arrayType.type.defaultValue,
