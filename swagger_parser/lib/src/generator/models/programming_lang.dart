@@ -4,10 +4,12 @@ import '../templates/dart_enum_dto_template.dart';
 import '../templates/dart_freezed_dto_template.dart';
 import '../templates/dart_json_serializable_dto_template.dart';
 import '../templates/dart_retrofit_client_template.dart';
+import '../templates/dart_root_interface_template.dart';
 import '../templates/dart_typedef_template.dart';
 import '../templates/kotlin_enum_dto_template.dart';
 import '../templates/kotlin_moshi_dto_template.dart';
 import '../templates/kotlin_retrofit_client_template.dart';
+import '../templates/kotlin_root_interface_template.dart';
 import '../templates/kotlin_typedef_template.dart';
 import 'universal_component_class.dart';
 import 'universal_data_class.dart';
@@ -78,6 +80,26 @@ enum ProgrammingLanguage {
       case ProgrammingLanguage.kotlin:
         return kotlinRetrofitClientTemplate(
           restClient: restClient,
+          postfix: postfix,
+        );
+    }
+  }
+
+  /// Determines template for generating root interface
+  /// for clients by language
+  String rootInterfaceFileContent(
+    Iterable<String> clientsNames,
+    String? postfix,
+  ) {
+    switch (this) {
+      case ProgrammingLanguage.dart:
+        return dartRootInterfaceTemplate(
+          clientsNames: clientsNames,
+          postfix: postfix,
+        );
+      case ProgrammingLanguage.kotlin:
+        return kotlinRootInterfaceTemplate(
+          clientsNames: clientsNames,
           postfix: postfix,
         );
     }

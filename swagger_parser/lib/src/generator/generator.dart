@@ -138,7 +138,6 @@ class Generator {
     final writeController = FillController(
       clientPostfix: _clientPostfix.toPascal,
       programmingLanguage: _programmingLanguage,
-      rootInterface: _rootInterface,
       freezed: _freezed,
       squishClients: _squishClients,
     );
@@ -148,6 +147,9 @@ class Generator {
     }
     for (final dataClass in _dataClasses) {
       files.add(await writeController.fillDtoContent(dataClass));
+    }
+    if (_rootInterface) {
+      files.add(await writeController.fillRootInterface(_dataClasses));
     }
     return files;
   }

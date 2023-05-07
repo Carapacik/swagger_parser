@@ -9,18 +9,15 @@ class FillController {
   const FillController({
     String clientPostfix = 'ApiClient',
     ProgrammingLanguage programmingLanguage = ProgrammingLanguage.dart,
-    bool rootInterface = true,
     bool squishClients = false,
     bool freezed = false,
   })  : _clientPostfix = clientPostfix,
         _programmingLanguage = programmingLanguage,
-        _rootInterface = rootInterface,
         _squishClients = squishClients,
         _freezed = freezed;
 
   final ProgrammingLanguage _programmingLanguage;
   final String _clientPostfix;
-  final bool _rootInterface;
   final bool _freezed;
   final bool _squishClients;
 
@@ -51,6 +48,19 @@ class FillController {
       name: '$folderName$fileName.${_programmingLanguage.fileExtension}',
       contents: _programmingLanguage.restClientFileContent(
         restClient,
+        _squishClients || _clientPostfix != 'ApiClient' ? _clientPostfix : null,
+      ),
+    );
+  }
+
+  Future<GeneratedFile> fillRootInterface(
+    Iterable<UniversalDataClass> dataClasses,
+  ) async {
+    final clientsNames = dataClasses.map((e) => e.name);
+    return GeneratedFile(
+      name: 'rest_client${_programmingLanguage.fileExtension}',
+      contents: _programmingLanguage.rootInterfaceFileContent(
+        clientsNames,
         _squishClients || _clientPostfix != 'ApiClient' ? _clientPostfix : null,
       ),
     );
