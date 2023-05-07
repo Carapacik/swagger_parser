@@ -25,6 +25,9 @@ class RestClient implements IRestClient {
   final Dio _dio;
   final String _baseUrl;
 
+${_p(clientsNames, postfix)}
+
+${_r(clientsNames, postfix)}
 }
 ''';
 }
@@ -41,4 +44,16 @@ String _clientsImport(
 
 String _interfaceGetters(Set<String> names, String postfix) => names
     .map((n) => '  ${n.toPascal + postfix.toPascal} get ${n.toCamel};')
+    .join('\n\n');
+
+String _p(Set<String> names, String postfix) => names
+    .map((n) => '  ${n.toPascal + postfix.toPascal}? _${n.toCamel};')
+    .join('\n');
+
+String _r(Set<String> names, String postfix) => names
+    .map(
+      (n) =>
+          '  @override\n  ${n.toPascal + postfix.toPascal} get ${n.toCamel} => '
+          '_${n.toCamel} ??= ${n.toPascal + postfix.toPascal}(_dio, baseUrl: _baseUrl);',
+    )
     .join('\n\n');
