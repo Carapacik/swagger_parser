@@ -7,8 +7,8 @@ import 'models/universal_rest_client.dart';
 /// Handles generating files
 class FillController {
   const FillController({
-    String clientPostfix = 'ApiClient',
     ProgrammingLanguage programmingLanguage = ProgrammingLanguage.dart,
+    String clientPostfix = 'Client',
     bool squishClients = false,
     bool freezed = false,
   })  : _clientPostfix = clientPostfix,
@@ -22,8 +22,7 @@ class FillController {
   final bool _squishClients;
 
   /// Return [GeneratedFile] generated from given [UniversalDataClass]
-  Future<GeneratedFile> fillDtoContent(UniversalDataClass dataClass) async =>
-      GeneratedFile(
+  GeneratedFile fillDtoContent(UniversalDataClass dataClass) => GeneratedFile(
         name: 'shared_models/'
             '${_programmingLanguage == ProgrammingLanguage.dart ? dataClass.name.toSnake : dataClass.name.toPascal}'
             '.${_programmingLanguage.fileExtension}',
@@ -32,36 +31,28 @@ class FillController {
       );
 
   /// Return [GeneratedFile] generated from given [UniversalRestClient]
-  Future<GeneratedFile> fillRestClientContent(
-    UniversalRestClient restClient,
-  ) async {
+  GeneratedFile fillRestClientContent(UniversalRestClient restClient) {
     final fileName = _programmingLanguage == ProgrammingLanguage.dart
-        ? _squishClients || _clientPostfix != 'ApiClient'
-            ? (restClient.name + _clientPostfix).toSnake
-            : 'rest_client'
-        : _squishClients || _clientPostfix != 'ApiClient'
-            ? restClient.name.toPascal + _clientPostfix
-            : 'RestClient';
-    final folderName =
-        _squishClients ? 'clients/' : '${restClient.name.toSnake}/';
+        ? '${restClient.name}_$_clientPostfix'.toSnake
+        : restClient.name.toPascal + _clientPostfix.toPascal;
+    final folderName = _squishClients ? 'clients' : restClient.name.toSnake;
     return GeneratedFile(
-      name: '$folderName$fileName.${_programmingLanguage.fileExtension}',
+      name: '$folderName/$fileName.${_programmingLanguage.fileExtension}',
       contents: _programmingLanguage.restClientFileContent(
         restClient,
-        _squishClients || _clientPostfix != 'ApiClient' ? _clientPostfix : null,
+        restClient.name.toPascal + _clientPostfix.toPascal,
       ),
     );
   }
 
-  Future<GeneratedFile> fillRootInterface(
-    Iterable<UniversalDataClass> dataClasses,
-  ) async {
-    final clientsNames = dataClasses.map((e) => e.name);
+  GeneratedFile fillRootInterface(Iterable<UniversalRestClient> clients) {
+    final clientsNames = clients.map((c) => c.name.toPascal).toSet();
     return GeneratedFile(
-      name: 'rest_client${_programmingLanguage.fileExtension}',
+      name: 'rest_client.${_programmingLanguage.fileExtension}',
       contents: _programmingLanguage.rootInterfaceFileContent(
         clientsNames,
-        _squishClients || _clientPostfix != 'ApiClient' ? _clientPostfix : null,
+        postfix: _clientPostfix.toPascal,
+        squishClients: _squishClients,
       ),
     );
   }

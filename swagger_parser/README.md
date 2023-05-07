@@ -45,11 +45,11 @@ An example of YAML is shown below
 ```yaml
 swagger_parser:
   schema_path: assets/openapi.json # Required. Sets the OpenApi schema path directory for api definition
-  output_directory: lib/api # Required. Sets output directory for generated files (api clients and models)
+  output_directory: lib/api # Required. Sets output directory for generated files (Clients and Dtos)
   language: dart # Optional. Sets the programming language. Current available languages are: dart, kotlin. Default: dart
-  root_interface: true # Optional. Set 'true' to generate interface with all clients instances. Default: true
+  root_interface: true # Optional (dart only). Set 'true' to generate interface with all clients instances. Default: true
   squish_clients: false # Optional. Set 'true' to put all clients in one folder. Default: false
-  client_postfix: ApiClient # Optional. Set postfix for client folder and Class. Works if there is only a single class or `squish_clients` is true. Default: ApiClient
+  client_postfix: Client # Optional. Set postfix for client folder and Class. Works if there is only a single class or `squish_clients` is true. Default: Client
   freezed: false # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
 ```
 

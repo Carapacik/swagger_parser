@@ -21,7 +21,7 @@ String descriptionComment(String? description, {String tab = ''}) {
   return '$tab/// $description\n';
 }
 
-String fileImport(UniversalComponentClass dataClass) => dataClass.parameters
+String ioImport(UniversalComponentClass dataClass) => dataClass.parameters
         .any((p) => p.toSuitableType(ProgrammingLanguage.dart) == 'File')
     ? "import 'dart:io';\n\n"
     : '';

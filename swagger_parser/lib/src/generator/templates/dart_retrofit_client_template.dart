@@ -12,18 +12,14 @@ import '../models/universal_type.dart';
 /// Provides template for generating dart Retrofit client
 String dartRetrofitClientTemplate({
   required UniversalRestClient restClient,
-  String? postfix,
+  required String name,
 }) {
-  final name = postfix != null ? restClient.name.toPascal + postfix : 'Client';
-  final partFile = postfix != null
-      ? '${restClient.name.toSnake}_${postfix.toSnake}'
-      : 'rest_client';
   final sb = StringBuffer(
     '''
 ${_fileImport(restClient)}import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../shared_models/')}
-part '$partFile.g.dart';
+part '${name.toSnake}.g.dart';
 
 @RestApi()
 abstract class $name {

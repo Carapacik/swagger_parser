@@ -1,6 +1,44 @@
+import '../../utils/case_utils.dart';
+
 String dartRootInterfaceTemplate({
-  required Iterable<String> clientsNames,
-  String? postfix,
+  required Set<String> clientsNames,
+  required String postfix,
+  required bool squishClients,
 }) {
-  return '';
+  if (clientsNames.isEmpty) {
+    return '';
+  }
+  return '''
+import 'package:dio/dio.dart';
+${_clientsImport(clientsNames, postfix, squishClients: squishClients)}
+abstract class IRestClient {
+${_interfaceGetters(clientsNames, postfix)}
 }
+
+class RestClient implements IRestClient {
+  RestClient({
+    required Dio dio,
+    required String baseUrl,
+  })  : _dio = dio,
+        _baseUrl = baseUrl;
+
+  final Dio _dio;
+  final String _baseUrl;
+
+}
+''';
+}
+
+String _clientsImport(
+  Set<String> imports,
+  String postfix, {
+  required bool squishClients,
+}) =>
+    '\n${imports.map(
+          (import) => "import '${squishClients ? 'clients' : import.toSnake}/"
+              "${'${import}_$postfix'.toSnake}.dart';",
+        ).join('\n')}\n';
+
+String _interfaceGetters(Set<String> names, String postfix) => names
+    .map((n) => '  ${n.toPascal + postfix.toPascal} get ${n.toCamel};')
+    .join('\n\n');

@@ -14,8 +14,7 @@ void main() {
       const restClient =
           UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
       const fillController = FillController();
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -35,8 +34,7 @@ abstract class Client {
           UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
@@ -51,8 +49,7 @@ interface Client {}
       const restClient =
           UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
       const fillController = FillController(squishClients: true);
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -74,8 +71,7 @@ abstract class ClassNameApiClient {
         programmingLanguage: ProgrammingLanguage.kotlin,
         squishClients: true,
       );
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
@@ -91,8 +87,7 @@ interface ClassNameApiClient {}
           UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
       const fillController =
           FillController(squishClients: true, clientPostfix: 'Api');
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -115,8 +110,7 @@ abstract class ClassNameApi {
         squishClients: true,
         clientPostfix: 'Api',
       );
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
@@ -140,8 +134,7 @@ interface ClassNameApi {}
         requests: [],
       );
       const fillController = FillController();
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -182,8 +175,7 @@ abstract class Client {
         ],
       );
       const fillController = FillController();
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -217,8 +209,7 @@ abstract class Client {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
@@ -303,8 +294,7 @@ interface Client {
         ],
       );
       const fillController = FillController();
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -418,8 +408,7 @@ abstract class Client {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
@@ -486,8 +475,7 @@ interface Client {
         ],
       );
       const fillController = FillController();
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -541,8 +529,7 @@ abstract class Client {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
@@ -602,8 +589,7 @@ interface Client {
         ],
       );
       const fillController = FillController();
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -668,8 +654,7 @@ abstract class Client {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
@@ -710,8 +695,7 @@ interface Client {
         ],
       );
       const fillController = FillController();
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -753,8 +737,7 @@ abstract class Client {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
@@ -805,8 +788,7 @@ interface Client {
         ],
       );
       const fillController = FillController();
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -865,8 +847,7 @@ abstract class Client {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
@@ -944,8 +925,7 @@ interface Client {
         ],
       );
       const fillController = FillController();
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'dart:io';
 
@@ -1040,8 +1020,7 @@ abstract class Client {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
@@ -1112,8 +1091,7 @@ interface Client {
         ],
       );
       const fillController = FillController();
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -1180,8 +1158,7 @@ abstract class Client {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
@@ -1243,8 +1220,7 @@ interface Client {
         ],
       );
       const fillController = FillController();
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -1313,8 +1289,7 @@ abstract class Client {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
@@ -1376,8 +1351,7 @@ interface Client {
         ],
       );
       const fillController = FillController();
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -1469,8 +1443,7 @@ abstract class Client {
         ],
       );
       const fillController = FillController();
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -1541,8 +1514,7 @@ abstract class Client {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
@@ -1629,8 +1601,7 @@ interface Client {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent =
-          await fillController.fillRestClientContent(restClient);
+      final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 

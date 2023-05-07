@@ -9,7 +9,6 @@ import '../templates/dart_typedef_template.dart';
 import '../templates/kotlin_enum_dto_template.dart';
 import '../templates/kotlin_moshi_dto_template.dart';
 import '../templates/kotlin_retrofit_client_template.dart';
-import '../templates/kotlin_root_interface_template.dart';
 import '../templates/kotlin_typedef_template.dart';
 import 'universal_component_class.dart';
 import 'universal_data_class.dart';
@@ -67,41 +66,36 @@ enum ProgrammingLanguage {
   }
 
   /// Determines template for generating Rest client by language
-  String restClientFileContent(
-    UniversalRestClient restClient,
-    String? postfix,
-  ) {
+  String restClientFileContent(UniversalRestClient restClient, String name) {
     switch (this) {
       case ProgrammingLanguage.dart:
         return dartRetrofitClientTemplate(
           restClient: restClient,
-          postfix: postfix,
+          name: name,
         );
       case ProgrammingLanguage.kotlin:
         return kotlinRetrofitClientTemplate(
           restClient: restClient,
-          postfix: postfix,
+          name: name,
         );
     }
   }
 
-  /// Determines template for generating root interface
-  /// for clients by language
+  /// Determines template for generating root interface for clients
   String rootInterfaceFileContent(
-    Iterable<String> clientsNames,
-    String? postfix,
-  ) {
+    Set<String> clientsNames, {
+    String postfix = 'Client',
+    bool squishClients = false,
+  }) {
     switch (this) {
       case ProgrammingLanguage.dart:
         return dartRootInterfaceTemplate(
           clientsNames: clientsNames,
           postfix: postfix,
+          squishClients: squishClients,
         );
       case ProgrammingLanguage.kotlin:
-        return kotlinRootInterfaceTemplate(
-          clientsNames: clientsNames,
-          postfix: postfix,
-        );
+        return '';
     }
   }
 }

@@ -17,7 +17,7 @@ void main() {
         parameters: [],
       );
       const fillController = FillController();
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
 
@@ -42,7 +42,7 @@ class ClassName {
         parameters: [],
       );
       const fillController = FillController(freezed: true);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -67,7 +67,7 @@ class ClassName with _$ClassName {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -93,7 +93,7 @@ data class ClassName()
         parameters: [],
       );
       const fillController = FillController();
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
 
@@ -130,7 +130,7 @@ class ClassName {
         parameters: [],
       );
       const fillController = FillController(freezed: true);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -199,7 +199,7 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController();
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'dart:io';
 
@@ -285,7 +285,7 @@ class ClassName {
         ],
       );
       const fillController = FillController(freezed: true);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'dart:io';
 
@@ -358,7 +358,7 @@ class ClassName with _$ClassName {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -395,7 +395,7 @@ data class ClassName(
         ],
       );
       const fillController = FillController();
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
 
@@ -434,7 +434,7 @@ class ClassName {
         ],
       );
       const fillController = FillController(freezed: true);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -469,7 +469,7 @@ class ClassName with _$ClassName {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -510,7 +510,7 @@ data class ClassName(
         ],
       );
       const fillController = FillController();
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
 
@@ -565,7 +565,7 @@ class ClassName {
         ],
       );
       const fillController = FillController(freezed: true);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -615,7 +615,7 @@ class ClassName with _$ClassName {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -665,7 +665,7 @@ data class ClassName(
         ],
       );
       const fillController = FillController();
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
 
@@ -722,7 +722,7 @@ class ClassName {
         ],
       );
       const fillController = FillController(freezed: true);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -778,7 +778,7 @@ class ClassName with _$ClassName {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -818,7 +818,7 @@ data class ClassName(
         ],
       );
       const fillController = FillController();
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
 
@@ -870,7 +870,7 @@ class ClassName {
         ],
       );
       const fillController = FillController(freezed: true);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -917,7 +917,7 @@ class ClassName with _$ClassName {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -955,7 +955,7 @@ data class ClassName(
         ],
       );
       const fillController = FillController();
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
 
@@ -1005,7 +1005,7 @@ class ClassName {
         ],
       );
       const fillController = FillController(freezed: true);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -1057,7 +1057,7 @@ class ClassName with _$ClassName {
       const fillController = FillController();
       final files = <GeneratedFile>[];
       for (final enumClass in dataClasses) {
-        files.add(await fillController.fillDtoContent(enumClass));
+        files.add(fillController.fillDtoContent(enumClass));
       }
       const expectedContent0 = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -1152,7 +1152,7 @@ const _$KeywordsNameEnumMap = {
       const fillController = FillController(freezed: true);
       final files = <GeneratedFile>[];
       for (final enumClass in dataClasses) {
-        files.add(await fillController.fillDtoContent(enumClass));
+        files.add(fillController.fillDtoContent(enumClass));
       }
       const expectedContent0 = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -1248,7 +1248,7 @@ const _$KeywordsNameEnumMap = {
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
       final files = <GeneratedFile>[];
       for (final enumClass in dataClasses) {
-        files.add(await fillController.fillDtoContent(enumClass));
+        files.add(fillController.fillDtoContent(enumClass));
       }
       const expectedContent0 = '''
 import com.squareup.moshi.Json
@@ -1331,7 +1331,7 @@ enum class KeywordsName {
       const fillController = FillController();
       final files = <GeneratedFile>[];
       for (final enumClass in dataClasses) {
-        files.add(await fillController.fillDtoContent(enumClass));
+        files.add(fillController.fillDtoContent(enumClass));
       }
       const expectedContent0 = '''
 typedef Date = DateTime;
@@ -1381,7 +1381,7 @@ typedef AnotherValue = Another;
       );
       final files = <GeneratedFile>[];
       for (final enumClass in dataClasses) {
-        files.add(await fillController.fillDtoContent(enumClass));
+        files.add(fillController.fillDtoContent(enumClass));
       }
       const expectedContent0 = '''
 typealias Date = Date;
@@ -1438,7 +1438,7 @@ typealias AnotherValue = Another;
         ],
       );
       const fillController = FillController();
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
 
@@ -1507,7 +1507,7 @@ class ClassName {
         ],
       );
       const fillController = FillController(freezed: true);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -1570,7 +1570,7 @@ class ClassName with _$ClassName {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContent = '''
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -1632,7 +1632,7 @@ data class ClassName(
         ],
       );
       const fillController = FillController();
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
 
@@ -1715,7 +1715,7 @@ class ClassName {
         ],
       );
       const fillController = FillController(freezed: true);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -1792,7 +1792,7 @@ class ClassName with _$ClassName {
       );
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
-      final filledContent = await fillController.fillDtoContent(dataClass);
+      final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContent = '''
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

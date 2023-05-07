@@ -10,9 +10,8 @@ import '../models/universal_type.dart';
 /// File contents are generated using universal rest client
 String kotlinRetrofitClientTemplate({
   required UniversalRestClient restClient,
-  String? postfix,
+  required String name,
 }) {
-  final name = postfix != null ? restClient.name.toPascal + postfix : 'Client';
   final sb = StringBuffer(
     '''
 import retrofit2.http.*

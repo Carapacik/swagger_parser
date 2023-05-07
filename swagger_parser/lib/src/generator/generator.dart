@@ -2,7 +2,6 @@ import 'package:path/path.dart' as p;
 
 import '../config/yaml_config.dart';
 import '../parser/parser.dart';
-import '../utils/case_utils.dart';
 import '../utils/file_utils.dart';
 import 'fill_controller.dart';
 import 'generator_exception.dart';
@@ -61,7 +60,7 @@ class Generator {
   Generator.fromString({
     required String schemaContent,
     required ProgrammingLanguage language,
-    String? clientPostfix = 'ApiClient',
+    String? clientPostfix,
     bool freezed = false,
     bool rootInterface = true,
     bool squishClients = false,
@@ -70,7 +69,7 @@ class Generator {
     _schemaContent = schemaContent;
     _programmingLanguage = language;
     _outputDirectory = '';
-    _clientPostfix = clientPostfix ?? 'ApiClient';
+    _clientPostfix = clientPostfix ?? 'Client';
     _rootInterface = rootInterface;
     _squishClients = squishClients;
     _freezed = freezed;
@@ -87,7 +86,7 @@ class Generator {
   ProgrammingLanguage _programmingLanguage = ProgrammingLanguage.dart;
 
   /// Client postfix
-  String _clientPostfix = 'ApiClient';
+  String _clientPostfix = 'Client';
 
   /// Generate root interface for all Clients
   bool _rootInterface = true;
@@ -135,21 +134,21 @@ class Generator {
 
   /// Generate "virtual" files content
   Future<List<GeneratedFile>> _fillContent() async {
-    final writeController = FillController(
-      clientPostfix: _clientPostfix.toPascal,
+    final fillController = FillController(
       programmingLanguage: _programmingLanguage,
+      clientPostfix: _clientPostfix,
       freezed: _freezed,
       squishClients: _squishClients,
     );
     final files = <GeneratedFile>[];
     for (final client in _restClients) {
-      files.add(await writeController.fillRestClientContent(client));
+      files.add(fillController.fillRestClientContent(client));
     }
     for (final dataClass in _dataClasses) {
-      files.add(await writeController.fillDtoContent(dataClass));
+      files.add(fillController.fillDtoContent(dataClass));
     }
-    if (_rootInterface) {
-      files.add(await writeController.fillRootInterface(_dataClasses));
+    if (_rootInterface && _programmingLanguage == ProgrammingLanguage.dart) {
+      files.add(fillController.fillRootInterface(_restClients));
     }
     return files;
   }
