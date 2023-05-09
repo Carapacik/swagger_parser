@@ -12,18 +12,18 @@ void main() {
   group('Empty rest client', () {
     test('dart + retrofit', () async {
       const restClient =
-          UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
+          UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'rest_client.g.dart';
+part 'some_client.g.dart';
 
 @RestApi()
-abstract class Client {
-  factory Client(Dio dio, {String baseUrl}) = _Client;
+abstract class SomeClient {
+  factory SomeClient(Dio dio, {String baseUrl}) = _SomeClient;
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -31,14 +31,14 @@ abstract class Client {
 
     test('kotlin + retrofit', () async {
       const restClient =
-          UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
+          UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController =
           FillController(programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
-interface Client {}
+interface SomeClient {}
 ''';
       expect(filledContent.contents, expectedContents);
     });
@@ -47,18 +47,18 @@ interface Client {}
   group('Empty rest client with squish clients', () {
     test('dart + retrofit', () async {
       const restClient =
-          UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
+          UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController(squishClients: true);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'class_name_api_client.g.dart';
+part 'some_client.g.dart';
 
 @RestApi()
-abstract class ClassNameApiClient {
-  factory ClassNameApiClient(Dio dio, {String baseUrl}) = _ClassNameApiClient;
+abstract class SomeClient {
+  factory SomeClient(Dio dio, {String baseUrl}) = _SomeClient;
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -66,7 +66,7 @@ abstract class ClassNameApiClient {
 
     test('kotlin + retrofit', () async {
       const restClient =
-          UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
+          UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
         squishClients: true,
@@ -75,7 +75,7 @@ abstract class ClassNameApiClient {
       const expectedContents = '''
 import retrofit2.http.*
 
-interface ClassNameApiClient {}
+interface SomeClient {}
 ''';
       expect(filledContent.contents, expectedContents);
     });
@@ -85,8 +85,7 @@ interface ClassNameApiClient {}
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
-      const fillController =
-          FillController(squishClients: true, clientPostfix: 'Api');
+      const fillController = FillController(clientPostfix: 'Api');
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -104,17 +103,53 @@ abstract class ClassNameApi {
 
     test('kotlin + retrofit', () async {
       const restClient =
-          UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
+          UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
-        squishClients: true,
         clientPostfix: 'Api',
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
 
-interface ClassNameApi {}
+interface SomeApi {}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+  });
+
+  group('Empty client postfix', () {
+    test('dart + retrofit', () async {
+      const restClient =
+          UniversalRestClient(name: 'Some', imports: {}, requests: []);
+      const fillController = FillController(clientPostfix: '');
+      final filledContent = fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'some.g.dart';
+
+@RestApi()
+abstract class Some {
+  factory Some(Dio dio, {String baseUrl}) = _Some;
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('kotlin + retrofit', () async {
+      const restClient =
+          UniversalRestClient(name: 'Some', imports: {}, requests: []);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+        clientPostfix: '',
+      );
+      final filledContent = fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import retrofit2.http.*
+
+interface Some {}
 ''';
       expect(filledContent.contents, expectedContents);
     });
@@ -145,11 +180,11 @@ import '../shared_models/kebab_class.dart';
 import '../shared_models/pascal_class.dart';
 import '../shared_models/space_class.dart';
 
-part 'rest_client.g.dart';
+part 'class_name_client.g.dart';
 
 @RestApi()
-abstract class Client {
-  factory Client(Dio dio, {String baseUrl}) = _Client;
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -180,11 +215,11 @@ abstract class Client {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'rest_client.g.dart';
+part 'class_name_client.g.dart';
 
 @RestApi()
-abstract class Client {
-  factory Client(Dio dio, {String baseUrl}) = _Client;
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
 
   @GET('/')
   Future<void> getRequest();
@@ -213,7 +248,7 @@ abstract class Client {
       const expectedContents = '''
 import retrofit2.http.*
 
-interface Client {
+interface ClassNameClient {
     @GET("/")
     suspend fun getRequest()
 }
@@ -299,11 +334,11 @@ interface Client {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'rest_client.g.dart';
+part 'class_name_client.g.dart';
 
 @RestApi()
-abstract class Client {
-  factory Client(Dio dio, {String baseUrl}) = _Client;
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
 
   @GET('/')
   Future<void> getRequest();
@@ -412,7 +447,7 @@ abstract class Client {
       const expectedContents = '''
 import retrofit2.http.*
 
-interface Client {
+interface ClassNameClient {
     @GET("/")
     suspend fun getRequest()
 
@@ -480,11 +515,11 @@ interface Client {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'rest_client.g.dart';
+part 'class_name_client.g.dart';
 
 @RestApi()
-abstract class Client {
-  factory Client(Dio dio, {String baseUrl}) = _Client;
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
 
   @GET('/')
   Future<void> getRequest();
@@ -533,7 +568,7 @@ abstract class Client {
       const expectedContents = '''
 import retrofit2.http.*
 
-interface Client {
+interface ClassNameClient {
     @GET("/")
     suspend fun getRequest()
 
@@ -594,11 +629,11 @@ interface Client {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'rest_client.g.dart';
+part 'class_name_client.g.dart';
 
 @RestApi()
-abstract class Client {
-  factory Client(Dio dio, {String baseUrl}) = _Client;
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
 
   @GET('/')
   Future<void> getRequest({
@@ -658,7 +693,7 @@ abstract class Client {
       const expectedContents = '''
 import retrofit2.http.*
 
-interface Client {
+interface ClassNameClient {
     @GET("/")
     suspend fun getRequest(
         @Query("list1") list1: List<String>,
@@ -700,11 +735,11 @@ interface Client {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'rest_client.g.dart';
+part 'class_name_client.g.dart';
 
 @RestApi()
-abstract class Client {
-  factory Client(Dio dio, {String baseUrl}) = _Client;
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
 
   @GET('/')
   Future<String> getRequest({
@@ -741,7 +776,7 @@ abstract class Client {
       const expectedContents = '''
 import retrofit2.http.*
 
-interface Client {
+interface ClassNameClient {
     @GET("/")
     suspend fun getRequest(
         @Query("name") alex: String,
@@ -793,11 +828,11 @@ interface Client {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'rest_client.g.dart';
+part 'class_name_client.g.dart';
 
 @RestApi()
-abstract class Client {
-  factory Client(Dio dio, {String baseUrl}) = _Client;
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
 
   @GET('/{id}')
   Future<void> getRequest({
@@ -851,7 +886,7 @@ abstract class Client {
       const expectedContents = '''
 import retrofit2.http.*
 
-interface Client {
+interface ClassNameClient {
     @GET("/{id}")
     suspend fun getRequest(
         @Header("Authorization") token: String,
@@ -934,11 +969,11 @@ import 'package:retrofit/retrofit.dart';
 
 import '../shared_models/another_file.dart';
 
-part 'rest_client.g.dart';
+part 'class_name_client.g.dart';
 
 @RestApi()
-abstract class Client {
-  factory Client(Dio dio, {String baseUrl}) = _Client;
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
 
   @MultiPart()
   @POST('/send')
@@ -1024,7 +1059,7 @@ abstract class Client {
       const expectedContents = '''
 import retrofit2.http.*
 
-interface Client {
+interface ClassNameClient {
     @MultiPart
     @POST("/send")
     suspend fun sendMultiPart(
@@ -1096,11 +1131,11 @@ interface Client {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'rest_client.g.dart';
+part 'class_name_client.g.dart';
 
 @RestApi()
-abstract class Client {
-  factory Client(Dio dio, {String baseUrl}) = _Client;
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
 
   @GET('/{id}')
   Future<String> getRequest({
@@ -1162,7 +1197,7 @@ abstract class Client {
       const expectedContents = '''
 import retrofit2.http.*
 
-interface Client {
+interface ClassNameClient {
     @GET("/{id}")
     suspend fun getRequest(
         @Query("list") list: List<String>?,
@@ -1227,11 +1262,11 @@ import 'package:retrofit/retrofit.dart';
 
 import '../shared_models/another_file.dart';
 
-part 'rest_client.g.dart';
+part 'class_name_client.g.dart';
 
 @RestApi()
-abstract class Client {
-  factory Client(Dio dio, {String baseUrl}) = _Client;
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
 
   @POST('/send')
   Future<void> sendGagaga({
@@ -1293,7 +1328,7 @@ abstract class Client {
       const expectedContents = '''
 import retrofit2.http.*
 
-interface Client {
+interface ClassNameClient {
     @POST("/send")
     suspend fun sendGagaga(
         @Header("Authorization") token: String = "gagaga123",
@@ -1356,11 +1391,11 @@ interface Client {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'rest_client.g.dart';
+part 'class_name_client.g.dart';
 
 @RestApi()
-abstract class Client {
-  factory Client(Dio dio, {String baseUrl}) = _Client;
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
 
   @GET('/request')
   Future<String?> getRequest({
@@ -1448,11 +1483,11 @@ abstract class Client {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'rest_client.g.dart';
+part 'class_name_client.g.dart';
 
 @RestApi()
-abstract class Client {
-  factory Client(Dio dio, {String baseUrl}) = _Client;
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
 
   @GET('/request')
   Future<String> getRequest({
@@ -1518,7 +1553,7 @@ abstract class Client {
       const expectedContents = '''
 import retrofit2.http.*
 
-interface Client {
+interface ClassNameClient {
     @GET("/request")
     suspend fun getRequest(
         @Query("deepArrayNullable") deepList: List<List<List<List<String>>>>?,
@@ -1605,7 +1640,7 @@ interface Client {
       const expectedContents = '''
 import retrofit2.http.*
 
-interface Client {
+interface ClassNameClient {
     @GET("/request")
     suspend fun getRequest(
         @Query("deepArrayNullable") list1: List<List<List<List<String>>>>?,

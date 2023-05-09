@@ -49,7 +49,7 @@ swagger_parser:
   language: dart # Optional. Sets the programming language. Current available languages are: dart, kotlin. Default: dart
   root_interface: true # Optional (dart only). Set 'true' to generate interface with all clients instances. Default: true
   squish_clients: false # Optional. Set 'true' to put all clients in one folder. Default: false
-  client_postfix: Client # Optional. Set postfix for client folder and Class. Works if there is only a single class or `squish_clients` is true. Default: Client
+  client_postfix: Client # Optional. Set postfix for Client class and file. Default: Client
   freezed: false # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
 ```
 
