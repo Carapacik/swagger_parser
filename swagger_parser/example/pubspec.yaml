@@ -6,8 +6,6 @@ environment:
 
 dependencies:
   dio: ^5.1.2
-  flutter:
-    sdk: flutter
   freezed_annotation: ^2.2.0
   json_annotation: ^4.8.1
   retrofit: ^4.0.1
@@ -21,9 +19,6 @@ dev_dependencies:
   swagger_parser:
     path:
       ../
-
-flutter:
-  uses-material-design: true
 
 swagger_parser:
   schema_path: assets/openapi.json
