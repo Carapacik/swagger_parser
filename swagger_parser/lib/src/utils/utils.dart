@@ -13,34 +13,18 @@ String dartImports({required Set<String> imports, String? pathPrefix}) {
   return '\n${imports.map((import) => "import '${pathPrefix ?? ''}${import.toSnake}.dart';").join('\n')}\n';
 }
 
-/// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
-String toSuitableType(
-  UniversalType type,
-  ProgrammingLanguage lang,
-) {
-  if (type.arrayDepth == 0) {
-    return type.byLang(lang);
+/// Provides class description
+String descriptionComment(String? description, {String tab = ''}) {
+  if (description == null || description.isEmpty) {
+    return '';
   }
-  final sb = StringBuffer();
-  for (var i = 0; i < type.arrayDepth; i++) {
-    sb.write('List<');
-  }
-  sb.write(type.byLang(lang));
-  for (var i = 0; i < type.arrayDepth; i++) {
-    sb.write('>');
-  }
-  if (type.nullable || (!type.isRequired && type.defaultValue == null)) {
-    sb.write('?');
-  }
-  return sb.toString();
+  return '$tab/// $description\n';
 }
 
-String fileImport(UniversalComponentClass dataClass) =>
-    dataClass.parameters.any(
-      (p) => toSuitableType(p, ProgrammingLanguage.dart) == 'File',
-    )
-        ? "import 'dart:io';\n\n"
-        : '';
+String ioImport(UniversalComponentClass dataClass) => dataClass.parameters
+        .any((p) => p.toSuitableType(ProgrammingLanguage.dart) == 'File')
+    ? "import 'dart:io';\n\n"
+    : '';
 
 void introMessage() {
   stdout.writeln(

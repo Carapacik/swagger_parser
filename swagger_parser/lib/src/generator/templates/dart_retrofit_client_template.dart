@@ -7,22 +7,19 @@ import '../models/programming_lang.dart';
 import '../models/universal_request.dart';
 import '../models/universal_request_type.dart';
 import '../models/universal_rest_client.dart';
+import '../models/universal_type.dart';
 
 /// Provides template for generating dart Retrofit client
 String dartRetrofitClientTemplate({
   required UniversalRestClient restClient,
-  String? postfix,
+  required String name,
 }) {
-  final name = postfix != null ? restClient.name.toPascal + postfix : 'Client';
-  final partFile = postfix != null
-      ? '${restClient.name.toSnake}_${postfix.toSnake}'
-      : 'rest_client';
   final sb = StringBuffer(
     '''
 ${_fileImport(restClient)}import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../shared_models/')}
-part '$partFile.g.dart';
+part '${name.toSnake}.g.dart';
 
 @RestApi()
 abstract class $name {
@@ -41,7 +38,7 @@ String _toClientRequest(UniversalRequest request) {
     '''
 
   ${request.isMultiPart ? '@MultiPart()\n  ' : ''}@${request.requestType.name.toUpperCase()}('${request.route}')
-  Future<${request.returnType == null ? 'void' : toSuitableType(request.returnType!, ProgrammingLanguage.dart)}> ${request.name}(''',
+  Future<${request.returnType == null ? 'void' : request.returnType!.toSuitableType(ProgrammingLanguage.dart)}> ${request.name}(''',
   );
   if (request.parameters.isNotEmpty) {
     sb.write('{\n');
@@ -62,7 +59,7 @@ String _toClientRequest(UniversalRequest request) {
 
 String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
       (r) => r.parameters.any(
-        (p) => toSuitableType(p.type, ProgrammingLanguage.dart) == 'File',
+        (e) => e.type.toSuitableType(ProgrammingLanguage.dart) == 'File',
       ),
     )
         ? "import 'dart:io';\n\n"
@@ -71,6 +68,6 @@ String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
 String _toQueryParameter(UniversalRequestType parameter) =>
     "    @${parameter.parameterType.type}(${parameter.name != null ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
     '${parameter.type.isRequired && parameter.type.defaultValue == null ? 'required ' : ''}'
-    '${toSuitableType(parameter.type, ProgrammingLanguage.dart)} '
+    '${parameter.type.toSuitableType(ProgrammingLanguage.dart)} '
     '${parameter.type.name!.toCamel}${parameter.type.defaultValue != null ? ' = '
         '${parameter.type.type.quoterForStringType()}${parameter.type.defaultValue}${parameter.type.type.quoterForStringType()}' : ''},';

@@ -4,11 +4,11 @@ extension StringTypeX on String {
       case 'integer':
         return 'int';
       case 'number':
-        if (format != null && (format == 'float' || format == 'double')) {
+        if (format == 'float' || format == 'double') {
           return 'double';
         }
         // This can happen
-        if (format != null && format == 'string') {
+        if (format == 'string') {
           return 'String';
         }
         return 'num';
@@ -36,11 +36,11 @@ extension StringTypeX on String {
       case 'integer':
         return 'Int';
       case 'number':
-        if (format != null && format == 'float') {
+        if (format == 'float') {
           return 'Float';
         }
         // This can happen
-        if (format != null && format == 'string') {
+        if (format == 'string') {
           return 'String';
         }
         return 'Double';

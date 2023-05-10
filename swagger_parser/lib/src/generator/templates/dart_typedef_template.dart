@@ -4,6 +4,7 @@ import '../../utils/case_utils.dart';
 import '../../utils/utils.dart';
 import '../models/programming_lang.dart';
 import '../models/universal_component_class.dart';
+import '../models/universal_type.dart';
 
 /// Provides template for generating dart typedefs using JSON serializable
 String dartTypeDefTemplate(UniversalComponentClass dataClass) {
@@ -13,7 +14,7 @@ String dartTypeDefTemplate(UniversalComponentClass dataClass) {
   if (type == null) {
     return '';
   }
-  return '''
-${import != null ? "import '${import.toSnake}.dart';\n\n" : ''}typedef $className = ${toSuitableType(type, ProgrammingLanguage.dart)};
-''';
+  return '${import != null ? "import '${import.toSnake}.dart';\n\n" : ''}'
+      '${descriptionComment(dataClass.description)}'
+      'typedef $className = ${type.toSuitableType(ProgrammingLanguage.dart)};\n';
 }
