@@ -5,8 +5,9 @@ import 'programming_lang.dart';
 class UniversalType {
   const UniversalType({
     required this.type,
-    this.format,
     this.name,
+    this.description,
+    this.format,
     this.jsonKey,
     this.defaultValue,
     this.isRequired = true,
@@ -17,12 +18,19 @@ class UniversalType {
   /// Object type
   final String type;
 
-  /// Format for object
-  /// Example: type = number, format = double
-  final String? format;
-
   /// Object name
   final String? name;
+
+  /// Object description
+  final String? description;
+
+  /// Format for object
+  /// "Digit": {
+  ///   "type": "number",
+  ///   "format": "double"
+  /// }
+  ///  must be `double`
+  final String? format;
 
   /// Object json key
   final String? jsonKey;
@@ -34,7 +42,8 @@ class UniversalType {
   final bool isRequired;
 
   /// Array depth, 0 if not a list
-  /// Example: arrayDepth = 2 -> List<List<Object>>
+  /// if arrayDepth = 2
+  /// List<List<Object>>
   final int arrayDepth;
 
   /// Whether or not this field is nullable
@@ -42,9 +51,10 @@ class UniversalType {
 
   /// Function for compare to put required named parameters first
   int compareTo(UniversalType other) {
-    if (isRequired == other.isRequired) {
+    if (isRequired == other.isRequired &&
+        (other.defaultValue == null) == (defaultValue == null)) {
       return 0;
-    } else if (isRequired) {
+    } else if (isRequired && defaultValue == null) {
       return -1;
     }
     return 1;
@@ -53,22 +63,35 @@ class UniversalType {
 
 /// Converts [UniversalType] to type from specified language
 extension UniversalTypeX on UniversalType {
-  String byLang(ProgrammingLanguage lang) {
+  /// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
+  String toSuitableType(ProgrammingLanguage lang) {
+    if (arrayDepth == 0) {
+      return _questionMark(lang);
+    }
+    final sb = StringBuffer();
+    for (var i = 0; i < arrayDepth; i++) {
+      sb.write('List<');
+    }
+    sb.write(_questionMark(lang));
+    for (var i = 0; i < arrayDepth; i++) {
+      sb.write('>');
+    }
+    if (nullable || (!isRequired && defaultValue == null)) {
+      sb.write('?');
+    }
+    return sb.toString();
+  }
+
+  String _questionMark(ProgrammingLanguage lang) {
+    final questionMark =
+        isRequired && !nullable || arrayDepth > 0 || defaultValue != null
+            ? ''
+            : '?';
     switch (lang) {
       case ProgrammingLanguage.dart:
-        return type.toDartType(format) +
-            (!nullable || arrayDepth > 0
-                ? isRequired || arrayDepth > 0 || defaultValue != null
-                    ? ''
-                    : '?'
-                : '?');
+        return type.toDartType(format) + questionMark;
       case ProgrammingLanguage.kotlin:
-        return type.toKotlinType(format) +
-            (!nullable || arrayDepth > 0
-                ? isRequired || arrayDepth > 0
-                    ? ''
-                    : '?'
-                : '?');
+        return type.toKotlinType(format) + questionMark;
     }
   }
 }

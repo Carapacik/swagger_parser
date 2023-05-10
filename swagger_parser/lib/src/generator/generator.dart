@@ -2,7 +2,6 @@ import 'package:path/path.dart' as p;
 
 import '../config/yaml_config.dart';
 import '../parser/parser.dart';
-import '../utils/case_utils.dart';
 import '../utils/file_utils.dart';
 import 'fill_controller.dart';
 import 'generator_exception.dart';
@@ -39,6 +38,9 @@ class Generator {
       }
       _programmingLanguage = parsedLang;
     }
+    if (yamlConfig.rootInterface != null) {
+      _rootInterface = yamlConfig.rootInterface!;
+    }
 
     if (yamlConfig.freezed != null) {
       _freezed = yamlConfig.freezed!;
@@ -58,15 +60,17 @@ class Generator {
   Generator.fromString({
     required String schemaContent,
     required ProgrammingLanguage language,
-    String? clientPostfix = 'ApiClient',
+    String? clientPostfix,
     bool freezed = false,
+    bool rootInterface = true,
     bool squishClients = false,
     bool isYaml = false,
   }) {
     _schemaContent = schemaContent;
     _programmingLanguage = language;
     _outputDirectory = '';
-    _clientPostfix = clientPostfix ?? 'ApiClient';
+    _clientPostfix = clientPostfix ?? 'Client';
+    _rootInterface = rootInterface;
     _squishClients = squishClients;
     _freezed = freezed;
     _isYaml = isYaml;
@@ -82,12 +86,15 @@ class Generator {
   ProgrammingLanguage _programmingLanguage = ProgrammingLanguage.dart;
 
   /// Client postfix
-  String _clientPostfix = 'ApiClient';
+  String _clientPostfix = 'Client';
 
-  /// User freezed to generate DTOs
+  /// Generate root interface for all Clients
+  bool _rootInterface = true;
+
+  /// Use freezed to generate DTOs
   bool _freezed = false;
 
-  /// Is squish Clients
+  /// Squish Clients in one folder
   bool _squishClients = false;
 
   /// Is the schema format YAML
@@ -127,18 +134,21 @@ class Generator {
 
   /// Generate "virtual" files content
   Future<List<GeneratedFile>> _fillContent() async {
-    final writeController = FillController(
-      clientPostfix: _clientPostfix.toPascal,
+    final fillController = FillController(
       programmingLanguage: _programmingLanguage,
+      clientPostfix: _clientPostfix,
       freezed: _freezed,
       squishClients: _squishClients,
     );
     final files = <GeneratedFile>[];
     for (final client in _restClients) {
-      files.add(await writeController.fillRestClientContent(client));
+      files.add(fillController.fillRestClientContent(client));
     }
     for (final dataClass in _dataClasses) {
-      files.add(await writeController.fillDtoContent(dataClass));
+      files.add(fillController.fillDtoContent(dataClass));
+    }
+    if (_rootInterface && _programmingLanguage == ProgrammingLanguage.dart) {
+      files.add(fillController.fillRootInterface(_restClients));
     }
     return files;
   }

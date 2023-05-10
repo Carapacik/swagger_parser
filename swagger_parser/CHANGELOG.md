@@ -1,3 +1,9 @@
+## 1.0
+- Require Dart >= 2.19
+- Add support for ` description ` annotation
+- Add ` root_interface ` option to generate root interface for all Clients
+- Refactor code related to ` nullable `
+
 ## 0.10.3
 - Now uses ` ref ` to identify return type of client method if ` type ` also exists
 
