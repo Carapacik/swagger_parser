@@ -1,4 +1,4 @@
-## 1.0
+## 1.0.0
 - Require Dart >= 2.19
 - Add support for ` description ` annotation
 - Add ` root_interface ` option to generate root interface for all Clients
