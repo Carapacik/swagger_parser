@@ -10,6 +10,7 @@ class UniversalComponentClass extends UniversalDataClass {
     required this.parameters,
     this.allOf,
     this.typeDef = false,
+    super.description,
   });
 
   /// List of additional references to components
@@ -22,7 +23,6 @@ class UniversalComponentClass extends UniversalDataClass {
   final AllOf? allOf;
 
   /// Whether or not this schema is a basic type
-  /// For example
   /// "Date": {
   ///   "type": "string",
   ///   "format": "date"
