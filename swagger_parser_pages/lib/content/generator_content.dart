@@ -17,6 +17,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
   ProgrammingLanguage _language = ProgrammingLanguage.dart;
   bool _isYaml = false;
   bool _freezed = false;
+  bool _rootInterface = false;
   bool _squishClients = false;
 
   @override
@@ -88,6 +89,25 @@ class _GeneratorContentState extends State<GeneratorContent> {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 600),
+                      crossFadeState: _language == ProgrammingLanguage.dart
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      sizeCurve: Curves.fastOutSlowIn,
+                      firstChild: Container(),
+                      secondChild: StatefulBuilder(
+                        builder: (context, setState) => CheckboxListTile(
+                          title: const Text(
+                            'Generate root interface for REST clients',
+                          ),
+                          value: _rootInterface,
+                          onChanged: (value) =>
+                              setState(() => _rootInterface = value!),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                     StatefulBuilder(
                       builder: (context, setState) => CheckboxListTile(
                         title: const Text('Is YAML file content'),
@@ -138,11 +158,10 @@ class _GeneratorContentState extends State<GeneratorContent> {
                     ),
                     const SizedBox(height: 32),
                     SizedBox(
-                      width: 300,
-                      height: 40,
                       child: OutlinedButton(
                         child: const Text(
                           'Generate and download',
+                          textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 24),
                         ),
                         onPressed: () async {
@@ -154,6 +173,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             freezed: _freezed,
                             squishClients: _squishClients,
                             isYaml: _isYaml,
+                            useRootInterface: _rootInterface,
                           );
                         },
                       ),
@@ -175,6 +195,7 @@ Future<void> _generateOutputs(
   required bool freezed,
   required bool squishClients,
   required bool isYaml,
+  required bool useRootInterface,
 }) async {
   final generator = Generator.fromString(
     schemaContent: schema,
@@ -183,6 +204,7 @@ Future<void> _generateOutputs(
     freezed: freezed,
     squishClients: squishClients,
     isYaml: isYaml,
+    rootInterface: useRootInterface,
   );
   try {
     final files = await generator.generateContent();
