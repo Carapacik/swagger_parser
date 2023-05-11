@@ -1,3 +1,7 @@
+## 1.0.0+1
+- Add ` root_interface ` option to [web interface](https://carapacik.github.io/swagger_parser)
+- Add topics
+
 ## 1.0.0
 - Require Dart >= 2.19
 - Add support for ` description ` annotation
