@@ -402,7 +402,6 @@ class OpenApiParser {
       entities =
           _definitionFileContent[_definitionsConst] as Map<String, dynamic>;
     }
-
     entities.forEach((key, value) {
       var requiredParameters = <String>[];
       if ((value as Map<String, dynamic>).containsKey(_requiredConst)) {
@@ -522,7 +521,6 @@ class OpenApiParser {
       }
       allOfClass.parameters.addAll(allOfClass.allOf!.properties);
     }
-
     return dataClasses;
   }
 
@@ -595,7 +593,7 @@ class OpenApiParser {
           jsonKey: name,
           defaultValue: arrayType.type.defaultValue,
           isRequired: isRequired,
-          nullable: arrayType.type.nullable,
+          nullable: map[_nullableConst] == true,
           arrayDepth: arrayType.type.arrayDepth + 1,
         ),
         import: arrayType.import,
@@ -712,7 +710,6 @@ class OpenApiParser {
           : map.containsKey(_refConst)
               ? _formatRef(map)
               : null;
-
       return TypeWithImport(
         type: UniversalType(
           type: type,
