@@ -593,7 +593,7 @@ class OpenApiParser {
           jsonKey: name,
           defaultValue: arrayType.type.defaultValue,
           isRequired: isRequired,
-          nullable: map[_nullableConst] == true,
+          nullable: map[_nullableConst].toString().toBool(),
           arrayDepth: arrayType.type.arrayDepth + 1,
         ),
         import: arrayType.import,
