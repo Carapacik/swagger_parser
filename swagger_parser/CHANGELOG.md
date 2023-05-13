@@ -1,3 +1,6 @@
+## 1.0.1
+- Fixed error with ` nullable ` in array ([#43](https://github.com/Carapacik/swagger_parser/issues/43))
+
 ## 1.0.0+1
 - Add ` root_interface ` option to [web interface](https://carapacik.github.io/swagger_parser)
 - Add topics
