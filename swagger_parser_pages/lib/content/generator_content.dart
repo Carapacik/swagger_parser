@@ -17,7 +17,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
   ProgrammingLanguage _language = ProgrammingLanguage.dart;
   bool _isYaml = false;
   bool _freezed = false;
-  bool _rootInterface = false;
+  bool _rootInterface = true;
   bool _squishClients = false;
 
   @override
@@ -173,7 +173,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             freezed: _freezed,
                             squishClients: _squishClients,
                             isYaml: _isYaml,
-                            useRootInterface: _rootInterface,
+                            rootInterface: _rootInterface,
                           );
                         },
                       ),
@@ -195,7 +195,7 @@ Future<void> _generateOutputs(
   required bool freezed,
   required bool squishClients,
   required bool isYaml,
-  required bool useRootInterface,
+  required bool rootInterface,
 }) async {
   final generator = Generator.fromString(
     schemaContent: schema,
@@ -204,7 +204,7 @@ Future<void> _generateOutputs(
     freezed: freezed,
     squishClients: squishClients,
     isYaml: isYaml,
-    rootInterface: useRootInterface,
+    rootInterface: rootInterface,
   );
   try {
     final files = await generator.generateContent();
