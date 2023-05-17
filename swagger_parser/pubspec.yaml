@@ -6,6 +6,7 @@ homepage: https://omega-r.com
 topics:
   - swagger
   - openapi
+  - codegen
   - api
   - json
 environment:
