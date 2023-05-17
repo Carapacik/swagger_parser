@@ -29,7 +29,7 @@ String _toClientRequest(UniversalRequest request) {
   final sb = StringBuffer(
     '''
 
-    ${request.isMultiPart ? '@MultiPart\n    ' : ''}@${request.requestType.name.toUpperCase()}("${request.route}")
+    ${request.isMultiPart ? '@MultiPart\n    ' : ''}${request.isMultiPart ? '@FormUrlEncoded\n    ' : ''}@${request.requestType.name.toUpperCase()}("${request.route}")
     suspend fun ${request.name}(''',
   );
   if (request.parameters.isEmpty) {

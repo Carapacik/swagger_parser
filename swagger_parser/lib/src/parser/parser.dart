@@ -309,6 +309,11 @@ class OpenApiParser {
               .contains(_multipartFormDataConst)) {
         isMultiPart = true;
       }
+      if (map.containsKey(_consumesConst) &&
+          (map[_consumesConst] as List<dynamic>)
+              .contains(_formUrlEncodedConst)) {
+        isFormUrlEncoded = true;
+      }
       for (final rawParameter in map[_parametersConst] as List<dynamic>) {
         final isRequired =
             (rawParameter as Map<String, dynamic>)[_requiredConst]
@@ -363,6 +368,7 @@ class OpenApiParser {
           requestType: HttpRequestType.fromString(key)!,
           route: path,
           isMultiPart: isMultiPart,
+          isFormUrlEncoded: isFormUrlEncoded,
           returnType: returnType,
           parameters: parameters,
         );
@@ -382,6 +388,7 @@ class OpenApiParser {
           restClients[sameTagIndex].imports.addAll(imports);
         }
         isMultiPart = false;
+        isFormUrlEncoded = false;
         imports.clear();
       });
     });
