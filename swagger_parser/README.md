@@ -27,14 +27,16 @@ In your pubspec.yaml, add the following dependencies:
 ```yaml
 dependencies:
   # dio: ^5.1.0
+  # freezed_annotation: ^2.2.0 # for freezed
   # json_annotation: ^4.8.1
   # retrofit: ^4.0.1
 
 dev_dependencies:
   # build_runner: ^2.3.3
+  # freezed: ^2.3.4 # for freezed
   # json_serializable: ^6.6.2
-  # retrofit_generator: ^6.0.0
-  swagger_parser:
+  # retrofit_generator: ^7.0.1
+  swagger_parser: ^1.0.2
 ```
 
 ### Configure package
@@ -53,8 +55,8 @@ swagger_parser:
   freezed: false # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
 ```
 
-### Run the generator
 
+### Run the generator
 To generate boilerplate code, run the `generate` program inside directory where your `pubspec.yaml` file is located:
 ```shell
 dart run swagger_parser:generate
@@ -72,7 +74,16 @@ dart run swagger_parser:generate -f <path to your config file>
 ```
 
 ### Generate files using [build_runner](https://pub.dev/packages/build_runner) for retrofit, json_serializable and freezed
-
+#### For `freezed` with `retrofit` use build.yaml file with this content:
+```yaml
+global_options:
+  freezed:
+    runs_before:
+      - json_serializable
+  json_serializable:
+    runs_before:
+      - retrofit_generator
+```
 To run the code generation, execute the following command:
 ```shell
 dart run build_runner build

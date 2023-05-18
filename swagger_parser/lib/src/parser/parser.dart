@@ -64,6 +64,7 @@ class OpenApiParser {
   static const _descriptionConst = 'description';
   static const _enumConst = 'enum';
   static const _formatConst = 'format';
+  static const _formUrlEncodedConst = 'application/x-www-form-urlencoded';
   static const _inConst = 'in';
   static const _itemsConst = 'items';
   static const _multipartFormDataConst = 'multipart/form-data';
@@ -94,6 +95,7 @@ class OpenApiParser {
     final restClients = <UniversalRestClient>[];
     final imports = SplayTreeSet<String>();
     var isMultiPart = false;
+    var isFormUrlEncoded = false;
 
     /// Parses return type for client query for OpenApi v3
     UniversalType? returnTypeV3(Map<String, dynamic> map) {
@@ -175,6 +177,10 @@ class OpenApiParser {
           contentType =
               contentTypes[_multipartFormDataConst] as Map<String, dynamic>;
           isMultiPart = true;
+        } else if (contentTypes.containsKey(_formUrlEncodedConst)) {
+          contentType =
+              contentTypes[_formUrlEncodedConst] as Map<String, dynamic>;
+          isFormUrlEncoded = true;
         } else {
           final content = (requestBody[_contentConst] as Map<String, dynamic>)
               .entries
@@ -303,6 +309,11 @@ class OpenApiParser {
               .contains(_multipartFormDataConst)) {
         isMultiPart = true;
       }
+      if (map.containsKey(_consumesConst) &&
+          (map[_consumesConst] as List<dynamic>)
+              .contains(_formUrlEncodedConst)) {
+        isFormUrlEncoded = true;
+      }
       for (final rawParameter in map[_parametersConst] as List<dynamic>) {
         final isRequired =
             (rawParameter as Map<String, dynamic>)[_requiredConst]
@@ -357,6 +368,7 @@ class OpenApiParser {
           requestType: HttpRequestType.fromString(key)!,
           route: path,
           isMultiPart: isMultiPart,
+          isFormUrlEncoded: isFormUrlEncoded,
           returnType: returnType,
           parameters: parameters,
         );
@@ -376,6 +388,7 @@ class OpenApiParser {
           restClients[sameTagIndex].imports.addAll(imports);
         }
         isMultiPart = false;
+        isFormUrlEncoded = false;
         imports.clear();
       });
     });
