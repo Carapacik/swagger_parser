@@ -12,6 +12,7 @@ class UniversalRequest {
     required this.returnType,
     required this.parameters,
     this.isMultiPart = false,
+    this.isFormUrlEncoded = false,
   });
 
   /// Request name
@@ -29,8 +30,11 @@ class UniversalRequest {
   /// Request parameters
   final List<UniversalRequestType> parameters;
 
-  /// Whether or not request is multipart
+  /// Request type 'multipart/form-data'
   final bool isMultiPart;
+
+  /// Request type 'application/x-www-form-urlencoded'
+  final bool isFormUrlEncoded;
 }
 
 enum HttpRequestType {

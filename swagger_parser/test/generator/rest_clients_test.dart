@@ -1081,6 +1081,101 @@ interface ClassNameClient {
     });
   });
 
+  group('FormUrlEncoded', () {
+    test('dart + retrofit', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {'Lol'},
+        requests: [
+          UniversalRequest(
+            name: 'sendBody',
+            requestType: HttpRequestType.post,
+            route: '/send',
+            returnType: null,
+            isFormUrlEncoded: true,
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.header,
+                type: UniversalType(type: 'string', name: 'token'),
+                name: 'Authorization',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.body,
+                type: UniversalType(type: 'Lol', name: 'lol'),
+              )
+            ],
+          ),
+        ],
+      );
+      const fillController = FillController();
+      final filledContent = fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+import '../shared_models/lol.dart';
+
+part 'class_name_client.g.dart';
+
+@RestApi()
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+
+  @FormUrlEncoded()
+  @POST('/send')
+  Future<void> sendBody({
+    @Header('Authorization') required String token,
+    @Body() required Lol lol,
+  });
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+
+    test('kotlin + retrofit', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {'Lol'},
+        requests: [
+          UniversalRequest(
+            name: 'sendBody',
+            requestType: HttpRequestType.post,
+            route: '/send',
+            returnType: null,
+            isFormUrlEncoded: true,
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.header,
+                type: UniversalType(type: 'string', name: 'token'),
+                name: 'Authorization',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.body,
+                type: UniversalType(type: 'Lol', name: 'lol'),
+              )
+            ],
+          ),
+        ],
+      );
+      const fillController =
+          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      final filledContent = fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import retrofit2.http.*
+
+interface ClassNameClient {
+    @FormUrlEncoded
+    @POST("/send")
+    suspend fun sendBody(
+        @Header("Authorization") token: String,
+        @Body lol: Lol,
+    )
+}
+''';
+      expect(filledContent.contents, expectedContents);
+    });
+  });
+
   group('Required parameters', () {
     test('dart + retrofit', () async {
       const restClient = UniversalRestClient(

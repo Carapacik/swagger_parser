@@ -1,3 +1,6 @@
+## 1.0.2
+- Fixed error with ` application/x-www-form-urlencoded ` ([#45](https://github.com/Carapacik/swagger_parser/issues/45))
+
 ## 1.0.1
 - Fixed error with ` nullable ` in array ([#43](https://github.com/Carapacik/swagger_parser/issues/43))
 
