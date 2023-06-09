@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 
 import '../../utils/case_utils.dart';
+import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
 import '../models/programming_lang.dart';
 import '../models/universal_component_class.dart';
@@ -36,7 +37,7 @@ String _parametersInConstructor(List<UniversalType> parameters) {
   final sortedByRequired =
       List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)));
   return sortedByRequired
-      .map((e) => '\n    ${_r(e)}this.${e.name}${_d(d: e.defaultValue)},')
+      .map((e) => '\n    ${_r(e)}this.${e.name}${_d(e)},')
       .join();
 }
 
@@ -53,4 +54,6 @@ String _r(UniversalType t) =>
     t.isRequired && t.defaultValue == null ? 'required ' : '';
 
 /// return defaultValue if have
-String _d({String? d}) => d != null ? ' = $d' : '';
+String _d(UniversalType t) => t.defaultValue != null
+    ? ' = ${t.type.quoterForStringType()}${t.defaultValue}${t.type.quoterForStringType()}'
+    : '';
