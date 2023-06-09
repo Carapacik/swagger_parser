@@ -675,7 +675,7 @@ part 'class_name.g.dart';
 class ClassName {
   const ClassName({
     this.intType = 1,
-    this.stringType = str,
+    this.stringType = 'str',
     this.boolType = false,
     this.nullableType = -1.1,
   });
@@ -1647,7 +1647,7 @@ class ClassName {
     required this.megaMind,
     required this.emptyDescription,
     required this.list,
-    this.defaultType = str,
+    this.defaultType = 'str',
   });
   
   factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
