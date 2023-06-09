@@ -1,3 +1,6 @@
+## 1.0.3
+- Fixed error with default value in dart json_serializable generation
+
 ## 1.0.2
 - Fixed error with ` application/x-www-form-urlencoded ` ([#45](https://github.com/Carapacik/swagger_parser/issues/45))
 

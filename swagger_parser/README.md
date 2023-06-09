@@ -26,14 +26,14 @@ In your pubspec.yaml, add the following dependencies:
 
 ```yaml
 dependencies:
-  # dio: ^5.1.0
+  # dio: ^5.2.0
   # freezed_annotation: ^2.2.0 # for freezed
   # json_annotation: ^4.8.1
   # retrofit: ^4.0.1
 
 dev_dependencies:
   # build_runner: ^2.3.3
-  # freezed: ^2.3.4 # for freezed
+  # freezed: ^2.3.5 # for freezed
   # json_serializable: ^6.6.2
   # retrofit_generator: ^7.0.1
   swagger_parser: ^1.0.2
