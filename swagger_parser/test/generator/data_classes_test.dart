@@ -1052,6 +1052,11 @@ class ClassName with _$ClassName {
           type: 'string',
           items: {'FALSE', 'for', 'do'},
         ),
+        UniversalEnumClass(
+          name: 'EnumNameStringWithLeadingNumbers',
+          type: 'string',
+          items: {'1itemOne', '2ItemTwo', '3item_three', '4ITEM-FOUR'},
+        ),
       ];
 
       const fillController = FillController();
@@ -1126,9 +1131,36 @@ const _$KeywordsNameEnumMap = {
   KeywordsName.valueDo: 'do',
 };
 ''';
+
+      const expectedContent3 = r'''
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum()
+enum EnumNameStringWithLeadingNumbers {
+  @JsonValue('1itemOne')
+  value1itemOne,
+  @JsonValue('2ItemTwo')
+  value2ItemTwo,
+  @JsonValue('3item_three')
+  value3itemThree,
+  @JsonValue('4ITEM-FOUR')
+  value4itemFour;
+
+  String toJson() => _$EnumNameStringWithLeadingNumbersEnumMap[this]!;
+}
+
+const _$EnumNameStringWithLeadingNumbersEnumMap = {
+  EnumNameStringWithLeadingNumbers.value1itemOne: '1itemOne',
+  EnumNameStringWithLeadingNumbers.value2ItemTwo: '2ItemTwo',
+  EnumNameStringWithLeadingNumbers.value3itemThree: '3item_three',
+  EnumNameStringWithLeadingNumbers.value4itemFour: '4ITEM-FOUR',
+};
+''';
+
       expect(files[0].contents, expectedContent0);
       expect(files[1].contents, expectedContent1);
       expect(files[2].contents, expectedContent2);
+      expect(files[3].contents, expectedContent3);
     });
 
     test('dart + freezed', () async {
@@ -1625,7 +1657,7 @@ data class ClassName(
           ),
           UniversalType(
             type: 'string',
-            description: 'List of data',
+            description: 'List of data\nThis data is a list',
             arrayDepth: 1,
             name: 'list',
           ),
@@ -1664,6 +1696,7 @@ class ClassName {
   final String megaMind;
   final Object emptyDescription;
   /// List of data
+  /// This data is a list
   final List<String> list;
 
   Map<String, dynamic> toJson() => _$ClassNameToJson(this);
@@ -1708,7 +1741,7 @@ class ClassName {
           ),
           UniversalType(
             type: 'string',
-            description: 'List of data',
+            description: 'List of data\nThis data is a list',
             arrayDepth: 1,
             name: 'list',
           ),
@@ -1736,6 +1769,7 @@ class ClassName with _$ClassName {
     required String megaMind,
     required Object emptyDescription,
     /// List of data
+    /// This data is a list
     required List<String> list,
     /// Default value
     @Default('str')
