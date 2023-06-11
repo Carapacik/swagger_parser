@@ -1,3 +1,8 @@
+## 1.0.4
+- Fixed parsing ` Body ` in OpenApi v2 ([#53](https://github.com/Carapacik/swagger_parser/issues/53))
+- Add multiline comments ([#54](https://github.com/Carapacik/swagger_parser/issues/54))
+- Fixed items name in enum generation ([#55](https://github.com/Carapacik/swagger_parser/issues/55))
+
 ## 1.0.3
 - Fixed error with default value in dart json_serializable generation
 
