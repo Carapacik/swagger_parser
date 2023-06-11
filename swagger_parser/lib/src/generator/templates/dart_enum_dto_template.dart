@@ -33,7 +33,11 @@ String _jsonValue(String type, String item) => '''
   @JsonValue(${type == 'string' ? "'$item'" : item})
   ${_valuePrefixForEnumItems(type, item)}''';
 
-String _valuePrefixForEnumItems(String type, String item) =>
-    type != 'string' || dartKeywords.contains(item.toCamel)
-        ? 'value ${item.toCamel}'.toCamel
-        : item.toCamel;
+String _valuePrefixForEnumItems(String type, String item) {
+  final startsWithNumber = RegExp(r'^\d');
+  return type != 'string' ||
+          dartKeywords.contains(item.toCamel) ||
+          startsWithNumber.hasMatch(item)
+      ? 'value ${item.toCamel}'.toCamel
+      : item.toCamel;
+}
