@@ -18,7 +18,14 @@ String descriptionComment(String? description, {String tab = ''}) {
   if (description == null || description.isEmpty) {
     return '';
   }
-  return '$tab/// $description\n';
+
+  final lineStart = RegExp('^(.*)', multiLine: true);
+  final result = description.replaceAllMapped(
+    lineStart,
+    (m) => '$tab/// ${m[1]}',
+  );
+
+  return '$result\n';
 }
 
 String ioImport(UniversalComponentClass dataClass) => dataClass.parameters
