@@ -334,7 +334,7 @@ class OpenApiParser {
               (e) => e.name == (rawParameter[_inConst].toString()),
             ),
             type: typeWithImport.type,
-            name: rawParameter[_nameConst] == _bodyConst
+            name: rawParameter[_inConst] == _bodyConst
                 ? null
                 : rawParameter[_nameConst].toString(),
           ),
@@ -615,12 +615,16 @@ class OpenApiParser {
       // `enum`
       final newName = name ?? _uniqueName;
       final items = (map[_enumConst] as List).map((e) => e.toString()).toSet();
+
+      final defaultValue = map[_defaultConst] == null
+          ? null
+          : '${newName.toPascal}.${map[_defaultConst].toString().toCamel}';
       _enumClasses.add(
         UniversalEnumClass(
           name: newName,
           type: map[_typeConst].toString(),
           items: items,
-          defaultValue: map[_defaultConst]?.toString(),
+          defaultValue: defaultValue,
           description: map[_descriptionConst]?.toString(),
         ),
       );
@@ -636,7 +640,7 @@ class OpenApiParser {
               ? map[_formatConst].toString()
               : null,
           jsonKey: newName,
-          defaultValue: map[_defaultConst]?.toString(),
+          defaultValue: defaultValue,
           isRequired: isRequired,
         ),
         import: newName,
