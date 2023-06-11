@@ -1309,10 +1309,10 @@ interface ClassNameClient {
     test('dart + retrofit', () async {
       const restClient = UniversalRestClient(
         name: 'ClassName',
-        imports: {'AnotherFile'},
+        imports: {'Unit', 'Soma'},
         requests: [
           UniversalRequest(
-            name: 'sendGagaga',
+            name: 'sendMessage',
             requestType: HttpRequestType.post,
             route: '/send',
             returnType: null,
@@ -1322,7 +1322,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'token',
-                  defaultValue: 'gagaga123',
+                  defaultValue: 'message123',
                 ),
                 name: 'Authorization',
               ),
@@ -1351,8 +1351,19 @@ interface ClassNameClient {
                   type: 'Unit',
                   name: 'unit',
                   defaultValue: 'CELSIUS',
+                  enumType: 'string',
                 ),
                 name: 'unit',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'Soma',
+                  name: 'soma',
+                  defaultValue: '1',
+                  enumType: 'int',
+                ),
+                name: 'soma',
               )
             ],
           )
@@ -1364,7 +1375,8 @@ interface ClassNameClient {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../shared_models/another_file.dart';
+import '../shared_models/unit.dart';
+import '../shared_models/soma.dart';
 
 part 'class_name_client.g.dart';
 
@@ -1373,11 +1385,12 @@ abstract class ClassNameClient {
   factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
 
   @POST('/send')
-  Future<void> sendGagaga({
-    @Header('Authorization') String token = 'gagaga123',
+  Future<void> sendMessage({
+    @Header('Authorization') String token = 'message123',
     @Query('age') double age = 17,
     @Query('adult') bool adult = false,
     @Query('unit') Unit unit = Unit.celsius,
+    @Query('soma') Soma soma = Soma.value1,
   });
 }
 ''';
@@ -1387,10 +1400,10 @@ abstract class ClassNameClient {
     test('kotlin + retrofit', () async {
       const restClient = UniversalRestClient(
         name: 'ClassName',
-        imports: {'AnotherFile'},
+        imports: {},
         requests: [
           UniversalRequest(
-            name: 'sendGagaga',
+            name: 'sendMessage',
             requestType: HttpRequestType.post,
             route: '/send',
             returnType: null,
@@ -1400,7 +1413,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'token',
-                  defaultValue: 'gagaga123',
+                  defaultValue: 'message123',
                 ),
                 name: 'Authorization',
               ),
@@ -1429,8 +1442,19 @@ abstract class ClassNameClient {
                   type: 'Unit',
                   name: 'unit',
                   defaultValue: 'CELSIUS',
+                  enumType: 'string',
                 ),
                 name: 'unit',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'Soma',
+                  name: 'soma',
+                  defaultValue: '1',
+                  enumType: 'int',
+                ),
+                name: 'soma',
               )
             ],
           )
@@ -1444,11 +1468,12 @@ import retrofit2.http.*
 
 interface ClassNameClient {
     @POST("/send")
-    suspend fun sendGagaga(
-        @Header("Authorization") token: String = "gagaga123",
+    suspend fun sendMessage(
+        @Header("Authorization") token: String = "message123",
         @Query("age") age: Double = 17,
         @Query("adult") adult: Boolean = false,
         @Query("unit") unit: Unit = Unit.CELSIUS,
+        @Query("soma") soma: Soma = Soma.VALUE_1,
     )
 }
 ''';

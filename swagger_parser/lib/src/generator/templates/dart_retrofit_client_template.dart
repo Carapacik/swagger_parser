@@ -47,7 +47,7 @@ String _toClientRequest(UniversalRequest request) {
     request.parameters.sorted((a, b) => a.type.compareTo(b.type)),
   );
   for (final parameter in sortedByRequired) {
-    sb.write('${_toQueryParameter(parameter)}\n');
+    sb.write('${_toParameter(parameter)}\n');
   }
   if (request.parameters.isNotEmpty) {
     sb.write('  });\n');
@@ -65,9 +65,15 @@ String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
         ? "import 'dart:io';\n\n"
         : '';
 
-String _toQueryParameter(UniversalRequestType parameter) =>
+String _toParameter(UniversalRequestType parameter) =>
     "    @${parameter.parameterType.type}(${parameter.name != null ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
     '${parameter.type.isRequired && parameter.type.defaultValue == null ? 'required ' : ''}'
     '${parameter.type.toSuitableType(ProgrammingLanguage.dart)} '
-    '${parameter.type.name!.toCamel}${parameter.type.defaultValue != null ? ' = '
-        '${parameter.type.type.quoterForStringType()}${parameter.type.defaultValue}${parameter.type.type.quoterForStringType()}' : ''},';
+    '${parameter.type.name!.toCamel}${_d(parameter.type)},';
+
+/// return defaultValue if have
+String _d(UniversalType t) => t.defaultValue != null
+    ? ' = ${t.type.quoterForStringType()}'
+        '${t.enumType != null ? '${t.type}.${prefixForEnumItems(t.enumType!, t.defaultValue!)}' : t.defaultValue}'
+        '${t.type.quoterForStringType()}'
+    : '';
