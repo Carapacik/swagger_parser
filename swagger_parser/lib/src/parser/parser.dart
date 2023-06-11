@@ -642,6 +642,7 @@ class OpenApiParser {
           jsonKey: newName,
           defaultValue: defaultValue,
           isRequired: isRequired,
+          enumType: map[_typeConst].toString(),
         ),
         import: newName,
       );

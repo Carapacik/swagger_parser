@@ -13,6 +13,7 @@ class UniversalType {
     this.isRequired = true,
     this.nullable = false,
     this.arrayDepth = 0,
+    this.enumType,
   });
 
   /// Object type
@@ -40,6 +41,9 @@ class UniversalType {
 
   /// Whether or not this field is required
   final bool isRequired;
+
+  /// If this type is enum
+  final String? enumType;
 
   /// Array depth, 0 if not a list
   /// if arrayDepth = 2
