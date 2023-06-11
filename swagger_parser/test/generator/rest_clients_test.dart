@@ -1344,6 +1344,15 @@ interface ClassNameClient {
                   defaultValue: 'false',
                 ),
                 name: 'adult',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'Unit',
+                  name: 'unit',
+                  defaultValue: 'CELSIUS',
+                ),
+                name: 'unit',
               )
             ],
           )
@@ -1368,6 +1377,7 @@ abstract class ClassNameClient {
     @Header('Authorization') String token = 'gagaga123',
     @Query('age') double age = 17,
     @Query('adult') bool adult = false,
+    @Query('unit') Unit unit = Unit.celsius,
   });
 }
 ''';
@@ -1412,6 +1422,15 @@ abstract class ClassNameClient {
                   defaultValue: 'false',
                 ),
                 name: 'adult',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'Unit',
+                  name: 'unit',
+                  defaultValue: 'CELSIUS',
+                ),
+                name: 'unit',
               )
             ],
           )
@@ -1429,6 +1448,7 @@ interface ClassNameClient {
         @Header("Authorization") token: String = "gagaga123",
         @Query("age") age: Double = 17,
         @Query("adult") adult: Boolean = false,
+        @Query("unit") unit: Unit = Unit.CELSIUS,
     )
 }
 ''';
