@@ -1,5 +1,4 @@
 import '../../utils/case_utils.dart';
-import '../../utils/dart_keywords.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
 import '../models/universal_enum_class.dart';
@@ -22,7 +21,7 @@ ${enumClass.items.map((e) => _jsonValue(enumClass.type, e)).join(',\n')};
 
 const _\$${className}EnumMap = {
   ${enumClass.items.map(
-            (e) => '$className.${_valuePrefixForEnumItems(enumClass.type, e)}: '
+            (e) => '$className.${prefixForEnumItems(enumClass.type, e)}: '
                 '${enumClass.type.quoterForStringType()}$e${enumClass.type.quoterForStringType()}',
           ).join(',\n  ')},
 };
@@ -31,13 +30,4 @@ const _\$${className}EnumMap = {
 
 String _jsonValue(String type, String item) => '''
   @JsonValue(${type == 'string' ? "'$item'" : item})
-  ${_valuePrefixForEnumItems(type, item)}''';
-
-String _valuePrefixForEnumItems(String type, String item) {
-  final startsWithNumber = RegExp(r'^\d');
-  return type != 'string' ||
-          dartKeywords.contains(item.toCamel) ||
-          startsWithNumber.hasMatch(item)
-      ? 'value ${item.toCamel}'.toCamel
-      : item.toCamel;
-}
+  ${prefixForEnumItems(type, item)}''';

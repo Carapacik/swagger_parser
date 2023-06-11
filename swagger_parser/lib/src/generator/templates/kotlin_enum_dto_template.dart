@@ -1,5 +1,5 @@
 import '../../utils/case_utils.dart';
-import '../../utils/dart_keywords.dart';
+import '../../utils/type_utils.dart';
 import '../models/universal_enum_class.dart';
 
 /// Provides template for generating kotlin enum DTO
@@ -17,14 +17,7 @@ enum class ${dataClass.name.toPascal} {${_parameters(dataClass)}
 String _parameters(UniversalEnumClass dataClass) => dataClass.items
     .map(
       (e) =>
-          '${dataClass.type != 'string' || _valuePrefixForEnumItems(dataClass.type, e) != e ? '\n    @Json("$e")' : ''}\n    '
-          '${_valuePrefixForEnumItems(dataClass.type, e)},',
+          '${dataClass.type != 'string' || prefixForEnumItems(dataClass.type, e, dart: false) != e ? '\n    @Json("$e")' : ''}\n    '
+          '${prefixForEnumItems(dataClass.type, e, dart: false)},',
     )
     .join();
-
-String _valuePrefixForEnumItems(String type, String item) =>
-    (type != 'string' || dartKeywords.contains(item.toCamel)
-            ? 'value ${item.toSnake}'
-            : item)
-        .toSnake
-        .toUpperCase();

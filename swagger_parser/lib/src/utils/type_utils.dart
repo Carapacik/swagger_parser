@@ -1,3 +1,6 @@
+import 'case_utils.dart';
+import 'dart_keywords.dart';
+
 extension StringTypeX on String {
   String toDartType([String? format]) {
     switch (this) {
@@ -63,9 +66,22 @@ extension StringTypeX on String {
     return this;
   }
 
-  String quoterForStringType({bool isDart = true}) => this == 'string'
-      ? isDart
+  String quoterForStringType({bool dart = true}) => this == 'string'
+      ? dart
           ? "'"
           : '"'
       : '';
+}
+
+String prefixForEnumItems(String type, String item, {bool dart = true}) {
+  final startsWithNumber = RegExp(r'^\d');
+  return type != 'string' ||
+          dartKeywords.contains(item.toCamel) ||
+          startsWithNumber.hasMatch(item)
+      ? dart
+          ? 'value ${item.toCamel}'.toCamel
+          : 'value ${item.toSnake}'.toSnake.toUpperCase()
+      : dart
+          ? item.toCamel
+          : item.toSnake.toUpperCase();
 }

@@ -60,5 +60,11 @@ String _toClientRequest(UniversalRequest request) {
 String _toQueryParameter(UniversalRequestType parameter) =>
     '        @${parameter.parameterType.type}${parameter.parameterType.isBody ? '' : '("${parameter.name}")'} '
     '${parameter.type.name!.toCamel}: ${parameter.type.toSuitableType(ProgrammingLanguage.kotlin)}'
-    '${parameter.type.defaultValue != null ? ' = ${parameter.type.type.quoterForStringType(isDart: false)}'
-        '${parameter.type.defaultValue}${parameter.type.type.quoterForStringType(isDart: false)}' : ''}';
+    '${_d(parameter.type)}';
+
+/// return defaultValue if have
+String _d(UniversalType t) => t.defaultValue != null
+    ? ' = ${t.type.quoterForStringType(dart: false)}'
+        '${t.enumType != null ? '${t.type}.${prefixForEnumItems(t.enumType!, t.defaultValue!, dart: false)}' : t.defaultValue}'
+        '${t.type.quoterForStringType(dart: false)}'
+    : '';
