@@ -36,7 +36,7 @@ dev_dependencies:
   # freezed: ^2.3.5 # for freezed
   # json_serializable: ^6.6.2
   # retrofit_generator: ^7.0.1
-  swagger_parser: ^1.0.2
+  swagger_parser:
 ```
 
 ### Configure package
