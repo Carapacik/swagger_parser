@@ -30,6 +30,7 @@ const dartKeywords = {
   'for',
   'Function',
   'get',
+  'hashCode',
   'hide',
   'if',
   'implements',
