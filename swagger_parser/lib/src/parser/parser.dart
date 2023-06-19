@@ -143,13 +143,25 @@ class OpenApiParser {
               (rawParameter as Map<String, dynamic>)[_requiredConst]
                   ?.toString()
                   .toBool();
-          final typeWithImport = _findType(
-            rawParameter[_schemaConst] as Map<String, dynamic>,
-            name: rawParameter[_nameConst].toString(),
-            isRequired: isRequired ?? true,
-            allOfObject: (rawParameter[_schemaConst] as Map<String, dynamic>)
-                .containsKey(_allOfConst),
-          );
+
+          TypeWithImport typeWithImport;
+
+          if (rawParameter[_schemaConst] != null) {
+            typeWithImport = _findType(
+              rawParameter[_schemaConst] as Map<String, dynamic>,
+              name: rawParameter[_nameConst].toString(),
+              isRequired: isRequired ?? true,
+              useSchema: true,
+            );
+          } else {
+            typeWithImport = _findType(
+              rawParameter,
+              name: rawParameter[_nameConst].toString(),
+              isRequired: isRequired ?? true,
+              useSchema: true,
+            );
+          }
+
           if (typeWithImport.import != null) {
             imports.add(typeWithImport.import!);
           }
@@ -319,12 +331,25 @@ class OpenApiParser {
             (rawParameter as Map<String, dynamic>)[_requiredConst]
                 ?.toString()
                 .toBool();
-        final typeWithImport = _findType(
-          rawParameter,
-          name: rawParameter[_nameConst].toString(),
-          isRequired: isRequired ?? true,
-          useSchema: true,
-        );
+
+        TypeWithImport typeWithImport;
+
+        if (rawParameter[_schemaConst] != null) {
+          typeWithImport = _findType(
+            rawParameter[_schemaConst] as Map<String, dynamic>,
+            name: rawParameter[_nameConst].toString(),
+            isRequired: isRequired ?? true,
+            useSchema: true,
+          );
+        } else {
+          typeWithImport = _findType(
+            rawParameter,
+            name: rawParameter[_nameConst].toString(),
+            isRequired: isRequired ?? true,
+            useSchema: true,
+          );
+        }
+
         if (typeWithImport.import != null) {
           imports.add(typeWithImport.import!);
         }
