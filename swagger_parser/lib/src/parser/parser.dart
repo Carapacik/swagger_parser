@@ -144,23 +144,13 @@ class OpenApiParser {
                   ?.toString()
                   .toBool();
 
-          TypeWithImport typeWithImport;
-
-          if (rawParameter[_schemaConst] != null) {
-            typeWithImport = _findType(
-              rawParameter[_schemaConst] as Map<String, dynamic>,
-              name: rawParameter[_nameConst].toString(),
-              isRequired: isRequired ?? true,
-              useSchema: true,
-            );
-          } else {
-            typeWithImport = _findType(
-              rawParameter,
-              name: rawParameter[_nameConst].toString(),
-              isRequired: isRequired ?? true,
-              useSchema: true,
-            );
-          }
+          final typeWithImport = _findType(
+            rawParameter[_schemaConst] != null ? rawParameter[_schemaConst] as Map<String, dynamic> : rawParameter,
+            name: rawParameter[_nameConst].toString(),
+            isRequired: isRequired ?? true,
+            allOfObject: (rawParameter[_schemaConst] as Map<String, dynamic>)
+                .containsKey(_allOfConst),
+          );
 
           if (typeWithImport.import != null) {
             imports.add(typeWithImport.import!);
@@ -332,23 +322,13 @@ class OpenApiParser {
                 ?.toString()
                 .toBool();
 
-        TypeWithImport typeWithImport;
-
-        if (rawParameter[_schemaConst] != null) {
-          typeWithImport = _findType(
-            rawParameter[_schemaConst] as Map<String, dynamic>,
-            name: rawParameter[_nameConst].toString(),
-            isRequired: isRequired ?? true,
-            useSchema: true,
-          );
-        } else {
-          typeWithImport = _findType(
-            rawParameter,
-            name: rawParameter[_nameConst].toString(),
-            isRequired: isRequired ?? true,
-            useSchema: true,
-          );
-        }
+        final typeWithImport = _findType(
+          rawParameter[_schemaConst] != null ? rawParameter[_schemaConst] as Map<String, dynamic> : rawParameter,
+          name: rawParameter[_nameConst].toString(),
+          isRequired: isRequired ?? true,
+          allOfObject: (rawParameter[_schemaConst] as Map<String, dynamic>)
+              .containsKey(_allOfConst),
+        );
 
         if (typeWithImport.import != null) {
           imports.add(typeWithImport.import!);
