@@ -145,7 +145,9 @@ class OpenApiParser {
                   .toBool();
 
           final typeWithImport = _findType(
-            rawParameter[_schemaConst] != null ? rawParameter[_schemaConst] as Map<String, dynamic> : rawParameter,
+            rawParameter[_schemaConst] != null
+                ? rawParameter[_schemaConst] as Map<String, dynamic>
+                : rawParameter,
             name: rawParameter[_nameConst].toString(),
             isRequired: isRequired ?? true,
             allOfObject: (rawParameter[_schemaConst] as Map<String, dynamic>)
@@ -323,7 +325,9 @@ class OpenApiParser {
                 .toBool();
 
         final typeWithImport = _findType(
-          rawParameter[_schemaConst] != null ? rawParameter[_schemaConst] as Map<String, dynamic> : rawParameter,
+          rawParameter[_schemaConst] != null
+              ? rawParameter[_schemaConst] as Map<String, dynamic>
+              : rawParameter,
           name: rawParameter[_nameConst].toString(),
           isRequired: isRequired ?? true,
           allOfObject: (rawParameter[_schemaConst] as Map<String, dynamic>)
@@ -590,7 +594,6 @@ class OpenApiParser {
     String? name,
     String? arrayName,
     bool isRequired = true,
-    bool useSchema = false,
     bool allOfObject = false,
     bool root = true,
   }) {

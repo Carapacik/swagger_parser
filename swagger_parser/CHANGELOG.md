@@ -1,3 +1,6 @@
+## 1.0.7
+- Fixed classes as body parameters ([#61](https://github.com/Carapacik/swagger_parser/issues/61))
+
 ## 1.0.6
 - Fixed generation default enum values ([#58](https://github.com/Carapacik/swagger_parser/issues/58))
 - Add new keywords to check the name of variables
