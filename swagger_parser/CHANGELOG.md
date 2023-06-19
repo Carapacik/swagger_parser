@@ -1,5 +1,9 @@
+## 1.0.6
+- Fixed generation default enum values ([#58](https://github.com/Carapacik/swagger_parser/issues/58))
+- Add new keywords to check the name of variables
+
 ## 1.0.5
-- Fixed generation default enum default values in client ([#56](https://github.com/Carapacik/swagger_parser/issues/56))
+- Fixed generation default enum values in client ([#56](https://github.com/Carapacik/swagger_parser/issues/56))
 
 ## 1.0.4
 - Fixed parsing ` Body ` in OpenApi v2 ([#53](https://github.com/Carapacik/swagger_parser/issues/53))
