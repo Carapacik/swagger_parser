@@ -143,13 +143,15 @@ class OpenApiParser {
               (rawParameter as Map<String, dynamic>)[_requiredConst]
                   ?.toString()
                   .toBool();
+
           final typeWithImport = _findType(
-            rawParameter[_schemaConst] as Map<String, dynamic>,
+            rawParameter[_schemaConst] != null ? rawParameter[_schemaConst] as Map<String, dynamic> : rawParameter,
             name: rawParameter[_nameConst].toString(),
             isRequired: isRequired ?? true,
             allOfObject: (rawParameter[_schemaConst] as Map<String, dynamic>)
                 .containsKey(_allOfConst),
           );
+
           if (typeWithImport.import != null) {
             imports.add(typeWithImport.import!);
           }
@@ -319,12 +321,15 @@ class OpenApiParser {
             (rawParameter as Map<String, dynamic>)[_requiredConst]
                 ?.toString()
                 .toBool();
+
         final typeWithImport = _findType(
-          rawParameter,
+          rawParameter[_schemaConst] != null ? rawParameter[_schemaConst] as Map<String, dynamic> : rawParameter,
           name: rawParameter[_nameConst].toString(),
           isRequired: isRequired ?? true,
-          useSchema: true,
+          allOfObject: (rawParameter[_schemaConst] as Map<String, dynamic>)
+              .containsKey(_allOfConst),
         );
+
         if (typeWithImport.import != null) {
           imports.add(typeWithImport.import!);
         }
