@@ -6,7 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 import '../generator/models/all_of.dart';
-import '../generator/models/name_replacement.dart';
+import '../generator/models/replacement_rule.dart';
 import '../generator/models/universal_component_class.dart';
 import '../generator/models/universal_data_class.dart';
 import '../generator/models/universal_enum_class.dart';
@@ -22,7 +22,7 @@ import 'parser_exception.dart';
 class OpenApiParser {
   /// Accepts [fileContent] of the schema file
   /// and [isYaml] schema format or not
-  OpenApiParser(String fileContent, this._nameReplacements,
+  OpenApiParser(String fileContent, this._replacementRules,
       {bool isYaml = false}) {
     _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
@@ -51,7 +51,7 @@ class OpenApiParser {
   late final OpenApiVersion _version;
   final List<UniversalComponentClass> _objectClasses = [];
   final List<UniversalEnumClass> _enumClasses = [];
-  final List<NameReplacement> _nameReplacements;
+  final List<ReplacementRule> _replacementRules;
   int _uniqueNameCounter = 0;
 
   static const _additionalPropertiesConst = 'additionalProperties';
@@ -465,8 +465,8 @@ class OpenApiParser {
             (value[_enumConst] as List).map((e) => e.toString()).toSet();
 
         var type = value[_typeConst].toString();
-        _nameReplacements.forEach((nameReplacement) {
-          type = nameReplacement.apply(type)!;
+        _replacementRules.forEach((replacementRule) {
+          type = replacementRule.apply(type)!;
         });
 
         dataClasses.add(
@@ -516,8 +516,8 @@ class OpenApiParser {
       final allOf =
           refs.isNotEmpty ? AllOf(refs: refs, properties: parameters) : null;
 
-      _nameReplacements.forEach((nameReplacement) {
-        key = nameReplacement.apply(key)!;
+      _replacementRules.forEach((replacementRule) {
+        key = replacementRule.apply(key)!;
       });
       dataClasses.add(
         UniversalComponentClass(
@@ -639,8 +639,8 @@ class OpenApiParser {
       var newName = name ?? _uniqueName;
       final items = (map[_enumConst] as List).map((e) => e.toString()).toSet();
 
-      _nameReplacements.forEach((nameReplacement) {
-        newName = nameReplacement.apply(newName)!;
+      _replacementRules.forEach((replacementRule) {
+        newName = replacementRule.apply(newName)!;
       });
       _enumClasses.add(
         UniversalEnumClass(
@@ -753,9 +753,9 @@ class OpenApiParser {
               : null;
       // iterate over name replacements and apply them to type
       if (import != null) {
-        _nameReplacements.forEach((nameReplacement) {
-          import = nameReplacement.apply(import);
-          type = nameReplacement.apply(type)!;
+        _replacementRules.forEach((replacementRule) {
+          import = replacementRule.apply(import);
+          type = replacementRule.apply(type)!;
         });
       }
       return TypeWithImport(

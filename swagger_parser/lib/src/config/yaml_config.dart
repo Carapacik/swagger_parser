@@ -1,5 +1,5 @@
 import 'package:args/args.dart';
-import 'package:swagger_parser/src/generator/models/name_replacement.dart';
+import 'package:swagger_parser/src/generator/models/replacement_rule.dart';
 import 'package:yaml/yaml.dart';
 
 import '../utils/file_utils.dart';
@@ -92,13 +92,13 @@ class YamlConfig {
       _freezed = yamlConfig['freezed'] as bool?;
     }
 
-    if (yamlConfig.containsKey('replace_names')) {
-      if (yamlConfig['replace_names'] is! YamlList) {
+    if (yamlConfig.containsKey('replacement_rules')) {
+      if (yamlConfig['replacement_rules'] is! YamlList) {
         throw const ConfigException(
-          "Config parameter 'replace_names' must be list.",
+          "Config parameter 'replacement_rules' must be list.",
         );
       }
-      final replacementsYamlList = yamlConfig['replace_names'] as YamlList;
+      final replacementsYamlList = yamlConfig['replacement_rules'] as YamlList;
 
       for (final element in replacementsYamlList) {
         if (element is! YamlMap ||
@@ -107,12 +107,12 @@ class YamlConfig {
             element['pattern'] is! String ||
             element['replacement'] is! String) {
           throw const ConfigException(
-            "Config parameter 'replace_names' values must be maps of strings and contain 'pattern' and 'replacement'.",
+            "Config parameter 'replacement_rules' values must be maps of strings and contain 'pattern' and 'replacement'.",
           );
         }
 
-        _nameReplacements.add(
-          NameReplacement(
+        _replacementRules.add(
+          ReplacementRule(
             pattern: RegExp(element['pattern'].toString()),
             replacement: element['replacement'].toString(),
           ),
@@ -129,7 +129,7 @@ class YamlConfig {
   bool? _rootInterface;
   bool? _squishClients;
   bool? _freezed;
-  List<NameReplacement> _nameReplacements = [];
+  List<ReplacementRule> _replacementRules = [];
 
   String get outputDirectory => _outputDirectory!;
 
@@ -145,5 +145,5 @@ class YamlConfig {
 
   bool? get freezed => _freezed;
 
-  List<NameReplacement> get nameReplacements => _nameReplacements;
+  List<ReplacementRule> get replacementRules => _replacementRules;
 }

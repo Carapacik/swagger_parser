@@ -1,5 +1,5 @@
 import 'package:path/path.dart' as p;
-import 'package:swagger_parser/src/generator/models/name_replacement.dart';
+import 'package:swagger_parser/src/generator/models/replacement_rule.dart';
 
 import '../config/yaml_config.dart';
 import '../parser/parser.dart';
@@ -54,7 +54,7 @@ class Generator {
     if (yamlConfig.clientPostfix != null) {
       _clientPostfix = yamlConfig.clientPostfix!;
     }
-    _nameReplacements = yamlConfig.nameReplacements;
+    _replacementRules = yamlConfig.replacementRules;
   }
 
   /// Applies parameters directly from constructor
@@ -90,7 +90,7 @@ class Generator {
   /// Client postfix
   String _clientPostfix = 'Client';
 
-  List<NameReplacement> _nameReplacements = [];
+  List<ReplacementRule> _replacementRules = [];
   
   /// Generate root interface for all Clients
   bool _rootInterface = true;
@@ -123,7 +123,7 @@ class Generator {
   /// Parse definition file content and fill list of [UniversalRestClient]
   /// and list of [UniversalDataClass]
   void _parseOpenApiDefinitionFile() {
-    final parser = OpenApiParser(_schemaContent, _nameReplacements, isYaml: _isYaml);
+    final parser = OpenApiParser(_schemaContent, _replacementRules, isYaml: _isYaml);
     _restClients = parser.parseRestClients();
     _dataClasses = parser.parseDataClasses();
   }

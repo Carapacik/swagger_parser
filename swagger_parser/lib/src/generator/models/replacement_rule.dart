@@ -1,6 +1,6 @@
 /// Used to store regex patterns for replacing names during generation
-class NameReplacement {
-  const NameReplacement({
+class ReplacementRule {
+  const ReplacementRule({
     required this.pattern,
     required this.replacement,
   });
