@@ -91,7 +91,7 @@ class Generator {
   String _clientPostfix = 'Client';
 
   List<ReplacementRule> _replacementRules = [];
-  
+
   /// Generate root interface for all Clients
   bool _rootInterface = true;
 
@@ -123,7 +123,8 @@ class Generator {
   /// Parse definition file content and fill list of [UniversalRestClient]
   /// and list of [UniversalDataClass]
   void _parseOpenApiDefinitionFile() {
-    final parser = OpenApiParser(_schemaContent, _replacementRules, isYaml: _isYaml);
+    final parser =
+        OpenApiParser(_schemaContent, _replacementRules, isYaml: _isYaml);
     _restClients = parser.parseRestClients();
     _dataClasses = parser.parseDataClasses();
   }
