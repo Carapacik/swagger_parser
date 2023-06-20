@@ -6,6 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 import '../generator/models/all_of.dart';
+import '../generator/models/replacement_rule.dart';
 import '../generator/models/universal_component_class.dart';
 import '../generator/models/universal_data_class.dart';
 import '../generator/models/universal_enum_class.dart';
@@ -21,10 +22,14 @@ import 'parser_exception.dart';
 class OpenApiParser {
   /// Accepts [fileContent] of the schema file
   /// and [isYaml] schema format or not
-  OpenApiParser(String fileContent, {bool isYaml = false}) {
+  OpenApiParser(String fileContent,
+      {List<ReplacementRule> replacementRules = const <ReplacementRule>[],
+      bool isYaml = false}) {
     _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
         : jsonDecode(fileContent) as Map<String, dynamic>;
+
+    _replacementRules = replacementRules;
 
     if (_definitionFileContent.containsKey(_openApiConst)) {
       final version = _definitionFileContent[_openApiConst].toString();
@@ -49,6 +54,7 @@ class OpenApiParser {
   late final OpenApiVersion _version;
   final List<UniversalComponentClass> _objectClasses = [];
   final List<UniversalEnumClass> _enumClasses = [];
+  late final List<ReplacementRule> _replacementRules;
   int _uniqueNameCounter = 0;
 
   static const _additionalPropertiesConst = 'additionalProperties';
@@ -330,8 +336,9 @@ class OpenApiParser {
               : rawParameter,
           name: rawParameter[_nameConst].toString(),
           isRequired: isRequired ?? true,
-          allOfObject: (rawParameter[_schemaConst] as Map<String, dynamic>)
-              .containsKey(_allOfConst),
+          allOfObject: rawParameter.containsKey(_schemaConst) &&
+              (rawParameter[_schemaConst] as Map<String, dynamic>)
+                  .containsKey(_allOfConst),
         );
 
         if (typeWithImport.import != null) {
@@ -458,10 +465,16 @@ class OpenApiParser {
       } else if (value.containsKey(_enumConst)) {
         final items =
             (value[_enumConst] as List).map((e) => e.toString()).toSet();
+
+        var type = value[_typeConst].toString();
+        _replacementRules.forEach((replacementRule) {
+          type = replacementRule.apply(type)!;
+        });
+
         dataClasses.add(
           UniversalEnumClass(
             name: key,
-            type: value[_typeConst].toString(),
+            type: type,
             items: items,
             defaultValue: value[_defaultConst]?.toString(),
             description: value[_descriptionConst]?.toString(),
@@ -504,6 +517,10 @@ class OpenApiParser {
 
       final allOf =
           refs.isNotEmpty ? AllOf(refs: refs, properties: parameters) : null;
+
+      _replacementRules.forEach((replacementRule) {
+        key = replacementRule.apply(key)!;
+      });
       dataClasses.add(
         UniversalComponentClass(
           name: key,
@@ -621,9 +638,12 @@ class OpenApiParser {
       );
     } else if (map.containsKey(_enumConst)) {
       // `enum`
-      final newName = name ?? _uniqueName;
+      var newName = name ?? _uniqueName;
       final items = (map[_enumConst] as List).map((e) => e.toString()).toSet();
 
+      _replacementRules.forEach((replacementRule) {
+        newName = replacementRule.apply(newName)!;
+      });
       _enumClasses.add(
         UniversalEnumClass(
           name: newName,
@@ -713,7 +733,7 @@ class OpenApiParser {
         import: '$newName $_valueConst',
       );
     } else {
-      final type = map.containsKey(_typeConst)
+      var type = map.containsKey(_typeConst)
           ? map.containsKey(_refConst) &&
                   map[_typeConst].toString() == _objectConst
               ? _formatRef(map)
@@ -725,7 +745,7 @@ class OpenApiParser {
               : map.containsKey(_refConst)
                   ? _formatRef(map)
                   : _objectConst;
-      final import = map.containsKey(_typeConst) ||
+      var import = map.containsKey(_typeConst) ||
               map.containsKey(_anyOfConst) ||
               map.containsKey(_oneOfConst) ||
               allOfObject
@@ -733,6 +753,13 @@ class OpenApiParser {
           : map.containsKey(_refConst)
               ? _formatRef(map)
               : null;
+      // iterate over name replacements and apply them to type
+      if (import != null) {
+        _replacementRules.forEach((replacementRule) {
+          import = replacementRule.apply(import);
+          type = replacementRule.apply(type)!;
+        });
+      }
       return TypeWithImport(
         type: UniversalType(
           type: type,
