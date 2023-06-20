@@ -22,11 +22,14 @@ import 'parser_exception.dart';
 class OpenApiParser {
   /// Accepts [fileContent] of the schema file
   /// and [isYaml] schema format or not
-  OpenApiParser(String fileContent, this._replacementRules,
-      {bool isYaml = false}) {
+  OpenApiParser(String fileContent,
+      {List<ReplacementRule> replacementRules = const <ReplacementRule>[],
+      bool isYaml = false}) {
     _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
         : jsonDecode(fileContent) as Map<String, dynamic>;
+
+    _replacementRules = replacementRules;
 
     if (_definitionFileContent.containsKey(_openApiConst)) {
       final version = _definitionFileContent[_openApiConst].toString();
@@ -51,7 +54,7 @@ class OpenApiParser {
   late final OpenApiVersion _version;
   final List<UniversalComponentClass> _objectClasses = [];
   final List<UniversalEnumClass> _enumClasses = [];
-  final List<ReplacementRule> _replacementRules;
+  late final List<ReplacementRule> _replacementRules;
   int _uniqueNameCounter = 0;
 
   static const _additionalPropertiesConst = 'additionalProperties';
@@ -333,7 +336,7 @@ class OpenApiParser {
               : rawParameter,
           name: rawParameter[_nameConst].toString(),
           isRequired: isRequired ?? true,
-          allOfObject: rawParameter[_schemaConst] != null &&
+          allOfObject: rawParameter.containsKey(_schemaConst) &&
               (rawParameter[_schemaConst] as Map<String, dynamic>)
                   .containsKey(_allOfConst),
         );

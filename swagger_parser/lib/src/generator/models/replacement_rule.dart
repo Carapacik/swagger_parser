@@ -11,6 +11,7 @@ class ReplacementRule {
   /// Replacement string
   final String replacement;
 
+  /// applies the replacement rule to the given input string
   String? apply(String? input) {
     return input?.replaceAll(pattern, replacement);
   }

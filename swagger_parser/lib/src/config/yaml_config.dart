@@ -1,5 +1,5 @@
 import 'package:args/args.dart';
-import 'package:swagger_parser/src/generator/models/replacement_rule.dart';
+import '../generator/models/replacement_rule.dart';
 import 'package:yaml/yaml.dart';
 
 import '../utils/file_utils.dart';

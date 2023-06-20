@@ -1,5 +1,5 @@
 import 'package:path/path.dart' as p;
-import 'package:swagger_parser/src/generator/models/replacement_rule.dart';
+import 'models/replacement_rule.dart';
 
 import '../config/yaml_config.dart';
 import '../parser/parser.dart';
@@ -90,6 +90,7 @@ class Generator {
   /// Client postfix
   String _clientPostfix = 'Client';
 
+  /// List of rules used to replace patterns in generated class names
   List<ReplacementRule> _replacementRules = [];
 
   /// Generate root interface for all Clients
@@ -123,8 +124,8 @@ class Generator {
   /// Parse definition file content and fill list of [UniversalRestClient]
   /// and list of [UniversalDataClass]
   void _parseOpenApiDefinitionFile() {
-    final parser =
-        OpenApiParser(_schemaContent, _replacementRules, isYaml: _isYaml);
+    final parser = OpenApiParser(_schemaContent,
+        replacementRules: _replacementRules, isYaml: _isYaml);
     _restClients = parser.parseRestClients();
     _dataClasses = parser.parseDataClasses();
   }
