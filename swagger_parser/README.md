@@ -53,6 +53,9 @@ swagger_parser:
   squish_clients: false # Optional. Set 'true' to put all clients in one folder. Default: false
   client_postfix: Client # Optional. Set postfix for Client class and file. Default: Client
   freezed: false # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
+  replace_names: # Optional. Set regex replacement rules for generated names
+    - pattern: "[0-9]+"
+      replacement: ""
 ```
 
 

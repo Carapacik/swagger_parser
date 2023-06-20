@@ -1,4 +1,5 @@
 import 'package:args/args.dart';
+import 'package:swagger_parser/src/generator/models/name_replacement.dart';
 import 'package:yaml/yaml.dart';
 
 import '../utils/file_utils.dart';
@@ -90,6 +91,35 @@ class YamlConfig {
       }
       _freezed = yamlConfig['freezed'] as bool?;
     }
+
+    if (yamlConfig.containsKey('replace_names')) {
+      if (yamlConfig['replace_names'] is! YamlList) {
+        throw const ConfigException(
+          "Config parameter 'replace_names' must be list.",
+        );
+      }
+      final replacementsYamlList = yamlConfig['replace_names'] as YamlList;
+
+      for (final element in replacementsYamlList) {
+        if (element is! YamlMap ||
+            !element.keys.contains('pattern') ||
+            !element.keys.contains('replacement') ||
+            element['pattern'] is! String ||
+            element['replacement'] is! String) {
+          throw const ConfigException(
+            "Config parameter 'replace_names' values must be maps of strings and contain 'pattern' and 'replacement'.",
+          );
+        }
+
+        _nameReplacements.add(
+          NameReplacement(
+            pattern: RegExp(element['pattern'].toString()),
+            replacement: element['replacement'].toString(),
+          ),
+        );
+      }
+
+    }
   }
 
   String? _outputDirectory;
@@ -99,6 +129,7 @@ class YamlConfig {
   bool? _rootInterface;
   bool? _squishClients;
   bool? _freezed;
+  List<NameReplacement> _nameReplacements = [];
 
   String get outputDirectory => _outputDirectory!;
 
@@ -113,4 +144,6 @@ class YamlConfig {
   bool? get squishClients => _squishClients;
 
   bool? get freezed => _freezed;
+
+  List<NameReplacement> get nameReplacements => _nameReplacements;
 }
