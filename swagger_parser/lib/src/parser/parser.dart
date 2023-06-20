@@ -150,8 +150,9 @@ class OpenApiParser {
                 : rawParameter,
             name: rawParameter[_nameConst].toString(),
             isRequired: isRequired ?? true,
-            allOfObject: (rawParameter[_schemaConst] as Map<String, dynamic>)
-                .containsKey(_allOfConst),
+            allOfObject: rawParameter[_schemaConst] != null &&
+                (rawParameter[_schemaConst] as Map<String, dynamic>)
+                    .containsKey(_allOfConst),
           );
 
           if (typeWithImport.import != null) {
@@ -330,8 +331,9 @@ class OpenApiParser {
               : rawParameter,
           name: rawParameter[_nameConst].toString(),
           isRequired: isRequired ?? true,
-          allOfObject: (rawParameter[_schemaConst] as Map<String, dynamic>)
-              .containsKey(_allOfConst),
+          allOfObject: rawParameter[_schemaConst] != null &&
+              (rawParameter[_schemaConst] as Map<String, dynamic>)
+                  .containsKey(_allOfConst),
         );
 
         if (typeWithImport.import != null) {
