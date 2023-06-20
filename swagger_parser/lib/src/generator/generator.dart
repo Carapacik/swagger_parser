@@ -54,6 +54,7 @@ class Generator {
     if (yamlConfig.clientPostfix != null) {
       _clientPostfix = yamlConfig.clientPostfix!;
     }
+
     _replacementRules = yamlConfig.replacementRules;
   }
 
@@ -124,8 +125,11 @@ class Generator {
   /// Parse definition file content and fill list of [UniversalRestClient]
   /// and list of [UniversalDataClass]
   void _parseOpenApiDefinitionFile() {
-    final parser = OpenApiParser(_schemaContent,
-        replacementRules: _replacementRules, isYaml: _isYaml);
+    final parser = OpenApiParser(
+      _schemaContent,
+      replacementRules: _replacementRules,
+      isYaml: _isYaml,
+    );
     _restClients = parser.parseRestClients();
     _dataClasses = parser.parseDataClasses();
   }
