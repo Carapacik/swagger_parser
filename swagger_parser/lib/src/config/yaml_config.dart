@@ -107,7 +107,8 @@ class YamlConfig {
             element['pattern'] is! String ||
             element['replacement'] is! String) {
           throw const ConfigException(
-            "Config parameter 'replacement_rules' values must be maps of strings and contain 'pattern' and 'replacement'.",
+            "Config parameter 'replacement_rules' values must be maps of strings "
+            "and contain 'pattern' and 'replacement'.",
           );
         }
 
@@ -128,7 +129,7 @@ class YamlConfig {
   bool? _rootInterface;
   bool? _squishClients;
   bool? _freezed;
-  List<ReplacementRule> _replacementRules = [];
+  final List<ReplacementRule> _replacementRules = [];
 
   String get outputDirectory => _outputDirectory!;
 
