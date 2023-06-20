@@ -1,5 +1,4 @@
 import 'package:path/path.dart' as p;
-import 'models/replacement_rule.dart';
 
 import '../config/yaml_config.dart';
 import '../parser/parser.dart';
@@ -8,6 +7,7 @@ import 'fill_controller.dart';
 import 'generator_exception.dart';
 import 'models/generated_file.dart';
 import 'models/programming_lang.dart';
+import 'models/replacement_rule.dart';
 import 'models/universal_data_class.dart';
 import 'models/universal_rest_client.dart';
 
