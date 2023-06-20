@@ -35,7 +35,7 @@ dev_dependencies:
   # build_runner: ^2.3.3
   # freezed: ^2.3.5 # for freezed
   # json_serializable: ^6.6.2
-  # retrofit_generator: ^7.0.1
+  # retrofit_generator: ^7.0.0
   swagger_parser:
 ```
 

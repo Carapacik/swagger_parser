@@ -1,3 +1,7 @@
+## 1.1.0
+- Add regex replacement for generated class names
+- Fixed error with null raw parameter in OpenApi v2 ([#63](https://github.com/Carapacik/swagger_parser/issues/63))
+
 ## 1.0.7
 - Fixed classes as body parameters ([#61](https://github.com/Carapacik/swagger_parser/issues/61))
 
