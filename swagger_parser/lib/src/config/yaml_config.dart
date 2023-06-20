@@ -1,7 +1,7 @@
 import 'package:args/args.dart';
-import '../generator/models/replacement_rule.dart';
 import 'package:yaml/yaml.dart';
 
+import '../generator/models/replacement_rule.dart';
 import '../utils/file_utils.dart';
 import 'config_exception.dart';
 
