@@ -1,3 +1,6 @@
+## 1.2.0
+- Updated `retrofit_generator` dependency to [7.0.7](https://github.com/trevorwang/retrofit.dart/releases/tag/7.0.7) and consequently removed unused `.toJson()` generated methods in enums
+
 ## 1.1.0
 - Add regex replacement for generated class names
 - Fixed error with null raw parameter in OpenApi v2 ([#63](https://github.com/Carapacik/swagger_parser/issues/63))

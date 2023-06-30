@@ -1064,7 +1064,7 @@ class ClassName with _$ClassName {
       for (final enumClass in dataClasses) {
         files.add(fillController.fillDtoContent(enumClass));
       }
-      const expectedContent0 = r'''
+      const expectedContent0 = '''
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
@@ -1075,18 +1075,10 @@ enum EnumName {
   value2,
   @JsonValue(3)
   value3;
-
-  int toJson() => _$EnumNameEnumMap[this]!;
 }
-
-const _$EnumNameEnumMap = {
-  EnumName.value1: 1,
-  EnumName.value2: 2,
-  EnumName.value3: 3,
-};
 ''';
 
-      const expectedContent1 = r'''
+      const expectedContent1 = '''
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
@@ -1099,18 +1091,9 @@ enum EnumNameString {
   itemThree,
   @JsonValue('ITEM-FOUR')
   itemFour;
-
-  String toJson() => _$EnumNameStringEnumMap[this]!;
 }
-
-const _$EnumNameStringEnumMap = {
-  EnumNameString.itemOne: 'itemOne',
-  EnumNameString.itemTwo: 'ItemTwo',
-  EnumNameString.itemThree: 'item_three',
-  EnumNameString.itemFour: 'ITEM-FOUR',
-};
 ''';
-      const expectedContent2 = r'''
+      const expectedContent2 = '''
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
@@ -1121,18 +1104,10 @@ enum KeywordsName {
   valueFor,
   @JsonValue('do')
   valueDo;
-
-  String toJson() => _$KeywordsNameEnumMap[this]!;
 }
-
-const _$KeywordsNameEnumMap = {
-  KeywordsName.valueFalse: 'FALSE',
-  KeywordsName.valueFor: 'for',
-  KeywordsName.valueDo: 'do',
-};
 ''';
 
-      const expectedContent3 = r'''
+      const expectedContent3 = '''
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
@@ -1145,16 +1120,7 @@ enum EnumNameStringWithLeadingNumbers {
   value3itemThree,
   @JsonValue('4ITEM-FOUR')
   value4itemFour;
-
-  String toJson() => _$EnumNameStringWithLeadingNumbersEnumMap[this]!;
 }
-
-const _$EnumNameStringWithLeadingNumbersEnumMap = {
-  EnumNameStringWithLeadingNumbers.value1itemOne: '1itemOne',
-  EnumNameStringWithLeadingNumbers.value2ItemTwo: '2ItemTwo',
-  EnumNameStringWithLeadingNumbers.value3itemThree: '3item_three',
-  EnumNameStringWithLeadingNumbers.value4itemFour: '4ITEM-FOUR',
-};
 ''';
 
       expect(files[0].contents, expectedContent0);
@@ -1186,7 +1152,7 @@ const _$EnumNameStringWithLeadingNumbersEnumMap = {
       for (final enumClass in dataClasses) {
         files.add(fillController.fillDtoContent(enumClass));
       }
-      const expectedContent0 = r'''
+      const expectedContent0 = '''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 @JsonEnum()
@@ -1197,18 +1163,10 @@ enum EnumName {
   value2,
   @JsonValue(3)
   value3;
-
-  int toJson() => _$EnumNameEnumMap[this]!;
 }
-
-const _$EnumNameEnumMap = {
-  EnumName.value1: 1,
-  EnumName.value2: 2,
-  EnumName.value3: 3,
-};
 ''';
 
-      const expectedContent1 = r'''
+      const expectedContent1 = '''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 @JsonEnum()
@@ -1221,18 +1179,9 @@ enum EnumNameString {
   itemThree,
   @JsonValue('ITEM-FOUR')
   itemFour;
-
-  String toJson() => _$EnumNameStringEnumMap[this]!;
 }
-
-const _$EnumNameStringEnumMap = {
-  EnumNameString.itemOne: 'itemOne',
-  EnumNameString.itemTwo: 'ItemTwo',
-  EnumNameString.itemThree: 'item_three',
-  EnumNameString.itemFour: 'ITEM-FOUR',
-};
 ''';
-      const expectedContent2 = r'''
+      const expectedContent2 = '''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 @JsonEnum()
@@ -1243,15 +1192,7 @@ enum KeywordsName {
   valueFor,
   @JsonValue('do')
   valueDo;
-
-  String toJson() => _$KeywordsNameEnumMap[this]!;
 }
-
-const _$KeywordsNameEnumMap = {
-  KeywordsName.valueFalse: 'FALSE',
-  KeywordsName.valueFor: 'for',
-  KeywordsName.valueDo: 'do',
-};
 ''';
       expect(files[0].contents, expectedContent0);
       expect(files[1].contents, expectedContent1);
