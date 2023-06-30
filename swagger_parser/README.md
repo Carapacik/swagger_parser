@@ -64,11 +64,6 @@ To generate boilerplate code, run the `generate` program inside directory where 
 ```shell
 dart run swagger_parser:generate
 ```
-For Flutter projects, you can also run:
-```shell
-flutter pub run swagger_parser:generate
-```
-
 If you name your configuration file something other than `swagger_parser.yaml` or `pubspec.yaml` 
 you will need to specify the name of the YAML file as an argument.
 
@@ -87,11 +82,7 @@ global_options:
     runs_before:
       - retrofit_generator
 ```
-To run the code generation, execute the following command:
+To run the code generation with build_runner, execute the following command:
 ```shell
-dart run build_runner build
-```
-For Flutter projects, you can also run:
-```shell
-flutter pub run build_runner build
+dart run build_runner build -d
 ```
