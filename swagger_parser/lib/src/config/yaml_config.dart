@@ -94,7 +94,8 @@ class YamlConfig {
 
     if (yamlConfig.containsKey('include_to_json_in_enums')) {
       if (yamlConfig['include_to_json_in_enums'] is! bool?) {
-        throw const ConfigException("Config parameter 'include_to_json_in_enums' must be bool.");
+        throw const ConfigException(
+            "Config parameter 'include_to_json_in_enums' must be bool.");
       }
       _includeToJsonInEnums = yamlConfig['include_to_json_in_enums'] as bool?;
     }
