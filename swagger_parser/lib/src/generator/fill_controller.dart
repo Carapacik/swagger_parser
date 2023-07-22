@@ -11,23 +11,30 @@ class FillController {
     String clientPostfix = 'Client',
     bool squishClients = false,
     bool freezed = false,
-  })  : _clientPostfix = clientPostfix,
+    bool includeToJsonInEnums = false,
+  })
+      : _clientPostfix = clientPostfix,
         _programmingLanguage = programmingLanguage,
         _squishClients = squishClients,
-        _freezed = freezed;
+        _freezed = freezed,
+        _includeToJsonInEnums = includeToJsonInEnums;
 
   final ProgrammingLanguage _programmingLanguage;
   final String _clientPostfix;
   final bool _freezed;
   final bool _squishClients;
+  final bool _includeToJsonInEnums;
 
   /// Return [GeneratedFile] generated from given [UniversalDataClass]
-  GeneratedFile fillDtoContent(UniversalDataClass dataClass) => GeneratedFile(
+  GeneratedFile fillDtoContent(UniversalDataClass dataClass) =>
+      GeneratedFile(
         name: 'shared_models/'
-            '${_programmingLanguage == ProgrammingLanguage.dart ? dataClass.name.toSnake : dataClass.name.toPascal}'
+            '${_programmingLanguage == ProgrammingLanguage.dart ? dataClass.name
+            .toSnake : dataClass.name.toPascal}'
             '.${_programmingLanguage.fileExtension}',
         contents:
-            _programmingLanguage.dtoFileContent(dataClass, freezed: _freezed),
+        _programmingLanguage.dtoFileContent(dataClass, freezed: _freezed,
+            includeToJsonInEnums: _includeToJsonInEnums),
       );
 
   /// Return [GeneratedFile] generated from given [UniversalRestClient]
