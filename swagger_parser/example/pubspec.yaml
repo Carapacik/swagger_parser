@@ -21,6 +21,5 @@ dev_dependencies:
       ../
 
 swagger_parser:
-  schema_path: assets/restapi.json
+  schema_path: assets/openapi.json
   output_directory: lib/api
-  include_to_json_in_enums: true
