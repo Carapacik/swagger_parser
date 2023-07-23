@@ -55,6 +55,10 @@ class Generator {
       _clientPostfix = yamlConfig.clientPostfix!;
     }
 
+    if (yamlConfig.includeToJsonInEnums != null) {
+      _includeToJsonInEnums = yamlConfig.includeToJsonInEnums!;
+    }
+
     _replacementRules = yamlConfig.replacementRules;
   }
 
@@ -90,6 +94,9 @@ class Generator {
 
   /// Client postfix
   String _clientPostfix = 'Client';
+
+  /// If true, generated enums will have toJson method
+  bool _includeToJsonInEnums = false;
 
   /// List of rules used to replace patterns in generated class names
   List<ReplacementRule> _replacementRules = [];
@@ -149,6 +156,7 @@ class Generator {
       clientPostfix: _clientPostfix,
       freezed: _freezed,
       squishClients: _squishClients,
+      includeToJsonInEnums: _includeToJsonInEnums,
     );
     final files = <GeneratedFile>[];
     for (final client in _restClients) {
