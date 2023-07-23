@@ -15,7 +15,7 @@ dev_dependencies:
   carapacik_lints: ^1.4.0
   freezed: ^2.3.5
   json_serializable: ^6.7.0
-  retrofit_generator: ^7.0.7
+  retrofit_generator: ^7.0.8
   swagger_parser:
     path:
       ../

@@ -56,6 +56,7 @@ swagger_parser:
   replacement_rules: # Optional. Set regex replacement rules for the names of the generated classes/enums. All rules are applied in order.
     - pattern: "[0-9]+"
       replacement: ""
+  include_to_json_in_enums: false # Optional. Set 'true' to include toJson() in enums. If set to false, serialization will use .name instead. Default: false
 ```
 
 
