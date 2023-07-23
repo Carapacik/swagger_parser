@@ -1272,7 +1272,6 @@ enum KeywordsName {
         expect(files[2].contents, expectedContent2);
       });
 
-
       test('with toJson()', () async {
         const dataClasses = [
           UniversalEnumClass(
@@ -1286,7 +1285,8 @@ enum KeywordsName {
             items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
           ),
         ];
-        const fillController = FillController(freezed: true, includeToJsonInEnums: true);
+        const fillController =
+            FillController(freezed: true, includeToJsonInEnums: true);
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
