@@ -1,4 +1,4 @@
-### 1.2.1
+## 1.2.1
 - Updated `retrofit_generator` dependency to [7.0.8](https://github.com/trevorwang/retrofit.dart/releases/tag/7.0.8) and added config option to generate `.toJson()` methods in enums (`retrofit_generator` will use `.toJson()` instead of `.name` in this case)
 
 ## 1.2.0
