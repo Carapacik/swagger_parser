@@ -29,8 +29,11 @@ class FillController {
         name: 'shared_models/'
             '${_programmingLanguage == ProgrammingLanguage.dart ? dataClass.name.toSnake : dataClass.name.toPascal}'
             '.${_programmingLanguage.fileExtension}',
-        contents: _programmingLanguage.dtoFileContent(dataClass,
-            freezed: _freezed, includeToJsonInEnums: _includeToJsonInEnums),
+        contents: _programmingLanguage.dtoFileContent(
+          dataClass,
+          freezed: _freezed,
+          includeToJsonInEnums: _includeToJsonInEnums,
+        ),
       );
 
   /// Return [GeneratedFile] generated from given [UniversalRestClient]
