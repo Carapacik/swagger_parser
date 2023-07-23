@@ -1035,36 +1035,37 @@ class ClassName with _$ClassName {
   });
 
   group('Enum', () {
-    test('dart + json_serializable', () async {
-      const dataClasses = [
-        UniversalEnumClass(
-          name: 'EnumName',
-          type: 'int',
-          items: {'1', '2', '3'},
-        ),
-        UniversalEnumClass(
-          name: 'EnumNameString',
-          type: 'string',
-          items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
-        ),
-        UniversalEnumClass(
-          name: 'KeywordsName',
-          type: 'string',
-          items: {'FALSE', 'for', 'do'},
-        ),
-        UniversalEnumClass(
-          name: 'EnumNameStringWithLeadingNumbers',
-          type: 'string',
-          items: {'1itemOne', '2ItemTwo', '3item_three', '4ITEM-FOUR'},
-        ),
-      ];
+    group('dart + json_serializable', () {
+      test('without toJson()', () async {
+        const dataClasses = [
+          UniversalEnumClass(
+            name: 'EnumName',
+            type: 'int',
+            items: {'1', '2', '3'},
+          ),
+          UniversalEnumClass(
+            name: 'EnumNameString',
+            type: 'string',
+            items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+          ),
+          UniversalEnumClass(
+            name: 'KeywordsName',
+            type: 'string',
+            items: {'FALSE', 'for', 'do'},
+          ),
+          UniversalEnumClass(
+            name: 'EnumNameStringWithLeadingNumbers',
+            type: 'string',
+            items: {'1itemOne', '2ItemTwo', '3item_three', '4ITEM-FOUR'},
+          ),
+        ];
 
-      const fillController = FillController();
-      final files = <GeneratedFile>[];
-      for (final enumClass in dataClasses) {
-        files.add(fillController.fillDtoContent(enumClass));
-      }
-      const expectedContent0 = '''
+        const fillController = FillController();
+        final files = <GeneratedFile>[];
+        for (final enumClass in dataClasses) {
+          files.add(fillController.fillDtoContent(enumClass));
+        }
+        const expectedContent0 = '''
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
@@ -1078,7 +1079,7 @@ enum EnumName {
 }
 ''';
 
-      const expectedContent1 = '''
+        const expectedContent1 = '''
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
@@ -1093,7 +1094,7 @@ enum EnumNameString {
   itemFour;
 }
 ''';
-      const expectedContent2 = '''
+        const expectedContent2 = '''
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
@@ -1107,7 +1108,7 @@ enum KeywordsName {
 }
 ''';
 
-      const expectedContent3 = '''
+        const expectedContent3 = '''
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
@@ -1123,36 +1124,108 @@ enum EnumNameStringWithLeadingNumbers {
 }
 ''';
 
-      expect(files[0].contents, expectedContent0);
-      expect(files[1].contents, expectedContent1);
-      expect(files[2].contents, expectedContent2);
-      expect(files[3].contents, expectedContent3);
+        expect(files[0].contents, expectedContent0);
+        expect(files[1].contents, expectedContent1);
+        expect(files[2].contents, expectedContent2);
+        expect(files[3].contents, expectedContent3);
+      });
+
+      test('with toJson() in enums', () async {
+        const dataClasses = [
+          UniversalEnumClass(
+            name: 'EnumName',
+            type: 'int',
+            items: {'1', '2', '3'},
+          ),
+          UniversalEnumClass(
+            name: 'EnumNameString',
+            type: 'string',
+            items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+          ),
+        ];
+
+        const fillController = FillController(includeToJsonInEnums: true);
+        final files = <GeneratedFile>[];
+        for (final enumClass in dataClasses) {
+          files.add(fillController.fillDtoContent(enumClass));
+        }
+        const expectedContent0 = r'''
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum()
+enum EnumName {
+  @JsonValue(1)
+  value1,
+  @JsonValue(2)
+  value2,
+  @JsonValue(3)
+  value3;
+
+  int toJson() => _$EnumNameEnumMap[this]!;
+}
+
+const _$EnumNameEnumMap = {
+  EnumName.value1: 1,
+  EnumName.value2: 2,
+  EnumName.value3: 3,
+};
+''';
+
+        const expectedContent1 = r'''
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum()
+enum EnumNameString {
+  @JsonValue('itemOne')
+  itemOne,
+  @JsonValue('ItemTwo')
+  itemTwo,
+  @JsonValue('item_three')
+  itemThree,
+  @JsonValue('ITEM-FOUR')
+  itemFour;
+
+  String toJson() => _$EnumNameStringEnumMap[this]!;
+}
+
+const _$EnumNameStringEnumMap = {
+  EnumNameString.itemOne: 'itemOne',
+  EnumNameString.itemTwo: 'ItemTwo',
+  EnumNameString.itemThree: 'item_three',
+  EnumNameString.itemFour: 'ITEM-FOUR',
+};
+''';
+
+        expect(files[0].contents, expectedContent0);
+        expect(files[1].contents, expectedContent1);
+      });
     });
 
-    test('dart + freezed', () async {
-      const dataClasses = [
-        UniversalEnumClass(
-          name: 'EnumName',
-          type: 'int',
-          items: {'1', '2', '3'},
-        ),
-        UniversalEnumClass(
-          name: 'EnumNameString',
-          type: 'string',
-          items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
-        ),
-        UniversalEnumClass(
-          name: 'KeywordsName',
-          type: 'string',
-          items: {'FALSE', 'for', 'do'},
-        ),
-      ];
-      const fillController = FillController(freezed: true);
-      final files = <GeneratedFile>[];
-      for (final enumClass in dataClasses) {
-        files.add(fillController.fillDtoContent(enumClass));
-      }
-      const expectedContent0 = '''
+    group('dart + freezed', () {
+      test('without toJson()', () async {
+        const dataClasses = [
+          UniversalEnumClass(
+            name: 'EnumName',
+            type: 'int',
+            items: {'1', '2', '3'},
+          ),
+          UniversalEnumClass(
+            name: 'EnumNameString',
+            type: 'string',
+            items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+          ),
+          UniversalEnumClass(
+            name: 'KeywordsName',
+            type: 'string',
+            items: {'FALSE', 'for', 'do'},
+          ),
+        ];
+        const fillController = FillController(freezed: true);
+        final files = <GeneratedFile>[];
+        for (final enumClass in dataClasses) {
+          files.add(fillController.fillDtoContent(enumClass));
+        }
+        const expectedContent0 = '''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 @JsonEnum()
@@ -1166,7 +1239,7 @@ enum EnumName {
 }
 ''';
 
-      const expectedContent1 = '''
+        const expectedContent1 = '''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 @JsonEnum()
@@ -1181,7 +1254,7 @@ enum EnumNameString {
   itemFour;
 }
 ''';
-      const expectedContent2 = '''
+        const expectedContent2 = '''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 @JsonEnum()
@@ -1194,9 +1267,80 @@ enum KeywordsName {
   valueDo;
 }
 ''';
-      expect(files[0].contents, expectedContent0);
-      expect(files[1].contents, expectedContent1);
-      expect(files[2].contents, expectedContent2);
+        expect(files[0].contents, expectedContent0);
+        expect(files[1].contents, expectedContent1);
+        expect(files[2].contents, expectedContent2);
+      });
+
+
+      test('with toJson()', () async {
+        const dataClasses = [
+          UniversalEnumClass(
+            name: 'EnumName',
+            type: 'int',
+            items: {'1', '2', '3'},
+          ),
+          UniversalEnumClass(
+            name: 'EnumNameString',
+            type: 'string',
+            items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+          ),
+        ];
+        const fillController = FillController(freezed: true, includeToJsonInEnums: true);
+        final files = <GeneratedFile>[];
+        for (final enumClass in dataClasses) {
+          files.add(fillController.fillDtoContent(enumClass));
+        }
+
+        const expectedContent0 = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+@JsonEnum()
+enum EnumName {
+  @JsonValue(1)
+  value1,
+  @JsonValue(2)
+  value2,
+  @JsonValue(3)
+  value3;
+
+  int toJson() => _$EnumNameEnumMap[this]!;
+}
+
+const _$EnumNameEnumMap = {
+  EnumName.value1: 1,
+  EnumName.value2: 2,
+  EnumName.value3: 3,
+};
+''';
+
+        const expectedContent1 = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+@JsonEnum()
+enum EnumNameString {
+  @JsonValue('itemOne')
+  itemOne,
+  @JsonValue('ItemTwo')
+  itemTwo,
+  @JsonValue('item_three')
+  itemThree,
+  @JsonValue('ITEM-FOUR')
+  itemFour;
+
+  String toJson() => _$EnumNameStringEnumMap[this]!;
+}
+
+const _$EnumNameStringEnumMap = {
+  EnumNameString.itemOne: 'itemOne',
+  EnumNameString.itemTwo: 'ItemTwo',
+  EnumNameString.itemThree: 'item_three',
+  EnumNameString.itemFour: 'ITEM-FOUR',
+};
+''';
+        expect(files[0].contents, expectedContent0);
+        expect(files[1].contents, expectedContent1);
+      });
     });
 
     test('kotlin + moshi', () async {

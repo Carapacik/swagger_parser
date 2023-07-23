@@ -25,13 +25,13 @@ String _jsonValue(String type, String item) => '''
   ${prefixForEnumItems(type, item)}''';
 
 String _toJson(UniversalEnumClass enumClass, String className) => '''
+
   ${enumClass.type.toDartType()} toJson() => _\$${className}EnumMap[this]!;
-}  
+}
 
 const _\$${className}EnumMap = {
   ${enumClass.items.map(
           (e) => '$className.${prefixForEnumItems(enumClass.type, e)}: '
               '${enumClass.type.quoterForStringType()}$e${enumClass.type.quoterForStringType()}',
         ).join(',\n  ')},
-};
-''';
+};''';
