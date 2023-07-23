@@ -34,13 +34,15 @@ enum ProgrammingLanguage {
       ProgrammingLanguage.values.firstWhereOrNull((e) => e.name == value);
 
   /// Determines template for generating DTOs by language
-  String dtoFileContent(UniversalDataClass dataClass, {bool freezed = false}) {
+  String dtoFileContent(UniversalDataClass dataClass,
+      {bool freezed = false, bool includeToJsonInEnums = false}) {
     switch (this) {
       case ProgrammingLanguage.dart:
         if (dataClass is UniversalEnumClass) {
           return dartEnumDtoTemplate(
             dataClass,
             freezed: freezed,
+            includeToJsonInEnums: includeToJsonInEnums,
           );
         } else if (dataClass is UniversalComponentClass) {
           if (dataClass.typeDef) {
