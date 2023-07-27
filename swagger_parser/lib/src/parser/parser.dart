@@ -617,14 +617,17 @@ class OpenApiParser {
   }) {
     if (map.containsKey(_typeConst) && map[_typeConst] == _arrayConst) {
       // `array`
+      final arrayItems = map[_itemsConst] as Map<String, dynamic>;
       final arrayType = _findType(
-        map[_itemsConst] as Map<String, dynamic>,
+        arrayItems,
         arrayName: name,
         root: false,
       );
+      final arrayValueNullable = arrayItems[_nullableConst].toString().toBool();
+      final type = '${arrayType.type.type}${arrayValueNullable ? '?' : ''}';
       return TypeWithImport(
         type: UniversalType(
-          type: arrayType.type.type,
+          type: type,
           name: (dartKeywords.contains(name) ? '$name $_valueConst' : name)
               ?.toCamel,
           description: map[_descriptionConst]?.toString(),
@@ -793,7 +796,9 @@ class TypeWithImport {
   final String? import;
 }
 
-extension _YamlMapX on YamlMap {
+/// Extension used for YAML map
+extension on YamlMap {
+  /// Convert to Dart map
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{};
 
@@ -812,8 +817,9 @@ extension _YamlMapX on YamlMap {
   }
 }
 
-extension _StringToBoolX on String {
-  /// used specially for yaml map
+/// Extension used for YAML map
+extension on String {
+  /// used specially for YAML map
   bool toBool() => toLowerCase() == 'true';
 }
 
