@@ -1,5 +1,6 @@
 /// Used to store regex patterns for replacing names during generation
 class ReplacementRule {
+  /// Constructor for [ReplacementRule]
   const ReplacementRule({
     required this.pattern,
     required this.replacement,
@@ -12,7 +13,5 @@ class ReplacementRule {
   final String replacement;
 
   /// Applies the replacement rule to the given input string
-  String? apply(String? input) {
-    return input?.replaceAll(pattern, replacement);
-  }
+  String? apply(String? input) => input?.replaceAll(pattern, replacement);
 }

@@ -35,7 +35,7 @@ dev_dependencies:
   # build_runner: ^2.3.3
   # freezed: ^2.4.1 # for freezed
   # json_serializable: ^6.6.2
-  # retrofit_generator: ^7.0.7
+  # retrofit_generator: ^7.0.8
   swagger_parser:
 ```
 
@@ -53,10 +53,11 @@ swagger_parser:
   squish_clients: false # Optional. Set 'true' to put all clients in one folder. Default: false
   client_postfix: Client # Optional. Set postfix for Client class and file. Default: Client
   freezed: false # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
+  include_to_json_in_enums: false # Optional. Set 'true' to include toJson() in enums. If set to false, serialization will use .name instead. Default: false
   replacement_rules: # Optional. Set regex replacement rules for the names of the generated classes/enums. All rules are applied in order.
+    # Example of rule
     - pattern: "[0-9]+"
       replacement: ""
-  include_to_json_in_enums: false # Optional. Set 'true' to include toJson() in enums. If set to false, serialization will use .name instead. Default: false
 ```
 
 
@@ -72,7 +73,7 @@ you will need to specify the name of the YAML file as an argument.
 dart run swagger_parser:generate -f <path to your config file>
 ```
 
-### Generate files using [build_runner](https://pub.dev/packages/build_runner) for retrofit, json_serializable and freezed
+### (Only for freezed) Generate files using [build_runner](https://pub.dev/packages/build_runner) for retrofit, json_serializable and freezed
 #### For `freezed` with `retrofit` use build.yaml file with this content:
 ```yaml
 global_options:
