@@ -1,5 +1,8 @@
+## 1.2.3
+- Fixed rename for enums ([#69](https://github.com/Carapacik/swagger_parser/issues/69))
+
 ## 1.2.2
-- Fixed error with parse nullable item in array
+- Fixed error with parse nullable item in array ([#68](https://github.com/Carapacik/swagger_parser/issues/68))
 
 ## 1.2.1
 - Updated `retrofit_generator` dependency to [7.0.8](https://github.com/trevorwang/retrofit.dart/releases/tag/7.0.8) and added config option to generate `.toJson()` methods in enums (`retrofit_generator` will use `.toJson()` instead of `.name` in this case)
