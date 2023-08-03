@@ -1417,6 +1417,92 @@ enum class KeywordsName {
     });
   });
 
+  group('Enum negative values', () {
+    test('dart + json_serializable', () async {
+      const dataClass = UniversalEnumClass(
+        name: 'EnumName',
+        type: 'int',
+        items: {'-2', '-1', '0', '1'},
+      );
+      const fillController = FillController();
+      final file = fillController.fillDtoContent(dataClass);
+
+      const expectedContent = '''
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum()
+enum EnumName {
+  @JsonValue(-2)
+  valueMinus2,
+  @JsonValue(-1)
+  valueMinus1,
+  @JsonValue(0)
+  value0,
+  @JsonValue(1)
+  value1;
+}
+''';
+
+      expect(file.contents, expectedContent);
+    });
+
+    test('dart + freezed', () async {
+      const dataClass = UniversalEnumClass(
+        name: 'EnumName',
+        type: 'int',
+        items: {'-2', '-1', '0', '1'},
+      );
+      const fillController = FillController(freezed: true);
+      final file = fillController.fillDtoContent(dataClass);
+
+      const expectedContent = '''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+@JsonEnum()
+enum EnumName {
+  @JsonValue(-2)
+  valueMinus2,
+  @JsonValue(-1)
+  valueMinus1,
+  @JsonValue(0)
+  value0,
+  @JsonValue(1)
+  value1;
+}
+''';
+
+      expect(file.contents, expectedContent);
+    });
+
+    test('kotlin + moshi', () async {
+      const dataClass = UniversalEnumClass(
+        name: 'EnumName',
+        type: 'int',
+        items: {'-2', '-1', '0', '1'},
+      );
+      const fillController =
+          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      final file = fillController.fillDtoContent(dataClass);
+      const expectedContent = '''
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+enum class EnumName {
+    @Json("-2")
+    VALUE_MINUS_2,
+    @Json("-1")
+    VALUE_MINUS_1,
+    @Json("0")
+    VALUE_0,
+    @Json("1")
+    VALUE_1,
+}
+''';
+      expect(file.contents, expectedContent);
+    });
+  });
+
   group('Typedef data class', () {
     test('dart', () async {
       const dataClasses = [

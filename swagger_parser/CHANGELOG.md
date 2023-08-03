@@ -1,3 +1,6 @@
+## 1.2.4
+- Fixed names for negative enum values
+
 ## 1.2.3
 - Fixed rename for enums ([#69](https://github.com/Carapacik/swagger_parser/issues/69))
 
