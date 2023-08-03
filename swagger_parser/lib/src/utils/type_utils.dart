@@ -79,7 +79,8 @@ String prefixForEnumItems(String type, String item, {bool dart = true}) {
           dartKeywords.contains(item.toCamel) ||
           startsWithNumber.hasMatch(item)
       ? dart
-          ? 'value ${item.toCamel}'.toCamel
+          ? 'value ${item.startsWith('-') ? 'Minus' : ''} ${item.toCamel}'
+              .toCamel
           : 'value ${item.toSnake}'.toSnake.toUpperCase()
       : dart
           ? item.toCamel
