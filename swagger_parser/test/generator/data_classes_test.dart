@@ -88,7 +88,7 @@ data class ClassName()
           'snake_class',
           'kebab-class',
           'PascalClass',
-          'Space class'
+          'Space class',
         },
         parameters: [],
       );
@@ -125,7 +125,7 @@ class ClassName {
           'snake_class',
           'kebab-class',
           'PascalClass',
-          'Space class'
+          'Space class',
         },
         parameters: [],
       );
@@ -195,7 +195,7 @@ class ClassName with _$ClassName {
           UniversalType(type: 'file', name: 'fileType'),
           UniversalType(type: 'boolean', name: 'boolType'),
           UniversalType(type: 'object', name: 'objectType'),
-          UniversalType(type: 'Another', name: 'anotherType')
+          UniversalType(type: 'Another', name: 'anotherType'),
         ],
       );
       const fillController = FillController();
@@ -281,7 +281,7 @@ class ClassName {
           UniversalType(type: 'file', name: 'fileType'),
           UniversalType(type: 'boolean', name: 'boolType'),
           UniversalType(type: 'object', name: 'objectType'),
-          UniversalType(type: 'Another', name: 'anotherType')
+          UniversalType(type: 'Another', name: 'anotherType'),
         ],
       );
       const fillController = FillController(freezed: true);
@@ -353,7 +353,7 @@ class ClassName with _$ClassName {
           UniversalType(type: 'file', name: 'fileType'),
           UniversalType(type: 'boolean', name: 'boolType'),
           UniversalType(type: 'object', name: 'objectType'),
-          UniversalType(type: 'Another', name: 'anotherType')
+          UniversalType(type: 'Another', name: 'anotherType'),
         ],
       );
       const fillController =
@@ -391,7 +391,7 @@ data class ClassName(
         parameters: [
           UniversalType(type: 'integer', name: 'list0', arrayDepth: 1),
           UniversalType(type: 'string', name: 'list1', arrayDepth: 2),
-          UniversalType(type: 'Another', name: 'list5', arrayDepth: 5)
+          UniversalType(type: 'Another', name: 'list5', arrayDepth: 5),
         ],
       );
       const fillController = FillController();
@@ -430,7 +430,7 @@ class ClassName {
         parameters: [
           UniversalType(type: 'integer', name: 'list0', arrayDepth: 1),
           UniversalType(type: 'string', name: 'list1', arrayDepth: 2),
-          UniversalType(type: 'Another', name: 'list5', arrayDepth: 5)
+          UniversalType(type: 'Another', name: 'list5', arrayDepth: 5),
         ],
       );
       const fillController = FillController(freezed: true);
@@ -464,7 +464,7 @@ class ClassName with _$ClassName {
         parameters: [
           UniversalType(type: 'integer', name: 'list0', arrayDepth: 1),
           UniversalType(type: 'string', name: 'list1', arrayDepth: 2),
-          UniversalType(type: 'Another', name: 'list5', arrayDepth: 5)
+          UniversalType(type: 'Another', name: 'list5', arrayDepth: 5),
         ],
       );
       const fillController =
@@ -506,7 +506,7 @@ data class ClassName(
             type: 'Another',
             name: 'anotherType',
             jsonKey: 'another',
-          )
+          ),
         ],
       );
       const fillController = FillController();
@@ -561,7 +561,7 @@ class ClassName {
             type: 'Another',
             name: 'anotherType',
             jsonKey: 'another',
-          )
+          ),
         ],
       );
       const fillController = FillController(freezed: true);
@@ -610,7 +610,7 @@ class ClassName with _$ClassName {
             type: 'Another',
             name: 'anotherType',
             jsonKey: 'another',
-          )
+          ),
         ],
       );
       const fillController =
@@ -814,7 +814,7 @@ data class ClassName(
             arrayDepth: 2,
             name: 'anotherList',
             isRequired: true,
-          )
+          ),
         ],
       );
       const fillController = FillController();
@@ -866,7 +866,7 @@ class ClassName {
             arrayDepth: 2,
             name: 'anotherList',
             isRequired: true,
-          )
+          ),
         ],
       );
       const fillController = FillController(freezed: true);
@@ -912,7 +912,7 @@ class ClassName with _$ClassName {
             arrayDepth: 2,
             name: 'anotherList',
             isRequired: true,
-          )
+          ),
         ],
       );
       const fillController =
@@ -951,7 +951,7 @@ data class ClassName(
             name: 'anotherNotRequired',
             isRequired: false,
           ),
-          UniversalType(type: 'Another', name: 'list', arrayDepth: 1)
+          UniversalType(type: 'Another', name: 'list', arrayDepth: 1),
         ],
       );
       const fillController = FillController();
@@ -1001,7 +1001,7 @@ class ClassName {
             name: 'anotherNotRequired',
             isRequired: false,
           ),
-          UniversalType(type: 'Another', name: 'list', arrayDepth: 1)
+          UniversalType(type: 'Another', name: 'list', arrayDepth: 1),
         ],
       );
       const fillController = FillController(freezed: true);

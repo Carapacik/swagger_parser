@@ -1,5 +1,4 @@
-import 'dart:developer' show log;
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:swagger_parser_pages/utils/file_utils.dart';
@@ -16,6 +15,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
   late final TextEditingController _clientPostfix;
   ProgrammingLanguage _language = ProgrammingLanguage.dart;
   bool _isYaml = false;
+  bool _includeToJsonInEnums = false;
   bool _freezed = false;
   bool _rootInterface = true;
   bool _squishClients = false;
@@ -43,8 +43,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ConstrainedBox(
-                constraints:
-                    const BoxConstraints(maxWidth: 400, maxHeight: 300),
+                constraints: const BoxConstraints(maxWidth: 400, maxHeight: 300),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -71,8 +70,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                   children: [
                     const Text(
                       'Config parameters',
-                      style:
-                          TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
+                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 24),
                     Center(
@@ -91,9 +89,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
                     const SizedBox(height: 16),
                     AnimatedCrossFade(
                       duration: const Duration(milliseconds: 600),
-                      crossFadeState: _language == ProgrammingLanguage.dart
-                          ? CrossFadeState.showSecond
-                          : CrossFadeState.showFirst,
+                      crossFadeState:
+                          _language == ProgrammingLanguage.dart ? CrossFadeState.showSecond : CrossFadeState.showFirst,
                       sizeCurve: Curves.fastOutSlowIn,
                       firstChild: Container(),
                       secondChild: StatefulBuilder(
@@ -102,8 +99,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             'Generate root interface for REST clients',
                           ),
                           value: _rootInterface,
-                          onChanged: (value) =>
-                              setState(() => _rootInterface = value!),
+                          onChanged: (value) => setState(() => _rootInterface = value!),
                         ),
                       ),
                     ),
@@ -133,17 +129,31 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         return CheckboxListTile(
                           title: const Text('Squish client folders into one?'),
                           value: _squishClients,
-                          onChanged: (value) =>
-                              setState(() => _squishClients = value!),
+                          onChanged: (value) => setState(() => _squishClients = value!),
                         );
                       },
                     ),
                     const SizedBox(height: 16),
                     AnimatedCrossFade(
                       duration: const Duration(milliseconds: 600),
-                      crossFadeState: _language == ProgrammingLanguage.dart
-                          ? CrossFadeState.showSecond
-                          : CrossFadeState.showFirst,
+                      crossFadeState:
+                          _language == ProgrammingLanguage.dart ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                      sizeCurve: Curves.fastOutSlowIn,
+                      // for correct animation
+                      firstChild: Container(),
+                      secondChild: StatefulBuilder(
+                        builder: (context, setState) => CheckboxListTile(
+                          title: const Text('Generate to json in Enum'),
+                          value: _includeToJsonInEnums,
+                          onChanged: (value) => setState(() => _includeToJsonInEnums = value!),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 600),
+                      crossFadeState:
+                          _language == ProgrammingLanguage.dart ? CrossFadeState.showSecond : CrossFadeState.showFirst,
                       sizeCurve: Curves.fastOutSlowIn,
                       // for correct animation
                       firstChild: Container(),
@@ -151,8 +161,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         builder: (context, setState) => CheckboxListTile(
                           title: const Text('Use freezed'),
                           value: _freezed,
-                          onChanged: (value) =>
-                              setState(() => _freezed = value!),
+                          onChanged: (value) => setState(() => _freezed = value!),
                         ),
                       ),
                     ),
@@ -174,6 +183,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             squishClients: _squishClients,
                             isYaml: _isYaml,
                             rootInterface: _rootInterface,
+                            includeToJsonInEnums: _includeToJsonInEnums,
                           );
                         },
                       ),
@@ -181,7 +191,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       );
@@ -196,7 +206,9 @@ Future<void> _generateOutputs(
   required bool squishClients,
   required bool isYaml,
   required bool rootInterface,
+  required bool includeToJsonInEnums,
 }) async {
+  final sm = ScaffoldMessenger.of(context);
   final generator = Generator.fromString(
     schemaContent: schema,
     language: language,
@@ -204,18 +216,23 @@ Future<void> _generateOutputs(
     freezed: freezed,
     squishClients: squishClients,
     isYaml: isYaml,
+    includeToJsonInEnums: includeToJsonInEnums,
     rootInterface: rootInterface,
+    replacementRules: [],
   );
   try {
     final files = await generator.generateContent();
     generateArchive(files);
-  } on Object catch (e) {
-    log(e.toString());
-    ScaffoldMessenger.of(context).showSnackBar(
+  } on Object catch (e, st) {
+    if (kDebugMode) {
+      print(e);
+    }
+    sm.showSnackBar(
       SnackBar(
         content: Text(e.toString()),
         behavior: SnackBarBehavior.floating,
       ),
     );
+    Error.throwWithStackTrace(e, st);
   }
 }

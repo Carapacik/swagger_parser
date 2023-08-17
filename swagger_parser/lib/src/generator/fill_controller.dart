@@ -6,6 +6,7 @@ import 'models/universal_rest_client.dart';
 
 /// Handles generating files
 class FillController {
+  /// Constructor that accepts configuration parameters for creating files
   const FillController({
     ProgrammingLanguage programmingLanguage = ProgrammingLanguage.dart,
     String clientPostfix = 'Client',
@@ -51,6 +52,7 @@ class FillController {
     );
   }
 
+  /// Return [GeneratedFile] root interface generated from given clients
   GeneratedFile fillRootInterface(Iterable<UniversalRestClient> clients) {
     final clientsNames = clients.map((c) => c.name.toPascal).toSet();
     return GeneratedFile(

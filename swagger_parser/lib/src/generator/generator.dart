@@ -68,10 +68,12 @@ class Generator {
     required String schemaContent,
     required ProgrammingLanguage language,
     String? clientPostfix,
-    bool freezed = false,
     bool rootInterface = true,
     bool squishClients = false,
+    bool freezed = false,
     bool isYaml = false,
+    bool includeToJsonInEnums = false,
+    List<ReplacementRule> replacementRules = const [],
   }) {
     _schemaContent = schemaContent;
     _programmingLanguage = language;
@@ -81,6 +83,8 @@ class Generator {
     _squishClients = squishClients;
     _freezed = freezed;
     _isYaml = isYaml;
+    _includeToJsonInEnums = includeToJsonInEnums;
+    _replacementRules = replacementRules;
   }
 
   /// The contents of your schema file
