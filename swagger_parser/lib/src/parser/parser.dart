@@ -576,7 +576,7 @@ class OpenApiParser {
       '206',
       '207',
       '208',
-      '226'
+      '226',
     };
     final key = map.keys.where(codes2xx.contains).firstOrNull;
     if (key == null) {
