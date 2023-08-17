@@ -139,7 +139,6 @@ class YamlConfig {
   bool? _squishClients;
   bool? _freezed;
   bool? _includeToJsonInEnums;
-
   final List<ReplacementRule> _replacementRules = [];
 
   String get outputDirectory => _outputDirectory!;
@@ -156,7 +155,7 @@ class YamlConfig {
 
   bool? get freezed => _freezed;
 
-  List<ReplacementRule> get replacementRules => _replacementRules;
-
   bool? get includeToJsonInEnums => _includeToJsonInEnums;
+
+  List<ReplacementRule> get replacementRules => _replacementRules;
 }

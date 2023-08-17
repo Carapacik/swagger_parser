@@ -164,7 +164,7 @@ interface Some {}
           'snake_class',
           'kebab-class',
           'PascalClass',
-          'Space class'
+          'Space class',
         },
         requests: [],
       );
@@ -206,7 +206,7 @@ abstract class ClassNameClient {
             route: '/',
             returnType: null,
             parameters: [],
-          )
+          ),
         ],
       );
       const fillController = FillController();
@@ -239,7 +239,7 @@ abstract class ClassNameClient {
             route: '/',
             returnType: null,
             parameters: [],
-          )
+          ),
         ],
       );
       const fillController =
@@ -325,7 +325,7 @@ interface ClassNameClient {
             route: '/',
             returnType: null,
             parameters: [],
-          )
+          ),
         ],
       );
       const fillController = FillController();
@@ -438,7 +438,7 @@ abstract class ClassNameClient {
             route: '/',
             returnType: null,
             parameters: [],
-          )
+          ),
         ],
       );
       const fillController =
@@ -506,7 +506,7 @@ interface ClassNameClient {
             route: '/boolean',
             returnType: UniversalType(type: 'boolean'),
             parameters: [],
-          )
+          ),
         ],
       );
       const fillController = FillController();
@@ -559,7 +559,7 @@ abstract class ClassNameClient {
             route: '/boolean',
             returnType: UniversalType(type: 'boolean'),
             parameters: [],
-          )
+          ),
         ],
       );
       const fillController =
@@ -611,7 +611,7 @@ interface ClassNameClient {
                   arrayDepth: 3,
                   name: 'list2',
                 ),
-              )
+              ),
             ],
           ),
           UniversalRequest(
@@ -620,7 +620,7 @@ interface ClassNameClient {
             route: '/list-of-list',
             returnType: UniversalType(type: 'string', arrayDepth: 2),
             parameters: [],
-          )
+          ),
         ],
       );
       const fillController = FillController();
@@ -675,7 +675,7 @@ abstract class ClassNameClient {
                   arrayDepth: 3,
                   name: 'list2',
                 ),
-              )
+              ),
             ],
           ),
           UniversalRequest(
@@ -684,7 +684,7 @@ abstract class ClassNameClient {
             route: '/list-of-list',
             returnType: UniversalType(type: 'string', arrayDepth: 2),
             parameters: [],
-          )
+          ),
         ],
       );
       const fillController =
@@ -724,9 +724,9 @@ interface ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(type: 'string', name: 'alex'),
                 name: 'name',
-              )
+              ),
             ],
-          )
+          ),
         ],
       );
       const fillController = FillController();
@@ -765,9 +765,9 @@ abstract class ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(type: 'string', name: 'alex'),
                 name: 'name',
-              )
+              ),
             ],
-          )
+          ),
         ],
       );
       const fillController =
@@ -817,9 +817,9 @@ interface ClassNameClient {
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
                 type: UniversalType(type: 'Another', name: 'another'),
-              )
+              ),
             ],
-          )
+          ),
         ],
       );
       const fillController = FillController();
@@ -875,9 +875,9 @@ abstract class ClassNameClient {
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
                 type: UniversalType(type: 'Another', name: 'another'),
-              )
+              ),
             ],
-          )
+          ),
         ],
       );
       const fillController =
@@ -941,7 +941,7 @@ interface ClassNameClient {
                 parameterType: HttpParameterType.part,
                 type: UniversalType(type: 'boolean', name: 'parsed'),
                 name: 'parsed-if',
-              )
+              ),
             ],
           ),
           UniversalRequest(
@@ -954,9 +954,9 @@ interface ClassNameClient {
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
                 type: UniversalType(type: 'AnotherFile', name: 'file'),
-              )
+              ),
             ],
-          )
+          ),
         ],
       );
       const fillController = FillController();
@@ -1035,7 +1035,7 @@ abstract class ClassNameClient {
                 parameterType: HttpParameterType.part,
                 type: UniversalType(type: 'boolean', name: 'parsed'),
                 name: 'parsed-if',
-              )
+              ),
             ],
           ),
           UniversalRequest(
@@ -1048,9 +1048,9 @@ abstract class ClassNameClient {
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
                 type: UniversalType(type: 'AnotherFile', name: 'file'),
-              )
+              ),
             ],
-          )
+          ),
         ],
       );
       const fillController =
@@ -1102,7 +1102,7 @@ interface ClassNameClient {
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
                 type: UniversalType(type: 'Lol', name: 'lol'),
-              )
+              ),
             ],
           ),
         ],
@@ -1152,7 +1152,7 @@ abstract class ClassNameClient {
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
                 type: UniversalType(type: 'Lol', name: 'lol'),
-              )
+              ),
             ],
           ),
         ],
@@ -1217,7 +1217,7 @@ interface ClassNameClient {
                 name: 'type',
               ),
             ],
-          )
+          ),
         ],
       );
       const fillController = FillController();
@@ -1283,7 +1283,7 @@ abstract class ClassNameClient {
                 name: 'type',
               ),
             ],
-          )
+          ),
         ],
       );
       const fillController =
@@ -1364,9 +1364,9 @@ interface ClassNameClient {
                   enumType: 'int',
                 ),
                 name: 'soma',
-              )
+              ),
             ],
-          )
+          ),
         ],
       );
       const fillController = FillController();
@@ -1455,9 +1455,9 @@ abstract class ClassNameClient {
                   enumType: 'int',
                 ),
                 name: 'soma',
-              )
+              ),
             ],
-          )
+          ),
         ],
       );
       const fillController =
@@ -1522,7 +1522,7 @@ interface ClassNameClient {
                 name: 'deepArrayNullable',
               ),
             ],
-          )
+          ),
         ],
       );
       const fillController = FillController();
@@ -1614,7 +1614,7 @@ abstract class ClassNameClient {
                 name: 'RequiredAndNullable',
               ),
             ],
-          )
+          ),
         ],
       );
       const fillController = FillController();
@@ -1684,7 +1684,7 @@ abstract class ClassNameClient {
                 name: 'deepArrayNullable',
               ),
             ],
-          )
+          ),
         ],
       );
       const fillController =
@@ -1771,7 +1771,7 @@ interface ClassNameClient {
                 name: 'RequiredAndNullable',
               ),
             ],
-          )
+          ),
         ],
       );
       const fillController =
