@@ -37,7 +37,7 @@ enum ProgrammingLanguage {
   String dtoFileContent(
     UniversalDataClass dataClass, {
     bool freezed = false,
-    bool includeToJsonInEnums = false,
+    bool enumsToJson = false,
   }) {
     switch (this) {
       case ProgrammingLanguage.dart:
@@ -45,7 +45,7 @@ enum ProgrammingLanguage {
           return dartEnumDtoTemplate(
             dataClass,
             freezed: freezed,
-            includeToJsonInEnums: includeToJsonInEnums,
+            enumsToJson: enumsToJson,
           );
         } else if (dataClass is UniversalComponentClass) {
           if (dataClass.typeDef) {

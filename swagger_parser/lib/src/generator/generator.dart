@@ -170,7 +170,7 @@ class Generator {
       clientPostfix: _clientPostfix,
       freezed: _freezed,
       squishClients: _squishClients,
-      includeToJsonInEnums: _enumsToJson,
+      enumsToJson: _enumsToJson,
     );
     final files = <GeneratedFile>[];
     for (final client in _restClients) {
