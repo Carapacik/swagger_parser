@@ -24,10 +24,11 @@ class OpenApiParser {
   /// and [isYaml] schema format or not
   OpenApiParser(
     String fileContent, {
-    List<ReplacementRule> replacementRules = const <ReplacementRule>[],
     bool isYaml = false,
-  }) {
-    _replacementRules = replacementRules;
+    bool enumsPrefix = false,
+    List<ReplacementRule> replacementRules = const <ReplacementRule>[],
+  })  : _enumsPrefix = enumsPrefix,
+        _replacementRules = replacementRules {
     _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
         : jsonDecode(fileContent) as Map<String, dynamic>;
@@ -51,8 +52,9 @@ class OpenApiParser {
     throw const ParserException('Unknown version of OpenAPI.');
   }
 
+  final List<ReplacementRule> _replacementRules;
+  final bool _enumsPrefix;
   late final Map<String, dynamic> _definitionFileContent;
-  late final List<ReplacementRule> _replacementRules;
   late final OpenApiVersion _version;
   final List<UniversalComponentClass> _objectClasses = [];
   final List<UniversalEnumClass> _enumClasses = [];
@@ -450,6 +452,7 @@ class OpenApiParser {
             final typeWithImport = _findType(
               propertyValue as Map<String, dynamic>,
               name: propertyName,
+              additionalName: key,
               isRequired: requiredParameters.contains(propertyName) ||
                   requiredParameters.isEmpty,
             );
@@ -610,7 +613,7 @@ class OpenApiParser {
   TypeWithImport _findType(
     Map<String, dynamic> map, {
     String? name,
-    String? arrayName,
+    String? additionalName,
     bool isRequired = true,
     bool allOfObject = false,
     bool root = true,
@@ -620,7 +623,7 @@ class OpenApiParser {
       final arrayItems = map[_itemsConst] as Map<String, dynamic>;
       final arrayType = _findType(
         arrayItems,
-        arrayName: name,
+        additionalName: name,
         root: false,
       );
       final arrayValueNullable = arrayItems[_nullableConst].toString().toBool();
@@ -643,6 +646,9 @@ class OpenApiParser {
     } else if (map.containsKey(_enumConst)) {
       // `enum`
       var newName = name ?? _uniqueName;
+      if (_enumsPrefix && additionalName != null) {
+        newName = '$additionalName $newName'.toPascal;
+      }
       final items = (map[_enumConst] as List).map((e) => e.toString()).toSet();
 
       for (final replacementRule in _replacementRules) {
@@ -668,7 +674,7 @@ class OpenApiParser {
           format: map.containsKey(_formatConst)
               ? map[_formatConst].toString()
               : null,
-          jsonKey: newName,
+          jsonKey: name ?? _uniqueName,
           defaultValue: map[_defaultConst]?.toString(),
           isRequired: isRequired,
           enumType: map[_typeConst].toString(),
@@ -683,7 +689,7 @@ class OpenApiParser {
             (map[_additionalPropertiesConst] as Map<String, dynamic>)
                 .isNotEmpty)) {
       // `object` or `additionalProperties`
-      final newName = arrayName ?? name ?? _uniqueName;
+      final newName = additionalName ?? name ?? _uniqueName;
       final typeWithImports = <TypeWithImport>[];
       if (map.containsKey(_propertiesConst)) {
         (map[_propertiesConst] as Map<String, dynamic>).forEach((key, value) {

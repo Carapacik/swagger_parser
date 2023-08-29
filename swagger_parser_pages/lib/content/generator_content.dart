@@ -15,7 +15,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
   late final TextEditingController _clientPostfix;
   ProgrammingLanguage _language = ProgrammingLanguage.dart;
   bool _isYaml = false;
-  bool _includeToJsonInEnums = false;
+  bool _enumsToJson = false;
+  bool _enumsPrefix = false;
   bool _freezed = false;
   bool _rootInterface = true;
   bool _squishClients = false;
@@ -144,8 +145,24 @@ class _GeneratorContentState extends State<GeneratorContent> {
                       secondChild: StatefulBuilder(
                         builder: (context, setState) => CheckboxListTile(
                           title: const Text('Generate to json in Enum'),
-                          value: _includeToJsonInEnums,
-                          onChanged: (value) => setState(() => _includeToJsonInEnums = value!),
+                          value: _enumsToJson,
+                          onChanged: (value) => setState(() => _enumsToJson = value!),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 600),
+                      crossFadeState:
+                          _language == ProgrammingLanguage.dart ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                      sizeCurve: Curves.fastOutSlowIn,
+                      // for correct animation
+                      firstChild: Container(),
+                      secondChild: StatefulBuilder(
+                        builder: (context, setState) => CheckboxListTile(
+                          title: const Text('Generate enum name with parent component name'),
+                          value: _enumsPrefix,
+                          onChanged: (value) => setState(() => _enumsPrefix = value!),
                         ),
                       ),
                     ),
@@ -182,8 +199,9 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             freezed: _freezed,
                             squishClients: _squishClients,
                             isYaml: _isYaml,
+                            enumsToJson: _enumsToJson,
+                            enumsPrefix: _enumsPrefix,
                             rootInterface: _rootInterface,
-                            includeToJsonInEnums: _includeToJsonInEnums,
                           );
                         },
                       ),
@@ -206,7 +224,8 @@ Future<void> _generateOutputs(
   required bool squishClients,
   required bool isYaml,
   required bool rootInterface,
-  required bool includeToJsonInEnums,
+  required bool enumsToJson,
+  required bool enumsPrefix,
 }) async {
   final sm = ScaffoldMessenger.of(context);
   final generator = Generator.fromString(
@@ -216,7 +235,8 @@ Future<void> _generateOutputs(
     freezed: freezed,
     squishClients: squishClients,
     isYaml: isYaml,
-    includeToJsonInEnums: includeToJsonInEnums,
+    enumsToJson: enumsToJson,
+    enumsPrefix: enumsPrefix,
     rootInterface: rootInterface,
     replacementRules: [],
   );
