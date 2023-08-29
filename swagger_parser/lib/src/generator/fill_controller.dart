@@ -12,18 +12,18 @@ class FillController {
     String clientPostfix = 'Client',
     bool squishClients = false,
     bool freezed = false,
-    bool includeToJsonInEnums = false,
+    bool enumsToJson = false,
   })  : _clientPostfix = clientPostfix,
         _programmingLanguage = programmingLanguage,
         _squishClients = squishClients,
         _freezed = freezed,
-        _includeToJsonInEnums = includeToJsonInEnums;
+        _enumsToJson = enumsToJson;
 
   final ProgrammingLanguage _programmingLanguage;
   final String _clientPostfix;
   final bool _freezed;
   final bool _squishClients;
-  final bool _includeToJsonInEnums;
+  final bool _enumsToJson;
 
   /// Return [GeneratedFile] generated from given [UniversalDataClass]
   GeneratedFile fillDtoContent(UniversalDataClass dataClass) => GeneratedFile(
@@ -33,7 +33,7 @@ class FillController {
         contents: _programmingLanguage.dtoFileContent(
           dataClass,
           freezed: _freezed,
-          includeToJsonInEnums: _includeToJsonInEnums,
+          enumsToJson: _enumsToJson,
         ),
       );
 

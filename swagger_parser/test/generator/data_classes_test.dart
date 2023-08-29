@@ -1144,7 +1144,7 @@ enum EnumNameStringWithLeadingNumbers {
           ),
         ];
 
-        const fillController = FillController(includeToJsonInEnums: true);
+        const fillController = FillController(enumsToJson: true);
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
@@ -1285,8 +1285,7 @@ enum KeywordsName {
             items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
           ),
         ];
-        const fillController =
-            FillController(freezed: true, includeToJsonInEnums: true);
+        const fillController = FillController(freezed: true, enumsToJson: true);
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
