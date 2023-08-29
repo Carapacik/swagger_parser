@@ -1,3 +1,6 @@
+## 1.3.0
+- Add possibility to add enum prefix from parent component ([#29](https://github.com/Carapacik/swagger_parser/issues/29)). Change `enums_prefix` to true to enable this option
+
 ## 1.2.4
 - Fixed names for negative enum values
 

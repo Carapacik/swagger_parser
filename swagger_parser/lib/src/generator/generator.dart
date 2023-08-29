@@ -55,8 +55,12 @@ class Generator {
       _clientPostfix = yamlConfig.clientPostfix!;
     }
 
-    if (yamlConfig.includeToJsonInEnums != null) {
-      _includeToJsonInEnums = yamlConfig.includeToJsonInEnums!;
+    if (yamlConfig.enumsToJson != null) {
+      _enumsToJson = yamlConfig.enumsToJson!;
+    }
+
+    if (yamlConfig.enumsPrefix != null) {
+      _enumsPrefix = yamlConfig.enumsPrefix!;
     }
 
     _replacementRules = yamlConfig.replacementRules;
@@ -72,7 +76,8 @@ class Generator {
     bool squishClients = false,
     bool freezed = false,
     bool isYaml = false,
-    bool includeToJsonInEnums = false,
+    bool enumsToJson = false,
+    bool enumsPrefix = false,
     List<ReplacementRule> replacementRules = const [],
   }) {
     _schemaContent = schemaContent;
@@ -83,7 +88,8 @@ class Generator {
     _squishClients = squishClients;
     _freezed = freezed;
     _isYaml = isYaml;
-    _includeToJsonInEnums = includeToJsonInEnums;
+    _enumsToJson = enumsToJson;
+    _enumsPrefix = enumsPrefix;
     _replacementRules = replacementRules;
   }
 
@@ -100,7 +106,10 @@ class Generator {
   String _clientPostfix = 'Client';
 
   /// If true, generated enums will have toJson method
-  bool _includeToJsonInEnums = false;
+  bool _enumsToJson = false;
+
+  /// If true, generated enums will have parent component name in its class name
+  bool _enumsPrefix = false;
 
   /// List of rules used to replace patterns in generated class names
   List<ReplacementRule> _replacementRules = [];
@@ -138,8 +147,9 @@ class Generator {
   void _parseOpenApiDefinitionFile() {
     final parser = OpenApiParser(
       _schemaContent,
-      replacementRules: _replacementRules,
       isYaml: _isYaml,
+      enumsPrefix: _enumsPrefix,
+      replacementRules: _replacementRules,
     );
     _restClients = parser.parseRestClients();
     _dataClasses = parser.parseDataClasses();
@@ -160,7 +170,7 @@ class Generator {
       clientPostfix: _clientPostfix,
       freezed: _freezed,
       squishClients: _squishClients,
-      includeToJsonInEnums: _includeToJsonInEnums,
+      includeToJsonInEnums: _enumsToJson,
     );
     final files = <GeneratedFile>[];
     for (final client in _restClients) {
