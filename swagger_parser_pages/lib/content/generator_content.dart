@@ -80,9 +80,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         width: 300,
                         initialSelection: ProgrammingLanguage.dart,
                         dropdownMenuEntries: ProgrammingLanguage.values
-                            .map(
-                              (e) => DropdownMenuEntry(value: e, label: e.name),
-                            )
+                            .map((e) => DropdownMenuEntry(value: e, label: e.name))
                             .toList(growable: false),
                         onSelected: (lng) => setState(() => _language = lng!),
                       ),
@@ -96,45 +94,40 @@ class _GeneratorContentState extends State<GeneratorContent> {
                       firstChild: Container(),
                       secondChild: StatefulBuilder(
                         builder: (context, setState) => CheckboxListTile(
-                          title: const Text(
-                            'Generate root interface for REST clients',
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          title: const Text('Generate root interface for REST clients'),
                           value: _rootInterface,
                           onChanged: (value) => setState(() => _rootInterface = value!),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
                     StatefulBuilder(
                       builder: (context, setState) => CheckboxListTile(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         title: const Text('Is YAML file content'),
                         value: _isYaml,
                         onChanged: (value) => setState(() => _isYaml = value!),
                       ),
                     ),
-                    const SizedBox(height: 16),
                     TextField(
                       controller: _clientPostfix,
                       decoration: const InputDecoration(
-                        labelStyle: TextStyle(fontSize: 24),
+                        labelStyle: TextStyle(fontSize: 18),
                         hintText: 'Postfix for client classes',
-                        hintStyle: TextStyle(fontSize: 24),
+                        hintStyle: TextStyle(fontSize: 18),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(horizontal: 16),
                       ),
                       style: const TextStyle(fontSize: 24),
                     ),
-                    const SizedBox(height: 16),
                     StatefulBuilder(
-                      builder: (context, setState) {
-                        return CheckboxListTile(
-                          title: const Text('Squish client folders into one?'),
-                          value: _squishClients,
-                          onChanged: (value) => setState(() => _squishClients = value!),
-                        );
-                      },
+                      builder: (context, setState) => CheckboxListTile(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        title: const Text('Squish client folders into one?'),
+                        value: _squishClients,
+                        onChanged: (value) => setState(() => _squishClients = value!),
+                      ),
                     ),
-                    const SizedBox(height: 16),
                     AnimatedCrossFade(
                       duration: const Duration(milliseconds: 600),
                       crossFadeState:
@@ -144,29 +137,21 @@ class _GeneratorContentState extends State<GeneratorContent> {
                       firstChild: Container(),
                       secondChild: StatefulBuilder(
                         builder: (context, setState) => CheckboxListTile(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                           title: const Text('Generate to json in Enum'),
                           value: _enumsToJson,
                           onChanged: (value) => setState(() => _enumsToJson = value!),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    AnimatedCrossFade(
-                      duration: const Duration(milliseconds: 600),
-                      crossFadeState:
-                          _language == ProgrammingLanguage.dart ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                      sizeCurve: Curves.fastOutSlowIn,
-                      // for correct animation
-                      firstChild: Container(),
-                      secondChild: StatefulBuilder(
-                        builder: (context, setState) => CheckboxListTile(
-                          title: const Text('Generate enum name with parent component name'),
-                          value: _enumsPrefix,
-                          onChanged: (value) => setState(() => _enumsPrefix = value!),
-                        ),
+                    StatefulBuilder(
+                      builder: (context, setState) => CheckboxListTile(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        title: const Text('Generate enum name with prefix from parent component'),
+                        value: _enumsPrefix,
+                        onChanged: (value) => setState(() => _enumsPrefix = value!),
                       ),
                     ),
-                    const SizedBox(height: 16),
                     AnimatedCrossFade(
                       duration: const Duration(milliseconds: 600),
                       crossFadeState:
@@ -176,6 +161,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                       firstChild: Container(),
                       secondChild: StatefulBuilder(
                         builder: (context, setState) => CheckboxListTile(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                           title: const Text('Use freezed'),
                           value: _freezed,
                           onChanged: (value) => setState(() => _freezed = value!),
