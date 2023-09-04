@@ -485,16 +485,6 @@ class OpenApiParser {
           ),
         );
         return;
-      } else if (value.containsKey(_allOfConst)) {
-        for (final map in value[_allOfConst] as List) {
-          if ((map as Map<String, dynamic>).containsKey(_refConst)) {
-            refs.add(_formatRef(map));
-            continue;
-          }
-          if (map.containsKey(_propertiesConst)) {
-            findParamsAndImports(map);
-          }
-        }
       } else if (value.containsKey(_typeConst) ||
           value.containsKey(_refConst)) {
         final typeWithImport = _findType(
@@ -517,6 +507,18 @@ class OpenApiParser {
           ),
         );
         return;
+      }
+
+      if (value.containsKey(_allOfConst)) {
+        for (final map in value[_allOfConst] as List) {
+          if ((map as Map<String, dynamic>).containsKey(_refConst)) {
+            refs.add(_formatRef(map));
+            continue;
+          }
+          if (map.containsKey(_propertiesConst)) {
+            findParamsAndImports(map);
+          }
+        }
       }
 
       final allOf =
