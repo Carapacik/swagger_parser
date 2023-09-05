@@ -19,7 +19,7 @@ part '${dataClass.name.toSnake}.g.dart';
 ${descriptionComment(dataClass.description)}@Freezed()
 class $className with _\$$className {
   const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;
-  \n  factory $className.fromJson(Map<String, dynamic> json) => _\$${className}FromJson(json);
+  \n  factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
 }
 ''';
 }
