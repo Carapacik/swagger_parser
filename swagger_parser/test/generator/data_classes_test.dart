@@ -27,9 +27,9 @@ part 'class_name.g.dart';
 class ClassName {
   const ClassName();
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
-  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+  Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -53,7 +53,7 @@ part 'class_name.g.dart';
 class ClassName with _$ClassName {
   const factory ClassName() = _ClassName;
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -109,9 +109,9 @@ part 'class_name.g.dart';
 class ClassName {
   const ClassName();
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
-  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+  Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -147,7 +147,7 @@ part 'class_name.g.dart';
 class ClassName with _$ClassName {
   const factory ClassName() = _ClassName;
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -224,7 +224,7 @@ class ClassName {
     required this.anotherType,
   });
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
   final int intType;
   final num numberType;
@@ -239,7 +239,7 @@ class ClassName {
   final Object objectType;
   final Another anotherType;
 
-  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+  Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -311,7 +311,7 @@ class ClassName with _$ClassName {
     required Another anotherType,
   }) = _ClassName;
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -411,13 +411,13 @@ class ClassName {
     required this.list5,
   });
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
   final List<int> list0;
   final List<List<String>> list1;
   final List<List<List<List<List<Another>>>>> list5;
 
-  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+  Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -451,7 +451,7 @@ class ClassName with _$ClassName {
     required List<List<List<List<List<Another>>>>> list5,
   }) = _ClassName;
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -525,7 +525,7 @@ class ClassName {
     required this.anotherType,
   });
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
   @JsonKey(name: 'int_type')
   final int intType;
@@ -535,7 +535,7 @@ class ClassName {
   @JsonKey(name: 'another')
   final Another anotherType;
 
-  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+  Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -584,7 +584,7 @@ class ClassName with _$ClassName {
     required Another anotherType,
   }) = _ClassName;
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -680,14 +680,14 @@ class ClassName {
     this.nullableType = -1.1,
   });
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
   final int intType;
   final String stringType;
   final bool boolType;
   final num nullableType;
 
-  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+  Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -742,7 +742,7 @@ class ClassName with _$ClassName {
     required num nullableType,
   }) = _ClassName;
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -835,14 +835,14 @@ class ClassName {
     this.another,
   });
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
   final int? intType;
   final List<String>? list;
   final Another? another;
   final List<List<Another>> anotherList;
 
-  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+  Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -888,7 +888,7 @@ class ClassName with _$ClassName {
     Another? another,
   }) = _ClassName;
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -972,14 +972,14 @@ class ClassName {
     this.anotherNotRequired,
   });
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
   final int? intNotRequired;
   final int intRequired;
   final Another? anotherNotRequired;
   final List<Another> list;
 
-  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+  Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -1023,7 +1023,7 @@ class ClassName with _$ClassName {
     Another? anotherNotRequired,
   }) = _ClassName;
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -1656,7 +1656,7 @@ class ClassName {
     this.list4,
   });
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
   final List<List<List<List<String>>>>? list1;
   final String? list2;
@@ -1664,7 +1664,7 @@ class ClassName {
   final String? list4;
   final String? list5;
 
-  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+  Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -1726,7 +1726,7 @@ class ClassName with _$ClassName {
     String? list4,
   }) = _ClassName;
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -1852,7 +1852,7 @@ class ClassName {
     this.defaultType = 'str',
   });
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
   /// Some string
   final String stringType;
@@ -1869,7 +1869,7 @@ class ClassName {
   /// This data is a list
   final List<String> list;
 
-  Map<String, dynamic> toJson() => _$ClassNameToJson(this);
+  Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -1946,7 +1946,7 @@ class ClassName with _$ClassName {
     required String defaultType,
   }) = _ClassName;
   
-  factory ClassName.fromJson(Map<String, dynamic> json) => _$ClassNameFromJson(json);
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
       expect(filledContent.contents, expectedContents);
