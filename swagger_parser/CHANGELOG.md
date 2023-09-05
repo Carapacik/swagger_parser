@@ -1,3 +1,6 @@
+## 1.3.2
+- Fix error with replacement rules in allOf
+
 ## 1.3.1
 - Fix error with allOf ([#72](https://github.com/Carapacik/swagger_parser/issues/72))
 

@@ -512,7 +512,11 @@ class OpenApiParser {
       if (value.containsKey(_allOfConst)) {
         for (final map in value[_allOfConst] as List) {
           if ((map as Map<String, dynamic>).containsKey(_refConst)) {
-            refs.add(_formatRef(map));
+            var ref = _formatRef(map);
+            for (final replacementRule in _replacementRules) {
+              ref = replacementRule.apply(ref)!;
+            }
+            refs.add(ref);
             continue;
           }
           if (map.containsKey(_propertiesConst)) {
@@ -527,6 +531,7 @@ class OpenApiParser {
       for (final replacementRule in _replacementRules) {
         key = replacementRule.apply(key)!;
       }
+
       dataClasses.add(
         UniversalComponentClass(
           name: key,

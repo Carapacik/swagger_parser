@@ -19,9 +19,9 @@ ${descriptionComment(dataClass.description)}@JsonSerializable()
 class $className {
   const $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersInConstructor(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''});
   
-  factory $className.fromJson(Map<String, dynamic> json) => _\$${className}FromJson(json);
+  factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
   ${_parametersInClass(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n' : ''}
-  Map<String, dynamic> toJson() => _\$${className}ToJson(this);
+  Map<String, Object?> toJson() => _\$${className}ToJson(this);
 }
 ''';
 }
