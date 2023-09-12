@@ -35,6 +35,29 @@ class UniversalRequest {
 
   /// Request type 'application/x-www-form-urlencoded'
   final bool isFormUrlEncoded;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UniversalRequest &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          requestType == other.requestType &&
+          route == other.route &&
+          returnType == other.returnType &&
+          const DeepCollectionEquality().equals(parameters, other.parameters) &&
+          isMultiPart == other.isMultiPart &&
+          isFormUrlEncoded == other.isFormUrlEncoded;
+
+  @override
+  int get hashCode =>
+      name.hashCode ^
+      requestType.hashCode ^
+      route.hashCode ^
+      returnType.hashCode ^
+      parameters.hashCode ^
+      isMultiPart.hashCode ^
+      isFormUrlEncoded.hashCode;
 }
 
 enum HttpRequestType {
