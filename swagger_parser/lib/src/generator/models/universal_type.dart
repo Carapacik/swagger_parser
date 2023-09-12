@@ -63,6 +63,35 @@ class UniversalType {
     }
     return 1;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UniversalType &&
+          runtimeType == other.runtimeType &&
+          type == other.type &&
+          name == other.name &&
+          description == other.description &&
+          format == other.format &&
+          jsonKey == other.jsonKey &&
+          defaultValue == other.defaultValue &&
+          isRequired == other.isRequired &&
+          enumType == other.enumType &&
+          arrayDepth == other.arrayDepth &&
+          nullable == other.nullable;
+
+  @override
+  int get hashCode =>
+      type.hashCode ^
+      name.hashCode ^
+      description.hashCode ^
+      format.hashCode ^
+      jsonKey.hashCode ^
+      defaultValue.hashCode ^
+      isRequired.hashCode ^
+      enumType.hashCode ^
+      arrayDepth.hashCode ^
+      nullable.hashCode;
 }
 
 /// Converts [UniversalType] to type from specified language
