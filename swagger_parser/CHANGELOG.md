@@ -1,3 +1,6 @@
+## 1.3.3
+- Fix error with unnamed classes uniques names ([#74](https://github.com/Carapacik/swagger_parser/issues/74))
+
 ## 1.3.2
 - Fix error with replacement rules in allOf
 
