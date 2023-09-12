@@ -1,3 +1,6 @@
+## 1.3.4
+- Enum prefix only for variable type now
+
 ## 1.3.3
 - Fix error with unnamed classes uniques names ([#74](https://github.com/Carapacik/swagger_parser/issues/74))
 
