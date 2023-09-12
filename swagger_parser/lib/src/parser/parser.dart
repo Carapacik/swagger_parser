@@ -652,15 +652,15 @@ class OpenApiParser {
       );
     } else if (map.containsKey(_enumConst)) {
       // `enum`
-      var newName = name ?? _uniqueName;
+      final variableName = name ?? _uniqueName;
+      var newName = variableName;
       if (_enumsPrefix && additionalName != null) {
         newName = '$additionalName $newName'.toPascal;
       }
-      final items = (map[_enumConst] as List).map((e) => e.toString()).toSet();
-
       for (final replacementRule in _replacementRules) {
         newName = replacementRule.apply(newName)!;
       }
+      final items = (map[_enumConst] as List).map((e) => e.toString()).toSet();
       _enumClasses.add(
         UniversalEnumClass(
           name: newName,
@@ -673,9 +673,9 @@ class OpenApiParser {
       return TypeWithImport(
         type: UniversalType(
           type: newName.toPascal,
-          name: (dartKeywords.contains(newName)
-                  ? '$newName $_enumConst'
-                  : newName)
+          name: (dartKeywords.contains(variableName)
+                  ? '$variableName $_enumConst'
+                  : variableName)
               .toCamel,
           description: map[_descriptionConst]?.toString(),
           format: map.containsKey(_formatConst)
