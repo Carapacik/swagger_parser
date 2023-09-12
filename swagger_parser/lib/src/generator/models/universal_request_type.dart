@@ -16,6 +16,18 @@ class UniversalRequestType {
 
   /// Request parameter http type
   final HttpParameterType parameterType;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UniversalRequestType &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          type == other.type &&
+          parameterType == other.parameterType;
+
+  @override
+  int get hashCode => name.hashCode ^ type.hashCode ^ parameterType.hashCode;
 }
 
 enum HttpParameterType {

@@ -696,7 +696,7 @@ class OpenApiParser {
             (map[_additionalPropertiesConst] as Map<String, dynamic>)
                 .isNotEmpty)) {
       // `object` or `additionalProperties`
-      final newName = additionalName ?? name ?? _uniqueName;
+      final newName = name ?? additionalName ?? _uniqueName;
       final typeWithImports = <TypeWithImport>[];
       if (map.containsKey(_propertiesConst)) {
         (map[_propertiesConst] as Map<String, dynamic>).forEach((key, value) {

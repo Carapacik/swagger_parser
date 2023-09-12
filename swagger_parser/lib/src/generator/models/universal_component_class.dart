@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import 'all_of.dart';
 import 'universal_data_class.dart';
 import 'universal_type.dart';
@@ -29,4 +31,21 @@ class UniversalComponentClass extends UniversalDataClass {
   /// }
   ///  must be DateTime instead of its own class
   final bool typeDef;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UniversalComponentClass &&
+          runtimeType == other.runtimeType &&
+          const DeepCollectionEquality().equals(imports, other.imports) &&
+          const DeepCollectionEquality().equals(parameters, other.parameters) &&
+          allOf == other.allOf &&
+          typeDef == other.typeDef;
+
+  @override
+  int get hashCode =>
+      imports.hashCode ^
+      parameters.hashCode ^
+      allOf.hashCode ^
+      typeDef.hashCode;
 }
