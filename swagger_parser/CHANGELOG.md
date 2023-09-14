@@ -1,3 +1,6 @@
+## 1.4.0
+- By default value nullable and not required for process default values ([#76](https://github.com/Carapacik/swagger_parser/issues/76))
+
 ## 1.3.5
 - Fix default enum values in dto ([#79](https://github.com/Carapacik/swagger_parser/issues/79))
 
