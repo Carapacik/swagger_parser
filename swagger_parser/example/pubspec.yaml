@@ -19,7 +19,3 @@ dev_dependencies:
   swagger_parser:
     path:
       ../
-
-swagger_parser:
-  schema_path: assets/openapi.json
-  output_directory: lib/api

@@ -30,7 +30,7 @@ String _parametersToString(List<UniversalType> parameters) {
   return sortedByRequired
       .map(
         (e) => '\n${descriptionComment(e.description, tab: '    ')}'
-            '${_jsonKey(e)}    ${e.isRequired ? 'required ' : ''}'
+            '${_jsonKey(e)}    ${_r(e)}'
             '${e.toSuitableType(ProgrammingLanguage.dart)} ${e.name},',
       )
       .join();
@@ -45,11 +45,17 @@ String _jsonKey(UniversalType t) {
     sb.write("    @JsonKey(name: '${t.jsonKey}')\n");
   }
   if (t.defaultValue != null) {
-    sb.write(
-      '    @Default(${t.type.quoterForStringType()}'
-      '${t.defaultValue}${t.type.quoterForStringType()})\n',
-    );
+    sb.write('    @Default(${_d(t)})\n');
   }
 
   return sb.toString();
 }
+
+/// return required if isRequired
+String _r(UniversalType t) =>
+    t.isRequired && t.defaultValue == null ? 'required ' : '';
+
+/// return defaultValue if have
+String _d(UniversalType t) => '${t.type.quoterForStringType()}'
+    '${t.enumType != null ? '${t.type}.${prefixForEnumItems(t.enumType!, t.defaultValue!)}' : t.defaultValue}'
+    '${t.type.quoterForStringType()}';
