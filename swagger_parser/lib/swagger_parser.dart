@@ -7,3 +7,7 @@ export 'src/generator/generator.dart';
 export 'src/generator/models/generated_file.dart';
 export 'src/generator/models/programming_lang.dart';
 export 'src/generator/models/replacement_rule.dart';
+export 'src/generator/models/universal_data_class.dart';
+export 'src/generator/models/universal_rest_client.dart';
+export 'src/parser/parser.dart' show OpenApiParser;
+export 'src/parser/parser_exception.dart';

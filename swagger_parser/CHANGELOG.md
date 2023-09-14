@@ -1,3 +1,6 @@
+## 1.3.5
+- Fix default enum values in dto ([#79](https://github.com/Carapacik/swagger_parser/issues/79))
+
 ## 1.3.4
 - Enum prefix only for variable type now
 
