@@ -36,17 +36,17 @@ class OpenApiParser {
     if (_definitionFileContent.containsKey(_openApiConst)) {
       final version = _definitionFileContent[_openApiConst].toString();
       if (version.startsWith('3.1')) {
-        _version = OpenApiVersion.v3_1;
+        _version = OAS.v3_1;
         return;
       }
       if (version.startsWith('3.0')) {
-        _version = OpenApiVersion.v3;
+        _version = OAS.v3;
         return;
       }
     }
     if (_definitionFileContent.containsKey(_swaggerConst) &&
         _definitionFileContent[_swaggerConst].toString().startsWith('2.0')) {
-      _version = OpenApiVersion.v2;
+      _version = OAS.v2;
       return;
     }
     throw const ParserException('Unknown version of OpenAPI.');
@@ -55,7 +55,7 @@ class OpenApiParser {
   final List<ReplacementRule> _replacementRules;
   final bool _enumsPrefix;
   late final Map<String, dynamic> _definitionFileContent;
-  late final OpenApiVersion _version;
+  late final OAS _version;
   final List<UniversalComponentClass> _objectClasses = [];
   final List<UniversalEnumClass> _enumClasses = [];
   int _uniqueNameCounter = 0;
@@ -148,18 +148,40 @@ class OpenApiParser {
       final types = <UniversalRequestType>[];
       if (map.containsKey(_parametersConst)) {
         for (final rawParameter in map[_parametersConst] as List<dynamic>) {
-          final isRequired =
-              (rawParameter as Map<String, dynamic>)[_requiredConst]
-                  ?.toString()
-                  .toBool();
+          final isRefParameter =
+              (rawParameter as Map<String, dynamic>).containsKey(_refConst);
+          var parameter = rawParameter;
+          if (isRefParameter) {
+            // find ref parameter
+            final refParameterName = _formatRef(parameter);
+            final isRefParameterExist =
+                _definitionFileContent.containsKey(_componentsConst) &&
+                    (_definitionFileContent[_componentsConst]
+                            as Map<String, dynamic>)
+                        .containsKey(_parametersConst) &&
+                    ((_definitionFileContent[_componentsConst]
+                                as Map<String, dynamic>)[_parametersConst]
+                            as Map<String, dynamic>)
+                        .containsKey(refParameterName);
 
+            if (!isRefParameterExist) {
+              throw ParserException(
+                '${parameter[_refConst]} does not exist in schema',
+              );
+            }
+            parameter = ((_definitionFileContent[_componentsConst]
+                        as Map<String, dynamic>)[_parametersConst]
+                    as Map<String, dynamic>)[refParameterName]!
+                as Map<String, dynamic>;
+          }
+          final isRequired = parameter[_requiredConst]?.toString().toBool();
           final typeWithImport = _findType(
-            rawParameter[_schemaConst] != null
-                ? rawParameter[_schemaConst] as Map<String, dynamic>
-                : rawParameter,
-            name: rawParameter[_nameConst].toString(),
+            parameter[_schemaConst] != null
+                ? parameter[_schemaConst] as Map<String, dynamic>
+                : parameter,
+            name: parameter[_nameConst].toString(),
             isRequired: isRequired ?? true,
-            allOfObject: (rawParameter[_schemaConst] as Map<String, dynamic>)
+            allOfObject: (parameter[_schemaConst] as Map<String, dynamic>)
                 .containsKey(_allOfConst),
           );
 
@@ -169,12 +191,12 @@ class OpenApiParser {
           types.add(
             UniversalRequestType(
               parameterType: HttpParameterType.values.firstWhere(
-                (e) => e.name == (rawParameter[_inConst].toString()),
+                (e) => e.name == (parameter[_inConst].toString()),
               ),
               type: typeWithImport.type,
-              name: rawParameter[_nameConst] == _bodyConst
+              name: parameter[_nameConst] == _bodyConst
                   ? null
-                  : rawParameter[_nameConst].toString(),
+                  : parameter[_nameConst].toString(),
             ),
           );
         }
@@ -375,10 +397,10 @@ class OpenApiParser {
 
         final requestPathResponses = (requestPath
             as Map<String, dynamic>)[_responsesConst] as Map<String, dynamic>;
-        final returnType = _version == OpenApiVersion.v2
+        final returnType = _version == OAS.v2
             ? returnTypeV2(requestPathResponses)
             : returnTypeV3(requestPathResponses);
-        final parameters = _version == OpenApiVersion.v2
+        final parameters = _version == OAS.v2
             ? parametersV2(requestPath)
             : parametersV3(requestPath);
         final requestName =
@@ -422,7 +444,7 @@ class OpenApiParser {
   Iterable<UniversalDataClass> parseDataClasses() {
     final dataClasses = <UniversalDataClass>[];
     late final Map<String, dynamic> entities;
-    if (_version == OpenApiVersion.v3_1 || _version == OpenApiVersion.v3) {
+    if (_version == OAS.v3_1 || _version == OAS.v3) {
       if (!_definitionFileContent.containsKey(_componentsConst) ||
           !(_definitionFileContent[_componentsConst] as Map<String, dynamic>)
               .containsKey(_schemasConst)) {
@@ -430,7 +452,7 @@ class OpenApiParser {
       }
       entities = (_definitionFileContent[_componentsConst]
           as Map<String, dynamic>)[_schemasConst] as Map<String, dynamic>;
-    } else if (_version == OpenApiVersion.v2) {
+    } else if (_version == OAS.v2) {
       if (!_definitionFileContent.containsKey(_definitionsConst)) {
         return dataClasses;
       }
@@ -839,5 +861,5 @@ extension on String {
   bool toBool() => toLowerCase() == 'true';
 }
 
-/// All versions of the OpenApi that this package supports
-enum OpenApiVersion { v3_1, v3, v2 }
+/// All versions of the OpenApi Specification that this package supports
+enum OAS { v3_1, v3, v2 }
