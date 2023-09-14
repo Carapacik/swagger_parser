@@ -49,11 +49,13 @@ String _jsonKey(UniversalType t) {
   return "  @JsonKey(name: '${t.jsonKey}')\n";
 }
 
-/// return required if required
+/// return required if isRequired
 String _r(UniversalType t) =>
     t.isRequired && t.defaultValue == null ? 'required ' : '';
 
 /// return defaultValue if have
 String _d(UniversalType t) => t.defaultValue != null
-    ? ' = ${t.type.quoterForStringType()}${t.defaultValue}${t.type.quoterForStringType()}'
+    ? ' = ${t.type.quoterForStringType()}'
+        '${t.enumType != null ? '${t.type}.${prefixForEnumItems(t.enumType!, t.defaultValue!)}' : t.defaultValue}'
+        '${t.type.quoterForStringType()}'
     : '';
