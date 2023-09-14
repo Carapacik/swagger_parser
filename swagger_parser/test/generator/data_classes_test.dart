@@ -639,7 +639,7 @@ data class ClassName(
     test('dart + json_serializable', () async {
       const dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
+        imports: {'Haha'},
         parameters: [
           UniversalType(
             type: 'integer',
@@ -662,12 +662,21 @@ data class ClassName(
             defaultValue: '-1.1',
             nullable: true,
           ),
+          UniversalType(
+            type: 'Haha',
+            name: 'enumType',
+            defaultValue: 'HEHE',
+            enumType: 'string',
+            nullable: false,
+          ),
         ],
       );
       const fillController = FillController();
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
+
+import 'haha.dart';
 
 part 'class_name.g.dart';
 
@@ -678,6 +687,7 @@ class ClassName {
     this.stringType = 'str',
     this.boolType = false,
     this.nullableType = -1.1,
+    this.enumType = Haha.hehe,
   });
   
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
@@ -686,6 +696,7 @@ class ClassName {
   final String stringType;
   final bool boolType;
   final num nullableType;
+  final Haha enumType;
 
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
@@ -696,7 +707,7 @@ class ClassName {
     test('dart + freezed', () async {
       const dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
+        imports: {'Haha'},
         parameters: [
           UniversalType(
             type: 'integer',
@@ -719,12 +730,21 @@ class ClassName {
             defaultValue: '-1.1',
             nullable: true,
           ),
+          UniversalType(
+            type: 'Haha',
+            name: 'enumType',
+            defaultValue: 'HEHE',
+            enumType: 'string',
+            nullable: false,
+          ),
         ],
       );
       const fillController = FillController(freezed: true);
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'haha.dart';
 
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
@@ -733,13 +753,15 @@ part 'class_name.g.dart';
 class ClassName with _$ClassName {
   const factory ClassName({
     @Default(1)
-    required int intType,
+    int intType,
     @Default('str')
-    required String stringType,
+    String stringType,
     @Default(false)
-    required bool boolType,
+    bool boolType,
     @Default(-1.1)
-    required num nullableType,
+    num nullableType,
+    @Default(Haha.hehe)
+    Haha enumType,
   }) = _ClassName;
   
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
@@ -1943,7 +1965,7 @@ class ClassName with _$ClassName {
     required List<String> list,
     /// Default value
     @Default('str')
-    required String defaultType,
+    String defaultType,
   }) = _ClassName;
   
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
