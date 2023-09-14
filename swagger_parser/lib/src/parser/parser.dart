@@ -362,6 +362,9 @@ class OpenApiParser {
       return types;
     }
 
+    if (!_definitionFileContent.containsKey(_pathsConst)) {
+      return [];
+    }
     (_definitionFileContent[_pathsConst] as Map<String, dynamic>)
         .forEach((path, pathValue) {
       (pathValue as Map<String, dynamic>).forEach((key, requestPath) {
@@ -446,6 +449,7 @@ class OpenApiParser {
       final parameters = <UniversalType>[];
       final imports = SplayTreeSet<String>();
 
+      /// Used for find properties in map
       void findParamsAndImports(Map<String, dynamic> map) {
         (map[_propertiesConst] as Map<String, dynamic>).forEach(
           (propertyName, propertyValue) {
@@ -453,8 +457,7 @@ class OpenApiParser {
               propertyValue as Map<String, dynamic>,
               name: propertyName,
               additionalName: key,
-              isRequired: requiredParameters.contains(propertyName) ||
-                  requiredParameters.isEmpty,
+              isRequired: requiredParameters.contains(propertyName),
             );
             parameters.add(typeWithImport.type);
             if (typeWithImport.import != null) {
@@ -490,8 +493,7 @@ class OpenApiParser {
         final typeWithImport = _findType(
           value,
           name: key,
-          isRequired:
-              requiredParameters.contains(key) || requiredParameters.isEmpty,
+          isRequired: requiredParameters.contains(key),
         );
         parameters.add(typeWithImport.type);
         if (typeWithImport.import != null) {
@@ -621,7 +623,7 @@ class OpenApiParser {
     Map<String, dynamic> map, {
     String? name,
     String? additionalName,
-    bool isRequired = true,
+    bool isRequired = false,
     bool allOfObject = false,
     bool root = true,
   }) {
@@ -799,6 +801,7 @@ class OpenApiParser {
 
 /// Class that contains certain [type] and imports associated with it
 /// [import] are created when `$ref` is found while determining type
+// in future replace ny record
 class TypeWithImport {
   const TypeWithImport({required this.type, this.import});
 
