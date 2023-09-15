@@ -55,8 +55,7 @@ class UniversalType {
 
   /// Function for compare to put required named parameters first
   int compareTo(UniversalType other) {
-    if (isRequired == other.isRequired &&
-        (other.defaultValue == null) == (defaultValue == null)) {
+    if (isRequired == other.isRequired && (other.defaultValue == null) == (defaultValue == null)) {
       return 0;
     } else if (isRequired && defaultValue == null) {
       return -1;
@@ -116,10 +115,7 @@ extension UniversalTypeX on UniversalType {
   }
 
   String _questionMark(ProgrammingLanguage lang) {
-    final questionMark =
-        isRequired && !nullable || arrayDepth > 0 || defaultValue != null
-            ? ''
-            : '?';
+    final questionMark = isRequired && !nullable || arrayDepth > 0 || defaultValue != null ? '' : '?';
     switch (lang) {
       case ProgrammingLanguage.dart:
         return type.toDartType(format) + questionMark;

@@ -45,6 +45,24 @@
         },
         "object1": {
           "type": "object"
+        },
+        "array1": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "array2": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
         }
       }
     }
