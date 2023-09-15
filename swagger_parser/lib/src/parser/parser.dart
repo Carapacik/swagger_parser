@@ -5,7 +5,6 @@ import 'package:collection/collection.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
-import '../generator/models/all_of.dart';
 import '../generator/models/replacement_rule.dart';
 import '../generator/models/universal_component_class.dart';
 import '../generator/models/universal_data_class.dart';
@@ -17,6 +16,8 @@ import '../generator/models/universal_type.dart';
 import '../utils/case_utils.dart';
 import '../utils/dart_keywords.dart';
 import 'parser_exception.dart';
+
+export 'parser_exception.dart';
 
 /// General class for parsing OpenApi files into universal models
 class OpenApiParser {
@@ -550,7 +551,7 @@ class OpenApiParser {
       }
 
       final allOf =
-          refs.isNotEmpty ? AllOf(refs: refs, properties: parameters) : null;
+          refs.isNotEmpty ? (refs: refs, properties: parameters) : null;
 
       for (final replacementRule in _replacementRules) {
         key = replacementRule.apply(key)!;
@@ -641,7 +642,7 @@ class OpenApiParser {
   }
 
   /// Find type of map
-  TypeWithImport _findType(
+  ({UniversalType type, String? import}) _findType(
     Map<String, dynamic> map, {
     String? name,
     String? additionalName,
@@ -659,7 +660,7 @@ class OpenApiParser {
       );
       final arrayValueNullable = arrayItems[_nullableConst].toString().toBool();
       final type = '${arrayType.type.type}${arrayValueNullable ? '?' : ''}';
-      return TypeWithImport(
+      return (
         type: UniversalType(
           type: type,
           name: (dartKeywords.contains(name) ? '$name $_valueConst' : name)
@@ -694,7 +695,7 @@ class OpenApiParser {
           description: map[_descriptionConst]?.toString(),
         ),
       );
-      return TypeWithImport(
+      return (
         type: UniversalType(
           type: newName.toPascal,
           name: (dartKeywords.contains(variableName)
@@ -721,7 +722,7 @@ class OpenApiParser {
                 .isNotEmpty)) {
       // `object` or `additionalProperties`
       final newName = name ?? additionalName ?? _uniqueName;
-      final typeWithImports = <TypeWithImport>[];
+      final typeWithImports = <({UniversalType type, String? import})>[];
       if (map.containsKey(_propertiesConst)) {
         (map[_propertiesConst] as Map<String, dynamic>).forEach((key, value) {
           typeWithImports.add(
@@ -756,7 +757,7 @@ class OpenApiParser {
           ),
         );
       }
-      return TypeWithImport(
+      return (
         type: UniversalType(
           type: '$newName $_valueConst'.toPascal,
           name: (dartKeywords.contains(newName)
@@ -801,7 +802,7 @@ class OpenApiParser {
           type = replacementRule.apply(type)!;
         }
       }
-      return TypeWithImport(
+      return (
         type: UniversalType(
           type: type,
           name: (dartKeywords.contains(name) ? '$name $_valueConst' : name)
@@ -819,19 +820,6 @@ class OpenApiParser {
       );
     }
   }
-}
-
-/// Class that contains certain [type] and imports associated with it
-/// [import] are created when `$ref` is found while determining type
-// in future replace ny record
-class TypeWithImport {
-  const TypeWithImport({required this.type, this.import});
-
-  /// Type
-  final UniversalType type;
-
-  /// Import for type, if you need a separate class
-  final String? import;
 }
 
 /// Extension used for YAML map

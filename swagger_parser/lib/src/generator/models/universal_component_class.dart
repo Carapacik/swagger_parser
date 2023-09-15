@@ -1,11 +1,11 @@
 import 'package:collection/collection.dart';
 
-import 'all_of.dart';
 import 'universal_data_class.dart';
 import 'universal_type.dart';
 
 /// Universal template for containing information about component
-class UniversalComponentClass extends UniversalDataClass {
+final class UniversalComponentClass extends UniversalDataClass {
+  /// Constructor for [UniversalComponentClass]
   const UniversalComponentClass({
     required super.name,
     required this.imports,
@@ -22,7 +22,7 @@ class UniversalComponentClass extends UniversalDataClass {
   final List<UniversalType> parameters;
 
   /// Temp field for containing info about `allOf` for future processing
-  final AllOf? allOf;
+  final ({List<String> refs, List<UniversalType> properties})? allOf;
 
   /// Whether or not this schema is a basic type
   /// "Date": {

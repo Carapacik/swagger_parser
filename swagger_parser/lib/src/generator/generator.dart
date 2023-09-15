@@ -14,7 +14,7 @@ import 'models/universal_rest_client.dart';
 /// Handles whole cycle of generation.
 /// Can be provided with arguments
 /// to specify custom path to yaml config.
-class Generator {
+final class Generator {
   /// Applies parameters set from yaml config file
   /// and sets them to default if not found
   Generator.fromYamlConfig(List<String> arguments) {

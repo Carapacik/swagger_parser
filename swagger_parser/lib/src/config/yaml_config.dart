@@ -13,7 +13,7 @@ import 'config_exception.dart';
 /// file is not specified in arguments,
 /// attempts to get config from pubspec.yaml
 /// If that fails, throws an exception
-class YamlConfig {
+final class YamlConfig {
   YamlConfig(List<String> arguments) {
     final parser = ArgParser()..addOption('file', abbr: 'f');
     final configFile = getConfigFile(

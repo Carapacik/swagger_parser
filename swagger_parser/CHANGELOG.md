@@ -1,3 +1,6 @@
+## 1.5.0
+- Reformat code for Dart 3
+
 ## 1.4.0
 - By default value nullable and not required for process default values ([#76](https://github.com/Carapacik/swagger_parser/issues/76))
 - Add support for common parameters for various paths ([#78](https://github.com/Carapacik/swagger_parser/issues/78))
