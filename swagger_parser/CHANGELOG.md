@@ -1,5 +1,5 @@
 ## 1.5.0
-- Reformat code for Dart 3
+- Requires Dart 3.0 or later
 
 ## 1.4.0
 - By default value nullable and not required for process default values ([#76](https://github.com/Carapacik/swagger_parser/issues/76))
