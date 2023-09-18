@@ -1,5 +1,5 @@
 /// Used to store regex patterns for replacing names during generation
-class ReplacementRule {
+final class ReplacementRule {
   /// Constructor for [ReplacementRule]
   const ReplacementRule({
     required this.pattern,

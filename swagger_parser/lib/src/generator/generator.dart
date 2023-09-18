@@ -14,7 +14,7 @@ import 'models/universal_rest_client.dart';
 /// Handles whole cycle of generation.
 /// Can be provided with arguments
 /// to specify custom path to yaml config.
-class Generator {
+final class Generator {
   /// Applies parameters set from yaml config file
   /// and sets them to default if not found
   Generator.fromYamlConfig(List<String> arguments) {
@@ -126,7 +126,10 @@ class Generator {
   /// Is the schema format YAML
   bool _isYaml = false;
 
+  /// Result data classes
   late final Iterable<UniversalDataClass> _dataClasses;
+
+  /// Result rest clients
   late final Iterable<UniversalRestClient> _restClients;
 
   /// Generates files based on OpenApi definition file

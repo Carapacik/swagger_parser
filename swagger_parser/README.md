@@ -32,9 +32,9 @@ dependencies:
   # retrofit: ^4.0.1
 
 dev_dependencies:
-  # build_runner: ^2.3.3
+  # build_runner: ^2.4.6
   # freezed: ^2.4.2 # for freezed
-  # json_serializable: ^6.6.2
+  # json_serializable: ^6.7.1
   # retrofit_generator: ^7.0.8
   swagger_parser:
 ```
