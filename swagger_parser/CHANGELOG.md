@@ -1,3 +1,6 @@
+## 1.5.1
+- Fixed method name generation in a language other than English ([#83](https://github.com/Carapacik/swagger_parser/issues/83))
+
 ## 1.5.0
 - Requires Dart 3.0 or later
 
