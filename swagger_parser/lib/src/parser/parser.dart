@@ -13,6 +13,7 @@ import '../generator/models/universal_rest_client.dart';
 import '../generator/models/universal_type.dart';
 import '../utils/case_utils.dart';
 import '../utils/dart_keywords.dart';
+import '../utils/utils.dart';
 import 'parser_exception.dart';
 
 export 'parser_exception.dart';
@@ -402,7 +403,10 @@ class OpenApiParser {
         final parameters = _version == OAS.v2
             ? parametersV2(requestPath)
             : parametersV3(requestPath);
-        final requestName = (key + path).toCamel;
+        final requestName =
+            replaceNotEnglishLetter(requestPath[_operationIdConst]?.toString())
+                    ?.toCamel ??
+                (key + path).toCamel;
 
         final request = UniversalRequest(
           name: requestName,

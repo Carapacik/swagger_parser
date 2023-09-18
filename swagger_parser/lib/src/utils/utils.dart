@@ -28,6 +28,16 @@ String descriptionComment(String? description, {String tab = ''}) {
   return '$result\n';
 }
 
+/// Replace all not english letters in text
+String? replaceNotEnglishLetter(String? text) {
+  if (text == null || text.isEmpty) {
+    return null;
+  }
+  final lettersRegex = RegExp('[^a-zA-Z]');
+  return text.replaceAll(lettersRegex, ' ');
+}
+
+/// Specially for File import
 String ioImport(UniversalComponentClass dataClass) => dataClass.parameters
         .any((p) => p.toSuitableType(ProgrammingLanguage.dart) == 'File')
     ? "import 'dart:io';\n\n"
