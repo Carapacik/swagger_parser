@@ -3,8 +3,7 @@
 import 'package:swagger_parser/src/generator/fill_controller.dart';
 import 'package:swagger_parser/src/generator/models/generated_file.dart';
 import 'package:swagger_parser/src/generator/models/programming_lang.dart';
-import 'package:swagger_parser/src/generator/models/universal_component_class.dart';
-import 'package:swagger_parser/src/generator/models/universal_enum_class.dart';
+import 'package:swagger_parser/src/generator/models/universal_data_class.dart';
 import 'package:swagger_parser/src/generator/models/universal_type.dart';
 import 'package:test/test.dart';
 

@@ -1,6 +1,4 @@
-import 'package:collection/collection.dart';
-
-import 'universal_data_class.dart';
+part of 'universal_data_class.dart';
 
 /// Universal template for enum
 final class UniversalEnumClass extends UniversalDataClass {

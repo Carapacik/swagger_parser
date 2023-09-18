@@ -1,7 +1,4 @@
-import 'package:collection/collection.dart';
-
-import 'universal_data_class.dart';
-import 'universal_type.dart';
+part of 'universal_data_class.dart';
 
 /// Universal template for containing information about component
 final class UniversalComponentClass extends UniversalDataClass {

@@ -126,7 +126,10 @@ final class Generator {
   /// Is the schema format YAML
   bool _isYaml = false;
 
+  /// Result data classes
   late final Iterable<UniversalDataClass> _dataClasses;
+
+  /// Result rest clients
   late final Iterable<UniversalRestClient> _restClients;
 
   /// Generates files based on OpenApi definition file

@@ -73,6 +73,7 @@ enum HttpRequestType {
   options,
   trace;
 
+  /// Constructor for [HttpRequestType]
   const HttpRequestType();
 
   /// Get type from string

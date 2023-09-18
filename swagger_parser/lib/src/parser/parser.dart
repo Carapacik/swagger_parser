@@ -6,9 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 import '../generator/models/replacement_rule.dart';
-import '../generator/models/universal_component_class.dart';
 import '../generator/models/universal_data_class.dart';
-import '../generator/models/universal_enum_class.dart';
 import '../generator/models/universal_request.dart';
 import '../generator/models/universal_request_type.dart';
 import '../generator/models/universal_rest_client.dart';

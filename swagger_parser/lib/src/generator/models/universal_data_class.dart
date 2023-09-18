@@ -1,5 +1,12 @@
+import 'package:collection/collection.dart';
+
+import 'universal_type.dart';
+
+part 'universal_component_class.dart';
+part 'universal_enum_class.dart';
+
 /// Universal template for containing information about component
-abstract base class UniversalDataClass {
+sealed class UniversalDataClass {
   /// Constructor for [UniversalDataClass]
   const UniversalDataClass({
     required this.name,

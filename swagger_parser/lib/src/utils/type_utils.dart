@@ -81,10 +81,9 @@ String prefixForEnumItems(String type, String item, {bool dart = true}) {
       ? dart
           ? 'value ${item.startsWith('-') ? 'minus' : ''} ${item.toCamel}'
               .toCamel
-          : 'value ${item.startsWith('-') ? 'minus' : ''} ${item.toSnake}'
-              .toSnake
-              .toUpperCase()
+          : 'value ${item.startsWith('-') ? 'minus' : ''} ${item.toScreamingSnake}'
+              .toScreamingSnake
       : dart
           ? item.toCamel
-          : item.toSnake.toUpperCase();
+          : item.toScreamingSnake;
 }
