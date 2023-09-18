@@ -2,7 +2,7 @@ name: example
 description: A project that showcases usage of swagger_parser
 publish_to: none
 environment:
-  sdk: ^3.1.0
+  sdk: ^3.0.0
 
 dependencies:
   dio: ^5.3.2
