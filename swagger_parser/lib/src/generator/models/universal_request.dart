@@ -12,12 +12,16 @@ final class UniversalRequest {
     required this.route,
     required this.returnType,
     required this.parameters,
+    this.description,
     this.isMultiPart = false,
     this.isFormUrlEncoded = false,
   });
 
   /// Request name
   final String name;
+
+  /// Request description
+  final String? description;
 
   /// HTTP type of request
   final HttpRequestType requestType;
