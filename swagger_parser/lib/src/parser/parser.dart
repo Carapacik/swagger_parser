@@ -402,12 +402,11 @@ class OpenApiParser {
         final parameters = _version == OAS.v2
             ? parametersV2(requestPath)
             : parametersV3(requestPath);
-        final requestName =
-            requestPath[_operationIdConst]?.toString().toCamel ??
-                (key + path).toCamel;
+        final requestName = (key + path).toCamel;
 
         final request = UniversalRequest(
           name: requestName,
+          description: requestPath[_descriptionConst]?.toString(),
           requestType: HttpRequestType.fromString(key)!,
           route: path,
           isMultiPart: isMultiPart,
