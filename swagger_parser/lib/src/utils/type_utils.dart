@@ -81,7 +81,7 @@ String prefixForEnumItems(String type, String item, {bool dart = true}) {
       ? dart
           ? 'value ${item.startsWith('-') ? 'minus' : ''} ${item.toCamel}'
               .toCamel
-          : 'value ${item.startsWith('-') ? 'minus' : ''} ${item.toScreamingSnake}'
+          : 'value ${item.startsWith('-') ? 'minus' : ''} ${item.toSnake}'
               .toScreamingSnake
       : dart
           ? item.toCamel
