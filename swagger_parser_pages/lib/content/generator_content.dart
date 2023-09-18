@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:swagger_parser_pages/utils/file_utils.dart';
@@ -44,7 +43,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 400, maxHeight: 300),
+                constraints: const BoxConstraints(maxWidth: 400, maxHeight: 500),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -230,9 +229,6 @@ Future<void> _generateOutputs(
     final files = await generator.generateContent();
     generateArchive(files);
   } on Object catch (e, st) {
-    if (kDebugMode) {
-      print(e);
-    }
     sm.showSnackBar(
       SnackBar(
         content: Text(e.toString()),

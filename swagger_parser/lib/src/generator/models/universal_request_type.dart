@@ -1,7 +1,8 @@
 import 'universal_type.dart';
 
 /// Universal template for containing information about Request parameter
-class UniversalRequestType {
+final class UniversalRequestType {
+  /// Constructor for [UniversalRequestType]
   const UniversalRequestType({
     required this.parameterType,
     required this.type,
@@ -30,6 +31,7 @@ class UniversalRequestType {
   int get hashCode => name.hashCode ^ type.hashCode ^ parameterType.hashCode;
 }
 
+/// Type of parameter in rest client
 enum HttpParameterType {
   header('Header'),
   path('Path'),
@@ -38,12 +40,16 @@ enum HttpParameterType {
   part('Part'),
   formData('Part');
 
+  /// Constructor for [HttpParameterType]
   const HttpParameterType(this.type);
 
+  /// Parameter type
   final String type;
 
+  /// Is element used in multipart
   bool get isPart =>
       this == HttpParameterType.part || this == HttpParameterType.formData;
 
+  /// Is element used as body
   bool get isBody => this == HttpParameterType.body;
 }

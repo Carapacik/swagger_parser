@@ -1,6 +1,6 @@
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
-import '../models/universal_enum_class.dart';
+import '../models/universal_data_class.dart';
 
 /// Provides template for generating kotlin enum DTO
 String kotlinEnumDtoTemplate(UniversalEnumClass dataClass) {
