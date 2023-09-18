@@ -1,7 +1,8 @@
 import 'universal_request.dart';
 
 /// Universal template for containing information about Rest client
-class UniversalRestClient {
+final class UniversalRestClient {
+  /// Constructor for [UniversalRestClient]
   const UniversalRestClient({
     required this.name,
     required this.imports,

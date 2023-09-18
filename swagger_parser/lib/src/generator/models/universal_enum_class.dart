@@ -1,9 +1,8 @@
-import 'package:collection/collection.dart';
-
-import 'universal_data_class.dart';
+part of 'universal_data_class.dart';
 
 /// Universal template for enum
-class UniversalEnumClass extends UniversalDataClass {
+final class UniversalEnumClass extends UniversalDataClass {
+  /// Constructor for [UniversalEnumClass]
   const UniversalEnumClass({
     required super.name,
     required this.type,

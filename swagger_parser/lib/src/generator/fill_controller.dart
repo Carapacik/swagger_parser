@@ -5,7 +5,7 @@ import 'models/universal_data_class.dart';
 import 'models/universal_rest_client.dart';
 
 /// Handles generating files
-class FillController {
+final class FillController {
   /// Constructor that accepts configuration parameters for creating files
   const FillController({
     ProgrammingLanguage programmingLanguage = ProgrammingLanguage.dart,

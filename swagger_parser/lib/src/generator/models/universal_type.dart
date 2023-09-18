@@ -2,7 +2,8 @@ import '../../utils/type_utils.dart';
 import 'programming_lang.dart';
 
 /// Universal template for containing information about type
-class UniversalType {
+final class UniversalType {
+  /// Constructor for [UniversalType]
   const UniversalType({
     required this.type,
     this.name,

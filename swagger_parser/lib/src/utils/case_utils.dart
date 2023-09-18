@@ -1,5 +1,6 @@
 /// [CaseUtils] for handling file names and class names
 class CaseUtils {
+  /// Constructor for [CaseUtils]
   CaseUtils(String text) {
     _words = _groupIntoWords(text);
   }
@@ -47,14 +48,23 @@ class CaseUtils {
   /// Return text formatted to snake case
   String get snakeCase => _words.map((word) => word.toLowerCase()).join('_');
 
+  /// Return text formatted to snake case
+  String get screamingSnakeCase => snakeCase.toUpperCase();
+
   String _upperCaseFirstLetter(String word) =>
       '${word.substring(0, 1).toUpperCase()}${word.substring(1).toLowerCase()}';
 }
 
 extension StringToCaseX on String {
+  /// Return text formatted to camelCase
   String get toCamel => CaseUtils(this).camelCase;
 
+  /// Return text formatted to PascalCase
   String get toPascal => CaseUtils(this).pascalCase;
 
+  /// Return text formatted to snake_case
   String get toSnake => CaseUtils(this).snakeCase;
+
+  /// Return text formatted to SCREAMING_SNAKE_CASE
+  String get toScreamingSnake => CaseUtils(this).screamingSnakeCase;
 }
