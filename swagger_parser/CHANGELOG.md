@@ -1,3 +1,6 @@
+## 1.5.3
+- Fix error with imports in dto component ([#86](https://github.com/Carapacik/swagger_parser/issues/86))
+
 ## 1.5.2
 - Fix grouping words for acronyms and abbreviations ([#85](https://github.com/Carapacik/swagger_parser/issues/85))
 

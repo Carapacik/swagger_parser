@@ -788,14 +788,7 @@ class OpenApiParser {
               : map.containsKey(_refConst)
                   ? _formatRef(map)
                   : _objectConst;
-      var import = map.containsKey(_typeConst) ||
-              map.containsKey(_anyOfConst) ||
-              map.containsKey(_oneOfConst) ||
-              allOfObject
-          ? null
-          : map.containsKey(_refConst)
-              ? _formatRef(map)
-              : null;
+      var import = map.containsKey(_refConst) ? _formatRef(map) : null;
       // iterate over name replacements and apply them to type
       if (import != null) {
         for (final replacementRule in _replacementRules) {

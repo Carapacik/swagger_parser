@@ -182,7 +182,9 @@ final class Generator {
     for (final dataClass in _dataClasses) {
       files.add(fillController.fillDtoContent(dataClass));
     }
-    if (_rootInterface && _programmingLanguage == ProgrammingLanguage.dart) {
+    if (_rootInterface &&
+        _programmingLanguage == ProgrammingLanguage.dart &&
+        _restClients.isNotEmpty) {
       files.add(fillController.fillRootInterface(_restClients));
     }
     return files;
