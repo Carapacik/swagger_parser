@@ -1,3 +1,6 @@
+## 1.5.2
+- Fix grouping words for acronyms and abbreviations ([#85](https://github.com/Carapacik/swagger_parser/issues/85))
+
 ## 1.5.1
 - Fixed method name generation in a language other than English ([#83](https://github.com/Carapacik/swagger_parser/issues/83))
 
