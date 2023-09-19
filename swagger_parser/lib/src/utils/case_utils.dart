@@ -7,9 +7,8 @@ class CaseUtils {
 
   late final List<String> _words;
   static const _separateSymbolsList = r' #,-./@\_{}';
-  static const _upperRegex = r'[A-Z]$';
-
-  final _upperCaseTwoLetterWords = <String>{};
+  final _upperCaseRegex = RegExp('[A-Z]');
+  final _upperCaseTwoLettersRowWords = <String>{};
 
   List<String> _groupIntoWords(String text) {
     final sb = StringBuffer();
@@ -18,28 +17,27 @@ class CaseUtils {
 
     for (var i = 0; i < text.length; i++) {
       final char = text[i];
-      final nextChar = i + 1 == text.length ? null : text[i + 1];
-      final nextNextChar = i + 2 >= text.length ? null : text[i + 2];
-
       if (_separateSymbolsList.contains(char)) {
         continue;
       }
 
+      final nextChar = i + 1 == text.length ? null : text[i + 1];
+      final nextSecondChar = i + 2 >= text.length ? null : text[i + 2];
+
       sb.write(char);
-      final upperRegex = RegExp(_upperRegex);
 
       final isEndOfWord = nextChar == null ||
-          (upperRegex.hasMatch(nextChar) &&
+          (_upperCaseRegex.hasMatch(nextChar) &&
               !isAllCaps &&
-              (!upperRegex.hasMatch(char) ||
-                  (nextNextChar != null &&
-                      !upperRegex.hasMatch(nextNextChar)))) ||
+              (!_upperCaseRegex.hasMatch(char) ||
+                  (nextSecondChar != null &&
+                      !_upperCaseRegex.hasMatch(nextSecondChar)))) ||
           _separateSymbolsList.contains(nextChar);
 
       if (isEndOfWord) {
-        final word = '$sb';
+        final word = sb.toString();
         if (sb.length == 2 && word.toUpperCase() == word) {
-          _upperCaseTwoLetterWords.add(word);
+          _upperCaseTwoLettersRowWords.add(word);
         }
         words.add(word);
         sb.clear();
@@ -70,7 +68,7 @@ class CaseUtils {
   String _upperCaseFirstLetter(String word) {
     if (word.length == 2) {
       final upperCase = word.toUpperCase();
-      if (_upperCaseTwoLetterWords.contains(upperCase)) {
+      if (_upperCaseTwoLettersRowWords.contains(upperCase)) {
         return upperCase;
       }
     }
