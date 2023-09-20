@@ -39,12 +39,13 @@ final class Generator {
       }
       _programmingLanguage = parsedLang;
     }
-    if (yamlConfig.rootInterface != null) {
-      _rootInterface = yamlConfig.rootInterface!;
-    }
 
     if (yamlConfig.freezed != null) {
       _freezed = yamlConfig.freezed!;
+    }
+
+    if (yamlConfig.rootInterface != null) {
+      _rootInterface = yamlConfig.rootInterface!;
     }
 
     if (yamlConfig.squishClients != null) {
@@ -55,6 +56,10 @@ final class Generator {
       _clientPostfix = yamlConfig.clientPostfix!;
     }
 
+    if (yamlConfig.pathMethodName != null) {
+      _pathMethodName = yamlConfig.pathMethodName!;
+    }
+
     if (yamlConfig.enumsToJson != null) {
       _enumsToJson = yamlConfig.enumsToJson!;
     }
@@ -62,7 +67,6 @@ final class Generator {
     if (yamlConfig.enumsPrefix != null) {
       _enumsPrefix = yamlConfig.enumsPrefix!;
     }
-
     _replacementRules = yamlConfig.replacementRules;
   }
 
@@ -71,23 +75,25 @@ final class Generator {
   Generator.fromString({
     required String schemaContent,
     required ProgrammingLanguage language,
-    String? clientPostfix,
-    bool rootInterface = true,
-    bool squishClients = false,
-    bool freezed = false,
     bool isYaml = false,
+    bool freezed = false,
+    bool rootInterface = true,
+    String? clientPostfix,
+    bool squishClients = false,
+    bool pathMethodName = false,
     bool enumsToJson = false,
     bool enumsPrefix = false,
     List<ReplacementRule> replacementRules = const [],
   }) {
     _schemaContent = schemaContent;
-    _programmingLanguage = language;
     _outputDirectory = '';
-    _clientPostfix = clientPostfix ?? 'Client';
-    _rootInterface = rootInterface;
-    _squishClients = squishClients;
-    _freezed = freezed;
+    _programmingLanguage = language;
     _isYaml = isYaml;
+    _freezed = freezed;
+    _rootInterface = rootInterface;
+    _clientPostfix = clientPostfix ?? 'Client';
+    _squishClients = squishClients;
+    _pathMethodName = pathMethodName;
     _enumsToJson = enumsToJson;
     _enumsPrefix = enumsPrefix;
     _replacementRules = replacementRules;
@@ -96,14 +102,29 @@ final class Generator {
   /// The contents of your schema file
   late final String _schemaContent;
 
+  /// Is the schema format YAML
+  bool _isYaml = false;
+
   /// Output directory
   late final String _outputDirectory;
 
   /// Output directory
   ProgrammingLanguage _programmingLanguage = ProgrammingLanguage.dart;
 
+  /// Use freezed to generate DTOs
+  bool _freezed = false;
+
+  /// Generate root interface for all Clients
+  bool _rootInterface = true;
+
   /// Client postfix
   String _clientPostfix = 'Client';
+
+  /// Squish Clients in one folder
+  bool _squishClients = false;
+
+  /// If true, use the endpoint path for the method name, if false, use operationId
+  bool _pathMethodName = false;
 
   /// If true, generated enums will have toJson method
   bool _enumsToJson = false;
@@ -113,18 +134,6 @@ final class Generator {
 
   /// List of rules used to replace patterns in generated class names
   List<ReplacementRule> _replacementRules = [];
-
-  /// Generate root interface for all Clients
-  bool _rootInterface = true;
-
-  /// Use freezed to generate DTOs
-  bool _freezed = false;
-
-  /// Squish Clients in one folder
-  bool _squishClients = false;
-
-  /// Is the schema format YAML
-  bool _isYaml = false;
 
   /// Result data classes
   late final Iterable<UniversalDataClass> _dataClasses;
@@ -151,6 +160,7 @@ final class Generator {
     final parser = OpenApiParser(
       _schemaContent,
       isYaml: _isYaml,
+      pathMethodName: _pathMethodName,
       enumsPrefix: _enumsPrefix,
       replacementRules: _replacementRules,
     );
