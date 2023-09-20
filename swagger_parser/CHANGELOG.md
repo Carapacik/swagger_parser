@@ -1,3 +1,6 @@
+## 1.6.0
+- Add new config parameter `path_method_name`
+
 ## 1.5.3
 - Fix error with imports in dto component ([#86](https://github.com/Carapacik/swagger_parser/issues/86))
 

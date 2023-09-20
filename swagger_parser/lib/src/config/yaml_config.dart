@@ -61,6 +61,13 @@ final class YamlConfig {
       _language = yamlConfig['language'].toString();
     }
 
+    if (yamlConfig.containsKey('freezed')) {
+      if (yamlConfig['freezed'] is! bool?) {
+        throw const ConfigException("Config parameter 'freezed' must be bool.");
+      }
+      _freezed = yamlConfig['freezed'] as bool?;
+    }
+
     if (yamlConfig.containsKey('root_interface')) {
       if (yamlConfig['root_interface'] is! bool?) {
         throw const ConfigException(
@@ -85,11 +92,13 @@ final class YamlConfig {
       _squishClients = yamlConfig['squish_clients'] as bool?;
     }
 
-    if (yamlConfig.containsKey('freezed')) {
-      if (yamlConfig['freezed'] is! bool?) {
-        throw const ConfigException("Config parameter 'freezed' must be bool.");
+    if (yamlConfig.containsKey('path_method_name')) {
+      if (yamlConfig['path_method_name'] is! bool?) {
+        throw const ConfigException(
+          "Config parameter 'path_method_name' must be bool.",
+        );
       }
-      _freezed = yamlConfig['freezed'] as bool?;
+      _pathMethodName = yamlConfig['path_method_name'] as bool?;
     }
 
     if (yamlConfig.containsKey('enums_to_json')) {
@@ -143,10 +152,11 @@ final class YamlConfig {
   String? _outputDirectory;
   String? _schemaFilePath;
   String? _language;
+  bool? _freezed;
   String? _clientPostfix;
   bool? _rootInterface;
   bool? _squishClients;
-  bool? _freezed;
+  bool? _pathMethodName;
   bool? _enumsToJson;
   bool? _enumsPrefix;
   final List<ReplacementRule> _replacementRules = [];
@@ -157,13 +167,15 @@ final class YamlConfig {
 
   String? get language => _language;
 
-  String? get clientPostfix => _clientPostfix;
+  bool? get freezed => _freezed;
 
   bool? get rootInterface => _rootInterface;
 
+  String? get clientPostfix => _clientPostfix;
+
   bool? get squishClients => _squishClients;
 
-  bool? get freezed => _freezed;
+  bool? get pathMethodName => _pathMethodName;
 
   bool? get enumsToJson => _enumsToJson;
 
