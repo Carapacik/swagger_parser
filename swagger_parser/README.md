@@ -49,10 +49,11 @@ swagger_parser:
   schema_path: assets/openapi.json # Required. Sets the OpenApi schema path directory for api definition
   output_directory: lib/api # Required. Sets output directory for generated files (Clients and Dtos)
   language: dart # Optional. Sets the programming language. Current available languages are: dart, kotlin. Default: dart
+  freezed: false # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
   root_interface: true # Optional (dart only). Set 'true' to generate interface with all clients instances. Default: true
   squish_clients: false # Optional. Set 'true' to put all clients in one folder. Default: false
   client_postfix: Client # Optional. Set postfix for Client class and file. Default: Client
-  freezed: false # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
+  path_method_name: false # Optional. Set 'true' to use only the endpoint path for the method name. Set 'false' to use operationId. Default: false
   enums_to_json: false # Optional. Set 'true' to include toJson() in enums. If set to false, serialization will use .name instead. Default: false
   enums_prefix: false # Optional. Set 'true' to set enum prefix from parent component. Default: false
   replacement_rules: # Optional. Set regex replacement rules for the names of the generated classes/enums. All rules are applied in order.

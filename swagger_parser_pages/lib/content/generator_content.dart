@@ -10,22 +10,16 @@ class GeneratorContent extends StatefulWidget {
 }
 
 class _GeneratorContentState extends State<GeneratorContent> {
-  late final TextEditingController _schemaController;
-  late final TextEditingController _clientPostfix;
+  late final TextEditingController _schemaController = TextEditingController();
+  late final TextEditingController _clientPostfix = TextEditingController();
   ProgrammingLanguage _language = ProgrammingLanguage.dart;
   bool _isYaml = false;
-  bool _enumsToJson = false;
-  bool _enumsPrefix = false;
   bool _freezed = false;
   bool _rootInterface = true;
   bool _squishClients = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _schemaController = TextEditingController();
-    _clientPostfix = TextEditingController();
-  }
+  bool _pathMethodName = false;
+  bool _enumsToJson = false;
+  bool _enumsPrefix = false;
 
   @override
   void dispose() {
@@ -90,13 +84,14 @@ class _GeneratorContentState extends State<GeneratorContent> {
                       crossFadeState:
                           _language == ProgrammingLanguage.dart ? CrossFadeState.showSecond : CrossFadeState.showFirst,
                       sizeCurve: Curves.fastOutSlowIn,
+                      // for correct animation
                       firstChild: Container(),
                       secondChild: StatefulBuilder(
                         builder: (context, setState) => CheckboxListTile(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                          title: const Text('Generate root interface for REST clients'),
-                          value: _rootInterface,
-                          onChanged: (value) => setState(() => _rootInterface = value!),
+                          title: const Text('Use freezed'),
+                          value: _freezed,
+                          onChanged: (value) => setState(() => _freezed = value!),
                         ),
                       ),
                     ),
@@ -106,6 +101,21 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         title: const Text('Is YAML file content'),
                         value: _isYaml,
                         onChanged: (value) => setState(() => _isYaml = value!),
+                      ),
+                    ),
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 600),
+                      crossFadeState:
+                          _language == ProgrammingLanguage.dart ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                      sizeCurve: Curves.fastOutSlowIn,
+                      firstChild: Container(),
+                      secondChild: StatefulBuilder(
+                        builder: (context, setState) => CheckboxListTile(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          title: const Text('Generate root interface for REST clients'),
+                          value: _rootInterface,
+                          onChanged: (value) => setState(() => _rootInterface = value!),
+                        ),
                       ),
                     ),
                     TextField(
@@ -125,6 +135,14 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         title: const Text('Squish client folders into one?'),
                         value: _squishClients,
                         onChanged: (value) => setState(() => _squishClients = value!),
+                      ),
+                    ),
+                    StatefulBuilder(
+                      builder: (context, setState) => CheckboxListTile(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        title: const Text('Generate method name from url path'),
+                        value: _pathMethodName,
+                        onChanged: (value) => setState(() => _pathMethodName = value!),
                       ),
                     ),
                     AnimatedCrossFade(
@@ -151,22 +169,6 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         onChanged: (value) => setState(() => _enumsPrefix = value!),
                       ),
                     ),
-                    AnimatedCrossFade(
-                      duration: const Duration(milliseconds: 600),
-                      crossFadeState:
-                          _language == ProgrammingLanguage.dart ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                      sizeCurve: Curves.fastOutSlowIn,
-                      // for correct animation
-                      firstChild: Container(),
-                      secondChild: StatefulBuilder(
-                        builder: (context, setState) => CheckboxListTile(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                          title: const Text('Use freezed'),
-                          value: _freezed,
-                          onChanged: (value) => setState(() => _freezed = value!),
-                        ),
-                      ),
-                    ),
                     const SizedBox(height: 32),
                     SizedBox(
                       child: OutlinedButton(
@@ -181,12 +183,13 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             schema: _schemaController.text,
                             clientPostfix: _clientPostfix.text,
                             language: _language,
-                            freezed: _freezed,
-                            squishClients: _squishClients,
                             isYaml: _isYaml,
+                            freezed: _freezed,
+                            rootInterface: _rootInterface,
+                            squishClients: _squishClients,
+                            pathMethodName: _pathMethodName,
                             enumsToJson: _enumsToJson,
                             enumsPrefix: _enumsPrefix,
-                            rootInterface: _rootInterface,
                           );
                         },
                       ),
@@ -209,20 +212,22 @@ Future<void> _generateOutputs(
   required bool squishClients,
   required bool isYaml,
   required bool rootInterface,
+  required bool pathMethodName,
   required bool enumsToJson,
   required bool enumsPrefix,
 }) async {
   final sm = ScaffoldMessenger.of(context);
   final generator = Generator.fromString(
     schemaContent: schema,
-    language: language,
-    clientPostfix: clientPostfix.trim().isEmpty ? null : clientPostfix,
-    freezed: freezed,
-    squishClients: squishClients,
     isYaml: isYaml,
+    language: language,
+    freezed: freezed,
+    rootInterface: rootInterface,
+    clientPostfix: clientPostfix.trim().isEmpty ? null : clientPostfix,
+    squishClients: squishClients,
+    pathMethodName: pathMethodName,
     enumsToJson: enumsToJson,
     enumsPrefix: enumsPrefix,
-    rootInterface: rootInterface,
     replacementRules: [],
   );
   try {

@@ -26,8 +26,10 @@ class OpenApiParser {
     String fileContent, {
     bool isYaml = false,
     bool enumsPrefix = false,
+    bool pathMethodName = false,
     List<ReplacementRule> replacementRules = const <ReplacementRule>[],
-  })  : _enumsPrefix = enumsPrefix,
+  })  : _pathMethodName = pathMethodName,
+        _enumsPrefix = enumsPrefix,
         _replacementRules = replacementRules {
     _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
@@ -52,8 +54,9 @@ class OpenApiParser {
     throw const ParserException('Unknown version of OpenAPI.');
   }
 
-  final List<ReplacementRule> _replacementRules;
+  final bool _pathMethodName;
   final bool _enumsPrefix;
+  final List<ReplacementRule> _replacementRules;
   late final Map<String, dynamic> _definitionFileContent;
   late final OAS _version;
   final List<UniversalComponentClass> _objectClasses = [];
@@ -403,9 +406,11 @@ class OpenApiParser {
         final parameters = _version == OAS.v2
             ? parametersV2(requestPath)
             : parametersV3(requestPath);
-        final requestName =
-            replaceNotEnglishLetter(requestPath[_operationIdConst]?.toString())
-                    ?.toCamel ??
+        final requestName = _pathMethodName
+            ? (key + path).toCamel
+            : replaceNotEnglishLetter(
+                  requestPath[_operationIdConst]?.toString(),
+                )?.toCamel ??
                 (key + path).toCamel;
 
         final request = UniversalRequest(
