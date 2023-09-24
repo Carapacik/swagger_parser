@@ -96,6 +96,7 @@ class OpenApiParser {
   static const _schemaConst = 'schema';
   static const _schemasConst = 'schemas';
   static const _serversConst = 'servers';
+  static const _summaryConst = 'summary';
   static const _swaggerConst = 'swagger';
   static const _tagsConst = 'tags';
   static const _typeConst = 'type';
@@ -413,9 +414,18 @@ class OpenApiParser {
                 )?.toCamel ??
                 (key + path).toCamel;
 
+        final summary = requestPath[_summaryConst]?.toString();
+        final description = requestPath[_descriptionConst]?.toString();
+        final fullDescription = switch ((summary, description)) {
+          (null, null) => null,
+          (_, null) => summary,
+          (null, _) => description,
+          (_, _) => '$summary\n\n$description',
+        };
+
         final request = UniversalRequest(
           name: requestName,
-          description: requestPath[_descriptionConst]?.toString(),
+          description: fullDescription,
           requestType: HttpRequestType.fromString(key)!,
           route: path,
           isMultiPart: isMultiPart,
