@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
+import '../generator/models/open_api_info.dart';
 import '../generator/models/replacement_rule.dart';
 import '../generator/models/universal_data_class.dart';
 import '../generator/models/universal_request.dart';
@@ -78,6 +79,7 @@ class OpenApiParser {
   static const _formatConst = 'format';
   static const _formUrlEncodedConst = 'application/x-www-form-urlencoded';
   static const _inConst = 'in';
+  static const _infoConst = 'info';
   static const _itemsConst = 'items';
   static const _multipartFormDataConst = 'multipart/form-data';
   static const _nameConst = 'name';
@@ -99,8 +101,24 @@ class OpenApiParser {
   static const _summaryConst = 'summary';
   static const _swaggerConst = 'swagger';
   static const _tagsConst = 'tags';
+  static const _titleConst = 'title';
   static const _typeConst = 'type';
   static const _valueConst = 'value';
+  static const _versionConst = 'version';
+
+  OpenApiInfo parseOpenApiInfo() {
+    final info = _definitionFileContent[_infoConst];
+    if (info == null || info is! Map<String, dynamic>) {
+      return const OpenApiInfo();
+    }
+
+    return OpenApiInfo(
+      title: info[_titleConst]?.toString(),
+      summary: info[_summaryConst]?.toString(),
+      description: info[_descriptionConst]?.toString(),
+      version: info[_versionConst]?.toString(),
+    );
+  }
 
   /// Parses rest clients from `paths` section of definition file
   /// and return list of [UniversalRestClient]
