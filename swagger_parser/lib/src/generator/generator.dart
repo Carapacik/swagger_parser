@@ -6,6 +6,7 @@ import '../utils/file_utils.dart';
 import 'fill_controller.dart';
 import 'generator_exception.dart';
 import 'models/generated_file.dart';
+import 'models/open_api_info.dart';
 import 'models/programming_lang.dart';
 import 'models/replacement_rule.dart';
 import 'models/universal_data_class.dart';
@@ -135,6 +136,8 @@ final class Generator {
   /// List of rules used to replace patterns in generated class names
   List<ReplacementRule> _replacementRules = [];
 
+  late final OpenApiInfo _openApiInfo;
+
   /// Result data classes
   late final Iterable<UniversalDataClass> _dataClasses;
 
@@ -164,6 +167,7 @@ final class Generator {
       enumsPrefix: _enumsPrefix,
       replacementRules: _replacementRules,
     );
+    _openApiInfo = parser.parseOpenApiInfo();
     _restClients = parser.parseRestClients();
     _dataClasses = parser.parseDataClasses();
   }
@@ -179,6 +183,7 @@ final class Generator {
   /// Generate "virtual" files content
   Future<List<GeneratedFile>> _fillContent() async {
     final fillController = FillController(
+      openApiInfo: _openApiInfo,
       programmingLanguage: _programmingLanguage,
       clientPostfix: _clientPostfix,
       freezed: _freezed,

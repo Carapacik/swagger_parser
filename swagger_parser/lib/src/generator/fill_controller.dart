@@ -1,5 +1,6 @@
 import '../utils/case_utils.dart';
 import 'models/generated_file.dart';
+import 'models/open_api_info.dart';
 import 'models/programming_lang.dart';
 import 'models/universal_data_class.dart';
 import 'models/universal_rest_client.dart';
@@ -8,17 +9,20 @@ import 'models/universal_rest_client.dart';
 final class FillController {
   /// Constructor that accepts configuration parameters for creating files
   const FillController({
+    OpenApiInfo openApiInfo = const OpenApiInfo(),
     ProgrammingLanguage programmingLanguage = ProgrammingLanguage.dart,
     String clientPostfix = 'Client',
     bool squishClients = false,
     bool freezed = false,
     bool enumsToJson = false,
-  })  : _clientPostfix = clientPostfix,
+  })  : _openApiInfo = openApiInfo,
+        _clientPostfix = clientPostfix,
         _programmingLanguage = programmingLanguage,
         _squishClients = squishClients,
         _freezed = freezed,
         _enumsToJson = enumsToJson;
 
+  final OpenApiInfo _openApiInfo;
   final ProgrammingLanguage _programmingLanguage;
   final String _clientPostfix;
   final bool _freezed;
@@ -43,6 +47,7 @@ final class FillController {
         ? '${restClient.name}_$_clientPostfix'.toSnake
         : restClient.name.toPascal + _clientPostfix.toPascal;
     final folderName = _squishClients ? 'clients' : restClient.name.toSnake;
+
     return GeneratedFile(
       name: '$folderName/$fileName.${_programmingLanguage.fileExtension}',
       contents: _programmingLanguage.restClientFileContent(
@@ -59,6 +64,7 @@ final class FillController {
       name: 'rest_client.${_programmingLanguage.fileExtension}',
       contents: _programmingLanguage.rootInterfaceFileContent(
         clientsNames,
+        openApiInfo: _openApiInfo,
         postfix: _clientPostfix.toPascal,
         squishClients: _squishClients,
       ),
