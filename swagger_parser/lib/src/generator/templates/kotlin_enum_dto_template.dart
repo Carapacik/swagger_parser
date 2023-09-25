@@ -1,10 +1,12 @@
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
+import '../../utils/utils.dart';
 import '../models/universal_data_class.dart';
 
 /// Provides template for generating kotlin enum DTO
 String kotlinEnumDtoTemplate(UniversalEnumClass dataClass) {
   return '''
+$kotlinGeneratedFileComment
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
