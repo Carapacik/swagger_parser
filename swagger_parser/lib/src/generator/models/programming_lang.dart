@@ -11,6 +11,7 @@ import '../templates/kotlin_enum_dto_template.dart';
 import '../templates/kotlin_moshi_dto_template.dart';
 import '../templates/kotlin_retrofit_client_template.dart';
 import '../templates/kotlin_typedef_template.dart';
+import 'open_api_info.dart';
 import 'universal_data_class.dart';
 import 'universal_rest_client.dart';
 
@@ -84,11 +85,13 @@ enum ProgrammingLanguage {
   /// Determines template for generating root interface for clients
   String rootInterfaceFileContent(
     Set<String> clientsNames, {
+    required OpenApiInfo openApiInfo,
     String postfix = 'Client',
     bool squishClients = false,
   }) =>
       switch (this) {
         ProgrammingLanguage.dart => dartRootInterfaceTemplate(
+            openApiInfo: openApiInfo,
             clientsNames: clientsNames,
             postfix: postfix,
             squishClients: squishClients,

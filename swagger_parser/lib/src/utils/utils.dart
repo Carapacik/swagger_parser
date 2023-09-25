@@ -14,7 +14,12 @@ String dartImports({required Set<String> imports, String? pathPrefix}) {
 }
 
 /// Provides class description
-String descriptionComment(String? description, {String tab = ''}) {
+String descriptionComment(
+  String? description, {
+  bool tabForFirstLine = true,
+  String tab = '',
+  String end = '',
+}) {
   if (description == null || description.isEmpty) {
     return '';
   }
@@ -22,10 +27,10 @@ String descriptionComment(String? description, {String tab = ''}) {
   final lineStart = RegExp('^(.*)', multiLine: true);
   final result = description.replaceAllMapped(
     lineStart,
-    (m) => '$tab/// ${m[1]}',
+    (m) => '${!tabForFirstLine && m.start == 0 ? '' : tab}/// ${m[1]}',
   );
 
-  return '$result\n';
+  return '$result\n$end';
 }
 
 /// Replace all not english letters in text

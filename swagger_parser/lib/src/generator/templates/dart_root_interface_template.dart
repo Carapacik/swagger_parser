@@ -1,6 +1,9 @@
 import '../../utils/case_utils.dart';
+import '../../utils/utils.dart';
+import '../models/open_api_info.dart';
 
 String dartRootInterfaceTemplate({
+  required OpenApiInfo openApiInfo,
   required Set<String> clientsNames,
   required String postfix,
   required bool squishClients,
@@ -8,6 +11,21 @@ String dartRootInterfaceTemplate({
   if (clientsNames.isEmpty) {
     return '';
   }
+
+  final title = openApiInfo.title;
+  final summary = openApiInfo.summary;
+  final description = openApiInfo.description;
+  final version = openApiInfo.version;
+  final fulldescription = switch ((summary, description)) {
+    (null, null) => null,
+    (_, null) => summary,
+    (null, _) => description,
+    (_, _) => '$summary\n\n$description',
+  };
+
+  final comment =
+      '${title ?? ''}${version != null ? ' `v$version`' : ''}${fulldescription != null ? '\n\n$fulldescription' : ''}';
+
   return '''
 import 'package:dio/dio.dart';
 ${_clientsImport(clientsNames, postfix, squishClients: squishClients)}
@@ -15,7 +33,7 @@ abstract class IRestClient {
 ${_interfaceGetters(clientsNames, postfix)}
 }
 
-class RestClient implements IRestClient {
+${descriptionComment(comment)}class RestClient implements IRestClient {
   RestClient({
     required Dio dio,
     required String baseUrl,

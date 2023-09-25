@@ -1,3 +1,8 @@
+## 1.6.1
+- Add summary of the methods to the code docs
+- Fix indents for multiline code docs
+- Add support for root client code docs
+
 ## 1.6.0
 - Add new config parameter `path_method_name`
 
