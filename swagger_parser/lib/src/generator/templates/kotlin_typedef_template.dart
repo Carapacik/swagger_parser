@@ -13,6 +13,7 @@ String kotlinTypeDefTemplate(UniversalComponentClass dataClass) {
   if (type == null) {
     return '';
   }
-  return '${descriptionComment(dataClass.description)}'
+  return '$kotlinGeneratedFileComment'
+      '${descriptionComment(dataClass.description)}'
       'typealias $className = ${type.toSuitableType(ProgrammingLanguage.kotlin)};\n';
 }

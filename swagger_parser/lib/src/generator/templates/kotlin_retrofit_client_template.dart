@@ -15,6 +15,7 @@ String kotlinRetrofitClientTemplate({
 }) {
   final sb = StringBuffer(
     '''
+$kotlinGeneratedFileComment
 import retrofit2.http.*
 
 interface $name {''',

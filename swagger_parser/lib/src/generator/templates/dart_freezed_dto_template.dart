@@ -11,6 +11,7 @@ import '../models/universal_type.dart';
 String dartFreezedDtoTemplate(UniversalComponentClass dataClass) {
   final className = dataClass.name.toPascal;
   return '''
+$dartGeneratedFileComment
 ${ioImport(dataClass)}import 'package:freezed_annotation/freezed_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.freezed.dart';

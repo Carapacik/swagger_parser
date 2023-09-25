@@ -16,6 +16,7 @@ String dartRetrofitClientTemplate({
 }) {
   final sb = StringBuffer(
     '''
+$dartGeneratedFileComment
 ${_fileImport(restClient)}import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../shared_models/')}

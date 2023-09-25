@@ -27,6 +27,7 @@ String dartRootInterfaceTemplate({
       '${title ?? ''}${version != null ? ' `v$version`' : ''}${fulldescription != null ? '\n\n$fulldescription' : ''}';
 
   return '''
+$dartGeneratedFileComment
 import 'package:dio/dio.dart';
 ${_clientsImport(clientsNames, postfix, squishClients: squishClients)}
 abstract class IRestClient {
