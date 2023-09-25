@@ -11,7 +11,6 @@ import '../models/universal_type.dart';
 String dartJsonSerializableDtoTemplate(UniversalComponentClass dataClass) {
   final className = dataClass.name.toPascal;
   return '''
-$dartGeneratedFileComment
 ${ioImport(dataClass)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.g.dart';

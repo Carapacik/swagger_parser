@@ -55,6 +55,7 @@ const dartGeneratedFileComment = r'''
 //
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
+
 ''';
 
 const kotlinGeneratedFileComment = r'''
@@ -62,7 +63,8 @@ const kotlinGeneratedFileComment = r'''
 //  [__  | | | |__| | __ | __ |___ |__/     |__] |__| |__/ [__  |___ |__/
 //  ___] |_|_| |  | |__] |__] |___ |  \ ___ |    |  | |  \ ___] |___ |  \
 //
-// GENERATED CODE - DO NOT MODIFY BY HAND                         
+// GENERATED CODE - DO NOT MODIFY BY HAND
+                         
 ''';
 
 void introMessage() {

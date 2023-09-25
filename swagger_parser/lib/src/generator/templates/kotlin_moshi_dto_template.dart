@@ -8,7 +8,6 @@ import '../models/universal_type.dart';
 /// Provides template for generating kotlin DTO using Moshi
 String kotlinMoshiDtoTemplate(UniversalComponentClass dataClass) {
   return '''
-$kotlinGeneratedFileComment
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
