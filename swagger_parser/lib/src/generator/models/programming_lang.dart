@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 
+import '../../utils/utils.dart';
 import '../generator_exception.dart';
 import '../templates/dart_enum_dto_template.dart';
 import '../templates/dart_freezed_dto_template.dart';
@@ -38,48 +39,64 @@ enum ProgrammingLanguage {
     UniversalDataClass dataClass, {
     bool freezed = false,
     bool enumsToJson = false,
+    bool commentForGeneratedFiles = false,
   }) {
-    switch (this) {
-      case ProgrammingLanguage.dart:
-        if (dataClass is UniversalEnumClass) {
-          return dartEnumDtoTemplate(
-            dataClass,
-            freezed: freezed,
-            enumsToJson: enumsToJson,
-          );
-        } else if (dataClass is UniversalComponentClass) {
-          if (dataClass.typeDef) {
-            return dartTypeDefTemplate(dataClass);
+    String generateContent() {
+      switch (this) {
+        case ProgrammingLanguage.dart:
+          if (dataClass is UniversalEnumClass) {
+            return dartEnumDtoTemplate(
+              dataClass,
+              freezed: freezed,
+              enumsToJson: enumsToJson,
+            );
+          } else if (dataClass is UniversalComponentClass) {
+            if (dataClass.typeDef) {
+              return dartTypeDefTemplate(dataClass);
+            }
+            if (freezed) {
+              return dartFreezedDtoTemplate(dataClass);
+            }
+            return dartJsonSerializableDtoTemplate(dataClass);
           }
-          if (freezed) {
-            return dartFreezedDtoTemplate(dataClass);
+        case ProgrammingLanguage.kotlin:
+          if (dataClass is UniversalEnumClass) {
+            return kotlinEnumDtoTemplate(dataClass);
+          } else if (dataClass is UniversalComponentClass) {
+            if (dataClass.typeDef) {
+              return kotlinTypeDefTemplate(dataClass);
+            }
+            return kotlinMoshiDtoTemplate(dataClass);
           }
-          return dartJsonSerializableDtoTemplate(dataClass);
-        }
-      case ProgrammingLanguage.kotlin:
-        if (dataClass is UniversalEnumClass) {
-          return kotlinEnumDtoTemplate(dataClass);
-        } else if (dataClass is UniversalComponentClass) {
-          if (dataClass.typeDef) {
-            return kotlinTypeDefTemplate(dataClass);
-          }
-          return kotlinMoshiDtoTemplate(dataClass);
-        }
+      }
+      throw GeneratorException('Unknown type exception');
     }
-    throw GeneratorException('Unknown type exception');
+
+    return switch (this) {
+      ProgrammingLanguage.dart =>
+        '${commentForGeneratedFiles ? dartGeneratedFileComment : ''}${generateContent()}',
+      ProgrammingLanguage.kotlin =>
+        '${commentForGeneratedFiles ? kotlinGeneratedFileComment : ''}${generateContent()}',
+    };
   }
 
   /// Determines template for generating Rest client by language
-  String restClientFileContent(UniversalRestClient restClient, String name) =>
+  String restClientFileContent(
+    UniversalRestClient restClient,
+    String name, {
+    bool commentForGeneratedFiles = false,
+  }) =>
       switch (this) {
-        ProgrammingLanguage.dart => dartRetrofitClientTemplate(
+        ProgrammingLanguage.dart =>
+          '${commentForGeneratedFiles ? dartGeneratedFileComment : ''}${dartRetrofitClientTemplate(
             restClient: restClient,
             name: name,
-          ),
-        ProgrammingLanguage.kotlin => kotlinRetrofitClientTemplate(
+          )}',
+        ProgrammingLanguage.kotlin =>
+          '${commentForGeneratedFiles ? kotlinGeneratedFileComment : ''}${kotlinRetrofitClientTemplate(
             restClient: restClient,
             name: name,
-          )
+          )}'
       };
 
   /// Determines template for generating root interface for clients
@@ -88,14 +105,16 @@ enum ProgrammingLanguage {
     required OpenApiInfo openApiInfo,
     String postfix = 'Client',
     bool squishClients = false,
+    bool commentForGeneratedFiles = false,
   }) =>
       switch (this) {
-        ProgrammingLanguage.dart => dartRootInterfaceTemplate(
+        ProgrammingLanguage.dart =>
+          '${commentForGeneratedFiles ? dartGeneratedFileComment : ''}${dartRootInterfaceTemplate(
             openApiInfo: openApiInfo,
             clientsNames: clientsNames,
             postfix: postfix,
             squishClients: squishClients,
-          ),
+          )}',
         ProgrammingLanguage.kotlin => ''
       };
 }

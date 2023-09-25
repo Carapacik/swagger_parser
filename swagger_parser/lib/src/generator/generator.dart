@@ -189,6 +189,7 @@ final class Generator {
       freezed: _freezed,
       squishClients: _squishClients,
       enumsToJson: _enumsToJson,
+      commentForGeneratedFiles: true,
     );
     final files = <GeneratedFile>[];
     for (final client in _restClients) {
