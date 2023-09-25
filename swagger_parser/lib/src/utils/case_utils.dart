@@ -7,7 +7,8 @@ class CaseUtils {
 
   late final List<String> _words;
   static const _separateSymbolsList = r' #,-./@\_{}';
-  final _upperCaseRegex = RegExp('[A-Z]');
+  static final _upperCaseRegex = RegExp('[A-Z]');
+  static final _lowerCaseRegex = RegExp('[a-z]');
   final _upperCaseTwoLettersRowWords = <String>{};
 
   List<String> _groupIntoWords(String text) {
@@ -31,7 +32,7 @@ class CaseUtils {
               !isAllCaps &&
               (!_upperCaseRegex.hasMatch(char) ||
                   (nextSecondChar != null &&
-                      !_upperCaseRegex.hasMatch(nextSecondChar)))) ||
+                      _lowerCaseRegex.hasMatch(nextSecondChar)))) ||
           _separateSymbolsList.contains(nextChar);
 
       if (isEndOfWord) {
