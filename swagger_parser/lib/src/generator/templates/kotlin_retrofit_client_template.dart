@@ -30,7 +30,7 @@ String _toClientRequest(UniversalRequest request) {
   final sb = StringBuffer(
     '''
 
-    ${descriptionComment(request.description)}${request.description != null ? '    ' : ''}${request.isMultiPart ? '@MultiPart\n    ' : ''}${request.isFormUrlEncoded ? '@FormUrlEncoded\n    ' : ''}@${request.requestType.name.toUpperCase()}("${request.route}")
+    ${descriptionComment(request.description, tabForFirstLine: false, tab: '    ', end: '    ')}${request.isMultiPart ? '@MultiPart\n    ' : ''}${request.isFormUrlEncoded ? '@FormUrlEncoded\n    ' : ''}@${request.requestType.name.toUpperCase()}("${request.route}")
     suspend fun ${request.name}(''',
   );
   if (request.parameters.isEmpty) {
