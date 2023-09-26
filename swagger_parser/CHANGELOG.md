@@ -1,5 +1,5 @@
 ## 1.6.2
-- Fix groupping words for abbreviations when special characters are present
+- Fix grouping words for abbreviations when special characters are present
 - Fix replacement type for enum classes
 - Takes case in replacement
 
