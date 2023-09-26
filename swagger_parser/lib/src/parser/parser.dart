@@ -529,10 +529,9 @@ class OpenApiParser {
       } else if (value.containsKey(_enumConst)) {
         final items =
             (value[_enumConst] as List).map((e) => e.toString()).toSet();
-        var type = value[_typeConst].toString();
+        final type = value[_typeConst].toString();
         for (final replacementRule in _replacementRules) {
           key = replacementRule.apply(key)!;
-          type = replacementRule.apply(type)!;
         }
 
         dataClasses.add(

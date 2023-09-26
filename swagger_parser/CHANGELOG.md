@@ -1,3 +1,8 @@
+## 1.6.2
+- Fix groupping words for abbreviations when special characters are present
+- Fix replacement type for enum classes
+- Takes case in replacement
+
 ## 1.6.1
 - Add summary of the methods to the code docs
 - Fix indents for multiline code docs

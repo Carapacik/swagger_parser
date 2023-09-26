@@ -1,3 +1,5 @@
+import '../../utils/case_utils.dart';
+
 /// Used to store regex patterns for replacing names during generation
 final class ReplacementRule {
   /// Constructor for [ReplacementRule]
@@ -12,6 +14,16 @@ final class ReplacementRule {
   /// Replacement string
   final String replacement;
 
+  /// Returns the replacement string in the correct case
+  String get replacementInCorrectCase => replacement.isNotEmpty
+      ? replacement[0] == replacement[0].toUpperCase()
+          ? replacement.toPascal
+          : replacement.toCamel
+      : replacement;
+
   /// Applies the replacement rule to the given input string
-  String? apply(String? input) => input?.replaceAll(pattern, replacement);
+  String? apply(String? input) => input?.replaceAll(
+        pattern,
+        replacementInCorrectCase,
+      );
 }
