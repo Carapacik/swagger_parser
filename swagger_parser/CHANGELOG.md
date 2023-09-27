@@ -1,3 +1,6 @@
+## 1.6.3
+- Fix error with `allOf` results in the schema with type `object` ([#91](https://github.com/Carapacik/swagger_parser/issues/91))
+
 ## 1.6.2
 - Fix grouping words for abbreviations when special characters are present
 - Fix replacement type for enum classes
