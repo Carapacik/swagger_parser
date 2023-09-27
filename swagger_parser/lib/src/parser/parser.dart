@@ -564,7 +564,9 @@ class OpenApiParser {
             description: value[_descriptionConst]?.toString(),
           ),
         );
-        return;
+        if (!value.containsKey(_allOfConst)) {
+          return;
+        }
       }
 
       if (value.containsKey(_allOfConst)) {
