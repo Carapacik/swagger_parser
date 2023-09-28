@@ -77,13 +77,13 @@ final class Generator {
   }
 
   /// The contents of your schema file
-  late final String _schemaContent;
+  final String _schemaContent;
 
   /// Is the schema format YAML
   final bool _isYaml;
 
   /// Output directory
-  late final String _outputDirectory;
+  final String _outputDirectory;
 
   /// Output directory
   final ProgrammingLanguage _programmingLanguage;
@@ -115,6 +115,7 @@ final class Generator {
   /// List of rules used to replace patterns in generated class names
   final List<ReplacementRule> _replacementRules;
 
+  /// Result open api info
   late final OpenApiInfo _openApiInfo;
 
   /// Result data classes
