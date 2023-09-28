@@ -1,6 +1,7 @@
 import 'package:args/args.dart';
 import 'package:yaml/yaml.dart';
 
+import '../generator/models/programming_lang.dart';
 import '../generator/models/replacement_rule.dart';
 import '../utils/file_utils.dart';
 import 'config_exception.dart';
@@ -58,7 +59,14 @@ final class YamlConfig {
     }
 
     if (yamlConfig.containsKey('language')) {
-      _language = yamlConfig['language'].toString();
+      final language =
+          ProgrammingLanguage.fromString(yamlConfig['language'].toString());
+      if (language == null) {
+        throw ConfigException(
+          "'language' field must be contained in ${ProgrammingLanguage.values}.",
+        );
+      }
+      _language = language;
     }
 
     if (yamlConfig.containsKey('freezed')) {
@@ -160,7 +168,7 @@ final class YamlConfig {
 
   String? _outputDirectory;
   String? _schemaFilePath;
-  String? _language;
+  ProgrammingLanguage? _language;
   bool? _freezed;
   String? _clientPostfix;
   bool? _rootInterface;
@@ -175,7 +183,7 @@ final class YamlConfig {
 
   String get schemaFilePath => _schemaFilePath!;
 
-  String? get language => _language;
+  ProgrammingLanguage? get language => _language;
 
   bool? get freezed => _freezed;
 

@@ -13,7 +13,7 @@ void main() {
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -32,8 +32,8 @@ abstract class SomeClient {
     test('kotlin + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -48,7 +48,7 @@ interface SomeClient {}
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController = FillController(squishClients: true);
+      const fillController = FillController.forTests(squishClients: true);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -67,7 +67,7 @@ abstract class SomeClient {
     test('kotlin + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController = FillController(
+      const fillController = FillController.forTests(
         programmingLanguage: ProgrammingLanguage.kotlin,
         squishClients: true,
       );
@@ -85,7 +85,7 @@ interface SomeClient {}
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
-      const fillController = FillController(clientPostfix: 'Api');
+      const fillController = FillController.forTests(clientPostfix: 'Api');
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -104,7 +104,7 @@ abstract class ClassNameApi {
     test('kotlin + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController = FillController(
+      const fillController = FillController.forTests(
         programmingLanguage: ProgrammingLanguage.kotlin,
         clientPostfix: 'Api',
       );
@@ -122,7 +122,7 @@ interface SomeApi {}
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController = FillController(clientPostfix: '');
+      const fillController = FillController.forTests(clientPostfix: '');
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -141,7 +141,7 @@ abstract class Some {
     test('kotlin + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController = FillController(
+      const fillController = FillController.forTests(
         programmingLanguage: ProgrammingLanguage.kotlin,
         clientPostfix: '',
       );
@@ -168,7 +168,7 @@ interface Some {}
         },
         requests: [],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -209,7 +209,7 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -242,8 +242,8 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -328,7 +328,7 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -441,8 +441,8 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -509,7 +509,7 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -562,8 +562,8 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -623,7 +623,7 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -687,8 +687,8 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -729,7 +729,7 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -770,8 +770,8 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -822,7 +822,7 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -880,8 +880,8 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -959,7 +959,7 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'dart:io';
@@ -1053,8 +1053,8 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1107,7 +1107,7 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1157,8 +1157,8 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1220,7 +1220,7 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1286,8 +1286,8 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1369,7 +1369,7 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1460,8 +1460,8 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1525,7 +1525,7 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1617,7 +1617,7 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1687,8 +1687,8 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1774,8 +1774,8 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1811,7 +1811,7 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1848,8 +1848,8 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1908,7 +1908,7 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -2000,7 +2000,7 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController.forTests();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -2070,8 +2070,8 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -2157,8 +2157,8 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController.forTests(
+          programmingLanguage: ProgrammingLanguage.kotlin);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*

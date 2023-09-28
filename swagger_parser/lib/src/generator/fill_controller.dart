@@ -9,6 +9,23 @@ import 'models/universal_rest_client.dart';
 final class FillController {
   /// Constructor that accepts configuration parameters for creating files
   const FillController({
+    required OpenApiInfo openApiInfo,
+    required ProgrammingLanguage programmingLanguage,
+    required String clientPostfix,
+    required bool squishClients,
+    required bool freezed,
+    required bool enumsToJson,
+    required bool markFilesAsGenerated,
+  })  : _openApiInfo = openApiInfo,
+        _clientPostfix = clientPostfix,
+        _programmingLanguage = programmingLanguage,
+        _squishClients = squishClients,
+        _freezed = freezed,
+        _enumsToJson = enumsToJson,
+        _markFilesAsGenerated = markFilesAsGenerated;
+
+  /// Constructor for tests that accepts configuration parameters with default values to create files
+  const FillController.forTests({
     OpenApiInfo openApiInfo = const OpenApiInfo(),
     ProgrammingLanguage programmingLanguage = ProgrammingLanguage.dart,
     String clientPostfix = 'Client',
