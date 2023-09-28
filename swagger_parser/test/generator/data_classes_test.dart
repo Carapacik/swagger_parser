@@ -65,7 +65,8 @@ class ClassName with _$ClassName {
         parameters: [],
       );
       const fillController = FillController.forTests(
-          programmingLanguage: ProgrammingLanguage.kotlin);
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
@@ -356,7 +357,8 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController.forTests(
-          programmingLanguage: ProgrammingLanguage.kotlin);
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
@@ -467,7 +469,8 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController.forTests(
-          programmingLanguage: ProgrammingLanguage.kotlin);
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
@@ -613,7 +616,8 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController.forTests(
-          programmingLanguage: ProgrammingLanguage.kotlin);
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
@@ -798,7 +802,8 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController.forTests(
-          programmingLanguage: ProgrammingLanguage.kotlin);
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
@@ -937,7 +942,8 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController.forTests(
-          programmingLanguage: ProgrammingLanguage.kotlin);
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
@@ -1383,7 +1389,8 @@ const _$EnumNameStringEnumMap = {
         ),
       ];
       const fillController = FillController.forTests(
-          programmingLanguage: ProgrammingLanguage.kotlin);
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final files = <GeneratedFile>[];
       for (final enumClass in dataClasses) {
         files.add(fillController.fillDtoContent(enumClass));
@@ -1502,7 +1509,8 @@ enum EnumName {
         items: {'-2', '-1', '0', '1'},
       );
       const fillController = FillController.forTests(
-          programmingLanguage: ProgrammingLanguage.kotlin);
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final file = fillController.fillDtoContent(dataClass);
       const expectedContent = '''
 import com.squareup.moshi.Json
@@ -1793,7 +1801,8 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController.forTests(
-          programmingLanguage: ProgrammingLanguage.kotlin);
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContent = '''
 import com.squareup.moshi.Json
@@ -2017,7 +2026,8 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController.forTests(
-          programmingLanguage: ProgrammingLanguage.kotlin);
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContent = '''
 import com.squareup.moshi.Json

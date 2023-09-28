@@ -9,7 +9,7 @@ import '../models/universal_type.dart';
 /// Provides template for generating dart typedefs using JSON serializable
 String dartTypeDefTemplate(
   UniversalComponentClass dataClass, {
-    required bool markFileAsGenerated,
+  required bool markFileAsGenerated,
 }) {
   final className = dataClass.name.toPascal;
   final type = dataClass.parameters.firstOrNull;
