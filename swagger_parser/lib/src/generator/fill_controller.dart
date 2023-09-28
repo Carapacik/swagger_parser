@@ -15,14 +15,14 @@ final class FillController {
     bool squishClients = false,
     bool freezed = false,
     bool enumsToJson = false,
-    bool commentForGeneratedFiles = false,
+    bool markFilesAsGenerated = false,
   })  : _openApiInfo = openApiInfo,
         _clientPostfix = clientPostfix,
         _programmingLanguage = programmingLanguage,
         _squishClients = squishClients,
         _freezed = freezed,
         _enumsToJson = enumsToJson,
-        _commentForGeneratedFiles = commentForGeneratedFiles;
+        _markFilesAsGenerated = markFilesAsGenerated;
 
   final OpenApiInfo _openApiInfo;
   final ProgrammingLanguage _programmingLanguage;
@@ -30,7 +30,7 @@ final class FillController {
   final bool _freezed;
   final bool _squishClients;
   final bool _enumsToJson;
-  final bool _commentForGeneratedFiles;
+  final bool _markFilesAsGenerated;
 
   /// Return [GeneratedFile] generated from given [UniversalDataClass]
   GeneratedFile fillDtoContent(UniversalDataClass dataClass) => GeneratedFile(
@@ -41,7 +41,7 @@ final class FillController {
           dataClass,
           freezed: _freezed,
           enumsToJson: _enumsToJson,
-          commentForGeneratedFiles: _commentForGeneratedFiles,
+          markFilesAsGenerated: _markFilesAsGenerated,
         ),
       );
 
@@ -57,7 +57,7 @@ final class FillController {
       contents: _programmingLanguage.restClientFileContent(
         restClient,
         restClient.name.toPascal + _clientPostfix.toPascal,
-        commentForGeneratedFiles: _commentForGeneratedFiles,
+        markFilesAsGenerated: _markFilesAsGenerated,
       ),
     );
   }
@@ -72,7 +72,7 @@ final class FillController {
         openApiInfo: _openApiInfo,
         postfix: _clientPostfix.toPascal,
         squishClients: _squishClients,
-        commentForGeneratedFiles: _commentForGeneratedFiles,
+        markFilesAsGenerated: _markFilesAsGenerated,
       ),
     );
   }

@@ -68,6 +68,10 @@ final class Generator {
     if (yamlConfig.enumsPrefix != null) {
       _enumsPrefix = yamlConfig.enumsPrefix!;
     }
+
+    if (yamlConfig.markFilesAsGenerated != null) {
+      _markFilesAsGenerated = yamlConfig.markFilesAsGenerated!;
+    }
     _replacementRules = yamlConfig.replacementRules;
   }
 
@@ -84,6 +88,7 @@ final class Generator {
     bool pathMethodName = false,
     bool enumsToJson = false,
     bool enumsPrefix = false,
+    bool markFilesAsGenerated = true,
     List<ReplacementRule> replacementRules = const [],
   }) {
     _schemaContent = schemaContent;
@@ -97,6 +102,7 @@ final class Generator {
     _pathMethodName = pathMethodName;
     _enumsToJson = enumsToJson;
     _enumsPrefix = enumsPrefix;
+    _markFilesAsGenerated = markFilesAsGenerated;
     _replacementRules = replacementRules;
   }
 
@@ -132,6 +138,9 @@ final class Generator {
 
   /// If true, generated enums will have parent component name in its class name
   bool _enumsPrefix = false;
+
+  /// If true, generated files will be marked as generated
+  bool _markFilesAsGenerated = true;
 
   /// List of rules used to replace patterns in generated class names
   List<ReplacementRule> _replacementRules = [];
@@ -189,7 +198,7 @@ final class Generator {
       freezed: _freezed,
       squishClients: _squishClients,
       enumsToJson: _enumsToJson,
-      commentForGeneratedFiles: true,
+      markFilesAsGenerated: _markFilesAsGenerated,
     );
     final files = <GeneratedFile>[];
     for (final client in _restClients) {

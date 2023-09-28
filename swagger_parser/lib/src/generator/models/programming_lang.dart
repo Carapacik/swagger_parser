@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 
-import '../../utils/utils.dart';
 import '../generator_exception.dart';
 import '../templates/dart_enum_dto_template.dart';
 import '../templates/dart_freezed_dto_template.dart';
@@ -37,84 +36,94 @@ enum ProgrammingLanguage {
   /// Determines template for generating DTOs by language
   String dtoFileContent(
     UniversalDataClass dataClass, {
-    bool freezed = false,
-    bool enumsToJson = false,
-    bool commentForGeneratedFiles = false,
+    required bool freezed,
+    required bool enumsToJson,
+    required bool markFilesAsGenerated,
   }) {
-    String generateContent() {
-      switch (this) {
-        case ProgrammingLanguage.dart:
-          if (dataClass is UniversalEnumClass) {
-            return dartEnumDtoTemplate(
+    switch (this) {
+      case dart:
+        if (dataClass is UniversalEnumClass) {
+          return dartEnumDtoTemplate(
+            dataClass,
+            freezed: freezed,
+            enumsToJson: enumsToJson,
+            markFileAsGenerated: markFilesAsGenerated,
+          );
+        } else if (dataClass is UniversalComponentClass) {
+          if (dataClass.typeDef) {
+            return dartTypeDefTemplate(
               dataClass,
-              freezed: freezed,
-              enumsToJson: enumsToJson,
+              markFileAsGenerated: markFilesAsGenerated,
             );
-          } else if (dataClass is UniversalComponentClass) {
-            if (dataClass.typeDef) {
-              return dartTypeDefTemplate(dataClass);
-            }
-            if (freezed) {
-              return dartFreezedDtoTemplate(dataClass);
-            }
-            return dartJsonSerializableDtoTemplate(dataClass);
           }
-        case ProgrammingLanguage.kotlin:
-          if (dataClass is UniversalEnumClass) {
-            return kotlinEnumDtoTemplate(dataClass);
-          } else if (dataClass is UniversalComponentClass) {
-            if (dataClass.typeDef) {
-              return kotlinTypeDefTemplate(dataClass);
-            }
-            return kotlinMoshiDtoTemplate(dataClass);
+          if (freezed) {
+            return dartFreezedDtoTemplate(
+              dataClass,
+              markFileAsGenerated: markFilesAsGenerated,
+            );
           }
-      }
-      throw GeneratorException('Unknown type exception');
+          return dartJsonSerializableDtoTemplate(
+            dataClass,
+            markFileAsGenerated: markFilesAsGenerated,
+          );
+        }
+      case kotlin:
+        if (dataClass is UniversalEnumClass) {
+          return kotlinEnumDtoTemplate(
+            dataClass,
+            markFileAsGenerated: markFilesAsGenerated,
+          );
+        } else if (dataClass is UniversalComponentClass) {
+          if (dataClass.typeDef) {
+            return kotlinTypeDefTemplate(
+              dataClass,
+              markFileAsGenerated: markFilesAsGenerated,
+            );
+          }
+          return kotlinMoshiDtoTemplate(
+            dataClass,
+            markFileAsGenerated: markFilesAsGenerated,
+          );
+        }
     }
-
-    return switch (this) {
-      ProgrammingLanguage.dart =>
-        '${commentForGeneratedFiles ? dartGeneratedFileComment : ''}${generateContent()}',
-      ProgrammingLanguage.kotlin =>
-        '${commentForGeneratedFiles ? kotlinGeneratedFileComment : ''}${generateContent()}',
-    };
+    throw GeneratorException('Unknown type exception');
   }
 
   /// Determines template for generating Rest client by language
   String restClientFileContent(
     UniversalRestClient restClient,
     String name, {
-    bool commentForGeneratedFiles = false,
+    required bool markFilesAsGenerated,
   }) =>
       switch (this) {
-        ProgrammingLanguage.dart =>
-          '${commentForGeneratedFiles ? dartGeneratedFileComment : ''}${dartRetrofitClientTemplate(
+        dart => dartRetrofitClientTemplate(
             restClient: restClient,
             name: name,
-          )}',
-        ProgrammingLanguage.kotlin =>
-          '${commentForGeneratedFiles ? kotlinGeneratedFileComment : ''}${kotlinRetrofitClientTemplate(
+            markFileAsGenerated: markFilesAsGenerated,
+          ),
+        kotlin => kotlinRetrofitClientTemplate(
             restClient: restClient,
             name: name,
-          )}'
+            markFileAsGenerated: markFilesAsGenerated,
+          ),
       };
 
   /// Determines template for generating root interface for clients
   String rootInterfaceFileContent(
     Set<String> clientsNames, {
     required OpenApiInfo openApiInfo,
-    String postfix = 'Client',
-    bool squishClients = false,
-    bool commentForGeneratedFiles = false,
+    required String postfix,
+    required bool squishClients,
+    required bool markFilesAsGenerated,
   }) =>
       switch (this) {
-        ProgrammingLanguage.dart =>
-          '${commentForGeneratedFiles ? dartGeneratedFileComment : ''}${dartRootInterfaceTemplate(
+        dart => dartRootInterfaceTemplate(
             openApiInfo: openApiInfo,
             clientsNames: clientsNames,
             postfix: postfix,
             squishClients: squishClients,
-          )}',
-        ProgrammingLanguage.kotlin => ''
+            markFileAsGenerated: markFilesAsGenerated,
+          ),
+        kotlin => '',
       };
 }

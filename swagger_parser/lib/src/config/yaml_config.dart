@@ -119,6 +119,15 @@ final class YamlConfig {
       _enumsPrefix = yamlConfig['enums_prefix'] as bool?;
     }
 
+    if (yamlConfig.containsKey('mark_files_as_generated')) {
+      if (yamlConfig['mark_files_as_generated'] is! bool?) {
+        throw const ConfigException(
+          "Config parameter 'mark_files_as_generated' must be bool.",
+        );
+      }
+      _markFilesAsGenerated = yamlConfig['mark_files_as_generated'] as bool?;
+    }
+
     if (yamlConfig.containsKey('replacement_rules')) {
       if (yamlConfig['replacement_rules'] is! YamlList) {
         throw const ConfigException(
@@ -159,6 +168,7 @@ final class YamlConfig {
   bool? _pathMethodName;
   bool? _enumsToJson;
   bool? _enumsPrefix;
+  bool? _markFilesAsGenerated;
   final List<ReplacementRule> _replacementRules = [];
 
   String get outputDirectory => _outputDirectory!;
@@ -180,6 +190,8 @@ final class YamlConfig {
   bool? get enumsToJson => _enumsToJson;
 
   bool? get enumsPrefix => _enumsPrefix;
+
+  bool? get markFilesAsGenerated => _markFilesAsGenerated;
 
   List<ReplacementRule> get replacementRules => _replacementRules;
 }

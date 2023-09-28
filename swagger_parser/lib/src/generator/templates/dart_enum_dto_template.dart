@@ -6,12 +6,13 @@ import '../models/universal_data_class.dart';
 /// Provides template for generating dart enum DTO
 String dartEnumDtoTemplate(
   UniversalEnumClass enumClass, {
-  bool freezed = false,
-  bool enumsToJson = false,
+  required bool freezed,
+  required bool enumsToJson,
+  required bool markFileAsGenerated,
 }) {
   final className = enumClass.name.toPascal;
   return '''
-import '${freezed ? 'package:freezed_annotation/freezed_annotation.dart' : 'package:json_annotation/json_annotation.dart'}';
+${markFileAsGenerated ? dartGeneratedFileComment : ''}import '${freezed ? 'package:freezed_annotation/freezed_annotation.dart' : 'package:json_annotation/json_annotation.dart'}';
 
 ${descriptionComment(enumClass.description)}@JsonEnum()
 enum $className {

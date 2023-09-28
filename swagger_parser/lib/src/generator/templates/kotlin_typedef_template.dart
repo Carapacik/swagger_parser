@@ -7,12 +7,15 @@ import '../models/universal_data_class.dart';
 import '../models/universal_type.dart';
 
 /// Provides template for generating dart typedefs using JSON serializable
-String kotlinTypeDefTemplate(UniversalComponentClass dataClass) {
+String kotlinTypeDefTemplate(
+  UniversalComponentClass dataClass, {
+  required bool markFileAsGenerated,
+}) {
   final className = dataClass.name.toPascal;
   final type = dataClass.parameters.firstOrNull;
   if (type == null) {
     return '';
   }
-  return '${descriptionComment(dataClass.description)}'
+  return '${markFileAsGenerated ? kotlinGeneratedFileComment : ''}${descriptionComment(dataClass.description)}'
       'typealias $className = ${type.toSuitableType(ProgrammingLanguage.kotlin)};\n';
 }

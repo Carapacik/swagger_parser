@@ -8,10 +8,13 @@ import '../models/universal_data_class.dart';
 import '../models/universal_type.dart';
 
 /// Provides template for generating dart DTO using freezed
-String dartFreezedDtoTemplate(UniversalComponentClass dataClass) {
+String dartFreezedDtoTemplate(
+  UniversalComponentClass dataClass, {
+  required bool markFileAsGenerated,
+}) {
   final className = dataClass.name.toPascal;
   return '''
-${ioImport(dataClass)}import 'package:freezed_annotation/freezed_annotation.dart';
+${markFileAsGenerated ? dartGeneratedFileComment : ''}${ioImport(dataClass)}import 'package:freezed_annotation/freezed_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';

@@ -7,6 +7,7 @@ String dartRootInterfaceTemplate({
   required Set<String> clientsNames,
   required String postfix,
   required bool squishClients,
+  required bool markFileAsGenerated,
 }) {
   if (clientsNames.isEmpty) {
     return '';
@@ -27,7 +28,7 @@ String dartRootInterfaceTemplate({
       '${title ?? ''}${version != null ? ' `v$version`' : ''}${fulldescription != null ? '\n\n$fulldescription' : ''}';
 
   return '''
-import 'package:dio/dio.dart';
+${markFileAsGenerated ? dartGeneratedFileComment : ''}import 'package:dio/dio.dart';
 ${_clientsImport(clientsNames, postfix, squishClients: squishClients)}
 abstract class IRestClient {
 ${_interfaceGetters(clientsNames, postfix)}

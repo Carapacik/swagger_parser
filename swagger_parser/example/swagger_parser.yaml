@@ -1,3 +1,4 @@
 swagger_parser:
   schema_path: assets/openapi.json
   output_directory: lib/api
+  mark_files_as_generated: false
