@@ -1,3 +1,6 @@
+## 1.6.4
+- Add new config parameter `mark_files_as_generated`
+
 ## 1.6.3
 - Fix error with `allOf` results in the schema with type `object` ([#91](https://github.com/Carapacik/swagger_parser/issues/91))
 
