@@ -17,7 +17,7 @@ import 'models/universal_rest_client.dart';
 /// to specify custom path to yaml config.
 final class Generator {
   /// Applies parameters directly from constructor
-  /// without config YAML file
+  /// and sets them to default if not found
   Generator({
     required String schemaContent,
     required String outputDirectory,
@@ -47,9 +47,8 @@ final class Generator {
         _replacementRules = replacementRules ?? const [];
 
   /// Applies parameters set from yaml config file
-  /// and sets them to default if not found
   factory Generator.fromYamlConfig(List<String> arguments) {
-    final yamlConfig = YamlConfig(arguments);
+    final yamlConfig = YamlConfig.fromYamlFile(arguments);
 
     final schemaFilePath = yamlConfig.schemaFilePath;
     final configFile = schemaFile(schemaFilePath);
