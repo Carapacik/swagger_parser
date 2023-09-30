@@ -134,8 +134,12 @@ final class Generator {
 
   /// Generates files based on OpenApi definition file
   Future<(OpenApiInfo, GenerationStatistics)> generateFiles() async {
+    final stopwatch = Stopwatch()..start();
+
     _parseOpenApiDefinitionFile();
     await _generateFiles();
+
+    stopwatch.stop();
 
     return (
       _openApiInfo,
@@ -146,6 +150,7 @@ final class Generator {
         totalDataClasses: _dataClasses.length,
         totalRequests:
             _restClients.fold(0, (val, el) => val + el.requests.length),
+        timeElapsed: stopwatch.elapsed,
       )
     );
   }

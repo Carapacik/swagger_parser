@@ -5,6 +5,7 @@ class GenerationStatistics {
     required this.totalRestClients,
     required this.totalRequests,
     required this.totalDataClasses,
+    required this.timeElapsed,
   });
 
   final int totalFiles;
@@ -12,6 +13,7 @@ class GenerationStatistics {
   final int totalRestClients;
   final int totalRequests;
   final int totalDataClasses;
+  final Duration timeElapsed;
 
   GenerationStatistics merge(GenerationStatistics other) {
     return GenerationStatistics(
@@ -20,6 +22,7 @@ class GenerationStatistics {
       totalRestClients: totalRestClients + other.totalRestClients,
       totalRequests: totalRequests + other.totalRequests,
       totalDataClasses: totalDataClasses + other.totalDataClasses,
+      timeElapsed: timeElapsed + other.timeElapsed,
     );
   }
 }
