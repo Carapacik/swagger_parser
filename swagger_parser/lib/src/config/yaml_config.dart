@@ -1,9 +1,7 @@
-import 'package:args/args.dart';
 import 'package:yaml/yaml.dart';
 
 import '../generator/models/programming_lang.dart';
 import '../generator/models/replacement_rule.dart';
-import '../utils/file_utils.dart';
 import 'config_exception.dart';
 
 /// Handles parsing Yaml config file
@@ -33,44 +31,41 @@ final class YamlConfig {
   });
 
   /// Applies parameters from YAML file
-  factory YamlConfig.fromYamlFile(List<String> arguments) {
-    final parser = ArgParser()..addOption('file', abbr: 'f');
-    final configFile = getConfigFile(
-      filePath: parser.parse(arguments)['file']?.toString(),
-    );
-    if (configFile == null) {
-      throw const ConfigException("Can't find yaml config file.");
+  factory YamlConfig.fromYaml(
+    YamlMap yamlConfig, {
+    bool isRootConfig = false,
+    YamlConfig? rootConfig,
+  }) {
+    String? schemaPath;
+
+    schemaPath = yamlConfig['schema_path']?.toString();
+    if (isRootConfig && schemaPath == null) {
+      schemaPath = '';
     }
 
-    final yamlFileContent = configFile.readAsStringSync();
-    final dynamic yamlFile = loadYaml(yamlFileContent);
-
-    if (yamlFile is! YamlMap) {
-      throw ConfigException(
-        "Failed to extract config from the 'pubspec.yaml' file.\n"
-        'Expected YAML map but got ${yamlFile.runtimeType}.',
-      );
-    }
-
-    final yamlConfig = yamlFile['swagger_parser'] as YamlMap?;
-    if (yamlConfig == null) {
-      throw ConfigException(
-        "`${configFile.path}` file does not contain a 'swagger_parser' section.",
-      );
-    }
-
-    final schemaFilePath = yamlConfig['schema_path']?.toString();
-    if (schemaFilePath == null) {
+    if (schemaPath == null) {
       throw const ConfigException(
         "Config parameter 'schema_path' is required.",
       );
     }
 
-    final outputDirectory = yamlConfig['output_directory']?.toString();
+    var outputDirectory = yamlConfig['output_directory']?.toString();
+    if (isRootConfig && outputDirectory == null) {
+      outputDirectory = '';
+    }
+
     if (outputDirectory == null) {
-      throw const ConfigException(
-        "Config parameter 'output_directory' is required.",
-      );
+      if (rootConfig == null) {
+        throw const ConfigException(
+          "Config parameter 'output_directory' is required.",
+        );
+      } else if (rootConfig.outputDirectory == '') {
+        throw ConfigException(
+          "Config parameter 'output_directory' for $schemaPath was not found.\n"
+          "Add the 'output_directory' parameter under 'swagger_parser:' or set it for each schema.",
+        );
+      }
+      outputDirectory = rootConfig.outputDirectory;
     }
 
     ProgrammingLanguage? language;
@@ -150,39 +145,42 @@ final class YamlConfig {
       );
     }
 
-    final replacementRules = <ReplacementRule>[];
-    for (final element in rawReplacementRules ?? []) {
-      if (element is! YamlMap ||
-          element['pattern'] is! String ||
-          element['replacement'] is! String) {
-        throw const ConfigException(
-          "Config parameter 'replacement_rules' values must be maps of strings "
-          "and contain 'pattern' and 'replacement'.",
+    List<ReplacementRule>? replacementRules;
+    if (rawReplacementRules != null) {
+      replacementRules ??= [];
+      for (final element in rawReplacementRules) {
+        if (element is! YamlMap ||
+            element['pattern'] is! String ||
+            element['replacement'] is! String) {
+          throw const ConfigException(
+            "Config parameter 'replacement_rules' values must be maps of strings "
+            "and contain 'pattern' and 'replacement'.",
+          );
+        }
+        replacementRules.add(
+          ReplacementRule(
+            pattern: RegExp(element['pattern'].toString()),
+            replacement: element['replacement'].toString(),
+          ),
         );
       }
-
-      replacementRules.add(
-        ReplacementRule(
-          pattern: RegExp(element['pattern'].toString()),
-          replacement: element['replacement'].toString(),
-        ),
-      );
     }
 
     return YamlConfig(
-      schemaFilePath: schemaFilePath,
+      schemaFilePath: schemaPath,
       outputDirectory: outputDirectory,
-      language: language,
-      freezed: freezed,
-      rootInterface: rootInterface,
-      rootClientName: rootClientName,
-      clientPostfix: clientPostfix,
-      squishClients: squishClients,
-      pathMethodName: pathMethodName,
-      enumsToJson: enumsToJson,
-      enumsPrefix: enumsPrefix,
-      markFilesAsGenerated: markFilesAsGenerated,
-      replacementRules: replacementRules,
+      language: language ?? rootConfig?.language,
+      freezed: freezed ?? rootConfig?.freezed,
+      rootInterface: rootInterface ?? rootConfig?.rootInterface,
+      rootClientName: rootClientName ?? rootConfig?.rootClientName,
+      clientPostfix: clientPostfix ?? rootConfig?.clientPostfix,
+      squishClients: squishClients ?? rootConfig?.squishClients,
+      pathMethodName: pathMethodName ?? rootConfig?.pathMethodName,
+      enumsToJson: enumsToJson ?? rootConfig?.enumsToJson,
+      enumsPrefix: enumsPrefix ?? rootConfig?.enumsPrefix,
+      markFilesAsGenerated:
+          markFilesAsGenerated ?? rootConfig?.markFilesAsGenerated,
+      replacementRules: replacementRules ?? rootConfig?.replacementRules ?? [],
     );
   }
 
