@@ -830,6 +830,7 @@ class OpenApiParser {
           type = replacementRule.apply(type)!;
         }
       }
+
       return (
         type: UniversalType(
           type: type,
@@ -839,6 +840,7 @@ class OpenApiParser {
           format: map[_formatConst]?.toString(),
           jsonKey: name,
           defaultValue: map[_defaultConst]?.toString(),
+          enumType: map[_defaultConst] != null && import != null ? type : null,
           isRequired: isRequired,
           nullable: root &&
               map.containsKey(_nullableConst) &&
