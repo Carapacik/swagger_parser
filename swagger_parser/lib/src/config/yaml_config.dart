@@ -22,6 +22,7 @@ final class YamlConfig {
     required this.language,
     required this.freezed,
     required this.rootInterface,
+    required this.rootClientName,
     required this.clientPostfix,
     required this.squishClients,
     required this.pathMethodName,
@@ -94,6 +95,14 @@ final class YamlConfig {
         "Config parameter 'root_interface' must be bool.",
       );
     }
+
+    final rootClientName = yamlConfig['root_client_name'];
+    if (rootClientName is! String?) {
+      throw const ConfigException(
+        "Config parameter 'root_client_name' must be bool.",
+      );
+    }
+
     final rawClientPostfix = yamlConfig['client_postfix']?.toString().trim();
 
     final clientPostfix =
@@ -166,6 +175,7 @@ final class YamlConfig {
       language: language,
       freezed: freezed,
       rootInterface: rootInterface,
+      rootClientName: rootClientName,
       clientPostfix: clientPostfix,
       squishClients: squishClients,
       pathMethodName: pathMethodName,
@@ -182,6 +192,7 @@ final class YamlConfig {
   final bool? freezed;
   final String? clientPostfix;
   final bool? rootInterface;
+  final String? rootClientName;
   final bool? squishClients;
   final bool? pathMethodName;
   final bool? enumsToJson;

@@ -10,8 +10,9 @@ class GeneratorContent extends StatefulWidget {
 }
 
 class _GeneratorContentState extends State<GeneratorContent> {
-  late final TextEditingController _schemaController = TextEditingController();
-  late final TextEditingController _clientPostfix = TextEditingController();
+  late final _schemaController = TextEditingController();
+  late final _clientPostfix = TextEditingController();
+  late final _rootClientName = TextEditingController();
   ProgrammingLanguage _language = ProgrammingLanguage.dart;
   bool _isYaml = false;
   bool _freezed = false;
@@ -135,6 +136,25 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         ),
                       ),
                     ),
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 600),
+                      crossFadeState: _language == ProgrammingLanguage.dart
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      sizeCurve: Curves.fastOutSlowIn,
+                      firstChild: Container(),
+                      secondChild: TextField(
+                        controller: _rootClientName,
+                        decoration: const InputDecoration(
+                          labelStyle: TextStyle(fontSize: 18),
+                          hintText: 'Root client name',
+                          hintStyle: TextStyle(fontSize: 18),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                    ),
                     TextField(
                       controller: _clientPostfix,
                       decoration: const InputDecoration(
@@ -229,6 +249,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             isYaml: _isYaml,
                             freezed: _freezed,
                             rootInterface: _rootInterface,
+                            rootClientName: _rootClientName.text,
                             squishClients: _squishClients,
                             pathMethodName: _pathMethodName,
                             markFilesAsGenerated: _markFilesAsGenerated,
@@ -256,6 +277,7 @@ Future<void> _generateOutputs(
   required bool squishClients,
   required bool isYaml,
   required bool rootInterface,
+  required String rootClientName,
   required bool pathMethodName,
   required bool enumsToJson,
   required bool enumsPrefix,
@@ -269,6 +291,7 @@ Future<void> _generateOutputs(
     outputDirectory: '',
     freezed: freezed,
     rootInterface: rootInterface,
+    rootClientName: rootClientName.trim().isEmpty ? null : rootClientName,
     clientPostfix: clientPostfix.trim().isEmpty ? null : clientPostfix,
     squishClients: squishClients,
     pathMethodName: pathMethodName,

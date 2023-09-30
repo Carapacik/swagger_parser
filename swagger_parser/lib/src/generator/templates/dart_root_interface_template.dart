@@ -4,6 +4,7 @@ import '../models/open_api_info.dart';
 
 String dartRootInterfaceTemplate({
   required OpenApiInfo openApiInfo,
+  required String name,
   required Set<String> clientsNames,
   required String postfix,
   required bool squishClients,
@@ -12,6 +13,8 @@ String dartRootInterfaceTemplate({
   if (clientsNames.isEmpty) {
     return '';
   }
+
+  name = name.toPascal;
 
   final title = openApiInfo.title;
   final summary = openApiInfo.summary;
@@ -30,12 +33,12 @@ String dartRootInterfaceTemplate({
   return '''
 ${markFileAsGenerated ? dartGeneratedFileComment : ''}import 'package:dio/dio.dart';
 ${_clientsImport(clientsNames, postfix, squishClients: squishClients)}
-abstract class IRestClient {
+abstract class I$name {
 ${_interfaceGetters(clientsNames, postfix)}
 }
 
-${descriptionComment(comment)}class RestClient implements IRestClient {
-  RestClient({
+${descriptionComment(comment)}class $name implements I$name {
+  $name({
     required Dio dio,
     required String baseUrl,
   })  : _dio = dio,

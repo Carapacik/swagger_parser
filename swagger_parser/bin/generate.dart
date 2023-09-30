@@ -1,3 +1,4 @@
+import 'package:swagger_parser/src/config/yaml_config.dart';
 import 'package:swagger_parser/src/utils/utils.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 
@@ -7,7 +8,8 @@ Future<void> main(List<String> arguments) async {
   try {
     /// Run generate from YAML config
     /// If you need
-    final generator = Generator.fromYamlConfig(arguments);
+    final yamlConfig = YamlConfig.fromYamlFile(arguments);
+    final generator = Generator.fromYamlConfig(yamlConfig);
     generateMessage();
     await generator.generateFiles();
     successMessage();

@@ -12,6 +12,7 @@ final class FillController {
     required OpenApiInfo openApiInfo,
     required ProgrammingLanguage programmingLanguage,
     required String clientPostfix,
+    required String rootClientName,
     required bool squishClients,
     required bool freezed,
     required bool enumsToJson,
@@ -19,6 +20,7 @@ final class FillController {
   })  : _openApiInfo = openApiInfo,
         _clientPostfix = clientPostfix,
         _programmingLanguage = programmingLanguage,
+        _rootClientName = rootClientName,
         _squishClients = squishClients,
         _freezed = freezed,
         _enumsToJson = enumsToJson,
@@ -29,6 +31,7 @@ final class FillController {
     OpenApiInfo openApiInfo = const OpenApiInfo(),
     ProgrammingLanguage programmingLanguage = ProgrammingLanguage.dart,
     String clientPostfix = 'Client',
+    String rootClientName = 'RestClient',
     bool squishClients = false,
     bool freezed = false,
     bool enumsToJson = false,
@@ -36,6 +39,7 @@ final class FillController {
   })  : _openApiInfo = openApiInfo,
         _clientPostfix = clientPostfix,
         _programmingLanguage = programmingLanguage,
+        _rootClientName = rootClientName,
         _squishClients = squishClients,
         _freezed = freezed,
         _enumsToJson = enumsToJson,
@@ -43,6 +47,7 @@ final class FillController {
 
   final OpenApiInfo _openApiInfo;
   final ProgrammingLanguage _programmingLanguage;
+  final String _rootClientName;
   final String _clientPostfix;
   final bool _freezed;
   final bool _squishClients;
@@ -83,10 +88,11 @@ final class FillController {
   GeneratedFile fillRootInterface(Iterable<UniversalRestClient> clients) {
     final clientsNames = clients.map((c) => c.name.toPascal).toSet();
     return GeneratedFile(
-      name: 'rest_client.${_programmingLanguage.fileExtension}',
+      name: '${_rootClientName.toSnake}.${_programmingLanguage.fileExtension}',
       contents: _programmingLanguage.rootInterfaceFileContent(
         clientsNames,
         openApiInfo: _openApiInfo,
+        name: _rootClientName,
         postfix: _clientPostfix.toPascal,
         squishClients: _squishClients,
         markFilesAsGenerated: _markFilesAsGenerated,

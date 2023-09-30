@@ -25,6 +25,7 @@ final class Generator {
     required bool? isYaml,
     required bool? freezed,
     required bool? rootInterface,
+    required String? rootClientName,
     required String? clientPostfix,
     required bool? squishClients,
     required bool? pathMethodName,
@@ -38,6 +39,7 @@ final class Generator {
         _isYaml = isYaml ?? false,
         _freezed = freezed ?? false,
         _rootInterface = rootInterface ?? true,
+        _rootClientName = rootClientName ?? 'RestClient',
         _clientPostfix = clientPostfix ?? 'Client',
         _squishClients = squishClients ?? false,
         _pathMethodName = pathMethodName ?? false,
@@ -47,9 +49,7 @@ final class Generator {
         _replacementRules = replacementRules ?? const [];
 
   /// Applies parameters set from yaml config file
-  factory Generator.fromYamlConfig(List<String> arguments) {
-    final yamlConfig = YamlConfig.fromYamlFile(arguments);
-
+  factory Generator.fromYamlConfig(YamlConfig yamlConfig) {
     final schemaFilePath = yamlConfig.schemaFilePath;
     final configFile = schemaFile(schemaFilePath);
     if (configFile == null) {
@@ -66,6 +66,7 @@ final class Generator {
       language: yamlConfig.language,
       freezed: yamlConfig.freezed,
       rootInterface: yamlConfig.rootInterface,
+      rootClientName: yamlConfig.rootClientName,
       clientPostfix: yamlConfig.clientPostfix,
       squishClients: yamlConfig.squishClients,
       pathMethodName: yamlConfig.pathMethodName,
@@ -93,6 +94,9 @@ final class Generator {
 
   /// Generate root interface for all Clients
   final bool _rootInterface;
+
+  /// Root client name
+  final String _rootClientName;
 
   /// Client postfix
   final String _clientPostfix;
@@ -165,6 +169,7 @@ final class Generator {
     final fillController = FillController(
       openApiInfo: _openApiInfo,
       programmingLanguage: _programmingLanguage,
+      rootClientName: _rootClientName,
       clientPostfix: _clientPostfix,
       freezed: _freezed,
       squishClients: _squishClients,

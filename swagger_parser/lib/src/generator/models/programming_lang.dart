@@ -112,6 +112,7 @@ enum ProgrammingLanguage {
   String rootInterfaceFileContent(
     Set<String> clientsNames, {
     required OpenApiInfo openApiInfo,
+    required String name,
     required String postfix,
     required bool squishClients,
     required bool markFilesAsGenerated,
@@ -119,6 +120,7 @@ enum ProgrammingLanguage {
       switch (this) {
         dart => dartRootInterfaceTemplate(
             openApiInfo: openApiInfo,
+            name: name,
             clientsNames: clientsNames,
             postfix: postfix,
             squishClients: squishClients,
