@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import '../generator/models/generation_statistics.dart';
+import '../generator/models/open_api_info.dart';
 import '../generator/models/programming_lang.dart';
 import '../generator/models/universal_data_class.dart';
 import '../generator/models/universal_type.dart';
@@ -83,8 +85,54 @@ void generateMessage() {
   stdout.writeln('Generate...');
 }
 
+final _numbersRegExp = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+
+String formatNumber(int number) {
+  return '$number'.replaceAllMapped(
+    _numbersRegExp,
+    (match) => '${match[1]} ',
+  );
+}
+
+void schemaStatisticsMessage(
+  String name,
+  OpenApiInfo openApi,
+  GenerationStatistics statistics,
+) {
+  final version = openApi.version != null ? 'v${openApi.version}' : '';
+  var title = '$name $version';
+
+  if (title.length > 80) {
+    title = '${title.substring(0, 80)}...';
+  }
+
+  // pretty print
+  stdout.writeln(
+    '\n> $title:\n'
+    '    ${formatNumber(statistics.totalRestClients)} rest clients, '
+    '${formatNumber(statistics.totalRequests)} requests, '
+    '${formatNumber(statistics.totalDataClasses)} data classes.\n'
+    '    ${formatNumber(statistics.totalFiles)} files with ${formatNumber(statistics.totalLines)} lines of code.',
+  );
+}
+
+void summaryStatisticsMessage(
+  int schemasCount,
+  GenerationStatistics statistics,
+) {
+  stdout.writeln(
+    '\nSummary:\n'
+    '${formatNumber(schemasCount)} schemas, '
+    '${formatNumber(statistics.totalRestClients)} clients, '
+    '${formatNumber(statistics.totalRequests)} requests, '
+    '${formatNumber(statistics.totalDataClasses)} data classes.\n'
+    '${formatNumber(statistics.totalFiles)} files with ${formatNumber(statistics.totalLines)} lines of code.',
+  );
+}
+
 void successMessage() {
   stdout.writeln(
+    '\n'
     'The generation was completed successfully. '
     'You can run the generation using build_runner.',
   );

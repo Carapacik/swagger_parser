@@ -197,4 +197,6 @@ final class YamlConfig {
   final bool? enumsPrefix;
   final bool? markFilesAsGenerated;
   final List<ReplacementRule> replacementRules;
+
+  String get name => schemaFilePath.split('/').last.split('.').first;
 }

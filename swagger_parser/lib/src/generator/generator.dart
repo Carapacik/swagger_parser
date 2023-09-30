@@ -6,6 +6,7 @@ import '../utils/file_utils.dart';
 import 'fill_controller.dart';
 import 'generator_exception.dart';
 import 'models/generated_file.dart';
+import 'models/generation_statistics.dart';
 import 'models/open_api_info.dart';
 import 'models/programming_lang.dart';
 import 'models/replacement_rule.dart';
@@ -128,10 +129,25 @@ final class Generator {
   /// Result rest clients
   late final Iterable<UniversalRestClient> _restClients;
 
+  int _totalFiles = 0;
+  int _totalLines = 0;
+
   /// Generates files based on OpenApi definition file
-  Future<void> generateFiles() async {
+  Future<(OpenApiInfo, GenerationStatistics)> generateFiles() async {
     _parseOpenApiDefinitionFile();
     await _generateFiles();
+
+    return (
+      _openApiInfo,
+      GenerationStatistics(
+        totalFiles: _totalFiles,
+        totalLines: _totalLines,
+        totalRestClients: _restClients.length,
+        totalDataClasses: _dataClasses.length,
+        totalRequests:
+            _restClients.fold(0, (val, el) => val + el.requests.length),
+      )
+    );
   }
 
   /// Generates content of files based on OpenApi definition file
@@ -159,7 +175,9 @@ final class Generator {
   /// Generate files based on parsed universal models
   Future<void> _generateFiles() async {
     final files = await _fillContent();
+    _totalFiles += files.length;
     for (final file in files) {
+      _totalLines += file.contents.split('\n').length;
       await generateFile(_outputDirectory, file);
     }
   }
