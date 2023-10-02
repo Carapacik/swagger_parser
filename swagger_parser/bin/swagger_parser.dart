@@ -1,4 +1,4 @@
-import 'package:swagger_parser/src/config/yaml_config_manager.dart';
+import 'package:swagger_parser/src/config/yaml_config.dart';
 import 'package:swagger_parser/src/generator/models/generation_statistics.dart';
 import 'package:swagger_parser/src/utils/utils.dart';
 import 'package:swagger_parser/swagger_parser.dart';
@@ -8,7 +8,7 @@ Future<void> main(List<String> arguments) async {
   introMessage();
   try {
     /// Run generate from YAML config
-    final configs = YamlConfigManager.parseConfigsFromYamlFile(arguments);
+    final configs = YamlConfig.parseConfigsFromYamlFile(arguments);
 
     GenerationStatistics? totalStats;
 

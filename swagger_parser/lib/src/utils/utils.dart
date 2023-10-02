@@ -55,24 +55,24 @@ String ioImport(UniversalComponentClass dataClass) => dataClass.parameters
     ? "import 'dart:io';\n\n"
     : '';
 
-const dartGeneratedFileComment = r'''
-//  ____ _ _ _ ____ ____ ____ ____ ____     ___  ____ ____ ____ ____ ____
-//  [__  | | | |__| | __ | __ |___ |__/     |__] |__| |__/ [__  |___ |__/
-//  ___] |_|_| |  | |__] |__] |___ |  \ ___ |    |  | |  \ ___] |___ |  \                            
-//
+const generatedCodeComment = '''
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+''';
+
+const ignoreLintsComment = '''
 // ignore_for_file: type=lint
-
 ''';
 
-const kotlinGeneratedFileComment = r'''
-//  ____ _ _ _ ____ ____ ____ ____ ____     ___  ____ ____ ____ ____ ____
-//  [__  | | | |__| | __ | __ |___ |__/     |__] |__| |__/ [__  |___ |__/
-//  ___] |_|_| |  | |__] |__] |___ |  \ ___ |    |  | |  \ ___] |___ |  \
-//
-// GENERATED CODE - DO NOT MODIFY BY HAND
-                         
-''';
+String generatedFileComment({
+  required bool markFileAsGenerated,
+  bool ignoreLints = false,
+}) =>
+    markFileAsGenerated
+        ? ignoreLints
+            ? '$generatedCodeComment$ignoreLintsComment\n'
+            : '$generatedCodeComment\n'
+        : '';
 
 void introMessage() {
   stdout.writeln(

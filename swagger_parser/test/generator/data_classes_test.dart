@@ -15,7 +15,7 @@ void main() {
         imports: {},
         parameters: [],
       );
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -40,7 +40,7 @@ class ClassName {
         imports: {},
         parameters: [],
       );
-      const fillController = FillController.forTests(freezed: true);
+      const fillController = FillController(freezed: true);
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -64,7 +64,7 @@ class ClassName with _$ClassName {
         imports: {},
         parameters: [],
       );
-      const fillController = FillController.forTests(
+      const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
       );
       final filledContent = fillController.fillDtoContent(dataClass);
@@ -92,7 +92,7 @@ data class ClassName()
         },
         parameters: [],
       );
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -129,7 +129,7 @@ class ClassName {
         },
         parameters: [],
       );
-      const fillController = FillController.forTests(freezed: true);
+      const fillController = FillController(freezed: true);
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -198,7 +198,7 @@ class ClassName with _$ClassName {
           UniversalType(type: 'Another', name: 'anotherType'),
         ],
       );
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'dart:io';
@@ -284,7 +284,7 @@ class ClassName {
           UniversalType(type: 'Another', name: 'anotherType'),
         ],
       );
-      const fillController = FillController.forTests(freezed: true);
+      const fillController = FillController(freezed: true);
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'dart:io';
@@ -356,7 +356,7 @@ class ClassName with _$ClassName {
           UniversalType(type: 'Another', name: 'anotherType'),
         ],
       );
-      const fillController = FillController.forTests(
+      const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
       );
       final filledContent = fillController.fillDtoContent(dataClass);
@@ -395,7 +395,7 @@ data class ClassName(
           UniversalType(type: 'Another', name: 'list5', arrayDepth: 5),
         ],
       );
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -434,7 +434,7 @@ class ClassName {
           UniversalType(type: 'Another', name: 'list5', arrayDepth: 5),
         ],
       );
-      const fillController = FillController.forTests(freezed: true);
+      const fillController = FillController(freezed: true);
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -468,7 +468,7 @@ class ClassName with _$ClassName {
           UniversalType(type: 'Another', name: 'list5', arrayDepth: 5),
         ],
       );
-      const fillController = FillController.forTests(
+      const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
       );
       final filledContent = fillController.fillDtoContent(dataClass);
@@ -511,7 +511,7 @@ data class ClassName(
           ),
         ],
       );
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -566,7 +566,7 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController.forTests(freezed: true);
+      const fillController = FillController(freezed: true);
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -615,7 +615,7 @@ class ClassName with _$ClassName {
           ),
         ],
       );
-      const fillController = FillController.forTests(
+      const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
       );
       final filledContent = fillController.fillDtoContent(dataClass);
@@ -674,7 +674,7 @@ data class ClassName(
           ),
         ],
       );
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -742,7 +742,7 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController.forTests(freezed: true);
+      const fillController = FillController(freezed: true);
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -801,7 +801,7 @@ class ClassName with _$ClassName {
           ),
         ],
       );
-      const fillController = FillController.forTests(
+      const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
       );
       final filledContent = fillController.fillDtoContent(dataClass);
@@ -843,7 +843,7 @@ data class ClassName(
           ),
         ],
       );
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -895,7 +895,7 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController.forTests(freezed: true);
+      const fillController = FillController(freezed: true);
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -941,7 +941,7 @@ class ClassName with _$ClassName {
           ),
         ],
       );
-      const fillController = FillController.forTests(
+      const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
       );
       final filledContent = fillController.fillDtoContent(dataClass);
@@ -981,7 +981,7 @@ data class ClassName(
           UniversalType(type: 'Another', name: 'list', arrayDepth: 1),
         ],
       );
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -1031,7 +1031,7 @@ class ClassName {
           UniversalType(type: 'Another', name: 'list', arrayDepth: 1),
         ],
       );
-      const fillController = FillController.forTests(freezed: true);
+      const fillController = FillController(freezed: true);
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -1087,7 +1087,7 @@ class ClassName with _$ClassName {
           ),
         ];
 
-        const fillController = FillController.forTests();
+        const fillController = FillController();
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
@@ -1171,7 +1171,7 @@ enum EnumNameStringWithLeadingNumbers {
           ),
         ];
 
-        const fillController = FillController.forTests(enumsToJson: true);
+        const fillController = FillController(enumsToJson: true);
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
@@ -1247,7 +1247,7 @@ const _$EnumNameStringEnumMap = {
             items: {'FALSE', 'for', 'do'},
           ),
         ];
-        const fillController = FillController.forTests(freezed: true);
+        const fillController = FillController(freezed: true);
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
@@ -1312,8 +1312,7 @@ enum KeywordsName {
             items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
           ),
         ];
-        const fillController =
-            FillController.forTests(freezed: true, enumsToJson: true);
+        const fillController = FillController(freezed: true, enumsToJson: true);
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
@@ -1388,7 +1387,7 @@ const _$EnumNameStringEnumMap = {
           items: {'FALSE', 'for', 'do'},
         ),
       ];
-      const fillController = FillController.forTests(
+      const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
       );
       final files = <GeneratedFile>[];
@@ -1452,7 +1451,7 @@ enum class KeywordsName {
         type: 'int',
         items: {'-2', '-1', '0', '1'},
       );
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final file = fillController.fillDtoContent(dataClass);
 
       const expectedContent = '''
@@ -1480,7 +1479,7 @@ enum EnumName {
         type: 'int',
         items: {'-2', '-1', '0', '1'},
       );
-      const fillController = FillController.forTests(freezed: true);
+      const fillController = FillController(freezed: true);
       final file = fillController.fillDtoContent(dataClass);
 
       const expectedContent = '''
@@ -1508,7 +1507,7 @@ enum EnumName {
         type: 'int',
         items: {'-2', '-1', '0', '1'},
       );
-      const fillController = FillController.forTests(
+      const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
       );
       final file = fillController.fillDtoContent(dataClass);
@@ -1560,7 +1559,7 @@ enum class EnumName {
           typeDef: true,
         ),
       ];
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final files = <GeneratedFile>[];
       for (final enumClass in dataClasses) {
         files.add(fillController.fillDtoContent(enumClass));
@@ -1608,7 +1607,7 @@ typedef AnotherValue = Another;
           typeDef: true,
         ),
       ];
-      const fillController = FillController.forTests(
+      const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
       );
       final files = <GeneratedFile>[];
@@ -1669,7 +1668,7 @@ typealias AnotherValue = Another;
           ),
         ],
       );
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -1738,7 +1737,7 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController.forTests(freezed: true);
+      const fillController = FillController(freezed: true);
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -1800,7 +1799,7 @@ class ClassName with _$ClassName {
           ),
         ],
       );
-      const fillController = FillController.forTests(
+      const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
       );
       final filledContent = fillController.fillDtoContent(dataClass);
@@ -1864,7 +1863,7 @@ data class ClassName(
           ),
         ],
       );
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -1948,7 +1947,7 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController.forTests(freezed: true);
+      const fillController = FillController(freezed: true);
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -2025,7 +2024,7 @@ class ClassName with _$ClassName {
           ),
         ],
       );
-      const fillController = FillController.forTests(
+      const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
       );
       final filledContent = fillController.fillDtoContent(dataClass);

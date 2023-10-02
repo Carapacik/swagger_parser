@@ -14,7 +14,10 @@ String dartFreezedDtoTemplate(
 }) {
   final className = dataClass.name.toPascal;
   return '''
-${markFileAsGenerated ? dartGeneratedFileComment : ''}${ioImport(dataClass)}import 'package:freezed_annotation/freezed_annotation.dart';
+${generatedFileComment(
+    markFileAsGenerated: markFileAsGenerated,
+    ignoreLints: true,
+  )}${ioImport(dataClass)}import 'package:freezed_annotation/freezed_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';
