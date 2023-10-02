@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 void main() {
   group('Empty root interface', () {
     test('dart', () async {
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final filledContent = fillController.fillRootInterface([]);
       const expectedContents = '';
       expect(filledContent.contents, expectedContents);
@@ -17,7 +17,7 @@ void main() {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
       ];
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final filledContent = fillController.fillRootInterface(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -57,7 +57,7 @@ class RestClient implements IRestClient {
         const UniversalRestClient(name: 'Four', imports: {}, requests: []),
         const UniversalRestClient(name: 'Five', imports: {}, requests: []),
       ];
-      const fillController = FillController.forTests();
+      const fillController = FillController();
       final filledContent = fillController.fillRootInterface(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -121,7 +121,7 @@ class RestClient implements IRestClient {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
       ];
-      const fillController = FillController.forTests(squishClients: true);
+      const fillController = FillController(squishClients: true);
       final filledContent = fillController.fillRootInterface(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -161,7 +161,7 @@ class RestClient implements IRestClient {
         const UniversalRestClient(name: 'Four', imports: {}, requests: []),
         const UniversalRestClient(name: 'Five', imports: {}, requests: []),
       ];
-      const fillController = FillController.forTests(squishClients: true);
+      const fillController = FillController(squishClients: true);
       final filledContent = fillController.fillRootInterface(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';

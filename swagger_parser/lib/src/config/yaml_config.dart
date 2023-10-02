@@ -19,17 +19,17 @@ final class YamlConfig {
   const YamlConfig({
     required this.schemaFilePath,
     required this.outputDirectory,
-    required this.language,
-    required this.freezed,
-    required this.rootInterface,
-    required this.rootClientName,
-    required this.clientPostfix,
-    required this.squishClients,
-    required this.pathMethodName,
-    required this.enumsToJson,
-    required this.enumsPrefix,
-    required this.markFilesAsGenerated,
-    required this.replacementRules,
+    this.language,
+    this.freezed,
+    this.rootInterface,
+    this.rootClientName,
+    this.clientPostfix,
+    this.squishClients,
+    this.pathMethodName,
+    this.enumsToJson,
+    this.enumsPrefix,
+    this.markFilesAsGenerated,
+    this.replacementRules = const [],
   });
 
   /// Applies parameters from YAML file

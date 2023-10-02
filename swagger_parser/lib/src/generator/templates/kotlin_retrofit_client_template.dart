@@ -16,7 +16,7 @@ String kotlinRetrofitClientTemplate({
 }) {
   final sb = StringBuffer(
     '''
-${markFileAsGenerated ? kotlinGeneratedFileComment : ''}import retrofit2.http.*
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}import retrofit2.http.*
 
 interface $name {''',
   );
