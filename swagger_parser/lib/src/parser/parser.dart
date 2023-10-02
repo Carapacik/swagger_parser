@@ -203,8 +203,6 @@ class OpenApiParser {
                 : parameter,
             name: parameter[_nameConst].toString(),
             isRequired: isRequired ?? true,
-            allOfObject: (parameter[_schemaConst] as Map<String, dynamic>)
-                .containsKey(_allOfConst),
           );
 
           if (typeWithImport.import != null) {
@@ -383,9 +381,6 @@ class OpenApiParser {
               : rawParameter,
           name: rawParameter[_nameConst].toString(),
           isRequired: isRequired ?? true,
-          allOfObject: rawParameter.containsKey(_schemaConst) &&
-              (rawParameter[_schemaConst] as Map<String, dynamic>)
-                  .containsKey(_allOfConst),
         );
 
         if (typeWithImport.import != null) {
@@ -682,7 +677,6 @@ class OpenApiParser {
     String? name,
     String? additionalName,
     bool isRequired = false,
-    bool allOfObject = false,
     bool root = true,
   }) {
     if (map.containsKey(_typeConst) && map[_typeConst] == _arrayConst) {
@@ -810,6 +804,23 @@ class OpenApiParser {
         import: '$newName $_valueConst',
       );
     } else {
+      ({String? import, UniversalType type})? findTypeInOfLikeParams() {
+        final of = map[_allOfConst] ?? map[_anyOfConst] ?? map[_oneOfConst];
+        if (of is List<dynamic> && of.length == 1) {
+          final item = of[0];
+          if (item is Map<String, dynamic>) {
+            return _findType(
+              item,
+              root: false,
+            );
+          }
+        }
+        return null;
+      }
+
+      // find type in of one-element allOf, anyOf or oneOf
+      final ofType = findTypeInOfLikeParams();
+
       var type = map.containsKey(_typeConst)
           ? map.containsKey(_refConst) &&
                   map[_typeConst].toString() == _objectConst
@@ -817,12 +828,15 @@ class OpenApiParser {
               : map[_typeConst].toString()
           : map.containsKey(_anyOfConst) ||
                   map.containsKey(_oneOfConst) ||
-                  allOfObject
-              ? _objectConst
+                  map.containsKey(_allOfConst)
+              ? ofType?.type.type ?? _objectConst
               : map.containsKey(_refConst)
                   ? _formatRef(map)
                   : _objectConst;
-      var import = map.containsKey(_refConst) ? _formatRef(map) : null;
+
+      var import =
+          map.containsKey(_refConst) ? _formatRef(map) : ofType?.import;
+
       // iterate over name replacements and apply them to type
       if (import != null) {
         for (final replacementRule in _replacementRules) {
