@@ -12,7 +12,10 @@ String dartEnumDtoTemplate(
 }) {
   final className = enumClass.name.toPascal;
   return '''
-${markFileAsGenerated ? dartGeneratedFileComment : ''}import '${freezed ? 'package:freezed_annotation/freezed_annotation.dart' : 'package:json_annotation/json_annotation.dart'}';
+${generatedFileComment(
+    markFileAsGenerated: markFileAsGenerated,
+    ignoreLints: true,
+  )}import '${freezed ? 'package:freezed_annotation/freezed_annotation.dart' : 'package:json_annotation/json_annotation.dart'}';
 
 ${descriptionComment(enumClass.description)}@JsonEnum()
 enum $className {

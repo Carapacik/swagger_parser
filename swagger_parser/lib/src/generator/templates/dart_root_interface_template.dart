@@ -28,7 +28,10 @@ String dartRootInterfaceTemplate({
       '${title ?? ''}${version != null ? ' `v$version`' : ''}${fulldescription != null ? '\n\n$fulldescription' : ''}';
 
   return '''
-${markFileAsGenerated ? dartGeneratedFileComment : ''}import 'package:dio/dio.dart';
+${generatedFileComment(
+    markFileAsGenerated: markFileAsGenerated,
+    ignoreLints: true,
+  )}import 'package:dio/dio.dart';
 ${_clientsImport(clientsNames, postfix, squishClients: squishClients)}
 abstract class IRestClient {
 ${_interfaceGetters(clientsNames, postfix)}
