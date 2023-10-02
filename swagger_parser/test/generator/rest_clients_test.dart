@@ -175,11 +175,11 @@ interface Some {}
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../shared_models/camel_class.dart';
-import '../shared_models/snake_class.dart';
-import '../shared_models/kebab_class.dart';
-import '../shared_models/pascal_class.dart';
-import '../shared_models/space_class.dart';
+import '../models/camel_class.dart';
+import '../models/snake_class.dart';
+import '../models/kebab_class.dart';
+import '../models/pascal_class.dart';
+import '../models/space_class.dart';
 
 part 'class_name_client.g.dart';
 
@@ -974,7 +974,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../shared_models/another_file.dart';
+import '../models/another_file.dart';
 
 part 'class_name_client.g.dart';
 
@@ -1121,7 +1121,7 @@ interface ClassNameClient {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../shared_models/lol.dart';
+import '../models/lol.dart';
 
 part 'class_name_client.g.dart';
 
@@ -1385,8 +1385,8 @@ interface ClassNameClient {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../shared_models/unit.dart';
-import '../shared_models/soma.dart';
+import '../models/unit.dart';
+import '../models/soma.dart';
 
 part 'class_name_client.g.dart';
 
@@ -1830,7 +1830,7 @@ interface ClassNameClient {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../shared_models/some.dart';
+import '../models/some.dart';
 
 part 'class_name_client.g.dart';
 
