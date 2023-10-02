@@ -724,6 +724,7 @@ class OpenApiParser {
           description: map[_descriptionConst]?.toString(),
         ),
       );
+
       return (
         type: UniversalType(
           type: newName.toPascal,
@@ -803,46 +804,96 @@ class OpenApiParser {
         ),
         import: '$newName $_valueConst',
       );
-    } else {
-      ({String? import, UniversalType type})? findTypeInOfLikeParams() {
-        final of = map[_allOfConst] ?? map[_anyOfConst] ?? map[_oneOfConst];
-        if (of is List<dynamic> && of.length == 1) {
+    } else if (map.containsKey(_allOfConst) ||
+        map.containsKey(_anyOfConst) ||
+        map.containsKey(_oneOfConst)) {
+      String? ofImport;
+      UniversalType? ofType;
+
+      final of = map[_allOfConst] ?? map[_anyOfConst] ?? map[_oneOfConst];
+      if (of is List<dynamic>) {
+        // Find type in of one-element allOf, anyOf or oneOf
+        if (of.length == 1) {
           final item = of[0];
           if (item is Map<String, dynamic>) {
-            return _findType(
-              item,
-              root: false,
-            );
+            (import: ofImport, type: ofType) = _findType(item);
           }
         }
-        return null;
+        // Find nullable type in of two-element allOf, anyOf or oneOf
+        else if (map.containsKey(_anyOfConst) && of.length == 2) {
+          final item1 = of[0];
+          final item2 = of[1];
+          if (item1 is Map<String, dynamic> && item2 is Map<String, dynamic>) {
+            final nullableItem = item1[_typeConst] == 'null'
+                ? item2
+                : item2[_typeConst] == 'null'
+                    ? item1
+                    : null;
+            if (nullableItem != null) {
+              final type = _findType(nullableItem);
+              ofImport = type.import;
+              ofType = type.type.copyWith(nullable: true);
+            }
+          }
+        }
       }
 
-      // find type in of one-element allOf, anyOf or oneOf
-      final ofType = findTypeInOfLikeParams();
+      final type = ofType?.type ?? _objectConst;
+      final import = ofImport;
+      var defaultValue = map[_defaultConst]?.toString();
 
+      // TODO(StarProxima): remove this shit
+      if (defaultValue == '{}') {
+        defaultValue = null;
+      }
+
+      return (
+        type: UniversalType(
+          type: type,
+          name: (dartKeywords.contains(name) ? '$name $_valueConst' : name)
+              ?.toCamel,
+          description: map[_descriptionConst]?.toString(),
+          format: ofType?.format,
+          jsonKey: name,
+          defaultValue: defaultValue,
+          enumType: defaultValue != null &&
+                  import != null &&
+                  (ofType == null || ofType.arrayDepth == 0)
+              ? type
+              : null,
+          isRequired: isRequired,
+          arrayDepth: ofType?.arrayDepth ?? 0,
+          nullable: root &&
+                  map.containsKey(_nullableConst) &&
+                  map[_nullableConst].toString().toBool() ||
+              (ofType?.nullable ?? false),
+        ),
+        import: import,
+      );
+    } else {
       var type = map.containsKey(_typeConst)
           ? map.containsKey(_refConst) &&
                   map[_typeConst].toString() == _objectConst
               ? _formatRef(map)
               : map[_typeConst].toString()
-          : map.containsKey(_anyOfConst) ||
-                  map.containsKey(_oneOfConst) ||
-                  map.containsKey(_allOfConst)
-              ? ofType?.type.type ?? _objectConst
-              : map.containsKey(_refConst)
-                  ? _formatRef(map)
-                  : _objectConst;
+          : map.containsKey(_refConst)
+              ? _formatRef(map)
+              : _objectConst;
 
-      var import =
-          map.containsKey(_refConst) ? _formatRef(map) : ofType?.import;
+      var import = map.containsKey(_refConst) ? _formatRef(map) : null;
 
-      // iterate over name replacements and apply them to type
       if (import != null) {
         for (final replacementRule in _replacementRules) {
           import = replacementRule.apply(import);
           type = replacementRule.apply(type)!;
         }
+      }
+
+      var defaultValue = map[_defaultConst]?.toString();
+
+      // TODO(StarProxima): remove this shit
+      if (defaultValue == '{}') {
+        defaultValue = null;
       }
 
       return (
@@ -853,8 +904,8 @@ class OpenApiParser {
           description: map[_descriptionConst]?.toString(),
           format: map[_formatConst]?.toString(),
           jsonKey: name,
-          defaultValue: map[_defaultConst]?.toString(),
-          enumType: map[_defaultConst] != null && import != null ? type : null,
+          defaultValue: defaultValue,
+          enumType: defaultValue != null && import != null ? type : null,
           isRequired: isRequired,
           nullable: root &&
               map.containsKey(_nullableConst) &&
