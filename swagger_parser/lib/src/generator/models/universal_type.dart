@@ -54,6 +54,32 @@ final class UniversalType {
   /// Whether or not this field is nullable
   final bool nullable;
 
+  UniversalType copyWith({
+    String? type,
+    String? name,
+    String? description,
+    String? format,
+    String? jsonKey,
+    String? defaultValue,
+    bool? isRequired,
+    String? enumType,
+    int? arrayDepth,
+    bool? nullable,
+  }) {
+    return UniversalType(
+      type: type ?? this.type,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      format: format ?? this.format,
+      jsonKey: jsonKey ?? this.jsonKey,
+      defaultValue: defaultValue ?? this.defaultValue,
+      isRequired: isRequired ?? this.isRequired,
+      enumType: enumType ?? this.enumType,
+      arrayDepth: arrayDepth ?? this.arrayDepth,
+      nullable: nullable ?? this.nullable,
+    );
+  }
+
   /// Function for compare to put required named parameters first
   int compareTo(UniversalType other) {
     if (isRequired == other.isRequired &&

@@ -2,6 +2,7 @@ import 'package:path/path.dart' as p;
 
 import '../config/yaml_config.dart';
 import '../parser/parser.dart';
+import '../utils/case_utils.dart';
 import '../utils/file_utils.dart';
 import 'fill_controller.dart';
 import 'generator_exception.dart';
@@ -23,6 +24,7 @@ final class Generator {
     required String schemaContent,
     required String outputDirectory,
     ProgrammingLanguage? language,
+    String? name,
     bool? isYaml,
     bool? freezed,
     bool? rootInterface,
@@ -30,12 +32,14 @@ final class Generator {
     String? rootClientName,
     bool? squishClients,
     bool? pathMethodName,
+    bool? putInFolder,
     bool? enumsToJson,
     bool? enumsPrefix,
     bool? markFilesAsGenerated,
     List<ReplacementRule>? replacementRules,
   })  : _schemaContent = schemaContent,
         _outputDirectory = outputDirectory,
+        _name = name,
         _programmingLanguage = language ?? ProgrammingLanguage.dart,
         _isYaml = isYaml ?? false,
         _freezed = freezed ?? false,
@@ -44,6 +48,7 @@ final class Generator {
         _clientPostfix = clientPostfix ?? 'Client',
         _squishClients = squishClients ?? false,
         _pathMethodName = pathMethodName ?? false,
+        _putInFolder = putInFolder ?? false,
         _enumsToJson = enumsToJson ?? false,
         _enumsPrefix = enumsPrefix ?? false,
         _markFilesAsGenerated = markFilesAsGenerated ?? true,
@@ -63,14 +68,16 @@ final class Generator {
     return Generator(
       schemaContent: schemaContent,
       outputDirectory: yamlConfig.outputDirectory,
-      isYaml: isYaml,
       language: yamlConfig.language,
+      name: yamlConfig.name,
+      isYaml: isYaml,
       freezed: yamlConfig.freezed,
       rootInterface: yamlConfig.rootInterface,
       rootClientName: yamlConfig.rootClientName,
       clientPostfix: yamlConfig.clientPostfix,
       squishClients: yamlConfig.squishClients,
       pathMethodName: yamlConfig.pathMethodName,
+      putInFolder: yamlConfig.putInFolder,
       enumsToJson: yamlConfig.enumsToJson,
       enumsPrefix: yamlConfig.enumsPrefix,
       markFilesAsGenerated: yamlConfig.markFilesAsGenerated,
@@ -86,6 +93,9 @@ final class Generator {
 
   /// Output directory
   final String _outputDirectory;
+
+  /// Name of schema
+  final String? _name;
 
   /// Output directory
   final ProgrammingLanguage _programmingLanguage;
@@ -107,6 +117,9 @@ final class Generator {
 
   /// If true, use the endpoint path for the method name, if false, use operationId
   final bool _pathMethodName;
+
+  /// If true, generated all files will be put in folder with name of schema
+  final bool _putInFolder;
 
   /// If true, generated enums will have toJson method
   final bool _enumsToJson;
@@ -183,7 +196,10 @@ final class Generator {
     _totalFiles += files.length;
     for (final file in files) {
       _totalLines += file.contents.split('\n').length;
-      await generateFile(_outputDirectory, file);
+      await generateFile(
+        '$_outputDirectory${_putInFolder && _name != null ? '/${_name?.toSnake}' : ''}',
+        file,
+      );
     }
   }
 

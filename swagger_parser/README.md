@@ -47,7 +47,7 @@ An example of YAML is shown below
 ```yaml
 swagger_parser:
   # Required. Sets the OpenApi schema path directory for api definition
-  schema_path: assets/openapi.json
+  schema_path: specs/openapi.json
   # Required. Sets output directory for generated files (Clients and Dtos)
   output_directory: lib/api
   # Optional. Sets the programming language. Current available languages are: dart, kotlin. Default: dart
@@ -56,6 +56,8 @@ swagger_parser:
   freezed: false
   # Optional (dart only). Set 'true' to generate interface with all clients instances. Default: true
   root_interface: true
+  # Optional (dart only). Set root client name. Default: RestClient
+  root_client_name: RestClient
   # Optional. Set 'true' to put all clients in one folder. Default: false
   squish_clients: false
   # Optional. Set postfix for Client class and file. Default: Client
@@ -68,11 +70,46 @@ swagger_parser:
   enums_prefix: false
   # Optional. Set 'false' to not put a comment at the beginning of the generated files. Default: true
   mark_files_as_generated: true
+  # Optional. Set to 'true' to put the api in its folder. Default: false
+  put_in_folder: false
+  # Optional. Set API name for folder. If not specified, the file name is used.
+  name: null
   # Optional. Set regex replacement rules for the names of the generated classes/enums. All rules are applied in order.
-  replacement_rules: 
+  replacement_rules:
     # Example of rule
-    - pattern: "[0-9]+"
-      replacement: ""
+    - pattern: "$"
+      replacement: "DTO"
+      
+```
+
+For multiple schemes:
+
+```yaml
+swagger_parser:
+  # <...> Set default parameters for all schemes.
+  output_directory: lib/api
+ 
+  # Optional. You can pass a list of schemes. 
+  # Each schema inherits the parameters described in swagger_parser, any parameter for any schema can be set manually.
+  # Cannot be used at the same time as schema_path.
+  schemas:
+    - schema_path: specs/openapi.json
+      root_client_name: ApiMicroservice
+      freezed: true
+      put_in_folder: true
+      replacement_rules: []
+
+    - schema_path: specs/openapi.json
+      name: pet_service
+      client_postfix: Repository
+      squish_clients: true
+      enums_to_json: true
+      put_in_folder: true
+      
+    - schema_path: specs/openapi.json
+      output_directory: lib/api/kotlin
+      language: kotlin
+
 ```
 
 

@@ -37,7 +37,7 @@ final class FillController {
 
   /// Return [GeneratedFile] generated from given [UniversalDataClass]
   GeneratedFile fillDtoContent(UniversalDataClass dataClass) => GeneratedFile(
-        name: 'shared_models/'
+        name: 'models/'
             '${_programmingLanguage == ProgrammingLanguage.dart ? dataClass.name.toSnake : dataClass.name.toPascal}'
             '.${_programmingLanguage.fileExtension}',
         contents: _programmingLanguage.dtoFileContent(

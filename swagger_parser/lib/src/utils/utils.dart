@@ -100,13 +100,13 @@ String formatNumber(int number) {
 }
 
 void schemaStatisticsMessage({
-  required String name,
   required OpenApiInfo openApi,
   required GenerationStatistics statistics,
+  String? name,
 }) {
   final version = openApi.version != null ? 'v${openApi.version}' : '';
 
-  var title = name;
+  var title = name ?? '';
   if (title.length > 80) {
     title = '${title.substring(0, 80)}...';
   }
@@ -122,11 +122,12 @@ void schemaStatisticsMessage({
 }
 
 void schemaFailedMessage({
-  required String name,
   required Object error,
   required StackTrace stack,
+  String? name,
 }) {
-  var title = name;
+  var title = name ?? '';
+
   if (title.length > 80) {
     title = '${title.substring(0, 80)}...';
   }
