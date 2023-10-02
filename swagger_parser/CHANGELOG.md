@@ -1,5 +1,7 @@
-## 1.6.4
+## 1.7.0
 - Add new config parameter `mark_files_as_generated`
+- Support of default values for ref enum types
+- Type support in one-element allOf, anyOf and oneOf
 
 ## 1.6.3
 - Fix error with `allOf` results in the schema with type `object` ([#91](https://github.com/Carapacik/swagger_parser/issues/91))
