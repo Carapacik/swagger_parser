@@ -19,6 +19,7 @@ final class YamlConfig {
   const YamlConfig({
     required this.schemaFilePath,
     required this.outputDirectory,
+    this.name,
     this.language,
     this.freezed,
     this.rootInterface,
@@ -26,6 +27,7 @@ final class YamlConfig {
     this.clientPostfix,
     this.squishClients,
     this.pathMethodName,
+    this.putInFolder,
     this.enumsToJson,
     this.enumsPrefix,
     this.markFilesAsGenerated,
@@ -96,7 +98,7 @@ final class YamlConfig {
     final rootClientName = yamlConfig['root_client_name'];
     if (rootClientName is! String?) {
       throw const ConfigException(
-        "Config parameter 'root_client_name' must be bool.",
+        "Config parameter 'root_client_name' must be String.",
       );
     }
 
@@ -168,9 +170,29 @@ final class YamlConfig {
       }
     }
 
+    final putInFolder = yamlConfig['put_in_folder'];
+    if (putInFolder is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'put_in_folder' must be bool.",
+      );
+    }
+
+    final rawName = yamlConfig['name'];
+    if (rawName is! String?) {
+      throw const ConfigException(
+        "Config parameter 'name' must be String.",
+      );
+    }
+    final name = rawName?.isEmpty ?? true
+        ? schemaPath.split('/').lastOrNull?.split('.').firstOrNull
+        : rawName;
+
+    // print(name)
+
     return YamlConfig(
       schemaFilePath: schemaPath,
       outputDirectory: outputDirectory,
+      name: name,
       language: language ?? rootConfig?.language,
       freezed: freezed ?? rootConfig?.freezed,
       rootInterface: rootInterface ?? rootConfig?.rootInterface,
@@ -178,6 +200,7 @@ final class YamlConfig {
       clientPostfix: clientPostfix ?? rootConfig?.clientPostfix,
       squishClients: squishClients ?? rootConfig?.squishClients,
       pathMethodName: pathMethodName ?? rootConfig?.pathMethodName,
+      putInFolder: putInFolder ?? rootConfig?.putInFolder,
       enumsToJson: enumsToJson ?? rootConfig?.enumsToJson,
       enumsPrefix: enumsPrefix ?? rootConfig?.enumsPrefix,
       markFilesAsGenerated:
@@ -256,6 +279,7 @@ final class YamlConfig {
     return configs;
   }
 
+  final String? name;
   final String schemaFilePath;
   final String outputDirectory;
   final ProgrammingLanguage? language;
@@ -265,6 +289,7 @@ final class YamlConfig {
   final String? rootClientName;
   final bool? squishClients;
   final bool? pathMethodName;
+  final bool? putInFolder;
   final bool? enumsToJson;
   final bool? enumsPrefix;
   final bool? markFilesAsGenerated;
