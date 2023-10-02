@@ -48,21 +48,15 @@ String ioImport(UniversalComponentClass dataClass) => dataClass.parameters
     ? "import 'dart:io';\n\n"
     : '';
 
-const dartGeneratedFileComment = r'''
-//  ____ _ _ _ ____ ____ ____ ____ ____     ___  ____ ____ ____ ____ ____
-//  [__  | | | |__| | __ | __ |___ |__/     |__] |__| |__/ [__  |___ |__/
-//  ___] |_|_| |  | |__] |__] |___ |  \ ___ |    |  | |  \ ___] |___ |  \                            
-//
+const dartGeneratedFileComment = '''
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
 
 ''';
 
-const kotlinGeneratedFileComment = r'''
-//  ____ _ _ _ ____ ____ ____ ____ ____     ___  ____ ____ ____ ____ ____
-//  [__  | | | |__| | __ | __ |___ |__/     |__] |__| |__/ [__  |___ |__/
-//  ___] |_|_| |  | |__] |__] |___ |  \ ___ |    |  | |  \ ___] |___ |  \
-//
+const kotlinGeneratedFileComment = '''
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
                          
 ''';
