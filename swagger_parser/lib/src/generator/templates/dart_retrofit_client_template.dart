@@ -37,7 +37,7 @@ String _toClientRequest(UniversalRequest request) {
   final sb = StringBuffer(
     '''
 
-  ${request.isMultiPart ? '@MultiPart()\n  ' : ''}${request.isFormUrlEncoded ? '@FormUrlEncoded()\n  ' : ''}@${request.requestType.name.toUpperCase()}('${request.route}')
+  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isMultiPart ? '@MultiPart()\n  ' : ''}${request.isFormUrlEncoded ? '@FormUrlEncoded()\n  ' : ''}@${request.requestType.name.toUpperCase()}('${request.route}')
   Future<${request.returnType == null ? 'void' : request.returnType!.toSuitableType(ProgrammingLanguage.dart)}> ${request.name}(''',
   );
   if (request.parameters.isNotEmpty) {

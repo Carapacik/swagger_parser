@@ -1,5 +1,6 @@
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
+import '../../utils/utils.dart';
 import '../models/programming_lang.dart';
 import '../models/universal_request.dart';
 import '../models/universal_request_type.dart';
@@ -29,7 +30,7 @@ String _toClientRequest(UniversalRequest request) {
   final sb = StringBuffer(
     '''
 
-    ${request.isMultiPart ? '@MultiPart\n    ' : ''}${request.isFormUrlEncoded ? '@FormUrlEncoded\n    ' : ''}@${request.requestType.name.toUpperCase()}("${request.route}")
+    ${descriptionComment(request.description, tabForFirstLine: false, tab: '    ', end: '    ')}${request.isMultiPart ? '@MultiPart\n    ' : ''}${request.isFormUrlEncoded ? '@FormUrlEncoded\n    ' : ''}@${request.requestType.name.toUpperCase()}("${request.route}")
     suspend fun ${request.name}(''',
   );
   if (request.parameters.isEmpty) {

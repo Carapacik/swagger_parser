@@ -6,6 +6,7 @@ import '../utils/file_utils.dart';
 import 'fill_controller.dart';
 import 'generator_exception.dart';
 import 'models/generated_file.dart';
+import 'models/open_api_info.dart';
 import 'models/programming_lang.dart';
 import 'models/replacement_rule.dart';
 import 'models/universal_data_class.dart';
@@ -14,7 +15,7 @@ import 'models/universal_rest_client.dart';
 /// Handles whole cycle of generation.
 /// Can be provided with arguments
 /// to specify custom path to yaml config.
-class Generator {
+final class Generator {
   /// Applies parameters set from yaml config file
   /// and sets them to default if not found
   Generator.fromYamlConfig(List<String> arguments) {
@@ -39,12 +40,13 @@ class Generator {
       }
       _programmingLanguage = parsedLang;
     }
-    if (yamlConfig.rootInterface != null) {
-      _rootInterface = yamlConfig.rootInterface!;
-    }
 
     if (yamlConfig.freezed != null) {
       _freezed = yamlConfig.freezed!;
+    }
+
+    if (yamlConfig.rootInterface != null) {
+      _rootInterface = yamlConfig.rootInterface!;
     }
 
     if (yamlConfig.squishClients != null) {
@@ -55,6 +57,10 @@ class Generator {
       _clientPostfix = yamlConfig.clientPostfix!;
     }
 
+    if (yamlConfig.pathMethodName != null) {
+      _pathMethodName = yamlConfig.pathMethodName!;
+    }
+
     if (yamlConfig.enumsToJson != null) {
       _enumsToJson = yamlConfig.enumsToJson!;
     }
@@ -62,7 +68,6 @@ class Generator {
     if (yamlConfig.enumsPrefix != null) {
       _enumsPrefix = yamlConfig.enumsPrefix!;
     }
-
     _replacementRules = yamlConfig.replacementRules;
   }
 
@@ -71,23 +76,25 @@ class Generator {
   Generator.fromString({
     required String schemaContent,
     required ProgrammingLanguage language,
-    String? clientPostfix,
-    bool rootInterface = true,
-    bool squishClients = false,
-    bool freezed = false,
     bool isYaml = false,
+    bool freezed = false,
+    bool rootInterface = true,
+    String? clientPostfix,
+    bool squishClients = false,
+    bool pathMethodName = false,
     bool enumsToJson = false,
     bool enumsPrefix = false,
     List<ReplacementRule> replacementRules = const [],
   }) {
     _schemaContent = schemaContent;
-    _programmingLanguage = language;
     _outputDirectory = '';
-    _clientPostfix = clientPostfix ?? 'Client';
-    _rootInterface = rootInterface;
-    _squishClients = squishClients;
-    _freezed = freezed;
+    _programmingLanguage = language;
     _isYaml = isYaml;
+    _freezed = freezed;
+    _rootInterface = rootInterface;
+    _clientPostfix = clientPostfix ?? 'Client';
+    _squishClients = squishClients;
+    _pathMethodName = pathMethodName;
     _enumsToJson = enumsToJson;
     _enumsPrefix = enumsPrefix;
     _replacementRules = replacementRules;
@@ -96,14 +103,29 @@ class Generator {
   /// The contents of your schema file
   late final String _schemaContent;
 
+  /// Is the schema format YAML
+  bool _isYaml = false;
+
   /// Output directory
   late final String _outputDirectory;
 
   /// Output directory
   ProgrammingLanguage _programmingLanguage = ProgrammingLanguage.dart;
 
+  /// Use freezed to generate DTOs
+  bool _freezed = false;
+
+  /// Generate root interface for all Clients
+  bool _rootInterface = true;
+
   /// Client postfix
   String _clientPostfix = 'Client';
+
+  /// Squish Clients in one folder
+  bool _squishClients = false;
+
+  /// If true, use the endpoint path for the method name, if false, use operationId
+  bool _pathMethodName = false;
 
   /// If true, generated enums will have toJson method
   bool _enumsToJson = false;
@@ -114,19 +136,12 @@ class Generator {
   /// List of rules used to replace patterns in generated class names
   List<ReplacementRule> _replacementRules = [];
 
-  /// Generate root interface for all Clients
-  bool _rootInterface = true;
+  late final OpenApiInfo _openApiInfo;
 
-  /// Use freezed to generate DTOs
-  bool _freezed = false;
-
-  /// Squish Clients in one folder
-  bool _squishClients = false;
-
-  /// Is the schema format YAML
-  bool _isYaml = false;
-
+  /// Result data classes
   late final Iterable<UniversalDataClass> _dataClasses;
+
+  /// Result rest clients
   late final Iterable<UniversalRestClient> _restClients;
 
   /// Generates files based on OpenApi definition file
@@ -148,9 +163,11 @@ class Generator {
     final parser = OpenApiParser(
       _schemaContent,
       isYaml: _isYaml,
+      pathMethodName: _pathMethodName,
       enumsPrefix: _enumsPrefix,
       replacementRules: _replacementRules,
     );
+    _openApiInfo = parser.parseOpenApiInfo();
     _restClients = parser.parseRestClients();
     _dataClasses = parser.parseDataClasses();
   }
@@ -166,6 +183,7 @@ class Generator {
   /// Generate "virtual" files content
   Future<List<GeneratedFile>> _fillContent() async {
     final fillController = FillController(
+      openApiInfo: _openApiInfo,
       programmingLanguage: _programmingLanguage,
       clientPostfix: _clientPostfix,
       freezed: _freezed,
@@ -179,7 +197,9 @@ class Generator {
     for (final dataClass in _dataClasses) {
       files.add(fillController.fillDtoContent(dataClass));
     }
-    if (_rootInterface && _programmingLanguage == ProgrammingLanguage.dart) {
+    if (_rootInterface &&
+        _programmingLanguage == ProgrammingLanguage.dart &&
+        _restClients.isNotEmpty) {
       files.add(fillController.fillRootInterface(_restClients));
     }
     return files;

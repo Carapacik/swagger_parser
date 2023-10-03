@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import '../generator/models/programming_lang.dart';
-import '../generator/models/universal_component_class.dart';
+import '../generator/models/universal_data_class.dart';
 import '../generator/models/universal_type.dart';
 import '../utils/case_utils.dart';
 
@@ -14,7 +14,12 @@ String dartImports({required Set<String> imports, String? pathPrefix}) {
 }
 
 /// Provides class description
-String descriptionComment(String? description, {String tab = ''}) {
+String descriptionComment(
+  String? description, {
+  bool tabForFirstLine = true,
+  String tab = '',
+  String end = '',
+}) {
   if (description == null || description.isEmpty) {
     return '';
   }
@@ -22,12 +27,22 @@ String descriptionComment(String? description, {String tab = ''}) {
   final lineStart = RegExp('^(.*)', multiLine: true);
   final result = description.replaceAllMapped(
     lineStart,
-    (m) => '$tab/// ${m[1]}',
+    (m) => '${!tabForFirstLine && m.start == 0 ? '' : tab}/// ${m[1]}',
   );
 
-  return '$result\n';
+  return '$result\n$end';
 }
 
+/// Replace all not english letters in text
+String? replaceNotEnglishLetter(String? text) {
+  if (text == null || text.isEmpty) {
+    return null;
+  }
+  final lettersRegex = RegExp('[^a-zA-Z]');
+  return text.replaceAll(lettersRegex, ' ');
+}
+
+/// Specially for File import
 String ioImport(UniversalComponentClass dataClass) => dataClass.parameters
         .any((p) => p.toSuitableType(ProgrammingLanguage.dart) == 'File')
     ? "import 'dart:io';\n\n"

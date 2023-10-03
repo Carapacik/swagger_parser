@@ -4,19 +4,24 @@ import 'universal_request_type.dart';
 import 'universal_type.dart';
 
 /// Universal template for containing information about Request
-class UniversalRequest {
+final class UniversalRequest {
+  /// Constructor for [UniversalRequest]
   const UniversalRequest({
     required this.name,
     required this.requestType,
     required this.route,
     required this.returnType,
     required this.parameters,
+    this.description,
     this.isMultiPart = false,
     this.isFormUrlEncoded = false,
   });
 
   /// Request name
   final String name;
+
+  /// Request description
+  final String? description;
 
   /// HTTP type of request
   final HttpRequestType requestType;
@@ -60,6 +65,7 @@ class UniversalRequest {
       isFormUrlEncoded.hashCode;
 }
 
+/// Request type
 enum HttpRequestType {
   get,
   post,
@@ -71,8 +77,10 @@ enum HttpRequestType {
   options,
   trace;
 
+  /// Constructor for [HttpRequestType]
   const HttpRequestType();
 
+  /// Get type from string
   static HttpRequestType? fromString(String type) =>
       HttpRequestType.values.firstWhereOrNull((e) => e.name == type);
 }

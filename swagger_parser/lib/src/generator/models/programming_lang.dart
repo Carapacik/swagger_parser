@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 
+import '../generator_exception.dart';
 import '../templates/dart_enum_dto_template.dart';
 import '../templates/dart_freezed_dto_template.dart';
 import '../templates/dart_json_serializable_dto_template.dart';
@@ -10,9 +11,8 @@ import '../templates/kotlin_enum_dto_template.dart';
 import '../templates/kotlin_moshi_dto_template.dart';
 import '../templates/kotlin_retrofit_client_template.dart';
 import '../templates/kotlin_typedef_template.dart';
-import 'universal_component_class.dart';
+import 'open_api_info.dart';
 import 'universal_data_class.dart';
-import 'universal_enum_class.dart';
 import 'universal_rest_client.dart';
 
 /// Enumerates supported programming languages to determine templates
@@ -56,7 +56,6 @@ enum ProgrammingLanguage {
           }
           return dartJsonSerializableDtoTemplate(dataClass);
         }
-        throw Exception('Unknown type exception');
       case ProgrammingLanguage.kotlin:
         if (dataClass is UniversalEnumClass) {
           return kotlinEnumDtoTemplate(dataClass);
@@ -66,41 +65,37 @@ enum ProgrammingLanguage {
           }
           return kotlinMoshiDtoTemplate(dataClass);
         }
-        throw Exception('Unknown type exception');
     }
+    throw GeneratorException('Unknown type exception');
   }
 
   /// Determines template for generating Rest client by language
-  String restClientFileContent(UniversalRestClient restClient, String name) {
-    switch (this) {
-      case ProgrammingLanguage.dart:
-        return dartRetrofitClientTemplate(
-          restClient: restClient,
-          name: name,
-        );
-      case ProgrammingLanguage.kotlin:
-        return kotlinRetrofitClientTemplate(
-          restClient: restClient,
-          name: name,
-        );
-    }
-  }
+  String restClientFileContent(UniversalRestClient restClient, String name) =>
+      switch (this) {
+        ProgrammingLanguage.dart => dartRetrofitClientTemplate(
+            restClient: restClient,
+            name: name,
+          ),
+        ProgrammingLanguage.kotlin => kotlinRetrofitClientTemplate(
+            restClient: restClient,
+            name: name,
+          )
+      };
 
   /// Determines template for generating root interface for clients
   String rootInterfaceFileContent(
     Set<String> clientsNames, {
+    required OpenApiInfo openApiInfo,
     String postfix = 'Client',
     bool squishClients = false,
-  }) {
-    switch (this) {
-      case ProgrammingLanguage.dart:
-        return dartRootInterfaceTemplate(
-          clientsNames: clientsNames,
-          postfix: postfix,
-          squishClients: squishClients,
-        );
-      case ProgrammingLanguage.kotlin:
-        return '';
-    }
-  }
+  }) =>
+      switch (this) {
+        ProgrammingLanguage.dart => dartRootInterfaceTemplate(
+            openApiInfo: openApiInfo,
+            clientsNames: clientsNames,
+            postfix: postfix,
+            squishClients: squishClients,
+          ),
+        ProgrammingLanguage.kotlin => ''
+      };
 }

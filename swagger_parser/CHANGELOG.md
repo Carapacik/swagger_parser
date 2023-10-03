@@ -1,3 +1,31 @@
+## 1.6.3
+- Fix error with `allOf` results in the schema with type `object` ([#91](https://github.com/Carapacik/swagger_parser/issues/91))
+
+## 1.6.2
+- Fix grouping words for abbreviations when special characters are present
+- Fix replacement type for enum classes
+- Takes case in replacement
+
+## 1.6.1
+- Add summary of the methods to the code docs
+- Fix indents for multiline code docs
+- Add support for root client code docs
+
+## 1.6.0
+- Add new config parameter `path_method_name`
+
+## 1.5.3
+- Fix error with imports in dto component ([#86](https://github.com/Carapacik/swagger_parser/issues/86))
+
+## 1.5.2
+- Fix grouping words for acronyms and abbreviations ([#85](https://github.com/Carapacik/swagger_parser/issues/85))
+
+## 1.5.1
+- Fixed method name generation in a language other than English ([#83](https://github.com/Carapacik/swagger_parser/issues/83))
+
+## 1.5.0
+- Requires Dart 3.0 or later
+
 ## 1.4.0
 - By default value nullable and not required for process default values ([#76](https://github.com/Carapacik/swagger_parser/issues/76))
 - Add support for common parameters for various paths ([#78](https://github.com/Carapacik/swagger_parser/issues/78))

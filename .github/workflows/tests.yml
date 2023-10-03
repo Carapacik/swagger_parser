@@ -22,10 +22,10 @@ jobs:
       matrix:
         sdk:
           - stable
-          - 2.19.6
+          - 3.0.7
     steps:
-      - uses: actions/checkout@v3.6.0
-      - uses: dart-lang/setup-dart@v1.5.0
+      - uses: actions/checkout@v4.1.0
+      - uses: dart-lang/setup-dart@v1.5.1
         with:
           sdk: "${{ matrix.sdk }}"
       - name: Install dependencies

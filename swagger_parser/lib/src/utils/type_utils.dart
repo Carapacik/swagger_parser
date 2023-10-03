@@ -74,17 +74,17 @@ extension StringTypeX on String {
 }
 
 String prefixForEnumItems(String type, String item, {bool dart = true}) {
-  final startsWithNumber = RegExp(r'^\d');
-  return type != 'string' ||
-          dartKeywords.contains(item.toCamel) ||
-          startsWithNumber.hasMatch(item)
+  final startsWithNumber = RegExp(r'^\d').hasMatch(item);
+  final startsWithMinus = item.startsWith('-');
+
+  return dartKeywords.contains(item.toCamel) ||
+          startsWithNumber ||
+          startsWithMinus
       ? dart
-          ? 'value ${item.startsWith('-') ? 'minus' : ''} ${item.toCamel}'
-              .toCamel
-          : 'value ${item.startsWith('-') ? 'minus' : ''} ${item.toSnake}'
-              .toSnake
-              .toUpperCase()
+          ? 'value ${startsWithMinus ? 'minus' : ''} ${item.toCamel}'.toCamel
+          : 'value ${startsWithMinus ? 'minus' : ''} ${item.toSnake}'
+              .toScreamingSnake
       : dart
           ? item.toCamel
-          : item.toSnake.toUpperCase();
+          : item.toScreamingSnake;
 }
