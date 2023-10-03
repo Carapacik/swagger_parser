@@ -108,7 +108,7 @@ enum ProgrammingLanguage {
           ),
       };
 
-  /// Determines template for generating root interface for clients
+  /// Determines template for generating root client for clients
   String rootClientFileContent(
     Set<String> clientsNames, {
     required OpenApiInfo openApiInfo,

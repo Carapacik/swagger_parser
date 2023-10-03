@@ -3,7 +3,7 @@ import 'package:swagger_parser/src/generator/models/universal_rest_client.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Empty root interface', () {
+  group('Empty root client', () {
     test('dart', () async {
       const fillController = FillController();
       final filledContent = fillController.fillRootClient([]);
@@ -12,7 +12,7 @@ void main() {
     });
   });
 
-  group('Root interface with one client', () {
+  group('root client with one client', () {
     test('dart', () async {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
@@ -48,7 +48,7 @@ class RestClient implements IRestClient {
     });
   });
 
-  group('Root interface with multiple clients', () {
+  group('root client with multiple clients', () {
     test('dart', () async {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
@@ -116,7 +116,7 @@ class RestClient implements IRestClient {
     });
   });
 
-  group('Root interface with one client and squish', () {
+  group('root client with one client and squish', () {
     test('dart', () async {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
@@ -152,7 +152,7 @@ class RestClient implements IRestClient {
     });
   });
 
-  group('Root interface with multiple clients and squish', () {
+  group('root client with multiple clients and squish', () {
     test('dart', () async {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),

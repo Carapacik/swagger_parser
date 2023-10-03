@@ -66,7 +66,7 @@ final class FillController {
     );
   }
 
-  /// Return [GeneratedFile] root interface generated from given clients
+  /// Return [GeneratedFile] root client generated from given clients
   GeneratedFile fillRootClient(Iterable<UniversalRestClient> clients) {
     final clientsNames = clients.map((c) => c.name.toPascal).toSet();
     return GeneratedFile(

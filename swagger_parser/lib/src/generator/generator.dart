@@ -105,7 +105,7 @@ final class Generator {
   /// Use freezed to generate DTOs
   final bool _freezed;
 
-  /// Generate root interface for all Clients
+  /// Generate root client for all Clients
   final bool _rootClient;
 
   /// Root client name

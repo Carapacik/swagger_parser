@@ -128,7 +128,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                           title: const Text(
-                            'Generate root interface for REST clients',
+                            'Generate root client for REST clients',
                           ),
                           value: _rootClient,
                           onChanged: (value) =>

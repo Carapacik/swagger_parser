@@ -48,7 +48,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@Freezed()
+@freezed
 class ClassName with _$ClassName {
   const factory ClassName() = _ClassName;
   
@@ -143,7 +143,7 @@ import 'space_class.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@Freezed()
+@freezed
 class ClassName with _$ClassName {
   const factory ClassName() = _ClassName;
   
@@ -294,7 +294,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@Freezed()
+@freezed
 class ClassName with _$ClassName {
   const factory ClassName({
     required int intType,
@@ -444,7 +444,7 @@ import 'another.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@Freezed()
+@freezed
 class ClassName with _$ClassName {
   const factory ClassName({
     required List<int> list0,
@@ -574,7 +574,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@Freezed()
+@freezed
 class ClassName with _$ClassName {
   const factory ClassName({
     @JsonKey(name: 'int_type')
@@ -752,7 +752,7 @@ import 'haha.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@Freezed()
+@freezed
 class ClassName with _$ClassName {
   const factory ClassName({
     @Default(1)
@@ -905,7 +905,7 @@ import 'another.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@Freezed()
+@freezed
 class ClassName with _$ClassName {
   const factory ClassName({
     required List<List<Another>> anotherList,
@@ -1041,7 +1041,7 @@ import 'another.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@Freezed()
+@freezed
 class ClassName with _$ClassName {
   const factory ClassName({
     required int intRequired,
@@ -1745,7 +1745,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-@Freezed()
+@freezed
 class ClassName with _$ClassName {
   const factory ClassName({
     required String list3,
@@ -1886,15 +1886,19 @@ class ClassName {
   
   /// Some string
   final String stringType;
+
   /// Default value
   final String defaultType;
+
   /// JsonKey here
   @JsonKey(name: 'json_key_value')
   final String jsonKeyValue;
+
   /// Mega mind
   @JsonKey(name: 'mega_MIND')
   final String megaMind;
   final Object emptyDescription;
+
   /// List of data
   /// This data is a list
   final List<String> list;
@@ -1956,21 +1960,25 @@ part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
 /// Test class
-@Freezed()
+@freezed
 class ClassName with _$ClassName {
   const factory ClassName({
     /// Some string
     required String stringType,
+
     /// JsonKey here
     @JsonKey(name: 'json_key_value')
     required String jsonKeyValue,
+
     /// Mega mind
     @JsonKey(name: 'mega_MIND')
     required String megaMind,
     required Object emptyDescription,
+
     /// List of data
     /// This data is a list
     required List<String> list,
+
     /// Default value
     @Default('str')
     String defaultType,
