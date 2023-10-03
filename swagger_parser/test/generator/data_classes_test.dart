@@ -64,8 +64,9 @@ class ClassName with _$ClassName {
         imports: {},
         parameters: [],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
@@ -355,8 +356,9 @@ class ClassName with _$ClassName {
           UniversalType(type: 'Another', name: 'anotherType'),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
@@ -466,8 +468,9 @@ class ClassName with _$ClassName {
           UniversalType(type: 'Another', name: 'list5', arrayDepth: 5),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
@@ -612,8 +615,9 @@ class ClassName with _$ClassName {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
@@ -797,8 +801,9 @@ class ClassName with _$ClassName {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
@@ -936,8 +941,9 @@ class ClassName with _$ClassName {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
 import com.squareup.moshi.Json
@@ -1381,8 +1387,9 @@ const _$EnumNameStringEnumMap = {
           items: {'FALSE', 'for', 'do'},
         ),
       ];
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final files = <GeneratedFile>[];
       for (final enumClass in dataClasses) {
         files.add(fillController.fillDtoContent(enumClass));
@@ -1500,8 +1507,9 @@ enum EnumName {
         type: 'int',
         items: {'-2', '-1', '0', '1'},
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final file = fillController.fillDtoContent(dataClass);
       const expectedContent = '''
 import com.squareup.moshi.Json
@@ -1791,8 +1799,9 @@ class ClassName with _$ClassName {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContent = '''
 import com.squareup.moshi.Json
@@ -2015,8 +2024,9 @@ class ClassName with _$ClassName {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContent = '''
 import com.squareup.moshi.Json
