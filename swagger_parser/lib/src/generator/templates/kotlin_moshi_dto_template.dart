@@ -1,7 +1,7 @@
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
-import '../models/programming_lang.dart';
+import '../models/programming_language.dart';
 import '../models/universal_data_class.dart';
 import '../models/universal_type.dart';
 
@@ -11,7 +11,7 @@ String kotlinMoshiDtoTemplate(
   required bool markFileAsGenerated,
 }) {
   return '''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}import com.squareup.moshi.Json
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated, ignoreLints: false)}import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 ${descriptionComment(dataClass.description)}@JsonClass(generateAdapter = true)

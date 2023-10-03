@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 
 import '../../utils/case_utils.dart';
 import '../../utils/utils.dart';
-import '../models/programming_lang.dart';
+import '../models/programming_language.dart';
 import '../models/universal_data_class.dart';
 import '../models/universal_type.dart';
 
@@ -16,6 +16,6 @@ String kotlinTypeDefTemplate(
   if (type == null) {
     return '';
   }
-  return '${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${descriptionComment(dataClass.description)}'
+  return '${generatedFileComment(markFileAsGenerated: markFileAsGenerated, ignoreLints: false)}${descriptionComment(dataClass.description)}'
       'typealias $className = ${type.toSuitableType(ProgrammingLanguage.kotlin)};\n';
 }

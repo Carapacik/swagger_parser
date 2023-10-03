@@ -1,5 +1,5 @@
 import '../../utils/type_utils.dart';
-import 'programming_lang.dart';
+import 'programming_language.dart';
 
 /// Universal template for containing information about type
 final class UniversalType {
@@ -119,6 +119,11 @@ final class UniversalType {
       enumType.hashCode ^
       arrayDepth.hashCode ^
       nullable.hashCode;
+
+  @override
+  String toString() {
+    return 'UniversalType(\ntype: $type,\nname: $name,\ndescription: $description,\nformat: $format,\njsonKey: $jsonKey,\ndefaultValue: $defaultValue,\nisRequired: $isRequired,\nenumType: $enumType,\narrayDepth: $arrayDepth,\nnullable: $nullable\n)';
+  }
 }
 
 /// Converts [UniversalType] to type from specified language

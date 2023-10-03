@@ -1,7 +1,7 @@
 import '../utils/case_utils.dart';
 import 'models/generated_file.dart';
 import 'models/open_api_info.dart';
-import 'models/programming_lang.dart';
+import 'models/programming_language.dart';
 import 'models/universal_data_class.dart';
 import 'models/universal_rest_client.dart';
 
@@ -13,7 +13,7 @@ final class FillController {
     ProgrammingLanguage programmingLanguage = ProgrammingLanguage.dart,
     String clientPostfix = 'Client',
     String rootClientName = 'RestClient',
-    bool squishClients = false,
+    bool putClientsInFolder = false,
     bool freezed = false,
     bool enumsToJson = false,
     bool markFilesAsGenerated = false,
@@ -21,7 +21,7 @@ final class FillController {
         _clientPostfix = clientPostfix,
         _programmingLanguage = programmingLanguage,
         _rootClientName = rootClientName,
-        _squishClients = squishClients,
+        _putClientsInFolder = putClientsInFolder,
         _freezed = freezed,
         _enumsToJson = enumsToJson,
         _markFilesAsGenerated = markFilesAsGenerated;
@@ -31,7 +31,7 @@ final class FillController {
   final String _rootClientName;
   final String _clientPostfix;
   final bool _freezed;
-  final bool _squishClients;
+  final bool _putClientsInFolder;
   final bool _enumsToJson;
   final bool _markFilesAsGenerated;
 
@@ -53,7 +53,8 @@ final class FillController {
     final fileName = _programmingLanguage == ProgrammingLanguage.dart
         ? '${restClient.name}_$_clientPostfix'.toSnake
         : restClient.name.toPascal + _clientPostfix.toPascal;
-    final folderName = _squishClients ? 'clients' : restClient.name.toSnake;
+    final folderName =
+        _putClientsInFolder ? 'clients' : restClient.name.toSnake;
 
     return GeneratedFile(
       name: '$folderName/$fileName.${_programmingLanguage.fileExtension}',
@@ -65,17 +66,17 @@ final class FillController {
     );
   }
 
-  /// Return [GeneratedFile] root interface generated from given clients
-  GeneratedFile fillRootInterface(Iterable<UniversalRestClient> clients) {
+  /// Return [GeneratedFile] root client generated from given clients
+  GeneratedFile fillRootClient(Iterable<UniversalRestClient> clients) {
     final clientsNames = clients.map((c) => c.name.toPascal).toSet();
     return GeneratedFile(
       name: '${_rootClientName.toSnake}.${_programmingLanguage.fileExtension}',
-      contents: _programmingLanguage.rootInterfaceFileContent(
+      contents: _programmingLanguage.rootClientFileContent(
         clientsNames,
         openApiInfo: _openApiInfo,
         name: _rootClientName,
         postfix: _clientPostfix.toPascal,
-        squishClients: _squishClients,
+        putClientsInFolder: _putClientsInFolder,
         markFilesAsGenerated: _markFilesAsGenerated,
       ),
     );

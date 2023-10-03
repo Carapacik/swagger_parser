@@ -28,9 +28,13 @@ class OpenApiParser {
     bool isYaml = false,
     bool enumsPrefix = false,
     bool pathMethodName = false,
+    String? name,
+    bool squashClients = false,
     List<ReplacementRule> replacementRules = const <ReplacementRule>[],
   })  : _pathMethodName = pathMethodName,
         _enumsPrefix = enumsPrefix,
+        _name = name,
+        _squashClients = squashClients,
         _replacementRules = replacementRules {
     _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
@@ -57,6 +61,8 @@ class OpenApiParser {
 
   final bool _pathMethodName;
   final bool _enumsPrefix;
+  final String? _name;
+  final bool _squashClients;
   final List<ReplacementRule> _replacementRules;
   late final Map<String, dynamic> _definitionFileContent;
   late final OAS _version;
@@ -651,9 +657,11 @@ class OpenApiParser {
   }
 
   /// Get tag for name
-  String _getTag(Map<String, dynamic> map) => map.containsKey(_tagsConst)
-      ? (map[_tagsConst] as List<dynamic>).first.toString()
-      : 'client';
+  String _getTag(Map<String, dynamic> map) => _squashClients && _name != null
+      ? _name!
+      : map.containsKey(_tagsConst)
+          ? (map[_tagsConst] as List<dynamic>).first.toString()
+          : 'client';
 
   /// Format `$ref` type
   String _formatRef(Map<String, dynamic> map, {bool useSchema = false}) => p

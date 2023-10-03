@@ -21,7 +21,7 @@ Future<void> main(List<String> arguments) async {
         final (openApi, stats) = await generator.generateFiles();
 
         schemaStatisticsMessage(
-          name: config.name ?? config.schemaFilePath,
+          name: config.name,
           openApi: openApi,
           statistics: stats,
         );

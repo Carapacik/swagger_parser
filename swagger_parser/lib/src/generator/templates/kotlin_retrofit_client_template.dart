@@ -1,7 +1,7 @@
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
-import '../models/programming_lang.dart';
+import '../models/programming_language.dart';
 import '../models/universal_request.dart';
 import '../models/universal_request_type.dart';
 import '../models/universal_rest_client.dart';
@@ -16,7 +16,7 @@ String kotlinRetrofitClientTemplate({
 }) {
   final sb = StringBuffer(
     '''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}import retrofit2.http.*
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated, ignoreLints: false)}import retrofit2.http.*
 
 interface $name {''',
   );

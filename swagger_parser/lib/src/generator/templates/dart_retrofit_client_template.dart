@@ -3,7 +3,7 @@ import 'package:collection/collection.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
-import '../models/programming_lang.dart';
+import '../models/programming_language.dart';
 import '../models/universal_request.dart';
 import '../models/universal_request_type.dart';
 import '../models/universal_rest_client.dart';
@@ -19,7 +19,6 @@ String dartRetrofitClientTemplate({
     '''
 ${generatedFileComment(
       markFileAsGenerated: markFileAsGenerated,
-      ignoreLints: true,
     )}${_fileImport(restClient)}import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}

@@ -5,7 +5,7 @@ import '../templates/dart_enum_dto_template.dart';
 import '../templates/dart_freezed_dto_template.dart';
 import '../templates/dart_json_serializable_dto_template.dart';
 import '../templates/dart_retrofit_client_template.dart';
-import '../templates/dart_root_interface_template.dart';
+import '../templates/dart_root_client_template.dart';
 import '../templates/dart_typedef_template.dart';
 import '../templates/kotlin_enum_dto_template.dart';
 import '../templates/kotlin_moshi_dto_template.dart';
@@ -108,22 +108,22 @@ enum ProgrammingLanguage {
           ),
       };
 
-  /// Determines template for generating root interface for clients
-  String rootInterfaceFileContent(
+  /// Determines template for generating root client for clients
+  String rootClientFileContent(
     Set<String> clientsNames, {
     required OpenApiInfo openApiInfo,
     required String name,
     required String postfix,
-    required bool squishClients,
+    required bool putClientsInFolder,
     required bool markFilesAsGenerated,
   }) =>
       switch (this) {
-        dart => dartRootInterfaceTemplate(
+        dart => dartRootClientTemplate(
             openApiInfo: openApiInfo,
             name: name,
             clientsNames: clientsNames,
             postfix: postfix,
-            squishClients: squishClients,
+            putClientsInFolder: putClientsInFolder,
             markFileAsGenerated: markFilesAsGenerated,
           ),
         kotlin => '',

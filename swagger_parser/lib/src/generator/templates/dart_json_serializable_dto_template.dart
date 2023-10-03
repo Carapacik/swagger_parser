@@ -3,7 +3,7 @@ import 'package:collection/collection.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
-import '../models/programming_lang.dart';
+import '../models/programming_language.dart';
 import '../models/universal_data_class.dart';
 import '../models/universal_type.dart';
 
@@ -16,7 +16,6 @@ String dartJsonSerializableDtoTemplate(
   return '''
 ${generatedFileComment(
     markFileAsGenerated: markFileAsGenerated,
-    ignoreLints: true,
   )}${ioImport(dataClass)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.g.dart';
@@ -33,8 +32,9 @@ class $className {
 }
 
 String _parametersInClass(List<UniversalType> parameters) => parameters
-    .map(
-      (e) => '\n${descriptionComment(e.description, tab: '  ')}'
+    .mapIndexed(
+      (i, e) =>
+          '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '  ')}'
           '${_jsonKey(e)}  final ${e.toSuitableType(ProgrammingLanguage.dart)} ${e.name};',
     )
     .join();
@@ -43,7 +43,7 @@ String _parametersInConstructor(List<UniversalType> parameters) {
   final sortedByRequired =
       List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)));
   return sortedByRequired
-      .map((e) => '\n    ${_r(e)}this.${e.name}${_d(e)},')
+      .map((e) => '\n    ${_required(e)}this.${e.name}${_defaultValue(e)},')
       .join();
 }
 
@@ -56,12 +56,19 @@ String _jsonKey(UniversalType t) {
 }
 
 /// return required if isRequired
-String _r(UniversalType t) =>
+String _required(UniversalType t) =>
     t.isRequired && t.defaultValue == null ? 'required ' : '';
 
 /// return defaultValue if have
-String _d(UniversalType t) => t.defaultValue != null
-    ? ' = ${t.type.quoterForStringType()}'
-        '${t.enumType != null ? '${t.type}.${prefixForEnumItems(t.enumType!, t.defaultValue!)}' : t.defaultValue}'
-        '${t.type.quoterForStringType()}'
-    : '';
+String _defaultValue(UniversalType t) {
+  final value =
+      t.defaultValue == '[]' ? 'const ${t.defaultValue}' : t.defaultValue;
+  final type = t.type;
+  final enumType = t.enumType;
+
+  return value != null
+      ? ' = ${type.quoterForStringType()}'
+          '${enumType != null ? '$type.${prefixForEnumItems(enumType, value)}' : value}'
+          '${type.quoterForStringType()}'
+      : '';
+}

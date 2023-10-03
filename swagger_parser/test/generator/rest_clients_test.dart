@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_redundant_argument_values
 
 import 'package:swagger_parser/src/generator/fill_controller.dart';
-import 'package:swagger_parser/src/generator/models/programming_lang.dart';
+import 'package:swagger_parser/src/generator/models/programming_language.dart';
 import 'package:swagger_parser/src/generator/models/universal_request.dart';
 import 'package:swagger_parser/src/generator/models/universal_request_type.dart';
 import 'package:swagger_parser/src/generator/models/universal_rest_client.dart';
@@ -49,7 +49,7 @@ interface SomeClient {}
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController = FillController(squishClients: true);
+      const fillController = FillController(putClientsInFolder: true);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -70,7 +70,7 @@ abstract class SomeClient {
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
-        squishClients: true,
+        putClientsInFolder: true,
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''

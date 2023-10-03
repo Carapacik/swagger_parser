@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 
 import '../../utils/case_utils.dart';
 import '../../utils/utils.dart';
-import '../models/programming_lang.dart';
+import '../models/programming_language.dart';
 import '../models/universal_data_class.dart';
 import '../models/universal_type.dart';
 
@@ -19,7 +19,6 @@ String dartTypeDefTemplate(
   }
   return '${generatedFileComment(
     markFileAsGenerated: markFileAsGenerated,
-    ignoreLints: true,
   )}${import != null ? "import '${import.toSnake}.dart';\n\n" : ''}'
       '${descriptionComment(dataClass.description)}'
       'typedef $className = ${type.toSuitableType(ProgrammingLanguage.dart)};\n';

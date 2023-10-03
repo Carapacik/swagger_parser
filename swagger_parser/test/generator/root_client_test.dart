@@ -3,22 +3,22 @@ import 'package:swagger_parser/src/generator/models/universal_rest_client.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Empty root interface', () {
+  group('Empty root client', () {
     test('dart', () async {
       const fillController = FillController();
-      final filledContent = fillController.fillRootInterface([]);
+      final filledContent = fillController.fillRootClient([]);
       const expectedContents = '';
       expect(filledContent.contents, expectedContents);
     });
   });
 
-  group('Root interface with one client', () {
+  group('root client with one client', () {
     test('dart', () async {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
       ];
       const fillController = FillController();
-      final filledContent = fillController.fillRootInterface(clients);
+      final filledContent = fillController.fillRootClient(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 
@@ -48,7 +48,7 @@ class RestClient implements IRestClient {
     });
   });
 
-  group('Root interface with multiple clients', () {
+  group('root client with multiple clients', () {
     test('dart', () async {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
@@ -58,7 +58,7 @@ class RestClient implements IRestClient {
         const UniversalRestClient(name: 'Five', imports: {}, requests: []),
       ];
       const fillController = FillController();
-      final filledContent = fillController.fillRootInterface(clients);
+      final filledContent = fillController.fillRootClient(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 
@@ -116,13 +116,13 @@ class RestClient implements IRestClient {
     });
   });
 
-  group('Root interface with one client and squish', () {
+  group('root client with one client and squish', () {
     test('dart', () async {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
       ];
-      const fillController = FillController(squishClients: true);
-      final filledContent = fillController.fillRootInterface(clients);
+      const fillController = FillController(putClientsInFolder: true);
+      final filledContent = fillController.fillRootClient(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 
@@ -152,7 +152,7 @@ class RestClient implements IRestClient {
     });
   });
 
-  group('Root interface with multiple clients and squish', () {
+  group('root client with multiple clients and squish', () {
     test('dart', () async {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
@@ -161,8 +161,8 @@ class RestClient implements IRestClient {
         const UniversalRestClient(name: 'Four', imports: {}, requests: []),
         const UniversalRestClient(name: 'Five', imports: {}, requests: []),
       ];
-      const fillController = FillController(squishClients: true);
-      final filledContent = fillController.fillRootInterface(clients);
+      const fillController = FillController(putClientsInFolder: true);
+      final filledContent = fillController.fillRootClient(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 
