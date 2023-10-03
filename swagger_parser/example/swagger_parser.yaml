@@ -61,19 +61,19 @@ swagger_parser:
   # any parameter for any schema can be set manually.
   # Cannot be used at the same time as schema_path.
   schemas:
-    - schema_path: specs/openapi.json
+    - schema_path: schemas/openapi.json
       root_client_name: ApiMicroservice
       freezed: true
       put_in_folder: true
       replacement_rules: []
 
-    - schema_path: specs/openapi.json
+    - schema_path: schemas/openapi.json
       name: pet_service
       client_postfix: Repository
       squish_clients: true
       enums_to_json: true
       put_in_folder: true
       
-    - schema_path: specs/openapi.json
+    - schema_path: schemas/openapi.json
       output_directory: lib/api/kotlin
       language: kotlin
