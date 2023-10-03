@@ -30,6 +30,7 @@ final class Generator {
     String? clientPostfix,
     String? rootClientName,
     bool? putClientsInFolder,
+    bool? squashClients,
     bool? pathMethodName,
     bool? putInFolder,
     bool? enumsToJson,
@@ -46,6 +47,7 @@ final class Generator {
         _rootClientName = rootClientName ?? 'RestClient',
         _clientPostfix = clientPostfix ?? 'Client',
         _putClientsInFolder = putClientsInFolder ?? false,
+        _squashClients = squashClients ?? false,
         _pathMethodName = pathMethodName ?? false,
         _putInFolder = putInFolder ?? false,
         _enumsToJson = enumsToJson ?? false,
@@ -75,6 +77,7 @@ final class Generator {
       rootClientName: yamlConfig.rootClientName,
       clientPostfix: yamlConfig.clientPostfix,
       putClientsInFolder: yamlConfig.putClientsInFolder,
+      squashClients: yamlConfig.squashClients,
       pathMethodName: yamlConfig.pathMethodName,
       putInFolder: yamlConfig.putInFolder,
       enumsToJson: yamlConfig.enumsToJson,
@@ -111,8 +114,11 @@ final class Generator {
   /// Client postfix
   final String _clientPostfix;
 
-  /// Squish Clients in one folder
+  /// Put all clients in clients folder
   final bool _putClientsInFolder;
+
+  /// Squash all clients in one client.
+  final bool _squashClients;
 
   /// If true, use the endpoint path for the method name, if false, use operationId
   final bool _pathMethodName;
@@ -162,6 +168,8 @@ final class Generator {
       isYaml: _isYaml,
       pathMethodName: _pathMethodName,
       enumsPrefix: _enumsPrefix,
+      name: _name,
+      squashClients: _squashClients,
       replacementRules: _replacementRules,
     );
     _openApiInfo = parser.parseOpenApiInfo();

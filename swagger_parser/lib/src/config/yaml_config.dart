@@ -26,6 +26,7 @@ final class YamlConfig {
     this.rootClientName,
     this.clientPostfix,
     this.putClientsInFolder,
+    this.squashClients,
     this.pathMethodName,
     this.putInFolder,
     this.enumsToJson,
@@ -116,6 +117,13 @@ final class YamlConfig {
       );
     }
 
+    final squashClients = yamlConfig['squash_clients'];
+    if (squashClients is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'squash_clients' must be bool.",
+      );
+    }
+
     final pathMethodName = yamlConfig['path_method_name'];
     if (pathMethodName is! bool?) {
       throw const ConfigException(
@@ -199,6 +207,7 @@ final class YamlConfig {
       rootClientName: rootClientName ?? rootConfig?.rootClientName,
       clientPostfix: clientPostfix ?? rootConfig?.clientPostfix,
       putClientsInFolder: putClientsInFolder ?? rootConfig?.putClientsInFolder,
+      squashClients: squashClients ?? rootConfig?.squashClients,
       pathMethodName: pathMethodName ?? rootConfig?.pathMethodName,
       putInFolder: putInFolder ?? rootConfig?.putInFolder,
       enumsToJson: enumsToJson ?? rootConfig?.enumsToJson,
@@ -288,6 +297,7 @@ final class YamlConfig {
   final bool? rootClient;
   final String? rootClientName;
   final bool? putClientsInFolder;
+  final bool? squashClients;
   final bool? pathMethodName;
   final bool? putInFolder;
   final bool? enumsToJson;

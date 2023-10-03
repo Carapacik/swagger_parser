@@ -10,7 +10,7 @@ swagger_parser:
   language: dart
 
   # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
-  freezed: false
+  freezed:  true
 
   # Optional (dart only). Set 'true' to generate root client
   # with interface and all clients instances. Default: true
@@ -27,10 +27,10 @@ swagger_parser:
   put_in_folder: false
 
   # Optional. Set 'true' to put all clients in clients folder. Default: false.
-  put_clients_in_folder: false
+  put_clients_in_folder: true
 
   # Optional. Set to 'true' to squash all clients in one client. Default: false
-  squash_clients: false
+  squash_clients: true
 
   # Optional. Set postfix for Client class and file. Default: Client
   client_postfix: Client
@@ -56,21 +56,24 @@ swagger_parser:
     - pattern: "$"
       replacement: "DTO"
 
+  # Optional. You can pass a list of schemes. 
+  # Each schema inherits the parameters described in swagger_parser,
+  # any parameter for any schema can be set manually.
+  # Cannot be used at the same time as schema_path.
   schemas:
-    # - schema_path: specs/accounts_api.json
-    #   root_client_name: AccountsApiMicroservice
+    - schema_path: specs/openapi.json
+      root_client_name: ApiMicroservice
+      freezed: true
+      put_in_folder: true
+      replacement_rules: []
 
-    - schema_path: specs/auth_api.json
-      root_client_name: AuthApiMicroservice
-
-    # - schema_path: specs/devices_api.json
-    #   root_client_name: DevicesApiMicroservice
-
-    # - schema_path: specs/pillows_api.json
-    #   root_client_name: PillowsApiMicroservice
-
-    # - schema_path: specs/sleep_data_api.json
-    #   root_client_name: SleepDataApiMicroservice
-
-    # - schema_path: specs/terra_api.json
-    #   root_client_name: TerraApiMicroservice
+    - schema_path: specs/openapi.json
+      name: pet_service
+      client_postfix: Repository
+      squish_clients: true
+      enums_to_json: true
+      put_in_folder: true
+      
+    - schema_path: specs/openapi.json
+      output_directory: lib/api/kotlin
+      language: kotlin
