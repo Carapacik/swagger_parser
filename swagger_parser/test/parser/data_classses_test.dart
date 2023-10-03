@@ -1,5 +1,5 @@
 import 'package:path/path.dart' as p;
-import 'package:swagger_parser/src/generator/models/universal_component_class.dart';
+import 'package:swagger_parser/src/generator/models/universal_data_class.dart';
 import 'package:swagger_parser/src/generator/models/universal_type.dart';
 import 'package:swagger_parser/src/parser/parser.dart';
 import 'package:swagger_parser/src/utils/file_utils.dart';
