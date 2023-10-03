@@ -10,7 +10,8 @@ import 'package:test/test.dart';
 void main() {
   group('Paths check', () {
     test('basic paths check 2.0', () async {
-      final schemaFilePath = p.join('test', 'parser', 'schemas', 'basic_requests.2.0.json');
+      final schemaFilePath =
+          p.join('test', 'parser', 'schemas', 'basic_requests.2.0.json');
       final configFile = schemaFile(schemaFilePath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
@@ -28,7 +29,8 @@ void main() {
               parameters: [
                 UniversalRequestType(
                   parameterType: HttpParameterType.body,
-                  type: UniversalType(type: 'RegisterUserDto', name: 'body', jsonKey: 'body'),
+                  type: UniversalType(
+                      type: 'RegisterUserDto', name: 'body', jsonKey: 'body'),
                 ),
               ],
             ),
@@ -106,7 +108,8 @@ void main() {
     });
 
     test('basic paths check 3.0', () async {
-      final schemaFilePath = p.join('test', 'parser', 'schemas', 'basic_requests.3.0.json');
+      final schemaFilePath =
+          p.join('test', 'parser', 'schemas', 'basic_requests.3.0.json');
       final configFile = schemaFile(schemaFilePath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
@@ -124,7 +127,8 @@ void main() {
               parameters: [
                 UniversalRequestType(
                   parameterType: HttpParameterType.body,
-                  type: UniversalType(type: 'RegisterUserDto', name: 'body', jsonKey: 'body'),
+                  type: UniversalType(
+                      type: 'RegisterUserDto', name: 'body', jsonKey: 'body'),
                 ),
               ],
             ),

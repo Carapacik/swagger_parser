@@ -8,7 +8,8 @@ import 'package:test/test.dart';
 void main() {
   group('Empty data class', () {
     test('2.0', () async {
-      final schemaFilePath = p.join('test', 'parser', 'schemas', 'empty_class.2.0.json');
+      final schemaFilePath =
+          p.join('test', 'parser', 'schemas', 'empty_class.2.0.json');
       final configFile = schemaFile(schemaFilePath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
@@ -22,7 +23,8 @@ void main() {
     });
 
     test('3.0', () async {
-      final schemaFilePath = p.join('test', 'parser', 'schemas', 'empty_class.3.0.json');
+      final schemaFilePath =
+          p.join('test', 'parser', 'schemas', 'empty_class.3.0.json');
       final configFile = schemaFile(schemaFilePath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
@@ -38,7 +40,8 @@ void main() {
 
   group('Types check', () {
     test('basic types check 2.0', () async {
-      final schemaFilePath = p.join('test', 'parser', 'schemas', 'basic_types_class.2.0.json');
+      final schemaFilePath =
+          p.join('test', 'parser', 'schemas', 'basic_types_class.2.0.json');
       final configFile = schemaFile(schemaFilePath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
@@ -145,7 +148,8 @@ void main() {
     });
 
     test('basic types check 3.0', () async {
-      final schemaFilePath = p.join('test', 'parser', 'schemas', 'basic_types_class.3.0.json');
+      final schemaFilePath =
+          p.join('test', 'parser', 'schemas', 'basic_types_class.3.0.json');
       final configFile = schemaFile(schemaFilePath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
@@ -252,7 +256,8 @@ void main() {
     });
 
     test('composite types check 2.0', () async {
-      final schemaFilePath = p.join('test', 'parser', 'schemas', 'reference_types_class.2.0.json');
+      final schemaFilePath =
+          p.join('test', 'parser', 'schemas', 'reference_types_class.2.0.json');
       final configFile = schemaFile(schemaFilePath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
@@ -301,7 +306,8 @@ void main() {
     });
 
     test('composite types check 3.0', () async {
-      final schemaFilePath = p.join('test', 'parser', 'schemas', 'reference_types_class.3.0.json');
+      final schemaFilePath =
+          p.join('test', 'parser', 'schemas', 'reference_types_class.3.0.json');
       final configFile = schemaFile(schemaFilePath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
