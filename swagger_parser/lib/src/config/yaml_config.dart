@@ -193,6 +193,7 @@ final class YamlConfig {
         "Config parameter 'name' must be String.",
       );
     }
+
     final name = rawName == null || rawName.isEmpty
         ? schemaPath.split('/').last.split('.').first
         : rawName;
