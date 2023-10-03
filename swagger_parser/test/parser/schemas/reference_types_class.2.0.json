@@ -1,0 +1,27 @@
+{
+  "swagger": "2.0",
+  "definitions": {
+    "ClassName": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "another": {
+          "$ref": "#/definitions/AnotherClass"
+        }
+      }
+    },
+    "AnotherClass": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
