@@ -21,7 +21,7 @@ ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';
 
-${descriptionComment(dataClass.description)}@freezed
+${descriptionComment(dataClass.description)}@Freezed()
 class $className with _\$$className {
   const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;
   \n  factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);

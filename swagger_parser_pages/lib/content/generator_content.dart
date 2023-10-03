@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_final_fields
-
 import 'package:flutter/material.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:swagger_parser_pages/utils/file_utils.dart';
@@ -32,6 +30,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
   void dispose() {
     _schemaController.dispose();
     _clientPostfix.dispose();
+    _name.dispose();
+    _rootClientName.dispose();
     super.dispose();
   }
 
@@ -337,7 +337,7 @@ Future<void> _generateOutputs(
     rootClient: rootClient,
     rootClientName: rootClientName.trim().isEmpty ? null : rootClientName,
     clientPostfix: clientPostfix.trim().isEmpty ? null : clientPostfix,
-    name: name,
+    name: name.trim().isEmpty ? null : name,
     putInFolder: putInFolder,
     putClientsInFolder: putClientsInFolder,
     squashClients: squashClients,

@@ -86,7 +86,7 @@ swagger_parser:
   # Set 'false' to use operationId. Default: false
   path_method_name: false
 
-  # Optional. Set 'true' to include toJson() in enums. 
+  # Optional (dart only). Set 'true' to include toJson() in enums. 
   # If set to false, serialization will use .name instead. Default: false
   enums_to_json: false
 
@@ -100,8 +100,8 @@ swagger_parser:
   # All rules are applied in order.
   replacement_rules:
     # Example of rule
-    - pattern: "$"
-      replacement: "DTO"
+    - pattern: "[0-9]+"
+      replacement: ""
       
 ```
 

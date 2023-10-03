@@ -827,7 +827,7 @@ class OpenApiParser {
             (import: ofImport, type: ofType) = _findType(item);
           }
         }
-        // Find nullable type in of two-element allOf, anyOf or oneOf
+        // Find nullable type in of two-element anyOf
         else if (map.containsKey(_anyOfConst) && of.length == 2) {
           final item1 = of[0];
           final item2 = of[1];
