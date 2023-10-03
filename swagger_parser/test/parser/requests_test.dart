@@ -30,7 +30,10 @@ void main() {
                 UniversalRequestType(
                   parameterType: HttpParameterType.body,
                   type: UniversalType(
-                      type: 'RegisterUserDto', name: 'body', jsonKey: 'body'),
+                    type: 'RegisterUserDto',
+                    name: 'body',
+                    jsonKey: 'body',
+                  ),
                 ),
               ],
             ),
@@ -128,7 +131,10 @@ void main() {
                 UniversalRequestType(
                   parameterType: HttpParameterType.body,
                   type: UniversalType(
-                      type: 'RegisterUserDto', name: 'body', jsonKey: 'body'),
+                    type: 'RegisterUserDto',
+                    name: 'body',
+                    jsonKey: 'body',
+                  ),
                 ),
               ],
             ),
