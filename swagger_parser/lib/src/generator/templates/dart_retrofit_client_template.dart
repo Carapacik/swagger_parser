@@ -18,9 +18,8 @@ String dartRetrofitClientTemplate({
   final sb = StringBuffer(
     '''
 ${generatedFileComment(
-    markFileAsGenerated: markFileAsGenerated,
-    ignoreLints: true,
-  )}${_fileImport(restClient)}import 'package:dio/dio.dart';
+      markFileAsGenerated: markFileAsGenerated,
+    )}${_fileImport(restClient)}import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../shared_models/')}
 part '${name.toSnake}.g.dart';
