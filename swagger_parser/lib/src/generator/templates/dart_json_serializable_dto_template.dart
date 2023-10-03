@@ -8,10 +8,15 @@ import '../models/universal_data_class.dart';
 import '../models/universal_type.dart';
 
 /// Provides template for generating dart DTO using JSON serializable
-String dartJsonSerializableDtoTemplate(UniversalComponentClass dataClass) {
+String dartJsonSerializableDtoTemplate(
+  UniversalComponentClass dataClass, {
+  required bool markFileAsGenerated,
+}) {
   final className = dataClass.name.toPascal;
   return '''
-${ioImport(dataClass)}import 'package:json_annotation/json_annotation.dart';
+${generatedFileComment(
+    markFileAsGenerated: markFileAsGenerated,
+  )}${ioImport(dataClass)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.g.dart';
 
