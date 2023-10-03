@@ -12,10 +12,11 @@ import '../models/universal_type.dart';
 String kotlinRetrofitClientTemplate({
   required UniversalRestClient restClient,
   required String name,
+  required bool markFileAsGenerated,
 }) {
   final sb = StringBuffer(
     '''
-import retrofit2.http.*
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated, ignoreLints: false)}import retrofit2.http.*
 
 interface $name {''',
   );

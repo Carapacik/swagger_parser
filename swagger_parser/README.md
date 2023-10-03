@@ -46,17 +46,30 @@ An example of YAML is shown below
 
 ```yaml
 swagger_parser:
-  schema_path: assets/openapi.json # Required. Sets the OpenApi schema path directory for api definition
-  output_directory: lib/api # Required. Sets output directory for generated files (Clients and Dtos)
-  language: dart # Optional. Sets the programming language. Current available languages are: dart, kotlin. Default: dart
-  freezed: false # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
-  root_interface: true # Optional (dart only). Set 'true' to generate interface with all clients instances. Default: true
-  squish_clients: false # Optional. Set 'true' to put all clients in one folder. Default: false
-  client_postfix: Client # Optional. Set postfix for Client class and file. Default: Client
-  path_method_name: false # Optional. Set 'true' to use only the endpoint path for the method name. Set 'false' to use operationId. Default: false
-  enums_to_json: false # Optional. Set 'true' to include toJson() in enums. If set to false, serialization will use .name instead. Default: false
-  enums_prefix: false # Optional. Set 'true' to set enum prefix from parent component. Default: false
-  replacement_rules: # Optional. Set regex replacement rules for the names of the generated classes/enums. All rules are applied in order.
+  # Required. Sets the OpenApi schema path directory for api definition
+  schema_path: assets/openapi.json
+  # Required. Sets output directory for generated files (Clients and Dtos)
+  output_directory: lib/api
+  # Optional. Sets the programming language. Current available languages are: dart, kotlin. Default: dart
+  language: dart
+  # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
+  freezed: false
+  # Optional (dart only). Set 'true' to generate interface with all clients instances. Default: true
+  root_interface: true
+  # Optional. Set 'true' to put all clients in one folder. Default: false
+  squish_clients: false
+  # Optional. Set postfix for Client class and file. Default: Client
+  client_postfix: Client
+  # Optional. Set 'true' to use only the endpoint path for the method name. Set 'false' to use operationId. Default: false
+  path_method_name: false
+  # Optional. Set 'true' to include toJson() in enums. If set to false, serialization will use .name instead. Default: false
+  enums_to_json: false
+  # Optional. Set 'true' to set enum prefix from parent component. Default: false
+  enums_prefix: false
+  # Optional. Set 'false' to not put a comment at the beginning of the generated files. Default: true
+  mark_files_as_generated: true
+  # Optional. Set regex replacement rules for the names of the generated classes/enums. All rules are applied in order.
+  replacement_rules: 
     # Example of rule
     - pattern: "[0-9]+"
       replacement: ""

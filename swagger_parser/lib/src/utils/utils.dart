@@ -48,6 +48,25 @@ String ioImport(UniversalComponentClass dataClass) => dataClass.parameters
     ? "import 'dart:io';\n\n"
     : '';
 
+String generatedFileComment({
+  required bool markFileAsGenerated,
+  bool ignoreLints = true,
+}) =>
+    markFileAsGenerated
+        ? ignoreLints
+            ? '$_generatedCodeComment$_ignoreLintsComment\n'
+            : '$_generatedCodeComment\n'
+        : '';
+
+const _generatedCodeComment = '''
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+''';
+
+const _ignoreLintsComment = '''
+// ignore_for_file: type=lint
+''';
+
 void introMessage() {
   stdout.writeln(
     '''

@@ -16,126 +16,106 @@ import 'models/universal_rest_client.dart';
 /// Can be provided with arguments
 /// to specify custom path to yaml config.
 final class Generator {
-  /// Applies parameters set from yaml config file
+  /// Applies parameters directly from constructor
   /// and sets them to default if not found
-  Generator.fromYamlConfig(List<String> arguments) {
-    final yamlConfig = YamlConfig(arguments);
+  Generator({
+    required String schemaContent,
+    required String outputDirectory,
+    ProgrammingLanguage? language,
+    bool? isYaml,
+    bool? freezed,
+    bool? rootInterface,
+    String? clientPostfix,
+    bool? squishClients,
+    bool? pathMethodName,
+    bool? enumsToJson,
+    bool? enumsPrefix,
+    bool? markFilesAsGenerated,
+    List<ReplacementRule>? replacementRules,
+  })  : _schemaContent = schemaContent,
+        _outputDirectory = outputDirectory,
+        _programmingLanguage = language ?? ProgrammingLanguage.dart,
+        _isYaml = isYaml ?? false,
+        _freezed = freezed ?? false,
+        _rootInterface = rootInterface ?? true,
+        _clientPostfix = clientPostfix ?? 'Client',
+        _squishClients = squishClients ?? false,
+        _pathMethodName = pathMethodName ?? false,
+        _enumsToJson = enumsToJson ?? false,
+        _enumsPrefix = enumsPrefix ?? false,
+        _markFilesAsGenerated = markFilesAsGenerated ?? true,
+        _replacementRules = replacementRules ?? const [];
 
-    _outputDirectory = yamlConfig.outputDirectory;
+  /// Applies parameters set from yaml config file
+  factory Generator.fromYamlConfig(List<String> arguments) {
+    final yamlConfig = YamlConfig.fromYamlFile(arguments);
 
     final schemaFilePath = yamlConfig.schemaFilePath;
     final configFile = schemaFile(schemaFilePath);
     if (configFile == null) {
       throw GeneratorException("Can't find schema file at $schemaFilePath.");
     }
-    _isYaml = p.extension(schemaFilePath).toLowerCase() == '.yaml';
-    _schemaContent = configFile.readAsStringSync();
 
-    if (yamlConfig.language != null) {
-      final parsedLang = ProgrammingLanguage.fromString(yamlConfig.language);
-      if (parsedLang == null) {
-        throw GeneratorException(
-          "'language' field must be contained in ${ProgrammingLanguage.values}.",
-        );
-      }
-      _programmingLanguage = parsedLang;
-    }
+    final isYaml = p.extension(schemaFilePath).toLowerCase() == '.yaml';
+    final schemaContent = configFile.readAsStringSync();
 
-    if (yamlConfig.freezed != null) {
-      _freezed = yamlConfig.freezed!;
-    }
-
-    if (yamlConfig.rootInterface != null) {
-      _rootInterface = yamlConfig.rootInterface!;
-    }
-
-    if (yamlConfig.squishClients != null) {
-      _squishClients = yamlConfig.squishClients!;
-    }
-
-    if (yamlConfig.clientPostfix != null) {
-      _clientPostfix = yamlConfig.clientPostfix!;
-    }
-
-    if (yamlConfig.pathMethodName != null) {
-      _pathMethodName = yamlConfig.pathMethodName!;
-    }
-
-    if (yamlConfig.enumsToJson != null) {
-      _enumsToJson = yamlConfig.enumsToJson!;
-    }
-
-    if (yamlConfig.enumsPrefix != null) {
-      _enumsPrefix = yamlConfig.enumsPrefix!;
-    }
-    _replacementRules = yamlConfig.replacementRules;
-  }
-
-  /// Applies parameters directly from constructor
-  /// without config YAML file
-  Generator.fromString({
-    required String schemaContent,
-    required ProgrammingLanguage language,
-    bool isYaml = false,
-    bool freezed = false,
-    bool rootInterface = true,
-    String? clientPostfix,
-    bool squishClients = false,
-    bool pathMethodName = false,
-    bool enumsToJson = false,
-    bool enumsPrefix = false,
-    List<ReplacementRule> replacementRules = const [],
-  }) {
-    _schemaContent = schemaContent;
-    _outputDirectory = '';
-    _programmingLanguage = language;
-    _isYaml = isYaml;
-    _freezed = freezed;
-    _rootInterface = rootInterface;
-    _clientPostfix = clientPostfix ?? 'Client';
-    _squishClients = squishClients;
-    _pathMethodName = pathMethodName;
-    _enumsToJson = enumsToJson;
-    _enumsPrefix = enumsPrefix;
-    _replacementRules = replacementRules;
+    return Generator(
+      schemaContent: schemaContent,
+      outputDirectory: yamlConfig.outputDirectory,
+      isYaml: isYaml,
+      language: yamlConfig.language,
+      freezed: yamlConfig.freezed,
+      rootInterface: yamlConfig.rootInterface,
+      clientPostfix: yamlConfig.clientPostfix,
+      squishClients: yamlConfig.squishClients,
+      pathMethodName: yamlConfig.pathMethodName,
+      enumsToJson: yamlConfig.enumsToJson,
+      enumsPrefix: yamlConfig.enumsPrefix,
+      markFilesAsGenerated: yamlConfig.markFilesAsGenerated,
+      replacementRules: yamlConfig.replacementRules,
+    );
   }
 
   /// The contents of your schema file
-  late final String _schemaContent;
+  final String _schemaContent;
 
   /// Is the schema format YAML
-  bool _isYaml = false;
+  final bool _isYaml;
 
   /// Output directory
-  late final String _outputDirectory;
+  final String _outputDirectory;
 
   /// Output directory
-  ProgrammingLanguage _programmingLanguage = ProgrammingLanguage.dart;
+  final ProgrammingLanguage _programmingLanguage;
 
   /// Use freezed to generate DTOs
-  bool _freezed = false;
+  final bool _freezed;
 
   /// Generate root interface for all Clients
-  bool _rootInterface = true;
+  final bool _rootInterface;
 
   /// Client postfix
-  String _clientPostfix = 'Client';
+  final String _clientPostfix;
 
   /// Squish Clients in one folder
-  bool _squishClients = false;
+  final bool _squishClients;
 
   /// If true, use the endpoint path for the method name, if false, use operationId
-  bool _pathMethodName = false;
+  final bool _pathMethodName;
 
   /// If true, generated enums will have toJson method
-  bool _enumsToJson = false;
+  final bool _enumsToJson;
 
   /// If true, generated enums will have parent component name in its class name
-  bool _enumsPrefix = false;
+  final bool _enumsPrefix;
+
+  /// If true, generated files will be marked as generated
+  final bool _markFilesAsGenerated;
 
   /// List of rules used to replace patterns in generated class names
-  List<ReplacementRule> _replacementRules = [];
+  final List<ReplacementRule> _replacementRules;
 
+  /// Result open api info
   late final OpenApiInfo _openApiInfo;
 
   /// Result data classes
@@ -189,6 +169,7 @@ final class Generator {
       freezed: _freezed,
       squishClients: _squishClients,
       enumsToJson: _enumsToJson,
+      markFilesAsGenerated: _markFilesAsGenerated,
     );
     final files = <GeneratedFile>[];
     for (final client in _restClients) {

@@ -32,8 +32,9 @@ abstract class SomeClient {
     test('kotlin + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -242,8 +243,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -441,8 +443,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -562,8 +565,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -687,8 +691,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -770,8 +775,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -880,8 +886,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1053,8 +1060,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1157,8 +1165,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1286,8 +1295,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1460,8 +1470,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1687,8 +1698,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1774,8 +1786,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -1848,8 +1861,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -2070,8 +2084,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
@@ -2157,8 +2172,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController =
-          FillController(programmingLanguage: ProgrammingLanguage.kotlin);
+      const fillController = FillController(
+        programmingLanguage: ProgrammingLanguage.kotlin,
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import retrofit2.http.*
