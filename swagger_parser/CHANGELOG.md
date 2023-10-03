@@ -1,12 +1,12 @@
 ## 1.8.0
 - Multiple scheme support
+- Support for specifying nullable types via anyOf
 - Add new config parameter `root_client_name`
 - Add new config parameter `name`
 - Add new config parameter `put_in_folder`
 - Add new config parameter `squash_clients`
 - Rename `root_interface` to `root_client`
 - Rename `squish_clients` to `put_clients_in_folder`
-
 
 ## 1.7.0
 - Add new config parameter `mark_files_as_generated`

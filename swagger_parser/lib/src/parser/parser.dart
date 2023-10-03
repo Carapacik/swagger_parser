@@ -848,12 +848,7 @@ class OpenApiParser {
 
       final type = ofType?.type ?? _objectConst;
       final import = ofImport;
-      var defaultValue = map[_defaultConst]?.toString();
-
-      // TODO(StarProxima): remove this shit
-      if (defaultValue == '{}') {
-        defaultValue = null;
-      }
+      final defaultValue = map[_defaultConst]?.toString();
 
       return (
         type: UniversalType(
@@ -897,12 +892,7 @@ class OpenApiParser {
         }
       }
 
-      var defaultValue = map[_defaultConst]?.toString();
-
-      // TODO(StarProxima): remove this shit
-      if (defaultValue == '{}') {
-        defaultValue = null;
-      }
+      final defaultValue = map[_defaultConst]?.toString();
 
       return (
         type: UniversalType(
