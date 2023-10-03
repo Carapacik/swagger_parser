@@ -7,7 +7,7 @@ import 'models/universal_rest_client.dart';
 
 /// Handles generating files
 final class FillController {
-  /// Constructor that accepts configuration parameters for creating files
+  /// Constructor that accepts configuration parameters with default values to create files
   const FillController({
     OpenApiInfo openApiInfo = const OpenApiInfo(),
     ProgrammingLanguage programmingLanguage = ProgrammingLanguage.dart,
@@ -15,12 +15,14 @@ final class FillController {
     bool squishClients = false,
     bool freezed = false,
     bool enumsToJson = false,
+    bool markFilesAsGenerated = false,
   })  : _openApiInfo = openApiInfo,
         _clientPostfix = clientPostfix,
         _programmingLanguage = programmingLanguage,
         _squishClients = squishClients,
         _freezed = freezed,
-        _enumsToJson = enumsToJson;
+        _enumsToJson = enumsToJson,
+        _markFilesAsGenerated = markFilesAsGenerated;
 
   final OpenApiInfo _openApiInfo;
   final ProgrammingLanguage _programmingLanguage;
@@ -28,6 +30,7 @@ final class FillController {
   final bool _freezed;
   final bool _squishClients;
   final bool _enumsToJson;
+  final bool _markFilesAsGenerated;
 
   /// Return [GeneratedFile] generated from given [UniversalDataClass]
   GeneratedFile fillDtoContent(UniversalDataClass dataClass) => GeneratedFile(
@@ -38,6 +41,7 @@ final class FillController {
           dataClass,
           freezed: _freezed,
           enumsToJson: _enumsToJson,
+          markFilesAsGenerated: _markFilesAsGenerated,
         ),
       );
 
@@ -53,6 +57,7 @@ final class FillController {
       contents: _programmingLanguage.restClientFileContent(
         restClient,
         restClient.name.toPascal + _clientPostfix.toPascal,
+        markFilesAsGenerated: _markFilesAsGenerated,
       ),
     );
   }
@@ -67,6 +72,7 @@ final class FillController {
         openApiInfo: _openApiInfo,
         postfix: _clientPostfix.toPascal,
         squishClients: _squishClients,
+        markFilesAsGenerated: _markFilesAsGenerated,
       ),
     );
   }

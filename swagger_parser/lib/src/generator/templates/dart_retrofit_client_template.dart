@@ -13,10 +13,13 @@ import '../models/universal_type.dart';
 String dartRetrofitClientTemplate({
   required UniversalRestClient restClient,
   required String name,
+  required bool markFileAsGenerated,
 }) {
   final sb = StringBuffer(
     '''
-${_fileImport(restClient)}import 'package:dio/dio.dart';
+${generatedFileComment(
+      markFileAsGenerated: markFileAsGenerated,
+    )}${_fileImport(restClient)}import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../shared_models/')}
 part '${name.toSnake}.g.dart';
