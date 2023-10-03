@@ -19,7 +19,6 @@ String dartRetrofitClientTemplate({
     '''
 ${generatedFileComment(
       markFileAsGenerated: markFileAsGenerated,
-      ignoreLints: true,
     )}${_fileImport(restClient)}import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}

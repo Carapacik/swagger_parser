@@ -16,7 +16,6 @@ String dartJsonSerializableDtoTemplate(
   return '''
 ${generatedFileComment(
     markFileAsGenerated: markFileAsGenerated,
-    ignoreLints: true,
   )}${ioImport(dataClass)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.g.dart';

@@ -16,7 +16,6 @@ String dartFreezedDtoTemplate(
   return '''
 ${generatedFileComment(
     markFileAsGenerated: markFileAsGenerated,
-    ignoreLints: true,
   )}${ioImport(dataClass)}import 'package:freezed_annotation/freezed_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.freezed.dart';

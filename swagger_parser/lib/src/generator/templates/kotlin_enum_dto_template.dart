@@ -9,7 +9,7 @@ String kotlinEnumDtoTemplate(
   required bool markFileAsGenerated,
 }) {
   return '''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}import com.squareup.moshi.Json
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated, ignoreLints: false)}import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
