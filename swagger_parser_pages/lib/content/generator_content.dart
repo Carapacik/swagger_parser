@@ -16,8 +16,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
   ProgrammingLanguage _language = ProgrammingLanguage.dart;
   bool _isYaml = false;
   bool _freezed = false;
-  bool _rootInterface = true;
-  bool _squishClients = false;
+  bool _rootClient = true;
+  bool _putClientsInFolder = false;
   bool _pathMethodName = false;
   bool _markFilesAsGenerated = false;
   bool _enumsToJson = false;
@@ -130,9 +130,9 @@ class _GeneratorContentState extends State<GeneratorContent> {
                           title: const Text(
                             'Generate root interface for REST clients',
                           ),
-                          value: _rootInterface,
+                          value: _rootClient,
                           onChanged: (value) =>
-                              setState(() => _rootInterface = value!),
+                              setState(() => _rootClient = value!),
                         ),
                       ),
                     ),
@@ -172,9 +172,9 @@ class _GeneratorContentState extends State<GeneratorContent> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         title: const Text('Squish client folders into one?'),
-                        value: _squishClients,
+                        value: _putClientsInFolder,
                         onChanged: (value) =>
-                            setState(() => _squishClients = value!),
+                            setState(() => _putClientsInFolder = value!),
                       ),
                     ),
                     StatefulBuilder(
@@ -248,9 +248,9 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             language: _language,
                             isYaml: _isYaml,
                             freezed: _freezed,
-                            rootInterface: _rootInterface,
+                            rootClient: _rootClient,
                             rootClientName: _rootClientName.text,
-                            squishClients: _squishClients,
+                            putClientsInFolder: _putClientsInFolder,
                             pathMethodName: _pathMethodName,
                             markFilesAsGenerated: _markFilesAsGenerated,
                             enumsToJson: _enumsToJson,
@@ -274,9 +274,9 @@ Future<void> _generateOutputs(
   required String clientPostfix,
   required ProgrammingLanguage language,
   required bool freezed,
-  required bool squishClients,
+  required bool putClientsInFolder,
   required bool isYaml,
-  required bool rootInterface,
+  required bool rootClient,
   required String rootClientName,
   required bool pathMethodName,
   required bool enumsToJson,
@@ -290,10 +290,10 @@ Future<void> _generateOutputs(
     language: language,
     outputDirectory: '',
     freezed: freezed,
-    rootInterface: rootInterface,
+    rootClient: rootClient,
     rootClientName: rootClientName.trim().isEmpty ? null : rootClientName,
     clientPostfix: clientPostfix.trim().isEmpty ? null : clientPostfix,
-    squishClients: squishClients,
+    putClientsInFolder: putClientsInFolder,
     pathMethodName: pathMethodName,
     enumsToJson: enumsToJson,
     enumsPrefix: enumsPrefix,

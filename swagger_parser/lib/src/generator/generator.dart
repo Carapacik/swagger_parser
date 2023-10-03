@@ -8,7 +8,7 @@ import 'fill_controller.dart';
 import 'generator_exception.dart';
 import 'models/generated_file.dart';
 import 'models/open_api_info.dart';
-import 'models/programming_lang.dart';
+import 'models/programming_language.dart';
 import 'models/replacement_rule.dart';
 import 'models/universal_data_class.dart';
 import 'models/universal_rest_client.dart';
@@ -26,10 +26,10 @@ final class Generator {
     String? name,
     bool? isYaml,
     bool? freezed,
-    bool? rootInterface,
+    bool? rootClient,
     String? clientPostfix,
     String? rootClientName,
-    bool? squishClients,
+    bool? putClientsInFolder,
     bool? pathMethodName,
     bool? putInFolder,
     bool? enumsToJson,
@@ -42,10 +42,10 @@ final class Generator {
         _programmingLanguage = language ?? ProgrammingLanguage.dart,
         _isYaml = isYaml ?? false,
         _freezed = freezed ?? false,
-        _rootInterface = rootInterface ?? true,
+        _rootClient = rootClient ?? true,
         _rootClientName = rootClientName ?? 'RestClient',
         _clientPostfix = clientPostfix ?? 'Client',
-        _squishClients = squishClients ?? false,
+        _putClientsInFolder = putClientsInFolder ?? false,
         _pathMethodName = pathMethodName ?? false,
         _putInFolder = putInFolder ?? false,
         _enumsToJson = enumsToJson ?? false,
@@ -55,13 +55,13 @@ final class Generator {
 
   /// Applies parameters set from yaml config file
   factory Generator.fromYamlConfig(YamlConfig yamlConfig) {
-    final schemaFilePath = yamlConfig.schemaFilePath;
-    final configFile = schemaFile(schemaFilePath);
+    final schemaPath = yamlConfig.schemaPath;
+    final configFile = schemaFile(schemaPath);
     if (configFile == null) {
-      throw GeneratorException("Can't find schema file at $schemaFilePath.");
+      throw GeneratorException("Can't find schema file at $schemaPath.");
     }
 
-    final isYaml = p.extension(schemaFilePath).toLowerCase() == '.yaml';
+    final isYaml = p.extension(schemaPath).toLowerCase() == '.yaml';
     final schemaContent = configFile.readAsStringSync();
 
     return Generator(
@@ -71,10 +71,10 @@ final class Generator {
       name: yamlConfig.name,
       isYaml: isYaml,
       freezed: yamlConfig.freezed,
-      rootInterface: yamlConfig.rootInterface,
+      rootClient: yamlConfig.rootClient,
       rootClientName: yamlConfig.rootClientName,
       clientPostfix: yamlConfig.clientPostfix,
-      squishClients: yamlConfig.squishClients,
+      putClientsInFolder: yamlConfig.putClientsInFolder,
       pathMethodName: yamlConfig.pathMethodName,
       putInFolder: yamlConfig.putInFolder,
       enumsToJson: yamlConfig.enumsToJson,
@@ -103,7 +103,7 @@ final class Generator {
   final bool _freezed;
 
   /// Generate root interface for all Clients
-  final bool _rootInterface;
+  final bool _rootClient;
 
   /// Root client name
   final String _rootClientName;
@@ -112,7 +112,7 @@ final class Generator {
   final String _clientPostfix;
 
   /// Squish Clients in one folder
-  final bool _squishClients;
+  final bool _putClientsInFolder;
 
   /// If true, use the endpoint path for the method name, if false, use operationId
   final bool _pathMethodName;
@@ -188,7 +188,7 @@ final class Generator {
       rootClientName: _rootClientName,
       clientPostfix: _clientPostfix,
       freezed: _freezed,
-      squishClients: _squishClients,
+      putClientsInFolder: _putClientsInFolder,
       enumsToJson: _enumsToJson,
       markFilesAsGenerated: _markFilesAsGenerated,
     );
@@ -199,10 +199,10 @@ final class Generator {
     for (final dataClass in _dataClasses) {
       files.add(fillController.fillDtoContent(dataClass));
     }
-    if (_rootInterface &&
+    if (_rootClient &&
         _programmingLanguage == ProgrammingLanguage.dart &&
         _restClients.isNotEmpty) {
-      files.add(fillController.fillRootInterface(_restClients));
+      files.add(fillController.fillRootClient(_restClients));
     }
     return files;
   }

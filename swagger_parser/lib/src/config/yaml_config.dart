@@ -1,7 +1,7 @@
 import 'package:args/args.dart';
 import 'package:yaml/yaml.dart';
 
-import '../generator/models/programming_lang.dart';
+import '../generator/models/programming_language.dart';
 import '../generator/models/replacement_rule.dart';
 import '../utils/file_utils.dart';
 import 'config_exception.dart';
@@ -17,15 +17,15 @@ import 'config_exception.dart';
 final class YamlConfig {
   /// Applies parameters directly from constructor
   const YamlConfig({
-    required this.schemaFilePath,
+    required this.schemaPath,
     required this.outputDirectory,
-    this.name,
+    required this.name,
     this.language,
     this.freezed,
-    this.rootInterface,
+    this.rootClient,
     this.rootClientName,
     this.clientPostfix,
-    this.squishClients,
+    this.putClientsInFolder,
     this.pathMethodName,
     this.putInFolder,
     this.enumsToJson,
@@ -88,10 +88,11 @@ final class YamlConfig {
       throw const ConfigException("Config parameter 'freezed' must be bool.");
     }
 
-    final rootInterface = yamlConfig['root_interface'];
-    if (rootInterface is! bool?) {
+    final rootClient =
+        yamlConfig['root_client'] ?? yamlConfig['root_interface'];
+    if (rootClient is! bool?) {
       throw const ConfigException(
-        "Config parameter 'root_interface' must be bool.",
+        "Config parameter 'root_client' must be bool.",
       );
     }
 
@@ -107,10 +108,11 @@ final class YamlConfig {
     final clientPostfix =
         rawClientPostfix?.isEmpty ?? false ? null : rawClientPostfix;
 
-    final squishClients = yamlConfig['squish_clients'];
-    if (squishClients is! bool?) {
+    final putClientsInFolder =
+        yamlConfig['put_clients_in_folder'] ?? yamlConfig['squish_clients'];
+    if (putClientsInFolder is! bool?) {
       throw const ConfigException(
-        "Config parameter 'squish_clients' must be bool.",
+        "Config parameter 'put_clients_in_folder' must be bool.",
       );
     }
 
@@ -183,22 +185,20 @@ final class YamlConfig {
         "Config parameter 'name' must be String.",
       );
     }
-    final name = rawName?.isEmpty ?? true
-        ? schemaPath.split('/').lastOrNull?.split('.').firstOrNull
+    final name = rawName == null || rawName.isEmpty
+        ? schemaPath.split('/').last.split('.').first
         : rawName;
 
-    // print(name)
-
     return YamlConfig(
-      schemaFilePath: schemaPath,
+      schemaPath: schemaPath,
       outputDirectory: outputDirectory,
       name: name,
       language: language ?? rootConfig?.language,
       freezed: freezed ?? rootConfig?.freezed,
-      rootInterface: rootInterface ?? rootConfig?.rootInterface,
+      rootClient: rootClient ?? rootConfig?.rootClient,
       rootClientName: rootClientName ?? rootConfig?.rootClientName,
       clientPostfix: clientPostfix ?? rootConfig?.clientPostfix,
-      squishClients: squishClients ?? rootConfig?.squishClients,
+      putClientsInFolder: putClientsInFolder ?? rootConfig?.putClientsInFolder,
       pathMethodName: pathMethodName ?? rootConfig?.pathMethodName,
       putInFolder: putInFolder ?? rootConfig?.putInFolder,
       enumsToJson: enumsToJson ?? rootConfig?.enumsToJson,
@@ -279,15 +279,15 @@ final class YamlConfig {
     return configs;
   }
 
-  final String? name;
-  final String schemaFilePath;
+  final String name;
+  final String schemaPath;
   final String outputDirectory;
   final ProgrammingLanguage? language;
   final bool? freezed;
   final String? clientPostfix;
-  final bool? rootInterface;
+  final bool? rootClient;
   final String? rootClientName;
-  final bool? squishClients;
+  final bool? putClientsInFolder;
   final bool? pathMethodName;
   final bool? putInFolder;
   final bool? enumsToJson;

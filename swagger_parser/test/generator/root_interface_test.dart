@@ -6,7 +6,7 @@ void main() {
   group('Empty root interface', () {
     test('dart', () async {
       const fillController = FillController();
-      final filledContent = fillController.fillRootInterface([]);
+      final filledContent = fillController.fillRootClient([]);
       const expectedContents = '';
       expect(filledContent.contents, expectedContents);
     });
@@ -18,7 +18,7 @@ void main() {
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
       ];
       const fillController = FillController();
-      final filledContent = fillController.fillRootInterface(clients);
+      final filledContent = fillController.fillRootClient(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 
@@ -58,7 +58,7 @@ class RestClient implements IRestClient {
         const UniversalRestClient(name: 'Five', imports: {}, requests: []),
       ];
       const fillController = FillController();
-      final filledContent = fillController.fillRootInterface(clients);
+      final filledContent = fillController.fillRootClient(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 
@@ -121,8 +121,8 @@ class RestClient implements IRestClient {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
       ];
-      const fillController = FillController(squishClients: true);
-      final filledContent = fillController.fillRootInterface(clients);
+      const fillController = FillController(putClientsInFolder: true);
+      final filledContent = fillController.fillRootClient(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 
@@ -161,8 +161,8 @@ class RestClient implements IRestClient {
         const UniversalRestClient(name: 'Four', imports: {}, requests: []),
         const UniversalRestClient(name: 'Five', imports: {}, requests: []),
       ];
-      const fillController = FillController(squishClients: true);
-      final filledContent = fillController.fillRootInterface(clients);
+      const fillController = FillController(putClientsInFolder: true);
+      final filledContent = fillController.fillRootClient(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
 

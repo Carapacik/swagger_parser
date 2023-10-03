@@ -2,12 +2,12 @@ import '../../utils/case_utils.dart';
 import '../../utils/utils.dart';
 import '../models/open_api_info.dart';
 
-String dartRootInterfaceTemplate({
+String dartRootClientTemplate({
   required OpenApiInfo openApiInfo,
   required String name,
   required Set<String> clientsNames,
   required String postfix,
-  required bool squishClients,
+  required bool putClientsInFolder,
   required bool markFileAsGenerated,
 }) {
   if (clientsNames.isEmpty) {
@@ -34,7 +34,7 @@ String dartRootInterfaceTemplate({
 ${generatedFileComment(
     markFileAsGenerated: markFileAsGenerated,
   )}import 'package:dio/dio.dart';
-${_clientsImport(clientsNames, postfix, squishClients: squishClients)}
+${_clientsImport(clientsNames, postfix, putClientsInFolder: putClientsInFolder)}
 abstract class I$name {
 ${_interfaceGetters(clientsNames, postfix)}
 }
@@ -59,10 +59,11 @@ ${_r(clientsNames, postfix)}
 String _clientsImport(
   Set<String> imports,
   String postfix, {
-  required bool squishClients,
+  required bool putClientsInFolder,
 }) =>
     '\n${imports.map(
-          (import) => "import '${squishClients ? 'clients' : import.toSnake}/"
+          (import) =>
+              "import '${putClientsInFolder ? 'clients' : import.toSnake}/"
               "${'${import}_$postfix'.toSnake}.dart';",
         ).join('\n')}\n';
 

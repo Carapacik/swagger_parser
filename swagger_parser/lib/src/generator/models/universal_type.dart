@@ -1,5 +1,5 @@
 import '../../utils/type_utils.dart';
-import 'programming_lang.dart';
+import 'programming_language.dart';
 
 /// Universal template for containing information about type
 final class UniversalType {

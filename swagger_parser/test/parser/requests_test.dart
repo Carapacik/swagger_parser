@@ -10,9 +10,9 @@ import 'package:test/test.dart';
 void main() {
   group('Paths check', () {
     test('basic paths check 2.0', () async {
-      final schemaFilePath =
+      final schemaPath =
           p.join('test', 'parser', 'schemas', 'basic_requests.2.0.json');
-      final configFile = schemaFile(schemaFilePath);
+      final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
       final actualDataClass = parser.parseRestClients().toList();
@@ -111,9 +111,9 @@ void main() {
     });
 
     test('basic paths check 3.0', () async {
-      final schemaFilePath =
+      final schemaPath =
           p.join('test', 'parser', 'schemas', 'basic_requests.3.0.json');
-      final configFile = schemaFile(schemaFilePath);
+      final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
       final actualDataClass = parser.parseRestClients().toList();
