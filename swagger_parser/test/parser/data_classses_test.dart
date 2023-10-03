@@ -300,6 +300,7 @@ void main() {
           ],
         ),
       ];
+      expect(dataClasses.length, expectedDataClasses.length);
       for (var i = 0; i < dataClasses.length; i++) {
         expect(dataClasses[i], expectedDataClasses[i]);
       }
@@ -312,7 +313,7 @@ void main() {
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
       final dataClasses = parser.parseDataClasses().toList();
-      const expectedDataClasses = [
+      const expectedDataClasses = <UniversalDataClass>[
         UniversalComponentClass(
           name: 'ClassName',
           imports: {'AnotherClass'},
@@ -350,9 +351,103 @@ void main() {
           ],
         ),
       ];
+      expect(dataClasses.length, expectedDataClasses.length);
       for (var i = 0; i < dataClasses.length; i++) {
         expect(dataClasses[i], expectedDataClasses[i]);
       }
+    });
+
+    test('of-like params types check 3.1', () async {
+      final schemaPath =
+          p.join('test', 'parser', 'schemas', 'of_like_class.3.1.json');
+      final configFile = schemaFile(schemaPath);
+      final schemaContent = configFile!.readAsStringSync();
+      final parser = OpenApiParser(schemaContent);
+      final dataClasses = parser.parseDataClasses().toList();
+      const expectedDataClasses = <UniversalDataClass>[
+        UniversalComponentClass(
+          name: 'OneOfElement',
+          imports: {'EnumClass'},
+          parameters: [
+            UniversalType(
+              type: 'EnumClass',
+              name: 'allClass',
+              jsonKey: 'allClass',
+              isRequired: false,
+            ),
+            UniversalType(
+              type: 'EnumClass',
+              name: 'anyClass',
+              jsonKey: 'anyClass',
+              enumType: 'EnumClass',
+              defaultValue: 'value1',
+              isRequired: false,
+            ),
+            UniversalType(
+              type: 'EnumClass',
+              name: 'oneClass',
+              jsonKey: 'oneClass',
+              isRequired: false,
+            ),
+            UniversalType(
+              type: 'integer',
+              name: 'allType',
+              jsonKey: 'allType',
+              isRequired: false,
+            ),
+            UniversalType(
+              type: 'string',
+              format: 'date-time',
+              name: 'anyType',
+              jsonKey: 'anyType',
+              isRequired: false,
+            ),
+            UniversalType(
+              type: 'EnumClass',
+              name: 'oneType',
+              jsonKey: 'oneType',
+              defaultValue: '[]',
+              arrayDepth: 1,
+              isRequired: false,
+            ),
+            UniversalType(
+              type: 'EnumClass',
+              name: 'nullableClass',
+              jsonKey: 'nullableClass',
+              nullable: true,
+              isRequired: false,
+            ),
+            UniversalType(
+              type: 'EnumClass',
+              name: 'nullableType',
+              jsonKey: 'nullableType',
+              defaultValue: '[]',
+              arrayDepth: 1,
+              nullable: true,
+              isRequired: false,
+            ),
+          ],
+        ),
+        UniversalEnumClass(
+          name: 'EnumClass',
+          type: 'string',
+          items: {'value1', 'value2'},
+        ),
+      ];
+
+      expect(dataClasses.length, expectedDataClasses.length);
+      final item1 = dataClasses[0] as UniversalComponentClass;
+      final item2 = dataClasses[1] as UniversalEnumClass;
+      final expectedItem1 = expectedDataClasses[0] as UniversalComponentClass;
+      final expectedItem2 = expectedDataClasses[1] as UniversalEnumClass;
+      expect(item1.parameters.length, expectedItem1.parameters.length);
+      for (var i = 0; i < item1.parameters.length; i++) {
+        expect(
+          item1.parameters[i],
+          expectedItem1.parameters[i],
+        );
+      }
+      expect(item2, expectedItem2);
     });
   });
 }

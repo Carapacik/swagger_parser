@@ -15,8 +15,8 @@ void main() {
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
-      final actualDataClass = parser.parseRestClients().toList();
-      const expectedDataClass = [
+      final actualRestClients = parser.parseRestClients().toList();
+      const expectedRestClients = [
         UniversalRestClient(
           name: 'Auth',
           imports: {'RegisterUserDto'},
@@ -105,8 +105,8 @@ void main() {
           ],
         ),
       ];
-      for (var i = 0; i < actualDataClass.length; i++) {
-        expect(actualDataClass.last, expectedDataClass.last);
+      for (var i = 0; i < actualRestClients.length; i++) {
+        expect(actualRestClients.last, expectedRestClients.last);
       }
     });
 
@@ -116,8 +116,8 @@ void main() {
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
-      final actualDataClass = parser.parseRestClients().toList();
-      const expectedDataClass = [
+      final actualRestClients = parser.parseRestClients().toList();
+      const expectedRestClients = [
         UniversalRestClient(
           name: 'Auth',
           imports: {'RegisterUserDto'},
@@ -203,8 +203,8 @@ void main() {
           ],
         ),
       ];
-      for (var i = 0; i < actualDataClass.length; i++) {
-        expect(actualDataClass.last, expectedDataClass.last);
+      for (var i = 0; i < actualRestClients.length; i++) {
+        expect(actualRestClients.last, expectedRestClients.last);
       }
     });
   });

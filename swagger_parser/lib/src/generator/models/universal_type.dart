@@ -119,6 +119,11 @@ final class UniversalType {
       enumType.hashCode ^
       arrayDepth.hashCode ^
       nullable.hashCode;
+
+  @override
+  String toString() {
+    return 'UniversalType(\ntype: $type,\nname: $name,\ndescription: $description,\nformat: $format,\njsonKey: $jsonKey,\ndefaultValue: $defaultValue,\nisRequired: $isRequired,\nenumType: $enumType,\narrayDepth: $arrayDepth,\nnullable: $nullable\n)';
+  }
 }
 
 /// Converts [UniversalType] to type from specified language
