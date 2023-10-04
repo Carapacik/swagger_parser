@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../generator/models/programming_lang.dart';
+import '../generator/models/programming_language.dart';
 import '../generator/models/universal_data_class.dart';
 import '../generator/models/universal_type.dart';
 import '../utils/case_utils.dart';

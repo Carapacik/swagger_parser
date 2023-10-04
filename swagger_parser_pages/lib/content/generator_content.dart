@@ -10,15 +10,19 @@ class GeneratorContent extends StatefulWidget {
 }
 
 class _GeneratorContentState extends State<GeneratorContent> {
-  late final TextEditingController _schemaController = TextEditingController();
-  late final TextEditingController _clientPostfix = TextEditingController();
+  late final _schemaController = TextEditingController();
+  late final _clientPostfix = TextEditingController();
+  late final _name = TextEditingController();
+  late final _rootClientName = TextEditingController();
   ProgrammingLanguage _language = ProgrammingLanguage.dart;
   bool _isYaml = false;
   bool _freezed = false;
-  bool _rootInterface = true;
-  bool _squishClients = false;
+  bool _rootClient = true;
+  bool _putClientsInFolder = false;
+  bool _putInFolder = false;
   bool _pathMethodName = false;
-  bool _markFilesAsGenerated = false;
+  bool _squashClients = false;
+  bool _markFilesAsGenerated = true;
   bool _enumsToJson = false;
   bool _enumsPrefix = false;
 
@@ -26,6 +30,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
   void dispose() {
     _schemaController.dispose();
     _clientPostfix.dispose();
+    _name.dispose();
+    _rootClientName.dispose();
     super.dispose();
   }
 
@@ -104,6 +110,17 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         ),
                       ),
                     ),
+                    TextField(
+                      controller: _clientPostfix,
+                      decoration: const InputDecoration(
+                        labelStyle: TextStyle(fontSize: 18),
+                        hintText: 'Name',
+                        hintStyle: TextStyle(fontSize: 18),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                      ),
+                      style: const TextStyle(fontSize: 24),
+                    ),
                     StatefulBuilder(
                       builder: (context, setState) => CheckboxListTile(
                         shape: RoundedRectangleBorder(
@@ -121,22 +138,41 @@ class _GeneratorContentState extends State<GeneratorContent> {
                           : CrossFadeState.showFirst,
                       sizeCurve: Curves.fastOutSlowIn,
                       firstChild: Container(),
+                      secondChild: TextField(
+                        controller: _rootClientName,
+                        decoration: const InputDecoration(
+                          labelStyle: TextStyle(fontSize: 18),
+                          hintText: 'Root client name',
+                          hintStyle: TextStyle(fontSize: 18),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                    ),
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 600),
+                      crossFadeState: _language == ProgrammingLanguage.dart
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      sizeCurve: Curves.fastOutSlowIn,
+                      firstChild: Container(),
                       secondChild: StatefulBuilder(
                         builder: (context, setState) => CheckboxListTile(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
                           title: const Text(
-                            'Generate root interface for REST clients',
+                            'Generate root client for REST clients',
                           ),
-                          value: _rootInterface,
+                          value: _rootClient,
                           onChanged: (value) =>
-                              setState(() => _rootInterface = value!),
+                              setState(() => _rootClient = value!),
                         ),
                       ),
                     ),
                     TextField(
-                      controller: _clientPostfix,
+                      controller: _name,
                       decoration: const InputDecoration(
                         labelStyle: TextStyle(fontSize: 18),
                         hintText: 'Postfix for client classes',
@@ -151,10 +187,32 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        title: const Text('Squish client folders into one?'),
-                        value: _squishClients,
+                        title: const Text('Put the all api in its folder'),
+                        value: _putInFolder,
                         onChanged: (value) =>
-                            setState(() => _squishClients = value!),
+                            setState(() => _putInFolder = value!),
+                      ),
+                    ),
+                    StatefulBuilder(
+                      builder: (context, setState) => CheckboxListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        title: const Text('Put all clients in clients folder'),
+                        value: _putClientsInFolder,
+                        onChanged: (value) =>
+                            setState(() => _putClientsInFolder = value!),
+                      ),
+                    ),
+                    StatefulBuilder(
+                      builder: (context, setState) => CheckboxListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        title: const Text('Squash all clients in one client'),
+                        value: _squashClients,
+                        onChanged: (value) =>
+                            setState(() => _squashClients = value!),
                       ),
                     ),
                     StatefulBuilder(
@@ -228,9 +286,13 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             language: _language,
                             isYaml: _isYaml,
                             freezed: _freezed,
-                            rootInterface: _rootInterface,
-                            squishClients: _squishClients,
+                            rootClient: _rootClient,
+                            rootClientName: _rootClientName.text,
+                            name: _name.text,
+                            putInFolder: _putInFolder,
+                            putClientsInFolder: _putClientsInFolder,
                             pathMethodName: _pathMethodName,
+                            squashClients: _squashClients,
                             markFilesAsGenerated: _markFilesAsGenerated,
                             enumsToJson: _enumsToJson,
                             enumsPrefix: _enumsPrefix,
@@ -253,9 +315,13 @@ Future<void> _generateOutputs(
   required String clientPostfix,
   required ProgrammingLanguage language,
   required bool freezed,
-  required bool squishClients,
+  required String name,
+  required bool putInFolder,
+  required bool putClientsInFolder,
+  required bool squashClients,
   required bool isYaml,
-  required bool rootInterface,
+  required bool rootClient,
+  required String rootClientName,
   required bool pathMethodName,
   required bool enumsToJson,
   required bool enumsPrefix,
@@ -268,9 +334,13 @@ Future<void> _generateOutputs(
     language: language,
     outputDirectory: '',
     freezed: freezed,
-    rootInterface: rootInterface,
+    rootClient: rootClient,
+    rootClientName: rootClientName.trim().isEmpty ? null : rootClientName,
     clientPostfix: clientPostfix.trim().isEmpty ? null : clientPostfix,
-    squishClients: squishClients,
+    name: name.trim().isEmpty ? null : name,
+    putInFolder: putInFolder,
+    putClientsInFolder: putClientsInFolder,
+    squashClients: squashClients,
     pathMethodName: pathMethodName,
     enumsToJson: enumsToJson,
     enumsPrefix: enumsPrefix,
