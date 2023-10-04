@@ -29,7 +29,7 @@ class RestClient {
     Dio dio, {
     String? baseUrl,
   })  : _dio = dio,
-      _baseUrl = baseUrl;
+        _baseUrl = baseUrl;
 
   final Dio _dio;
   final String? _baseUrl;
@@ -68,7 +68,7 @@ class RestClient {
     Dio dio, {
     String? baseUrl,
   })  : _dio = dio,
-      _baseUrl = baseUrl;
+        _baseUrl = baseUrl;
 
   final Dio _dio;
   final String? _baseUrl;
@@ -111,7 +111,7 @@ class RestClient {
     Dio dio, {
     String? baseUrl,
   })  : _dio = dio,
-      _baseUrl = baseUrl;
+        _baseUrl = baseUrl;
 
   final Dio _dio;
   final String? _baseUrl;
@@ -150,7 +150,7 @@ class RestClient {
     Dio dio, {
     String? baseUrl,
   })  : _dio = dio,
-      _baseUrl = baseUrl;
+        _baseUrl = baseUrl;
 
   final Dio _dio;
   final String? _baseUrl;
