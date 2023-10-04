@@ -26,7 +26,7 @@ part '${name.toSnake}.g.dart';
 
 @RestApi()
 abstract class $name {
-  factory $name(Dio dio, {String baseUrl}) = _$name;
+  factory $name(Dio dio, {String? baseUrl}) = _$name;
 ''',
   );
   for (final request in restClient.requests) {

@@ -35,19 +35,14 @@ ${generatedFileComment(
     markFileAsGenerated: markFileAsGenerated,
   )}import 'package:dio/dio.dart';
 ${_clientsImport(clientsNames, postfix, putClientsInFolder: putClientsInFolder)}
-abstract class I$className {
-${_interfaceGetters(clientsNames, postfix)}
-}
-
-${descriptionComment(comment)}class $className implements I$className {
-  $className({
-    required Dio dio,
-    required String baseUrl,
-  })  : _dio = dio,
-        _baseUrl = baseUrl;
+${descriptionComment(comment)}class $className {
+  $className(
+    this._dio, {
+    String? baseUrl,
+  })  : _baseUrl = baseUrl;
 
   final Dio _dio;
-  final String _baseUrl;
+  final String? _baseUrl;
 
 ${_p(clientsNames, postfix)}
 
@@ -77,8 +72,7 @@ String _p(Set<String> names, String postfix) => names
 
 String _r(Set<String> names, String postfix) => names
     .map(
-      (n) =>
-          '  @override\n  ${n.toPascal + postfix.toPascal} get ${n.toCamel} => '
+      (n) => '  ${n.toPascal + postfix.toPascal} get ${n.toCamel} => '
           '_${n.toCamel} ??= ${n.toPascal + postfix.toPascal}(_dio, baseUrl: _baseUrl);',
     )
     .join('\n\n');

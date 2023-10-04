@@ -126,7 +126,7 @@ swagger_parser:
     - schema_path: specs/openapi.json
       name: pet_service
       client_postfix: Repository
-      squish_clients: true
+      put_clients_in_folder: true
       enums_to_json: true
       put_in_folder: true
       

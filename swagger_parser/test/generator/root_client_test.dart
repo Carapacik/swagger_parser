@@ -24,23 +24,17 @@ import 'package:dio/dio.dart';
 
 import 'one/one_client.dart';
 
-abstract class IRestClient {
-  OneClient get one;
-}
-
-class RestClient implements IRestClient {
-  RestClient({
-    required Dio dio,
-    required String baseUrl,
-  })  : _dio = dio,
-        _baseUrl = baseUrl;
+class RestClient {
+  RestClient(
+    this._dio, {
+    String? baseUrl,
+  })  : _baseUrl = baseUrl;
 
   final Dio _dio;
-  final String _baseUrl;
+  final String? _baseUrl;
 
   OneClient? _one;
 
-  @override
   OneClient get one => _one ??= OneClient(_dio, baseUrl: _baseUrl);
 }
 ''';
@@ -68,27 +62,14 @@ import 'three/three_client.dart';
 import 'four/four_client.dart';
 import 'five/five_client.dart';
 
-abstract class IRestClient {
-  OneClient get one;
-
-  TwoClient get two;
-
-  ThreeClient get three;
-
-  FourClient get four;
-
-  FiveClient get five;
-}
-
-class RestClient implements IRestClient {
-  RestClient({
-    required Dio dio,
-    required String baseUrl,
-  })  : _dio = dio,
-        _baseUrl = baseUrl;
+class RestClient {
+  RestClient(
+    this._dio, {
+    String? baseUrl,
+  })  : _baseUrl = baseUrl;
 
   final Dio _dio;
-  final String _baseUrl;
+  final String? _baseUrl;
 
   OneClient? _one;
   TwoClient? _two;
@@ -96,19 +77,14 @@ class RestClient implements IRestClient {
   FourClient? _four;
   FiveClient? _five;
 
-  @override
   OneClient get one => _one ??= OneClient(_dio, baseUrl: _baseUrl);
 
-  @override
   TwoClient get two => _two ??= TwoClient(_dio, baseUrl: _baseUrl);
 
-  @override
   ThreeClient get three => _three ??= ThreeClient(_dio, baseUrl: _baseUrl);
 
-  @override
   FourClient get four => _four ??= FourClient(_dio, baseUrl: _baseUrl);
 
-  @override
   FiveClient get five => _five ??= FiveClient(_dio, baseUrl: _baseUrl);
 }
 ''';
@@ -116,7 +92,7 @@ class RestClient implements IRestClient {
     });
   });
 
-  group('root client with one client and squish', () {
+  group('root client with one client and put clients in folder', () {
     test('dart', () async {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
@@ -128,23 +104,17 @@ import 'package:dio/dio.dart';
 
 import 'clients/one_client.dart';
 
-abstract class IRestClient {
-  OneClient get one;
-}
-
-class RestClient implements IRestClient {
-  RestClient({
-    required Dio dio,
-    required String baseUrl,
-  })  : _dio = dio,
-        _baseUrl = baseUrl;
+class RestClient {
+  RestClient(
+    this._dio, {
+    String? baseUrl,
+  })  : _baseUrl = baseUrl;
 
   final Dio _dio;
-  final String _baseUrl;
+  final String? _baseUrl;
 
   OneClient? _one;
 
-  @override
   OneClient get one => _one ??= OneClient(_dio, baseUrl: _baseUrl);
 }
 ''';
@@ -152,7 +122,7 @@ class RestClient implements IRestClient {
     });
   });
 
-  group('root client with multiple clients and squish', () {
+  group('root client with multiple clients and put clients in folder', () {
     test('dart', () async {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
@@ -172,27 +142,14 @@ import 'clients/three_client.dart';
 import 'clients/four_client.dart';
 import 'clients/five_client.dart';
 
-abstract class IRestClient {
-  OneClient get one;
-
-  TwoClient get two;
-
-  ThreeClient get three;
-
-  FourClient get four;
-
-  FiveClient get five;
-}
-
-class RestClient implements IRestClient {
-  RestClient({
-    required Dio dio,
-    required String baseUrl,
-  })  : _dio = dio,
-        _baseUrl = baseUrl;
+class RestClient {
+  RestClient(
+    this._dio, {
+    String? baseUrl,
+  })  : _baseUrl = baseUrl;
 
   final Dio _dio;
-  final String _baseUrl;
+  final String? _baseUrl;
 
   OneClient? _one;
   TwoClient? _two;
@@ -200,19 +157,14 @@ class RestClient implements IRestClient {
   FourClient? _four;
   FiveClient? _five;
 
-  @override
   OneClient get one => _one ??= OneClient(_dio, baseUrl: _baseUrl);
 
-  @override
   TwoClient get two => _two ??= TwoClient(_dio, baseUrl: _baseUrl);
 
-  @override
   ThreeClient get three => _three ??= ThreeClient(_dio, baseUrl: _baseUrl);
 
-  @override
   FourClient get four => _four ??= FourClient(_dio, baseUrl: _baseUrl);
 
-  @override
   FiveClient get five => _five ??= FiveClient(_dio, baseUrl: _baseUrl);
 }
 ''';

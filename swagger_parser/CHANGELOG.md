@@ -1,6 +1,7 @@
 ## 1.8.0
 - Multiple schemas support(see ([example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml)))
 - Support for specifying nullable types via anyOf
+- Edit root client template
 - Add new config parameter `root_client_name`
 - Add new config parameter `name`
 - Add new config parameter `put_in_folder`
