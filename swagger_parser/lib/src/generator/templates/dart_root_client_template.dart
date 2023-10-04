@@ -20,7 +20,7 @@ String dartRootClientTemplate({
   final summary = openApiInfo.summary;
   final description = openApiInfo.description;
   final version = openApiInfo.version;
-  final fulldescription = switch ((summary, description)) {
+  final fullDescription = switch ((summary, description)) {
     (null, null) => null,
     (_, null) => summary,
     (null, _) => description,
@@ -28,7 +28,7 @@ String dartRootClientTemplate({
   };
 
   final comment =
-      '${title ?? ''}${version != null ? ' `v$version`' : ''}${fulldescription != null ? '\n\n$fulldescription' : ''}';
+      '${title ?? ''}${version != null ? ' `v$version`' : ''}${fullDescription != null ? '\n\n$fullDescription' : ''}';
 
   return '''
 ${generatedFileComment(

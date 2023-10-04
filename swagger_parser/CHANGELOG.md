@@ -1,5 +1,5 @@
 ## 1.8.0
-- Multiple schemas support
+- Multiple schemas support(see ([example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml)))
 - Support for specifying nullable types via anyOf
 - Add new config parameter `root_client_name`
 - Add new config parameter `name`
