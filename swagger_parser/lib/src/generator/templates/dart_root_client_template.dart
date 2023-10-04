@@ -37,9 +37,10 @@ ${generatedFileComment(
 ${_clientsImport(clientsNames, postfix, putClientsInFolder: putClientsInFolder)}
 ${descriptionComment(comment)}class $className {
   $className(
-    this._dio, {
+    Dio dio, {
     String? baseUrl,
-  })  : _baseUrl = baseUrl;
+  })  : _dio = dio,
+      _baseUrl = baseUrl;
 
   final Dio _dio;
   final String? _baseUrl;

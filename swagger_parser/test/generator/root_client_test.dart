@@ -26,9 +26,10 @@ import 'one/one_client.dart';
 
 class RestClient {
   RestClient(
-    this._dio, {
+    Dio dio, {
     String? baseUrl,
-  })  : _baseUrl = baseUrl;
+  })  : _dio = dio,
+      _baseUrl = baseUrl;
 
   final Dio _dio;
   final String? _baseUrl;
@@ -64,9 +65,10 @@ import 'five/five_client.dart';
 
 class RestClient {
   RestClient(
-    this._dio, {
+    Dio dio, {
     String? baseUrl,
-  })  : _baseUrl = baseUrl;
+  })  : _dio = dio,
+      _baseUrl = baseUrl;
 
   final Dio _dio;
   final String? _baseUrl;
@@ -106,9 +108,10 @@ import 'clients/one_client.dart';
 
 class RestClient {
   RestClient(
-    this._dio, {
+    Dio dio, {
     String? baseUrl,
-  })  : _baseUrl = baseUrl;
+  })  : _dio = dio,
+      _baseUrl = baseUrl;
 
   final Dio _dio;
   final String? _baseUrl;
@@ -144,9 +147,10 @@ import 'clients/five_client.dart';
 
 class RestClient {
   RestClient(
-    this._dio, {
+    Dio dio, {
     String? baseUrl,
-  })  : _baseUrl = baseUrl;
+  })  : _dio = dio,
+      _baseUrl = baseUrl;
 
   final Dio _dio;
   final String? _baseUrl;
