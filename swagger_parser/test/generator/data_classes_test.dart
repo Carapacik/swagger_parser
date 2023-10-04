@@ -2,7 +2,7 @@
 
 import 'package:swagger_parser/src/generator/fill_controller.dart';
 import 'package:swagger_parser/src/generator/models/generated_file.dart';
-import 'package:swagger_parser/src/generator/models/programming_lang.dart';
+import 'package:swagger_parser/src/generator/models/programming_language.dart';
 import 'package:swagger_parser/src/generator/models/universal_data_class.dart';
 import 'package:swagger_parser/src/generator/models/universal_type.dart';
 import 'package:test/test.dart';
@@ -1886,15 +1886,19 @@ class ClassName {
   
   /// Some string
   final String stringType;
+
   /// Default value
   final String defaultType;
+
   /// JsonKey here
   @JsonKey(name: 'json_key_value')
   final String jsonKeyValue;
+
   /// Mega mind
   @JsonKey(name: 'mega_MIND')
   final String megaMind;
   final Object emptyDescription;
+
   /// List of data
   /// This data is a list
   final List<String> list;
@@ -1961,16 +1965,20 @@ class ClassName with _$ClassName {
   const factory ClassName({
     /// Some string
     required String stringType,
+
     /// JsonKey here
     @JsonKey(name: 'json_key_value')
     required String jsonKeyValue,
+
     /// Mega mind
     @JsonKey(name: 'mega_MIND')
     required String megaMind,
     required Object emptyDescription,
+
     /// List of data
     /// This data is a list
     required List<String> list,
+
     /// Default value
     @Default('str')
     String defaultType,

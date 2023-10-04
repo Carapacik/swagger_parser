@@ -99,7 +99,7 @@ class InformationBox extends StatelessWidget {
                   ),
                   const TextSpan(
                     text:
-                        '- Squish clients. By default, swagger parser will separate clients into different folders judging by tags. By checking this parameter you can instead put all clients into single folder.\n',
+                        '- Put clients in folder. By default, swagger parser will separate clients into different folders judging by tags. By checking this parameter you can instead put all clients into single folder.\n',
                     style: TextStyle(fontSize: 18),
                   ),
                   const WidgetSpan(

@@ -29,13 +29,13 @@ dependencies:
   # dio: ^5.3.0
   # freezed_annotation: ^2.4.1 # for freezed
   # json_annotation: ^4.8.1
-  # retrofit: ^4.0.1
+  # retrofit: ^4.0.2
 
 dev_dependencies:
   # build_runner: ^2.4.6
-  # freezed: ^2.4.2 # for freezed
+  # freezed: ^2.4.3 # for freezed
   # json_serializable: ^6.7.1
-  # retrofit_generator: ^7.0.8
+  # retrofit_generator: ^8.0.0
   swagger_parser:
 ```
 
@@ -47,32 +47,92 @@ An example of YAML is shown below
 ```yaml
 swagger_parser:
   # Required. Sets the OpenApi schema path directory for api definition
-  schema_path: assets/openapi.json
+  schema_path: specs/openapi.json
+
   # Required. Sets output directory for generated files (Clients and Dtos)
   output_directory: lib/api
-  # Optional. Sets the programming language. Current available languages are: dart, kotlin. Default: dart
+
+  # Optional. Sets the programming language.
+  # Current available languages are: dart, kotlin. Default: dart
   language: dart
+
   # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
   freezed: false
-  # Optional (dart only). Set 'true' to generate interface with all clients instances. Default: true
-  root_interface: true
-  # Optional. Set 'true' to put all clients in one folder. Default: false
-  squish_clients: false
+
+  # Optional (dart only). Set 'true' to generate root client
+  # with interface and all clients instances. Default: true
+  root_client: true
+
+  # Optional (dart only). Set root client name. Default: RestClient
+  root_client_name: RestClient
+
+  # Optional. Set API name for folder and export file (coming soon).
+  # If not specified, the file name is used.
+  name: null
+
+  # Optional. Set to 'true' to put the all api in its folder. Default: false
+  put_in_folder: false
+
+  # Optional. Set 'true' to put all clients in clients folder. Default: false.
+  put_clients_in_folder: false
+
+  # Optional. Set to 'true' to squash all clients in one client. Default: false
+  squash_clients: false
+
   # Optional. Set postfix for Client class and file. Default: Client
   client_postfix: Client
-  # Optional. Set 'true' to use only the endpoint path for the method name. Set 'false' to use operationId. Default: false
+
+  # Optional. Set 'true' to use only the endpoint path for the method name.
+  # Set 'false' to use operationId. Default: false
   path_method_name: false
-  # Optional. Set 'true' to include toJson() in enums. If set to false, serialization will use .name instead. Default: false
+
+  # Optional (dart only). Set 'true' to include toJson() in enums. 
+  # If set to false, serialization will use .name instead. Default: false
   enums_to_json: false
+
   # Optional. Set 'true' to set enum prefix from parent component. Default: false
   enums_prefix: false
+
   # Optional. Set 'false' to not put a comment at the beginning of the generated files. Default: true
   mark_files_as_generated: true
-  # Optional. Set regex replacement rules for the names of the generated classes/enums. All rules are applied in order.
-  replacement_rules: 
+
+  # Optional. Set regex replacement rules for the names of the generated classes/enums.
+  # All rules are applied in order.
+  replacement_rules:
     # Example of rule
     - pattern: "[0-9]+"
       replacement: ""
+```
+
+For multiple schemes:
+
+```yaml
+swagger_parser:
+  # <...> Set default parameters for all schemes.
+  output_directory: lib/api
+  squash_clients: true
+ 
+  # Optional. You can pass a list of schemes. 
+  # Each schema inherits the parameters described in swagger_parser,
+  # any parameter for any schema can be set manually.
+  # Cannot be used at the same time as schema_path.
+  schemas:
+    - schema_path: specs/openapi.json
+      root_client_name: ApiMicroservice
+      freezed: true
+      put_in_folder: true
+      replacement_rules: []
+
+    - schema_path: specs/openapi.json
+      name: pet_service
+      client_postfix: Repository
+      put_clients_in_folder: true
+      enums_to_json: true
+      put_in_folder: true
+      
+    - schema_path: specs/openapi.json
+      output_directory: lib/api/kotlin
+      language: kotlin
 ```
 
 

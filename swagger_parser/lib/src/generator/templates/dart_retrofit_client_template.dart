@@ -3,7 +3,7 @@ import 'package:collection/collection.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
-import '../models/programming_lang.dart';
+import '../models/programming_language.dart';
 import '../models/universal_request.dart';
 import '../models/universal_request_type.dart';
 import '../models/universal_rest_client.dart';
@@ -21,12 +21,12 @@ ${generatedFileComment(
       markFileAsGenerated: markFileAsGenerated,
     )}${_fileImport(restClient)}import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
-${dartImports(imports: restClient.imports, pathPrefix: '../shared_models/')}
+${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
 part '${name.toSnake}.g.dart';
 
 @RestApi()
 abstract class $name {
-  factory $name(Dio dio, {String baseUrl}) = _$name;
+  factory $name(Dio dio, {String? baseUrl}) = _$name;
 ''',
   );
   for (final request in restClient.requests) {
