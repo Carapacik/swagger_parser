@@ -54,6 +54,7 @@ final class UniversalType {
   /// Whether or not this field is nullable
   final bool nullable;
 
+  /// Copy of [UniversalType] with new values
   UniversalType copyWith({
     String? type,
     String? name,

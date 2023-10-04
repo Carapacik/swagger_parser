@@ -14,7 +14,7 @@ String dartRootClientTemplate({
     return '';
   }
 
-  name = name.toPascal;
+  final className = name.toPascal;
 
   final title = openApiInfo.title;
   final summary = openApiInfo.summary;
@@ -35,12 +35,12 @@ ${generatedFileComment(
     markFileAsGenerated: markFileAsGenerated,
   )}import 'package:dio/dio.dart';
 ${_clientsImport(clientsNames, postfix, putClientsInFolder: putClientsInFolder)}
-abstract class I$name {
+abstract class I$className {
 ${_interfaceGetters(clientsNames, postfix)}
 }
 
-${descriptionComment(comment)}class $name implements I$name {
-  $name({
+${descriptionComment(comment)}class $className implements I$className {
+  $className({
     required Dio dio,
     required String baseUrl,
   })  : _dio = dio,
