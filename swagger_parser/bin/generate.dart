@@ -8,7 +8,6 @@ Future<void> main(List<String> arguments) async {
   try {
     /// Run generate from YAML config
     final configs = YamlConfig.parseConfigsFromYamlFile(arguments);
-
     generateMessage();
     for (final config in configs) {
       final generator = Generator.fromYamlConfig(config);

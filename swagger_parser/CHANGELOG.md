@@ -1,5 +1,5 @@
 ## 1.8.0
-- Multiple scheme support
+- Multiple schemas support
 - Support for specifying nullable types via anyOf
 - Add new config parameter `root_client_name`
 - Add new config parameter `name`

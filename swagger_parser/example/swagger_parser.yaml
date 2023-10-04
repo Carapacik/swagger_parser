@@ -53,8 +53,8 @@ swagger_parser:
   # All rules are applied in order.
   replacement_rules:
     # Example of rule
-    - pattern: "$"
-      replacement: "DTO"
+    - pattern: "[0-9]+"
+      replacement: ""
 
   # Optional. You can pass a list of schemes. 
   # Each schema inherits the parameters described in swagger_parser,
