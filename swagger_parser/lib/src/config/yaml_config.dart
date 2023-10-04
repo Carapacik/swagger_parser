@@ -1,7 +1,7 @@
 import 'package:args/args.dart';
 import 'package:yaml/yaml.dart';
 
-import '../generator/models/programming_lang.dart';
+import '../generator/models/programming_language.dart';
 import '../generator/models/replacement_rule.dart';
 import '../utils/file_utils.dart';
 import 'config_exception.dart';
@@ -17,14 +17,18 @@ import 'config_exception.dart';
 final class YamlConfig {
   /// Applies parameters directly from constructor
   const YamlConfig({
-    required this.schemaFilePath,
+    required this.schemaPath,
     required this.outputDirectory,
+    required this.name,
     this.language,
     this.freezed,
-    this.rootInterface,
+    this.rootClient,
+    this.rootClientName,
     this.clientPostfix,
-    this.squishClients,
+    this.putClientsInFolder,
+    this.squashClients,
     this.pathMethodName,
+    this.putInFolder,
     this.enumsToJson,
     this.enumsPrefix,
     this.markFilesAsGenerated,
@@ -32,44 +36,41 @@ final class YamlConfig {
   });
 
   /// Applies parameters from YAML file
-  factory YamlConfig.fromYamlFile(List<String> arguments) {
-    final parser = ArgParser()..addOption('file', abbr: 'f');
-    final configFile = getConfigFile(
-      filePath: parser.parse(arguments)['file']?.toString(),
-    );
-    if (configFile == null) {
-      throw const ConfigException("Can't find yaml config file.");
+  factory YamlConfig.fromYaml(
+    YamlMap yamlConfig, {
+    bool isRootConfig = false,
+    YamlConfig? rootConfig,
+  }) {
+    String? schemaPath;
+
+    schemaPath = yamlConfig['schema_path']?.toString();
+    if (isRootConfig && schemaPath == null) {
+      schemaPath = '';
     }
 
-    final yamlFileContent = configFile.readAsStringSync();
-    final dynamic yamlFile = loadYaml(yamlFileContent);
-
-    if (yamlFile is! YamlMap) {
-      throw ConfigException(
-        "Failed to extract config from the 'pubspec.yaml' file.\n"
-        'Expected YAML map but got ${yamlFile.runtimeType}.',
-      );
-    }
-
-    final yamlConfig = yamlFile['swagger_parser'] as YamlMap?;
-    if (yamlConfig == null) {
-      throw ConfigException(
-        "`${configFile.path}` file does not contain a 'swagger_parser' section.",
-      );
-    }
-
-    final schemaFilePath = yamlConfig['schema_path']?.toString();
-    if (schemaFilePath == null) {
+    if (schemaPath == null) {
       throw const ConfigException(
         "Config parameter 'schema_path' is required.",
       );
     }
 
-    final outputDirectory = yamlConfig['output_directory']?.toString();
+    var outputDirectory = yamlConfig['output_directory']?.toString();
+    if (isRootConfig && outputDirectory == null) {
+      outputDirectory = '';
+    }
+
     if (outputDirectory == null) {
-      throw const ConfigException(
-        "Config parameter 'output_directory' is required.",
-      );
+      if (rootConfig == null) {
+        throw const ConfigException(
+          "Config parameter 'output_directory' is required.",
+        );
+      } else if (rootConfig.outputDirectory == '') {
+        throw ConfigException(
+          "Config parameter 'output_directory' for $schemaPath was not found.\n"
+          "Add the 'output_directory' parameter under 'swagger_parser:' or set it for each schema.",
+        );
+      }
+      outputDirectory = rootConfig.outputDirectory;
     }
 
     ProgrammingLanguage? language;
@@ -88,21 +89,38 @@ final class YamlConfig {
       throw const ConfigException("Config parameter 'freezed' must be bool.");
     }
 
-    final rootInterface = yamlConfig['root_interface'];
-    if (rootInterface is! bool?) {
+    final rootClient =
+        yamlConfig['root_client'] ?? yamlConfig['root_interface'];
+    if (rootClient is! bool?) {
       throw const ConfigException(
-        "Config parameter 'root_interface' must be bool.",
+        "Config parameter 'root_client' must be bool.",
       );
     }
+
+    final rootClientName = yamlConfig['root_client_name'];
+    if (rootClientName is! String?) {
+      throw const ConfigException(
+        "Config parameter 'root_client_name' must be String.",
+      );
+    }
+
     final rawClientPostfix = yamlConfig['client_postfix']?.toString().trim();
 
     final clientPostfix =
         rawClientPostfix?.isEmpty ?? false ? null : rawClientPostfix;
 
-    final squishClients = yamlConfig['squish_clients'];
-    if (squishClients is! bool?) {
+    final putClientsInFolder =
+        yamlConfig['put_clients_in_folder'] ?? yamlConfig['squish_clients'];
+    if (putClientsInFolder is! bool?) {
       throw const ConfigException(
-        "Config parameter 'squish_clients' must be bool.",
+        "Config parameter 'put_clients_in_folder' must be bool.",
+      );
+    }
+
+    final squashClients = yamlConfig['squash_clients'];
+    if (squashClients is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'squash_clients' must be bool.",
       );
     }
 
@@ -141,49 +159,148 @@ final class YamlConfig {
       );
     }
 
-    final replacementRules = <ReplacementRule>[];
-    for (final element in rawReplacementRules ?? []) {
-      if (element is! YamlMap ||
-          element['pattern'] is! String ||
-          element['replacement'] is! String) {
-        throw const ConfigException(
-          "Config parameter 'replacement_rules' values must be maps of strings "
-          "and contain 'pattern' and 'replacement'.",
+    List<ReplacementRule>? replacementRules;
+    if (rawReplacementRules != null) {
+      replacementRules ??= [];
+      for (final element in rawReplacementRules) {
+        if (element is! YamlMap ||
+            element['pattern'] is! String ||
+            element['replacement'] is! String) {
+          throw const ConfigException(
+            "Config parameter 'replacement_rules' values must be maps of strings "
+            "and contain 'pattern' and 'replacement'.",
+          );
+        }
+        replacementRules.add(
+          ReplacementRule(
+            pattern: RegExp(element['pattern'].toString()),
+            replacement: element['replacement'].toString(),
+          ),
         );
       }
+    }
 
-      replacementRules.add(
-        ReplacementRule(
-          pattern: RegExp(element['pattern'].toString()),
-          replacement: element['replacement'].toString(),
-        ),
+    final putInFolder = yamlConfig['put_in_folder'];
+    if (putInFolder is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'put_in_folder' must be bool.",
       );
     }
 
+    final rawName = yamlConfig['name'];
+    if (rawName is! String?) {
+      throw const ConfigException(
+        "Config parameter 'name' must be String.",
+      );
+    }
+
+    final name = rawName == null || rawName.isEmpty
+        ? schemaPath.split('/').last.split('.').first
+        : rawName;
+
     return YamlConfig(
-      schemaFilePath: schemaFilePath,
+      schemaPath: schemaPath,
       outputDirectory: outputDirectory,
-      language: language,
-      freezed: freezed,
-      rootInterface: rootInterface,
-      clientPostfix: clientPostfix,
-      squishClients: squishClients,
-      pathMethodName: pathMethodName,
-      enumsToJson: enumsToJson,
-      enumsPrefix: enumsPrefix,
-      markFilesAsGenerated: markFilesAsGenerated,
-      replacementRules: replacementRules,
+      name: name,
+      language: language ?? rootConfig?.language,
+      freezed: freezed ?? rootConfig?.freezed,
+      rootClient: rootClient ?? rootConfig?.rootClient,
+      rootClientName: rootClientName ?? rootConfig?.rootClientName,
+      clientPostfix: clientPostfix ?? rootConfig?.clientPostfix,
+      putClientsInFolder: putClientsInFolder ?? rootConfig?.putClientsInFolder,
+      squashClients: squashClients ?? rootConfig?.squashClients,
+      pathMethodName: pathMethodName ?? rootConfig?.pathMethodName,
+      putInFolder: putInFolder ?? rootConfig?.putInFolder,
+      enumsToJson: enumsToJson ?? rootConfig?.enumsToJson,
+      enumsPrefix: enumsPrefix ?? rootConfig?.enumsPrefix,
+      markFilesAsGenerated:
+          markFilesAsGenerated ?? rootConfig?.markFilesAsGenerated,
+      replacementRules: replacementRules ?? rootConfig?.replacementRules ?? [],
     );
   }
 
-  final String schemaFilePath;
+  static List<YamlConfig> parseConfigsFromYamlFile(List<String> arguments) {
+    final parser = ArgParser()..addOption('file', abbr: 'f');
+    final configFile = getConfigFile(
+      filePath: parser.parse(arguments)['file']?.toString(),
+    );
+    if (configFile == null) {
+      throw const ConfigException("Can't find yaml config file.");
+    }
+
+    final yamlFileContent = configFile.readAsStringSync();
+    final dynamic yamlFile = loadYaml(yamlFileContent);
+
+    if (yamlFile is! YamlMap) {
+      throw ConfigException(
+        "Failed to extract config from the 'pubspec.yaml' file.\n"
+        'Expected YAML map but got ${yamlFile.runtimeType}.',
+      );
+    }
+
+    final yamlMap = yamlFile['swagger_parser'] as YamlMap?;
+
+    if (yamlMap == null) {
+      throw ConfigException(
+        "`${configFile.path}` file does not contain a 'swagger_parser' section.",
+      );
+    }
+
+    final configs = <YamlConfig>[];
+
+    final schemaPath = yamlMap['schema_path'] as String?;
+    final schemas = yamlMap['schemas'] as YamlList?;
+
+    if (schemas == null && schemaPath == null) {
+      throw const ConfigException(
+        "Config parameter 'schema_path' or 'schemas' is required.",
+      );
+    }
+
+    if (schemas != null && schemaPath != null) {
+      throw const ConfigException(
+        "Config parameter 'schema_path' and 'schemas' can't be used together.",
+      );
+    }
+
+    if (schemas != null) {
+      final rootConfig = YamlConfig.fromYaml(
+        yamlMap,
+        isRootConfig: true,
+      );
+
+      for (final schema in schemas) {
+        if (schema is! YamlMap) {
+          throw const ConfigException(
+            "Config parameter 'schemas' must be list of maps.",
+          );
+        }
+        final config = YamlConfig.fromYaml(
+          schema,
+          rootConfig: rootConfig,
+        );
+        configs.add(config);
+      }
+    } else {
+      final config = YamlConfig.fromYaml(yamlMap);
+      configs.add(config);
+    }
+
+    return configs;
+  }
+
+  final String name;
+  final String schemaPath;
   final String outputDirectory;
   final ProgrammingLanguage? language;
   final bool? freezed;
   final String? clientPostfix;
-  final bool? rootInterface;
-  final bool? squishClients;
+  final bool? rootClient;
+  final String? rootClientName;
+  final bool? putClientsInFolder;
+  final bool? squashClients;
   final bool? pathMethodName;
+  final bool? putInFolder;
   final bool? enumsToJson;
   final bool? enumsPrefix;
   final bool? markFilesAsGenerated;

@@ -1,5 +1,5 @@
 import '../../utils/type_utils.dart';
-import 'programming_lang.dart';
+import 'programming_language.dart';
 
 /// Universal template for containing information about type
 final class UniversalType {
@@ -54,6 +54,33 @@ final class UniversalType {
   /// Whether or not this field is nullable
   final bool nullable;
 
+  /// Copy of [UniversalType] with new values
+  UniversalType copyWith({
+    String? type,
+    String? name,
+    String? description,
+    String? format,
+    String? jsonKey,
+    String? defaultValue,
+    bool? isRequired,
+    String? enumType,
+    int? arrayDepth,
+    bool? nullable,
+  }) {
+    return UniversalType(
+      type: type ?? this.type,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      format: format ?? this.format,
+      jsonKey: jsonKey ?? this.jsonKey,
+      defaultValue: defaultValue ?? this.defaultValue,
+      isRequired: isRequired ?? this.isRequired,
+      enumType: enumType ?? this.enumType,
+      arrayDepth: arrayDepth ?? this.arrayDepth,
+      nullable: nullable ?? this.nullable,
+    );
+  }
+
   /// Function for compare to put required named parameters first
   int compareTo(UniversalType other) {
     if (isRequired == other.isRequired &&
@@ -93,6 +120,11 @@ final class UniversalType {
       enumType.hashCode ^
       arrayDepth.hashCode ^
       nullable.hashCode;
+
+  @override
+  String toString() {
+    return 'UniversalType(\ntype: $type,\nname: $name,\ndescription: $description,\nformat: $format,\njsonKey: $jsonKey,\ndefaultValue: $defaultValue,\nisRequired: $isRequired,\nenumType: $enumType,\narrayDepth: $arrayDepth,\nnullable: $nullable\n)';
+  }
 }
 
 /// Converts [UniversalType] to type from specified language

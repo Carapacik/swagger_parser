@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_redundant_argument_values
 
 import 'package:swagger_parser/src/generator/fill_controller.dart';
-import 'package:swagger_parser/src/generator/models/programming_lang.dart';
+import 'package:swagger_parser/src/generator/models/programming_language.dart';
 import 'package:swagger_parser/src/generator/models/universal_request.dart';
 import 'package:swagger_parser/src/generator/models/universal_request_type.dart';
 import 'package:swagger_parser/src/generator/models/universal_rest_client.dart';
@@ -23,7 +23,7 @@ part 'some_client.g.dart';
 
 @RestApi()
 abstract class SomeClient {
-  factory SomeClient(Dio dio, {String baseUrl}) = _SomeClient;
+  factory SomeClient(Dio dio, {String? baseUrl}) = _SomeClient;
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -45,11 +45,11 @@ interface SomeClient {}
     });
   });
 
-  group('Empty rest client with squish clients', () {
+  group('Empty rest client with put clients in folder', () {
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController = FillController(squishClients: true);
+      const fillController = FillController(putClientsInFolder: true);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -59,7 +59,7 @@ part 'some_client.g.dart';
 
 @RestApi()
 abstract class SomeClient {
-  factory SomeClient(Dio dio, {String baseUrl}) = _SomeClient;
+  factory SomeClient(Dio dio, {String? baseUrl}) = _SomeClient;
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -70,7 +70,7 @@ abstract class SomeClient {
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,
-        squishClients: true,
+        putClientsInFolder: true,
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -96,7 +96,7 @@ part 'class_name_api.g.dart';
 
 @RestApi()
 abstract class ClassNameApi {
-  factory ClassNameApi(Dio dio, {String baseUrl}) = _ClassNameApi;
+  factory ClassNameApi(Dio dio, {String? baseUrl}) = _ClassNameApi;
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -133,7 +133,7 @@ part 'some.g.dart';
 
 @RestApi()
 abstract class Some {
-  factory Some(Dio dio, {String baseUrl}) = _Some;
+  factory Some(Dio dio, {String? baseUrl}) = _Some;
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -175,17 +175,17 @@ interface Some {}
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../shared_models/camel_class.dart';
-import '../shared_models/snake_class.dart';
-import '../shared_models/kebab_class.dart';
-import '../shared_models/pascal_class.dart';
-import '../shared_models/space_class.dart';
+import '../models/camel_class.dart';
+import '../models/snake_class.dart';
+import '../models/kebab_class.dart';
+import '../models/pascal_class.dart';
+import '../models/space_class.dart';
 
 part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 }
 ''';
       expect(filledContent.contents, expectedContents);
@@ -220,7 +220,7 @@ part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @GET('/')
   Future<void> getRequest();
@@ -340,7 +340,7 @@ part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @GET('/')
   Future<void> getRequest();
@@ -522,7 +522,7 @@ part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @GET('/')
   Future<void> getRequest();
@@ -637,7 +637,7 @@ part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @GET('/')
   Future<void> getRequest({
@@ -744,7 +744,7 @@ part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @GET('/')
   Future<String> getRequest({
@@ -838,7 +838,7 @@ part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @GET('/{id}')
   Future<void> getRequest({
@@ -974,13 +974,13 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../shared_models/another_file.dart';
+import '../models/another_file.dart';
 
 part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @MultiPart()
   @POST('/send')
@@ -1121,13 +1121,13 @@ interface ClassNameClient {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../shared_models/lol.dart';
+import '../models/lol.dart';
 
 part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @FormUrlEncoded()
   @POST('/send')
@@ -1239,7 +1239,7 @@ part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @GET('/{id}')
   Future<String> getRequest({
@@ -1385,14 +1385,14 @@ interface ClassNameClient {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../shared_models/unit.dart';
-import '../shared_models/soma.dart';
+import '../models/unit.dart';
+import '../models/soma.dart';
 
 part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @POST('/send')
   Future<void> sendMessage({
@@ -1546,7 +1546,7 @@ part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @GET('/request')
   Future<String?> getRequest({
@@ -1638,7 +1638,7 @@ part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @GET('/request')
   Future<String> getRequest({
@@ -1830,13 +1830,13 @@ interface ClassNameClient {
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../shared_models/some.dart';
+import '../models/some.dart';
 
 part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   /// Some description
   @GET('/some')
@@ -1932,7 +1932,7 @@ part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @GET('/request')
   Future<String?> getRequest({
@@ -2024,7 +2024,7 @@ part 'class_name_client.g.dart';
 
 @RestApi()
 abstract class ClassNameClient {
-  factory ClassNameClient(Dio dio, {String baseUrl}) = _ClassNameClient;
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
   @GET('/request')
   Future<String> getRequest({

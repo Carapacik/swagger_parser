@@ -2,12 +2,13 @@ import 'package:path/path.dart' as p;
 
 import '../config/yaml_config.dart';
 import '../parser/parser.dart';
+import '../utils/case_utils.dart';
 import '../utils/file_utils.dart';
 import 'fill_controller.dart';
 import 'generator_exception.dart';
 import 'models/generated_file.dart';
 import 'models/open_api_info.dart';
-import 'models/programming_lang.dart';
+import 'models/programming_language.dart';
 import 'models/replacement_rule.dart';
 import 'models/universal_data_class.dart';
 import 'models/universal_rest_client.dart';
@@ -22,53 +23,63 @@ final class Generator {
     required String schemaContent,
     required String outputDirectory,
     ProgrammingLanguage? language,
+    String? name,
     bool? isYaml,
     bool? freezed,
-    bool? rootInterface,
+    bool? rootClient,
     String? clientPostfix,
-    bool? squishClients,
+    String? rootClientName,
+    bool? putClientsInFolder,
+    bool? squashClients,
     bool? pathMethodName,
+    bool? putInFolder,
     bool? enumsToJson,
     bool? enumsPrefix,
     bool? markFilesAsGenerated,
     List<ReplacementRule>? replacementRules,
   })  : _schemaContent = schemaContent,
         _outputDirectory = outputDirectory,
+        _name = name,
         _programmingLanguage = language ?? ProgrammingLanguage.dart,
         _isYaml = isYaml ?? false,
         _freezed = freezed ?? false,
-        _rootInterface = rootInterface ?? true,
+        _rootClient = rootClient ?? true,
+        _rootClientName = rootClientName ?? 'RestClient',
         _clientPostfix = clientPostfix ?? 'Client',
-        _squishClients = squishClients ?? false,
+        _putClientsInFolder = putClientsInFolder ?? false,
+        _squashClients = squashClients ?? false,
         _pathMethodName = pathMethodName ?? false,
+        _putInFolder = putInFolder ?? false,
         _enumsToJson = enumsToJson ?? false,
         _enumsPrefix = enumsPrefix ?? false,
         _markFilesAsGenerated = markFilesAsGenerated ?? true,
         _replacementRules = replacementRules ?? const [];
 
   /// Applies parameters set from yaml config file
-  factory Generator.fromYamlConfig(List<String> arguments) {
-    final yamlConfig = YamlConfig.fromYamlFile(arguments);
-
-    final schemaFilePath = yamlConfig.schemaFilePath;
-    final configFile = schemaFile(schemaFilePath);
+  factory Generator.fromYamlConfig(YamlConfig yamlConfig) {
+    final schemaPath = yamlConfig.schemaPath;
+    final configFile = schemaFile(schemaPath);
     if (configFile == null) {
-      throw GeneratorException("Can't find schema file at $schemaFilePath.");
+      throw GeneratorException("Can't find schema file at $schemaPath.");
     }
 
-    final isYaml = p.extension(schemaFilePath).toLowerCase() == '.yaml';
+    final isYaml = p.extension(schemaPath).toLowerCase() == '.yaml';
     final schemaContent = configFile.readAsStringSync();
 
     return Generator(
       schemaContent: schemaContent,
       outputDirectory: yamlConfig.outputDirectory,
-      isYaml: isYaml,
       language: yamlConfig.language,
+      name: yamlConfig.name,
+      isYaml: isYaml,
       freezed: yamlConfig.freezed,
-      rootInterface: yamlConfig.rootInterface,
+      rootClient: yamlConfig.rootClient,
+      rootClientName: yamlConfig.rootClientName,
       clientPostfix: yamlConfig.clientPostfix,
-      squishClients: yamlConfig.squishClients,
+      putClientsInFolder: yamlConfig.putClientsInFolder,
+      squashClients: yamlConfig.squashClients,
       pathMethodName: yamlConfig.pathMethodName,
+      putInFolder: yamlConfig.putInFolder,
       enumsToJson: yamlConfig.enumsToJson,
       enumsPrefix: yamlConfig.enumsPrefix,
       markFilesAsGenerated: yamlConfig.markFilesAsGenerated,
@@ -85,23 +96,35 @@ final class Generator {
   /// Output directory
   final String _outputDirectory;
 
+  /// Name of schema
+  final String? _name;
+
   /// Output directory
   final ProgrammingLanguage _programmingLanguage;
 
   /// Use freezed to generate DTOs
   final bool _freezed;
 
-  /// Generate root interface for all Clients
-  final bool _rootInterface;
+  /// Generate root client for all Clients
+  final bool _rootClient;
+
+  /// Root client name
+  final String _rootClientName;
 
   /// Client postfix
   final String _clientPostfix;
 
-  /// Squish Clients in one folder
-  final bool _squishClients;
+  /// Put all clients in clients folder
+  final bool _putClientsInFolder;
+
+  /// Squash all clients in one client.
+  final bool _squashClients;
 
   /// If true, use the endpoint path for the method name, if false, use operationId
   final bool _pathMethodName;
+
+  /// If true, generated all files will be put in folder with name of schema
+  final bool _putInFolder;
 
   /// If true, generated enums will have toJson method
   final bool _enumsToJson;
@@ -145,6 +168,8 @@ final class Generator {
       isYaml: _isYaml,
       pathMethodName: _pathMethodName,
       enumsPrefix: _enumsPrefix,
+      name: _name,
+      squashClients: _squashClients,
       replacementRules: _replacementRules,
     );
     _openApiInfo = parser.parseOpenApiInfo();
@@ -156,7 +181,10 @@ final class Generator {
   Future<void> _generateFiles() async {
     final files = await _fillContent();
     for (final file in files) {
-      await generateFile(_outputDirectory, file);
+      await generateFile(
+        '$_outputDirectory${_putInFolder && _name != null ? '/${_name?.toSnake}' : ''}',
+        file,
+      );
     }
   }
 
@@ -165,9 +193,10 @@ final class Generator {
     final fillController = FillController(
       openApiInfo: _openApiInfo,
       programmingLanguage: _programmingLanguage,
+      rootClientName: _rootClientName,
       clientPostfix: _clientPostfix,
       freezed: _freezed,
-      squishClients: _squishClients,
+      putClientsInFolder: _putClientsInFolder,
       enumsToJson: _enumsToJson,
       markFilesAsGenerated: _markFilesAsGenerated,
     );
@@ -178,10 +207,10 @@ final class Generator {
     for (final dataClass in _dataClasses) {
       files.add(fillController.fillDtoContent(dataClass));
     }
-    if (_rootInterface &&
+    if (_rootClient &&
         _programmingLanguage == ProgrammingLanguage.dart &&
         _restClients.isNotEmpty) {
-      files.add(fillController.fillRootInterface(_restClients));
+      files.add(fillController.fillRootClient(_restClients));
     }
     return files;
   }
