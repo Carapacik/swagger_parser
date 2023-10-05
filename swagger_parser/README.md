@@ -29,13 +29,13 @@ dependencies:
   # dio: ^5.3.0
   # freezed_annotation: ^2.4.1 # for freezed
   # json_annotation: ^4.8.1
-  # retrofit: ^4.0.1
+  # retrofit: ^4.0.2
 
 dev_dependencies:
   # build_runner: ^2.4.6
-  # freezed: ^2.4.2 # for freezed
+  # freezed: ^2.4.3 # for freezed
   # json_serializable: ^6.7.1
-  # retrofit_generator: ^7.0.8
+  # retrofit_generator: ^8.0.0
   swagger_parser:
 ```
 
@@ -86,7 +86,7 @@ swagger_parser:
   # Set 'false' to use operationId. Default: false
   path_method_name: false
 
-  # Optional. Set 'true' to include toJson() in enums. 
+  # Optional (dart only). Set 'true' to include toJson() in enums. 
   # If set to false, serialization will use .name instead. Default: false
   enums_to_json: false
 
@@ -100,9 +100,8 @@ swagger_parser:
   # All rules are applied in order.
   replacement_rules:
     # Example of rule
-    - pattern: "$"
-      replacement: "DTO"
-      
+    - pattern: "[0-9]+"
+      replacement: ""
 ```
 
 For multiple schemes:
@@ -127,14 +126,13 @@ swagger_parser:
     - schema_path: specs/openapi.json
       name: pet_service
       client_postfix: Repository
-      squish_clients: true
+      put_clients_in_folder: true
       enums_to_json: true
       put_in_folder: true
       
     - schema_path: specs/openapi.json
       output_directory: lib/api/kotlin
       language: kotlin
-
 ```
 
 
