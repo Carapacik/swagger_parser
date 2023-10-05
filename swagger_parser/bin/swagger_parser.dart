@@ -24,7 +24,6 @@ Future<void> main(List<String> arguments) async {
           openApi: openApi,
           statistics: stats,
         );
-
         totalStats = totalStats?.merge(stats);
         totalStats ??= stats;
         successSchemasCount++;
