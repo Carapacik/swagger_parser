@@ -8,6 +8,7 @@ import '../generator/models/universal_type.dart';
 import '../utils/case_utils.dart';
 
 const _green = '\x1B[32m';
+// ignore: unused_element
 const _yellow = '\x1B[33m';
 const _red = '\x1B[31m';
 const _reset = '\x1B[0m';

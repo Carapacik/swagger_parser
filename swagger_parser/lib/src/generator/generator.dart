@@ -203,7 +203,7 @@ final class Generator {
     final files = await _fillContent();
     _totalFiles += files.length;
     for (final file in files) {
-      _totalLines += file.contents.split('\n').length;
+      _totalLines += RegExp('\n').allMatches(file.contents).length;
       await generateFile(
         '$_outputDirectory${_putInFolder && _name != null ? '/${_name?.toSnake}' : ''}',
         file,
