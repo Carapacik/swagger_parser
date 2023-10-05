@@ -1,3 +1,7 @@
+## 1.9.0
+- Added display of generation statistics for each scheme and total.
+- The command to start generation has been changed to `dart run swagger_parser`
+
 ## 1.8.0
 - Multiple schemas support(see ([example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml)))
 - Support for specifying nullable types via anyOf

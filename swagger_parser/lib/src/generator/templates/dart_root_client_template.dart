@@ -63,10 +63,6 @@ String _clientsImport(
               "${'${import}_$postfix'.toSnake}.dart';",
         ).join('\n')}\n';
 
-String _interfaceGetters(Set<String> names, String postfix) => names
-    .map((n) => '  ${n.toPascal + postfix.toPascal} get ${n.toCamel};')
-    .join('\n\n');
-
 String _p(Set<String> names, String postfix) => names
     .map((n) => '  ${n.toPascal + postfix.toPascal}? _${n.toCamel};')
     .join('\n');
