@@ -47,7 +47,7 @@ An example of YAML is shown below
 ```yaml
 swagger_parser:
   # Required. Sets the OpenApi schema path directory for api definition
-  schema_path: specs/openapi.json
+  schema_path: schemas/openapi.json
 
   # Required. Sets output directory for generated files (Clients and Dtos)
   output_directory: lib/api
@@ -111,26 +111,25 @@ swagger_parser:
   # <...> Set default parameters for all schemes.
   output_directory: lib/api
   squash_clients: true
- 
   # Optional. You can pass a list of schemes. 
   # Each schema inherits the parameters described in swagger_parser,
   # any parameter for any schema can be set manually.
   # Cannot be used at the same time as schema_path.
   schemas:
-    - schema_path: specs/openapi.json
+    - schema_path: schemas/openapi.json
       root_client_name: ApiMicroservice
       freezed: true
       put_in_folder: true
       replacement_rules: []
 
-    - schema_path: specs/openapi.json
+    - schema_path: schemas/openapi.json
       name: pet_service
       client_postfix: Repository
       put_clients_in_folder: true
       enums_to_json: true
       put_in_folder: true
-      
-    - schema_path: specs/openapi.json
+
+    - schema_path: schemas/openapi.json
       output_directory: lib/api/kotlin
       language: kotlin
 ```

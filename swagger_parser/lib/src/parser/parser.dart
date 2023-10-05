@@ -772,7 +772,8 @@ class OpenApiParser {
           );
         });
       }
-      if (map.containsKey(_additionalPropertiesConst)) {
+      if (map.containsKey(_additionalPropertiesConst) &&
+          map[_additionalPropertiesConst] is Map<String, dynamic>) {
         typeWithImports.add(
           _findType(
             map[_additionalPropertiesConst] as Map<String, dynamic>,
