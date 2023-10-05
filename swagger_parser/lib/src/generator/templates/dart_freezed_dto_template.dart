@@ -36,7 +36,7 @@ String _parametersToString(List<UniversalType> parameters) {
       .mapIndexed(
         (i, e) =>
             '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '    ')}'
-            '${_jsonKey(e)}    ${_r(e)}'
+            '${_jsonKey(e)}    ${_required(e)}'
             '${e.toSuitableType(ProgrammingLanguage.dart)} ${e.name},',
       )
       .join();
@@ -51,17 +51,17 @@ String _jsonKey(UniversalType t) {
     sb.write("    @JsonKey(name: '${t.jsonKey}')\n");
   }
   if (t.defaultValue != null) {
-    sb.write('    @Default(${_d(t)})\n');
+    sb.write('    @Default(${_defaultValue(t)})\n');
   }
 
   return sb.toString();
 }
 
 /// return required if isRequired
-String _r(UniversalType t) =>
+String _required(UniversalType t) =>
     t.isRequired && t.defaultValue == null ? 'required ' : '';
 
 /// return defaultValue if have
-String _d(UniversalType t) => '${t.type.quoterForStringType()}'
-    '${t.enumType != null ? '${t.type}.${prefixForEnumItems(t.enumType!, t.defaultValue!)}' : t.defaultValue}'
+String _defaultValue(UniversalType t) => '${t.type.quoterForStringType()}'
+    '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : t.defaultValue}'
     '${t.type.quoterForStringType()}';

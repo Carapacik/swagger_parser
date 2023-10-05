@@ -15,7 +15,7 @@ final class UniversalEnumClass extends UniversalDataClass {
   final String type;
 
   /// Enum items
-  final Set<String> items;
+  final Set<UniversalEnumItem> items;
 
   /// Holding enum default value
   final String? defaultValue;
@@ -37,5 +37,47 @@ final class UniversalEnumClass extends UniversalDataClass {
   @override
   String toString() {
     return 'UniversalEnumClass(\ntype: $type,\nitems: $items,\ndefaultValue: $defaultValue\n)';
+  }
+}
+
+/// Universal template for enum item
+class UniversalEnumItem {
+  /// Constructor for [UniversalEnumItem]
+  const UniversalEnumItem({
+    required this.name,
+    required this.jsonKey,
+    this.description,
+  });
+
+  /// Enum item name
+  final String name;
+
+  /// Enum item json key
+  final String jsonKey;
+
+  /// Enum item description
+  final String? description;
+
+  /// Convert list of strings to set of [UniversalEnumItem]
+  /// Only for testing
+  static Set<UniversalEnumItem> listFromNames(Iterable<String> names) {
+    return protectEnumItemsNames(names);
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UniversalEnumItem &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          jsonKey == other.jsonKey &&
+          description == other.description;
+
+  @override
+  int get hashCode => name.hashCode ^ jsonKey.hashCode ^ description.hashCode;
+
+  @override
+  String toString() {
+    return 'UniversalEnumItem(name: $name, jsonKey: $jsonKey, description: $description)';
   }
 }

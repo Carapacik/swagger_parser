@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
@@ -18,14 +20,19 @@ ${generatedFileComment(
 
 ${descriptionComment(enumClass.description)}@JsonEnum()
 enum $className {
-${enumClass.items.map((e) => _jsonValue(enumClass.type, e)).join(',\n')};
+${enumClass.items.mapIndexed((i, e) => _jsonValue(i, enumClass.type, e)).join(',\n')};
 ${enumsToJson ? _toJson(enumClass, className) : '}'}
 ''';
 }
 
-String _jsonValue(String type, String item) => '''
-  @JsonValue(${type == 'string' ? "'$item'" : item})
-  ${prefixForEnumItems(type, item)}''';
+String _jsonValue(
+  int index,
+  String type,
+  UniversalEnumItem item,
+) =>
+    '''
+${index != 0 && item.description != null ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}  @JsonValue(${type == 'string' ? "'${item.jsonKey}'" : item.jsonKey})
+  ${item.name.toCamel}''';
 
 String _toJson(UniversalEnumClass enumClass, String className) => '''
 
@@ -34,7 +41,7 @@ String _toJson(UniversalEnumClass enumClass, String className) => '''
 
 const _\$${className}EnumMap = {
   ${enumClass.items.map(
-          (e) => '$className.${prefixForEnumItems(enumClass.type, e)}: '
-              '${enumClass.type.quoterForStringType()}$e${enumClass.type.quoterForStringType()}',
+          (e) => '$className.${e.name.toCamel}: '
+              '${enumClass.type.quoterForStringType()}${e.jsonKey}${enumClass.type.quoterForStringType()}',
         ).join(',\n  ')},
 };''';

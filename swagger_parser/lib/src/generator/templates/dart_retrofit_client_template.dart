@@ -72,11 +72,11 @@ String _toParameter(UniversalRequestType parameter) =>
     "    @${parameter.parameterType.type}(${parameter.name != null ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
     '${parameter.type.isRequired && parameter.type.defaultValue == null ? 'required ' : ''}'
     '${parameter.type.toSuitableType(ProgrammingLanguage.dart)} '
-    '${parameter.type.name!.toCamel}${_d(parameter.type)},';
+    '${parameter.type.name!.toCamel}${_defaultValue(parameter.type)},';
 
 /// return defaultValue if have
-String _d(UniversalType t) => t.defaultValue != null
+String _defaultValue(UniversalType t) => t.defaultValue != null
     ? ' = ${t.type.quoterForStringType()}'
-        '${t.enumType != null ? '${t.type}.${prefixForEnumItems(t.enumType!, t.defaultValue!)}' : t.defaultValue}'
+        '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(t.defaultValue)}'
         '${t.type.quoterForStringType()}'
     : '';
