@@ -42,6 +42,6 @@ String _toJson(UniversalEnumClass enumClass, String className) => '''
 const _\$${className}EnumMap = {
   ${enumClass.items.map(
           (e) => '$className.${e.name.toCamel}: '
-              '${enumClass.type.quoterForStringType()}${e.jsonKey}${enumClass.type.quoterForStringType()}',
+              '${enumClass.type == 'string' ? "'" : ''}${e.jsonKey}${enumClass.type == 'string' ? "'" : ''}',
         ).join(',\n  ')},
 };''';

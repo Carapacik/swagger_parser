@@ -777,13 +777,11 @@ class OpenApiParser {
           type: newName.toPascal,
           name: variableName.toCamel,
           description: description,
-          format: map.containsKey(_formatConst)
-              ? map[_formatConst].toString()
-              : null,
+          format: map[_formatConst]?.toString(),
           jsonKey: name,
           defaultValue: protectDefaultValue(map[_defaultConst]),
           isRequired: isRequired,
-          enumType: map[_typeConst].toString(),
+          enumType: map[_typeConst]?.toString(),
         ),
         import: newName,
       );

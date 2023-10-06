@@ -62,6 +62,5 @@ String _required(UniversalType t) =>
     t.isRequired && t.defaultValue == null ? 'required ' : '';
 
 /// return defaultValue if have
-String _defaultValue(UniversalType t) => '${t.type.quoterForStringType()}'
-    '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : t.defaultValue}'
-    '${t.type.quoterForStringType()}';
+String _defaultValue(UniversalType t) =>
+    '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}';

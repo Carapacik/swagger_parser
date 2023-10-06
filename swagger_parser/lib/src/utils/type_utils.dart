@@ -3,75 +3,43 @@ import 'case_utils.dart';
 import 'dart_keywords.dart';
 
 extension StringTypeX on String {
-  String toDartType([String? format]) {
-    switch (this) {
-      case 'integer':
-        return 'int';
-      case 'number':
-        if (format == 'float' || format == 'double') {
-          return 'double';
-        }
-        // This can happen
-        if (format == 'string') {
-          return 'String';
-        }
-        return 'num';
-      case 'string':
-        switch (format) {
-          case 'binary':
-            return 'File';
-          case 'date':
-          case 'date-time':
-            return 'DateTime';
-        }
-        return 'String';
-      case 'file':
-        return 'File';
-      case 'boolean':
-        return 'bool';
-      case 'object':
-        return 'Object';
-    }
-    return this;
-  }
+  String toDartType([String? format]) => switch (this) {
+        'integer' => 'int',
+        'number' => switch (format) {
+            'float' || 'double' => 'double',
+            // This can happen
+            'string' => 'String',
+            _ => 'num',
+          },
+        'string' => switch (format) {
+            'binary' => 'File',
+            'date' || 'date-time' => 'DateTime',
+            _ => 'String',
+          },
+        'file' => 'File',
+        'boolean' => 'bool',
+        'object' || 'null' => 'Object',
+        _ => this
+      };
 
-  String toKotlinType([String? format]) {
-    switch (this) {
-      case 'integer':
-        return 'Int';
-      case 'number':
-        if (format == 'float') {
-          return 'Float';
-        }
-        // This can happen
-        if (format == 'string') {
-          return 'String';
-        }
-        return 'Double';
-      case 'string':
-        switch (format) {
-          case 'binary':
-            return 'MultipartBody.Part';
-          case 'date':
-          case 'date-time':
-            return 'Date';
-        }
-        return 'String';
-      case 'file':
-        return 'MultipartBody.Part';
-      case 'boolean':
-        return 'Boolean';
-      case 'object':
-        return 'Any';
-    }
-    return this;
-  }
-
-  String quoterForStringType({bool dart = true}) => this == 'string'
-      ? dart
-          ? "'"
-          : '"'
-      : '';
+  String toKotlinType([String? format]) => switch (this) {
+        'integer' => 'Int',
+        'number' => switch (format) {
+            'float' => 'Float',
+            // This can happen
+            'string' => 'String',
+            _ => 'Double',
+          },
+        'string' => switch (format) {
+            'binary' => 'MultipartBody.Part',
+            'date' || 'date-time' => 'Date',
+            _ => 'String',
+          },
+        'file' => 'MultipartBody.Part',
+        'boolean' => 'Boolean',
+        'object' => 'Any',
+        _ => this
+      };
 }
 
 const _valueConst = 'value';
@@ -103,8 +71,10 @@ String? protectDefaultEnum(Object? name) =>
 /// Protect default value from incorrect symbols, keywords, etc.
 String? protectDefaultValue(
   Object? name, {
+  String? type,
   bool isEnum = false,
   bool isArray = false,
+  bool dart = true,
 }) {
   final nameStr = name?.toString();
   if (nameStr == null) {
@@ -120,12 +90,17 @@ String? protectDefaultValue(
     return nameStr;
   }
 
+  if (isEnum) {
+    return protectEnumItemsNames([nameStr]).first.name;
+  }
+
   if (isArray) {
     return null;
   }
 
-  if (isEnum) {
-    return protectEnumItemsNames([nameStr]).first.name;
+  if (type == 'string') {
+    final k = dart ? "'" : '"';
+    return '$k${nameStr.replaceAll(k, dart ? r"\'" : r'\"')}$k';
   }
 
   return nameStr;
