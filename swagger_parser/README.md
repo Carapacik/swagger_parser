@@ -13,10 +13,10 @@
 
 - Supports OpenApi v2, v3.0 and v3.1
 - Support JSON and YAML format
-- Generate REST client files based on Retrofit
-- Generate data classes (also on [freezed](https://pub.dev/packages/freezed))
 - Support for generation by link
 - Support for multiple schemes
+- Generate REST client files based on Retrofit
+- Generate data classes (also on [freezed](https://pub.dev/packages/freezed))
 - Support for multiple languages (Dart, Kotlin)
 - Web interface at https://carapacik.github.io/swagger_parser
 
@@ -51,9 +51,9 @@ swagger_parser:
   # You must provide the file path and/or url to the OpenApi schema.
   
   # Sets the OpenApi schema path directory for api definition.
-  # schema_path: schemas/openapi.json
+  schema_path: schemas/openapi.json
   # Sets the url of the OpenApi schema
-  # schema_url: https://petstore.swagger.io/v2/swagger.json
+  schema_url: https://petstore.swagger.io/v2/swagger.json
 
   # Required. Sets output directory for generated files (Clients and DTOs).
   output_directory: lib/api
