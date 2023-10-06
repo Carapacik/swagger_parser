@@ -28,7 +28,7 @@ final class Generator {
     String? schemaContent,
     bool? isYaml,
     bool? schemaFromUrlToFile,
-    PreferSchemaFrom? preferSchemeFrom,
+    PreferSchemaSource? preferSchemeSource,
     ProgrammingLanguage? language,
     String? name,
     bool? freezed,
@@ -48,7 +48,7 @@ final class Generator {
         _schemaContent = schemaContent,
         _isYaml = isYaml ?? false,
         _schemaFromUrlToFile = schemaFromUrlToFile ?? true,
-        _preferSchemeFrom = preferSchemeFrom ?? PreferSchemaFrom.url,
+        _preferSchemeSource = preferSchemeSource ?? PreferSchemaSource.url,
         _outputDirectory = outputDirectory,
         _name = name,
         _programmingLanguage = language ?? ProgrammingLanguage.dart,
@@ -72,7 +72,7 @@ final class Generator {
       schemaPath: yamlConfig.schemaPath,
       schemaUrl: yamlConfig.schemaUrl,
       schemaFromUrlToFile: yamlConfig.schemaFromUrlToFile,
-      preferSchemeFrom: yamlConfig.preferSchemaFrom,
+      preferSchemeSource: yamlConfig.preferSchemaSource,
       language: yamlConfig.language,
       name: yamlConfig.name,
       freezed: yamlConfig.freezed,
@@ -106,7 +106,7 @@ final class Generator {
   final bool _schemaFromUrlToFile;
 
   /// Prefer schema from url or file
-  final PreferSchemaFrom _preferSchemeFrom;
+  final PreferSchemaSource _preferSchemeSource;
 
   /// Output directory
   final String _outputDirectory;
@@ -201,7 +201,7 @@ final class Generator {
     final url = _schemaUrl;
     final path = _schemaPath;
 
-    if ((_preferSchemeFrom == PreferSchemaFrom.url || path == null) &&
+    if ((_preferSchemeSource == PreferSchemaSource.url || path == null) &&
         url != null) {
       final extension = p.extension(url).toLowerCase();
       _isYaml = switch (extension) {

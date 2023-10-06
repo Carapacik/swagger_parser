@@ -23,7 +23,7 @@ final class YamlConfig {
     this.schemaPath,
     this.schemaUrl,
     this.schemaFromUrlToFile,
-    this.preferSchemaFrom,
+    this.preferSchemaSource,
     this.language,
     this.freezed,
     this.rootClient,
@@ -110,13 +110,14 @@ final class YamlConfig {
       );
     }
 
-    PreferSchemaFrom? preferSchemaFrom;
-    final rawPreferSchemeFrom = yamlConfig['prefer_schema_from']?.toString();
-    if (rawPreferSchemeFrom != null) {
-      preferSchemaFrom = PreferSchemaFrom.fromString(rawPreferSchemeFrom);
-      if (preferSchemaFrom == null) {
+    PreferSchemaSource? preferSchemaSource;
+    final rawPreferSchemeSource =
+        yamlConfig['prefer_schema_source']?.toString();
+    if (rawPreferSchemeSource != null) {
+      preferSchemaSource = PreferSchemaSource.fromString(rawPreferSchemeSource);
+      if (preferSchemaSource == null) {
         throw ConfigException(
-          "'prefer_schema_from' field must be contained in ${PreferSchemaFrom.values.map((e) => e.name)}.",
+          "'prefer_schema_source' field must be contained in ${PreferSchemaSource.values.map((e) => e.name)}.",
         );
       }
     }
@@ -242,7 +243,7 @@ final class YamlConfig {
       schemaUrl: schemaUrl,
       schemaFromUrlToFile:
           schemaFromUrlToFile ?? rootConfig?.schemaFromUrlToFile,
-      preferSchemaFrom: preferSchemaFrom ?? rootConfig?.preferSchemaFrom,
+      preferSchemaSource: preferSchemaSource ?? rootConfig?.preferSchemaSource,
       language: language ?? rootConfig?.language,
       freezed: freezed ?? rootConfig?.freezed,
       rootClient: rootClient ?? rootConfig?.rootClient,
@@ -290,17 +291,19 @@ final class YamlConfig {
     final configs = <YamlConfig>[];
 
     final schemaPath = yamlMap['schema_path'] as String?;
+    final schemaUrl = yamlMap['schema_url'] as String?;
     final schemas = yamlMap['schemas'] as YamlList?;
 
-    if (schemas == null && schemaPath == null) {
+    if (schemas == null && schemaUrl == null && schemaPath == null) {
       throw const ConfigException(
-        "Config parameter 'schema_path' or 'schemas' is required.",
+        "Config parameter 'schema_path', 'schema_url' or 'schemas' is required.",
       );
     }
 
-    if (schemas != null && schemaPath != null) {
+    if (schemas != null && schemaPath != null ||
+        schemas != null && schemaUrl != null) {
       throw const ConfigException(
-        "Config parameter 'schema_path' and 'schemas' can't be used together.",
+        "Config parameter 'schema_path' or 'schema_url' can't be used with 'schemas'.",
       );
     }
 
@@ -335,7 +338,7 @@ final class YamlConfig {
   final String? schemaPath;
   final String? schemaUrl;
   final bool? schemaFromUrlToFile;
-  final PreferSchemaFrom? preferSchemaFrom;
+  final PreferSchemaSource? preferSchemaSource;
   final ProgrammingLanguage? language;
   final bool? freezed;
   final String? clientPostfix;
@@ -351,11 +354,14 @@ final class YamlConfig {
   final List<ReplacementRule> replacementRules;
 }
 
-enum PreferSchemaFrom {
+/// Enum for choosing schema source
+enum PreferSchemaSource {
   url,
-  file;
+  path;
 
-  static PreferSchemaFrom? fromString(String string) => values.firstWhereOrNull(
+  /// Returns [PreferSchemaSource] from string
+  static PreferSchemaSource? fromString(String string) =>
+      values.firstWhereOrNull(
         (e) => e.name == string,
       );
 }
