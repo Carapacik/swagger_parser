@@ -78,11 +78,18 @@ const _valueConst = 'value';
 const _enumConst = 'enum';
 const _objectConst = 'object';
 
-int _uniqueNameCounter = 0;
+int _uniqueObjectCounter = 0;
+int _uniqueEnumCounter = 0;
 
-String uniqueName() {
-  final name = '$_objectConst$_uniqueNameCounter'.toPascal;
-  _uniqueNameCounter++;
+String uniqueName({bool isEnum = false}) {
+  final String name;
+  if (isEnum) {
+    name = '$_enumConst$_uniqueEnumCounter';
+    _uniqueEnumCounter++;
+  } else {
+    name = '$_objectConst$_uniqueObjectCounter';
+    _uniqueObjectCounter++;
+  }
   return name;
 }
 
@@ -94,7 +101,11 @@ String? protectDefaultEnum(Object? name) =>
     protectDefaultValue(name, isEnum: true);
 
 /// Protect default value from incorrect symbols, keywords, etc.
-String? protectDefaultValue(Object? name, {bool isEnum = false}) {
+String? protectDefaultValue(
+  Object? name, {
+  bool isEnum = false,
+  bool isArray = false,
+}) {
   final nameStr = name?.toString();
   if (nameStr == null) {
     return null;
@@ -102,6 +113,14 @@ String? protectDefaultValue(Object? name, {bool isEnum = false}) {
 
   /// Json is not supported
   if (nameStr.startsWith('{') && nameStr.endsWith('}')) {
+    return null;
+  }
+
+  if (nameStr.startsWith('[') && nameStr.endsWith(']')) {
+    return nameStr;
+  }
+
+  if (isArray) {
     return null;
   }
 
@@ -172,10 +191,13 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_][a-zA-Z\d_]*$');
 }) {
   final (newName, error) = switch (name) {
     null || '' => uniqueIfNull
-        ? (uniqueName(), 'Name not received and was auto-generated.')
+        ? (
+            uniqueName(isEnum: isEnum),
+            'Name not received and was auto-generated.'
+          )
         : (null, null),
     _ when !_nameRegExp.hasMatch(name) => (
-        uniqueName(),
+        uniqueName(isEnum: isEnum),
         'Incorrect name has been replaced. Original name: `$name`.'
       ),
     _ when dartKeywords.contains(name.toCamel) => (

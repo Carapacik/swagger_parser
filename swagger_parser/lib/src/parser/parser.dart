@@ -358,6 +358,7 @@ class OpenApiParser {
         code2xxMap[_schemaConst] as Map<String, dynamic>,
         additionalName: additionalName,
       );
+
       if (typeWithImport.import != null) {
         imports.add(typeWithImport.import!);
       }
@@ -443,12 +444,12 @@ class OpenApiParser {
             ? parametersV2(requestPath)
             : parametersV3(requestPath);
 
-        final summary = requestPath[_summaryConst]?.toString();
-        var description = requestPath[_descriptionConst]?.toString();
+        final summary = requestPath[_summaryConst]?.toString().trim();
+        var description = requestPath[_descriptionConst]?.toString().trim();
         description = switch ((summary, description)) {
           (null, null) => null,
-          (_, null) => summary,
-          (null, _) => description,
+          (_, null) || (_, '') => summary,
+          (null, _) || ('', _) => description,
           (_, _) => '$summary\n\n$description',
         };
 
@@ -555,7 +556,7 @@ class OpenApiParser {
         findParamsAndImports(value);
       } else if (value.containsKey(_enumConst)) {
         final items = protectEnumItemsNames(
-          (value[_enumConst] as List).map((e) => '$e').toList(),
+          (value[_enumConst] as List).map((e) => '$e'),
         );
         final type = value[_typeConst].toString();
         for (final replacementRule in _replacementRules) {
@@ -728,7 +729,8 @@ class OpenApiParser {
           description: description,
           format: arrayType.type.format,
           jsonKey: name,
-          defaultValue: arrayType.type.defaultValue,
+          defaultValue:
+              protectDefaultValue(arrayType.type.defaultValue, isArray: true),
           isRequired: isRequired,
           nullable: map[_nullableConst].toString().toBool(),
           arrayDepth: arrayType.type.arrayDepth + 1,
@@ -749,12 +751,13 @@ class OpenApiParser {
       if (_enumsPrefix && additionalName != null) {
         newName = '$additionalName $newName'.toPascal;
       }
+
       for (final replacementRule in _replacementRules) {
         newName = replacementRule.apply(newName)!;
       }
 
       final items = protectEnumItemsNames(
-        (map[_enumConst] as List).map((e) => '$e').toList(),
+        (map[_enumConst] as List).map((e) => '$e'),
       );
 
       _enumClasses.add(
@@ -775,7 +778,7 @@ class OpenApiParser {
           format: map.containsKey(_formatConst)
               ? map[_formatConst].toString()
               : null,
-          jsonKey: name ?? uniqueName(),
+          jsonKey: name,
           defaultValue: protectDefaultValue(map[_defaultConst]),
           isRequired: isRequired,
           enumType: map[_typeConst].toString(),
@@ -897,6 +900,7 @@ class OpenApiParser {
       final type = ofType?.type ?? _objectConst;
       final import = ofImport;
       final defaultValue = map[_defaultConst]?.toString();
+
       final enumType = defaultValue != null &&
               import != null &&
               (ofType == null || ofType.arrayDepth == 0)
@@ -912,8 +916,11 @@ class OpenApiParser {
           description: description,
           format: ofType?.format,
           jsonKey: name,
-          defaultValue:
-              protectDefaultValue(defaultValue, isEnum: enumType != null),
+          defaultValue: protectDefaultValue(
+            defaultValue,
+            isEnum: enumType != null,
+            isArray: (ofType?.arrayDepth ?? 0) > 0,
+          ),
           enumType: enumType,
           isRequired: isRequired,
           arrayDepth: ofType?.arrayDepth ?? 0,
