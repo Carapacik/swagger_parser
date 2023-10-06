@@ -17,9 +17,7 @@ String dartRetrofitClientTemplate({
 }) {
   final sb = StringBuffer(
     '''
-${generatedFileComment(
-      markFileAsGenerated: markFileAsGenerated,
-    )}${_fileImport(restClient)}import 'package:dio/dio.dart';
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_fileImport(restClient)}import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
 part '${name.toSnake}.g.dart';
@@ -62,7 +60,7 @@ String _toClientRequest(UniversalRequest request) {
 
 String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
       (r) => r.parameters.any(
-        (e) => e.type.toSuitableType(ProgrammingLanguage.dart) == 'File',
+        (e) => e.type.toSuitableType(ProgrammingLanguage.dart).startsWith('File'),
       ),
     )
         ? "import 'dart:io';\n\n"
