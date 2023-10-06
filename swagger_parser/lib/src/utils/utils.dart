@@ -1,9 +1,17 @@
 import 'dart:io';
 
+import '../generator/models/generation_statistics.dart';
+import '../generator/models/open_api_info.dart';
 import '../generator/models/programming_language.dart';
 import '../generator/models/universal_data_class.dart';
 import '../generator/models/universal_type.dart';
 import '../utils/case_utils.dart';
+
+const _green = '\x1B[32m';
+// ignore: unused_element
+const _yellow = '\x1B[33m';
+const _red = '\x1B[31m';
+const _reset = '\x1B[0m';
 
 /// Provides imports as String from list of imports
 String dartImports({required Set<String> imports, String? pathPrefix}) {
@@ -84,14 +92,94 @@ void generateMessage() {
   stdout.writeln('Generate...');
 }
 
-void successMessage() {
+final _numbersRegExp = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+
+String formatNumber(int number) => '$number'.replaceAllMapped(
+      _numbersRegExp,
+      (match) => '${match[1]} ',
+    );
+
+void schemaStatisticsMessage({
+  required OpenApiInfo openApi,
+  required GenerationStatistics statistics,
+  String? name,
+}) {
+  final version = openApi.version != null ? 'v${openApi.version}' : '';
+
+  var title = name ?? '';
+  if (title.length > 80) {
+    title = '${title.substring(0, 80)}...';
+  }
+
   stdout.writeln(
-    'The generation was completed successfully. '
-    'You can run the generation using build_runner.',
+    '\n> $title $version: \n'
+    '    ${formatNumber(statistics.totalRestClients)} rest clients, '
+    '${formatNumber(statistics.totalRequests)} requests, '
+    '${formatNumber(statistics.totalDataClasses)} data classes.\n'
+    '    ${formatNumber(statistics.totalFiles)} files with ${formatNumber(statistics.totalLines)} lines of code.\n'
+    '    ${_green}Success (${statistics.timeElapsed.inMilliseconds / 1000} seconds)$_reset',
   );
 }
 
+void schemaFailedMessage({
+  required Object error,
+  required StackTrace stack,
+  String? name,
+}) {
+  var title = name ?? '';
+  if (title.length > 80) {
+    title = '${title.substring(0, 80)}...';
+  }
+
+  stdout.writeln(
+    '\n> $title: \n'
+    '    ${_red}Failed to generate files.$_reset\n'
+    '    $error\n'
+    '    ${stack.toString().replaceAll('\n', '\n    ')}',
+  );
+}
+
+void summaryStatisticsMessage({
+  required int successCount,
+  required int schemasCount,
+  required GenerationStatistics statistics,
+}) {
+  stdout.writeln(
+    '\nSummary (${statistics.timeElapsed.inMilliseconds / 1000} seconds):\n'
+    '${successCount != schemasCount ? '$successCount/$schemasCount' : '$schemasCount'} schemas, '
+    '${formatNumber(statistics.totalRestClients)} clients, '
+    '${formatNumber(statistics.totalRequests)} requests, '
+    '${formatNumber(statistics.totalDataClasses)} data classes.\n'
+    '${formatNumber(statistics.totalFiles)} files with ${formatNumber(statistics.totalLines)} lines of code.',
+  );
+}
+
+void doneMessage({
+  required int successSchemasCount,
+  required int schemasCount,
+}) {
+  if (successSchemasCount == 0) {
+    stdout.writeln(
+      '\n'
+      '${_red}The generation was completed with errors.\n'
+      'No schemas were generated.$_reset',
+    );
+  } else if (successSchemasCount != schemasCount) {
+    stdout.writeln(
+      '\n'
+      '${_red}The generation was completed with errors.\n'
+      '${schemasCount - successSchemasCount} schemas were not generated.$_reset',
+    );
+  } else {
+    stdout.writeln(
+      '\n'
+      '${schemasCount > 1 ? _green : ''}The generation was completed successfully. '
+      'You can run the generation using build_runner.${schemasCount > 1 ? _reset : ''}',
+    );
+  }
+}
+
 void exitWithError(String message) {
-  stderr.writeln('ERROR: $message');
+  stderr.writeln('${_red}ERROR: $message$_reset');
   exit(2);
 }
