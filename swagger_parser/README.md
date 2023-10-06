@@ -42,58 +42,58 @@ dev_dependencies:
 ### Configure package
 
 Add your OpenApi json file configuration to your `pubspec.yaml` or create a new config file called `swagger_parser.yaml`.
-An example of YAML is shown below
+An example of YAML is shown below. A default value is specified for each of the optional parameters.
 
 ```yaml
 swagger_parser:
-  # Required. Sets the OpenApi schema path directory for api definition
+  # Required. Sets the OpenApi schema path directory for api definition.
   schema_path: schemas/openapi.json
 
-  # Required. Sets output directory for generated files (Clients and Dtos)
+  # Required. Sets output directory for generated files (Clients and DTOs).
   output_directory: lib/api
 
   # Optional. Sets the programming language.
-  # Current available languages are: dart, kotlin. Default: dart
+  # Current available languages are: dart, kotlin
   language: dart
 
-  # Optional (dart only). Set 'true' to generate data classes using freezed package. Default: false
+  # Optional (dart only). Set 'true' to generate data classes using freezed package.
   freezed: false
 
   # Optional (dart only). Set 'true' to generate root client
-  # with interface and all clients instances. Default: true
+  # with interface and all clients instances.
   root_client: true
 
-  # Optional (dart only). Set root client name. Default: RestClient
+  # Optional (dart only). Set root client name
   root_client_name: RestClient
 
   # Optional. Set API name for folder and export file (coming soon).
   # If not specified, the file name is used.
   name: null
 
-  # Optional. Set to 'true' to put the all api in its folder. Default: false
+  # Optional. Set to 'true' to put the all api in its folder.
   put_in_folder: false
 
-  # Optional. Set 'true' to put all clients in clients folder. Default: false.
+  # Optional. Set 'true' to put all clients in clients folder.
   put_clients_in_folder: false
 
-  # Optional. Set to 'true' to squash all clients in one client. Default: false
+  # Optional. Set to 'true' to squash all clients in one client.
   squash_clients: false
 
-  # Optional. Set postfix for Client class and file. Default: Client
+  # Optional. Set postfix for Client class and file.
   client_postfix: Client
 
   # Optional. Set 'true' to use only the endpoint path for the method name.
-  # Set 'false' to use operationId. Default: false
+  # Set 'false' to use operationId
   path_method_name: false
 
   # Optional (dart only). Set 'true' to include toJson() in enums. 
-  # If set to false, serialization will use .name instead. Default: false
+  # If set to false, serialization will use .name instead.
   enums_to_json: false
 
-  # Optional. Set 'true' to set enum prefix from parent component. Default: false
+  # Optional. Set 'true' to set enum prefix from parent component.
   enums_prefix: false
 
-  # Optional. Set 'false' to not put a comment at the beginning of the generated files. Default: true
+  # Optional. Set 'false' to not put a comment at the beginning of the generated files.
   mark_files_as_generated: true
 
   # Optional. Set regex replacement rules for the names of the generated classes/enums.
@@ -111,6 +111,7 @@ swagger_parser:
   # <...> Set default parameters for all schemes.
   output_directory: lib/api
   squash_clients: true
+
   # Optional. You can pass a list of schemes. 
   # Each schema inherits the parameters described in swagger_parser,
   # any parameter for any schema can be set manually.
@@ -124,7 +125,7 @@ swagger_parser:
 
     - schema_path: schemas/openapi.json
       name: pet_service
-      client_postfix: Repository
+      client_postfix: DataSource
       put_clients_in_folder: true
       enums_to_json: true
       put_in_folder: true
@@ -136,15 +137,15 @@ swagger_parser:
 
 
 ### Run the generator
-To generate boilerplate code, run the `generate` program inside directory where your `pubspec.yaml` file is located:
+To generate code, run the `swagger_parser` program inside directory where your `pubspec.yaml` file is located:
 ```shell
-dart run swagger_parser:generate
+dart run swagger_parser
 ```
 If you name your configuration file something other than `swagger_parser.yaml` or `pubspec.yaml` 
 you will need to specify the name of the YAML file as an argument.
 
 ```shell
-dart run swagger_parser:generate -f <path to your config file>
+dart run swagger_parser -f <path to your config file>
 ```
 
 ### (Only for freezed) Generate files using [build_runner](https://pub.dev/packages/build_runner) for retrofit, json_serializable and freezed
