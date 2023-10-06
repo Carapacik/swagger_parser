@@ -802,10 +802,11 @@ class OpenApiParser {
       var requiredParameters = <String>[];
       if (map.containsKey(_requiredConst)) {
         requiredParameters =
-            (map[_requiredConst] as List).map((e) => e.toString()).toList();
+            (map[_requiredConst] as List).map((e) => '$e').toList();
       }
 
       final typeWithImports = <({UniversalType type, String? import})>[];
+
       if (map.containsKey(_propertiesConst)) {
         (map[_propertiesConst] as Map<String, dynamic>).forEach((key, value) {
           typeWithImports.add(

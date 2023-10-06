@@ -1,6 +1,7 @@
 /// Contains statistics about generation
 class GenerationStatistics {
-  GenerationStatistics({
+  /// Constructor for [GenerationStatistics]
+  const GenerationStatistics({
     required this.totalFiles,
     required this.totalLines,
     required this.totalRestClients,
