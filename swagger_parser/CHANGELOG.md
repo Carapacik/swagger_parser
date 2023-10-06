@@ -5,7 +5,7 @@
 - Fix error with missing File import ([#101](https://github.com/Carapacik/swagger_parser/issues/101))
 
 ## 1.8.0
-- Multiple schemas support(see ([example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml)))
+- Multiple schemas support (see [example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml))
 - Support for specifying nullable types via anyOf
 - Edit root client template
 - Add new config parameter `root_client_name`

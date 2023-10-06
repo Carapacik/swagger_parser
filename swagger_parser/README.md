@@ -7,12 +7,14 @@
 [![Tests](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml)
 <a href="https://omega-r.com/"><img src="https://raw.githubusercontent.com/Carapacik/swagger_parser/main/.github/readme/omega_logo.png" width="200" align="right"/></a>
 
-## Dart package that generates REST clients and data classes from OpenApi definition file
+## Dart package that generates REST clients and data classes from OpenApi definition files or links
 
 ## Features
 
 - Supports OpenApi v2, v3.0 and v3.1
 - Support JSON and YAML format
+- Support for generation by link
+- Support for multiple schemes
 - Generate REST client files based on Retrofit
 - Generate data classes (also on [freezed](https://pub.dev/packages/freezed))
 - Support for multiple languages (Dart, Kotlin)
@@ -46,8 +48,12 @@ An example of YAML is shown below. A default value is specified for each of the 
 
 ```yaml
 swagger_parser:
-  # Required. Sets the OpenApi schema path directory for api definition.
-  schema_path: schemas/openapi.json
+  # You must provide the file path and/or url to the OpenApi schema.
+  
+  # Sets the OpenApi schema path directory for api definition.
+  # schema_path: schemas/openapi.json
+  # Sets the url of the OpenApi schema
+  # schema_url: https://petstore.swagger.io/v2/swagger.json
 
   # Required. Sets output directory for generated files (Clients and DTOs).
   output_directory: lib/api
@@ -55,6 +61,10 @@ swagger_parser:
   # Optional. Sets the programming language.
   # Current available languages are: dart, kotlin
   language: dart
+
+  # Optional. If 'schema_path' and 'schema_url' are specified, what will be used.
+  # Current available options are: path, url.
+  prefer_schema_from: url
 
   # Optional (dart only). Set 'true' to generate data classes using freezed package.
   freezed: false
@@ -78,6 +88,9 @@ swagger_parser:
 
   # Optional. Set to 'true' to squash all clients in one client.
   squash_clients: false
+
+  # Optional. Set to 'false' to not write the schema from the url to the schema file.
+  schema_from_url_to_file: true
 
   # Optional. Set postfix for Client class and file.
   client_postfix: Client
@@ -123,14 +136,14 @@ swagger_parser:
       put_in_folder: true
       replacement_rules: []
 
-    - schema_path: schemas/openapi.json
+    - schema_url: https://petstore.swagger.io/v2/swagger.json
       name: pet_service
-      client_postfix: DataSource
+      client_postfix: Service
       put_clients_in_folder: true
-      enums_to_json: true
       put_in_folder: true
 
-    - schema_path: schemas/openapi.json
+    - schema_path: schemas/pet_store.json
+      schema_url: https://petstore.swagger.io/v2/swagger.json
       output_directory: lib/api/kotlin
       language: kotlin
 ```
