@@ -60,7 +60,8 @@ String _toClientRequest(UniversalRequest request) {
 
 String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
       (r) => r.parameters.any(
-        (e) => e.type.toSuitableType(ProgrammingLanguage.dart).startsWith('File'),
+        (e) =>
+            e.type.toSuitableType(ProgrammingLanguage.dart).startsWith('File'),
       ),
     )
         ? "import 'dart:io';\n\n"
@@ -68,12 +69,16 @@ String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
 
 String _toParameter(UniversalRequestType parameter) =>
     "    @${parameter.parameterType.type}(${parameter.name != null ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
-    '${parameter.type.isRequired && parameter.type.defaultValue == null ? 'required ' : ''}'
+    '${_required(parameter.type)}'
     '${parameter.type.toSuitableType(ProgrammingLanguage.dart)} '
-    '${parameter.type.name!.toCamel}${_d(parameter.type)},';
+    '${parameter.type.name!.toCamel}${_defaultValue(parameter.type)},';
+
+/// return required if isRequired
+String _required(UniversalType t) =>
+    t.isRequired && t.defaultValue == null ? 'required ' : '';
 
 /// return defaultValue if have
-String _d(UniversalType t) => t.defaultValue != null
+String _defaultValue(UniversalType t) => t.defaultValue != null
     ? ' = ${t.type.quoterForStringType()}'
         '${t.enumType != null ? '${t.type}.${prefixForEnumItems(t.enumType!, t.defaultValue!)}' : t.defaultValue}'
         '${t.type.quoterForStringType()}'

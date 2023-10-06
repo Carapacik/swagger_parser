@@ -47,7 +47,6 @@ final class UniversalComponentClass extends UniversalDataClass {
       typeDef.hashCode;
 
   @override
-  String toString() {
-    return 'UniversalComponentClass(\nimports: $imports,\nparameters: $parameters,\nallOf: $allOf,\ntypeDef: $typeDef\n)';
-  }
+  String toString() =>
+      'UniversalComponentClass(\nimports: $imports,\nparameters: $parameters,\nallOf: $allOf,\ntypeDef: $typeDef\n)';
 }

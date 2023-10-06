@@ -67,14 +67,31 @@ final class UniversalRequest {
 
 /// Request type
 enum HttpRequestType {
+  /// {@nodoc}
   get,
+
+  /// {@nodoc}
   post,
+
+  /// {@nodoc}
   head,
+
+  /// {@nodoc}
   put,
+
+  /// {@nodoc}
   delete,
+
+  /// {@nodoc}
   patch,
+
+  /// {@nodoc}
   connect,
+
+  /// {@nodoc}
   options,
+
+  /// {@nodoc}
   trace;
 
   /// Constructor for [HttpRequestType]
