@@ -93,12 +93,10 @@ void generateMessage() {
 
 final _numbersRegExp = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
 
-String formatNumber(int number) {
-  return '$number'.replaceAllMapped(
-    _numbersRegExp,
-    (match) => '${match[1]} ',
-  );
-}
+String formatNumber(int number) => '$number'.replaceAllMapped(
+      _numbersRegExp,
+      (match) => '${match[1]} ',
+    );
 
 void schemaStatisticsMessage({
   required OpenApiInfo openApi,
@@ -128,7 +126,6 @@ void schemaFailedMessage({
   String? name,
 }) {
   var title = name ?? '';
-
   if (title.length > 80) {
     title = '${title.substring(0, 80)}...';
   }

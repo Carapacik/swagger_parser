@@ -125,7 +125,7 @@ swagger_parser:
 
     - schema_path: schemas/openapi.json
       name: pet_service
-      client_postfix: Repository
+      client_postfix: DataSource
       put_clients_in_folder: true
       enums_to_json: true
       put_in_folder: true
@@ -158,14 +158,6 @@ global_options:
   json_serializable:
     runs_before:
       - retrofit_generator
-
-# If you want to serialize nested lists of objects
-targets:
-  $default:
-    builders:
-      json_serializable:
-        options:
-          explicit_to_json: true
 ```
 To run the code generation with build_runner, execute the following command:
 ```shell

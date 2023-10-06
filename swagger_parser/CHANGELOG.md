@@ -1,6 +1,8 @@
 ## 1.9.0
-- Added display of generation statistics for each scheme and total.
+- Added display of generation statistics for each scheme and total
 - The command to start generation has been changed to `dart run swagger_parser`
+- Fix error with `required` params in unnamed classes ([#98](https://github.com/Carapacik/swagger_parser/issues/98))
+- Fix error with missing File import ([#101](https://github.com/Carapacik/swagger_parser/issues/101))
 
 ## 1.8.0
 - Multiple schemas support(see ([example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml)))
