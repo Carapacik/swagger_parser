@@ -217,7 +217,7 @@ final class Generator {
       _schemaContent = await schemaFromUrl(url);
       if (_schemaFromUrlToFile && path != null) {
         if (!_isYaml) {
-          final formattedJson = const JsonEncoder.withIndent('  ')
+          final formattedJson = const JsonEncoder.withIndent('    ')
               .convert(jsonDecode(_schemaContent!));
           writeSchemaToFile(formattedJson, path);
         } else {
