@@ -79,6 +79,7 @@ class OpenApiParser {
   static const _defaultConst = 'default';
   static const _definitionsConst = 'definitions';
   static const _descriptionConst = 'description';
+  static const _deprecatedConst = 'deprecated';
   static const _enumConst = 'enum';
   static const _formatConst = 'format';
   static const _formUrlEncodedConst = 'application/x-www-form-urlencoded';
@@ -478,6 +479,7 @@ class OpenApiParser {
           isFormUrlEncoded: isFormUrlEncoded,
           returnType: returnType,
           parameters: parameters,
+          isDeprecated: requestPath[_deprecatedConst].toString().toBool(),
         );
         final currentTag = _getTag(requestPath);
         final sameTagIndex =
