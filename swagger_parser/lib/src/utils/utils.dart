@@ -43,10 +43,11 @@ String? replaceNotEnglishLetter(String? text) {
 }
 
 /// Specially for File import
-String ioImport(UniversalComponentClass dataClass) => dataClass.parameters
-        .any((p) => p.toSuitableType(ProgrammingLanguage.dart) == 'File')
-    ? "import 'dart:io';\n\n"
-    : '';
+String ioImport(UniversalComponentClass dataClass) => dataClass.parameters.any(
+      (p) => p.toSuitableType(ProgrammingLanguage.dart).startsWith('File'),
+    )
+        ? "import 'dart:io';\n\n"
+        : '';
 
 String generatedFileComment({
   required bool markFileAsGenerated,
