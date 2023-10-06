@@ -10,6 +10,9 @@ import '../utils/case_utils.dart';
 const _green = '\x1B[32m';
 // ignore: unused_element
 const _yellow = '\x1B[33m';
+// ignore: unused_element
+const _blue = '\x1B[34m';
+const _lightBlue = '\x1B[36m';
 const _red = '\x1B[31m';
 const _reset = '\x1B[0m';
 
@@ -92,6 +95,10 @@ void generateMessage() {
   stdout.writeln('Generate...');
 }
 
+void extractingSchemaFromUrlMessage(String url) {
+  stdout.writeln('Extracting schema from $_lightBlue$url...$_reset');
+}
+
 final _numbersRegExp = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
 
 String formatNumber(int number) => '$number'.replaceAllMapped(
@@ -112,12 +119,12 @@ void schemaStatisticsMessage({
   }
 
   stdout.writeln(
-    '\n> $title $version: \n'
+    '> $title $version: \n'
     '    ${formatNumber(statistics.totalRestClients)} rest clients, '
     '${formatNumber(statistics.totalRequests)} requests, '
     '${formatNumber(statistics.totalDataClasses)} data classes.\n'
     '    ${formatNumber(statistics.totalFiles)} files with ${formatNumber(statistics.totalLines)} lines of code.\n'
-    '    ${_green}Success (${statistics.timeElapsed.inMilliseconds / 1000} seconds)$_reset',
+    '    ${_green}Success (${statistics.timeElapsed.inMilliseconds / 1000} seconds)$_reset\n',
   );
 }
 
@@ -132,10 +139,10 @@ void schemaFailedMessage({
   }
 
   stdout.writeln(
-    '\n> $title: \n'
+    '> $title: \n'
     '    ${_red}Failed to generate files.$_reset\n'
     '    $error\n'
-    '    ${stack.toString().replaceAll('\n', '\n    ')}',
+    '    ${stack.toString().replaceAll('\n', '\n    ')}\n',
   );
 }
 
@@ -145,7 +152,7 @@ void summaryStatisticsMessage({
   required GenerationStatistics statistics,
 }) {
   stdout.writeln(
-    '\nSummary (${statistics.timeElapsed.inMilliseconds / 1000} seconds):\n'
+    'Summary (${statistics.timeElapsed.inMilliseconds / 1000} seconds):\n'
     '${successCount != schemasCount ? '$successCount/$schemasCount' : '$schemasCount'} schemas, '
     '${formatNumber(statistics.totalRestClients)} clients, '
     '${formatNumber(statistics.totalRequests)} requests, '
@@ -160,19 +167,16 @@ void doneMessage({
 }) {
   if (successSchemasCount == 0) {
     stdout.writeln(
-      '\n'
       '${_red}The generation was completed with errors.\n'
       'No schemas were generated.$_reset',
     );
   } else if (successSchemasCount != schemasCount) {
     stdout.writeln(
-      '\n'
       '${_red}The generation was completed with errors.\n'
       '${schemasCount - successSchemasCount} schemas were not generated.$_reset',
     );
   } else {
     stdout.writeln(
-      '\n'
       '${schemasCount > 1 ? _green : ''}The generation was completed successfully. '
       'You can run the generation using build_runner.${schemasCount > 1 ? _reset : ''}',
     );

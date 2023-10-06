@@ -25,15 +25,15 @@ class OpenApiParser {
   /// and [isYaml] schema format or not
   OpenApiParser(
     String fileContent, {
+    String? name,
     bool isYaml = false,
     bool enumsPrefix = false,
     bool pathMethodName = false,
-    String? name,
     bool squashClients = false,
     List<ReplacementRule> replacementRules = const <ReplacementRule>[],
-  })  : _pathMethodName = pathMethodName,
+  })  : _name = name,
+        _pathMethodName = pathMethodName,
         _enumsPrefix = enumsPrefix,
-        _name = name,
         _squashClients = squashClients,
         _replacementRules = replacementRules {
     _definitionFileContent = isYaml

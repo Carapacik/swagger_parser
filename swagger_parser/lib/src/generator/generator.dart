@@ -4,6 +4,7 @@ import '../config/yaml_config.dart';
 import '../parser/parser.dart';
 import '../utils/case_utils.dart';
 import '../utils/file_utils.dart';
+import '../utils/utils.dart';
 import 'fill_controller.dart';
 import 'generator_exception.dart';
 import 'models/generated_file.dart';
@@ -21,11 +22,11 @@ final class Generator {
   /// Applies parameters directly from constructor
   /// and sets them to default if not found
   Generator({
-    required String schemaContent,
     required String outputDirectory,
+    required String schemaPath,
+    String? schemaUrl,
     ProgrammingLanguage? language,
     String? name,
-    bool? isYaml,
     bool? freezed,
     bool? rootClient,
     String? clientPostfix,
@@ -38,11 +39,11 @@ final class Generator {
     bool? enumsPrefix,
     bool? markFilesAsGenerated,
     List<ReplacementRule>? replacementRules,
-  })  : _schemaContent = schemaContent,
+  })  : _schemaPath = schemaPath,
+        _schemaUrl = schemaUrl,
         _outputDirectory = outputDirectory,
         _name = name,
         _programmingLanguage = language ?? ProgrammingLanguage.dart,
-        _isYaml = isYaml ?? false,
         _freezed = freezed ?? false,
         _rootClient = rootClient ?? true,
         _rootClientName = rootClientName ?? 'RestClient',
@@ -58,21 +59,12 @@ final class Generator {
 
   /// Applies parameters set from yaml config file
   factory Generator.fromYamlConfig(YamlConfig yamlConfig) {
-    final schemaPath = yamlConfig.schemaPath;
-    final configFile = schemaFile(schemaPath);
-    if (configFile == null) {
-      throw GeneratorException("Can't find schema file at $schemaPath.");
-    }
-
-    final isYaml = p.extension(schemaPath).toLowerCase() == '.yaml';
-    final schemaContent = configFile.readAsStringSync();
-
     return Generator(
-      schemaContent: schemaContent,
       outputDirectory: yamlConfig.outputDirectory,
+      schemaPath: yamlConfig.schemaPath,
+      schemaUrl: yamlConfig.schemaUrl,
       language: yamlConfig.language,
       name: yamlConfig.name,
-      isYaml: isYaml,
       freezed: yamlConfig.freezed,
       rootClient: yamlConfig.rootClient,
       rootClientName: yamlConfig.rootClientName,
@@ -89,10 +81,16 @@ final class Generator {
   }
 
   /// The contents of your schema file
-  final String _schemaContent;
+  late final String _schemaContent;
 
   /// Is the schema format YAML
-  final bool _isYaml;
+  late final bool _isYaml;
+
+  /// The path to your schema file
+  final String _schemaPath;
+
+  /// The url to your schema file
+  final String? _schemaUrl;
 
   /// Output directory
   final String _outputDirectory;
@@ -155,6 +153,7 @@ final class Generator {
   Future<(OpenApiInfo, GenerationStatistics)> generateFiles() async {
     final stopwatch = Stopwatch()..start();
 
+    await _fetchSchemaContent();
     _parseOpenApiDefinitionFile();
     await _generateFiles();
 
@@ -179,6 +178,38 @@ final class Generator {
   Future<List<GeneratedFile>> generateContent() async {
     _parseOpenApiDefinitionFile();
     return _fillContent();
+  }
+
+  Future<void> _fetchSchemaContent() async {
+    final url = _schemaUrl;
+
+    if (url != null) {
+      final extension = p.extension(url).toLowerCase();
+      _isYaml = switch (extension) {
+        '.yaml' => true,
+        '.json' => false,
+        _ => throw GeneratorException(
+            'Unsupported $url extension: $extension',
+          ),
+      };
+      extractingSchemaFromUrlMessage(url);
+      _schemaContent = await schemaUrl(url);
+      writeSchemaToFile(_schemaContent, _schemaPath);
+    } else {
+      final configFile = schemaFile(_schemaPath);
+      if (configFile == null) {
+        throw GeneratorException("Can't find schema file at $_schemaPath.");
+      }
+      final extension = p.extension(_schemaPath).toLowerCase();
+      _isYaml = switch (extension) {
+        '.yaml' => true,
+        '.json' => false,
+        _ => throw GeneratorException(
+            'Unsupported $_schemaPath extension: $extension',
+          ),
+      };
+      _schemaContent = configFile.readAsStringSync();
+    }
   }
 
   /// Parse definition file content and fill list of [UniversalRestClient]

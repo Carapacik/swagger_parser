@@ -20,6 +20,7 @@ final class YamlConfig {
     required this.schemaPath,
     required this.outputDirectory,
     required this.name,
+    this.schemaUrl,
     this.language,
     this.freezed,
     this.rootClient,
@@ -73,6 +74,31 @@ final class YamlConfig {
       outputDirectory = rootConfig.outputDirectory;
     }
 
+    final rawName = yamlConfig['name'];
+    if (rawName is! String?) {
+      throw const ConfigException(
+        "Config parameter 'name' must be String.",
+      );
+    }
+
+    final name = rawName == null || rawName.isEmpty
+        ? schemaPath.split('/').last.split('.').first
+        : rawName;
+
+    final schemaUrl = yamlConfig['schema_url'];
+    if (schemaUrl is! String?) {
+      throw const ConfigException(
+        "Config parameter 'schema_url' must be String.",
+      );
+    } else if (schemaUrl != null) {
+      final uri = Uri.tryParse(schemaUrl);
+      if (uri == null) {
+        throw const ConfigException(
+          "Config parameter 'schema_url' must be valid URL.",
+        );
+      }
+    }
+
     ProgrammingLanguage? language;
     final rawLanguage = yamlConfig['language']?.toString();
     if (rawLanguage != null) {
@@ -114,6 +140,13 @@ final class YamlConfig {
     if (putClientsInFolder is! bool?) {
       throw const ConfigException(
         "Config parameter 'put_clients_in_folder' must be bool.",
+      );
+    }
+
+    final putInFolder = yamlConfig['put_in_folder'];
+    if (putInFolder is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'put_in_folder' must be bool.",
       );
     }
 
@@ -180,37 +213,20 @@ final class YamlConfig {
       }
     }
 
-    final putInFolder = yamlConfig['put_in_folder'];
-    if (putInFolder is! bool?) {
-      throw const ConfigException(
-        "Config parameter 'put_in_folder' must be bool.",
-      );
-    }
-
-    final rawName = yamlConfig['name'];
-    if (rawName is! String?) {
-      throw const ConfigException(
-        "Config parameter 'name' must be String.",
-      );
-    }
-
-    final name = rawName == null || rawName.isEmpty
-        ? schemaPath.split('/').last.split('.').first
-        : rawName;
-
     return YamlConfig(
+      name: name,
       schemaPath: schemaPath,
       outputDirectory: outputDirectory,
-      name: name,
+      schemaUrl: schemaUrl,
       language: language ?? rootConfig?.language,
       freezed: freezed ?? rootConfig?.freezed,
       rootClient: rootClient ?? rootConfig?.rootClient,
       rootClientName: rootClientName ?? rootConfig?.rootClientName,
       clientPostfix: clientPostfix ?? rootConfig?.clientPostfix,
+      putInFolder: putInFolder ?? rootConfig?.putInFolder,
       putClientsInFolder: putClientsInFolder ?? rootConfig?.putClientsInFolder,
       squashClients: squashClients ?? rootConfig?.squashClients,
       pathMethodName: pathMethodName ?? rootConfig?.pathMethodName,
-      putInFolder: putInFolder ?? rootConfig?.putInFolder,
       enumsToJson: enumsToJson ?? rootConfig?.enumsToJson,
       enumsPrefix: enumsPrefix ?? rootConfig?.enumsPrefix,
       markFilesAsGenerated:
@@ -289,17 +305,18 @@ final class YamlConfig {
     return configs;
   }
 
-  final String name;
   final String schemaPath;
   final String outputDirectory;
+  final String name;
+  final String? schemaUrl;
   final ProgrammingLanguage? language;
   final bool? freezed;
   final String? clientPostfix;
   final bool? rootClient;
   final String? rootClientName;
-  final bool? putClientsInFolder;
   final bool? squashClients;
   final bool? pathMethodName;
+  final bool? putClientsInFolder;
   final bool? putInFolder;
   final bool? enumsToJson;
   final bool? enumsPrefix;
