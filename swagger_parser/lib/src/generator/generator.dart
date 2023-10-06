@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:path/path.dart' as p;
 
 import '../config/yaml_config.dart';
@@ -214,7 +216,13 @@ final class Generator {
       extractingSchemaFromUrlMessage(url);
       _schemaContent = await schemaFromUrl(url);
       if (_schemaFromUrlToFile && path != null) {
-        writeSchemaToFile(_schemaContent!, path);
+        if (!_isYaml) {
+          final formattedJson = const JsonEncoder.withIndent('  ')
+              .convert(jsonDecode(_schemaContent!));
+          writeSchemaToFile(formattedJson, path);
+        } else {
+          writeSchemaToFile(_schemaContent!, path);
+        }
       }
     } else if (path != null) {
       final configFile = schemaFile(path);
