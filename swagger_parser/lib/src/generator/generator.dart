@@ -23,8 +23,12 @@ final class Generator {
   /// and sets them to default if not found
   Generator({
     required String outputDirectory,
-    required String schemaPath,
+    String? schemaPath,
     String? schemaUrl,
+    String? schemaContent,
+    bool? isYaml,
+    bool? schemaFromUrlToFile,
+    PreferSchemaFrom? preferSchemeFrom,
     ProgrammingLanguage? language,
     String? name,
     bool? freezed,
@@ -41,6 +45,10 @@ final class Generator {
     List<ReplacementRule>? replacementRules,
   })  : _schemaPath = schemaPath,
         _schemaUrl = schemaUrl,
+        _schemaContent = schemaContent,
+        _isYaml = isYaml ?? false,
+        _schemaFromUrlToFile = schemaFromUrlToFile ?? true,
+        _preferSchemeFrom = preferSchemeFrom ?? PreferSchemaFrom.url,
         _outputDirectory = outputDirectory,
         _name = name,
         _programmingLanguage = language ?? ProgrammingLanguage.dart,
@@ -63,6 +71,8 @@ final class Generator {
       outputDirectory: yamlConfig.outputDirectory,
       schemaPath: yamlConfig.schemaPath,
       schemaUrl: yamlConfig.schemaUrl,
+      schemaFromUrlToFile: yamlConfig.schemaFromUrlToFile,
+      preferSchemeFrom: yamlConfig.preferSchemaFrom,
       language: yamlConfig.language,
       name: yamlConfig.name,
       freezed: yamlConfig.freezed,
@@ -81,16 +91,22 @@ final class Generator {
   }
 
   /// The contents of your schema file
-  late final String _schemaContent;
+  String? _schemaContent;
 
   /// Is the schema format YAML
-  late final bool _isYaml;
+  bool _isYaml;
 
   /// The path to your schema file
-  final String _schemaPath;
+  final String? _schemaPath;
 
   /// The url to your schema file
   final String? _schemaUrl;
+
+  /// If true, schema will be extracted from url and saved to file
+  final bool _schemaFromUrlToFile;
+
+  /// Prefer schema from url or file
+  final PreferSchemaFrom _preferSchemeFrom;
 
   /// Output directory
   final String _outputDirectory;
@@ -176,14 +192,17 @@ final class Generator {
   /// Generates content of files based on OpenApi definition file
   /// and return list of [GeneratedFile]
   Future<List<GeneratedFile>> generateContent() async {
+    await _fetchSchemaContent();
     _parseOpenApiDefinitionFile();
     return _fillContent();
   }
 
   Future<void> _fetchSchemaContent() async {
     final url = _schemaUrl;
+    final path = _schemaPath;
 
-    if (url != null) {
+    if ((_preferSchemeFrom == PreferSchemaFrom.url || path == null) &&
+        url != null) {
       final extension = p.extension(url).toLowerCase();
       _isYaml = switch (extension) {
         '.yaml' => true,
@@ -193,22 +212,28 @@ final class Generator {
           ),
       };
       extractingSchemaFromUrlMessage(url);
-      _schemaContent = await schemaUrl(url);
-      writeSchemaToFile(_schemaContent, _schemaPath);
-    } else {
-      final configFile = schemaFile(_schemaPath);
-      if (configFile == null) {
-        throw GeneratorException("Can't find schema file at $_schemaPath.");
+      _schemaContent = await schemaFromUrl(url);
+      if (_schemaFromUrlToFile && path != null) {
+        writeSchemaToFile(_schemaContent!, path);
       }
-      final extension = p.extension(_schemaPath).toLowerCase();
+    } else if (path != null) {
+      final configFile = schemaFile(path);
+      if (configFile == null) {
+        throw GeneratorException("Can't find schema file at $path.");
+      }
+      final extension = p.extension(path).toLowerCase();
       _isYaml = switch (extension) {
         '.yaml' => true,
         '.json' => false,
         _ => throw GeneratorException(
-            'Unsupported $_schemaPath extension: $extension',
+            'Unsupported $path extension: $extension',
           ),
       };
       _schemaContent = configFile.readAsStringSync();
+    } else if (_schemaContent == null) {
+      throw GeneratorException(
+        "Parameters 'schemaPath' or 'schemaUrl' or 'schemaContent' are required",
+      );
     }
   }
 
@@ -216,7 +241,7 @@ final class Generator {
   /// and list of [UniversalDataClass]
   void _parseOpenApiDefinitionFile() {
     final parser = OpenApiParser(
-      _schemaContent,
+      _schemaContent!,
       isYaml: _isYaml,
       pathMethodName: _pathMethodName,
       enumsPrefix: _enumsPrefix,

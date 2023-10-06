@@ -1,4 +1,5 @@
 import 'package:args/args.dart';
+import 'package:collection/collection.dart';
 import 'package:yaml/yaml.dart';
 
 import '../generator/models/programming_language.dart';
@@ -17,10 +18,12 @@ import 'config_exception.dart';
 final class YamlConfig {
   /// Applies parameters directly from constructor
   const YamlConfig({
-    required this.schemaPath,
-    required this.outputDirectory,
     required this.name,
+    required this.outputDirectory,
+    this.schemaPath,
     this.schemaUrl,
+    this.schemaFromUrlToFile,
+    this.preferSchemaFrom,
     this.language,
     this.freezed,
     this.rootClient,
@@ -49,9 +52,19 @@ final class YamlConfig {
       schemaPath = '';
     }
 
-    if (schemaPath == null) {
+    final schemaUrl = yamlConfig['schema_url']?.toString();
+    if (schemaUrl != null) {
+      final uri = Uri.tryParse(schemaUrl);
+      if (uri == null) {
+        throw const ConfigException(
+          "Config parameter 'schema_url' must be valid URL.",
+        );
+      }
+    }
+
+    if (schemaPath == null && schemaUrl == null) {
       throw const ConfigException(
-        "Config parameter 'schema_path' is required.",
+        "Config parameters 'schema_path' or 'schema_url' are required.",
       );
     }
 
@@ -82,19 +95,28 @@ final class YamlConfig {
     }
 
     final name = rawName == null || rawName.isEmpty
-        ? schemaPath.split('/').last.split('.').first
+        ? (schemaPath ?? schemaUrl)!
+                .split('/')
+                .lastOrNull
+                ?.split('.')
+                .firstOrNull ??
+            'unknown'
         : rawName;
 
-    final schemaUrl = yamlConfig['schema_url'];
-    if (schemaUrl is! String?) {
+    final schemaFromUrlToFile = yamlConfig['schema_from_url_to_file'];
+    if (schemaFromUrlToFile is! bool?) {
       throw const ConfigException(
-        "Config parameter 'schema_url' must be String.",
+        "Config parameter 'schema_from_url_to_file' must be bool.",
       );
-    } else if (schemaUrl != null) {
-      final uri = Uri.tryParse(schemaUrl);
-      if (uri == null) {
-        throw const ConfigException(
-          "Config parameter 'schema_url' must be valid URL.",
+    }
+
+    PreferSchemaFrom? preferSchemaFrom;
+    final rawPreferSchemeFrom = yamlConfig['prefer_schema_from']?.toString();
+    if (rawPreferSchemeFrom != null) {
+      preferSchemaFrom = PreferSchemaFrom.fromString(rawPreferSchemeFrom);
+      if (preferSchemaFrom == null) {
+        throw ConfigException(
+          "'prefer_schema_from' field must be contained in ${PreferSchemaFrom.values.map((e) => e.name)}.",
         );
       }
     }
@@ -105,7 +127,7 @@ final class YamlConfig {
       language = ProgrammingLanguage.fromString(rawLanguage);
       if (language == null) {
         throw ConfigException(
-          "'language' field must be contained in ${ProgrammingLanguage.values}.",
+          "'language' field must be contained in ${ProgrammingLanguage.values.map((e) => e.name)}.",
         );
       }
     }
@@ -218,6 +240,9 @@ final class YamlConfig {
       schemaPath: schemaPath,
       outputDirectory: outputDirectory,
       schemaUrl: schemaUrl,
+      schemaFromUrlToFile:
+          schemaFromUrlToFile ?? rootConfig?.schemaFromUrlToFile,
+      preferSchemaFrom: preferSchemaFrom ?? rootConfig?.preferSchemaFrom,
       language: language ?? rootConfig?.language,
       freezed: freezed ?? rootConfig?.freezed,
       rootClient: rootClient ?? rootConfig?.rootClient,
@@ -305,10 +330,12 @@ final class YamlConfig {
     return configs;
   }
 
-  final String schemaPath;
-  final String outputDirectory;
   final String name;
+  final String outputDirectory;
+  final String? schemaPath;
   final String? schemaUrl;
+  final bool? schemaFromUrlToFile;
+  final PreferSchemaFrom? preferSchemaFrom;
   final ProgrammingLanguage? language;
   final bool? freezed;
   final String? clientPostfix;
@@ -322,4 +349,13 @@ final class YamlConfig {
   final bool? enumsPrefix;
   final bool? markFilesAsGenerated;
   final List<ReplacementRule> replacementRules;
+}
+
+enum PreferSchemaFrom {
+  url,
+  file;
+
+  static PreferSchemaFrom? fromString(String string) => values.firstWhereOrNull(
+        (e) => e.name == string,
+      );
 }

@@ -35,7 +35,7 @@ void writeSchemaToFile(String schemaContent, String filePath) {
   File(p.join(_rootDirectoryPath, filePath)).writeAsStringSync(schemaContent);
 }
 
-Future<String> schemaUrl(String url) async {
+Future<String> schemaFromUrl(String url) async {
   final client = HttpClient();
   final request = await client.getUrl(Uri.parse(url));
   final response = await request.close();
