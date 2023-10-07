@@ -1911,7 +1911,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'class_name.g.dart';
 
-/// Test class
+/// Test class.
 @JsonSerializable()
 class ClassName {
   const ClassName({
@@ -1925,23 +1925,23 @@ class ClassName {
   
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
-  /// Some string
+  /// Some string.
   final String stringType;
 
-  /// Default value
+  /// Default value.
   final String defaultType;
 
-  /// JsonKey here
+  /// JsonKey here.
   @JsonKey(name: 'json_key_value')
   final String jsonKeyValue;
 
-  /// Mega mind
+  /// Mega mind.
   @JsonKey(name: 'mega_MIND')
   final String megaMind;
   final Object emptyDescription;
 
-  /// List of data
-  /// This data is a list
+  /// List of data.
+  /// This data is a list.
   final List<String> list;
 
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
@@ -2000,27 +2000,27 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
 
-/// Test class
+/// Test class.
 @Freezed()
 class ClassName with _$ClassName {
   const factory ClassName({
-    /// Some string
+    /// Some string.
     required String stringType,
 
-    /// JsonKey here
+    /// JsonKey here.
     @JsonKey(name: 'json_key_value')
     required String jsonKeyValue,
 
-    /// Mega mind
+    /// Mega mind.
     @JsonKey(name: 'mega_MIND')
     required String megaMind,
     required Object emptyDescription,
 
-    /// List of data
-    /// This data is a list
+    /// List of data.
+    /// This data is a list.
     required List<String> list,
 
-    /// Default value
+    /// Default value.
     @Default('str')
     String defaultType,
   }) = _ClassName;
@@ -2081,21 +2081,21 @@ class ClassName with _$ClassName {
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-/// Test class
+/// Test class.
 @JsonClass(generateAdapter = true)
 data class ClassName(
-    /// Some string
+    /// Some string.
     var stringType: String,
-    /// Default value
+    /// Default value.
     var defaultType: String = "str",
-    /// JsonKey here
+    /// JsonKey here.
     @Json("json_key_value")
     var jsonKeyValue: String,
-    /// Mega mind
+    /// Mega mind.
     @Json("mega_MIND")
     var megaMind: String,
     var emptyDescription: Any,
-    /// List of data
+    /// List of data.
     var list: List<String>,
 )
 ''';

@@ -450,13 +450,25 @@ class OpenApiParser {
             ? parametersV2(requestPath)
             : parametersV3(requestPath);
 
+        // Build full description
         final summary = requestPath[_summaryConst]?.toString().trim();
         var description = requestPath[_descriptionConst]?.toString().trim();
         description = switch ((summary, description)) {
-          (null, null) => null,
+          (null, null) || ('', '') => null,
           (_, null) || (_, '') => summary,
           (null, _) || ('', _) => description,
           (_, _) => '$summary\n\n$description',
+        };
+        final parametersDescription = parameters
+            .where((e) => e.description != null)
+            .map((e) => '[${e.name ?? 'body'}] - ${e.description}')
+            .join('\n')
+            .trim();
+        description = switch ((description, parametersDescription)) {
+          (null, '') || ('', '') => null,
+          (_, '') => description,
+          (null, _) || ('', _) => parametersDescription,
+          (_, _) => '$description\n\n$parametersDescription',
         };
 
         final String requestName;

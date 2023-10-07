@@ -1838,7 +1838,7 @@ part 'class_name_client.g.dart';
 abstract class ClassNameClient {
   factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 
-  /// Some description
+  /// Some description.
   @GET('/some')
   Future<void> some();
 }
@@ -1869,7 +1869,7 @@ abstract class ClassNameClient {
 import retrofit2.http.*
 
 interface ClassNameClient {
-    /// Some description
+    /// Some description.
     @GET("/some")
     suspend fun some()
 }
