@@ -28,6 +28,7 @@ final class YamlConfig {
     this.freezed,
     this.rootClient,
     this.rootClientName,
+    this.exportFile,
     this.clientPostfix,
     this.putClientsInFolder,
     this.squashClients,
@@ -153,6 +154,13 @@ final class YamlConfig {
       );
     }
 
+    final exportFile = yamlConfig['export_file'];
+    if (exportFile is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'export_file' must be bool.",
+      );
+    }
+
     final rawClientPostfix = yamlConfig['client_postfix']?.toString().trim();
 
     final clientPostfix =
@@ -248,6 +256,7 @@ final class YamlConfig {
       freezed: freezed ?? rootConfig?.freezed,
       rootClient: rootClient ?? rootConfig?.rootClient,
       rootClientName: rootClientName ?? rootConfig?.rootClientName,
+      exportFile: exportFile ?? rootConfig?.exportFile,
       clientPostfix: clientPostfix ?? rootConfig?.clientPostfix,
       putInFolder: putInFolder ?? rootConfig?.putInFolder,
       putClientsInFolder: putClientsInFolder ?? rootConfig?.putClientsInFolder,
@@ -344,6 +353,7 @@ final class YamlConfig {
   final String? clientPostfix;
   final bool? rootClient;
   final String? rootClientName;
+  final bool? exportFile;
   final bool? squashClients;
   final bool? pathMethodName;
   final bool? putClientsInFolder;
