@@ -64,7 +64,7 @@ swagger_parser:
 
   # Optional. If 'schema_path' and 'schema_url' are specified, what will be used.
   # Current available options are: path, url.
-  prefer_schema_from: url
+  prefer_schema_source: url
 
   # Optional (dart only). Set 'true' to generate data classes using freezed package.
   freezed: false
