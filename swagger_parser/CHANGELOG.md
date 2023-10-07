@@ -1,3 +1,8 @@
+## 1.9.1
+- Handling incorrect names for classes, enums and methods.
+- Additional name for unnamed models [#98](https://github.com/Carapacik/swagger_parser/issues/98)
+- Support for deprecated annotations for methods
+
 ## 1.9.0
 - Added display of generation statistics for each scheme and total
 - The command to start generation has been changed to `dart run swagger_parser`

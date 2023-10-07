@@ -45,9 +45,9 @@ ${descriptionComment(comment)}class $className {
   final Dio _dio;
   final String? _baseUrl;
 
-${_p(clientsNames, postfix)}
+${_privateFields(clientsNames, postfix)}
 
-${_r(clientsNames, postfix)}
+${_getters(clientsNames, postfix)}
 }
 ''';
 }
@@ -63,11 +63,11 @@ String _clientsImport(
               "${'${import}_$postfix'.toSnake}.dart';",
         ).join('\n')}\n';
 
-String _p(Set<String> names, String postfix) => names
+String _privateFields(Set<String> names, String postfix) => names
     .map((n) => '  ${n.toPascal + postfix.toPascal}? _${n.toCamel};')
     .join('\n');
 
-String _r(Set<String> names, String postfix) => names
+String _getters(Set<String> names, String postfix) => names
     .map(
       (n) => '  ${n.toPascal + postfix.toPascal} get ${n.toCamel} => '
           '_${n.toCamel} ??= ${n.toPascal + postfix.toPascal}(_dio, baseUrl: _baseUrl);',

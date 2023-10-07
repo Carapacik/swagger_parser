@@ -158,6 +158,14 @@ global_options:
   json_serializable:
     runs_before:
       - retrofit_generator
+
+# If you want to serialize nested lists of objects
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          explicit_to_json: true
 ```
 To run the code generation with build_runner, execute the following command:
 ```shell
