@@ -461,7 +461,7 @@ class OpenApiParser {
         };
         final parametersDescription = parameters
             .where((e) => e.description != null)
-            .map((e) => '[${e.name ?? 'body'}] - ${e.description}')
+            .map((e) => '[${e.name?.toCamel ?? 'body'}] - ${e.description}')
             .join('\n')
             .trim();
         description = switch ((description, parametersDescription)) {
