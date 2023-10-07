@@ -220,6 +220,7 @@ class OpenApiParser {
                 (e) => e.name == (parameter[_inConst].toString()),
               ),
               type: typeWithImport.type,
+              description: parameter[_descriptionConst]?.toString(),
               name: parameter[_nameConst] == _bodyConst
                   ? null
                   : parameter[_nameConst].toString(),
@@ -269,6 +270,7 @@ class OpenApiParser {
             types.add(
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
+                description: requestBody[_descriptionConst]?.toString(),
                 type: UniversalType(
                   type: currentType.type,
                   name: 'file',
@@ -297,6 +299,7 @@ class OpenApiParser {
                 UniversalRequestType(
                   parameterType: HttpParameterType.part,
                   name: e.key,
+                  description: requestBody[_descriptionConst]?.toString(),
                   type: UniversalType(
                     type: currentType.type,
                     name: e.key,
@@ -324,6 +327,7 @@ class OpenApiParser {
           types.add(
             UniversalRequestType(
               parameterType: HttpParameterType.body,
+              description: requestBody[_descriptionConst]?.toString(),
               type: UniversalType(
                 type: currentType.type,
                 name: _bodyConst,
@@ -398,6 +402,7 @@ class OpenApiParser {
               (e) => e.name == (rawParameter[_inConst].toString()),
             ),
             type: typeWithImport.type,
+            description: rawParameter[_descriptionConst]?.toString(),
             name: rawParameter[_inConst] == _bodyConst
                 ? null
                 : rawParameter[_nameConst].toString(),
