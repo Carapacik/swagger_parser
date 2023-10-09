@@ -1,3 +1,6 @@
+## 1.9.2
+- Fix error with `required` in clients ([#101](https://github.com/Carapacik/swagger_parser/issues/103))
+
 ## 1.9.1
 - Handling incorrect names for classes, enums and methods.
 - Additional name for unnamed models [#98](https://github.com/Carapacik/swagger_parser/issues/98)
