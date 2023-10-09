@@ -19,6 +19,9 @@ class CaseUtils {
     for (var i = 0; i < text.length; i++) {
       final char = text[i];
       if (_separateSymbolsList.contains(char)) {
+        if (i == 0 && char == '_') {
+          words.add('private');
+        }
         continue;
       }
 

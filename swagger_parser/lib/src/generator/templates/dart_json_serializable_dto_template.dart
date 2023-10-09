@@ -60,15 +60,8 @@ String _required(UniversalType t) =>
     t.isRequired && t.defaultValue == null ? 'required ' : '';
 
 /// return defaultValue if have
-String _defaultValue(UniversalType t) {
-  final value =
-      t.defaultValue == '[]' ? 'const ${t.defaultValue}' : t.defaultValue;
-  final type = t.type;
-  final enumType = t.enumType;
-
-  return value != null
-      ? ' = ${type.quoterForStringType()}'
-          '${enumType != null ? '$type.${prefixForEnumItems(enumType, value)}' : value}'
-          '${type.quoterForStringType()}'
-      : '';
-}
+String _defaultValue(UniversalType t) => t.defaultValue != null
+    ? ' = '
+        '${t.arrayDepth > 0 ? 'const ' : ''}'
+        '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}'
+    : '';
