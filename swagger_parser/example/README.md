@@ -2,7 +2,7 @@
 - ### Set the output directory in pubspec.yaml
 - ### Run command below to generate rest clients and data classes:
 ```shell
-dart run swagger_parser:generate
+dart run swagger_parser
 ```
 - ### For `freezed` with `retrofit` use build.yaml file with this content:
 ```yaml
@@ -13,7 +13,6 @@ global_options:
   json_serializable:
     runs_before:
       - retrofit_generator
-
 ```
 - ### Run code generation with `build_runner` for `json_seializable`(`freezed`) and `retrofit` with command:
 ```shell
