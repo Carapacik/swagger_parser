@@ -15,6 +15,7 @@ final class UniversalRequest {
     this.description,
     this.isMultiPart = false,
     this.isFormUrlEncoded = false,
+    this.isDeprecated = false,
   });
 
   /// Request name
@@ -40,6 +41,9 @@ final class UniversalRequest {
 
   /// Request type 'application/x-www-form-urlencoded'
   final bool isFormUrlEncoded;
+
+  /// Value indicating whether this request is deprecated
+  final bool isDeprecated;
 
   @override
   bool operator ==(Object other) =>
