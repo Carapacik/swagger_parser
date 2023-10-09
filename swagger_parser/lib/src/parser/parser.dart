@@ -397,7 +397,7 @@ class OpenApiParser {
               ? rawParameter[_schemaConst] as Map<String, dynamic>
               : rawParameter,
           name: rawParameter[_nameConst].toString(),
-          isRequired: isRequired ?? true,
+          isRequired: isRequired ?? false,
         );
 
         if (typeWithImport.import != null) {
