@@ -78,8 +78,8 @@ class OpenApiParser {
   static const _contentConst = 'content';
   static const _defaultConst = 'default';
   static const _definitionsConst = 'definitions';
-  static const _descriptionConst = 'description';
   static const _deprecatedConst = 'deprecated';
+  static const _descriptionConst = 'description';
   static const _enumConst = 'enum';
   static const _formatConst = 'format';
   static const _formUrlEncodedConst = 'application/x-www-form-urlencoded';
@@ -134,9 +134,9 @@ class OpenApiParser {
 
     /// Parses return type for client query for OpenApi v3
     UniversalType? returnTypeV3(
-      Map<String, dynamic> map, {
-      required String additionalName,
-    }) {
+      Map<String, dynamic> map,
+      String additionalName,
+    ) {
       final code2xxMap = _code2xxMap(map);
       if (code2xxMap == null || !code2xxMap.containsKey(_contentConst)) {
         return null;
@@ -348,9 +348,9 @@ class OpenApiParser {
 
     /// Parses return type for client query for OpenApi v2
     UniversalType? returnTypeV2(
-      Map<String, dynamic> map, {
-      required String additionalName,
-    }) {
+      Map<String, dynamic> map,
+      String additionalName,
+    ) {
       final code2xxMap = _code2xxMap(map);
       if (code2xxMap == null || !code2xxMap.containsKey(_schemaConst)) {
         return null;
@@ -433,14 +433,8 @@ class OpenApiParser {
             as Map<String, dynamic>)[_responsesConst] as Map<String, dynamic>;
         final additionalName = '$key${path}Response'.toPascal;
         final returnType = _version == OAS.v2
-            ? returnTypeV2(
-                requestPathResponses,
-                additionalName: additionalName,
-              )
-            : returnTypeV3(
-                requestPathResponses,
-                additionalName: additionalName,
-              );
+            ? returnTypeV2(requestPathResponses, additionalName)
+            : returnTypeV3(requestPathResponses, additionalName);
         final parameters = _version == OAS.v2
             ? parametersV2(requestPath)
             : parametersV3(requestPath);
@@ -537,7 +531,7 @@ class OpenApiParser {
       final imports = SplayTreeSet<String>();
 
       /// Used for find properties in map
-      void findParamsAndImports(Map<String, dynamic> map) {
+      void findParametersAndImports(Map<String, dynamic> map) {
         (map[_propertiesConst] as Map<String, dynamic>).forEach(
           (propertyName, propertyValue) {
             final typeWithImport = _findType(
@@ -555,7 +549,7 @@ class OpenApiParser {
       }
 
       if (value.containsKey(_propertiesConst)) {
-        findParamsAndImports(value);
+        findParametersAndImports(value);
       } else if (value.containsKey(_enumConst)) {
         final items = protectEnumItemsNames(
           (value[_enumConst] as List).map((e) => '$e'),
@@ -611,7 +605,7 @@ class OpenApiParser {
             continue;
           }
           if (map.containsKey(_propertiesConst)) {
-            findParamsAndImports(map);
+            findParametersAndImports(map);
           }
         }
       }
@@ -1007,4 +1001,13 @@ extension on String {
 }
 
 /// All versions of the OpenApi Specification that this package supports
-enum OAS { v3_1, v3, v2 }
+enum OAS {
+  /// {@nodoc}
+  v3_1,
+
+  /// {@nodoc}
+  v3,
+
+  /// {@nodoc}
+  v2
+}

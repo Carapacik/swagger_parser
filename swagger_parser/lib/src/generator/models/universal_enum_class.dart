@@ -76,7 +76,6 @@ class UniversalEnumItem {
   int get hashCode => name.hashCode ^ jsonKey.hashCode ^ description.hashCode;
 
   @override
-  String toString() {
-    return 'UniversalEnumItem(name: $name, jsonKey: $jsonKey, description: $description)';
-  }
+  String toString() =>
+      'UniversalEnumItem(name: $name, jsonKey: $jsonKey, description: $description)';
 }

@@ -99,8 +99,8 @@ String? protectDefaultValue(
   }
 
   if (type == 'string') {
-    final k = dart ? "'" : '"';
-    return '$k${nameStr.replaceAll(k, dart ? r"\'" : r'\"')}$k';
+    final quote = dart ? "'" : '"';
+    return '$quote${nameStr.replaceAll(quote, dart ? r"\'" : r'\"')}$quote';
   }
 
   return nameStr;
@@ -124,7 +124,7 @@ Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names) {
   }
 
   for (final name in names) {
-    final (newName, error) = switch (name) {
+    final (newName, renameDescription) = switch (name) {
       _
           when _startWithNumberRegExp.hasMatch(name) &&
               _enumNameRegExp.hasMatch(numberEnumItemName(name).toCamel) =>
@@ -146,7 +146,7 @@ Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names) {
       UniversalEnumItem(
         name: newName,
         jsonKey: name,
-        description: error,
+        description: renameDescription,
       ),
     );
   }
