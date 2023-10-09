@@ -1064,26 +1064,36 @@ class ClassName with _$ClassName {
   group('Enum', () {
     group('dart + json_serializable', () {
       test('without toJson()', () async {
-        const dataClasses = [
+        final dataClasses = [
           UniversalEnumClass(
             name: 'EnumName',
             type: 'int',
-            items: {'1', '2', '3'},
+            items: UniversalEnumItem.listFromNames({'1', '2', '3'}),
           ),
           UniversalEnumClass(
             name: 'EnumNameString',
             type: 'string',
-            items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+            items: UniversalEnumItem.listFromNames(
+              {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR', 'пятый'},
+            ),
           ),
           UniversalEnumClass(
             name: 'KeywordsName',
             type: 'string',
-            items: {'FALSE', 'for', 'do'},
+            items: UniversalEnumItem.listFromNames({'FALSE', 'for', 'do'}),
           ),
           UniversalEnumClass(
             name: 'EnumNameStringWithLeadingNumbers',
             type: 'string',
-            items: {'1itemOne', '2ItemTwo', '3item_three', '4ITEM-FOUR'},
+            items: UniversalEnumItem.listFromNames(
+              {
+                '1itemOne',
+                '2ItemTwo',
+                '3item_three',
+                '4ITEM-FOUR',
+                '5иллегалчарактер',
+              },
+            ),
           ),
         ];
 
@@ -1118,7 +1128,11 @@ enum EnumNameString {
   @JsonValue('item_three')
   itemThree,
   @JsonValue('ITEM-FOUR')
-  itemFour;
+  itemFour,
+
+  /// Incorrect name has been replaced. Original name: `пятый`.
+  @JsonValue('пятый')
+  undefined0;
 }
 ''';
         const expectedContent2 = '''
@@ -1126,10 +1140,15 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
 enum KeywordsName {
+  /// The name has been replaced because it contains a keyword. Original name: `FALSE`.
   @JsonValue('FALSE')
   valueFalse,
+
+  /// The name has been replaced because it contains a keyword. Original name: `for`.
   @JsonValue('for')
   valueFor,
+
+  /// The name has been replaced because it contains a keyword. Original name: `do`.
   @JsonValue('do')
   valueDo;
 }
@@ -1147,7 +1166,11 @@ enum EnumNameStringWithLeadingNumbers {
   @JsonValue('3item_three')
   value3itemThree,
   @JsonValue('4ITEM-FOUR')
-  value4itemFour;
+  value4ItemFour,
+
+  /// Incorrect name has been replaced. Original name: `5иллегалчарактер`.
+  @JsonValue('5иллегалчарактер')
+  undefined0;
 }
 ''';
 
@@ -1158,16 +1181,18 @@ enum EnumNameStringWithLeadingNumbers {
       });
 
       test('with toJson() in enums', () async {
-        const dataClasses = [
+        final dataClasses = [
           UniversalEnumClass(
             name: 'EnumName',
             type: 'int',
-            items: {'1', '2', '3'},
+            items: UniversalEnumItem.listFromNames({'1', '2', '3'}),
           ),
           UniversalEnumClass(
             name: 'EnumNameString',
             type: 'string',
-            items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+            items: UniversalEnumItem.listFromNames(
+              {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+            ),
           ),
         ];
 
@@ -1230,21 +1255,23 @@ const _$EnumNameStringEnumMap = {
 
     group('dart + freezed', () {
       test('without toJson()', () async {
-        const dataClasses = [
+        final dataClasses = [
           UniversalEnumClass(
             name: 'EnumName',
             type: 'int',
-            items: {'1', '2', '3'},
+            items: UniversalEnumItem.listFromNames({'1', '2', '3'}),
           ),
           UniversalEnumClass(
             name: 'EnumNameString',
             type: 'string',
-            items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+            items: UniversalEnumItem.listFromNames(
+              {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+            ),
           ),
           UniversalEnumClass(
             name: 'KeywordsName',
             type: 'string',
-            items: {'FALSE', 'for', 'do'},
+            items: UniversalEnumItem.listFromNames({'FALSE', 'for', 'do'}),
           ),
         ];
         const fillController = FillController(freezed: true);
@@ -1286,10 +1313,15 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 @JsonEnum()
 enum KeywordsName {
+  /// The name has been replaced because it contains a keyword. Original name: `FALSE`.
   @JsonValue('FALSE')
   valueFalse,
+
+  /// The name has been replaced because it contains a keyword. Original name: `for`.
   @JsonValue('for')
   valueFor,
+
+  /// The name has been replaced because it contains a keyword. Original name: `do`.
   @JsonValue('do')
   valueDo;
 }
@@ -1300,16 +1332,18 @@ enum KeywordsName {
       });
 
       test('with toJson()', () async {
-        const dataClasses = [
+        final dataClasses = [
           UniversalEnumClass(
             name: 'EnumName',
             type: 'int',
-            items: {'1', '2', '3'},
+            items: UniversalEnumItem.listFromNames({'1', '2', '3'}),
           ),
           UniversalEnumClass(
             name: 'EnumNameString',
             type: 'string',
-            items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+            items: UniversalEnumItem.listFromNames(
+              {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+            ),
           ),
         ];
         const fillController = FillController(freezed: true, enumsToJson: true);
@@ -1370,21 +1404,23 @@ const _$EnumNameStringEnumMap = {
     });
 
     test('kotlin + moshi', () async {
-      const dataClasses = [
+      final dataClasses = [
         UniversalEnumClass(
           name: 'EnumName',
           type: 'int',
-          items: {'1', '2', '3'},
+          items: UniversalEnumItem.listFromNames({'1', '2', '3'}),
         ),
         UniversalEnumClass(
           name: 'EnumNameString',
           type: 'string',
-          items: {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+          items: UniversalEnumItem.listFromNames(
+            {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+          ),
         ),
         UniversalEnumClass(
           name: 'KeywordsName',
           type: 'string',
-          items: {'FALSE', 'for', 'do'},
+          items: UniversalEnumItem.listFromNames({'FALSE', 'for', 'do'}),
         ),
       ];
       const fillController = FillController(
@@ -1430,10 +1466,15 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 enum class KeywordsName {
+    /// The name has been replaced because it contains a keyword. Original name: `FALSE`.
     @Json("FALSE")
     VALUE_FALSE,
+
+    /// The name has been replaced because it contains a keyword. Original name: `for`.
     @Json("for")
     VALUE_FOR,
+
+    /// The name has been replaced because it contains a keyword. Original name: `do`.
     @Json("do")
     VALUE_DO,
 }
@@ -1446,10 +1487,10 @@ enum class KeywordsName {
 
   group('Enum negative values', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalEnumClass(
+      final dataClass = UniversalEnumClass(
         name: 'EnumName',
         type: 'int',
-        items: {'-2', '-1', '0', '1'},
+        items: UniversalEnumItem.listFromNames({'-2', '-1', '0', '1'}),
       );
       const fillController = FillController();
       final file = fillController.fillDtoContent(dataClass);
@@ -1474,10 +1515,10 @@ enum EnumName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalEnumClass(
+      final dataClass = UniversalEnumClass(
         name: 'EnumName',
         type: 'int',
-        items: {'-2', '-1', '0', '1'},
+        items: UniversalEnumItem.listFromNames({'-2', '-1', '0', '1'}),
       );
       const fillController = FillController(freezed: true);
       final file = fillController.fillDtoContent(dataClass);
@@ -1502,10 +1543,10 @@ enum EnumName {
     });
 
     test('kotlin + moshi', () async {
-      const dataClass = UniversalEnumClass(
+      final dataClass = UniversalEnumClass(
         name: 'EnumName',
         type: 'int',
-        items: {'-2', '-1', '0', '1'},
+        items: UniversalEnumItem.listFromNames({'-2', '-1', '0', '1'}),
       );
       const fillController = FillController(
         programmingLanguage: ProgrammingLanguage.kotlin,

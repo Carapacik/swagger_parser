@@ -1,5 +1,6 @@
+import 'package:collection/collection.dart';
+
 import '../../utils/case_utils.dart';
-import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
 import '../models/universal_data_class.dart';
 
@@ -19,9 +20,10 @@ enum class ${dataClass.name.toPascal} {${_parameters(dataClass)}
 }
 
 String _parameters(UniversalEnumClass dataClass) => dataClass.items
-    .map(
-      (e) =>
-          '${dataClass.type != 'string' || prefixForEnumItems(dataClass.type, e, dart: false) != e ? '\n    @Json("$e")' : ''}\n    '
-          '${prefixForEnumItems(dataClass.type, e, dart: false)},',
+    .mapIndexed(
+      (i, e) =>
+          '${i != 0 && e.description != null ? '\n\n' : '\n'}${descriptionComment(e.description, tab: '    ')}'
+          '${dataClass.type != 'string' || e.jsonKey != e.name.toScreamingSnake ? '    @Json("${e.jsonKey}")' : ''}\n    '
+          '${e.name.toScreamingSnake},',
     )
     .join();
