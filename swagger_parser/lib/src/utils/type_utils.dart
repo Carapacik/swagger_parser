@@ -3,7 +3,7 @@ import 'case_utils.dart';
 import 'dart_keywords.dart';
 
 extension StringTypeX on String {
-  String toDartType([String? format]) => switch (this) {
+  String toDartType(bool isTypedef, [String? format]) => switch (this) {
         'integer' => 'int',
         'number' => switch (format) {
             'float' || 'double' => 'double',
@@ -19,7 +19,7 @@ extension StringTypeX on String {
         'file' => 'File',
         'boolean' => 'bool',
         'object' || 'null' => 'Object',
-        _ => this
+        _ => isTypedef ? 'String' : this
       };
 
   String toKotlinType([String? format]) => switch (this) {

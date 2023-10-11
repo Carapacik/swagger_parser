@@ -129,15 +129,15 @@ final class UniversalType {
 /// Converts [UniversalType] to type from specified language
 extension UniversalTypeX on UniversalType {
   /// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
-  String toSuitableType(ProgrammingLanguage lang) {
+  String toSuitableType(ProgrammingLanguage lang, {bool isTypedef = false}) {
     if (arrayDepth == 0) {
-      return _questionMark(lang);
+      return _questionMark(lang, isTypedef);
     }
     final sb = StringBuffer();
     for (var i = 0; i < arrayDepth; i++) {
       sb.write('List<');
     }
-    sb.write(_questionMark(lang));
+    sb.write(_questionMark(lang, isTypedef));
     for (var i = 0; i < arrayDepth; i++) {
       sb.write('>');
     }
@@ -147,14 +147,15 @@ extension UniversalTypeX on UniversalType {
     return sb.toString();
   }
 
-  String _questionMark(ProgrammingLanguage lang) {
+  String _questionMark(ProgrammingLanguage lang, bool isTypedef) {
     final questionMark =
         isRequired && !nullable || arrayDepth > 0 || defaultValue != null
             ? ''
             : '?';
     switch (lang) {
       case ProgrammingLanguage.dart:
-        return type.toDartType(format) + questionMark;
+        // final type = type.toDartType(format) == type
+        return type.toDartType(isTypedef, format) + questionMark;
       case ProgrammingLanguage.kotlin:
         return type.toKotlinType(format) + questionMark;
     }

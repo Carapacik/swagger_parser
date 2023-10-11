@@ -36,7 +36,7 @@ ${index != 0 && item.description != null ? '\n' : ''}${descriptionComment(item.d
 
 String _toJson(UniversalEnumClass enumClass, String className) => '''
 
-  ${enumClass.type.toDartType()} toJson() => _\$${className}EnumMap[this]!;
+  ${enumClass.type.toDartType(false)} toJson() => _\$${className}EnumMap[this]!;
 }
 
 const _\$${className}EnumMap = {
