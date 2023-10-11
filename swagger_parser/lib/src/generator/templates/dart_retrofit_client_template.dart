@@ -71,7 +71,7 @@ String _toParameter(UniversalRequestType parameter) =>
     "    @${parameter.parameterType.type}(${parameter.name != null ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
     '${_required(parameter.type)}'
     '${parameter.type.toSuitableType(ProgrammingLanguage.dart)} '
-    '${'${parameter.parameterType.type}${parameter.type.name!}'.toCamel}${_defaultValue(parameter.type)},';
+    '${'${parameter.parameterType.type} ${parameter.type.name!}'.toCamel}${_defaultValue(parameter.type)},';
 
 /// return required if isRequired
 String _required(UniversalType t) =>
