@@ -18,7 +18,7 @@ extension StringTypeX on String {
           },
         'file' => 'File',
         'boolean' => 'bool',
-        'object' || 'null' => 'Object',
+        'object' || 'null' => isTypedef ? 'String' : 'Object',
         _ => isTypedef ? 'String' : this
       };
 
