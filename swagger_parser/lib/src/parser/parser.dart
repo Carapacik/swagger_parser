@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:js_util';
 
 import 'package:collection/collection.dart';
 import 'package:path/path.dart' as p;
@@ -786,6 +787,7 @@ class OpenApiParser {
             (map.containsKey(_propertiesConst) &&
                 (map[_propertiesConst] as Map<String, dynamic>).isNotEmpty) ||
         (map.containsKey(_additionalPropertiesConst) &&
+            (instanceof(map[_additionalPropertiesConst], Map<String, dynamic>)) &&
             (map[_additionalPropertiesConst] as Map<String, dynamic>)
                 .isNotEmpty)) {
       // false positive result
