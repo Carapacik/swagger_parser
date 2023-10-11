@@ -21,5 +21,5 @@ String dartTypeDefTemplate(
     markFileAsGenerated: markFileAsGenerated,
   )}${import != null ? "import '${import.toSnake}.dart';\n\n" : ''}'
       '${descriptionComment(dataClass.description)}'
-      'typedef $className = ${type.toSuitableType(ProgrammingLanguage.dart)};\n';
+      'typedef $className = ${type.toSuitableType(ProgrammingLanguage.dart, isTypedef: true)};\n';
 }
