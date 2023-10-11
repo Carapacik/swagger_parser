@@ -20,6 +20,7 @@ String dartRetrofitClientTemplate({
 ${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_fileImport(restClient)}import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
+import '../extension/extension_client.dart';
 part '${name.toSnake}.g.dart';
 
 @RestApi()
