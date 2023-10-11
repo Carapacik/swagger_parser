@@ -18,8 +18,8 @@ extension StringTypeX on String {
           },
         'file' => 'File',
         'boolean' => 'bool',
-        'object' || 'null' => 'Object',
-        _ => this
+        'object' || 'null' => 'string',
+        _ => 'string'
       };
 
   String toKotlinType([String? format]) => switch (this) {

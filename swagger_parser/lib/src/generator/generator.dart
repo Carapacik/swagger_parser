@@ -230,6 +230,7 @@ final class Generator {
     for (final dataClass in _dataClasses) {
       files.add(fillController.fillDtoContent(dataClass));
     }
+    files.add(fillController.fillExtentionContent());
     if (_rootClient &&
         _programmingLanguage == ProgrammingLanguage.dart &&
         _restClients.isNotEmpty) {

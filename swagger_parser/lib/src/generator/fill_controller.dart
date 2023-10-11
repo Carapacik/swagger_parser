@@ -66,6 +66,25 @@ final class FillController {
     );
   }
 
+  /// Return [GeneratedFile] generated from given [UniversalRestClient]
+  GeneratedFile fillExtentionContent() {
+    const name = 'extension';
+    final fileName = _programmingLanguage == ProgrammingLanguage.dart
+        ? '${name}_$_clientPostfix'.toSnake
+        : name.toPascal + _clientPostfix.toPascal;
+    const folderName ='extension';
+
+    return GeneratedFile(
+      name: '$folderName/$fileName.${_programmingLanguage.fileExtension}',
+      contents: _programmingLanguage.extensionFileContent(
+        name.toPascal + _clientPostfix.toPascal,
+        markFilesAsGenerated: _markFilesAsGenerated,
+      ),
+    );
+  }
+
+
+
   /// Return [GeneratedFile] root client generated from given clients
   GeneratedFile fillRootClient(Iterable<UniversalRestClient> clients) {
     final clientsNames = clients.map((c) => c.name.toPascal).toSet();

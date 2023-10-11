@@ -5,11 +5,13 @@ import '../templates/dart_enum_dto_template.dart';
 import '../templates/dart_freezed_dto_template.dart';
 import '../templates/dart_json_serializable_dto_template.dart';
 import '../templates/dart_retrofit_client_template.dart';
+import '../templates/dart_retrofit_extension_template.dart';
 import '../templates/dart_root_client_template.dart';
 import '../templates/dart_typedef_template.dart';
 import '../templates/kotlin_enum_dto_template.dart';
 import '../templates/kotlin_moshi_dto_template.dart';
 import '../templates/kotlin_retrofit_client_template.dart';
+import '../templates/kotlin_retrofit_extension_template.dart';
 import '../templates/kotlin_typedef_template.dart';
 import 'open_api_info.dart';
 import 'universal_data_class.dart';
@@ -103,6 +105,21 @@ enum ProgrammingLanguage {
           ),
         kotlin => kotlinRetrofitClientTemplate(
             restClient: restClient,
+            name: name,
+            markFileAsGenerated: markFilesAsGenerated,
+          ),
+      };
+
+  String extensionFileContent(
+    String name, {
+    required bool markFilesAsGenerated,
+  }) =>
+      switch (this) {
+        dart => dartRetrofitExtensionTemplate(
+            name: name,
+            markFileAsGenerated: markFilesAsGenerated,
+          ),
+        kotlin => kotlinRetrofitExtensionTemplate(
             name: name,
             markFileAsGenerated: markFilesAsGenerated,
           ),
