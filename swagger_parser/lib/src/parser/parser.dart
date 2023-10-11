@@ -787,7 +787,7 @@ class OpenApiParser {
             (map.containsKey(_propertiesConst) &&
                 (map[_propertiesConst] as Map<String, dynamic>).isNotEmpty) ||
         (map.containsKey(_additionalPropertiesConst) &&
-            (instanceof(map[_additionalPropertiesConst], Map<String, dynamic>)) &&
+            (map[_additionalPropertiesConst] is Map<String, dynamic>) &&
             (map[_additionalPropertiesConst] as Map<String, dynamic>)
                 .isNotEmpty)) {
       // false positive result
