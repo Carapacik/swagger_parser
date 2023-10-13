@@ -364,8 +364,8 @@ void main() {
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
       final dataClasses = parser.parseDataClasses().toList();
-      const expectedDataClasses = <UniversalDataClass>[
-        UniversalComponentClass(
+      final expectedDataClasses = <UniversalDataClass>[
+        const UniversalComponentClass(
           name: 'OneOfElement',
           imports: {'EnumClass'},
           parameters: [
@@ -431,7 +431,7 @@ void main() {
         UniversalEnumClass(
           name: 'EnumClass',
           type: 'string',
-          items: {'value1', 'value2'},
+          items: UniversalEnumItem.listFromNames({'value1', 'value2'}),
         ),
       ];
 

@@ -24,7 +24,6 @@ String _parameters(List<UniversalType> parameters) => parameters
       (e) => '\n${descriptionComment(e.description, tab: '    ')}'
           '${e.jsonKey != null && e.name != e.jsonKey ? '    @Json("${e.jsonKey}")\n' : ''}    '
           'var ${e.name}: ${e.toSuitableType(ProgrammingLanguage.kotlin)}'
-          '${e.defaultValue != null ? ' = ${e.type.quoterForStringType(dart: false)}'
-              '${e.defaultValue}${e.type.quoterForStringType(dart: false)}' : ''},',
+          '${e.defaultValue != null ? ' = ${protectDefaultValue(e.defaultValue, type: e.type, dart: false)}' : ''},',
     )
     .join();
