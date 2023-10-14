@@ -12,6 +12,7 @@ import 'generator_exception.dart';
 import 'models/generated_file.dart';
 import 'models/generation_statistics.dart';
 import 'models/open_api_info.dart';
+import 'models/prefer_schema_source.dart';
 import 'models/programming_language.dart';
 import 'models/replacement_rule.dart';
 import 'models/universal_data_class.dart';

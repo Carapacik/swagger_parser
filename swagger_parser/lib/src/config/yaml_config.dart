@@ -2,6 +2,7 @@ import 'package:args/args.dart';
 import 'package:collection/collection.dart';
 import 'package:yaml/yaml.dart';
 
+import '../generator/models/prefer_schema_source.dart';
 import '../generator/models/programming_language.dart';
 import '../generator/models/replacement_rule.dart';
 import '../utils/file_utils.dart';
@@ -352,16 +353,4 @@ final class YamlConfig {
   final bool? enumsPrefix;
   final bool? markFilesAsGenerated;
   final List<ReplacementRule> replacementRules;
-}
-
-/// Enum for choosing schema source
-enum PreferSchemaSource {
-  url,
-  path;
-
-  /// Returns [PreferSchemaSource] from string
-  static PreferSchemaSource? fromString(String string) =>
-      values.firstWhereOrNull(
-        (e) => e.name == string,
-      );
 }
