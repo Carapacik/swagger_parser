@@ -31,13 +31,13 @@ dependencies:
   # dio: ^5.3.0
   # freezed_annotation: ^2.4.1 # for freezed
   # json_annotation: ^4.8.1
-  # retrofit: ^4.0.2
+  # retrofit: ^4.0.3
 
 dev_dependencies:
   # build_runner: ^2.4.6
-  # freezed: ^2.4.3 # for freezed
+  # freezed: ^2.4.5 # for freezed
   # json_serializable: ^6.7.1
-  # retrofit_generator: ^8.0.0
+  # retrofit_generator: ^8.0.1
   swagger_parser:
 ```
 
@@ -52,6 +52,7 @@ swagger_parser:
   
   # Sets the OpenApi schema path directory for api definition.
   schema_path: schemas/openapi.json
+
   # Sets the url of the OpenApi schema
   schema_url: https://petstore.swagger.io/v2/swagger.json
 
@@ -64,7 +65,7 @@ swagger_parser:
 
   # Optional. If 'schema_path' and 'schema_url' are specified, what will be used.
   # Current available options are: path, url.
-  prefer_schema_source: url
+  prefer_schema_source: path
 
   # Optional (dart only). Set 'true' to generate data classes using freezed package.
   freezed: false
