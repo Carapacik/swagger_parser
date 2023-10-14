@@ -1,9 +1,15 @@
+## 1.10.0
+- Support for generating schemas by url (see [example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml))
+- Add new config parameter `schema_url`
+- Add new config parameter `schema_from_url_to_file`
+- Add new config parameter `prefer_schema_source`
+
 ## 1.9.2
 - Fix error with `required` in clients ([#101](https://github.com/Carapacik/swagger_parser/issues/103))
 
 ## 1.9.1
 - Handling incorrect names for classes, enums and methods.
-- Additional name for unnamed models [#98](https://github.com/Carapacik/swagger_parser/issues/98)
+- Additional name for unnamed models ([#98](https://github.com/Carapacik/swagger_parser/issues/98))
 - Support for `deprecated` annotations for methods
 
 ## 1.9.0
@@ -13,7 +19,7 @@
 - Fix error with missing File import ([#101](https://github.com/Carapacik/swagger_parser/issues/101))
 
 ## 1.8.0
-- Multiple schemas support(see ([example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml)))
+- Multiple schemas support (see [example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml))
 - Support for specifying nullable types via anyOf
 - Edit root client template
 - Add new config parameter `root_client_name`
