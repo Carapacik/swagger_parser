@@ -216,13 +216,14 @@ class OpenApiParser {
           if (typeWithImport.import != null) {
             imports.add(typeWithImport.import!);
           }
+          final parameterType = HttpParameterType.values.firstWhere(
+            (e) => e.name == (parameter[_inConst].toString()),
+          );
           types.add(
             UniversalRequestType(
-              parameterType: HttpParameterType.values.firstWhere(
-                (e) => e.name == (parameter[_inConst].toString()),
-              ),
+              parameterType: parameterType,
               type: typeWithImport.type,
-              name: parameter[_nameConst] == _bodyConst
+              name: parameterType.isBody && parameter[_nameConst] == _bodyConst
                   ? null
                   : parameter[_nameConst].toString(),
             ),
@@ -386,32 +387,32 @@ class OpenApiParser {
               .contains(_formUrlEncodedConst)) {
         isFormUrlEncoded = true;
       }
-      for (final rawParameter in map[_parametersConst] as List<dynamic>) {
-        final isRequired =
-            (rawParameter as Map<String, dynamic>)[_requiredConst]
-                ?.toString()
-                .toBool();
+      for (final parameter in map[_parametersConst] as List<dynamic>) {
+        final isRequired = (parameter as Map<String, dynamic>)[_requiredConst]
+            ?.toString()
+            .toBool();
 
         final typeWithImport = _findType(
-          rawParameter[_schemaConst] != null
-              ? rawParameter[_schemaConst] as Map<String, dynamic>
-              : rawParameter,
-          name: rawParameter[_nameConst].toString(),
+          parameter[_schemaConst] != null
+              ? parameter[_schemaConst] as Map<String, dynamic>
+              : parameter,
+          name: parameter[_nameConst].toString(),
           isRequired: isRequired ?? false,
         );
 
         if (typeWithImport.import != null) {
           imports.add(typeWithImport.import!);
         }
+        final parameterType = HttpParameterType.values.firstWhere(
+          (e) => e.name == (parameter[_inConst].toString()),
+        );
         types.add(
           UniversalRequestType(
-            parameterType: HttpParameterType.values.firstWhere(
-              (e) => e.name == (rawParameter[_inConst].toString()),
-            ),
+            parameterType: parameterType,
             type: typeWithImport.type,
-            name: rawParameter[_inConst] == _bodyConst
+            name: parameterType.isBody && parameter[_nameConst] == _bodyConst
                 ? null
-                : rawParameter[_nameConst].toString(),
+                : parameter[_nameConst].toString(),
           ),
         );
       }
