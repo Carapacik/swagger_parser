@@ -1,3 +1,6 @@
+## 1.10.1
+- Fix error with query parameter named `body` ([#108](https://github.com/Carapacik/swagger_parser/issues/108))
+
 ## 1.10.0
 - Support for generating schemas by url (see [example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml))
 - Add new config parameter `schema_url`
