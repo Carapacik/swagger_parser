@@ -17,7 +17,7 @@ String dartRetrofitClientTemplate({
 }) {
   final sb = StringBuffer(
     '''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_fileImport(restClient)}import 'package:dio/dio.dart';
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_fileImport(restClient)}import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
 part '${name.toSnake}.g.dart';
@@ -38,7 +38,7 @@ String _toClientRequest(UniversalRequest request) {
   final sb = StringBuffer(
     '''
 
-  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${request.isMultiPart ? '@MultiPart()\n  ' : ''}${request.isFormUrlEncoded ? '@FormUrlEncoded()\n  ' : ''}@${request.requestType.name.toUpperCase()}('${request.route}')
+  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${request.isMultiPart ? '@MultiPart()\n  ' : ''}${request.isFormUrlEncoded ? '@FormUrlEncoded()\n  ' : ''}${_toContentTypeHeader(request)}@${request.requestType.name.toUpperCase()}('${request.route}')
   Future<${request.returnType == null ? 'void' : request.returnType!.toSuitableType(ProgrammingLanguage.dart)}> ${request.name}(''',
   );
   if (request.parameters.isNotEmpty) {
@@ -72,6 +72,12 @@ String _toParameter(UniversalRequestType parameter) =>
     '${_required(parameter.type)}'
     '${parameter.type.toSuitableType(ProgrammingLanguage.dart)} '
     '${parameter.type.name!.toCamel}${_defaultValue(parameter.type)},';
+
+String _toContentTypeHeader(UniversalRequest request) {
+  return request.shouldAddContentTypeHeader
+      ? "@Headers({'Content-Type': '${request.contentType.value}'})\n  "
+      : '';
+}
 
 /// return required if isRequired
 String _required(UniversalType t) =>
