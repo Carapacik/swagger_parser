@@ -6,7 +6,7 @@ environment:
   sdk: ^3.1.0
 
 dependencies:
-  archive: ^3.4.4
+  archive: ^3.4.6
   flutter:
     sdk: flutter
   flutter_web_plugins:
