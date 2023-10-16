@@ -24,15 +24,15 @@ class OpenApiParser {
   /// and [isYaml] schema format or not
   OpenApiParser(
     String fileContent, {
+    String? name,
     bool isYaml = false,
     bool enumsPrefix = false,
     bool pathMethodName = false,
-    String? name,
     bool squashClients = false,
     List<ReplacementRule> replacementRules = const <ReplacementRule>[],
-  })  : _pathMethodName = pathMethodName,
+  })  : _name = name,
+        _pathMethodName = pathMethodName,
         _enumsPrefix = enumsPrefix,
-        _name = name,
         _squashClients = squashClients,
         _replacementRules = replacementRules {
     _definitionFileContent = isYaml
@@ -217,13 +217,14 @@ class OpenApiParser {
           if (typeWithImport.import != null) {
             imports.add(typeWithImport.import!);
           }
+          final parameterType = HttpParameterType.values.firstWhere(
+            (e) => e.name == (parameter[_inConst].toString()),
+          );
           types.add(
             UniversalRequestType(
-              parameterType: HttpParameterType.values.firstWhere(
-                (e) => e.name == (parameter[_inConst].toString()),
-              ),
+              parameterType: parameterType,
               type: typeWithImport.type,
-              name: parameter[_nameConst] == _bodyConst
+              name: parameterType.isBody && parameter[_nameConst] == _bodyConst
                   ? null
                   : parameter[_nameConst].toString(),
             ),
@@ -388,32 +389,32 @@ class OpenApiParser {
         final consumes = map[_consumesConst] as List<dynamic>;
         httpContentType = HttpContentType.fromString(consumes.first.toString());
       }
-      for (final rawParameter in map[_parametersConst] as List<dynamic>) {
-        final isRequired =
-            (rawParameter as Map<String, dynamic>)[_requiredConst]
-                ?.toString()
-                .toBool();
+      for (final parameter in map[_parametersConst] as List<dynamic>) {
+        final isRequired = (parameter as Map<String, dynamic>)[_requiredConst]
+            ?.toString()
+            .toBool();
 
         final typeWithImport = _findType(
-          rawParameter[_schemaConst] != null
-              ? rawParameter[_schemaConst] as Map<String, dynamic>
-              : rawParameter,
-          name: rawParameter[_nameConst].toString(),
+          parameter[_schemaConst] != null
+              ? parameter[_schemaConst] as Map<String, dynamic>
+              : parameter,
+          name: parameter[_nameConst].toString(),
           isRequired: isRequired ?? false,
         );
 
         if (typeWithImport.import != null) {
           imports.add(typeWithImport.import!);
         }
+        final parameterType = HttpParameterType.values.firstWhere(
+          (e) => e.name == (parameter[_inConst].toString()),
+        );
         types.add(
           UniversalRequestType(
-            parameterType: HttpParameterType.values.firstWhere(
-              (e) => e.name == (rawParameter[_inConst].toString()),
-            ),
+            parameterType: parameterType,
             type: typeWithImport.type,
-            name: rawParameter[_inConst] == _bodyConst
+            name: parameterType.isBody && parameter[_nameConst] == _bodyConst
                 ? null
-                : rawParameter[_nameConst].toString(),
+                : parameter[_nameConst].toString(),
           ),
         );
       }
@@ -784,8 +785,10 @@ class OpenApiParser {
     else if (map.containsKey(_typeConst) &&
             map[_typeConst] == _objectConst &&
             (map.containsKey(_propertiesConst) &&
+                (map[_propertiesConst] is Map<String, dynamic>) &&
                 (map[_propertiesConst] as Map<String, dynamic>).isNotEmpty) ||
         (map.containsKey(_additionalPropertiesConst) &&
+            (map[_additionalPropertiesConst] is Map<String, dynamic>) &&
             (map[_additionalPropertiesConst] as Map<String, dynamic>)
                 .isNotEmpty)) {
       // false positive result
