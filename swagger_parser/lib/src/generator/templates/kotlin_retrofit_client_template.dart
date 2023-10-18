@@ -60,7 +60,7 @@ String _toClientRequest(UniversalRequest request) {
 }
 
 String _toQueryParameter(UniversalRequestType parameter) =>
-    '        @${parameter.parameterType.type}${parameter.parameterType.isBody ? '' : '("${parameter.name}")'} '
+    '        @${parameter.parameterType.type}${parameter.name != null && !parameter.parameterType.isBody ? '("${parameter.name}")' : ''} '
     '${parameter.type.name!.toCamel}: ${parameter.type.toSuitableType(ProgrammingLanguage.kotlin)}'
     '${_defaultValue(parameter.type)}';
 
