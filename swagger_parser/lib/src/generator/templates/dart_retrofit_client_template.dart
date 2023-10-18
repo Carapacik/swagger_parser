@@ -68,7 +68,7 @@ String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
         : '';
 
 String _toParameter(UniversalRequestType parameter) =>
-    "    @${parameter.parameterType.type}(${parameter.name != null ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
+    "    @${parameter.parameterType.type}(${parameter.name != null && !parameter.parameterType.isBody ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
     '${_required(parameter.type)}'
     '${parameter.type.toSuitableType(ProgrammingLanguage.dart)} '
     '${parameter.type.name!.toCamel}${_defaultValue(parameter.type)},';
