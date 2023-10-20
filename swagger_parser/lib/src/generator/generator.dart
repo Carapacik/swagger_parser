@@ -40,6 +40,7 @@ final class Generator {
     String? rootClientName,
     bool? putClientsInFolder,
     bool? squashClients,
+    bool? withHttpResponse,
     bool? pathMethodName,
     bool? putInFolder,
     bool? enumsToJson,
@@ -61,6 +62,7 @@ final class Generator {
         _clientPostfix = clientPostfix ?? 'Client',
         _putClientsInFolder = putClientsInFolder ?? false,
         _squashClients = squashClients ?? false,
+        _withHttpResponse = withHttpResponse ?? false,
         _pathMethodName = pathMethodName ?? false,
         _putInFolder = putInFolder ?? false,
         _enumsToJson = enumsToJson ?? false,
@@ -84,6 +86,7 @@ final class Generator {
       clientPostfix: yamlConfig.clientPostfix,
       putClientsInFolder: yamlConfig.putClientsInFolder,
       squashClients: yamlConfig.squashClients,
+      withHttpResponse: yamlConfig.withHttpResponse,
       pathMethodName: yamlConfig.pathMethodName,
       putInFolder: yamlConfig.putInFolder,
       enumsToJson: yamlConfig.enumsToJson,
@@ -137,6 +140,9 @@ final class Generator {
 
   /// Squash all clients in one client.
   final bool _squashClients;
+
+  /// Generate request methods with http response.
+  final bool _withHttpResponse;
 
   /// If true, use the endpoint path for the method name, if false, use operationId
   final bool _pathMethodName;
@@ -257,6 +263,7 @@ final class Generator {
       name: _name,
       squashClients: _squashClients,
       replacementRules: _replacementRules,
+      withHttpResponse: _withHttpResponse,
     );
     _openApiInfo = parser.parseOpenApiInfo();
     _restClients = parser.parseRestClients();

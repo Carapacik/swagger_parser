@@ -35,11 +35,14 @@ abstract class $name {
 }
 
 String _toClientRequest(UniversalRequest request) {
+  final responseType = request.returnType == null
+      ? 'void'
+      : request.returnType!.toSuitableType(ProgrammingLanguage.dart);
   final sb = StringBuffer(
     '''
 
   ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${request.isMultiPart ? '@MultiPart()\n  ' : ''}${request.isFormUrlEncoded ? '@FormUrlEncoded()\n  ' : ''}@${request.requestType.name.toUpperCase()}('${request.route}')
-  Future<${request.returnType == null ? 'void' : request.returnType!.toSuitableType(ProgrammingLanguage.dart)}> ${request.name}(''',
+  Future<${request.isWithHttpResponse ? 'HttpResponse<$responseType>' : responseType}> ${request.name}(''',
   );
   if (request.parameters.isNotEmpty) {
     sb.write('{\n');
