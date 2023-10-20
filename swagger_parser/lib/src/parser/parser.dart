@@ -29,11 +29,13 @@ class OpenApiParser {
     bool enumsPrefix = false,
     bool pathMethodName = false,
     bool squashClients = false,
+    bool originalHttpResponse = false,
     List<ReplacementRule> replacementRules = const <ReplacementRule>[],
   })  : _name = name,
         _pathMethodName = pathMethodName,
         _enumsPrefix = enumsPrefix,
         _squashClients = squashClients,
+        _originalHttpResponse = originalHttpResponse,
         _replacementRules = replacementRules {
     _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
@@ -62,6 +64,7 @@ class OpenApiParser {
   final bool _enumsPrefix;
   final String? _name;
   final bool _squashClients;
+  final bool _originalHttpResponse;
   final List<ReplacementRule> _replacementRules;
   late final Map<String, dynamic> _definitionFileContent;
   late final OAS _version;
@@ -472,6 +475,7 @@ class OpenApiParser {
           route: path,
           isMultiPart: isMultiPart,
           isFormUrlEncoded: isFormUrlEncoded,
+          isOriginalHttpResponse: _originalHttpResponse,
           returnType: returnType,
           parameters: parameters,
           isDeprecated: requestPath[_deprecatedConst].toString().toBool(),
