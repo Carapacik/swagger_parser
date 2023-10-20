@@ -1,3 +1,6 @@
+## 1.10.3
+- Add new config parameter `original_http_response`(only for dart) ([#115](https://github.com/Carapacik/swagger_parser/issues/115))
+
 ## 1.10.2
 - Fix error in `body` with name in dart template
 
