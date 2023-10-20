@@ -110,6 +110,9 @@ swagger_parser:
   # Optional. Set 'false' to not put a comment at the beginning of the generated files.
   mark_files_as_generated: true
 
+  # Optional (dart only). Set 'true' to wrap all request return types with HttpResponse.
+  original_http_response: false
+
   # Optional. Set regex replacement rules for the names of the generated classes/enums.
   # All rules are applied in order.
   replacement_rules:

@@ -37,6 +37,7 @@ final class YamlConfig {
     this.enumsToJson,
     this.enumsPrefix,
     this.markFilesAsGenerated,
+    this.originalHttpResponse,
     this.replacementRules = const [],
   });
 
@@ -209,6 +210,13 @@ final class YamlConfig {
       );
     }
 
+    final originalHttpResponse = yamlConfig['original_http_response'];
+    if (originalHttpResponse is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'original_http_response' must be bool.",
+      );
+    }
+
     final rawReplacementRules = yamlConfig['replacement_rules'];
     if (rawReplacementRules is! YamlList?) {
       throw const ConfigException(
@@ -254,6 +262,8 @@ final class YamlConfig {
       putClientsInFolder: putClientsInFolder ?? rootConfig?.putClientsInFolder,
       squashClients: squashClients ?? rootConfig?.squashClients,
       pathMethodName: pathMethodName ?? rootConfig?.pathMethodName,
+      originalHttpResponse:
+          originalHttpResponse ?? rootConfig?.originalHttpResponse,
       enumsToJson: enumsToJson ?? rootConfig?.enumsToJson,
       enumsPrefix: enumsPrefix ?? rootConfig?.enumsPrefix,
       markFilesAsGenerated:
@@ -352,5 +362,6 @@ final class YamlConfig {
   final bool? enumsToJson;
   final bool? enumsPrefix;
   final bool? markFilesAsGenerated;
+  final bool? originalHttpResponse;
   final List<ReplacementRule> replacementRules;
 }
