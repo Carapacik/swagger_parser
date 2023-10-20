@@ -794,11 +794,10 @@ class OpenApiParser {
         (map.containsKey(_additionalPropertiesConst) &&
             (map[_additionalPropertiesConst] is Map<String, dynamic>) &&
             (map[_additionalPropertiesConst] as Map<String, dynamic>)
-                .isNotEmpty &&
-            !(map[_additionalPropertiesConst] as Map<String, dynamic>)
-                .containsKey(_refConst))) {
+                .isNotEmpty)) {
       // false positive result
-      final (newName, description) = protectName(
+      // ignore: unnecessary_null_checks
+      final (newName!, description) = protectName(
         name ?? additionalName,
         uniqueIfNull: true,
         description: map[_descriptionConst]?.toString(),
@@ -835,10 +834,10 @@ class OpenApiParser {
         );
       }
 
-      if (_objectClasses.where((oc) => oc.name == newName!.toPascal).isEmpty) {
+      if (_objectClasses.where((oc) => oc.name == newName.toPascal).isEmpty) {
         _objectClasses.add(
           UniversalComponentClass(
-            name: newName!.toPascal,
+            name: newName.toPascal,
             imports: typeWithImports
                 .where((e) => e.import != null)
                 .map((e) => e.import!)
@@ -850,7 +849,7 @@ class OpenApiParser {
 
       return (
         type: UniversalType(
-          type: newName!.toPascal,
+          type: newName.toPascal,
           name: newName.toCamel,
           description: description,
           format: map.containsKey(_formatConst)
@@ -936,26 +935,16 @@ class OpenApiParser {
     }
     // Type or ref
     else {
-      String? import;
-      String type;
+      var type = map.containsKey(_typeConst)
+          ? map.containsKey(_refConst) &&
+                  map[_typeConst].toString() == _objectConst
+              ? _formatRef(map)
+              : map[_typeConst].toString()
+          : map.containsKey(_refConst)
+              ? _formatRef(map)
+              : _objectConst;
 
-      if (map.containsKey(_refConst)) {
-        import = _formatRef(map);
-      } else if (map.containsKey(_additionalPropertiesConst) &&
-          map[_additionalPropertiesConst] is Map<String, dynamic> &&
-          (map[_additionalPropertiesConst] as Map<String, dynamic>)
-              .containsKey(_refConst)) {
-        import =
-            _formatRef(map[_additionalPropertiesConst] as Map<String, dynamic>);
-      }
-
-      if (map.containsKey(_typeConst)) {
-        type = import != null && map[_typeConst].toString() == _objectConst
-            ? import
-            : map[_typeConst].toString();
-      } else {
-        type = import ?? _objectConst;
-      }
+      var import = map.containsKey(_refConst) ? _formatRef(map) : null;
 
       if (import != null) {
         for (final replacementRule in _replacementRules) {

@@ -1,6 +1,3 @@
-## 1.10.4
-- Fix bug with `additionalProperties` ([#114](https://github.com/Carapacik/swagger_parser/issues/114))
-
 ## 1.10.3
 - Add new config parameter `original_http_response`(only for dart) ([#115](https://github.com/Carapacik/swagger_parser/issues/115))
 
