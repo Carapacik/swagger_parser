@@ -793,13 +793,12 @@ class OpenApiParser {
                 (map[_propertiesConst] as Map<String, dynamic>).isNotEmpty) ||
         (map.containsKey(_additionalPropertiesConst) &&
             (map[_additionalPropertiesConst] is Map<String, dynamic>) &&
-            !(map[_additionalPropertiesConst] as Map<String, dynamic>)
-                .containsKey(_refConst) &&
             (map[_additionalPropertiesConst] as Map<String, dynamic>)
-                .isNotEmpty)) {
+                .isNotEmpty &&
+            !(map[_additionalPropertiesConst] as Map<String, dynamic>)
+                .containsKey(_refConst))) {
       // false positive result
-      // ignore: unnecessary_null_checks
-      final (newName!, description) = protectName(
+      final (newName, description) = protectName(
         name ?? additionalName,
         uniqueIfNull: true,
         description: map[_descriptionConst]?.toString(),
@@ -836,10 +835,10 @@ class OpenApiParser {
         );
       }
 
-      if (_objectClasses.where((oc) => oc.name == newName.toPascal).isEmpty) {
+      if (_objectClasses.where((oc) => oc.name == newName!.toPascal).isEmpty) {
         _objectClasses.add(
           UniversalComponentClass(
-            name: newName.toPascal,
+            name: newName!.toPascal,
             imports: typeWithImports
                 .where((e) => e.import != null)
                 .map((e) => e.import!)
@@ -851,7 +850,7 @@ class OpenApiParser {
 
       return (
         type: UniversalType(
-          type: newName.toPascal,
+          type: newName!.toPascal,
           name: newName.toCamel,
           description: description,
           format: map.containsKey(_formatConst)
