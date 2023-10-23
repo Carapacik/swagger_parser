@@ -1,3 +1,32 @@
+## 1.10.5
+- Fixed error with parsing dictionary objects ([#113](https://github.com/Carapacik/swagger_parser/issues/113))
+
+## 1.10.4
+- Fixed error with `additionalProperties` ([#114](https://github.com/Carapacik/swagger_parser/issues/114))
+
+## 1.10.3
+- Add new config parameter `original_http_response`(only for dart) ([#115](https://github.com/Carapacik/swagger_parser/issues/115))
+
+## 1.10.2
+- Fix error in `body` with name in dart template
+
+## 1.10.1
+- Fix error with query parameter named `body` ([#108](https://github.com/Carapacik/swagger_parser/issues/108))
+
+## 1.10.0
+- Support for generating schemas by url (see [example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml))
+- Add new config parameter `schema_url`
+- Add new config parameter `schema_from_url_to_file`
+- Add new config parameter `prefer_schema_source`
+
+## 1.9.2
+- Fix error with `required` in clients ([#101](https://github.com/Carapacik/swagger_parser/issues/103))
+
+## 1.9.1
+- Handling incorrect names for classes, enums and methods.
+- Additional name for unnamed models ([#98](https://github.com/Carapacik/swagger_parser/issues/98))
+- Support for `deprecated` annotations for methods
+
 ## 1.9.0
 - Added display of generation statistics for each scheme and total
 - The command to start generation has been changed to `dart run swagger_parser`

@@ -12,6 +12,7 @@ import 'generator_exception.dart';
 import 'models/generated_file.dart';
 import 'models/generation_statistics.dart';
 import 'models/open_api_info.dart';
+import 'models/prefer_schema_source.dart';
 import 'models/programming_language.dart';
 import 'models/replacement_rule.dart';
 import 'models/universal_data_class.dart';
@@ -40,6 +41,7 @@ final class Generator {
     String? rootClientName,
     bool? putClientsInFolder,
     bool? squashClients,
+    bool? originalHttpResponse,
     bool? pathMethodName,
     bool? putInFolder,
     bool? enumsToJson,
@@ -62,6 +64,7 @@ final class Generator {
         _clientPostfix = clientPostfix ?? 'Client',
         _putClientsInFolder = putClientsInFolder ?? false,
         _squashClients = squashClients ?? false,
+        _originalHttpResponse = originalHttpResponse ?? false,
         _pathMethodName = pathMethodName ?? false,
         _putInFolder = putInFolder ?? false,
         _enumsToJson = enumsToJson ?? false,
@@ -86,6 +89,7 @@ final class Generator {
       clientPostfix: yamlConfig.clientPostfix,
       putClientsInFolder: yamlConfig.putClientsInFolder,
       squashClients: yamlConfig.squashClients,
+      originalHttpResponse: yamlConfig.originalHttpResponse,
       pathMethodName: yamlConfig.pathMethodName,
       putInFolder: yamlConfig.putInFolder,
       enumsToJson: yamlConfig.enumsToJson,
@@ -142,6 +146,9 @@ final class Generator {
 
   /// Squash all clients in one client.
   final bool _squashClients;
+
+  /// Generate request methods with HttpResponse<Entity>
+  final bool _originalHttpResponse;
 
   /// If true, use the endpoint path for the method name, if false, use operationId
   final bool _pathMethodName;
@@ -262,6 +269,7 @@ final class Generator {
       name: _name,
       squashClients: _squashClients,
       replacementRules: _replacementRules,
+      originalHttpResponse: _originalHttpResponse,
     );
     _openApiInfo = parser.parseOpenApiInfo();
     _restClients = parser.parseRestClients();

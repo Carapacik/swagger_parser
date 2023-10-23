@@ -13,7 +13,6 @@ global_options:
   json_serializable:
     runs_before:
       - retrofit_generator
-
 ```
 - ### Run code generation with `build_runner` for `json_seializable`(`freezed`) and `retrofit` with command:
 ```shell

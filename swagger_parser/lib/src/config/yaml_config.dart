@@ -2,6 +2,7 @@ import 'package:args/args.dart';
 import 'package:collection/collection.dart';
 import 'package:yaml/yaml.dart';
 
+import '../generator/models/prefer_schema_source.dart';
 import '../generator/models/programming_language.dart';
 import '../generator/models/replacement_rule.dart';
 import '../utils/file_utils.dart';
@@ -37,6 +38,7 @@ final class YamlConfig {
     this.enumsToJson,
     this.enumsPrefix,
     this.markFilesAsGenerated,
+    this.originalHttpResponse,
     this.replacementRules = const [],
   });
 
@@ -216,6 +218,13 @@ final class YamlConfig {
       );
     }
 
+    final originalHttpResponse = yamlConfig['original_http_response'];
+    if (originalHttpResponse is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'original_http_response' must be bool.",
+      );
+    }
+
     final rawReplacementRules = yamlConfig['replacement_rules'];
     if (rawReplacementRules is! YamlList?) {
       throw const ConfigException(
@@ -262,6 +271,8 @@ final class YamlConfig {
       putClientsInFolder: putClientsInFolder ?? rootConfig?.putClientsInFolder,
       squashClients: squashClients ?? rootConfig?.squashClients,
       pathMethodName: pathMethodName ?? rootConfig?.pathMethodName,
+      originalHttpResponse:
+          originalHttpResponse ?? rootConfig?.originalHttpResponse,
       enumsToJson: enumsToJson ?? rootConfig?.enumsToJson,
       enumsPrefix: enumsPrefix ?? rootConfig?.enumsPrefix,
       markFilesAsGenerated:
@@ -361,17 +372,6 @@ final class YamlConfig {
   final bool? enumsToJson;
   final bool? enumsPrefix;
   final bool? markFilesAsGenerated;
+  final bool? originalHttpResponse;
   final List<ReplacementRule> replacementRules;
-}
-
-/// Enum for choosing schema source
-enum PreferSchemaSource {
-  url,
-  path;
-
-  /// Returns [PreferSchemaSource] from string
-  static PreferSchemaSource? fromString(String string) =>
-      values.firstWhereOrNull(
-        (e) => e.name == string,
-      );
 }

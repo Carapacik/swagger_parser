@@ -31,7 +31,7 @@ String _toClientRequest(UniversalRequest request) {
   final sb = StringBuffer(
     '''
 
-    ${descriptionComment(request.description, tabForFirstLine: false, tab: '    ', end: '    ')}${request.isMultiPart ? '@MultiPart\n    ' : ''}${request.isFormUrlEncoded ? '@FormUrlEncoded\n    ' : ''}@${request.requestType.name.toUpperCase()}("${request.route}")
+    ${descriptionComment(request.description, tabForFirstLine: false, tab: '    ', end: '    ')}${request.isDeprecated ? '@Deprecated("This method is marked as deprecated")\n    ' : ''}${request.isMultiPart ? '@MultiPart\n    ' : ''}${request.isFormUrlEncoded ? '@FormUrlEncoded\n    ' : ''}@${request.requestType.name.toUpperCase()}("${request.route}")
     suspend fun ${request.name}(''',
   );
   if (request.parameters.isEmpty) {
@@ -60,13 +60,12 @@ String _toClientRequest(UniversalRequest request) {
 }
 
 String _toQueryParameter(UniversalRequestType parameter) =>
-    '        @${parameter.parameterType.type}${parameter.parameterType.isBody ? '' : '("${parameter.name}")'} '
+    '        @${parameter.parameterType.type}${parameter.name != null && !parameter.parameterType.isBody ? '("${parameter.name}")' : ''} '
     '${parameter.type.name!.toCamel}: ${parameter.type.toSuitableType(ProgrammingLanguage.kotlin)}'
-    '${_d(parameter.type)}';
+    '${_defaultValue(parameter.type)}';
 
 /// return defaultValue if have
-String _d(UniversalType t) => t.defaultValue != null
-    ? ' = ${t.type.quoterForStringType(dart: false)}'
-        '${t.enumType != null ? '${t.type}.${prefixForEnumItems(t.enumType!, t.defaultValue!, dart: false)}' : t.defaultValue}'
-        '${t.type.quoterForStringType(dart: false)}'
+String _defaultValue(UniversalType t) => t.defaultValue != null
+    ? ' = '
+        '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toScreamingSnake}' : protectDefaultValue(t.defaultValue, type: t.type, dart: false)}'
     : '';
