@@ -1,3 +1,6 @@
+## 1.10.5
+- Fixed error with parsing dictionary objects ([#113](https://github.com/Carapacik/swagger_parser/issues/113))
+
 ## 1.10.4
 - Fixed error with `additionalProperties` ([#114](https://github.com/Carapacik/swagger_parser/issues/114))
 
