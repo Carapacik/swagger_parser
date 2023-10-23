@@ -1,6 +1,8 @@
 import 'package:args/args.dart';
+import 'package:collection/collection.dart';
 import 'package:yaml/yaml.dart';
 
+import '../generator/models/prefer_schema_source.dart';
 import '../generator/models/programming_language.dart';
 import '../generator/models/replacement_rule.dart';
 import '../utils/file_utils.dart';
@@ -17,9 +19,12 @@ import 'config_exception.dart';
 final class YamlConfig {
   /// Applies parameters directly from constructor
   const YamlConfig({
-    required this.schemaPath,
-    required this.outputDirectory,
     required this.name,
+    required this.outputDirectory,
+    this.schemaPath,
+    this.schemaUrl,
+    this.schemaFromUrlToFile,
+    this.preferSchemaSource,
     this.language,
     this.freezed,
     this.rootClient,
@@ -32,6 +37,7 @@ final class YamlConfig {
     this.enumsToJson,
     this.enumsPrefix,
     this.markFilesAsGenerated,
+    this.originalHttpResponse,
     this.replacementRules = const [],
   });
 
@@ -48,9 +54,19 @@ final class YamlConfig {
       schemaPath = '';
     }
 
-    if (schemaPath == null) {
+    final schemaUrl = yamlConfig['schema_url']?.toString();
+    if (schemaUrl != null) {
+      final uri = Uri.tryParse(schemaUrl);
+      if (uri == null) {
+        throw const ConfigException(
+          "Config parameter 'schema_url' must be valid URL.",
+        );
+      }
+    }
+
+    if (schemaPath == null && schemaUrl == null) {
       throw const ConfigException(
-        "Config parameter 'schema_path' is required.",
+        "Config parameters 'schema_path' or 'schema_url' are required.",
       );
     }
 
@@ -73,13 +89,48 @@ final class YamlConfig {
       outputDirectory = rootConfig.outputDirectory;
     }
 
+    final rawName = yamlConfig['name'];
+    if (rawName is! String?) {
+      throw const ConfigException(
+        "Config parameter 'name' must be String.",
+      );
+    }
+
+    final name = rawName == null || rawName.isEmpty
+        ? (schemaPath ?? schemaUrl)!
+                .split('/')
+                .lastOrNull
+                ?.split('.')
+                .firstOrNull ??
+            'unknown'
+        : rawName;
+
+    final schemaFromUrlToFile = yamlConfig['schema_from_url_to_file'];
+    if (schemaFromUrlToFile is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'schema_from_url_to_file' must be bool.",
+      );
+    }
+
+    PreferSchemaSource? preferSchemaSource;
+    final rawPreferSchemeSource =
+        yamlConfig['prefer_schema_source']?.toString();
+    if (rawPreferSchemeSource != null) {
+      preferSchemaSource = PreferSchemaSource.fromString(rawPreferSchemeSource);
+      if (preferSchemaSource == null) {
+        throw ConfigException(
+          "'prefer_schema_source' field must be contained in ${PreferSchemaSource.values.map((e) => e.name)}.",
+        );
+      }
+    }
+
     ProgrammingLanguage? language;
     final rawLanguage = yamlConfig['language']?.toString();
     if (rawLanguage != null) {
       language = ProgrammingLanguage.fromString(rawLanguage);
       if (language == null) {
         throw ConfigException(
-          "'language' field must be contained in ${ProgrammingLanguage.values}.",
+          "'language' field must be contained in ${ProgrammingLanguage.values.map((e) => e.name)}.",
         );
       }
     }
@@ -114,6 +165,13 @@ final class YamlConfig {
     if (putClientsInFolder is! bool?) {
       throw const ConfigException(
         "Config parameter 'put_clients_in_folder' must be bool.",
+      );
+    }
+
+    final putInFolder = yamlConfig['put_in_folder'];
+    if (putInFolder is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'put_in_folder' must be bool.",
       );
     }
 
@@ -152,6 +210,13 @@ final class YamlConfig {
       );
     }
 
+    final originalHttpResponse = yamlConfig['original_http_response'];
+    if (originalHttpResponse is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'original_http_response' must be bool.",
+      );
+    }
+
     final rawReplacementRules = yamlConfig['replacement_rules'];
     if (rawReplacementRules is! YamlList?) {
       throw const ConfigException(
@@ -180,37 +245,25 @@ final class YamlConfig {
       }
     }
 
-    final putInFolder = yamlConfig['put_in_folder'];
-    if (putInFolder is! bool?) {
-      throw const ConfigException(
-        "Config parameter 'put_in_folder' must be bool.",
-      );
-    }
-
-    final rawName = yamlConfig['name'];
-    if (rawName is! String?) {
-      throw const ConfigException(
-        "Config parameter 'name' must be String.",
-      );
-    }
-
-    final name = rawName == null || rawName.isEmpty
-        ? schemaPath.split('/').last.split('.').first
-        : rawName;
-
     return YamlConfig(
+      name: name,
       schemaPath: schemaPath,
       outputDirectory: outputDirectory,
-      name: name,
+      schemaUrl: schemaUrl,
+      schemaFromUrlToFile:
+          schemaFromUrlToFile ?? rootConfig?.schemaFromUrlToFile,
+      preferSchemaSource: preferSchemaSource ?? rootConfig?.preferSchemaSource,
       language: language ?? rootConfig?.language,
       freezed: freezed ?? rootConfig?.freezed,
       rootClient: rootClient ?? rootConfig?.rootClient,
       rootClientName: rootClientName ?? rootConfig?.rootClientName,
       clientPostfix: clientPostfix ?? rootConfig?.clientPostfix,
+      putInFolder: putInFolder ?? rootConfig?.putInFolder,
       putClientsInFolder: putClientsInFolder ?? rootConfig?.putClientsInFolder,
       squashClients: squashClients ?? rootConfig?.squashClients,
       pathMethodName: pathMethodName ?? rootConfig?.pathMethodName,
-      putInFolder: putInFolder ?? rootConfig?.putInFolder,
+      originalHttpResponse:
+          originalHttpResponse ?? rootConfig?.originalHttpResponse,
       enumsToJson: enumsToJson ?? rootConfig?.enumsToJson,
       enumsPrefix: enumsPrefix ?? rootConfig?.enumsPrefix,
       markFilesAsGenerated:
@@ -249,17 +302,19 @@ final class YamlConfig {
     final configs = <YamlConfig>[];
 
     final schemaPath = yamlMap['schema_path'] as String?;
+    final schemaUrl = yamlMap['schema_url'] as String?;
     final schemas = yamlMap['schemas'] as YamlList?;
 
-    if (schemas == null && schemaPath == null) {
+    if (schemas == null && schemaUrl == null && schemaPath == null) {
       throw const ConfigException(
-        "Config parameter 'schema_path' or 'schemas' is required.",
+        "Config parameter 'schema_path', 'schema_url' or 'schemas' is required.",
       );
     }
 
-    if (schemas != null && schemaPath != null) {
+    if (schemas != null && schemaPath != null ||
+        schemas != null && schemaUrl != null) {
       throw const ConfigException(
-        "Config parameter 'schema_path' and 'schemas' can't be used together.",
+        "Config parameter 'schema_path' or 'schema_url' can't be used with 'schemas'.",
       );
     }
 
@@ -290,19 +345,23 @@ final class YamlConfig {
   }
 
   final String name;
-  final String schemaPath;
   final String outputDirectory;
+  final String? schemaPath;
+  final String? schemaUrl;
+  final bool? schemaFromUrlToFile;
+  final PreferSchemaSource? preferSchemaSource;
   final ProgrammingLanguage? language;
   final bool? freezed;
   final String? clientPostfix;
   final bool? rootClient;
   final String? rootClientName;
-  final bool? putClientsInFolder;
   final bool? squashClients;
   final bool? pathMethodName;
+  final bool? putClientsInFolder;
   final bool? putInFolder;
   final bool? enumsToJson;
   final bool? enumsPrefix;
   final bool? markFilesAsGenerated;
+  final bool? originalHttpResponse;
   final List<ReplacementRule> replacementRules;
 }

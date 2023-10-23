@@ -16,6 +16,7 @@ final class UniversalRequest {
     this.isMultiPart = false,
     this.isFormUrlEncoded = false,
     this.isDeprecated = false,
+    this.isOriginalHttpResponse = false,
   });
 
   /// Request name
@@ -44,6 +45,9 @@ final class UniversalRequest {
 
   /// Value indicating whether this request is deprecated
   final bool isDeprecated;
+
+  /// Wrap request return type with HttpResponse
+  final bool isOriginalHttpResponse;
 
   @override
   bool operator ==(Object other) =>

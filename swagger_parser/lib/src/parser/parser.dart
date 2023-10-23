@@ -24,16 +24,18 @@ class OpenApiParser {
   /// and [isYaml] schema format or not
   OpenApiParser(
     String fileContent, {
+    String? name,
     bool isYaml = false,
     bool enumsPrefix = false,
     bool pathMethodName = false,
-    String? name,
     bool squashClients = false,
+    bool originalHttpResponse = false,
     List<ReplacementRule> replacementRules = const <ReplacementRule>[],
-  })  : _pathMethodName = pathMethodName,
+  })  : _name = name,
+        _pathMethodName = pathMethodName,
         _enumsPrefix = enumsPrefix,
-        _name = name,
         _squashClients = squashClients,
+        _originalHttpResponse = originalHttpResponse,
         _replacementRules = replacementRules {
     _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
@@ -62,6 +64,7 @@ class OpenApiParser {
   final bool _enumsPrefix;
   final String? _name;
   final bool _squashClients;
+  final bool _originalHttpResponse;
   final List<ReplacementRule> _replacementRules;
   late final Map<String, dynamic> _definitionFileContent;
   late final OAS _version;
@@ -134,9 +137,9 @@ class OpenApiParser {
 
     /// Parses return type for client query for OpenApi v3
     UniversalType? returnTypeV3(
-      Map<String, dynamic> map, {
-      required String additionalName,
-    }) {
+      Map<String, dynamic> map,
+      String additionalName,
+    ) {
       final code2xxMap = _code2xxMap(map);
       if (code2xxMap == null || !code2xxMap.containsKey(_contentConst)) {
         return null;
@@ -210,20 +213,21 @@ class OpenApiParser {
                 ? parameter[_schemaConst] as Map<String, dynamic>
                 : parameter,
             name: parameter[_nameConst].toString(),
-            isRequired: isRequired ?? true,
+            isRequired: isRequired ?? false,
           );
 
           if (typeWithImport.import != null) {
             imports.add(typeWithImport.import!);
           }
+          final parameterType = HttpParameterType.values.firstWhere(
+            (e) => e.name == (parameter[_inConst].toString()),
+          );
           types.add(
             UniversalRequestType(
-              parameterType: HttpParameterType.values.firstWhere(
-                (e) => e.name == (parameter[_inConst].toString()),
-              ),
+              parameterType: parameterType,
               type: typeWithImport.type,
               description: parameter[_descriptionConst]?.toString(),
-              name: parameter[_nameConst] == _bodyConst
+              name: parameterType.isBody && parameter[_nameConst] == _bodyConst
                   ? null
                   : parameter[_nameConst].toString(),
             ),
@@ -352,9 +356,9 @@ class OpenApiParser {
 
     /// Parses return type for client query for OpenApi v2
     UniversalType? returnTypeV2(
-      Map<String, dynamic> map, {
-      required String additionalName,
-    }) {
+      Map<String, dynamic> map,
+      String additionalName,
+    ) {
       final code2xxMap = _code2xxMap(map);
       if (code2xxMap == null || !code2xxMap.containsKey(_schemaConst)) {
         return null;
@@ -390,33 +394,33 @@ class OpenApiParser {
               .contains(_formUrlEncodedConst)) {
         isFormUrlEncoded = true;
       }
-      for (final rawParameter in map[_parametersConst] as List<dynamic>) {
-        final isRequired =
-            (rawParameter as Map<String, dynamic>)[_requiredConst]
-                ?.toString()
-                .toBool();
+      for (final parameter in map[_parametersConst] as List<dynamic>) {
+        final isRequired = (parameter as Map<String, dynamic>)[_requiredConst]
+            ?.toString()
+            .toBool();
 
         final typeWithImport = _findType(
-          rawParameter[_schemaConst] != null
-              ? rawParameter[_schemaConst] as Map<String, dynamic>
-              : rawParameter,
-          name: rawParameter[_nameConst].toString(),
-          isRequired: isRequired ?? true,
+          parameter[_schemaConst] != null
+              ? parameter[_schemaConst] as Map<String, dynamic>
+              : parameter,
+          name: parameter[_nameConst].toString(),
+          isRequired: isRequired ?? false,
         );
 
         if (typeWithImport.import != null) {
           imports.add(typeWithImport.import!);
         }
+        final parameterType = HttpParameterType.values.firstWhere(
+          (e) => e.name == (parameter[_inConst].toString()),
+        );
         types.add(
           UniversalRequestType(
-            parameterType: HttpParameterType.values.firstWhere(
-              (e) => e.name == (rawParameter[_inConst].toString()),
-            ),
+            parameterType: parameterType,
             type: typeWithImport.type,
-            description: rawParameter[_descriptionConst]?.toString(),
-            name: rawParameter[_inConst] == _bodyConst
+            description: parameter[_descriptionConst]?.toString(),
+            name: parameterType.isBody && parameter[_nameConst] == _bodyConst
                 ? null
-                : rawParameter[_nameConst].toString(),
+                : parameter[_nameConst].toString(),
           ),
         );
       }
@@ -438,14 +442,8 @@ class OpenApiParser {
             as Map<String, dynamic>)[_responsesConst] as Map<String, dynamic>;
         final additionalName = '$key${path}Response'.toPascal;
         final returnType = _version == OAS.v2
-            ? returnTypeV2(
-                requestPathResponses,
-                additionalName: additionalName,
-              )
-            : returnTypeV3(
-                requestPathResponses,
-                additionalName: additionalName,
-              );
+            ? returnTypeV2(requestPathResponses, additionalName)
+            : returnTypeV3(requestPathResponses, additionalName);
         final parameters = _version == OAS.v2
             ? parametersV2(requestPath)
             : parametersV3(requestPath);
@@ -471,7 +469,21 @@ class OpenApiParser {
           (_, _) => '$description\n\n$parametersDescription',
         };
 
-        final String requestName;
+        String requestName;
+
+        if (_pathMethodName) {
+          requestName = (key + path).toCamel;
+        } else {
+          final operationIdName =
+              requestPath[_operationIdConst]?.toString().toCamel;
+          final (_, error) = protectName(operationIdName);
+          if (error != null) {
+            description = '$description\n\n$error';
+            requestName = (key + path).toCamel;
+          } else {
+            requestName = operationIdName ?? (key + path).toCamel;
+          }
+        }
 
         if (_pathMethodName) {
           requestName = (key + path).toCamel;
@@ -494,6 +506,7 @@ class OpenApiParser {
           route: path,
           isMultiPart: isMultiPart,
           isFormUrlEncoded: isFormUrlEncoded,
+          isOriginalHttpResponse: _originalHttpResponse,
           returnType: returnType,
           parameters: parameters,
           isDeprecated: requestPath[_deprecatedConst].toString().toBool(),
@@ -554,7 +567,7 @@ class OpenApiParser {
       final imports = SplayTreeSet<String>();
 
       /// Used for find properties in map
-      void findParamsAndImports(Map<String, dynamic> map) {
+      void findParametersAndImports(Map<String, dynamic> map) {
         (map[_propertiesConst] as Map<String, dynamic>).forEach(
           (propertyName, propertyValue) {
             final typeWithImport = _findType(
@@ -572,7 +585,7 @@ class OpenApiParser {
       }
 
       if (value.containsKey(_propertiesConst)) {
-        findParamsAndImports(value);
+        findParametersAndImports(value);
       } else if (value.containsKey(_enumConst)) {
         final items = protectEnumItemsNames(
           (value[_enumConst] as List).map((e) => '$e'),
@@ -628,7 +641,7 @@ class OpenApiParser {
             continue;
           }
           if (map.containsKey(_propertiesConst)) {
-            findParamsAndImports(map);
+            findParametersAndImports(map);
           }
         }
       }
@@ -759,14 +772,15 @@ class OpenApiParser {
     }
     // Enum
     else if (map.containsKey(_enumConst)) {
-      final (variableName, description) = protectName(
+      // ignore: unnecessary_null_checks
+      final (variableName!, description) = protectName(
         name,
         isEnum: true,
         uniqueIfNull: true,
         description: map[_descriptionConst]?.toString(),
       );
 
-      var newName = variableName!;
+      var newName = variableName;
       if (_enumsPrefix && additionalName != null) {
         newName = '$additionalName $newName'.toPascal;
       }
@@ -807,10 +821,14 @@ class OpenApiParser {
     else if (map.containsKey(_typeConst) &&
             map[_typeConst] == _objectConst &&
             (map.containsKey(_propertiesConst) &&
+                (map[_propertiesConst] is Map<String, dynamic>) &&
                 (map[_propertiesConst] as Map<String, dynamic>).isNotEmpty) ||
         (map.containsKey(_additionalPropertiesConst) &&
+            (map[_additionalPropertiesConst] is Map<String, dynamic>) &&
             (map[_additionalPropertiesConst] as Map<String, dynamic>)
-                .isNotEmpty)) {
+                .isNotEmpty &&
+            !(map[_additionalPropertiesConst] as Map<String, dynamic>)
+                .containsKey(_refConst))) {
       // false positive result
       // ignore: unnecessary_null_checks
       final (newName!, description) = protectName(
@@ -827,6 +845,11 @@ class OpenApiParser {
 
       final typeWithImports = <({UniversalType type, String? import})>[];
 
+      // To detect is this entity is map or not
+      final mapType = map[_typeConst].toString() == _objectConst &&
+              map.containsKey(_additionalPropertiesConst)
+          ? 'string'
+          : null;
       if (map.containsKey(_propertiesConst)) {
         (map[_propertiesConst] as Map<String, dynamic>).forEach((key, value) {
           typeWithImports.add(
@@ -854,10 +877,8 @@ class OpenApiParser {
         _objectClasses.add(
           UniversalComponentClass(
             name: newName.toPascal,
-            imports: typeWithImports
-                .where((e) => e.import != null)
-                .map((e) => e.import!)
-                .toSet(),
+            imports:
+                typeWithImports.map((e) => e.import).whereNotNull().toSet(),
             parameters: typeWithImports.map((e) => e.type).toList(),
           ),
         );
@@ -872,6 +893,7 @@ class OpenApiParser {
               ? map[_formatConst].toString()
               : null,
           jsonKey: newName,
+          mapType: mapType,
           defaultValue: protectDefaultValue(map[_defaultConst]),
           nullable: map[_nullableConst].toString().toBool(),
           isRequired: isRequired,
@@ -951,17 +973,25 @@ class OpenApiParser {
     }
     // Type or ref
     else {
-      var type = map.containsKey(_typeConst)
-          ? map.containsKey(_refConst) &&
-                  map[_typeConst].toString() == _objectConst
-              ? _formatRef(map)
-              : map[_typeConst].toString()
-          : map.containsKey(_refConst)
-              ? _formatRef(map)
-              : _objectConst;
+      String? import;
+      String type;
+      if (map.containsKey(_refConst)) {
+        import = _formatRef(map);
+      } else if (map.containsKey(_additionalPropertiesConst) &&
+          map[_additionalPropertiesConst] is Map<String, dynamic> &&
+          (map[_additionalPropertiesConst] as Map<String, dynamic>)
+              .containsKey(_refConst)) {
+        import =
+            _formatRef(map[_additionalPropertiesConst] as Map<String, dynamic>);
+      }
 
-      var import = map.containsKey(_refConst) ? _formatRef(map) : null;
-
+      if (map.containsKey(_typeConst)) {
+        type = import != null && map[_typeConst].toString() == _objectConst
+            ? import
+            : map[_typeConst].toString();
+      } else {
+        type = import ?? _objectConst;
+      }
       if (import != null) {
         for (final replacementRule in _replacementRules) {
           import = replacementRule.apply(import);
@@ -969,6 +999,11 @@ class OpenApiParser {
         }
       }
 
+      // To detect is this entity is map or not
+      final mapType = map[_typeConst].toString() == _objectConst &&
+              map.containsKey(_additionalPropertiesConst)
+          ? 'string'
+          : null;
       final defaultValue = map[_defaultConst]?.toString();
       final (newName, description) =
           protectName(name, description: map[_descriptionConst]?.toString());
@@ -982,6 +1017,7 @@ class OpenApiParser {
           description: description,
           format: map[_formatConst]?.toString(),
           jsonKey: name,
+          mapType: mapType,
           defaultValue:
               protectDefaultValue(defaultValue, isEnum: enumType != null),
           enumType: enumType,
@@ -1024,4 +1060,13 @@ extension on String {
 }
 
 /// All versions of the OpenApi Specification that this package supports
-enum OAS { v3_1, v3, v2 }
+enum OAS {
+  /// {@nodoc}
+  v3_1,
+
+  /// {@nodoc}
+  v3,
+
+  /// {@nodoc}
+  v2
+}
