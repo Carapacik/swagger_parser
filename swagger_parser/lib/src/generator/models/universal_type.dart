@@ -15,6 +15,7 @@ final class UniversalType {
     this.nullable = false,
     this.arrayDepth = 0,
     this.enumType,
+    this.mapType,
   });
 
   /// Object type
@@ -54,6 +55,9 @@ final class UniversalType {
   /// Whether or not this field is nullable
   final bool nullable;
 
+  /// If not null means this is map with key type
+  final String? mapType;
+
   /// Copy of [UniversalType] with new values
   UniversalType copyWith({
     String? type,
@@ -66,6 +70,7 @@ final class UniversalType {
     String? enumType,
     int? arrayDepth,
     bool? nullable,
+    String? mapType,
   }) {
     return UniversalType(
       type: type ?? this.type,
@@ -78,6 +83,7 @@ final class UniversalType {
       enumType: enumType ?? this.enumType,
       arrayDepth: arrayDepth ?? this.arrayDepth,
       nullable: nullable ?? this.nullable,
+      mapType: mapType ?? this.mapType,
     );
   }
 
@@ -106,7 +112,8 @@ final class UniversalType {
           isRequired == other.isRequired &&
           enumType == other.enumType &&
           arrayDepth == other.arrayDepth &&
-          nullable == other.nullable;
+          nullable == other.nullable &&
+          mapType == other.mapType;
 
   @override
   int get hashCode =>
@@ -119,7 +126,8 @@ final class UniversalType {
       isRequired.hashCode ^
       enumType.hashCode ^
       arrayDepth.hashCode ^
-      nullable.hashCode;
+      nullable.hashCode ^
+      mapType.hashCode;
 
   @override
   String toString() =>
@@ -130,14 +138,20 @@ final class UniversalType {
 extension UniversalTypeX on UniversalType {
   /// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
   String toSuitableType(ProgrammingLanguage lang) {
-    if (arrayDepth == 0) {
+    if (arrayDepth == 0 && mapType == null) {
       return _questionMark(lang);
     }
     final sb = StringBuffer();
     for (var i = 0; i < arrayDepth; i++) {
       sb.write('List<');
     }
+    if (mapType != null) {
+      sb.write(_mapStart(lang));
+    }
     sb.write(_questionMark(lang));
+    if (mapType != null) {
+      sb.write('>');
+    }
     for (var i = 0; i < arrayDepth; i++) {
       sb.write('>');
     }
@@ -157,6 +171,15 @@ extension UniversalTypeX on UniversalType {
         return type.toDartType(format) + questionMark;
       case ProgrammingLanguage.kotlin:
         return type.toKotlinType(format) + questionMark;
+    }
+  }
+
+  String _mapStart(ProgrammingLanguage lang) {
+    switch (lang) {
+      case ProgrammingLanguage.dart:
+        return 'Map<${mapType!.toDartType(format)}, ';
+      case ProgrammingLanguage.kotlin:
+        return 'Map<${mapType!.toKotlinType(format)}, ';
     }
   }
 }
