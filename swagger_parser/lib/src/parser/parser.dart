@@ -813,6 +813,11 @@ class OpenApiParser {
 
       final typeWithImports = <({UniversalType type, String? import})>[];
 
+      // To detect is this entity is map or not
+      final mapType = map[_typeConst].toString() == _objectConst &&
+              map.containsKey(_additionalPropertiesConst)
+          ? 'string'
+          : null;
       if (map.containsKey(_propertiesConst)) {
         (map[_propertiesConst] as Map<String, dynamic>).forEach((key, value) {
           typeWithImports.add(
@@ -858,6 +863,7 @@ class OpenApiParser {
               ? map[_formatConst].toString()
               : null,
           jsonKey: newName,
+          mapType: mapType,
           defaultValue: protectDefaultValue(map[_defaultConst]),
           nullable: map[_nullableConst].toString().toBool(),
           isRequired: isRequired,
@@ -963,6 +969,11 @@ class OpenApiParser {
         }
       }
 
+      // To detect is this entity is map or not
+      final mapType = map[_typeConst].toString() == _objectConst &&
+              map.containsKey(_additionalPropertiesConst)
+          ? 'string'
+          : null;
       final defaultValue = map[_defaultConst]?.toString();
       final (newName, description) =
           protectName(name, description: map[_descriptionConst]?.toString());
@@ -976,6 +987,7 @@ class OpenApiParser {
           description: description,
           format: map[_formatConst]?.toString(),
           jsonKey: name,
+          mapType: mapType,
           defaultValue:
               protectDefaultValue(defaultValue, isEnum: enumType != null),
           enumType: enumType,
