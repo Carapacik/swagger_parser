@@ -20,28 +20,31 @@ ${generatedFileComment(
 
 ${descriptionComment(enumClass.description)}@JsonEnum()
 enum $className {
-${enumClass.items.mapIndexed((i, e) => _jsonValue(i, enumClass.type, e)).join(',\n')};
-${enumsToJson ? _toJson(enumClass, className) : '}'}
+${enumClass.items.mapIndexed((i, e) => _enumValue(i, enumClass.type, e)).join(',\n')},
+
+  /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
+  \$unknown(null);
+
+  const $className(this.json);
+
+  factory $className.fromJson(String json) => values.firstWhere(
+        (e) => e.json == json,
+        orElse: () => \$unknown,
+      );
+
+  final ${enumClass.type.toDartType()}? json;${enumsToJson ? _toJson(enumClass, className) : ''}
+}
 ''';
 }
 
-String _jsonValue(
+String _enumValue(
   int index,
   String type,
   UniversalEnumItem item,
 ) =>
     '''
-${index != 0 && item.description != null ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}  @JsonValue(${type == 'string' ? "'${item.jsonKey}'" : item.jsonKey})
-  ${item.name.toCamel}''';
+${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}  @JsonValue(${type == 'string' ? "'${item.jsonKey}'" : item.jsonKey})
+  ${item.name.toCamel}('${item.jsonKey}')''';
 
-String _toJson(UniversalEnumClass enumClass, String className) => '''
-
-  ${enumClass.type.toDartType()} toJson() => _\$${className}EnumMap[this]!;
-}
-
-const _\$${className}EnumMap = {
-  ${enumClass.items.map(
-          (e) => '$className.${e.name.toCamel}: '
-              '${enumClass.type == 'string' ? "'" : ''}${e.jsonKey}${enumClass.type == 'string' ? "'" : ''}',
-        ).join(',\n  ')},
-};''';
+String _toJson(UniversalEnumClass enumClass, String className) =>
+    '\n\n  ${enumClass.type.toDartType()}? toJson() => json;';
