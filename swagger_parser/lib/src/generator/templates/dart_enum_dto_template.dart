@@ -44,7 +44,7 @@ String _enumValue(
 ) =>
     '''
 ${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}  @JsonValue(${type == 'string' ? "'${item.jsonKey}'" : item.jsonKey})
-  ${item.name.toCamel}('${item.jsonKey}')''';
+  ${item.name.toCamel}(${type == 'string' ? "'${item.jsonKey}'" : item.jsonKey})''';
 
 String _toJson(UniversalEnumClass enumClass, String className) =>
     '\n\n  ${enumClass.type.toDartType()}? toJson() => json;';
