@@ -27,7 +27,7 @@ ${enumClass.items.mapIndexed((i, e) => _enumValue(i, enumClass.type, e)).join(',
 
   const $className(this.json);
 
-  factory $className.fromJson(String json) => values.firstWhere(
+  factory $className.fromJson(${enumClass.type.toDartType()} json) => values.firstWhere(
         (e) => e.json == json,
         orElse: () => \$unknown,
       );
