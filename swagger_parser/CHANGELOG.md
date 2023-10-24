@@ -1,3 +1,6 @@
+## 1.10.6
+- Fixed map objects parsing as separate entities ([#124](https://github.com/Carapacik/swagger_parser/issues/124))
+
 ## 1.10.5
 - Fixed error with parsing dictionary objects ([#113](https://github.com/Carapacik/swagger_parser/issues/113))
 
