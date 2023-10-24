@@ -841,6 +841,26 @@ class OpenApiParser {
         );
       }
 
+      // Interception of objectClass creation when Map construction is expected
+      if (typeWithImports.length == 1 && typeWithImports[0].import == null) {
+        return (
+          type: UniversalType(
+            type: map[_typeConst] as String,
+            name: newName.toCamel,
+            description: description,
+            format: map.containsKey(_formatConst)
+                ? map[_formatConst].toString()
+                : null,
+            jsonKey: newName,
+            mapType: mapType,
+            defaultValue: protectDefaultValue(map[_defaultConst]),
+            nullable: map[_nullableConst].toString().toBool(),
+            isRequired: isRequired,
+          ),
+          import: newName.toPascal,
+        );
+      }
+
       if (_objectClasses.where((oc) => oc.name == newName.toPascal).isEmpty) {
         _objectClasses.add(
           UniversalComponentClass(

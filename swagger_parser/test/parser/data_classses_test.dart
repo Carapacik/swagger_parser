@@ -449,5 +449,58 @@ void main() {
       }
       expect(item2, expectedItem2);
     });
+
+    test('additionalProperties entity that should not parse to object test',
+        () async {
+      final schemaPath = p.join(
+          'test', 'parser', 'schemas', 'additional_properties_class.3.0.json');
+      final configFile = schemaFile(schemaPath);
+      final schemaContent = configFile!.readAsStringSync();
+      final parser = OpenApiParser(schemaContent);
+      final dataClasses = parser.parseDataClasses().toList();
+      final expectedDataClasses = <UniversalDataClass>[
+        const UniversalComponentClass(
+          name: 'Example',
+          imports: {'Data'},
+          parameters: [
+            UniversalType(
+              type: 'object',
+              name: 'data',
+              description: 'data',
+              jsonKey: 'data',
+              isRequired: false,
+              mapType: 'string',
+            ),
+          ],
+        ),
+        const UniversalComponentClass(
+          name: 'ExampleParsable',
+          imports: {'Example'},
+          parameters: [
+            UniversalType(
+              type: 'Example',
+              name: 'data',
+              description: 'data',
+              jsonKey: 'data',
+              isRequired: false,
+            ),
+          ],
+        ),
+      ];
+
+      expect(dataClasses.length, expectedDataClasses.length);
+      final item1 = dataClasses[0] as UniversalComponentClass;
+      final item2 = dataClasses[1] as UniversalComponentClass;
+      final expectedItem1 = expectedDataClasses[0] as UniversalComponentClass;
+      final expectedItem2 = expectedDataClasses[1] as UniversalComponentClass;
+      expect(item1.parameters.length, expectedItem1.parameters.length);
+      for (var i = 0; i < item1.parameters.length; i++) {
+        expect(
+          item1.parameters[i],
+          expectedItem1.parameters[i],
+        );
+      }
+      expect(item2, expectedItem2);
+    });
   });
 }
