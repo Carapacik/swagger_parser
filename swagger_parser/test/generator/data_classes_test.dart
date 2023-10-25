@@ -1097,7 +1097,7 @@ class ClassName with _$ClassName {
           ),
         ];
 
-        const fillController = FillController();
+        const fillController = FillController(unknownEnumValue: false);
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
@@ -1109,8 +1109,10 @@ import 'package:json_annotation/json_annotation.dart';
 enum EnumName {
   @JsonValue(1)
   value1,
+
   @JsonValue(2)
   value2,
+
   @JsonValue(3)
   value3;
 }
@@ -1123,10 +1125,13 @@ import 'package:json_annotation/json_annotation.dart';
 enum EnumNameString {
   @JsonValue('itemOne')
   itemOne,
+
   @JsonValue('ItemTwo')
   itemTwo,
+
   @JsonValue('item_three')
   itemThree,
+
   @JsonValue('ITEM-FOUR')
   itemFour,
 
@@ -1161,10 +1166,13 @@ import 'package:json_annotation/json_annotation.dart';
 enum EnumNameStringWithLeadingNumbers {
   @JsonValue('1itemOne')
   value1itemOne,
+
   @JsonValue('2ItemTwo')
   value2ItemTwo,
+
   @JsonValue('3item_three')
   value3itemThree,
+
   @JsonValue('4ITEM-FOUR')
   value4ItemFour,
 
@@ -1196,56 +1204,57 @@ enum EnumNameStringWithLeadingNumbers {
           ),
         ];
 
-        const fillController = FillController(enumsToJson: true);
+        const fillController =
+            FillController(enumsToJson: true, unknownEnumValue: false);
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
         }
-        const expectedContent0 = r'''
+        const expectedContent0 = '''
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
 enum EnumName {
   @JsonValue(1)
-  value1,
+  value1(1),
+
   @JsonValue(2)
-  value2,
+  value2(2),
+
   @JsonValue(3)
-  value3;
+  value3(3);
 
-  int toJson() => _$EnumNameEnumMap[this]!;
+  const EnumName(this.json);
+
+  final int? json;
+
+  int? toJson() => json;
 }
-
-const _$EnumNameEnumMap = {
-  EnumName.value1: 1,
-  EnumName.value2: 2,
-  EnumName.value3: 3,
-};
 ''';
 
-        const expectedContent1 = r'''
+        const expectedContent1 = '''
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
 enum EnumNameString {
   @JsonValue('itemOne')
-  itemOne,
+  itemOne('itemOne'),
+
   @JsonValue('ItemTwo')
-  itemTwo,
+  itemTwo('ItemTwo'),
+
   @JsonValue('item_three')
-  itemThree,
+  itemThree('item_three'),
+
   @JsonValue('ITEM-FOUR')
-  itemFour;
+  itemFour('ITEM-FOUR');
 
-  String toJson() => _$EnumNameStringEnumMap[this]!;
+  const EnumNameString(this.json);
+
+  final String? json;
+
+  String? toJson() => json;
 }
-
-const _$EnumNameStringEnumMap = {
-  EnumNameString.itemOne: 'itemOne',
-  EnumNameString.itemTwo: 'ItemTwo',
-  EnumNameString.itemThree: 'item_three',
-  EnumNameString.itemFour: 'ITEM-FOUR',
-};
 ''';
 
         expect(files[0].contents, expectedContent0);
@@ -1274,7 +1283,8 @@ const _$EnumNameStringEnumMap = {
             items: UniversalEnumItem.listFromNames({'FALSE', 'for', 'do'}),
           ),
         ];
-        const fillController = FillController(freezed: true);
+        const fillController =
+            FillController(freezed: true, unknownEnumValue: false);
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
@@ -1286,8 +1296,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 enum EnumName {
   @JsonValue(1)
   value1,
+
   @JsonValue(2)
   value2,
+
   @JsonValue(3)
   value3;
 }
@@ -1300,10 +1312,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 enum EnumNameString {
   @JsonValue('itemOne')
   itemOne,
+
   @JsonValue('ItemTwo')
   itemTwo,
+
   @JsonValue('item_three')
   itemThree,
+
   @JsonValue('ITEM-FOUR')
   itemFour;
 }
@@ -1358,20 +1373,28 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 @JsonEnum()
 enum EnumName {
   @JsonValue(1)
-  value1,
+  value1(1),
+
   @JsonValue(2)
-  value2,
+  value2(2),
+
   @JsonValue(3)
-  value3;
+  value3(3),
 
-  int toJson() => _$EnumNameEnumMap[this]!;
+  /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
+  $unknown(null);
+
+  const EnumName(this.json);
+
+  factory EnumName.fromJson(int json) => values.firstWhere(
+        (e) => e.json == json,
+        orElse: () => $unknown,
+      );
+
+  final int? json;
+
+  int? toJson() => json;
 }
-
-const _$EnumNameEnumMap = {
-  EnumName.value1: 1,
-  EnumName.value2: 2,
-  EnumName.value3: 3,
-};
 ''';
 
         const expectedContent1 = r'''
@@ -1380,23 +1403,31 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 @JsonEnum()
 enum EnumNameString {
   @JsonValue('itemOne')
-  itemOne,
+  itemOne('itemOne'),
+
   @JsonValue('ItemTwo')
-  itemTwo,
+  itemTwo('ItemTwo'),
+
   @JsonValue('item_three')
-  itemThree,
+  itemThree('item_three'),
+
   @JsonValue('ITEM-FOUR')
-  itemFour;
+  itemFour('ITEM-FOUR'),
 
-  String toJson() => _$EnumNameStringEnumMap[this]!;
+  /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
+  $unknown(null);
+
+  const EnumNameString(this.json);
+
+  factory EnumNameString.fromJson(String json) => values.firstWhere(
+        (e) => e.json == json,
+        orElse: () => $unknown,
+      );
+
+  final String? json;
+
+  String? toJson() => json;
 }
-
-const _$EnumNameStringEnumMap = {
-  EnumNameString.itemOne: 'itemOne',
-  EnumNameString.itemTwo: 'ItemTwo',
-  EnumNameString.itemThree: 'item_three',
-  EnumNameString.itemFour: 'ITEM-FOUR',
-};
 ''';
         expect(files[0].contents, expectedContent0);
         expect(files[1].contents, expectedContent1);
@@ -1495,19 +1526,34 @@ enum class KeywordsName {
       const fillController = FillController();
       final file = fillController.fillDtoContent(dataClass);
 
-      const expectedContent = '''
+      const expectedContent = r'''
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
 enum EnumName {
   @JsonValue(-2)
-  valueMinus2,
+  valueMinus2(-2),
+
   @JsonValue(-1)
-  valueMinus1,
+  valueMinus1(-1),
+
   @JsonValue(0)
-  value0,
+  value0(0),
+
   @JsonValue(1)
-  value1;
+  value1(1),
+
+  /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
+  $unknown(null);
+
+  const EnumName(this.json);
+
+  factory EnumName.fromJson(int json) => values.firstWhere(
+        (e) => e.json == json,
+        orElse: () => $unknown,
+      );
+
+  final int? json;
 }
 ''';
 
@@ -1523,19 +1569,34 @@ enum EnumName {
       const fillController = FillController(freezed: true);
       final file = fillController.fillDtoContent(dataClass);
 
-      const expectedContent = '''
+      const expectedContent = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 @JsonEnum()
 enum EnumName {
   @JsonValue(-2)
-  valueMinus2,
+  valueMinus2(-2),
+
   @JsonValue(-1)
-  valueMinus1,
+  valueMinus1(-1),
+
   @JsonValue(0)
-  value0,
+  value0(0),
+
   @JsonValue(1)
-  value1;
+  value1(1),
+
+  /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
+  $unknown(null);
+
+  const EnumName(this.json);
+
+  factory EnumName.fromJson(int json) => values.firstWhere(
+        (e) => e.json == json,
+        orElse: () => $unknown,
+      );
+
+  final int? json;
 }
 ''';
 
