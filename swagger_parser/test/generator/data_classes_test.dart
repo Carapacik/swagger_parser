@@ -1092,6 +1092,7 @@ class ClassName with _$ClassName {
                 '3item_three',
                 '4ITEM-FOUR',
                 '5иллегалчарактер',
+                '6 item six',
               },
             ),
           ),
@@ -1178,7 +1179,10 @@ enum EnumNameStringWithLeadingNumbers {
 
   /// Incorrect name has been replaced. Original name: `5иллегалчарактер`.
   @JsonValue('5иллегалчарактер')
-  undefined0;
+  undefined0,
+
+  @JsonValue('6 item six')
+  value6ItemSix;
 }
 ''';
 
@@ -1357,7 +1361,7 @@ enum KeywordsName {
             name: 'EnumNameString',
             type: 'string',
             items: UniversalEnumItem.listFromNames(
-              {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
+              {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR', 'Item five'},
             ),
           ),
         ];
@@ -1413,6 +1417,9 @@ enum EnumNameString {
 
   @JsonValue('ITEM-FOUR')
   itemFour('ITEM-FOUR'),
+
+  @JsonValue('Item five')
+  itemFive('Item five'),
 
   /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
   $unknown(null);
