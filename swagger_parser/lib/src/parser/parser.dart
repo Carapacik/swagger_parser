@@ -477,8 +477,6 @@ class OpenApiParser {
           requestType: HttpRequestType.fromString(key)!,
           route: path,
           contentType: httpContentType,
-          isMultiPart: isMultiPart,
-          isFormUrlEncoded: isFormUrlEncoded,
           isOriginalHttpResponse: _originalHttpResponse,
           returnType: returnType,
           parameters: parameters,

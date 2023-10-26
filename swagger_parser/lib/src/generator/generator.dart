@@ -307,6 +307,7 @@ final class Generator {
       enumsToJson: _enumsToJson,
       unknownEnumValue: _unknownEnumValue,
       markFilesAsGenerated: _markFilesAsGenerated,
+      defaultContentType: _defaultContentType,
     );
     final files = <GeneratedFile>[];
     for (final client in _restClients) {
