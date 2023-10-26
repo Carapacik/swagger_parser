@@ -12,7 +12,7 @@
                 "type": "integer"
               },
               "another": {
-                "$ref":  "#/components/schemas/AnotherClass"
+                "$ref": "#/components/schemas/AnotherClass"
               }
             }
           }

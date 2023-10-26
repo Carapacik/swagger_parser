@@ -14,10 +14,11 @@ String dartRetrofitClientTemplate({
   required UniversalRestClient restClient,
   required String name,
   required bool markFileAsGenerated,
+  required String defaultContentType,
 }) {
   final sb = StringBuffer(
     '''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_fileImport(restClient)}import 'package:dio/dio.dart';
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_fileImport(restClient)}import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
 part '${name.toSnake}.g.dart';
@@ -28,20 +29,20 @@ abstract class $name {
 ''',
   );
   for (final request in restClient.requests) {
-    sb.write(_toClientRequest(request));
+    sb.write(_toClientRequest(request, defaultContentType));
   }
   sb.write('}\n');
   return sb.toString();
 }
 
-String _toClientRequest(UniversalRequest request) {
+String _toClientRequest(UniversalRequest request, String defaultContentType) {
   final responseType = request.returnType == null
       ? 'void'
       : request.returnType!.toSuitableType(ProgrammingLanguage.dart);
   final sb = StringBuffer(
     '''
 
-  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${request.isMultiPart ? '@MultiPart()\n  ' : ''}${request.isFormUrlEncoded ? '@FormUrlEncoded()\n  ' : ''}@${request.requestType.name.toUpperCase()}('${request.route}')
+  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}@${request.requestType.name.toUpperCase()}('${request.route}')
   Future<${request.isOriginalHttpResponse ? 'HttpResponse<$responseType>' : responseType}> ${request.name}(''',
   );
   if (request.parameters.isNotEmpty) {
@@ -75,6 +76,22 @@ String _toParameter(UniversalRequestType parameter) =>
     '${_required(parameter.type)}'
     '${parameter.type.toSuitableType(ProgrammingLanguage.dart)} '
     '${parameter.type.name!.toCamel}${_defaultValue(parameter.type)},';
+
+String _contentTypeHeader(
+  UniversalRequest request,
+  String defaultContentType,
+) {
+  if (request.isMultiPart) {
+    return '@MultiPart()\n  ';
+  }
+  if (request.isFormUrlEncoded) {
+    return '@FormUrlEncoded()\n  ';
+  }
+  if (request.contentType != defaultContentType) {
+    return "@Headers(<String, String>{'Content-Type': '${request.contentType}'})\n  ";
+  }
+  return '';
+}
 
 /// return required if isRequired
 String _required(UniversalType t) =>

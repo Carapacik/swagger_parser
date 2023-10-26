@@ -77,7 +77,10 @@ swagger_parser:
   # Optional (dart only). Set root client name
   root_client_name: RestClient
 
-  # Optional. Set API name for folder and export file (coming soon).
+  # Optional. Set default content-type for all requests
+  default_content_type: "application/json"
+
+  # Optional. Set API name for folder and export file
   # If not specified, the file name is used.
   name: null
 
