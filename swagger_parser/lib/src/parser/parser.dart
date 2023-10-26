@@ -135,7 +135,7 @@ class OpenApiParser {
   Iterable<UniversalRestClient> parseRestClients() {
     final restClients = <UniversalRestClient>[];
     final imports = SplayTreeSet<String>();
-    HttpContentType? httpContentType = null;
+    var resultContentType = _defaultContentType;
 
     /// Parses return type for client query for OpenApi v3
     UniversalType? returnTypeV3(
@@ -243,23 +243,20 @@ class OpenApiParser {
 
         final contentTypes = requestBody[_contentConst] as Map<String, dynamic>;
         Map<String, dynamic>? contentType;
-        httpContentType =
-            HttpContentType.fromString(contentTypes.entries.first.key);
-
         if (contentTypes.containsKey(_multipartFormDataConst)) {
           contentType =
               contentTypes[_multipartFormDataConst] as Map<String, dynamic>;
-          httpContentType = HttpContentType.multipartFormData;
+          resultContentType = _multipartFormDataConst;
         } else if (contentTypes.containsKey(_formUrlEncodedConst)) {
           contentType =
               contentTypes[_formUrlEncodedConst] as Map<String, dynamic>;
-          httpContentType = HttpContentType.applicationXWwwFormUrlencoded;
+          resultContentType = _formUrlEncodedConst;
         } else {
-          final content = (requestBody[_contentConst] as Map<String, dynamic>)
-              .entries
-              .firstOrNull;
+          final content = contentTypes.containsKey(_defaultContentType)
+              ? contentTypes[_defaultContentType]
+              : contentTypes.entries.firstOrNull?.value;
           contentType =
-              content == null ? null : content.value as Map<String, dynamic>;
+              content == null ? null : content as Map<String, dynamic>;
         }
 
         if (contentType == null) {
@@ -268,7 +265,7 @@ class OpenApiParser {
           );
         }
 
-        if (httpContentType!.isMultipart) {
+        if (resultContentType == _multipartFormDataConst) {
           if ((contentType[_schemaConst] as Map<String, dynamic>)
               .containsKey(_refConst)) {
             final isRequired = requestBody[_requiredConst]?.toString().toBool();
@@ -389,9 +386,14 @@ class OpenApiParser {
         return types;
       }
 
-      if (map.containsKey(_consumesConst)) {
+      if (map.containsKey(_consumesConst) &&
+          map[_consumesConst] is List<dynamic>) {
         final consumes = map[_consumesConst] as List<dynamic>;
-        httpContentType = HttpContentType.fromString(consumes.first.toString());
+        if (consumes.contains(_multipartFormDataConst)) {
+          resultContentType = _multipartFormDataConst;
+        } else if (consumes.contains(_formUrlEncodedConst)) {
+          resultContentType = _formUrlEncodedConst;
+        }
       }
       for (final parameter in map[_parametersConst] as List<dynamic>) {
         final isRequired = (parameter as Map<String, dynamic>)[_requiredConst]
@@ -476,7 +478,7 @@ class OpenApiParser {
           description: description,
           requestType: HttpRequestType.fromString(key)!,
           route: path,
-          contentType: httpContentType,
+          contentType: resultContentType,
           isOriginalHttpResponse: _originalHttpResponse,
           returnType: returnType,
           parameters: parameters,
@@ -497,7 +499,7 @@ class OpenApiParser {
           restClients[sameTagIndex].requests.add(request);
           restClients[sameTagIndex].imports.addAll(imports);
         }
-        httpContentType = HttpContentType.applicationJson;
+        resultContentType = _defaultContentType;
         imports.clear();
       });
     });
