@@ -12,9 +12,8 @@ final class UniversalRequest {
     required this.route,
     required this.returnType,
     required this.parameters,
+    this.contentType = 'application/json',
     this.description,
-    this.isMultiPart = false,
-    this.isFormUrlEncoded = false,
     this.isDeprecated = false,
     this.isOriginalHttpResponse = false,
   });
@@ -37,11 +36,15 @@ final class UniversalRequest {
   /// Request parameters
   final List<UniversalRequestType> parameters;
 
-  /// Request type 'multipart/form-data'
-  final bool isMultiPart;
+  /// Request content-type
+  final String contentType;
+
+  /// Request has Content-Type 'multipart/form-data'
+  bool get isMultiPart => contentType == 'multipart/form-data';
 
   /// Request type 'application/x-www-form-urlencoded'
-  final bool isFormUrlEncoded;
+  bool get isFormUrlEncoded =>
+      contentType == 'application/x-www-form-urlencoded';
 
   /// Value indicating whether this request is deprecated
   final bool isDeprecated;

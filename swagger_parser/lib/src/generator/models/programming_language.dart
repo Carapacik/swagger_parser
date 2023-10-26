@@ -96,12 +96,14 @@ enum ProgrammingLanguage {
     UniversalRestClient restClient,
     String name, {
     required bool markFilesAsGenerated,
+    required String defaultContentType,
   }) =>
       switch (this) {
         dart => dartRetrofitClientTemplate(
             restClient: restClient,
             name: name,
             markFileAsGenerated: markFilesAsGenerated,
+            defaultContentType: defaultContentType,
           ),
         kotlin => kotlinRetrofitClientTemplate(
             restClient: restClient,
