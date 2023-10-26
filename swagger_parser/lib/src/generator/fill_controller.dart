@@ -17,7 +17,9 @@ final class FillController {
     bool putClientsInFolder = false,
     bool freezed = false,
     bool enumsToJson = false,
+    bool unknownEnumValue = true,
     bool markFilesAsGenerated = false,
+    String defaultContentType = 'application/json',
   })  : _openApiInfo = openApiInfo,
         _programmingLanguage = programmingLanguage,
         _clientPostfix = clientPostfix,
@@ -26,7 +28,9 @@ final class FillController {
         _putClientsInFolder = putClientsInFolder,
         _freezed = freezed,
         _enumsToJson = enumsToJson,
-        _markFilesAsGenerated = markFilesAsGenerated;
+        _unknownEnumValue = unknownEnumValue,
+        _markFilesAsGenerated = markFilesAsGenerated,
+        _defaultContentType = defaultContentType;
 
   final OpenApiInfo _openApiInfo;
   final ProgrammingLanguage _programmingLanguage;
@@ -36,7 +40,9 @@ final class FillController {
   final bool _freezed;
   final bool _putClientsInFolder;
   final bool _enumsToJson;
+  final bool _unknownEnumValue;
   final bool _markFilesAsGenerated;
+  final String _defaultContentType;
 
   /// Return [GeneratedFile] generated from given [UniversalDataClass]
   GeneratedFile fillDtoContent(UniversalDataClass dataClass) => GeneratedFile(
@@ -47,6 +53,7 @@ final class FillController {
           dataClass,
           freezed: _freezed,
           enumsToJson: _enumsToJson,
+          unknownEnumValue: _unknownEnumValue,
           markFilesAsGenerated: _markFilesAsGenerated,
         ),
       );
@@ -65,6 +72,7 @@ final class FillController {
         restClient,
         restClient.name.toPascal + _clientPostfix.toPascal,
         markFilesAsGenerated: _markFilesAsGenerated,
+        defaultContentType: _defaultContentType,
       ),
     );
   }

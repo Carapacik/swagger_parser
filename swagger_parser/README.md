@@ -57,7 +57,7 @@ swagger_parser:
 
   # Sets the url of the OpenApi schema
   schema_url: https://petstore.swagger.io/v2/swagger.json
-
+  
   # Required. Sets output directory for generated files (Clients and DTOs).
   output_directory: lib/api
 
@@ -79,7 +79,10 @@ swagger_parser:
   # Optional (dart only). Set root client name
   root_client_name: RestClient
 
-  # Optional. Set API name for folder and export file (coming soon).
+  # Optional. Set default content-type for all requests
+  default_content_type: "application/json"
+
+  # Optional. Set API name for folder and export file
   # If not specified, the file name is used.
   name: null
 
@@ -108,6 +111,9 @@ swagger_parser:
 
   # Optional. Set 'true' to set enum prefix from parent component.
   enums_prefix: false
+
+  # Optional (dart only). Set 'true' to maintain backwards compatibility when adding new values on the backend.
+  unknown_enum_value: true
 
   # Optional. Set 'false' to not put a comment at the beginning of the generated files.
   mark_files_as_generated: true

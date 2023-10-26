@@ -34,6 +34,10 @@ swagger_parser:
   export_file: true
 
   # Optional. Set API name for folder and export file.
+  # Optional. Set default content-type for all requests
+  default_content_type: "application/json"
+
+  # Optional. Set API name for folder and export file (coming soon).
   # If not specified, the file name is used.
   name: null
 
