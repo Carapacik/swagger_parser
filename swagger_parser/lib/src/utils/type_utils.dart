@@ -61,7 +61,7 @@ String uniqueName({bool isEnum = false}) {
   return name;
 }
 
-final _enumNameRegExp = RegExp(r'^[a-zA-Z\d_-]*$');
+final _enumNameRegExp = RegExp(r'^[a-zA-Z\d_-\s]*$');
 final _startWithNumberRegExp = RegExp(r'^-?\d+');
 
 /// Protect default enum value from incorrect symbols, keywords, etc.
