@@ -81,7 +81,7 @@ void main() {
               requestType: HttpRequestType.patch,
               route: '/api/User/{id}/avatar',
               returnType: null,
-              isMultiPart: true,
+              contentType: 'multipart/form-data',
               parameters: [
                 UniversalRequestType(
                   name: 'avatar',
@@ -184,7 +184,7 @@ void main() {
               requestType: HttpRequestType.patch,
               route: '/api/User/{id}/avatar',
               returnType: null,
-              isMultiPart: true,
+              contentType: 'multipart/form-data',
               parameters: [
                 UniversalRequestType(
                   name: 'id',
