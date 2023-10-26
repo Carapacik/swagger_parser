@@ -38,6 +38,7 @@ enum ProgrammingLanguage {
     UniversalDataClass dataClass, {
     required bool freezed,
     required bool enumsToJson,
+    required bool unknownEnumValue,
     required bool markFilesAsGenerated,
   }) {
     switch (this) {
@@ -47,6 +48,7 @@ enum ProgrammingLanguage {
             dataClass,
             freezed: freezed,
             enumsToJson: enumsToJson,
+            unknownEnumValue: unknownEnumValue,
             markFileAsGenerated: markFilesAsGenerated,
           );
         } else if (dataClass is UniversalComponentClass) {

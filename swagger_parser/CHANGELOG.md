@@ -1,3 +1,8 @@
+## 1.11.0
+- Added unknown value to all enums to maintain backwards compatibility when adding new values on the backend
+- Add new config parameter `unknown_enum_value` (dart only) ([#106](https://github.com/Carapacik/swagger_parser/issues/106))
+- Support String values with spaces for enums ([#127](https://github.com/Carapacik/swagger_parser/issues/127))
+
 ## 1.10.6
 - Fixed map objects parsing as separate entities ([#124](https://github.com/Carapacik/swagger_parser/issues/124))
 
@@ -8,7 +13,7 @@
 - Fixed error with `additionalProperties` ([#114](https://github.com/Carapacik/swagger_parser/issues/114))
 
 ## 1.10.3
-- Add new config parameter `original_http_response`(only for dart) ([#115](https://github.com/Carapacik/swagger_parser/issues/115))
+- Add new config parameter `original_http_response` (dart only) ([#115](https://github.com/Carapacik/swagger_parser/issues/115))
 
 ## 1.10.2
 - Fix error in `body` with name in dart template
