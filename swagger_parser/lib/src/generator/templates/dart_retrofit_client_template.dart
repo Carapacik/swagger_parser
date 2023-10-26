@@ -88,7 +88,7 @@ String _contentTypeHeader(
     return '@FormUrlEncoded()\n  ';
   }
   if (request.contentType != defaultContentType) {
-    return "@Headers({'Content-Type': '${request.contentType}'})\n  ";
+    return "@Headers(<String, String>{'Content-Type': '${request.contentType}'})\n  ";
   }
   return '';
 }
