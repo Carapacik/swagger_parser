@@ -15,7 +15,8 @@ final class UniversalRequest {
     final HttpContentType? contentType,
     this.description,
     this.isDeprecated = false,
-  }) : contentType = contentType ?? HttpContentType.applicationJson;
+    this.isOriginalHttpResponse = false,
+  });
 
   /// Request name
   final String name;
@@ -52,6 +53,9 @@ final class UniversalRequest {
 
   /// Value indicating whether this request is deprecated
   final bool isDeprecated;
+
+  /// Wrap request return type with HttpResponse
+  final bool isOriginalHttpResponse;
 
   @override
   bool operator ==(Object other) =>

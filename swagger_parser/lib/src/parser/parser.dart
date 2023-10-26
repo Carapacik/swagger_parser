@@ -29,11 +29,13 @@ class OpenApiParser {
     bool enumsPrefix = false,
     bool pathMethodName = false,
     bool squashClients = false,
+    bool originalHttpResponse = false,
     List<ReplacementRule> replacementRules = const <ReplacementRule>[],
   })  : _name = name,
         _pathMethodName = pathMethodName,
         _enumsPrefix = enumsPrefix,
         _squashClients = squashClients,
+        _originalHttpResponse = originalHttpResponse,
         _replacementRules = replacementRules {
     _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
@@ -62,6 +64,7 @@ class OpenApiParser {
   final bool _enumsPrefix;
   final String? _name;
   final bool _squashClients;
+  final bool _originalHttpResponse;
   final List<ReplacementRule> _replacementRules;
   late final Map<String, dynamic> _definitionFileContent;
   late final OAS _version;
@@ -473,6 +476,9 @@ class OpenApiParser {
           requestType: HttpRequestType.fromString(key)!,
           route: path,
           contentType: httpContentType,
+          isMultiPart: isMultiPart,
+          isFormUrlEncoded: isFormUrlEncoded,
+          isOriginalHttpResponse: _originalHttpResponse,
           returnType: returnType,
           parameters: parameters,
           isDeprecated: requestPath[_deprecatedConst].toString().toBool(),
@@ -790,7 +796,9 @@ class OpenApiParser {
         (map.containsKey(_additionalPropertiesConst) &&
             (map[_additionalPropertiesConst] is Map<String, dynamic>) &&
             (map[_additionalPropertiesConst] as Map<String, dynamic>)
-                .isNotEmpty)) {
+                .isNotEmpty &&
+            !(map[_additionalPropertiesConst] as Map<String, dynamic>)
+                .containsKey(_refConst))) {
       // false positive result
       // ignore: unnecessary_null_checks
       final (newName!, description) = protectName(
@@ -807,6 +815,11 @@ class OpenApiParser {
 
       final typeWithImports = <({UniversalType type, String? import})>[];
 
+      // To detect is this entity is map or not
+      final mapType = map[_typeConst].toString() == _objectConst &&
+              map.containsKey(_additionalPropertiesConst)
+          ? 'string'
+          : null;
       if (map.containsKey(_propertiesConst)) {
         (map[_propertiesConst] as Map<String, dynamic>).forEach((key, value) {
           typeWithImports.add(
@@ -827,6 +840,26 @@ class OpenApiParser {
             name: _additionalPropertiesConst,
             root: false,
           ),
+        );
+      }
+
+      // Interception of objectClass creation when Map construction is expected
+      if (typeWithImports.length == 1 && typeWithImports[0].import == null) {
+        return (
+          type: UniversalType(
+            type: map[_typeConst] as String,
+            name: newName.toCamel,
+            description: description,
+            format: map.containsKey(_formatConst)
+                ? map[_formatConst].toString()
+                : null,
+            jsonKey: newName,
+            mapType: mapType,
+            defaultValue: protectDefaultValue(map[_defaultConst]),
+            nullable: map[_nullableConst].toString().toBool(),
+            isRequired: isRequired,
+          ),
+          import: newName.toPascal,
         );
       }
 
@@ -852,6 +885,7 @@ class OpenApiParser {
               ? map[_formatConst].toString()
               : null,
           jsonKey: newName,
+          mapType: mapType,
           defaultValue: protectDefaultValue(map[_defaultConst]),
           nullable: map[_nullableConst].toString().toBool(),
           isRequired: isRequired,
@@ -931,17 +965,25 @@ class OpenApiParser {
     }
     // Type or ref
     else {
-      var type = map.containsKey(_typeConst)
-          ? map.containsKey(_refConst) &&
-                  map[_typeConst].toString() == _objectConst
-              ? _formatRef(map)
-              : map[_typeConst].toString()
-          : map.containsKey(_refConst)
-              ? _formatRef(map)
-              : _objectConst;
+      String? import;
+      String type;
+      if (map.containsKey(_refConst)) {
+        import = _formatRef(map);
+      } else if (map.containsKey(_additionalPropertiesConst) &&
+          map[_additionalPropertiesConst] is Map<String, dynamic> &&
+          (map[_additionalPropertiesConst] as Map<String, dynamic>)
+              .containsKey(_refConst)) {
+        import =
+            _formatRef(map[_additionalPropertiesConst] as Map<String, dynamic>);
+      }
 
-      var import = map.containsKey(_refConst) ? _formatRef(map) : null;
-
+      if (map.containsKey(_typeConst)) {
+        type = import != null && map[_typeConst].toString() == _objectConst
+            ? import
+            : map[_typeConst].toString();
+      } else {
+        type = import ?? _objectConst;
+      }
       if (import != null) {
         for (final replacementRule in _replacementRules) {
           import = replacementRule.apply(import);
@@ -949,6 +991,12 @@ class OpenApiParser {
         }
       }
 
+      // To detect is this entity is map or not
+      final mapType = map[_typeConst].toString() == _objectConst &&
+              map.containsKey(_additionalPropertiesConst) &&
+              import == null
+          ? 'string'
+          : null;
       final defaultValue = map[_defaultConst]?.toString();
       final (newName, description) =
           protectName(name, description: map[_descriptionConst]?.toString());
@@ -962,6 +1010,7 @@ class OpenApiParser {
           description: description,
           format: map[_formatConst]?.toString(),
           jsonKey: name,
+          mapType: mapType,
           defaultValue:
               protectDefaultValue(defaultValue, isEnum: enumType != null),
           enumType: enumType,

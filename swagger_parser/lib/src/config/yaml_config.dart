@@ -36,7 +36,9 @@ final class YamlConfig {
     this.putInFolder,
     this.enumsToJson,
     this.enumsPrefix,
+    this.unknownEnumValue,
     this.markFilesAsGenerated,
+    this.originalHttpResponse,
     this.replacementRules = const [],
   });
 
@@ -202,10 +204,24 @@ final class YamlConfig {
       );
     }
 
+    final unknownEnumValue = yamlConfig['unknown_enum_value'];
+    if (unknownEnumValue is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'unknown_enum_value' must be bool.",
+      );
+    }
+
     final markFilesAsGenerated = yamlConfig['mark_files_as_generated'];
     if (markFilesAsGenerated is! bool?) {
       throw const ConfigException(
         "Config parameter 'mark_files_as_generated' must be bool.",
+      );
+    }
+
+    final originalHttpResponse = yamlConfig['original_http_response'];
+    if (originalHttpResponse is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'original_http_response' must be bool.",
       );
     }
 
@@ -254,8 +270,11 @@ final class YamlConfig {
       putClientsInFolder: putClientsInFolder ?? rootConfig?.putClientsInFolder,
       squashClients: squashClients ?? rootConfig?.squashClients,
       pathMethodName: pathMethodName ?? rootConfig?.pathMethodName,
+      originalHttpResponse:
+          originalHttpResponse ?? rootConfig?.originalHttpResponse,
       enumsToJson: enumsToJson ?? rootConfig?.enumsToJson,
       enumsPrefix: enumsPrefix ?? rootConfig?.enumsPrefix,
+      unknownEnumValue: unknownEnumValue ?? rootConfig?.unknownEnumValue,
       markFilesAsGenerated:
           markFilesAsGenerated ?? rootConfig?.markFilesAsGenerated,
       replacementRules: replacementRules ?? rootConfig?.replacementRules ?? [],
@@ -351,6 +370,8 @@ final class YamlConfig {
   final bool? putInFolder;
   final bool? enumsToJson;
   final bool? enumsPrefix;
+  final bool? unknownEnumValue;
   final bool? markFilesAsGenerated;
+  final bool? originalHttpResponse;
   final List<ReplacementRule> replacementRules;
 }

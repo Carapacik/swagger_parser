@@ -40,10 +40,12 @@ final class Generator {
     String? rootClientName,
     bool? putClientsInFolder,
     bool? squashClients,
+    bool? originalHttpResponse,
     bool? pathMethodName,
     bool? putInFolder,
     bool? enumsToJson,
     bool? enumsPrefix,
+    bool? unknownEnumValue,
     bool? markFilesAsGenerated,
     List<ReplacementRule>? replacementRules,
   })  : _schemaPath = schemaPath,
@@ -61,10 +63,12 @@ final class Generator {
         _clientPostfix = clientPostfix ?? 'Client',
         _putClientsInFolder = putClientsInFolder ?? false,
         _squashClients = squashClients ?? false,
+        _originalHttpResponse = originalHttpResponse ?? false,
         _pathMethodName = pathMethodName ?? false,
         _putInFolder = putInFolder ?? false,
         _enumsToJson = enumsToJson ?? false,
         _enumsPrefix = enumsPrefix ?? false,
+        unknownEnumValue = unknownEnumValue ?? true,
         _markFilesAsGenerated = markFilesAsGenerated ?? true,
         _replacementRules = replacementRules ?? const [];
 
@@ -84,10 +88,12 @@ final class Generator {
       clientPostfix: yamlConfig.clientPostfix,
       putClientsInFolder: yamlConfig.putClientsInFolder,
       squashClients: yamlConfig.squashClients,
+      originalHttpResponse: yamlConfig.originalHttpResponse,
       pathMethodName: yamlConfig.pathMethodName,
       putInFolder: yamlConfig.putInFolder,
       enumsToJson: yamlConfig.enumsToJson,
       enumsPrefix: yamlConfig.enumsPrefix,
+      unknownEnumValue: yamlConfig.unknownEnumValue,
       markFilesAsGenerated: yamlConfig.markFilesAsGenerated,
       replacementRules: yamlConfig.replacementRules,
     );
@@ -138,6 +144,9 @@ final class Generator {
   /// Squash all clients in one client.
   final bool _squashClients;
 
+  /// Generate request methods with HttpResponse<Entity>
+  final bool _originalHttpResponse;
+
   /// If true, use the endpoint path for the method name, if false, use operationId
   final bool _pathMethodName;
 
@@ -149,6 +158,9 @@ final class Generator {
 
   /// If true, generated enums will have parent component name in its class name
   final bool _enumsPrefix;
+
+  /// If true, adds an unknown value for all enums to maintain backward compatibility when adding new values on the backend.
+  final bool unknownEnumValue;
 
   /// If true, generated files will be marked as generated
   final bool _markFilesAsGenerated;
@@ -257,6 +269,7 @@ final class Generator {
       name: _name,
       squashClients: _squashClients,
       replacementRules: _replacementRules,
+      originalHttpResponse: _originalHttpResponse,
     );
     _openApiInfo = parser.parseOpenApiInfo();
     _restClients = parser.parseRestClients();
@@ -286,6 +299,7 @@ final class Generator {
       freezed: _freezed,
       putClientsInFolder: _putClientsInFolder,
       enumsToJson: _enumsToJson,
+      unknownEnumValue: unknownEnumValue,
       markFilesAsGenerated: _markFilesAsGenerated,
     );
     final files = <GeneratedFile>[];
