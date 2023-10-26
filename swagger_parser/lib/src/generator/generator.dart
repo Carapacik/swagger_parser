@@ -45,6 +45,7 @@ final class Generator {
     bool? putInFolder,
     bool? enumsToJson,
     bool? enumsPrefix,
+    bool? unknownEnumValue,
     bool? markFilesAsGenerated,
     List<ReplacementRule>? replacementRules,
   })  : _schemaPath = schemaPath,
@@ -67,6 +68,7 @@ final class Generator {
         _putInFolder = putInFolder ?? false,
         _enumsToJson = enumsToJson ?? false,
         _enumsPrefix = enumsPrefix ?? false,
+        unknownEnumValue = unknownEnumValue ?? true,
         _markFilesAsGenerated = markFilesAsGenerated ?? true,
         _replacementRules = replacementRules ?? const [];
 
@@ -91,6 +93,7 @@ final class Generator {
       putInFolder: yamlConfig.putInFolder,
       enumsToJson: yamlConfig.enumsToJson,
       enumsPrefix: yamlConfig.enumsPrefix,
+      unknownEnumValue: yamlConfig.unknownEnumValue,
       markFilesAsGenerated: yamlConfig.markFilesAsGenerated,
       replacementRules: yamlConfig.replacementRules,
     );
@@ -155,6 +158,9 @@ final class Generator {
 
   /// If true, generated enums will have parent component name in its class name
   final bool _enumsPrefix;
+
+  /// If true, adds an unknown value for all enums to maintain backward compatibility when adding new values on the backend.
+  final bool unknownEnumValue;
 
   /// If true, generated files will be marked as generated
   final bool _markFilesAsGenerated;
@@ -293,6 +299,7 @@ final class Generator {
       freezed: _freezed,
       putClientsInFolder: _putClientsInFolder,
       enumsToJson: _enumsToJson,
+      unknownEnumValue: unknownEnumValue,
       markFilesAsGenerated: _markFilesAsGenerated,
     );
     final files = <GeneratedFile>[];
