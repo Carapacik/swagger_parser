@@ -9,14 +9,14 @@
           "allClass": {
             "allOf": [
               {
-                  "$ref": "#/components/schemas/EnumClass"
+                "$ref": "#/components/schemas/EnumClass"
               }
             ]
           },
           "anyClass": {
             "anyOf": [
               {
-                  "$ref": "#/components/schemas/EnumClass"
+                "$ref": "#/components/schemas/EnumClass"
               }
             ],
             "default": "value1"
@@ -24,14 +24,14 @@
           "oneClass": {
             "oneOf": [
               {
-                  "$ref": "#/components/schemas/EnumClass"
+                "$ref": "#/components/schemas/EnumClass"
               }
             ]
           },
           "allType": {
             "allOf": [
               {
-                  "type": "integer"
+                "type": "integer"
               }
             ]
           },
@@ -83,11 +83,11 @@
       "EnumClass": {
         "type": "string",
         "enum": [
-            "value1",
-            "value2"
+          "value1",
+          "value2"
         ],
         "title": "EnumClass"
-    }
+      }
     }
   }
 }

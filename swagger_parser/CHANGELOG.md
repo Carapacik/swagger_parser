@@ -1,6 +1,7 @@
 ## 1.11.0
 - Added unknown value to all enums to maintain backwards compatibility when adding new values on the backend
 - Add new config parameter `unknown_enum_value` (dart only) ([#106](https://github.com/Carapacik/swagger_parser/issues/106))
+- Add new config parameter `default_content_type`
 - Support String values with spaces for enums ([#127](https://github.com/Carapacik/swagger_parser/issues/127))
 
 ## 1.10.6
