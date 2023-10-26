@@ -30,12 +30,14 @@ class OpenApiParser {
     bool pathMethodName = false,
     bool squashClients = false,
     bool originalHttpResponse = false,
+    String defaultContentType = 'application/json',
     List<ReplacementRule> replacementRules = const <ReplacementRule>[],
   })  : _name = name,
         _pathMethodName = pathMethodName,
         _enumsPrefix = enumsPrefix,
         _squashClients = squashClients,
         _originalHttpResponse = originalHttpResponse,
+        _defaultContentType = defaultContentType,
         _replacementRules = replacementRules {
     _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
@@ -65,6 +67,7 @@ class OpenApiParser {
   final String? _name;
   final bool _squashClients;
   final bool _originalHttpResponse;
+  final String _defaultContentType;
   final List<ReplacementRule> _replacementRules;
   late final Map<String, dynamic> _definitionFileContent;
   late final OAS _version;
@@ -85,13 +88,11 @@ class OpenApiParser {
   static const _descriptionConst = 'description';
   static const _enumConst = 'enum';
   static const _formatConst = 'format';
-  static final _formUrlEncodedConst =
-      HttpContentType.applicationXWwwFormUrlencoded.value;
+  static const _formUrlEncodedConst = 'application/x-www-form-urlencoded';
   static const _inConst = 'in';
   static const _infoConst = 'info';
   static const _itemsConst = 'items';
-  static final _multipartFormDataConst =
-      HttpContentType.multipartFormData.value;
+  static const _multipartFormDataConst = 'multipart/form-data';
   static const _nameConst = 'name';
   static const _nullableConst = 'nullable';
   static const _objectConst = 'object';

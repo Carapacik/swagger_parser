@@ -12,7 +12,7 @@ final class UniversalRequest {
     required this.route,
     required this.returnType,
     required this.parameters,
-    final HttpContentType? contentType,
+    this.contentType = 'application/json',
     this.description,
     this.isDeprecated = false,
     this.isOriginalHttpResponse = false,
@@ -36,20 +36,15 @@ final class UniversalRequest {
   /// Request parameters
   final List<UniversalRequestType> parameters;
 
-  final HttpContentType contentType;
+  /// Request content-type
+  final String contentType;
 
   /// Request has Content-Type 'multipart/form-data'
-  bool get isMultiPart => contentType.isMultipart;
+  bool get isMultiPart => contentType == 'multipart/form-data';
 
   /// Request type 'application/x-www-form-urlencoded'
   bool get isFormUrlEncoded =>
-      contentType == HttpContentType.applicationXWwwFormUrlencoded;
-
-  /// if is application/json or multipart/form-data or application/x-www-form-urlencoded do not add header
-  bool get shouldAddContentTypeHeader =>
-      !(contentType == HttpContentType.applicationJson ||
-          isMultiPart ||
-          isFormUrlEncoded);
+      contentType == 'application/x-www-form-urlencoded';
 
   /// Value indicating whether this request is deprecated
   final bool isDeprecated;
@@ -116,39 +111,4 @@ enum HttpRequestType {
   /// Get type from string
   static HttpRequestType? fromString(String type) =>
       HttpRequestType.values.firstWhereOrNull((e) => e.name == type);
-}
-
-/// Content-Type header of request
-enum HttpContentType {
-  applicationOctetStream('application/octet-stream'),
-  applicationJson('application/json'),
-  applicationXml('application/xml'),
-  applicationJsonPatch('application/json-patch+json'),
-  applicationXWwwFormUrlencoded('application/x-www-form-urlencoded'),
-  applicationPdf('application/pdf'),
-  multipartFormData('multipart/form-data'),
-  imageGif('image/gif'),
-  imageJpeg('image/jpeg'),
-  imagePng('image/png'),
-  textPlain('text/plain'),
-  textXml('text/xml'),
-  textHtml('text/html');
-
-  const HttpContentType(this.value);
-
-  /// The Content-Type value, e.g. "application/json".
-  final String value;
-
-  static HttpContentType? fromString(String? type) =>
-      HttpContentType.values.firstWhereOrNull(
-        (e) => e.value == type,
-      );
-
-  bool get isApplication => value.startsWith('application/');
-
-  bool get isMultipart => value.startsWith('multipart/');
-
-  bool get isText => value.startsWith('text/');
-
-  bool get isImage => value.startsWith('image/');
 }

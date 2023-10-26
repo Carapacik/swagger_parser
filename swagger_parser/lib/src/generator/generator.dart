@@ -46,6 +46,7 @@ final class Generator {
     bool? enumsToJson,
     bool? enumsPrefix,
     bool? unknownEnumValue,
+    String? defaultContentType,
     bool? markFilesAsGenerated,
     List<ReplacementRule>? replacementRules,
   })  : _schemaPath = schemaPath,
@@ -68,8 +69,9 @@ final class Generator {
         _putInFolder = putInFolder ?? false,
         _enumsToJson = enumsToJson ?? false,
         _enumsPrefix = enumsPrefix ?? false,
-        unknownEnumValue = unknownEnumValue ?? true,
+        _unknownEnumValue = unknownEnumValue ?? true,
         _markFilesAsGenerated = markFilesAsGenerated ?? true,
+        _defaultContentType = defaultContentType ?? 'application/json',
         _replacementRules = replacementRules ?? const [];
 
   /// Applies parameters set from yaml config file
@@ -160,10 +162,13 @@ final class Generator {
   final bool _enumsPrefix;
 
   /// If true, adds an unknown value for all enums to maintain backward compatibility when adding new values on the backend.
-  final bool unknownEnumValue;
+  final bool _unknownEnumValue;
 
   /// If true, generated files will be marked as generated
   final bool _markFilesAsGenerated;
+
+  /// Content type for all requests, default 'application/json'
+  final String _defaultContentType;
 
   /// List of rules used to replace patterns in generated class names
   final List<ReplacementRule> _replacementRules;
@@ -270,6 +275,7 @@ final class Generator {
       squashClients: _squashClients,
       replacementRules: _replacementRules,
       originalHttpResponse: _originalHttpResponse,
+      defaultContentType: _defaultContentType,
     );
     _openApiInfo = parser.parseOpenApiInfo();
     _restClients = parser.parseRestClients();
@@ -299,7 +305,7 @@ final class Generator {
       freezed: _freezed,
       putClientsInFolder: _putClientsInFolder,
       enumsToJson: _enumsToJson,
-      unknownEnumValue: unknownEnumValue,
+      unknownEnumValue: _unknownEnumValue,
       markFilesAsGenerated: _markFilesAsGenerated,
     );
     final files = <GeneratedFile>[];

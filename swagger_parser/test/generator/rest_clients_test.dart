@@ -918,7 +918,7 @@ interface ClassNameClient {
             requestType: HttpRequestType.post,
             route: '/send',
             returnType: null,
-            contentType: HttpContentType.multipartFormData,
+            contentType: 'multipart/form-data',
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.header,
@@ -956,7 +956,7 @@ interface ClassNameClient {
             requestType: HttpRequestType.post,
             route: '/single',
             returnType: UniversalType(type: 'boolean'),
-            contentType: HttpContentType.multipartFormData,
+            contentType: 'multipart/form-data',
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
@@ -1012,7 +1012,7 @@ abstract class ClassNameClient {
             requestType: HttpRequestType.post,
             route: '/send',
             returnType: null,
-            contentType: HttpContentType.multipartFormData,
+            contentType: 'multipart/form-data',
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.header,
@@ -1050,7 +1050,7 @@ abstract class ClassNameClient {
             requestType: HttpRequestType.post,
             route: '/single',
             returnType: UniversalType(type: 'boolean'),
-            contentType: HttpContentType.multipartFormData,
+            contentType: 'multipart/form-data',
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
@@ -1100,7 +1100,7 @@ interface ClassNameClient {
             requestType: HttpRequestType.post,
             route: '/send',
             returnType: null,
-            contentType: HttpContentType.applicationXWwwFormUrlencoded,
+            contentType: 'application/x-www-form-urlencoded',
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.header,
@@ -1150,7 +1150,7 @@ abstract class ClassNameClient {
             requestType: HttpRequestType.post,
             route: '/send',
             returnType: null,
-            contentType: HttpContentType.applicationXWwwFormUrlencoded,
+            contentType: 'application/x-www-form-urlencoded',
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.header,
