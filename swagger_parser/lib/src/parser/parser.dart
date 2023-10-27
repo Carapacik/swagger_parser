@@ -860,7 +860,7 @@ class OpenApiParser {
             nullable: map[_nullableConst].toString().toBool(),
             isRequired: isRequired,
           ),
-          import: newName.toPascal,
+          import: null,
         );
       }
 
