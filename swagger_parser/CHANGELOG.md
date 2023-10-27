@@ -1,3 +1,7 @@
+## 1.11.1
+- Fixed ref component being wrongly labeled as map
+- Fixed map components being assigned an import despite not needing one
+
 ## 1.11.0
 - Added unknown value to all enums to maintain backwards compatibility when adding new values on the backend
 - Add new config parameter `unknown_enum_value` (dart only) ([#106](https://github.com/Carapacik/swagger_parser/issues/106))

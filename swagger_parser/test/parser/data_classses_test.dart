@@ -453,7 +453,11 @@ void main() {
     test('additionalProperties entity that should not parse to object test',
         () async {
       final schemaPath = p.join(
-          'test', 'parser', 'schemas', 'additional_properties_class.3.0.json');
+        'test',
+        'parser',
+        'schemas',
+        'additional_properties_class.3.0.json',
+      );
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(schemaContent);
@@ -461,7 +465,7 @@ void main() {
       final expectedDataClasses = <UniversalDataClass>[
         const UniversalComponentClass(
           name: 'Example',
-          imports: {'Data'},
+          imports: {},
           parameters: [
             UniversalType(
               type: 'object',
