@@ -481,23 +481,9 @@ class OpenApiParser {
         } else {
           final operationIdName =
               requestPath[_operationIdConst]?.toString().toCamel;
-          final (_, error) = protectName(operationIdName);
-          if (error != null) {
-            description = '$description\n\n$error';
-            requestName = (key + path).toCamel;
-          } else {
-            requestName = operationIdName ?? (key + path).toCamel;
-          }
-        }
-
-        if (_pathMethodName) {
-          requestName = (key + path).toCamel;
-        } else {
-          final operationIdName =
-              requestPath[_operationIdConst]?.toString().toCamel;
-          final (_, error) = protectName(operationIdName);
-          if (error != null) {
-            description = '$description\n\n$error';
+          final (_, nameDescription) = protectName(operationIdName);
+          if (nameDescription != null) {
+            description = '$description\n\n$nameDescription';
             requestName = (key + path).toCamel;
           } else {
             requestName = operationIdName ?? (key + path).toCamel;
