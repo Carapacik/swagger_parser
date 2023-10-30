@@ -1076,12 +1076,15 @@ extension on String {
 
 /// All versions of the OpenApi Specification that this package supports
 enum OAS {
-  /// {@nodoc}
+  /// 3.1.x
   v3_1,
 
-  /// {@nodoc}
+  /// 3.0.x
   v3,
 
-  /// {@nodoc}
-  v2
+  /// 2.0
+  v2;
+
+  /// Constructor for OpenApi Specification
+  const OAS();
 }
