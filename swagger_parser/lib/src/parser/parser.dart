@@ -116,6 +116,7 @@ class OpenApiParser {
   static const _typeConst = 'type';
   static const _versionConst = 'version';
 
+  /// Parse OpenApi parameters into [OpenApiInfo]
   OpenApiInfo parseOpenApiInfo() {
     final info = _definitionFileContent[_infoConst];
     if (info == null || info is! Map<String, dynamic>) {
