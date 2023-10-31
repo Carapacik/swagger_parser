@@ -398,6 +398,8 @@ class OpenApiParser {
           resultContentType = _multipartFormDataConst;
         } else if (consumes.contains(_formUrlEncodedConst)) {
           resultContentType = _formUrlEncodedConst;
+        } else if (consumes.isNotEmpty && consumes.first != null) {
+          resultContentType = consumes.first as String;
         }
       }
       for (final parameter in map[_parametersConst] as List<dynamic>) {

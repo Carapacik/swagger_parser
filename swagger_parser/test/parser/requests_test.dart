@@ -26,6 +26,7 @@ void main() {
               requestType: HttpRequestType.post,
               route: '/api/Auth/register',
               returnType: UniversalType(type: 'string'),
+              contentType: 'text/json',
               parameters: [
                 UniversalRequestType(
                   parameterType: HttpParameterType.body,
@@ -110,7 +111,7 @@ void main() {
         ),
       ];
       for (var i = 0; i < actualRestClients.length; i++) {
-        expect(actualRestClients.last, expectedRestClients.last);
+        expect(actualRestClients[i], expectedRestClients[i]);
       }
     });
 
