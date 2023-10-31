@@ -7,8 +7,8 @@
           "Auth"
         ],
         "consumes": [
-          "application/json",
           "text/json",
+          "application/json",
           "application/*+json"
         ],
         "produces": [
