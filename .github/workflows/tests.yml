@@ -25,7 +25,7 @@ jobs:
           - 3.0.7
     steps:
       - uses: actions/checkout@v4.1.0
-      - uses: dart-lang/setup-dart@v1.5.1
+      - uses: dart-lang/setup-dart@v1.6.0
         with:
           sdk: "${{ matrix.sdk }}"
       - name: Install dependencies
