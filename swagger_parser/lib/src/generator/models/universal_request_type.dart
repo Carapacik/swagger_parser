@@ -6,6 +6,7 @@ final class UniversalRequestType {
   const UniversalRequestType({
     required this.parameterType,
     required this.type,
+    this.description,
     this.name,
   });
 
@@ -17,6 +18,9 @@ final class UniversalRequestType {
 
   /// Request parameter http type
   final HttpParameterType parameterType;
+
+  /// Request parameter description
+  final String? description;
 
   @override
   bool operator ==(Object other) =>

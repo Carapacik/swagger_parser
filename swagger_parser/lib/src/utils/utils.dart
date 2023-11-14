@@ -24,7 +24,7 @@ String dartImports({required Set<String> imports, String? pathPrefix}) {
   return '\n${imports.map((import) => "import '${pathPrefix ?? ''}${import.toSnake}.dart';").join('\n')}\n';
 }
 
-/// Provides class description
+/// Provides description
 String descriptionComment(
   String? description, {
   bool tabForFirstLine = true,
@@ -36,13 +36,25 @@ String descriptionComment(
   }
 
   final lineStart = RegExp('^(.*)', multiLine: true);
+
   final result = description.replaceAllMapped(
     lineStart,
-    (m) => '${!tabForFirstLine && m.start == 0 ? '' : tab}/// ${m[1]}',
+    (m) =>
+        '${!tabForFirstLine && m.start == 0 ? '' : tab}/// ${m.start == 0 && m.end == description.length ? m[1] : addDot(m[1])}',
   );
 
   return '$result\n$end';
 }
+
+/// RegExp for punctuation marks in the end of string
+final _punctuationRegExp = RegExp(r'[.!?]$');
+
+/// Add dot to string if not exist
+/// https://dart.dev/effective-dart/documentation#do-format-comments-like-sentences
+String? addDot(String? text) =>
+    text != null && text.trim().isNotEmpty && !_punctuationRegExp.hasMatch(text)
+        ? '$text.'
+        : text;
 
 /// Replace all not english letters in text
 String? replaceNotEnglishLetter(String? text) {

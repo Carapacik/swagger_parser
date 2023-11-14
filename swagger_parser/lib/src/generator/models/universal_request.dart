@@ -59,6 +59,7 @@ final class UniversalRequest {
           runtimeType == other.runtimeType &&
           name == other.name &&
           requestType == other.requestType &&
+          contentType == other.contentType &&
           route == other.route &&
           returnType == other.returnType &&
           const DeepCollectionEquality().equals(parameters, other.parameters) &&
@@ -71,6 +72,7 @@ final class UniversalRequest {
       requestType.hashCode ^
       route.hashCode ^
       returnType.hashCode ^
+      contentType.hashCode ^
       parameters.hashCode ^
       isMultiPart.hashCode ^
       isFormUrlEncoded.hashCode;

@@ -1,3 +1,9 @@
+## 1.11.3
+- Fix: annotating client methods with the first specified content type header in OpenAPI V2 schemas if the specified one is not the default.
+
+## 1.11.2
+- Add description of request parameters to the code docs
+
 ## 1.11.1
 - Fixed ref component being wrongly labeled as map
 - Fixed map components being assigned an import despite not needing one

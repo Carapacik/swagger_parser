@@ -84,8 +84,8 @@ class OpenApiParser {
   static const _contentConst = 'content';
   static const _defaultConst = 'default';
   static const _definitionsConst = 'definitions';
-  static const _deprecatedConst = 'deprecated';
   static const _descriptionConst = 'description';
+  static const _deprecatedConst = 'deprecated';
   static const _enumConst = 'enum';
   static const _formatConst = 'format';
   static const _formUrlEncodedConst = 'application/x-www-form-urlencoded';
@@ -116,6 +116,7 @@ class OpenApiParser {
   static const _typeConst = 'type';
   static const _versionConst = 'version';
 
+  /// Parse OpenApi parameters into [OpenApiInfo]
   OpenApiInfo parseOpenApiInfo() {
     final info = _definitionFileContent[_infoConst];
     if (info == null || info is! Map<String, dynamic>) {
@@ -228,6 +229,7 @@ class OpenApiParser {
             UniversalRequestType(
               parameterType: parameterType,
               type: typeWithImport.type,
+              description: parameter[_descriptionConst]?.toString(),
               name: parameterType.isBody && parameter[_nameConst] == _bodyConst
                   ? null
                   : parameter[_nameConst].toString(),
@@ -280,6 +282,7 @@ class OpenApiParser {
             types.add(
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
+                description: requestBody[_descriptionConst]?.toString(),
                 type: UniversalType(
                   type: currentType.type,
                   name: 'file',
@@ -310,6 +313,7 @@ class OpenApiParser {
                 UniversalRequestType(
                   parameterType: HttpParameterType.part,
                   name: e.key,
+                  description: requestBody[_descriptionConst]?.toString(),
                   type: UniversalType(
                     type: currentType.type,
                     name: e.key,
@@ -338,6 +342,7 @@ class OpenApiParser {
           types.add(
             UniversalRequestType(
               parameterType: HttpParameterType.body,
+              description: requestBody[_descriptionConst]?.toString(),
               type: UniversalType(
                 type: currentType.type,
                 name: _bodyConst,
@@ -393,6 +398,8 @@ class OpenApiParser {
           resultContentType = _multipartFormDataConst;
         } else if (consumes.contains(_formUrlEncodedConst)) {
           resultContentType = _formUrlEncodedConst;
+        } else if (consumes.isNotEmpty && consumes.first != null) {
+          resultContentType = consumes.first as String;
         }
       }
       for (final parameter in map[_parametersConst] as List<dynamic>) {
@@ -418,6 +425,7 @@ class OpenApiParser {
           UniversalRequestType(
             parameterType: parameterType,
             type: typeWithImport.type,
+            description: parameter[_descriptionConst]?.toString(),
             name: parameterType.isBody && parameter[_nameConst] == _bodyConst
                 ? null
                 : parameter[_nameConst].toString(),
@@ -448,25 +456,37 @@ class OpenApiParser {
             ? parametersV2(requestPath)
             : parametersV3(requestPath);
 
+        // Build full description
         final summary = requestPath[_summaryConst]?.toString().trim();
         var description = requestPath[_descriptionConst]?.toString().trim();
         description = switch ((summary, description)) {
-          (null, null) => null,
+          (null, null) || ('', '') => null,
           (_, null) || (_, '') => summary,
           (null, _) || ('', _) => description,
           (_, _) => '$summary\n\n$description',
         };
+        final parametersDescription = parameters
+            .where((e) => e.description != null)
+            .map((e) => '[${e.name?.toCamel ?? 'body'}] - ${e.description}')
+            .join('\n')
+            .trim();
+        description = switch ((description, parametersDescription)) {
+          (null, '') || ('', '') => null,
+          (_, '') => description,
+          (null, _) || ('', _) => parametersDescription,
+          (_, _) => '$description\n\n$parametersDescription',
+        };
 
-        final String requestName;
+        String requestName;
 
         if (_pathMethodName) {
           requestName = (key + path).toCamel;
         } else {
           final operationIdName =
               requestPath[_operationIdConst]?.toString().toCamel;
-          final (_, error) = protectName(operationIdName);
-          if (error != null) {
-            description = '$description\n\n$error';
+          final (_, nameDescription) = protectName(operationIdName);
+          if (nameDescription != null) {
+            description = '$description\n\n$nameDescription';
             requestName = (key + path).toCamel;
           } else {
             requestName = operationIdName ?? (key + path).toCamel;
@@ -744,14 +764,15 @@ class OpenApiParser {
     }
     // Enum
     else if (map.containsKey(_enumConst)) {
-      final (variableName, description) = protectName(
+      // ignore: unnecessary_null_checks
+      final (variableName!, description) = protectName(
         name,
         isEnum: true,
         uniqueIfNull: true,
         description: map[_descriptionConst]?.toString(),
       );
 
-      var newName = variableName!;
+      var newName = variableName;
       if (_enumsPrefix && additionalName != null) {
         newName = '$additionalName $newName'.toPascal;
       }
@@ -871,10 +892,8 @@ class OpenApiParser {
         _objectClasses.add(
           UniversalComponentClass(
             name: newName.toPascal,
-            imports: typeWithImports
-                .where((e) => e.import != null)
-                .map((e) => e.import!)
-                .toSet(),
+            imports:
+                typeWithImports.map((e) => e.import).whereNotNull().toSet(),
             parameters: typeWithImports.map((e) => e.type).toList(),
           ),
         );
@@ -1060,12 +1079,15 @@ extension on String {
 
 /// All versions of the OpenApi Specification that this package supports
 enum OAS {
-  /// {@nodoc}
+  /// 3.1.x
   v3_1,
 
-  /// {@nodoc}
+  /// 3.0.x
   v3,
 
-  /// {@nodoc}
-  v2
+  /// 2.0
+  v2;
+
+  /// Constructor for OpenApi Specification
+  const OAS();
 }
