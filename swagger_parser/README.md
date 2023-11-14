@@ -62,7 +62,7 @@ swagger_parser:
   output_directory: lib/api
 
   # Optional. Sets the programming language.
-  # Current available languages are: dart, kotlin
+  # Current available languages are: dart, kotlin.
   language: dart
 
   # Optional. If 'schema_path' and 'schema_url' are specified, what will be used.
@@ -76,15 +76,18 @@ swagger_parser:
   # with interface and all clients instances.
   root_client: true
 
-  # Optional (dart only). Set root client name
+  # Optional (dart only). Set root client name.
   root_client_name: RestClient
 
-  # Optional. Set default content-type for all requests
+  # Optional. Set default content-type for all requests.
   default_content_type: "application/json"
 
   # Optional. Set API name for folder and export file
   # If not specified, the file name is used.
   name: null
+
+  # Optional (dart only). Set 'true' to generate export file.
+  export_file: true
 
   # Optional. Set to 'true' to put the all api in its folder.
   put_in_folder: false
