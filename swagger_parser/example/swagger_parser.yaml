@@ -3,8 +3,7 @@ swagger_parser:
   
   # Sets the OpenApi schema path directory for api definition.
   # schema_path: schemas/openapi.json
-
-  # Sets the url of the OpenApi schema
+  # Sets the url of the OpenApi schema.
   # schema_url: https://petstore.swagger.io/v2/swagger.json
 
   # Required. Sets output directory for generated files (Clients and DTOs).
@@ -28,12 +27,15 @@ swagger_parser:
   # Optional (dart only). Set root client name
   root_client_name: RestClient
 
-  # Optional. Set default content-type for all requests
+  # Optional. Set default content-type for all requests.
   default_content_type: "application/json"
 
-  # Optional. Set API name for folder and export file (coming soon).
+  # Optional. Set API name for folder and export file.
   # If not specified, the file name is used.
   name: null
+
+  # Optional (dart only). Set 'true' to generate export file.
+  export_file: true
 
   # Optional. Set to 'true' to put the all api in its folder.
   put_in_folder: false

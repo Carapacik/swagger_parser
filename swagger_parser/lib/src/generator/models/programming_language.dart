@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 
 import '../generator_exception.dart';
 import '../templates/dart_enum_dto_template.dart';
+import '../templates/dart_export_file_template.dart';
 import '../templates/dart_freezed_dto_template.dart';
 import '../templates/dart_json_serializable_dto_template.dart';
 import '../templates/dart_retrofit_client_template.dart';
@@ -11,6 +12,7 @@ import '../templates/kotlin_enum_dto_template.dart';
 import '../templates/kotlin_moshi_dto_template.dart';
 import '../templates/kotlin_retrofit_client_template.dart';
 import '../templates/kotlin_typedef_template.dart';
+import 'generated_file.dart';
 import 'open_api_info.dart';
 import 'universal_data_class.dart';
 import 'universal_rest_client.dart';
@@ -129,6 +131,22 @@ enum ProgrammingLanguage {
             postfix: postfix,
             putClientsInFolder: putClientsInFolder,
             markFileAsGenerated: markFilesAsGenerated,
+          ),
+        kotlin => '',
+      };
+
+  String exportFileContent({
+    required bool markFileAsGenerated,
+    required List<GeneratedFile> restClients,
+    required List<GeneratedFile> dataClasses,
+    GeneratedFile? rootClient,
+  }) =>
+      switch (this) {
+        dart => dartExportFileTemplate(
+            markFileAsGenerated: markFileAsGenerated,
+            restClients: restClients,
+            dataClasses: dataClasses,
+            rootClient: rootClient,
           ),
         kotlin => '',
       };
