@@ -169,7 +169,7 @@ void summaryStatisticsMessage({
     '${formatNumber(statistics.totalRestClients)} clients, '
     '${formatNumber(statistics.totalRequests)} requests, '
     '${formatNumber(statistics.totalDataClasses)} data classes.\n'
-    '${formatNumber(statistics.totalFiles)} files with ${formatNumber(statistics.totalLines)} lines of code.',
+    '${formatNumber(statistics.totalFiles)} files with ${formatNumber(statistics.totalLines)} lines of code.\n',
   );
 }
 

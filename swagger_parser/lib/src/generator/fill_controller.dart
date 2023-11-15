@@ -13,6 +13,7 @@ final class FillController {
     ProgrammingLanguage programmingLanguage = ProgrammingLanguage.dart,
     String clientPostfix = 'Client',
     String rootClientName = 'RestClient',
+    String exportFileName = 'export',
     bool putClientsInFolder = false,
     bool freezed = false,
     bool enumsToJson = false,
@@ -20,9 +21,10 @@ final class FillController {
     bool markFilesAsGenerated = false,
     String defaultContentType = 'application/json',
   })  : _openApiInfo = openApiInfo,
-        _clientPostfix = clientPostfix,
         _programmingLanguage = programmingLanguage,
+        _clientPostfix = clientPostfix,
         _rootClientName = rootClientName,
+        _exportFileName = exportFileName,
         _putClientsInFolder = putClientsInFolder,
         _freezed = freezed,
         _enumsToJson = enumsToJson,
@@ -32,8 +34,9 @@ final class FillController {
 
   final OpenApiInfo _openApiInfo;
   final ProgrammingLanguage _programmingLanguage;
-  final String _rootClientName;
   final String _clientPostfix;
+  final String _rootClientName;
+  final String _exportFileName;
   final bool _freezed;
   final bool _putClientsInFolder;
   final bool _enumsToJson;
@@ -89,4 +92,19 @@ final class FillController {
       ),
     );
   }
+
+  GeneratedFile fillExportFile({
+    required List<GeneratedFile> restClients,
+    required List<GeneratedFile> dataClasses,
+    GeneratedFile? rootClient,
+  }) =>
+      GeneratedFile(
+        name: '$_exportFileName.${_programmingLanguage.fileExtension}',
+        contents: _programmingLanguage.exportFileContent(
+          restClients: restClients,
+          dataClasses: dataClasses,
+          rootClient: rootClient,
+          markFileAsGenerated: _markFilesAsGenerated,
+        ),
+      );
 }

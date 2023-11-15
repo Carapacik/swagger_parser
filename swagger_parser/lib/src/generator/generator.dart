@@ -37,6 +37,7 @@ final class Generator {
     bool? freezed,
     bool? rootClient,
     String? clientPostfix,
+    bool? exportFile,
     String? rootClientName,
     bool? putClientsInFolder,
     bool? squashClients,
@@ -61,6 +62,7 @@ final class Generator {
         _freezed = freezed ?? false,
         _rootClient = rootClient ?? true,
         _rootClientName = rootClientName ?? 'RestClient',
+        _exportFile = exportFile ?? true,
         _clientPostfix = clientPostfix ?? 'Client',
         _putClientsInFolder = putClientsInFolder ?? false,
         _squashClients = squashClients ?? false,
@@ -87,6 +89,7 @@ final class Generator {
       freezed: yamlConfig.freezed,
       rootClient: yamlConfig.rootClient,
       rootClientName: yamlConfig.rootClientName,
+      exportFile: yamlConfig.exportFile,
       clientPostfix: yamlConfig.clientPostfix,
       putClientsInFolder: yamlConfig.putClientsInFolder,
       squashClients: yamlConfig.squashClients,
@@ -136,6 +139,9 @@ final class Generator {
 
   /// Root client name
   final String _rootClientName;
+
+  /// Generate export file
+  final bool _exportFile;
 
   /// Client postfix
   final String _clientPostfix;
@@ -302,6 +308,7 @@ final class Generator {
       programmingLanguage: _programmingLanguage,
       rootClientName: _rootClientName,
       clientPostfix: _clientPostfix,
+      exportFileName: _name ?? 'export',
       freezed: _freezed,
       putClientsInFolder: _putClientsInFolder,
       enumsToJson: _enumsToJson,
@@ -309,18 +316,35 @@ final class Generator {
       markFilesAsGenerated: _markFilesAsGenerated,
       defaultContentType: _defaultContentType,
     );
-    final files = <GeneratedFile>[];
-    for (final client in _restClients) {
-      files.add(fillController.fillRestClientContent(client));
-    }
-    for (final dataClass in _dataClasses) {
-      files.add(fillController.fillDtoContent(dataClass));
-    }
-    if (_rootClient &&
-        _programmingLanguage == ProgrammingLanguage.dart &&
-        _restClients.isNotEmpty) {
-      files.add(fillController.fillRootClient(_restClients));
-    }
+
+    final restClientFiles =
+        _restClients.map(fillController.fillRestClientContent).toList();
+
+    final dataClassesFiles =
+        _dataClasses.map(fillController.fillDtoContent).toList();
+
+    final rootClientFile = _programmingLanguage == ProgrammingLanguage.dart &&
+            _rootClient &&
+            _restClients.isNotEmpty
+        ? fillController.fillRootClient(_restClients)
+        : null;
+
+    final exportFile =
+        _programmingLanguage == ProgrammingLanguage.dart && _exportFile
+            ? fillController.fillExportFile(
+                restClients: restClientFiles,
+                dataClasses: dataClassesFiles,
+                rootClient: rootClientFile,
+              )
+            : null;
+
+    final files = [
+      ...restClientFiles,
+      ...dataClassesFiles,
+      if (rootClientFile != null) rootClientFile,
+      if (exportFile != null) exportFile,
+    ];
+
     return files;
   }
 }
