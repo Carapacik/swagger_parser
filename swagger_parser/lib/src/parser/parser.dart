@@ -623,7 +623,7 @@ class OpenApiParser {
       }
 
       if (value.containsKey(_allOfConst)) {
-        for (final map in value[_allOfConst] as List) {
+        for (final map in value[_allOfConst] as List<dynamic>) {
           if ((map as Map<String, dynamic>).containsKey(_refConst)) {
             var ref = _formatRef(map);
             for (final replacementRule in _replacementRules) {
@@ -716,13 +716,12 @@ class OpenApiParser {
           : 'client';
 
   /// Format `$ref` type
-  String _formatRef(Map<String, dynamic> map, {bool useSchema = false}) => p
-      .basename(
+  String _formatRef(Map<String, dynamic> map, {bool useSchema = false}) =>
+      p.basename(
         useSchema
             ? (map[_schemaConst] as Map<String, dynamic>)[_refConst].toString()
             : map[_refConst].toString(),
-      )
-      .toPascal;
+      );
 
   /// Find type of map
   ({UniversalType type, String? import}) _findType(
@@ -991,13 +990,14 @@ class OpenApiParser {
       String? import;
       String type;
       if (map.containsKey(_refConst)) {
-        import = _formatRef(map);
+        import = _formatRef(map).toPascal;
       } else if (map.containsKey(_additionalPropertiesConst) &&
           map[_additionalPropertiesConst] is Map<String, dynamic> &&
           (map[_additionalPropertiesConst] as Map<String, dynamic>)
               .containsKey(_refConst)) {
         import =
-            _formatRef(map[_additionalPropertiesConst] as Map<String, dynamic>);
+            _formatRef(map[_additionalPropertiesConst] as Map<String, dynamic>)
+                .toPascal;
       }
 
       if (map.containsKey(_typeConst)) {
@@ -1019,7 +1019,7 @@ class OpenApiParser {
               map.containsKey(_additionalPropertiesConst) &&
               (map[_additionalPropertiesConst] is Map<String, dynamic>) &&
               !(map[_additionalPropertiesConst] as Map<String, dynamic>)
-                  .containsKey(r'$ref')
+                  .containsKey(_refConst)
           ? 'string'
           : null;
       final defaultValue = map[_defaultConst]?.toString();
