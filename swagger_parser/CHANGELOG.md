@@ -1,8 +1,11 @@
+## 1.12.1
+- Fixed error with `ref` in a case other than PascalCase ([#139](https://github.com/Carapacik/swagger_parser/issues/139))
+
 ## 1.12.0
 - Add new config parameter `export_file`
 
 ## 1.11.3
-- Fix: annotating client methods with the first specified content type header in OpenAPI V2 schemas if the specified one is not the default.
+- Fixed error with annotating client methods with the first specified content type header in OpenAPI V2 schemas if the specified one is not the default.
 
 ## 1.11.2
 - Add description of request parameters to the code docs
