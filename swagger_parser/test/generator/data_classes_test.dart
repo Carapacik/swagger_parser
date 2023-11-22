@@ -2,6 +2,7 @@
 
 import 'package:swagger_parser/src/generator/fill_controller.dart';
 import 'package:swagger_parser/src/generator/models/generated_file.dart';
+import 'package:swagger_parser/src/generator/models/json_serializer.dart';
 import 'package:swagger_parser/src/generator/models/programming_language.dart';
 import 'package:swagger_parser/src/generator/models/universal_data_class.dart';
 import 'package:swagger_parser/src/generator/models/universal_type.dart';
@@ -40,7 +41,9 @@ class ClassName {
         imports: {},
         parameters: [],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -129,7 +132,9 @@ class ClassName {
         },
         parameters: [],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -284,7 +289,9 @@ class ClassName {
           UniversalType(type: 'Another', name: 'anotherType'),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'dart:io';
@@ -434,7 +441,9 @@ class ClassName {
           UniversalType(type: 'Another', name: 'list5', arrayDepth: 5),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -566,7 +575,9 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -742,7 +753,9 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -895,7 +908,9 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -1031,7 +1046,9 @@ class ClassName {
           UniversalType(type: 'Another', name: 'list', arrayDepth: 1),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -1287,8 +1304,10 @@ enum EnumNameString {
             items: UniversalEnumItem.listFromNames({'FALSE', 'for', 'do'}),
           ),
         ];
-        const fillController =
-            FillController(freezed: true, unknownEnumValue: false);
+        const fillController = FillController(
+          jsonSerializer: JsonSerializer.freezed,
+          unknownEnumValue: false,
+        );
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
@@ -1365,7 +1384,10 @@ enum KeywordsName {
             ),
           ),
         ];
-        const fillController = FillController(freezed: true, enumsToJson: true);
+        const fillController = FillController(
+          jsonSerializer: JsonSerializer.freezed,
+          enumsToJson: true,
+        );
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
@@ -1573,7 +1595,9 @@ enum EnumName {
         type: 'int',
         items: UniversalEnumItem.listFromNames({'-2', '-1', '0', '1'}),
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final file = fillController.fillDtoContent(dataClass);
 
       const expectedContent = r'''
@@ -1846,7 +1870,9 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -2060,7 +2086,9 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';

@@ -1,5 +1,6 @@
 import '../utils/case_utils.dart';
 import 'models/generated_file.dart';
+import 'models/json_serializer.dart';
 import 'models/open_api_info.dart';
 import 'models/programming_language.dart';
 import 'models/universal_data_class.dart';
@@ -15,7 +16,7 @@ final class FillController {
     String rootClientName = 'RestClient',
     String exportFileName = 'export',
     bool putClientsInFolder = false,
-    bool freezed = false,
+    JsonSerializer jsonSerializer = JsonSerializer.json_serializable,
     bool enumsToJson = false,
     bool unknownEnumValue = true,
     bool markFilesAsGenerated = false,
@@ -26,7 +27,7 @@ final class FillController {
         _rootClientName = rootClientName,
         _exportFileName = exportFileName,
         _putClientsInFolder = putClientsInFolder,
-        _freezed = freezed,
+        _jsonSerializer = jsonSerializer,
         _enumsToJson = enumsToJson,
         _unknownEnumValue = unknownEnumValue,
         _markFilesAsGenerated = markFilesAsGenerated,
@@ -37,7 +38,7 @@ final class FillController {
   final String _clientPostfix;
   final String _rootClientName;
   final String _exportFileName;
-  final bool _freezed;
+  final JsonSerializer _jsonSerializer;
   final bool _putClientsInFolder;
   final bool _enumsToJson;
   final bool _unknownEnumValue;
@@ -51,7 +52,7 @@ final class FillController {
             '.${_programmingLanguage.fileExtension}',
         contents: _programmingLanguage.dtoFileContent(
           dataClass,
-          freezed: _freezed,
+          jsonSerializer: _jsonSerializer,
           enumsToJson: _enumsToJson,
           unknownEnumValue: _unknownEnumValue,
           markFilesAsGenerated: _markFilesAsGenerated,

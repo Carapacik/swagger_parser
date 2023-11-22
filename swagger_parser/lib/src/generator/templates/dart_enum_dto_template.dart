@@ -1,14 +1,25 @@
 import 'package:collection/collection.dart';
 
+import '../../../swagger_parser.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
+import '../models/json_serializer.dart';
 import '../models/universal_data_class.dart';
+
+String dartImportDtoTemplate(JsonSerializer jsonSerializer) {
+  switch (jsonSerializer) {
+    case JsonSerializer.freezed:
+      return "import 'package:freezed_annotation/freezed_annotation.dart';";
+    case JsonSerializer.json_serializable:
+      return "import 'package:json_annotation/json_annotation.dart';";
+  }
+}
 
 /// Provides template for generating dart enum DTO
 String dartEnumDtoTemplate(
   UniversalEnumClass enumClass, {
-  required bool freezed,
+  required JsonSerializer jsonSerializer,
   required bool enumsToJson,
   required bool unknownEnumValue,
   required bool markFileAsGenerated,
@@ -27,7 +38,7 @@ String dartEnumDtoTemplate(
   return '''
 ${generatedFileComment(
     markFileAsGenerated: markFileAsGenerated,
-  )}import '${freezed ? 'package:freezed_annotation/freezed_annotation.dart' : 'package:json_annotation/json_annotation.dart'}';
+  )}${dartImportDtoTemplate(jsonSerializer)}
 
 ${descriptionComment(enumClass.description)}@JsonEnum()
 enum $className {

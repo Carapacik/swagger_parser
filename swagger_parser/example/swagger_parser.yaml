@@ -80,7 +80,7 @@ swagger_parser:
   schemas:
     - schema_path: schemas/openapi.json
       root_client_name: ApiMicroservice
-      freezed: true
+      jsonSerializer: "freezed"
       put_in_folder: true
       replacement_rules: []
 
