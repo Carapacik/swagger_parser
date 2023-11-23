@@ -118,13 +118,13 @@ class OpenApiParser {
   final usedNamesCount = <String, int>{};
 
   String generateUniqueEnumName(String name) {
-    usedNamesCount.update(
-      name,
-      (value) => value + 1,
-      ifAbsent: () => 1,
-    );
+    if (usedNamesCount.containsKey(name)) {
+      usedNamesCount[name] = usedNamesCount[name]! + 1;
+      return '$name${usedNamesCount[name]}';
+    }
 
-    return '$name${usedNamesCount[name]}';
+    usedNamesCount[name] = 1;
+    return name;
   }
 
   /// Parse OpenApi parameters into [OpenApiInfo]

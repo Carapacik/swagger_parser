@@ -429,7 +429,7 @@ void main() {
           ],
         ),
         UniversalEnumClass(
-          name: 'EnumClass1',
+          name: 'EnumClass',
           type: 'string',
           items: UniversalEnumItem.listFromNames({'value1', 'value2'}),
         ),
