@@ -60,7 +60,7 @@ final class Generator {
         _outputDirectory = outputDirectory,
         _name = name,
         _programmingLanguage = language ?? ProgrammingLanguage.dart,
-        _jsonSerializer = jsonSerializer ?? JsonSerializer.json_serializable,
+        _jsonSerializer = jsonSerializer ?? JsonSerializer.jsonSerializable,
         _rootClient = rootClient ?? true,
         _rootClientName = rootClientName ?? 'RestClient',
         _exportFile = exportFile ?? true,

@@ -72,6 +72,10 @@ swagger_parser:
     # Example of rule
     - pattern: "[0-9]+"
       replacement: ""
+    # This rule is useful only for dart_mappable because otherwise the generated code will not compile.
+    # If you use freezed, you can remove this rule.
+    - pattern: "enum"
+      replacement: "apiEnum"
 
   # Optional. You can pass a list of schemes. 
   # Each schema inherits the parameters described in swagger_parser,
@@ -83,6 +87,13 @@ swagger_parser:
       jsonSerializer: "freezed"
       put_in_folder: true
       replacement_rules: []
+
+    - schema_url: https://petstore.swagger.io/v2/swagger.json
+      name: pet_service_dart_mappable
+      jsonSerializer: "dart_mappable"
+      client_postfix: Service
+      put_clients_in_folder: true
+      put_in_folder: true
 
     - schema_url: https://petstore.swagger.io/v2/swagger.json
       name: pet_service

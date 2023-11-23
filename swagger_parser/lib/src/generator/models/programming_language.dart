@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 
 import '../../../swagger_parser.dart';
 import '../generator_exception.dart';
+import '../templates/dart_dart_mappable_dto_template.dart';
 import '../templates/dart_enum_dto_template.dart';
 import '../templates/dart_export_file_template.dart';
 import '../templates/dart_freezed_dto_template.dart';
@@ -13,11 +14,8 @@ import '../templates/kotlin_enum_dto_template.dart';
 import '../templates/kotlin_moshi_dto_template.dart';
 import '../templates/kotlin_retrofit_client_template.dart';
 import '../templates/kotlin_typedef_template.dart';
-import 'generated_file.dart';
 import 'json_serializer.dart';
 import 'open_api_info.dart';
-import 'universal_data_class.dart';
-import 'universal_rest_client.dart';
 
 /// Enumerates supported programming languages to determine templates
 enum ProgrammingLanguage {
@@ -69,8 +67,13 @@ enum ProgrammingLanguage {
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
               );
-            case JsonSerializer.json_serializable:
+            case JsonSerializer.jsonSerializable:
               return dartJsonSerializableDtoTemplate(
+                dataClass,
+                markFileAsGenerated: markFilesAsGenerated,
+              );
+            case JsonSerializer.dartMappable:
+              return dartDartMappableDtoTemplate(
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
               );

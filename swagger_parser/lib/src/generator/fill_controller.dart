@@ -16,7 +16,7 @@ final class FillController {
     String rootClientName = 'RestClient',
     String exportFileName = 'export',
     bool putClientsInFolder = false,
-    JsonSerializer jsonSerializer = JsonSerializer.json_serializable,
+    JsonSerializer jsonSerializer = JsonSerializer.jsonSerializable,
     bool enumsToJson = false,
     bool unknownEnumValue = true,
     bool markFilesAsGenerated = false,

@@ -324,6 +324,93 @@ class ClassName with _$ClassName {
       expect(filledContent.contents, expectedContents);
     });
 
+    test('dart + dart_mappable', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        parameters: [
+          UniversalType(type: 'integer', name: 'intType'),
+          UniversalType(type: 'number', name: 'numberType'),
+          UniversalType(
+            type: 'number',
+            format: 'double',
+            name: 'doubleNumberType',
+          ),
+          UniversalType(
+            type: 'number',
+            format: 'float',
+            name: 'floatNumberType',
+          ),
+          UniversalType(type: 'string', name: 'stringType'),
+          UniversalType(
+            type: 'string',
+            format: 'binary',
+            name: 'binaryStringType',
+          ),
+          UniversalType(
+            type: 'string',
+            format: 'date',
+            name: 'dateStringType',
+          ),
+          UniversalType(
+            type: 'string',
+            format: 'date-time',
+            name: 'dateTimeStringType',
+          ),
+          UniversalType(type: 'file', name: 'fileType'),
+          UniversalType(type: 'boolean', name: 'boolType'),
+          UniversalType(type: 'object', name: 'objectType'),
+          UniversalType(type: 'Another', name: 'anotherType'),
+        ],
+      );
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.dartMappable,
+      );
+      final filledContent = fillController.fillDtoContent(dataClass);
+      const expectedContents = '''
+import 'package:dart_mappable/dart_mappable.dart';
+
+part 'class_name.mapper.dart';
+
+@MappableClass()
+class ClassName with ClassNameMappable {
+
+  const ClassName({
+    required this.intType,
+    required this.numberType,
+    required this.doubleNumberType,
+    required this.floatNumberType,
+    required this.stringType,
+    required this.binaryStringType,
+    required this.dateStringType,
+    required this.dateTimeStringType,
+    required this.fileType,
+    required this.boolType,
+    required this.objectType,
+    required this.anotherType,
+  });
+
+  final int intType;
+  final num numberType;
+  final double doubleNumberType;
+  final double floatNumberType;
+  final String stringType;
+  final File binaryStringType;
+  final DateTime dateStringType;
+  final DateTime dateTimeStringType;
+  final File fileType;
+  final bool boolType;
+  final Object objectType;
+  final Another anotherType;
+
+}
+''';
+      expect(
+        filledContent.contents,
+        equalsIgnoringWhitespace(expectedContents),
+      );
+    });
+
     test('kotlin + moshi', () async {
       const dataClass = UniversalComponentClass(
         name: 'ClassName',
