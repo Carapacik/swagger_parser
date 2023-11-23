@@ -1,3 +1,6 @@
+## 1.12.2
+- Fixes enum duplicate names (#140)[https://github.com/Carapacik/swagger_parser/issues/140]
+
 ## 1.12.1
 - Fixed error with `ref` in a case other than PascalCase ([#139](https://github.com/Carapacik/swagger_parser/issues/139))
 
