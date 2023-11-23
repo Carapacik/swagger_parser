@@ -72,7 +72,7 @@ class OpenApiParser {
   late final Map<String, dynamic> _definitionFileContent;
   late final OAS _version;
   final List<UniversalComponentClass> _objectClasses = [];
-  final List<UniversalEnumClass> _enumClasses = [];
+  final Set<UniversalEnumClass> _enumClasses = {};
 
   static const _additionalPropertiesConst = 'additionalProperties';
   static const _allOfConst = 'allOf';
@@ -115,6 +115,44 @@ class OpenApiParser {
   static const _titleConst = 'title';
   static const _typeConst = 'type';
   static const _versionConst = 'version';
+  final usedNamesCount = <String, int>{};
+
+  UniversalEnumClass getUniqueEnumClass({
+    required final String name,
+    required final Set<UniversalEnumItem> items,
+    required final String type,
+    required final String? defaultValue,
+    required final String? description,
+  }) {
+    // Search _enumClasses for an enum with the same name and values
+    final enumClass = _enumClasses.firstWhereOrNull(
+      (e) =>
+          e.originalName == name &&
+          const DeepCollectionEquality().equals(e.items, items),
+    );
+
+    if (enumClass != null) {
+      return enumClass;
+    }
+
+    String uniqueName;
+    if (usedNamesCount.containsKey(name)) {
+      usedNamesCount[name] = usedNamesCount[name]! + 1;
+      uniqueName = '$name${usedNamesCount[name]}';
+    } else {
+      usedNamesCount[name] = 1;
+      uniqueName = name;
+    }
+
+    return UniversalEnumClass(
+      originalName: name,
+      name: uniqueName.toPascal,
+      type: type,
+      items: items,
+      defaultValue: defaultValue,
+      description: description,
+    );
+  }
 
   /// Parse OpenApi parameters into [OpenApiInfo]
   OpenApiInfo parseOpenApiInfo() {
@@ -588,10 +626,10 @@ class OpenApiParser {
         }
 
         dataClasses.add(
-          UniversalEnumClass(
+          getUniqueEnumClass(
             name: key,
-            type: type,
             items: items,
+            type: type,
             defaultValue: value[_defaultConst]?.toString(),
             description: value[_descriptionConst]?.toString(),
           ),
@@ -784,19 +822,19 @@ class OpenApiParser {
         (map[_enumConst] as List).map((e) => '$e'),
       );
 
-      _enumClasses.add(
-        UniversalEnumClass(
-          name: newName.toPascal,
-          type: map[_typeConst].toString(),
-          items: items,
-          defaultValue: protectDefaultValue(map[_defaultConst], isEnum: true),
-          description: description,
-        ),
+      final enumClass = getUniqueEnumClass(
+        name: newName,
+        items: items,
+        type: map[_typeConst].toString(),
+        defaultValue: protectDefaultValue(map[_defaultConst], isEnum: true),
+        description: description,
       );
+
+      _enumClasses.add(enumClass);
 
       return (
         type: UniversalType(
-          type: newName.toPascal,
+          type: enumClass.name,
           name: variableName.toCamel,
           description: description,
           format: map[_formatConst]?.toString(),
@@ -805,7 +843,7 @@ class OpenApiParser {
           isRequired: isRequired,
           enumType: map[_typeConst]?.toString(),
         ),
-        import: newName,
+        import: enumClass.name,
       );
     }
     //  Object or additionalProperties
