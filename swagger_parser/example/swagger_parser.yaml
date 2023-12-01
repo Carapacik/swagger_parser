@@ -72,10 +72,6 @@ swagger_parser:
     # Example of rule
     - pattern: "[0-9]+"
       replacement: ""
-    # This rule is useful only for dart_mappable because otherwise the generated code will not compile.
-    # If you use freezed, you can remove this rule.
-    - pattern: "enum"
-      replacement: "apiEnum"
 
   # Optional. You can pass a list of schemes. 
   # Each schema inherits the parameters described in swagger_parser,
