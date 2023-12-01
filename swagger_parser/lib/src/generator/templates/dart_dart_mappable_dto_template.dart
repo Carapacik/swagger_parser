@@ -25,6 +25,8 @@ class $className with ${className}Mappable {
 ${indentation(2)}const $className(${getParameters(dataClass)});
 
 ${getFields(dataClass)}
+
+static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<${className}>(json);
 }
 ''';
 }
