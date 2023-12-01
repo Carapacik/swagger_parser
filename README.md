@@ -14,6 +14,9 @@
 - Supports OpenApi v2, v3.0 and v3.1
 - Support JSON and YAML format
 - Generate REST client files based on Retrofit
-- Generate data classes (also on [freezed](https://pub.dev/packages/freezed))
+- Generate data classes, using one of the following serializer:
+  - [json_serializable](https://pub.dev/packages/json_serializable)
+  - [freezed](https://pub.dev/packages/freezed)
+  - [dart_mappable](https://pub.dev/packages/dart_mappable)
 - Support for multiple languages (Dart, Kotlin)
 - Web interface at https://carapacik.github.io/swagger_parser

@@ -16,7 +16,10 @@
 - Support for generation by link
 - Support for multiple schemes
 - Generate REST client files based on Retrofit
-- Generate data classes (also on [freezed](https://pub.dev/packages/freezed))
+- Generate data classes, using one of the following serializer:
+  - [json_serializable](https://pub.dev/packages/json_serializable)
+  - [freezed](https://pub.dev/packages/freezed)
+  - [dart_mappable](https://pub.dev/packages/dart_mappable)
 - Support for multiple languages (Dart, Kotlin)
 - Web interface at https://carapacik.github.io/swagger_parser
 
@@ -144,9 +147,16 @@ swagger_parser:
   schemas:
     - schema_path: schemas/openapi.json
       root_client_name: ApiMicroservice
-      freezed: true
+      jsonSerializer: "freezed"
       put_in_folder: true
       replacement_rules: []
+
+    - schema_url: https://petstore.swagger.io/v2/swagger.json
+      name: pet_service_dart_mappable
+      jsonSerializer: "dart_mappable"
+      client_postfix: Service
+      put_clients_in_folder: true
+      put_in_folder: true
 
     - schema_url: https://petstore.swagger.io/v2/swagger.json
       name: pet_service
