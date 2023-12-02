@@ -403,6 +403,7 @@ class ClassName with ClassNameMappable {
   final Object objectType;
   final Another anotherType;
 
+  static ClassName fromJson(Map<String, dynamic> json) => ClassNameMapper.ensureInitialized().decodeMap<ClassName>(json);
 }
 ''';
       expect(
