@@ -1,10 +1,11 @@
 import 'package:collection/collection.dart';
 
-import '../../../swagger_parser.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
 import '../models/json_serializer.dart';
+import '../models/programming_language.dart';
+import '../models/universal_data_class.dart';
 import '../models/universal_type.dart';
 import 'dart_import_dto_template.dart';
 
@@ -26,7 +27,7 @@ ${indentation(2)}const $className(${getParameters(dataClass)});
 
 ${getFields(dataClass)}
 
-${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<${className}>(json);
+${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
 }
 ''';
 }

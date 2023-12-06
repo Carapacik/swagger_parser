@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 
-import '../../../swagger_parser.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
@@ -35,7 +34,7 @@ String dartEnumDtoTemplate(
             jsonParam: jsonParam,
           ),
         ).join(',\n')}${unknownEnumValue ? ',' : ';'}';
-    final unkownEnumValueStr = unknownEnumValue ? _unkownEnumValue() : '';
+    final unknownEnumValueStr = unknownEnumValue ? _unkownEnumValue() : '';
     final constructorStr = jsonParam ? _constructor(className) : '';
     final fromJsonStr = unknownEnumValue ? _fromJson(className, enumClass) : '';
     final jsonFieldStr = jsonParam ? _jsonField(enumClass) : '';
@@ -48,7 +47,7 @@ ${generatedFileComment(
 
 ${descriptionComment(enumClass.description)}@JsonEnum()
 enum $className {
-$values$unkownEnumValueStr$constructorStr$fromJsonStr$jsonFieldStr$toJsonStr
+$values$unknownEnumValueStr$constructorStr$fromJsonStr$jsonFieldStr$toJsonStr
 }
 ''';
   }

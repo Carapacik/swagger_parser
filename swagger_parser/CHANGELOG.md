@@ -1,6 +1,6 @@
 ## 1.13.0
-- Added support for (`dart_mappable`)[https://github.com/schultek/dart_mappable] serializer
-- Changed `freezed` schema property to `jsonSerializer`, which can be set to `freezed`, `dart_mappable` or `json_serializable` (default).
+- Added support for (`dart_mappable`)[https://pub.dev/packages/dart_mappable]
+- Changed `freezed` schema property to `json_serializer`, which can be set to `freezed`, `dart_mappable` or `json_serializable` (default).
 - Fixed enum generation name that are defined inside an array
 
 ## 1.12.2
