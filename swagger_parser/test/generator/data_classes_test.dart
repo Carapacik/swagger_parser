@@ -2,6 +2,7 @@
 
 import 'package:swagger_parser/src/generator/fill_controller.dart';
 import 'package:swagger_parser/src/generator/models/generated_file.dart';
+import 'package:swagger_parser/src/generator/models/json_serializer.dart';
 import 'package:swagger_parser/src/generator/models/programming_language.dart';
 import 'package:swagger_parser/src/generator/models/universal_data_class.dart';
 import 'package:swagger_parser/src/generator/models/universal_type.dart';
@@ -40,7 +41,9 @@ class ClassName {
         imports: {},
         parameters: [],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -129,7 +132,9 @@ class ClassName {
         },
         parameters: [],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -284,7 +289,9 @@ class ClassName {
           UniversalType(type: 'Another', name: 'anotherType'),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'dart:io';
@@ -315,6 +322,94 @@ class ClassName with _$ClassName {
 }
 ''';
       expect(filledContent.contents, expectedContents);
+    });
+
+    test('dart + dart_mappable', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        parameters: [
+          UniversalType(type: 'integer', name: 'intType'),
+          UniversalType(type: 'number', name: 'numberType'),
+          UniversalType(
+            type: 'number',
+            format: 'double',
+            name: 'doubleNumberType',
+          ),
+          UniversalType(
+            type: 'number',
+            format: 'float',
+            name: 'floatNumberType',
+          ),
+          UniversalType(type: 'string', name: 'stringType'),
+          UniversalType(
+            type: 'string',
+            format: 'binary',
+            name: 'binaryStringType',
+          ),
+          UniversalType(
+            type: 'string',
+            format: 'date',
+            name: 'dateStringType',
+          ),
+          UniversalType(
+            type: 'string',
+            format: 'date-time',
+            name: 'dateTimeStringType',
+          ),
+          UniversalType(type: 'file', name: 'fileType'),
+          UniversalType(type: 'boolean', name: 'boolType'),
+          UniversalType(type: 'object', name: 'objectType'),
+          UniversalType(type: 'Another', name: 'anotherType'),
+        ],
+      );
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.dartMappable,
+      );
+      final filledContent = fillController.fillDtoContent(dataClass);
+      const expectedContents = '''
+import 'package:dart_mappable/dart_mappable.dart';
+
+part 'class_name.mapper.dart';
+
+@MappableClass()
+class ClassName with ClassNameMappable {
+
+  const ClassName({
+    required this.intType,
+    required this.numberType,
+    required this.doubleNumberType,
+    required this.floatNumberType,
+    required this.stringType,
+    required this.binaryStringType,
+    required this.dateStringType,
+    required this.dateTimeStringType,
+    required this.fileType,
+    required this.boolType,
+    required this.objectType,
+    required this.anotherType,
+  });
+
+  final int intType;
+  final num numberType;
+  final double doubleNumberType;
+  final double floatNumberType;
+  final String stringType;
+  final File binaryStringType;
+  final DateTime dateStringType;
+  final DateTime dateTimeStringType;
+  final File fileType;
+  final bool boolType;
+  final Object objectType;
+  final Another anotherType;
+
+  static ClassName fromJson(Map<String, dynamic> json) => ClassNameMapper.ensureInitialized().decodeMap<ClassName>(json);
+}
+''';
+      expect(
+        filledContent.contents,
+        equalsIgnoringWhitespace(expectedContents),
+      );
     });
 
     test('kotlin + moshi', () async {
@@ -434,7 +529,9 @@ class ClassName {
           UniversalType(type: 'Another', name: 'list5', arrayDepth: 5),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -566,7 +663,9 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -742,7 +841,9 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -895,7 +996,9 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -1031,7 +1134,9 @@ class ClassName {
           UniversalType(type: 'Another', name: 'list', arrayDepth: 1),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -1287,8 +1392,10 @@ enum EnumNameString {
             items: UniversalEnumItem.listFromNames({'FALSE', 'for', 'do'}),
           ),
         ];
-        const fillController =
-            FillController(freezed: true, unknownEnumValue: false);
+        const fillController = FillController(
+          jsonSerializer: JsonSerializer.freezed,
+          unknownEnumValue: false,
+        );
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
@@ -1365,7 +1472,10 @@ enum KeywordsName {
             ),
           ),
         ];
-        const fillController = FillController(freezed: true, enumsToJson: true);
+        const fillController = FillController(
+          jsonSerializer: JsonSerializer.freezed,
+          enumsToJson: true,
+        );
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
@@ -1573,7 +1683,9 @@ enum EnumName {
         type: 'int',
         items: UniversalEnumItem.listFromNames({'-2', '-1', '0', '1'}),
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final file = fillController.fillDtoContent(dataClass);
 
       const expectedContent = r'''
@@ -1846,7 +1958,9 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -2060,7 +2174,9 @@ class ClassName {
           ),
         ],
       );
-      const fillController = FillController(freezed: true);
+      const fillController = FillController(
+        jsonSerializer: JsonSerializer.freezed,
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:freezed_annotation/freezed_annotation.dart';
