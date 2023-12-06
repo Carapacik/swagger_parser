@@ -11,6 +11,7 @@ import 'fill_controller.dart';
 import 'generator_exception.dart';
 import 'models/generated_file.dart';
 import 'models/generation_statistics.dart';
+import 'models/json_serializer.dart';
 import 'models/open_api_info.dart';
 import 'models/prefer_schema_source.dart';
 import 'models/programming_language.dart';
@@ -34,7 +35,7 @@ final class Generator {
     PreferSchemaSource? preferSchemeSource,
     ProgrammingLanguage? language,
     String? name,
-    bool? freezed,
+    JsonSerializer? jsonSerializer,
     bool? rootClient,
     String? clientPostfix,
     bool? exportFile,
@@ -59,7 +60,7 @@ final class Generator {
         _outputDirectory = outputDirectory,
         _name = name,
         _programmingLanguage = language ?? ProgrammingLanguage.dart,
-        _freezed = freezed ?? false,
+        _jsonSerializer = jsonSerializer ?? JsonSerializer.jsonSerializable,
         _rootClient = rootClient ?? true,
         _rootClientName = rootClientName ?? 'RestClient',
         _exportFile = exportFile ?? true,
@@ -86,7 +87,7 @@ final class Generator {
       preferSchemeSource: yamlConfig.preferSchemaSource,
       language: yamlConfig.language,
       name: yamlConfig.name,
-      freezed: yamlConfig.freezed,
+      jsonSerializer: yamlConfig.jsonSerializer,
       rootClient: yamlConfig.rootClient,
       rootClientName: yamlConfig.rootClientName,
       exportFile: yamlConfig.exportFile,
@@ -132,7 +133,7 @@ final class Generator {
   final ProgrammingLanguage _programmingLanguage;
 
   /// Use freezed to generate DTOs
-  final bool _freezed;
+  final JsonSerializer _jsonSerializer;
 
   /// Generate root client for all Clients
   final bool _rootClient;
@@ -309,7 +310,7 @@ final class Generator {
       rootClientName: _rootClientName,
       clientPostfix: _clientPostfix,
       exportFileName: _name ?? 'export',
-      freezed: _freezed,
+      jsonSerializer: _jsonSerializer,
       putClientsInFolder: _putClientsInFolder,
       enumsToJson: _enumsToJson,
       unknownEnumValue: _unknownEnumValue,

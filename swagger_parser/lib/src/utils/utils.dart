@@ -24,6 +24,8 @@ String dartImports({required Set<String> imports, String? pathPrefix}) {
   return '\n${imports.map((import) => "import '${pathPrefix ?? ''}${import.toSnake}.dart';").join('\n')}\n';
 }
 
+String indentation(int length) => ' ' * length;
+
 /// Provides description
 String descriptionComment(
   String? description, {
