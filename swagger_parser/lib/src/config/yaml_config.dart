@@ -140,12 +140,12 @@ final class YamlConfig {
     }
 
     JsonSerializer? jsonSerializer;
-    final rawJsonSerializer = yamlConfig['jsonSerializer']?.toString();
+    final rawJsonSerializer = yamlConfig['json_serializer']?.toString();
     if (rawJsonSerializer != null) {
       jsonSerializer = JsonSerializer.fromString(rawJsonSerializer);
       if (jsonSerializer == null) {
         throw ConfigException(
-          "'jsonSerializer' field must be contained in ${JsonSerializer.values.map((e) => e.name)}.",
+          "'json_serializer' field must be contained in ${JsonSerializer.values.map((e) => e.name)}.",
         );
       }
     }
