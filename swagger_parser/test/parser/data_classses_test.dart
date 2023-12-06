@@ -506,5 +506,16 @@ void main() {
       }
       expect(item2, expectedItem2);
     });
+
+    test('Enum name test', () async {
+      final schemaPath = p.join('test', 'parser', 'schemas', 'enum_class.json');
+      final configFile = schemaFile(schemaPath);
+      final schemaContent = configFile!.readAsStringSync();
+      final parser = OpenApiParser(schemaContent);
+      final dataClasses = parser.parseDataClasses();
+      expect(dataClasses, hasLength(2));
+      final enumClass = dataClasses.whereType<UniversalEnumClass>().first;
+      expect(enumClass.name, 'Status');
+    });
   });
 }

@@ -774,6 +774,7 @@ class OpenApiParser {
       final arrayItems = map[_itemsConst] as Map<String, dynamic>;
       final arrayType = _findType(
         arrayItems,
+        name: name,
         additionalName: name,
         root: false,
       );

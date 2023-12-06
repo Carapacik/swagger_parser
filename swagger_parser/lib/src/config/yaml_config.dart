@@ -2,6 +2,7 @@ import 'package:args/args.dart';
 import 'package:collection/collection.dart';
 import 'package:yaml/yaml.dart';
 
+import '../generator/models/json_serializer.dart';
 import '../generator/models/prefer_schema_source.dart';
 import '../generator/models/programming_language.dart';
 import '../generator/models/replacement_rule.dart';
@@ -26,7 +27,7 @@ final class YamlConfig {
     this.schemaFromUrlToFile,
     this.preferSchemaSource,
     this.language,
-    this.freezed,
+    this.jsonSerializer,
     this.rootClient,
     this.rootClientName,
     this.exportFile,
@@ -138,9 +139,15 @@ final class YamlConfig {
       }
     }
 
-    final freezed = yamlConfig['freezed'];
-    if (freezed is! bool?) {
-      throw const ConfigException("Config parameter 'freezed' must be bool.");
+    JsonSerializer? jsonSerializer;
+    final rawJsonSerializer = yamlConfig['jsonSerializer']?.toString();
+    if (rawJsonSerializer != null) {
+      jsonSerializer = JsonSerializer.fromString(rawJsonSerializer);
+      if (jsonSerializer == null) {
+        throw ConfigException(
+          "'jsonSerializer' field must be contained in ${JsonSerializer.values.map((e) => e.name)}.",
+        );
+      }
     }
 
     final rootClient =
@@ -278,7 +285,7 @@ final class YamlConfig {
           schemaFromUrlToFile ?? rootConfig?.schemaFromUrlToFile,
       preferSchemaSource: preferSchemaSource ?? rootConfig?.preferSchemaSource,
       language: language ?? rootConfig?.language,
-      freezed: freezed ?? rootConfig?.freezed,
+      jsonSerializer: jsonSerializer ?? rootConfig?.jsonSerializer,
       rootClient: rootClient ?? rootConfig?.rootClient,
       rootClientName: rootClientName ?? rootConfig?.rootClientName,
       exportFile: exportFile ?? rootConfig?.exportFile,
@@ -378,7 +385,7 @@ final class YamlConfig {
   final bool? schemaFromUrlToFile;
   final PreferSchemaSource? preferSchemaSource;
   final ProgrammingLanguage? language;
-  final bool? freezed;
+  final JsonSerializer? jsonSerializer;
   final String? clientPostfix;
   final bool? rootClient;
   final String? rootClientName;
