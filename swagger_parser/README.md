@@ -31,6 +31,7 @@ In your pubspec.yaml, add the following dependencies:
 
 ```yaml
 dependencies:
+  # dart_mappable: ^4.0.1  # for dart_mappable
   # dio: ^5.3.0
   # freezed_annotation: ^2.4.1 # for freezed
   # json_annotation: ^4.8.1
@@ -38,6 +39,7 @@ dependencies:
 
 dev_dependencies:
   # build_runner: ^2.4.6
+  # dart_mappable_builder: ^4.0.1  # for dart_mappable
   # freezed: ^2.4.5 # for freezed
   # json_serializable: ^6.7.1
   # retrofit_generator: ^8.0.4
@@ -55,6 +57,7 @@ swagger_parser:
   
   # Sets the OpenApi schema path directory for api definition.
   schema_path: schemas/openapi.json
+
   # Sets the url of the OpenApi schema.
   schema_url: https://petstore.swagger.io/v2/swagger.json
   
@@ -69,8 +72,9 @@ swagger_parser:
   # Current available options are: path, url.
   prefer_schema_source: url
 
-  # Optional (dart only). Set 'true' to generate data classes using freezed package.
-  freezed: false
+  # Optional (dart only).
+  # Current available serializers are: 'json_serializable', 'freezed' and 'dart_mappable'.
+  json_serializer: json_serializable
 
   # Optional (dart only). Set 'true' to generate root client
   # with interface and all clients instances.
