@@ -65,7 +65,7 @@ String _toClientRequest(UniversalRequest request, String defaultContentType) {
 String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
       (r) => r.parameters.any(
         (e) =>
-            e.type.toSuitableType(ProgrammingLanguage.dart).startsWith('File'),
+            e.type.toSuitableType(ProgrammingLanguage.dart).startsWith('File') || e.type.toSuitableType(ProgrammingLanguage.dart).startsWith('List<File'),
       ),
     )
         ? "import 'dart:io';\n\n"
