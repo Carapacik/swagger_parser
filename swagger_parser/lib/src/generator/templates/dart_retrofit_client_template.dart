@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 
-import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
 import '../models/programming_language.dart';
@@ -65,7 +64,12 @@ String _toClientRequest(UniversalRequest request, String defaultContentType) {
 String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
       (r) => r.parameters.any(
         (e) =>
-            e.type.toSuitableType(ProgrammingLanguage.dart).startsWith('File') || e.type.toSuitableType(ProgrammingLanguage.dart).startsWith('List<File'),
+            e.type
+                .toSuitableType(ProgrammingLanguage.dart)
+                .startsWith('File') ||
+            e.type
+                .toSuitableType(ProgrammingLanguage.dart)
+                .startsWith('List<File'),
       ),
     )
         ? "import 'dart:io';\n\n"
