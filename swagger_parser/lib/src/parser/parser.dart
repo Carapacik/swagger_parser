@@ -478,9 +478,21 @@ class OpenApiParser {
     }
     (_definitionFileContent[_pathsConst] as Map<String, dynamic>)
         .forEach((path, pathValue) {
-      (pathValue as Map<String, dynamic>).forEach((key, requestPath) {
+      final pathValueMap = pathValue as Map<String, dynamic>;
+
+      // global parameters are defined at the path level (i.e. /users/{id})
+      final globalParameters = <UniversalRequestType>[];
+
+      if (pathValueMap.containsKey(_parametersConst)) {
+        final params = _version == OAS.v2
+            ? parametersV2(pathValue)
+            : parametersV3(pathValue);
+        globalParameters.addAll(params);
+      }
+
+      pathValue.forEach((key, requestPath) {
         // `servers` contains List<dynamic>
-        if (key == _serversConst) {
+        if (key == _serversConst || key == _parametersConst) {
           return;
         }
 
@@ -493,6 +505,15 @@ class OpenApiParser {
         final parameters = _version == OAS.v2
             ? parametersV2(requestPath)
             : parametersV3(requestPath);
+
+        // Add global parameters that have not been overridden by local parameters
+        // defined at the request level.
+        parameters.addAll(
+          globalParameters.where(
+            (e) =>
+                parameters.every((p) => p.name != e.name && p.type != e.type),
+          ),
+        );
 
         // Build full description
         final summary = requestPath[_summaryConst]?.toString().trim();
