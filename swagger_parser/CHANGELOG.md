@@ -1,3 +1,7 @@
+## 1.13.1
+- Fixed error with path-level parameters cause crash ([#147](https://github.com/Carapacik/swagger_parser/issues/147))
+- Fixed `dart:io` import in template
+
 ## 1.13.0
 - Added support for [dart_mappable](https://pub.dev/packages/dart_mappable)
 - Changed `freezed` schema property to `json_serializer`, which can be set to `freezed`, `dart_mappable` or `json_serializable` (default).
