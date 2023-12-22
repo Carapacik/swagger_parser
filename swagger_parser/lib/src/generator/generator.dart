@@ -196,7 +196,7 @@ final class Generator {
   Future<(OpenApiInfo, GenerationStatistics)> generateFiles() async {
     final stopwatch = Stopwatch()..start();
 
-    await _fetchSchemaContent();
+    await fetchSchemaContent();
     _parseOpenApiDefinitionFile();
     await _generateFiles();
 
@@ -219,12 +219,12 @@ final class Generator {
   /// Generates content of files based on OpenApi definition file
   /// and return list of [GeneratedFile]
   Future<List<GeneratedFile>> generateContent() async {
-    await _fetchSchemaContent();
+    await fetchSchemaContent();
     _parseOpenApiDefinitionFile();
     return _fillContent();
   }
 
-  Future<void> _fetchSchemaContent() async {
+  Future<void> fetchSchemaContent() async {
     final url = _schemaUrl;
     final path = _schemaPath;
 
