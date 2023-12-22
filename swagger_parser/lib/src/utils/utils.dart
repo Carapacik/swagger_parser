@@ -198,7 +198,7 @@ void doneMessage({
 }
 
 void doneExtractMessage() {
-  stdout.writeln('${_green}The extraction was completed successfully. ');
+  stdout.writeln('${_green}The extraction was completed successfully.$_reset');
 }
 
 void exitWithError(String message) {
