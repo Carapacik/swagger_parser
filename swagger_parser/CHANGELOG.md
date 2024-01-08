@@ -1,3 +1,7 @@
+## 1.14.0
+- Fixed error with empty content type
+- Fixed retrofit template
+
 ## 1.13.1
 - Fixed error with path-level parameters cause crash ([#147](https://github.com/Carapacik/swagger_parser/issues/147))
 - Fixed `dart:io` import in template
