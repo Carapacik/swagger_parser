@@ -32,13 +32,15 @@ class OpenApiParser {
     bool originalHttpResponse = false,
     String defaultContentType = 'application/json',
     List<ReplacementRule> replacementRules = const <ReplacementRule>[],
+    List<String> skipParameters = const <String>[],
   })  : _name = name,
         _pathMethodName = pathMethodName,
         _enumsPrefix = enumsPrefix,
         _squashClients = squashClients,
         _originalHttpResponse = originalHttpResponse,
         _defaultContentType = defaultContentType,
-        _replacementRules = replacementRules {
+        _replacementRules = replacementRules,
+        _skipParameters = skipParameters {
     _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
         : jsonDecode(fileContent) as Map<String, dynamic>;
@@ -69,6 +71,7 @@ class OpenApiParser {
   final bool _originalHttpResponse;
   final String _defaultContentType;
   final List<ReplacementRule> _replacementRules;
+  final List<String> _skipParameters;
   late final Map<String, dynamic> _definitionFileContent;
   late final OAS _version;
   final List<UniversalComponentClass> _objectClasses = [];
@@ -247,6 +250,9 @@ class OpenApiParser {
                         as Map<String, dynamic>)[_parametersConst]
                     as Map<String, dynamic>)[refParameterName]!
                 as Map<String, dynamic>;
+          }
+          if (_skipParameters.contains(parameter[_nameConst])) {
+            continue;
           }
           final isRequired = parameter[_requiredConst]?.toString().toBool();
           final typeWithImport = _findType(
@@ -452,6 +458,10 @@ class OpenApiParser {
           name: parameter[_nameConst].toString(),
           isRequired: isRequired ?? false,
         );
+
+        if (_skipParameters.contains(parameter[_nameConst])) {
+          continue;
+        }
 
         if (typeWithImport.import != null) {
           imports.add(typeWithImport.import!);
@@ -771,7 +781,7 @@ class OpenApiParser {
   String _getTag(Map<String, dynamic> map) => _squashClients && _name != null
       ? _name!
       : map.containsKey(_tagsConst)
-          ? (map[_tagsConst] as List<dynamic>).first.toString()
+          ? (map[_tagsConst] as List<dynamic>).first.toString().replaceAll(RegExp(r'[^\w\s]+'), '') // Remove special characters
           : 'client';
 
   /// Format `$ref` type

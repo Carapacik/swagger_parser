@@ -51,6 +51,7 @@ final class Generator {
     String? defaultContentType,
     bool? markFilesAsGenerated,
     List<ReplacementRule>? replacementRules,
+    List<String>? skipParameters,
   })  : _schemaPath = schemaPath,
         _schemaUrl = schemaUrl,
         _schemaContent = schemaContent,
@@ -75,7 +76,8 @@ final class Generator {
         _unknownEnumValue = unknownEnumValue ?? true,
         _markFilesAsGenerated = markFilesAsGenerated ?? true,
         _defaultContentType = defaultContentType ?? 'application/json',
-        _replacementRules = replacementRules ?? const [];
+        _replacementRules = replacementRules ?? const [],
+        _skipParameters = skipParameters ?? const [];
 
   /// Applies parameters set from yaml config file
   factory Generator.fromYamlConfig(YamlConfig yamlConfig) {
@@ -102,6 +104,7 @@ final class Generator {
       unknownEnumValue: yamlConfig.unknownEnumValue,
       markFilesAsGenerated: yamlConfig.markFilesAsGenerated,
       replacementRules: yamlConfig.replacementRules,
+      skipParameters: yamlConfig.skipParameters,
     );
   }
 
@@ -179,6 +182,9 @@ final class Generator {
 
   /// List of rules used to replace patterns in generated class names
   final List<ReplacementRule> _replacementRules;
+
+  /// Skip parameters when generate
+  final List<String> _skipParameters;
 
   /// Result open api info
   late final OpenApiInfo _openApiInfo;
@@ -283,6 +289,7 @@ final class Generator {
       replacementRules: _replacementRules,
       originalHttpResponse: _originalHttpResponse,
       defaultContentType: _defaultContentType,
+      skipParameters: _skipParameters,
     );
     _openApiInfo = parser.parseOpenApiInfo();
     _restClients = parser.parseRestClients();

@@ -43,6 +43,7 @@ final class YamlConfig {
     this.originalHttpResponse,
     this.defaultContentType,
     this.replacementRules = const [],
+    this.skipParameters = const [],
   });
 
   /// Applies parameters from YAML file
@@ -276,6 +277,24 @@ final class YamlConfig {
       }
     }
 
+    final rawSkipParameters = yamlConfig['skip_parameters'];
+    if (rawSkipParameters is! YamlList?) {
+      throw const ConfigException(
+        "Config parameter 'skip_fields' must be list.",
+      );
+    }
+    final skipParameters = <String>[];
+    if (rawSkipParameters != null) {
+      for (final element in rawSkipParameters) {
+        if (element is! String) {
+          throw const ConfigException(
+            "Config parameter 'skip_fields' values must be List of String.",
+          );
+        }
+      skipParameters.add(element);
+      }
+    }
+
     return YamlConfig(
       name: name,
       schemaPath: schemaPath,
@@ -303,6 +322,7 @@ final class YamlConfig {
           markFilesAsGenerated ?? rootConfig?.markFilesAsGenerated,
       defaultContentType: defaultContentType ?? rootConfig?.defaultContentType,
       replacementRules: replacementRules ?? rootConfig?.replacementRules ?? [],
+      skipParameters: skipParameters,
     );
   }
 
@@ -401,4 +421,5 @@ final class YamlConfig {
   final String? defaultContentType;
   final bool? originalHttpResponse;
   final List<ReplacementRule> replacementRules;
+  final List<String> skipParameters;
 }
