@@ -16,7 +16,7 @@ void main() {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'some_client.g.dart';
@@ -52,7 +52,7 @@ interface SomeClient {}
       const fillController = FillController(putClientsInFolder: true);
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'some_client.g.dart';
@@ -89,7 +89,7 @@ interface SomeClient {}
       const fillController = FillController(clientPostfix: 'Api');
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'class_name_api.g.dart';
@@ -126,7 +126,7 @@ interface SomeApi {}
       const fillController = FillController(clientPostfix: '');
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'some.g.dart';
@@ -172,7 +172,7 @@ interface Some {}
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/camel_class.dart';
@@ -213,7 +213,7 @@ abstract class ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'class_name_client.g.dart';
@@ -333,7 +333,7 @@ interface ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'class_name_client.g.dart';
@@ -515,7 +515,7 @@ interface ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'class_name_client.g.dart';
@@ -630,7 +630,7 @@ interface ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'class_name_client.g.dart';
@@ -737,7 +737,7 @@ interface ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'class_name_client.g.dart';
@@ -831,7 +831,7 @@ interface ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'class_name_client.g.dart';
@@ -971,7 +971,7 @@ interface ClassNameClient {
       const expectedContents = '''
 import 'dart:io';
 
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/another_file.dart';
@@ -1118,7 +1118,7 @@ interface ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/lol.dart';
@@ -1232,7 +1232,7 @@ interface ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'class_name_client.g.dart';
@@ -1382,7 +1382,7 @@ interface ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/unit.dart';
@@ -1539,7 +1539,7 @@ interface ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'class_name_client.g.dart';
@@ -1631,7 +1631,7 @@ abstract class ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'class_name_client.g.dart';
@@ -1827,7 +1827,7 @@ interface ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/some.dart';
@@ -1925,7 +1925,7 @@ interface ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'class_name_client.g.dart';
@@ -2017,7 +2017,7 @@ abstract class ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'class_name_client.g.dart';
