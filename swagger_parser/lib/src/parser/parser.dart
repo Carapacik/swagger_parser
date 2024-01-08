@@ -189,9 +189,7 @@ class OpenApiParser {
           .entries
           .firstOrNull;
       if (contentType == null) {
-        throw const ParserException(
-          'Response must always have a content type.',
-        );
+        return null;
       }
       final contentTypeValue = contentType.value as Map<String, dynamic>;
       if (contentTypeValue.isEmpty ||

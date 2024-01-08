@@ -18,7 +18,7 @@ String dartRetrofitClientTemplate({
 }) {
   final sb = StringBuffer(
     '''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_fileImport(restClient)}import 'package:dio/dio.dart' hide Headers;
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_fileImport(restClient)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
 part '${name.toSnake}.g.dart';
@@ -97,6 +97,19 @@ String _contentTypeHeader(
   }
   return '';
 }
+
+/// ` hide Headers ` for retrofit Headers
+String _hideHeaders(
+  UniversalRestClient restClient,
+  String defaultContentType,
+) =>
+    restClient.requests.any(
+      (r) =>
+          r.contentType != defaultContentType &&
+          !(r.isMultiPart || r.isFormUrlEncoded),
+    )
+        ? ' hide Headers'
+        : '';
 
 /// return required if isRequired
 String _required(UniversalType t) =>
