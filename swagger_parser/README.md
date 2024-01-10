@@ -134,6 +134,10 @@ swagger_parser:
     # Example of rule
     - pattern: "[0-9]+"
       replacement: ""
+
+  # Optional. Skip parameters.
+  skip_parameters:
+    - 'X-Rider-Token'
 ```
 
 For multiple schemes:
