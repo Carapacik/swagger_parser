@@ -1,4 +1,5 @@
 import 'package:swagger_parser/src/config/yaml_config.dart';
+import 'package:swagger_parser/src/generator/models/prefer_schema_source.dart';
 import 'package:swagger_parser/src/utils/utils.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 
@@ -12,7 +13,7 @@ Future<void> main(List<String> arguments) async {
     generateMessage();
     for (final config in configs) {
       final generator = Generator.fromYamlConfig(config);
-      await generator.fetchSchemaContent();
+      await generator.fetchSchemaContent(PreferSchemaSource.url);
     }
 
     doneExtractMessage();
