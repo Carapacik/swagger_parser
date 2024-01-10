@@ -1075,9 +1075,7 @@ class OpenApiParser {
       // To detect is this entity is map or not
       final mapType = map[_typeConst].toString() == _objectConst &&
               map.containsKey(_additionalPropertiesConst) &&
-              (map[_additionalPropertiesConst] is Map<String, dynamic>) &&
-              !(map[_additionalPropertiesConst] as Map<String, dynamic>)
-                  .containsKey(_refConst)
+              (map[_additionalPropertiesConst] is Map<String, dynamic>)
           ? 'string'
           : null;
       final defaultValue = map[_defaultConst]?.toString();
