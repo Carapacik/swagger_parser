@@ -779,7 +779,10 @@ class OpenApiParser {
   String _getTag(Map<String, dynamic> map) => _squashClients && _name != null
       ? _name!
       : map.containsKey(_tagsConst)
-          ? (map[_tagsConst] as List<dynamic>).first.toString().replaceAll(RegExp(r'[^\w\s]+'), '') // Remove special characters
+          ? (map[_tagsConst] as List<dynamic>)
+              .first
+              .toString()
+              .replaceAll(RegExp(r'[^\w\s]+'), '') // Remove special characters
           : 'client';
 
   /// Format `$ref` type

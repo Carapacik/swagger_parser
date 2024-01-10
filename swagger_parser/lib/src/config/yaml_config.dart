@@ -291,7 +291,7 @@ final class YamlConfig {
             "Config parameter 'skip_fields' values must be List of String.",
           );
         }
-      skipParameters.add(element);
+        skipParameters.add(element);
       }
     }
 

@@ -1,3 +1,7 @@
+## 1.15.0
+- Remove special characters from tags
+- Add new config parameter `skip_parameters`
+
 ## 1.14.0
 - Fixed error with empty content type
 - Fixed retrofit template
