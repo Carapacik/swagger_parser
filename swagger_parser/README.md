@@ -135,9 +135,9 @@ swagger_parser:
     - pattern: "[0-9]+"
       replacement: ""
 
-  # Optional. Skip parameters.
+  # Optional. Skip parameters with names.
   skip_parameters:
-    - 'X-Rider-Token'
+    - 'X-Some-Token'
 ```
 
 For multiple schemes:
