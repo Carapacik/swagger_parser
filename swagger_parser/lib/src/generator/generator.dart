@@ -202,7 +202,7 @@ final class Generator {
   Future<(OpenApiInfo, GenerationStatistics)> generateFiles() async {
     final stopwatch = Stopwatch()..start();
 
-    await _fetchSchemaContent();
+    await fetchSchemaContent();
     _parseOpenApiDefinitionFile();
     await _generateFiles();
 
@@ -225,16 +225,20 @@ final class Generator {
   /// Generates content of files based on OpenApi definition file
   /// and return list of [GeneratedFile]
   Future<List<GeneratedFile>> generateContent() async {
-    await _fetchSchemaContent();
+    await fetchSchemaContent();
     _parseOpenApiDefinitionFile();
     return _fillContent();
   }
 
-  Future<void> _fetchSchemaContent() async {
+  Future<void> fetchSchemaContent([
+    PreferSchemaSource? preferSchemeSource,
+  ]) async {
     final url = _schemaUrl;
     final path = _schemaPath;
 
-    if ((_preferSchemeSource == PreferSchemaSource.url || path == null) &&
+    if (((preferSchemeSource ?? _preferSchemeSource) ==
+                PreferSchemaSource.url ||
+            path == null) &&
         url != null) {
       final extension = p.extension(url).toLowerCase();
       _isYaml = switch (extension) {
