@@ -224,11 +224,15 @@ final class Generator {
     return _fillContent();
   }
 
-  Future<void> fetchSchemaContent() async {
+  Future<void> fetchSchemaContent([
+    PreferSchemaSource? preferSchemeSource,
+  ]) async {
     final url = _schemaUrl;
     final path = _schemaPath;
 
-    if ((_preferSchemeSource == PreferSchemaSource.url || path == null) &&
+    if (((preferSchemeSource ?? _preferSchemeSource) ==
+                PreferSchemaSource.url ||
+            path == null) &&
         url != null) {
       final extension = p.extension(url).toLowerCase();
       _isYaml = switch (extension) {
