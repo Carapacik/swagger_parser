@@ -487,6 +487,7 @@ void main() {
               description: 'data',
               jsonKey: 'data',
               isRequired: false,
+              mapType: 'string',
             ),
           ],
         ),
