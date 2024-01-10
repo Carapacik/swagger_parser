@@ -3,6 +3,7 @@
 - Fixed retrofit template
 - Remove special characters from tags
 - Add new config parameter `skip_parameters`
+- Extract schemas from url ([#150](https://github.com/Carapacik/swagger_parser/issues/150))
 
 ## 1.13.1
 - Fixed error with path-level parameters cause crash ([#147](https://github.com/Carapacik/swagger_parser/issues/147))
