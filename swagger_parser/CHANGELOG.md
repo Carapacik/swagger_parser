@@ -1,3 +1,6 @@
+## 1.14.1
+- Removed check that would avoid generating a map when additional properties has a `$ref` value 
+
 ## 1.14.0
 - Fixed error with empty content type
 - Fixed retrofit template

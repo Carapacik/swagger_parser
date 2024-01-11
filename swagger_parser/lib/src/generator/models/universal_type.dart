@@ -131,7 +131,7 @@ final class UniversalType {
 
   @override
   String toString() =>
-      'UniversalType(\ntype: $type,\nname: $name,\ndescription: $description,\nformat: $format,\njsonKey: $jsonKey,\ndefaultValue: $defaultValue,\nisRequired: $isRequired,\nenumType: $enumType,\narrayDepth: $arrayDepth,\nnullable: $nullable\n)';
+      'UniversalType(\ntype: $type,\nname: $name,\ndescription: $description,\nformat: $format,\njsonKey: $jsonKey,\ndefaultValue: $defaultValue,\nisRequired: $isRequired,\nenumType: $enumType,\narrayDepth: $arrayDepth,\nnullable: $nullable\n, mapType: $mapType\n)';
 }
 
 /// Converts [UniversalType] to type from specified language

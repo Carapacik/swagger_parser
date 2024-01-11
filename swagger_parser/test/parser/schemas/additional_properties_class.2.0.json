@@ -1,0 +1,76 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API",
+    "version": "1.0",
+    "title": "REST API"
+  },
+  "host": "localhost:8081",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Test",
+      "description": "Test"
+    }
+  ],
+  "paths": {
+    "/test": {
+      "get": {
+        "tags": [
+          "Test"
+        ],
+        "operationId": "testMethod",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/WrapperClass"
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "definitions": {
+    "ValueClass": {
+      "type": "object",
+      "required": [
+        "testProp"
+      ],
+      "properties": {
+        "testProp": {
+          "type": "string",
+          "description": "A test property"
+        }
+      },
+      "title": "ValueClass"
+    },
+    "WrapperClass": {
+      "type": "object",
+      "required": [
+        "map"
+      ],
+      "properties": {
+        "map": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/ValueClass"
+          }
+        }
+      },
+      "title": "WrapperClass"
+    }
+  }
+}
