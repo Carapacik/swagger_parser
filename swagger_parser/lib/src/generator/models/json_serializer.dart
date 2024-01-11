@@ -2,9 +2,7 @@ import 'package:collection/collection.dart';
 
 enum JsonSerializer {
   jsonSerializable('json_serializable'),
-
   freezed('freezed'),
-
   dartMappable('dart_mappable');
 
   const JsonSerializer(this.name);
