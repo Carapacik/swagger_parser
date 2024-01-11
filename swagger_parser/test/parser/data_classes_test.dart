@@ -450,7 +450,7 @@ void main() {
       expect(item2, expectedItem2);
     });
 
-    test('additionalProperties entity that should not parse to object test',
+    test('additionalProperties entity that should not parse to object test 3.0',
         () async {
       final schemaPath = p.join(
         'test',
@@ -507,6 +507,60 @@ void main() {
       }
       expect(item2, expectedItem2);
     });
+
+    test('additionalProperties entity should parse to object test 2.0',
+            () async {
+          final schemaPath = p.join(
+            'test',
+            'parser',
+            'schemas',
+            'additional_properties_class.2.0.json',
+          );
+          final configFile = schemaFile(schemaPath);
+          final schemaContent = configFile!.readAsStringSync();
+          final parser = OpenApiParser(schemaContent);
+          final dataClasses = parser.parseDataClasses().toList();
+          final expectedDataClasses = <UniversalDataClass>[
+            const UniversalComponentClass(
+              name: 'ValueClass',
+              imports: {},
+              parameters: [
+                UniversalType(
+                  type: 'string',
+                  name: 'testProp',
+                  jsonKey: 'testProp',
+                  description: 'A test property',
+                ),
+              ],
+            ),
+            const UniversalComponentClass(
+              name: 'WrapperClass',
+              imports: { 'ValueClass' },
+              parameters: [
+                UniversalType(
+                  type: 'ValueClass',
+                  name: 'map',
+                  jsonKey: 'map',
+                  mapType: 'string',
+                ),
+              ],
+            ),
+          ];
+
+          expect(dataClasses.length, expectedDataClasses.length);
+          final item1 = dataClasses[0] as UniversalComponentClass;
+          final item2 = dataClasses[1] as UniversalComponentClass;
+          final expectedItem1 = expectedDataClasses[0] as UniversalComponentClass;
+          final expectedItem2 = expectedDataClasses[1] as UniversalComponentClass;
+          expect(item1.parameters.length, expectedItem1.parameters.length);
+          for (var i = 0; i < item1.parameters.length; i++) {
+            expect(
+              item1.parameters[i],
+              expectedItem1.parameters[i],
+            );
+          }
+          expect(item2, expectedItem2);
+        });
 
     test('Enum name test', () async {
       final schemaPath = p.join('test', 'parser', 'schemas', 'enum_class.json');

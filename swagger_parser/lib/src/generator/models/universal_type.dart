@@ -158,7 +158,6 @@ extension UniversalTypeX on UniversalType {
     if (nullable || (!isRequired && defaultValue == null)) {
       sb.write('?');
     }
-    print(sb.toString());
     return sb.toString();
   }
 
