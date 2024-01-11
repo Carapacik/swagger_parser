@@ -12,12 +12,16 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["available", "pending", "sold"],
+              "enum": [
+                "available",
+                "pending",
+                "sold"
+              ],
               "default": "available"
             },
             "collectionFormat": "multi"
           }
-         }
+        }
       }
     }
   }
