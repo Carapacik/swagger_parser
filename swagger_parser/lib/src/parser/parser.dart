@@ -945,7 +945,9 @@ class OpenApiParser {
       }
 
       // Interception of objectClass creation when Map construction is expected
-      if (typeWithImports.length == 1 && typeWithImports[0].import == null) {
+      if (mapType != null &&
+          typeWithImports.length == 1 &&
+          typeWithImports[0].import == null) {
         return (
           type: UniversalType(
             type: map[_typeConst] as String,

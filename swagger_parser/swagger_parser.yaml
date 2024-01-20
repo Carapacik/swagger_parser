@@ -80,7 +80,7 @@ swagger_parser:
   # any parameter for any schema can be set manually.
   # Cannot be used at the same time as schema_path.
   schemas:
-    - schema_path: example/schemas/openapi.json
+    - schema_path: example/schemas/debug.json
       output_directory: example/lib/
       json_serializer: freezed
       put_clients_in_folder: true

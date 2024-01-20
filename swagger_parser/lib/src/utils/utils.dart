@@ -90,7 +90,7 @@ const _generatedCodeComment = '''
 ''';
 
 const _ignoreLintsComment = '''
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, unused_import
 ''';
 
 void introMessage() {
