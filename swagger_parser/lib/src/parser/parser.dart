@@ -325,7 +325,7 @@ class OpenApiParser {
             types.add(
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
-                description: requestBody[_descriptionConst]?.toString(),
+                description: currentType.description,
                 type: UniversalType(
                   type: currentType.type,
                   name: 'file',
@@ -344,9 +344,10 @@ class OpenApiParser {
               contentType[_schemaConst] as Map<String, dynamic>;
           if (schemaContent.containsKey(_propertiesConst)) {
             final requiredParameters =
-                (schemaContent[_requiredConst] as List<dynamic>)
-                    .map((e) => e.toString())
-                    .toList();
+                (schemaContent[_requiredConst] as List<dynamic>?)
+                        ?.map((e) => e.toString())
+                        .toList() ??
+                    [];
 
             for (final e
                 in (schemaContent[_propertiesConst] as Map<String, dynamic>)
@@ -363,7 +364,7 @@ class OpenApiParser {
                 UniversalRequestType(
                   parameterType: HttpParameterType.part,
                   name: e.key,
-                  description: requestBody[_descriptionConst]?.toString(),
+                  description: currentType.description,
                   type: UniversalType(
                     type: currentType.type,
                     name: e.key,
@@ -393,7 +394,7 @@ class OpenApiParser {
           types.add(
             UniversalRequestType(
               parameterType: HttpParameterType.body,
-              description: requestBody[_descriptionConst]?.toString(),
+              description: currentType.description,
               type: UniversalType(
                 type: currentType.type,
                 name: _bodyConst,
@@ -546,7 +547,7 @@ class OpenApiParser {
         final parametersDescription = parameters
             .where((e) => e.description != null)
             .map((e) => '[${e.name?.toCamel ?? 'body'}] - ${e.description}')
-            .join('\n')
+            .join('\n\n')
             .trim();
         description = switch ((description, parametersDescription)) {
           (null, '') || ('', '') => null,
@@ -554,6 +555,7 @@ class OpenApiParser {
           (null, _) || ('', _) => parametersDescription,
           (_, _) => '$description\n\n$parametersDescription',
         };
+        // End build full description
 
         String requestName;
 
