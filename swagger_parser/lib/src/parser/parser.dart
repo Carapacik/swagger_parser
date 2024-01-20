@@ -210,6 +210,7 @@ class OpenApiParser {
       return UniversalType(
         type: typeWithImport.type.type,
         arrayDepth: typeWithImport.type.arrayDepth,
+        arrayValueNullable: typeWithImport.type.arrayValueNullable,
       );
     }
 
@@ -334,6 +335,7 @@ class OpenApiParser {
                   isRequired: currentType.isRequired,
                   nullable: currentType.nullable,
                   arrayDepth: currentType.arrayDepth,
+                  arrayValueNullable: currentType.arrayValueNullable,
                 ),
               ),
             );
@@ -371,6 +373,7 @@ class OpenApiParser {
                     isRequired: currentType.isRequired,
                     nullable: currentType.nullable,
                     arrayDepth: currentType.arrayDepth,
+                    arrayValueNullable: currentType.arrayValueNullable,
                   ),
                 ),
               );
@@ -400,6 +403,7 @@ class OpenApiParser {
                 isRequired: currentType.isRequired,
                 nullable: currentType.nullable,
                 arrayDepth: currentType.arrayDepth,
+                arrayValueNullable: currentType.arrayValueNullable,
               ),
             ),
           );
@@ -428,6 +432,7 @@ class OpenApiParser {
       return UniversalType(
         type: typeWithImport.type.type,
         arrayDepth: typeWithImport.type.arrayDepth,
+        arrayValueNullable: typeWithImport.type.arrayValueNullable,
       );
     }
 
@@ -817,14 +822,13 @@ class OpenApiParser {
         root: false,
       );
       final arrayValueNullable = arrayItems[_nullableConst].toString().toBool();
-      final type = '${arrayType.type.type}${arrayValueNullable ? '?' : ''}';
 
       final (newName, description) =
           protectName(name, description: map[_descriptionConst]?.toString());
 
       return (
         type: UniversalType(
-          type: type,
+          type: arrayType.type.type,
           name: newName?.toCamel,
           description: description,
           format: arrayType.type.format,
@@ -834,6 +838,7 @@ class OpenApiParser {
           isRequired: isRequired,
           nullable: map[_nullableConst].toString().toBool(),
           arrayDepth: arrayType.type.arrayDepth + 1,
+          arrayValueNullable: arrayValueNullable,
         ),
         import: arrayType.import,
       );
@@ -1056,6 +1061,7 @@ class OpenApiParser {
           enumType: enumType,
           isRequired: isRequired,
           arrayDepth: ofType?.arrayDepth ?? 0,
+          arrayValueNullable: ofType?.arrayValueNullable ?? false,
           nullable: root &&
                   map.containsKey(_nullableConst) &&
                   map[_nullableConst].toString().toBool() ||
