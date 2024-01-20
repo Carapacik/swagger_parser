@@ -341,11 +341,17 @@ class OpenApiParser {
           final schemaContent =
               contentType[_schemaConst] as Map<String, dynamic>;
           if (schemaContent.containsKey(_propertiesConst)) {
+            final requiredParameters =
+                (schemaContent[_requiredConst] as List<dynamic>)
+                    .map((e) => e.toString())
+                    .toList();
+
             for (final e
                 in (schemaContent[_propertiesConst] as Map<String, dynamic>)
                     .entries) {
               final typeWithImport = _findType(
                 e.value as Map<String, dynamic>,
+                isRequired: requiredParameters.contains(e.key),
               );
               final currentType = typeWithImport.type;
               if (typeWithImport.import != null) {
