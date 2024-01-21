@@ -615,13 +615,13 @@ class OpenApiParser {
       if (!_definitionFileContent.containsKey(_componentsConst) ||
           !(_definitionFileContent[_componentsConst] as Map<String, dynamic>)
               .containsKey(_schemasConst)) {
-        return dataClasses;
+        return [...dataClasses, ..._objectClasses, ..._enumClasses];
       }
       entities = (_definitionFileContent[_componentsConst]
           as Map<String, dynamic>)[_schemasConst] as Map<String, dynamic>;
     } else if (_version == OAS.v2) {
       if (!_definitionFileContent.containsKey(_definitionsConst)) {
-        return dataClasses;
+        return [...dataClasses, ..._objectClasses, ..._enumClasses];
       }
       entities =
           _definitionFileContent[_definitionsConst] as Map<String, dynamic>;
@@ -738,7 +738,6 @@ class OpenApiParser {
 
     dataClasses.addAll(_objectClasses);
     _objectClasses.clear();
-
     dataClasses.addAll(_enumClasses);
     _enumClasses.clear();
 

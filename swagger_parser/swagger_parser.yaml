@@ -84,4 +84,3 @@ swagger_parser:
       output_directory: example/lib/
       json_serializer: freezed
       put_clients_in_folder: true
-      put_in_folder: true
