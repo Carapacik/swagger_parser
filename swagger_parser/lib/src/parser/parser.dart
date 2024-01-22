@@ -210,6 +210,7 @@ class OpenApiParser {
       return UniversalType(
         type: typeWithImport.type.type,
         arrayDepth: typeWithImport.type.arrayDepth,
+        arrayValueNullable: typeWithImport.type.arrayValueNullable,
       );
     }
 
@@ -324,7 +325,7 @@ class OpenApiParser {
             types.add(
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
-                description: requestBody[_descriptionConst]?.toString(),
+                description: currentType.description,
                 type: UniversalType(
                   type: currentType.type,
                   name: 'file',
@@ -334,6 +335,7 @@ class OpenApiParser {
                   isRequired: currentType.isRequired,
                   nullable: currentType.nullable,
                   arrayDepth: currentType.arrayDepth,
+                  arrayValueNullable: currentType.arrayValueNullable,
                 ),
               ),
             );
@@ -341,11 +343,18 @@ class OpenApiParser {
           final schemaContent =
               contentType[_schemaConst] as Map<String, dynamic>;
           if (schemaContent.containsKey(_propertiesConst)) {
+            final requiredParameters =
+                (schemaContent[_requiredConst] as List<dynamic>?)
+                        ?.map((e) => e.toString())
+                        .toList() ??
+                    [];
+
             for (final e
                 in (schemaContent[_propertiesConst] as Map<String, dynamic>)
                     .entries) {
               final typeWithImport = _findType(
                 e.value as Map<String, dynamic>,
+                isRequired: requiredParameters.contains(e.key),
               );
               final currentType = typeWithImport.type;
               if (typeWithImport.import != null) {
@@ -355,7 +364,7 @@ class OpenApiParser {
                 UniversalRequestType(
                   parameterType: HttpParameterType.part,
                   name: e.key,
-                  description: requestBody[_descriptionConst]?.toString(),
+                  description: currentType.description,
                   type: UniversalType(
                     type: currentType.type,
                     name: e.key,
@@ -365,6 +374,7 @@ class OpenApiParser {
                     isRequired: currentType.isRequired,
                     nullable: currentType.nullable,
                     arrayDepth: currentType.arrayDepth,
+                    arrayValueNullable: currentType.arrayValueNullable,
                   ),
                 ),
               );
@@ -384,7 +394,7 @@ class OpenApiParser {
           types.add(
             UniversalRequestType(
               parameterType: HttpParameterType.body,
-              description: requestBody[_descriptionConst]?.toString(),
+              description: currentType.description,
               type: UniversalType(
                 type: currentType.type,
                 name: _bodyConst,
@@ -394,6 +404,7 @@ class OpenApiParser {
                 isRequired: currentType.isRequired,
                 nullable: currentType.nullable,
                 arrayDepth: currentType.arrayDepth,
+                arrayValueNullable: currentType.arrayValueNullable,
               ),
             ),
           );
@@ -422,6 +433,7 @@ class OpenApiParser {
       return UniversalType(
         type: typeWithImport.type.type,
         arrayDepth: typeWithImport.type.arrayDepth,
+        arrayValueNullable: typeWithImport.type.arrayValueNullable,
       );
     }
 
@@ -535,7 +547,7 @@ class OpenApiParser {
         final parametersDescription = parameters
             .where((e) => e.description != null)
             .map((e) => '[${e.name?.toCamel ?? 'body'}] - ${e.description}')
-            .join('\n')
+            .join('\n\n')
             .trim();
         description = switch ((description, parametersDescription)) {
           (null, '') || ('', '') => null,
@@ -543,6 +555,7 @@ class OpenApiParser {
           (null, _) || ('', _) => parametersDescription,
           (_, _) => '$description\n\n$parametersDescription',
         };
+        // End build full description
 
         String requestName;
 
@@ -811,14 +824,13 @@ class OpenApiParser {
         root: false,
       );
       final arrayValueNullable = arrayItems[_nullableConst].toString().toBool();
-      final type = '${arrayType.type.type}${arrayValueNullable ? '?' : ''}';
 
       final (newName, description) =
           protectName(name, description: map[_descriptionConst]?.toString());
 
       return (
         type: UniversalType(
-          type: type,
+          type: arrayType.type.type,
           name: newName?.toCamel,
           description: description,
           format: arrayType.type.format,
@@ -828,6 +840,7 @@ class OpenApiParser {
           isRequired: isRequired,
           nullable: map[_nullableConst].toString().toBool(),
           arrayDepth: arrayType.type.arrayDepth + 1,
+          arrayValueNullable: arrayValueNullable,
         ),
         import: arrayType.import,
       );
@@ -939,7 +952,9 @@ class OpenApiParser {
       }
 
       // Interception of objectClass creation when Map construction is expected
-      if (typeWithImports.length == 1 && typeWithImports[0].import == null) {
+      if (mapType != null &&
+          typeWithImports.length == 1 &&
+          typeWithImports[0].import == null) {
         return (
           type: UniversalType(
             type: map[_typeConst] as String,
@@ -1048,6 +1063,7 @@ class OpenApiParser {
           enumType: enumType,
           isRequired: isRequired,
           arrayDepth: ofType?.arrayDepth ?? 0,
+          arrayValueNullable: ofType?.arrayValueNullable ?? false,
           nullable: root &&
                   map.containsKey(_nullableConst) &&
                   map[_nullableConst].toString().toBool() ||

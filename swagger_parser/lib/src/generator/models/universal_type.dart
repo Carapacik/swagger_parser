@@ -14,6 +14,7 @@ final class UniversalType {
     this.isRequired = true,
     this.nullable = false,
     this.arrayDepth = 0,
+    this.arrayValueNullable = false,
     this.enumType,
     this.mapType,
   });
@@ -53,6 +54,9 @@ final class UniversalType {
   final int arrayDepth;
 
   /// Whether or not this field is nullable
+  final bool arrayValueNullable;
+
+  /// Whether or not this field is nullable
   final bool nullable;
 
   /// If not null means this is map with key type
@@ -71,6 +75,7 @@ final class UniversalType {
     int? arrayDepth,
     bool? nullable,
     String? mapType,
+    bool? arrayValueNullable,
   }) {
     return UniversalType(
       type: type ?? this.type,
@@ -84,6 +89,7 @@ final class UniversalType {
       arrayDepth: arrayDepth ?? this.arrayDepth,
       nullable: nullable ?? this.nullable,
       mapType: mapType ?? this.mapType,
+      arrayValueNullable: arrayValueNullable ?? this.arrayValueNullable,
     );
   }
 
@@ -113,7 +119,8 @@ final class UniversalType {
           enumType == other.enumType &&
           arrayDepth == other.arrayDepth &&
           nullable == other.nullable &&
-          mapType == other.mapType;
+          mapType == other.mapType &&
+          arrayValueNullable == other.arrayValueNullable;
 
   @override
   int get hashCode =>
@@ -127,11 +134,12 @@ final class UniversalType {
       enumType.hashCode ^
       arrayDepth.hashCode ^
       nullable.hashCode ^
-      mapType.hashCode;
+      mapType.hashCode ^
+      arrayValueNullable.hashCode;
 
   @override
   String toString() =>
-      'UniversalType(\ntype: $type,\nname: $name,\ndescription: $description,\nformat: $format,\njsonKey: $jsonKey,\ndefaultValue: $defaultValue,\nisRequired: $isRequired,\nenumType: $enumType,\narrayDepth: $arrayDepth,\nnullable: $nullable\n, mapType: $mapType\n)';
+      'UniversalType(\ntype: $type,\nname: $name,\ndescription: $description,\nformat: $format,\njsonKey: $jsonKey,\ndefaultValue: $defaultValue,\nisRequired: $isRequired,\nenumType: $enumType,\narrayDepth: $arrayDepth,\nnullable: $nullable\n, mapType: $mapType\n, arrayValueNullable: $arrayValueNullable\n)';
 }
 
 /// Converts [UniversalType] to type from specified language
@@ -163,7 +171,8 @@ extension UniversalTypeX on UniversalType {
 
   String _questionMark(ProgrammingLanguage lang) {
     final questionMark =
-        isRequired && !nullable || arrayDepth > 0 || defaultValue != null
+        (isRequired && !nullable || arrayDepth > 0 || defaultValue != null) &&
+                !arrayValueNullable
             ? ''
             : '?';
     switch (lang) {
