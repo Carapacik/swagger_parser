@@ -188,7 +188,7 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_][a-zA-Z\d_]*$');
       (null, null) => null,
       (null, _) => error,
       (_, null) => description,
-      (_, _) => '$description\n\n$error',
+      (_, _) => '$description\n$error',
     },
   );
 }

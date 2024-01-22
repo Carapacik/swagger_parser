@@ -18,7 +18,7 @@ String dartRetrofitClientTemplate({
 }) {
   final sb = StringBuffer(
     '''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_fileImport(restClient)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_convertImport(restClient)}${_fileImport(restClient)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
 part '${name.toSnake}.g.dart';
@@ -62,15 +62,18 @@ String _toClientRequest(UniversalRequest request, String defaultContentType) {
   return sb.toString();
 }
 
+String _convertImport(UniversalRestClient restClient) =>
+    restClient.requests.any(
+      (r) => r.parameters.any(
+        (e) => e.parameterType.isPart,
+      ),
+    )
+        ? "import 'dart:convert';\n"
+        : '';
+
 String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
       (r) => r.parameters.any(
-        (e) =>
-            e.type
-                .toSuitableType(ProgrammingLanguage.dart)
-                .startsWith('File') ||
-            e.type
-                .toSuitableType(ProgrammingLanguage.dart)
-                .startsWith('List<File'),
+        (e) => e.type.toSuitableType(ProgrammingLanguage.dart).contains('File'),
       ),
     )
         ? "import 'dart:io';\n\n"

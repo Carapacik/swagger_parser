@@ -969,6 +969,7 @@ interface ClassNameClient {
       const fillController = FillController();
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
