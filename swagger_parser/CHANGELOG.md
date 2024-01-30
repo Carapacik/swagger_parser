@@ -1,3 +1,6 @@
+## 1.14.2
+- Fixed errors with multipart ([#144](https://github.com/Carapacik/swagger_parser/issues/144))
+
 ## 1.14.1
 - Removed check that would avoid generating a map when additional properties has a `$ref` value 
 
