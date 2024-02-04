@@ -206,7 +206,7 @@ class OpenApiParser {
       final typeWithImport = _findType(
         contentTypeValue[_schemaConst] as Map<String, dynamic>,
         additionalName: additionalName,
-        isRequired: false,
+        isRequired: _requiredByDefault,
       );
       if (typeWithImport.import != null) {
         imports.add(typeWithImport.import!);
@@ -215,7 +215,7 @@ class OpenApiParser {
         type: typeWithImport.type.type,
         arrayDepth: typeWithImport.type.arrayDepth,
         arrayValueNullable: typeWithImport.type.arrayValueNullable,
-        isRequired: false,
+        isRequired: _requiredByDefault,
       );
     }
 

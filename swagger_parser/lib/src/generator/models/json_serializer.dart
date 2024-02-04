@@ -2,13 +2,13 @@ import 'package:collection/collection.dart';
 
 /// Used for select json serializer for dto
 enum JsonSerializer {
-  /// json_serializable
+  /// {@nodoc}
   jsonSerializable('json_serializable'),
 
-  /// freezed
+  /// {@nodoc}
   freezed('freezed'),
 
-  /// dart_mappable
+  /// {@nodoc}
   dartMappable('dart_mappable');
 
   /// Constructor
