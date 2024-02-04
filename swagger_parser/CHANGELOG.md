@@ -1,3 +1,6 @@
+## 1.15.0
+- Add new config parameter `required_by_default`
+
 ## 1.14.2
 - Fixed errors with multipart ([#144](https://github.com/Carapacik/swagger_parser/issues/144))
 

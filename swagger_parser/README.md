@@ -76,6 +76,11 @@ swagger_parser:
   # Current available serializers are: json_serializable, freezed, dart_mappable.
   json_serializer: json_serializable
 
+  # Optional (dart only).
+  # It is used if the value does not have the annotations 'required' and 'nullable'. 
+  # If the value is 'true', then value be 'required', if the value is 'false', then 'nullable'.
+  required_by_default: true
+
   # Optional (dart only). Set 'true' to generate root client
   # with interface and all clients instances.
   root_client: true

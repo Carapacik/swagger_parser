@@ -26,6 +26,7 @@ final class YamlConfig {
     this.schemaUrl,
     this.schemaFromUrlToFile,
     this.preferSchemaSource,
+    this.requiredByDefault,
     this.language,
     this.jsonSerializer,
     this.rootClient,
@@ -117,6 +118,13 @@ final class YamlConfig {
       );
     }
 
+    final requiredByDefault = yamlConfig['required_by_default'];
+    if (requiredByDefault is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'required_by_default' must be bool.",
+      );
+    }
+
     PreferSchemaSource? preferSchemaSource;
     final rawPreferSchemeSource =
         yamlConfig['prefer_schema_source']?.toString();
@@ -151,8 +159,7 @@ final class YamlConfig {
       }
     }
 
-    final rootClient =
-        yamlConfig['root_client'] ?? yamlConfig['root_interface'];
+    final rootClient = yamlConfig['root_client'];
     if (rootClient is! bool?) {
       throw const ConfigException(
         "Config parameter 'root_client' must be bool.",
@@ -302,6 +309,7 @@ final class YamlConfig {
       schemaUrl: schemaUrl,
       schemaFromUrlToFile:
           schemaFromUrlToFile ?? rootConfig?.schemaFromUrlToFile,
+      requiredByDefault: requiredByDefault ?? rootConfig?.requiredByDefault,
       preferSchemaSource: preferSchemaSource ?? rootConfig?.preferSchemaSource,
       language: language ?? rootConfig?.language,
       jsonSerializer: jsonSerializer ?? rootConfig?.jsonSerializer,
@@ -402,6 +410,7 @@ final class YamlConfig {
   final String outputDirectory;
   final String? schemaPath;
   final String? schemaUrl;
+  final bool? requiredByDefault;
   final bool? schemaFromUrlToFile;
   final PreferSchemaSource? preferSchemaSource;
   final ProgrammingLanguage? language;

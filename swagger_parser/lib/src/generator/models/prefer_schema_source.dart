@@ -9,8 +9,6 @@ enum PreferSchemaSource {
   path;
 
   /// Returns [PreferSchemaSource] from string
-  static PreferSchemaSource? fromString(String string) =>
-      values.firstWhereOrNull(
-        (e) => e.name == string,
-      );
+  static PreferSchemaSource? fromString(String value) =>
+      values.firstWhereOrNull((e) => e.name == value);
 }

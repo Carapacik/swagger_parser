@@ -120,7 +120,7 @@ class OpenApiParser {
   static const _versionConst = 'version';
   final usedNamesCount = <String, int>{};
 
-  UniversalEnumClass getUniqueEnumClass({
+  UniversalEnumClass _getUniqueEnumClass({
     required final String name,
     required final Set<UniversalEnumItem> items,
     required final String type,
@@ -627,11 +627,10 @@ class OpenApiParser {
           _definitionFileContent[_definitionsConst] as Map<String, dynamic>;
     }
     entities.forEach((key, value) {
+      value as Map<String, dynamic>;
       var requiredParameters = <String>[];
-      if ((value as Map<String, dynamic>).containsKey(_requiredConst)) {
-        requiredParameters = (value[_requiredConst] as List<dynamic>)
-            .map((e) => e.toString())
-            .toList();
+      if (value case {_requiredConst: final List<dynamic> rawParameters}) {
+        requiredParameters = rawParameters.map((e) => e.toString()).toList();
       }
 
       final refs = <String>[];
@@ -668,7 +667,7 @@ class OpenApiParser {
         }
 
         dataClasses.add(
-          getUniqueEnumClass(
+          _getUniqueEnumClass(
             name: key,
             items: items,
             type: type,
@@ -868,7 +867,7 @@ class OpenApiParser {
         (map[_enumConst] as List).map((e) => '$e'),
       );
 
-      final enumClass = getUniqueEnumClass(
+      final enumClass = _getUniqueEnumClass(
         name: newName,
         items: items,
         type: map[_typeConst].toString(),
