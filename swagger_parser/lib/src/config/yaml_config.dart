@@ -334,6 +334,7 @@ final class YamlConfig {
     );
   }
 
+  /// TODO
   static List<YamlConfig> parseConfigsFromYamlFile(List<String> arguments) {
     final parser = ArgParser()..addOption('file', abbr: 'f');
     final configFile = getConfigFile(
@@ -406,6 +407,7 @@ final class YamlConfig {
     return configs;
   }
 
+  /// TODO: docs for each parameter
   final String name;
   final String outputDirectory;
   final String? schemaPath;
