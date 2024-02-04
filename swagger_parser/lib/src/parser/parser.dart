@@ -206,7 +206,7 @@ class OpenApiParser {
       final typeWithImport = _findType(
         contentTypeValue[_schemaConst] as Map<String, dynamic>,
         additionalName: additionalName,
-        isRequired: _requiredByDefault,
+        isRequired: false,
       );
       if (typeWithImport.import != null) {
         imports.add(typeWithImport.import!);
@@ -215,7 +215,7 @@ class OpenApiParser {
         type: typeWithImport.type.type,
         arrayDepth: typeWithImport.type.arrayDepth,
         arrayValueNullable: typeWithImport.type.arrayValueNullable,
-        isRequired: _requiredByDefault,
+        isRequired: false,
       );
     }
 
@@ -764,9 +764,10 @@ class OpenApiParser {
         } else if (element is UniversalEnumClass) {
           allOfClass.parameters.add(
             UniversalType(
-                type: element.name,
-                name: element.name.toCamel,
-                isRequired: _requiredByDefault),
+              type: element.name,
+              name: element.name.toCamel,
+              isRequired: _requiredByDefault,
+            ),
           );
           allOfClass.imports.add(element.name);
         }

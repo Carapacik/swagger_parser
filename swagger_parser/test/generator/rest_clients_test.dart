@@ -500,7 +500,7 @@ interface ClassNameClient {
             route: '/string',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [],
           ),
@@ -510,7 +510,7 @@ interface ClassNameClient {
             route: '/boolean',
             returnType: UniversalType(
               type: 'boolean',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [],
           ),
@@ -559,7 +559,7 @@ abstract class ClassNameClient {
             route: '/string',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [],
           ),
@@ -569,7 +569,7 @@ abstract class ClassNameClient {
             route: '/boolean',
             returnType: UniversalType(
               type: 'boolean',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [],
           ),
@@ -615,7 +615,7 @@ interface ClassNameClient {
                   type: 'string',
                   arrayDepth: 1,
                   name: 'list1',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'list1',
               ),
@@ -625,7 +625,7 @@ interface ClassNameClient {
                   type: 'string',
                   arrayDepth: 3,
                   name: 'list2',
-                  isRequired: false,
+                  isRequired: true,
                 ),
               ),
             ],
@@ -637,7 +637,7 @@ interface ClassNameClient {
             returnType: UniversalType(
               type: 'string',
               arrayDepth: 2,
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [],
           ),
@@ -685,7 +685,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   arrayDepth: 1,
                   name: 'list1',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'list1',
               ),
@@ -695,7 +695,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   arrayDepth: 3,
                   name: 'list2',
-                  isRequired: false,
+                  isRequired: true,
                 ),
               ),
             ],
@@ -707,7 +707,7 @@ abstract class ClassNameClient {
             returnType: UniversalType(
               type: 'string',
               arrayDepth: 2,
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [],
           ),
@@ -747,7 +747,7 @@ interface ClassNameClient {
             route: '/',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -755,7 +755,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'alex',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'name',
               ),
@@ -795,7 +795,7 @@ abstract class ClassNameClient {
             route: '/',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -803,7 +803,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'alex',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'name',
               ),
@@ -846,7 +846,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'token',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'Authorization',
               ),
@@ -855,7 +855,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'alex',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'name',
               ),
@@ -864,7 +864,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'int',
                   name: 'id',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'id',
               ),
@@ -873,7 +873,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'Another',
                   name: 'another',
-                  isRequired: false,
+                  isRequired: true,
                 ),
               ),
             ],
@@ -920,7 +920,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'token',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'Authorization',
               ),
@@ -929,7 +929,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'alex',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'name',
               ),
@@ -938,7 +938,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'int',
                   name: 'id',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'id',
               ),
@@ -947,7 +947,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'Another',
                   name: 'another',
-                  isRequired: false,
+                  isRequired: true,
                 ),
               ),
             ],
@@ -993,7 +993,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'token',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'Authorization',
               ),
@@ -1002,7 +1002,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'alex',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'name',
               ),
@@ -1012,7 +1012,7 @@ interface ClassNameClient {
                   type: 'string',
                   format: 'binary',
                   name: 'file',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'file',
               ),
@@ -1021,7 +1021,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'file',
                   name: 'secondFile',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'file2',
               ),
@@ -1030,7 +1030,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'boolean',
                   name: 'parsed',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'parsed-if',
               ),
@@ -1042,7 +1042,7 @@ interface ClassNameClient {
             route: '/single',
             returnType: UniversalType(
               type: 'boolean',
-              isRequired: false,
+              isRequired: true,
             ),
             contentType: 'multipart/form-data',
             parameters: [
@@ -1051,7 +1051,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'AnotherFile',
                   name: 'file',
-                  isRequired: false,
+                  isRequired: true,
                 ),
               ),
             ],
@@ -1112,7 +1112,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'token',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'Authorization',
               ),
@@ -1121,7 +1121,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'alex',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'name',
               ),
@@ -1131,7 +1131,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   format: 'binary',
                   name: 'file',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'file',
               ),
@@ -1140,7 +1140,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'file',
                   name: 'secondFile',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'file2',
               ),
@@ -1149,7 +1149,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'boolean',
                   name: 'parsed',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'parsed-if',
               ),
@@ -1161,7 +1161,7 @@ abstract class ClassNameClient {
             route: '/single',
             returnType: UniversalType(
               type: 'boolean',
-              isRequired: false,
+              isRequired: true,
             ),
             contentType: 'multipart/form-data',
             parameters: [
@@ -1170,7 +1170,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'AnotherFile',
                   name: 'file',
-                  isRequired: false,
+                  isRequired: true,
                 ),
               ),
             ],
@@ -1224,7 +1224,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'token',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'Authorization',
               ),
@@ -1233,7 +1233,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'Lol',
                   name: 'lol',
-                  isRequired: false,
+                  isRequired: true,
                 ),
               ),
             ],
@@ -1282,7 +1282,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'token',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'Authorization',
               ),
@@ -1291,7 +1291,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'Lol',
                   name: 'lol',
-                  isRequired: false,
+                  isRequired: true,
                 ),
               ),
             ],
@@ -1330,7 +1330,7 @@ interface ClassNameClient {
             route: '/{id}',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -1399,7 +1399,7 @@ abstract class ClassNameClient {
             route: '/{id}',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -1472,7 +1472,7 @@ interface ClassNameClient {
                   type: 'string',
                   name: 'token',
                   defaultValue: 'message123',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'Authorization',
               ),
@@ -1483,7 +1483,7 @@ interface ClassNameClient {
                   format: 'double',
                   name: 'age',
                   defaultValue: '17',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'age',
               ),
@@ -1493,7 +1493,7 @@ interface ClassNameClient {
                   type: 'boolean',
                   name: 'adult',
                   defaultValue: 'false',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'adult',
               ),
@@ -1504,7 +1504,7 @@ interface ClassNameClient {
                   name: 'unit',
                   defaultValue: 'CELSIUS',
                   enumType: 'string',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'unit',
               ),
@@ -1515,7 +1515,7 @@ interface ClassNameClient {
                   name: 'soma',
                   defaultValue: '1',
                   enumType: 'int',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'soma',
               ),
@@ -1568,7 +1568,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   name: 'token',
                   defaultValue: 'message123',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'Authorization',
               ),
@@ -1579,7 +1579,7 @@ abstract class ClassNameClient {
                   format: 'double',
                   name: 'age',
                   defaultValue: '17',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'age',
               ),
@@ -1589,7 +1589,7 @@ abstract class ClassNameClient {
                   type: 'boolean',
                   name: 'adult',
                   defaultValue: 'false',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'adult',
               ),
@@ -1600,7 +1600,7 @@ abstract class ClassNameClient {
                   name: 'unit',
                   defaultValue: 'CELSIUS',
                   enumType: 'string',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'unit',
               ),
@@ -1611,7 +1611,7 @@ abstract class ClassNameClient {
                   name: 'soma',
                   defaultValue: '1',
                   enumType: 'int',
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 name: 'soma',
               ),
@@ -1674,7 +1674,7 @@ interface ClassNameClient {
             route: '/request2',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -1729,7 +1729,7 @@ abstract class ClassNameClient {
             route: '/request',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -1822,7 +1822,7 @@ abstract class ClassNameClient {
             returnType: UniversalType(
               type: 'string',
               nullable: true,
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -1831,7 +1831,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   arrayDepth: 4,
                   name: 'deepList',
-                  isRequired: false,
+                  isRequired: true,
                   nullable: true,
                 ),
                 name: 'deepArrayNullable',
@@ -1844,7 +1844,7 @@ abstract class ClassNameClient {
             route: '/request2',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -1853,7 +1853,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   arrayDepth: 4,
                   name: 'deepList',
-                  isRequired: false,
+                  isRequired: true,
                   nullable: true,
                 ),
                 name: 'deepArrayNullable',
@@ -1895,7 +1895,7 @@ interface ClassNameClient {
             route: '/request',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -2054,7 +2054,7 @@ interface ClassNameClient {
             returnType: UniversalType(
               type: 'string',
               nullable: true,
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -2076,7 +2076,7 @@ interface ClassNameClient {
             route: '/request2',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -2131,7 +2131,7 @@ abstract class ClassNameClient {
             route: '/request',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -2224,7 +2224,7 @@ abstract class ClassNameClient {
             returnType: UniversalType(
               type: 'string',
               nullable: true,
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -2233,7 +2233,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   arrayDepth: 4,
                   name: 'deepList',
-                  isRequired: false,
+                  isRequired: true,
                   nullable: true,
                 ),
                 name: 'deepArrayNullable',
@@ -2246,7 +2246,7 @@ abstract class ClassNameClient {
             route: '/request2',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
@@ -2255,7 +2255,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   arrayDepth: 4,
                   name: 'deepList',
-                  isRequired: false,
+                  isRequired: true,
                   nullable: true,
                 ),
                 name: 'deepArrayNullable',
@@ -2297,7 +2297,7 @@ interface ClassNameClient {
             route: '/request',
             returnType: UniversalType(
               type: 'string',
-              isRequired: false,
+              isRequired: true,
             ),
             parameters: [
               UniversalRequestType(
