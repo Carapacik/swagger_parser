@@ -30,6 +30,7 @@ class OpenApiParser {
     bool pathMethodName = false,
     bool squashClients = false,
     bool originalHttpResponse = false,
+    bool requiredByDefault = true,
     String defaultContentType = 'application/json',
     List<ReplacementRule> replacementRules = const <ReplacementRule>[],
     List<String> skipParameters = const <String>[],
@@ -40,6 +41,7 @@ class OpenApiParser {
         _originalHttpResponse = originalHttpResponse,
         _defaultContentType = defaultContentType,
         _replacementRules = replacementRules,
+        _requiredByDefault = requiredByDefault,
         _skipParameters = skipParameters {
     _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
@@ -68,6 +70,7 @@ class OpenApiParser {
   final bool _enumsPrefix;
   final String? _name;
   final bool _squashClients;
+  final bool _requiredByDefault;
   final bool _originalHttpResponse;
   final String _defaultContentType;
   final List<ReplacementRule> _replacementRules;
