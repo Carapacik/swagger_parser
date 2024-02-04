@@ -9,12 +9,12 @@ final class UniversalType {
   /// Constructor for [UniversalType]
   const UniversalType({
     required this.type,
+    required this.isRequired,
     this.name,
     this.description,
     this.format,
     this.jsonKey,
     this.defaultValue,
-    this.isRequired = true,
     this.nullable = false,
     this.arrayDepth = 0,
     this.arrayValueNullable = false,
