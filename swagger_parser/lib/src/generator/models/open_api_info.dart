@@ -1,4 +1,7 @@
+import 'package:meta/meta.dart';
+
 /// Information about the API
+@immutable
 class OpenApiInfo {
   /// Constructor for [OpenApiInfo]
   const OpenApiInfo({

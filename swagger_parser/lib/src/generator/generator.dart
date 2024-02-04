@@ -230,6 +230,7 @@ final class Generator {
     return _fillContent();
   }
 
+  // TODO
   Future<void> fetchSchemaContent([
     PreferSchemaSource? preferSchemeSource,
   ]) async {

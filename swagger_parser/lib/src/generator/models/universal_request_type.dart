@@ -1,6 +1,9 @@
+import 'package:meta/meta.dart';
+
 import 'universal_type.dart';
 
 /// Universal template for containing information about Request parameter
+@immutable
 final class UniversalRequestType {
   /// Constructor for [UniversalRequestType]
   const UniversalRequestType({

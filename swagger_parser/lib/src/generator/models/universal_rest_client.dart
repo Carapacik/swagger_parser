@@ -1,8 +1,10 @@
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 
 import 'universal_request.dart';
 
 /// Universal template for containing information about Rest client
+@immutable
 final class UniversalRestClient {
   /// Constructor for [UniversalRestClient]
   const UniversalRestClient({

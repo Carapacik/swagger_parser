@@ -142,9 +142,9 @@ void schemaStatisticsMessage({
   );
 }
 
-void schemaFailedMessage({
-  required Object error,
-  required StackTrace stack,
+void schemaFailedMessage(
+  Object error,
+  StackTrace stack, {
   String? name,
 }) {
   var title = name ?? '';
