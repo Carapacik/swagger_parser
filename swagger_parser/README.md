@@ -206,3 +206,13 @@ To run the code generation with build_runner, execute the following command:
 ```shell
 dart run build_runner build -d
 ```
+
+## Contributing
+
+Contributions are welcome!
+
+Here is a curated list of how you can help:
+
+- Report bugs and scenarios that do not match the expected behavior
+- Implement new features by making a pull-request
+- Write tests or supplement [E2E tests](https://github.com/Carapacik/swagger_parser/tree/main/swagger_parser/test/e2e) with your own scenarios that are not yet covered
