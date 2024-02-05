@@ -13,11 +13,11 @@ environment:
   sdk: ^3.0.0
 
 dependencies:
-  args: ^2.4.0
-  collection: ^1.17.1
-  meta: ^1.9.1
+  args: ^2.4.2
+  collection: ^1.18.0
+  meta: ^1.10.0
   path: ^1.8.3
-  yaml: ^3.1.1
+  yaml: ^3.1.2
 
 dev_dependencies:
   carapacik_lints: ^1.4.2
