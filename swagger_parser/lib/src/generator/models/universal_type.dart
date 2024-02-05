@@ -1,17 +1,20 @@
+import 'package:meta/meta.dart';
+
 import '../../utils/type_utils.dart';
 import 'programming_language.dart';
 
 /// Universal template for containing information about type
+@immutable
 final class UniversalType {
   /// Constructor for [UniversalType]
   const UniversalType({
     required this.type,
+    required this.isRequired,
     this.name,
     this.description,
     this.format,
     this.jsonKey,
     this.defaultValue,
-    this.isRequired = true,
     this.nullable = false,
     this.arrayDepth = 0,
     this.arrayValueNullable = false,
@@ -139,7 +142,7 @@ final class UniversalType {
 
   @override
   String toString() =>
-      'UniversalType(\ntype: $type,\nname: $name,\ndescription: $description,\nformat: $format,\njsonKey: $jsonKey,\ndefaultValue: $defaultValue,\nisRequired: $isRequired,\nenumType: $enumType,\narrayDepth: $arrayDepth,\nnullable: $nullable\n, mapType: $mapType\n, arrayValueNullable: $arrayValueNullable\n)';
+      'UniversalType(\ntype: $type,\nname: $name,\ndescription: $description,\nformat: $format,\njsonKey: $jsonKey,\ndefaultValue: $defaultValue,\nisRequired: $isRequired,\nenumType: $enumType,\narrayDepth: $arrayDepth,\nnullable: $nullable\n, mapType: $mapType\n, arrayValueNullable: $arrayValueNullable)';
 }
 
 /// Converts [UniversalType] to type from specified language

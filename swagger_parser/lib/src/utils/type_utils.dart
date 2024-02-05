@@ -2,7 +2,9 @@ import '../generator/models/universal_data_class.dart';
 import 'case_utils.dart';
 import 'dart_keywords.dart';
 
+/// TODO
 extension StringTypeX on String {
+  /// TODO
   String toDartType([String? format]) => switch (this) {
         'integer' => 'int',
         'number' => switch (format) {
@@ -22,6 +24,7 @@ extension StringTypeX on String {
         _ => this
       };
 
+  /// TODO
   String toKotlinType([String? format]) => switch (this) {
         'integer' => 'Int',
         'number' => switch (format) {
@@ -49,6 +52,7 @@ const _objectConst = 'object';
 int _uniqueObjectCounter = 0;
 int _uniqueEnumCounter = 0;
 
+/// TODO
 String uniqueName({bool isEnum = false}) {
   final String name;
   if (isEnum) {
@@ -61,7 +65,7 @@ String uniqueName({bool isEnum = false}) {
   return name;
 }
 
-final _enumNameRegExp = RegExp(r'^[a-zA-Z\d_-\s]*$');
+final _enumNameRegExp = RegExp(r'^[a-zA-Z\d_\s-]*$');
 final _startWithNumberRegExp = RegExp(r'^-?\d+');
 
 /// Protect default enum value from incorrect symbols, keywords, etc.

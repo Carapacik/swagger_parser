@@ -31,18 +31,18 @@ In your pubspec.yaml, add the following dependencies:
 
 ```yaml
 dependencies:
-  # dart_mappable: ^4.1.0  # for dart_mappable
+  # dart_mappable: ^4.2.0 # for dart_mappable
   # dio: ^5.4.0
   # freezed_annotation: ^2.4.1 # for freezed
   # json_annotation: ^4.8.1
-  # retrofit: ^4.0.3
+  # retrofit: ^4.1.0
 
 dev_dependencies:
   # build_runner: ^2.4.7
-  # dart_mappable_builder: ^4.1.0  # for dart_mappable
-  # freezed: ^2.4.5 # for freezed
+  # dart_mappable_builder: ^4.2.0 # for dart_mappable
+  # freezed: ^2.4.7 # for freezed
   # json_serializable: ^6.7.1
-  # retrofit_generator: ^8.0.5
+  # retrofit_generator: ^8.1.0
   swagger_parser:
 ```
 
@@ -75,6 +75,11 @@ swagger_parser:
   # Optional (dart only).
   # Current available serializers are: json_serializable, freezed, dart_mappable.
   json_serializer: json_serializable
+
+  # Optional (dart only).
+  # It is used if the value does not have the annotations 'required' and 'nullable'. 
+  # If the value is 'true', then value be 'required', if the value is 'false', then 'nullable'.
+  required_by_default: true
 
   # Optional (dart only). Set 'true' to generate root client
   # with interface and all clients instances.

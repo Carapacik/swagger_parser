@@ -1,4 +1,7 @@
+import 'package:meta/meta.dart';
+
 /// Contains statistics about generation
+@immutable
 class GenerationStatistics {
   /// Constructor for [GenerationStatistics]
   const GenerationStatistics({

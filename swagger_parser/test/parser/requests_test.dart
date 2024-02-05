@@ -25,7 +25,10 @@ void main() {
               name: 'postApiAuthRegister',
               requestType: HttpRequestType.post,
               route: '/api/Auth/register',
-              returnType: UniversalType(type: 'string'),
+              returnType: UniversalType(
+                type: 'string',
+                isRequired: true,
+              ),
               contentType: 'text/json',
               parameters: [
                 UniversalRequestType(
@@ -34,7 +37,7 @@ void main() {
                     type: 'RegisterUserDto',
                     name: 'body',
                     jsonKey: 'body',
-                    isRequired: false,
+                    isRequired: true,
                   ),
                 ),
               ],
@@ -49,7 +52,10 @@ void main() {
               name: 'getApiUserInfo',
               requestType: HttpRequestType.get,
               route: '/api/User/info',
-              returnType: UniversalType(type: 'UserInfoDto'),
+              returnType: UniversalType(
+                type: 'UserInfoDto',
+                isRequired: true,
+              ),
               parameters: [
                 UniversalRequestType(
                   name: 'tags',
@@ -131,7 +137,10 @@ void main() {
               name: 'postApiAuthRegister',
               requestType: HttpRequestType.post,
               route: '/api/Auth/register',
-              returnType: UniversalType(type: 'string'),
+              returnType: UniversalType(
+                type: 'string',
+                isRequired: true,
+              ),
               parameters: [
                 UniversalRequestType(
                   parameterType: HttpParameterType.body,
@@ -139,7 +148,7 @@ void main() {
                     type: 'RegisterUserDto',
                     name: 'body',
                     jsonKey: 'body',
-                    isRequired: false,
+                    isRequired: true,
                   ),
                 ),
               ],
@@ -154,7 +163,10 @@ void main() {
               name: 'getApiUserInfo',
               requestType: HttpRequestType.get,
               route: '/api/User/info',
-              returnType: UniversalType(type: 'UserInfoDto'),
+              returnType: UniversalType(
+                type: 'UserInfoDto',
+                isRequired: true,
+              ),
               parameters: [
                 UniversalRequestType(
                   name: 'limit',

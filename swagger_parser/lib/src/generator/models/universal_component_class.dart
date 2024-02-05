@@ -1,6 +1,7 @@
 part of 'universal_data_class.dart';
 
 /// Universal template for containing information about component
+@immutable
 final class UniversalComponentClass extends UniversalDataClass {
   /// Constructor for [UniversalComponentClass]
   const UniversalComponentClass({

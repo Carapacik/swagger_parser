@@ -1,9 +1,11 @@
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 
 import 'universal_request_type.dart';
 import 'universal_type.dart';
 
 /// Universal template for containing information about Request
+@immutable
 final class UniversalRequest {
   /// Constructor for [UniversalRequest]
   const UniversalRequest({
