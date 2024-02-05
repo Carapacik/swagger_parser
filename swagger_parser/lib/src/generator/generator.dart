@@ -304,7 +304,7 @@ final class Generator {
       skipParameters: _skipParameters,
       requiredByDefault: _requiredByDefault,
     );
-    _openApiInfo = parser.parseOpenApiInfo();
+    _openApiInfo = parser.openApiInfo;
     _restClients = parser.parseRestClients();
     _dataClasses = parser.parseDataClasses();
   }

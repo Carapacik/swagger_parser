@@ -5,11 +5,18 @@ import 'package:meta/meta.dart';
 class OpenApiInfo {
   /// Constructor for [OpenApiInfo]
   const OpenApiInfo({
+    required this.schemaVersion,
+    this.apiVersion,
     this.title,
     this.summary,
     this.description,
-    this.version,
   });
+
+  /// OpenApi version of schema
+  final OAS schemaVersion;
+
+  /// Version of the API
+  final String? apiVersion;
 
   /// Title of the API
   final String? title;
@@ -19,7 +26,19 @@ class OpenApiInfo {
 
   /// Description of the API
   final String? description;
+}
 
-  /// Version of the API
-  final String? version;
+/// All versions of the OpenApi Specification that this package supports
+enum OAS {
+  /// 3.1.x
+  v3_1,
+
+  /// 3.0.x
+  v3,
+
+  /// 2.0
+  v2;
+
+  /// Constructor for OpenApi Specification
+  const OAS();
 }

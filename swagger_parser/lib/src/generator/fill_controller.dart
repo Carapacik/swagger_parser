@@ -10,7 +10,7 @@ import 'models/universal_rest_client.dart';
 final class FillController {
   /// Constructor that accepts configuration parameters with default values to create files
   const FillController({
-    OpenApiInfo openApiInfo = const OpenApiInfo(),
+    OpenApiInfo openApiInfo = const OpenApiInfo(schemaVersion: OAS.v3_1),
     ProgrammingLanguage programmingLanguage = ProgrammingLanguage.dart,
     String clientPostfix = 'Client',
     String rootClientName = 'RestClient',

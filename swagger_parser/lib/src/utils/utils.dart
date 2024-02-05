@@ -125,7 +125,7 @@ void schemaStatisticsMessage({
   required GenerationStatistics statistics,
   String? name,
 }) {
-  final version = openApi.version != null ? 'v${openApi.version}' : '';
+  final version = openApi.apiVersion != null ? 'v${openApi.apiVersion}' : '';
 
   var title = name ?? '';
   if (title.length > 80) {

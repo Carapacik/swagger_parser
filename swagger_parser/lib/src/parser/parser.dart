@@ -46,24 +46,7 @@ class OpenApiParser {
     _definitionFileContent = isYaml
         ? (loadYaml(fileContent) as YamlMap).toMap()
         : jsonDecode(fileContent) as Map<String, dynamic>;
-
-    if (_definitionFileContent.containsKey(_openApiConst)) {
-      final version = _definitionFileContent[_openApiConst].toString();
-      if (version.startsWith('3.1')) {
-        _version = OAS.v3_1;
-        return;
-      }
-      if (version.startsWith('3.0')) {
-        _version = OAS.v3;
-        return;
-      }
-    }
-    if (_definitionFileContent.containsKey(_swaggerConst) &&
-        _definitionFileContent[_swaggerConst].toString().startsWith('2.0')) {
-      _version = OAS.v2;
-      return;
-    }
-    throw const ParserException('Unknown version of OpenAPI.');
+    _parseOpenApiInfo();
   }
 
   final bool _pathMethodName;
@@ -76,9 +59,10 @@ class OpenApiParser {
   final List<ReplacementRule> _replacementRules;
   final List<String> _skipParameters;
   late final Map<String, dynamic> _definitionFileContent;
-  late final OAS _version;
   final List<UniversalComponentClass> _objectClasses = [];
   final Set<UniversalEnumClass> _enumClasses = {};
+  final _usedNamesCount = <String, int>{};
+  late final OpenApiInfo _apiInfo;
 
   static const _additionalPropertiesConst = 'additionalProperties';
   static const _allOfConst = 'allOf';
@@ -121,7 +105,6 @@ class OpenApiParser {
   static const _titleConst = 'title';
   static const _typeConst = 'type';
   static const _versionConst = 'version';
-  final usedNamesCount = <String, int>{};
 
   UniversalEnumClass _getUniqueEnumClass({
     required final String name,
@@ -142,11 +125,11 @@ class OpenApiParser {
     }
 
     String uniqueName;
-    if (usedNamesCount.containsKey(name)) {
-      usedNamesCount[name] = usedNamesCount[name]! + 1;
-      uniqueName = '$name${usedNamesCount[name]}';
+    if (_usedNamesCount.containsKey(name)) {
+      _usedNamesCount[name] = _usedNamesCount[name]! + 1;
+      uniqueName = '$name${_usedNamesCount[name]}';
     } else {
-      usedNamesCount[name] = 1;
+      _usedNamesCount[name] = 1;
       uniqueName = name;
     }
 
@@ -161,19 +144,30 @@ class OpenApiParser {
   }
 
   /// Parse OpenApi parameters into [OpenApiInfo]
-  OpenApiInfo parseOpenApiInfo() {
-    final info = _definitionFileContent[_infoConst];
-    if (info == null || info is! Map<String, dynamic>) {
-      return const OpenApiInfo();
-    }
-
-    return OpenApiInfo(
-      title: info[_titleConst]?.toString(),
-      summary: info[_summaryConst]?.toString(),
-      description: info[_descriptionConst]?.toString(),
-      version: info[_versionConst]?.toString(),
+  void _parseOpenApiInfo() {
+    final schemaVersion = switch (_definitionFileContent) {
+      {_openApiConst: final Object? v} when v.toString().startsWith('3.1') =>
+        OAS.v3_1,
+      {_openApiConst: final Object? v} when v.toString().startsWith('3.0') =>
+        OAS.v3,
+      {_swaggerConst: final Object? v} when v.toString().startsWith('2.0') =>
+        OAS.v2,
+      _ => throw const ParserException('Unknown version of OpenAPI.'),
+    };
+    final info = switch (_definitionFileContent) {
+      {_infoConst: final Map<String, dynamic> v} => v,
+      _ => null,
+    };
+    _apiInfo = OpenApiInfo(
+      schemaVersion: schemaVersion,
+      apiVersion: info?[_versionConst]?.toString(),
+      title: info?[_titleConst]?.toString(),
+      summary: info?[_summaryConst]?.toString(),
+      description: info?[_descriptionConst]?.toString(),
     );
   }
+
+  OpenApiInfo get openApiInfo => _apiInfo;
 
   /// Parses rest clients from `paths` section of definition file
   /// and return list of [UniversalRestClient]
@@ -511,7 +505,7 @@ class OpenApiParser {
       final globalParameters = <UniversalRequestType>[];
 
       if (pathValueMap.containsKey(_parametersConst)) {
-        final params = _version == OAS.v2
+        final params = _apiInfo.schemaVersion == OAS.v2
             ? parametersV2(pathValue)
             : parametersV3(pathValue);
         globalParameters.addAll(params);
@@ -526,10 +520,10 @@ class OpenApiParser {
         final requestPathResponses = (requestPath
             as Map<String, dynamic>)[_responsesConst] as Map<String, dynamic>;
         final additionalName = '$key${path}Response'.toPascal;
-        final returnType = _version == OAS.v2
+        final returnType = _apiInfo.schemaVersion == OAS.v2
             ? returnTypeV2(requestPathResponses, additionalName)
             : returnTypeV3(requestPathResponses, additionalName);
-        final parameters = _version == OAS.v2
+        final parameters = _apiInfo.schemaVersion == OAS.v2
             ? parametersV2(requestPath)
             : parametersV3(requestPath);
 
@@ -618,7 +612,8 @@ class OpenApiParser {
   Iterable<UniversalDataClass> parseDataClasses() {
     final dataClasses = <UniversalDataClass>[];
     late final Map<String, dynamic> entities;
-    if (_version == OAS.v3_1 || _version == OAS.v3) {
+    if (_apiInfo.schemaVersion == OAS.v3_1 ||
+        _apiInfo.schemaVersion == OAS.v3) {
       if (!_definitionFileContent.containsKey(_componentsConst) ||
           !(_definitionFileContent[_componentsConst] as Map<String, dynamic>)
               .containsKey(_schemasConst)) {
@@ -626,7 +621,7 @@ class OpenApiParser {
       }
       entities = (_definitionFileContent[_componentsConst]
           as Map<String, dynamic>)[_schemasConst] as Map<String, dynamic>;
-    } else if (_version == OAS.v2) {
+    } else if (_apiInfo.schemaVersion == OAS.v2) {
       if (!_definitionFileContent.containsKey(_definitionsConst)) {
         return dataClasses;
       }
@@ -1177,19 +1172,4 @@ extension on YamlMap {
 extension on String {
   /// used specially for YAML map
   bool toBool() => toLowerCase() == 'true';
-}
-
-/// All versions of the OpenApi Specification that this package supports
-enum OAS {
-  /// 3.1.x
-  v3_1,
-
-  /// 3.0.x
-  v3,
-
-  /// 2.0
-  v2;
-
-  /// Constructor for OpenApi Specification
-  const OAS();
 }
