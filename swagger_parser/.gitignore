@@ -3,4 +3,3 @@
 build/
 pubspec.lock
 .idea/
-swagger_parser.yaml
