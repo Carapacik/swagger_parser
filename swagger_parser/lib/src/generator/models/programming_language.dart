@@ -145,6 +145,7 @@ enum ProgrammingLanguage {
         kotlin => '',
       };
 
+  /// Export file by language
   String exportFileContent({
     required bool markFileAsGenerated,
     required List<GeneratedFile> restClients,

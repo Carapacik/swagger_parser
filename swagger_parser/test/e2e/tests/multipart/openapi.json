@@ -1,0 +1,57 @@
+{
+  "openapi": "3.0.1",
+  "paths": {
+    "/test-multipart": {
+      "get": {
+        "summary": "Test",
+        "description": "Test",
+        "operationId": "test-multipart",
+        "requestBody": {
+          "description": "requestBody description",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "files": {
+                    "type": "array",
+                    "description": "Sample List of Files",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "address": {
+                    "description": "Sample Address",
+                    "type": "object",
+                    "properties": {
+                      "street": {
+                        "description": "Sample Street.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "image": {
+                    "description": "Sample Image",
+                    "type": "string",
+                    "format": "binary",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "files"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}

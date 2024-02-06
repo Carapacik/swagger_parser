@@ -1,6 +1,9 @@
+import 'package:meta/meta.dart';
+
 import 'universal_type.dart';
 
 /// Universal template for containing information about Request parameter
+@immutable
 final class UniversalRequestType {
   /// Constructor for [UniversalRequestType]
   const UniversalRequestType({
@@ -33,6 +36,11 @@ final class UniversalRequestType {
 
   @override
   int get hashCode => name.hashCode ^ type.hashCode ^ parameterType.hashCode;
+
+  @override
+  String toString() => 'UniversalRequestType(name: $name, '
+      'type: $type, '
+      'parameterType: $parameterType)';
 }
 
 /// Type of parameter in rest client

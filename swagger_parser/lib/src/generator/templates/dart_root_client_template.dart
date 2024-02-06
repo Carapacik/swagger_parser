@@ -19,7 +19,7 @@ String dartRootClientTemplate({
   final title = openApiInfo.title;
   final summary = openApiInfo.summary;
   final description = openApiInfo.description;
-  final version = openApiInfo.version;
+  final version = openApiInfo.apiVersion;
   final fullDescription = switch ((summary, description)) {
     (null, null) => null,
     (_, null) => summary,

@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 
 import '../../utils/type_utils.dart';
 import 'universal_type.dart';
@@ -7,6 +8,7 @@ part 'universal_component_class.dart';
 part 'universal_enum_class.dart';
 
 /// Universal template for containing information about component
+@immutable
 sealed class UniversalDataClass {
   /// Constructor for [UniversalDataClass]
   const UniversalDataClass({

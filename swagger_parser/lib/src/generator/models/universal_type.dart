@@ -1,17 +1,20 @@
+import 'package:meta/meta.dart';
+
 import '../../utils/type_utils.dart';
 import 'programming_language.dart';
 
 /// Universal template for containing information about type
+@immutable
 final class UniversalType {
   /// Constructor for [UniversalType]
   const UniversalType({
     required this.type,
+    required this.isRequired,
     this.name,
     this.description,
     this.format,
     this.jsonKey,
     this.defaultValue,
-    this.isRequired = true,
     this.nullable = false,
     this.arrayDepth = 0,
     this.arrayValueNullable = false,
@@ -111,7 +114,6 @@ final class UniversalType {
           runtimeType == other.runtimeType &&
           type == other.type &&
           name == other.name &&
-          description == other.description &&
           format == other.format &&
           jsonKey == other.jsonKey &&
           defaultValue == other.defaultValue &&
@@ -138,8 +140,17 @@ final class UniversalType {
       arrayValueNullable.hashCode;
 
   @override
-  String toString() =>
-      'UniversalType(\ntype: $type,\nname: $name,\ndescription: $description,\nformat: $format,\njsonKey: $jsonKey,\ndefaultValue: $defaultValue,\nisRequired: $isRequired,\nenumType: $enumType,\narrayDepth: $arrayDepth,\nnullable: $nullable\n, mapType: $mapType\n, arrayValueNullable: $arrayValueNullable\n)';
+  String toString() => 'UniversalType(type: $type, '
+      'name: $name, '
+      'format: $format, '
+      'jsonKey: $jsonKey, '
+      'defaultValue: $defaultValue, '
+      'isRequired: $isRequired, '
+      'enumType: $enumType, '
+      'arrayDepth: $arrayDepth, '
+      'arrayValueNullable: $arrayValueNullable, '
+      'nullable: $nullable, '
+      'mapType: $mapType)';
 }
 
 /// Converts [UniversalType] to type from specified language

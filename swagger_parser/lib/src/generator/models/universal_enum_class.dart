@@ -1,6 +1,7 @@
 part of 'universal_data_class.dart';
 
 /// Universal template for enum
+@immutable
 final class UniversalEnumClass extends UniversalDataClass {
   /// Constructor for [UniversalEnumClass]
   const UniversalEnumClass({
@@ -39,8 +40,9 @@ final class UniversalEnumClass extends UniversalDataClass {
       super.hashCode ^ type.hashCode ^ items.hashCode ^ defaultValue.hashCode;
 
   @override
-  String toString() =>
-      'UniversalEnumClass(\ntype: $type,\nitems: $items,\ndefaultValue: $defaultValue\n)';
+  String toString() => 'UniversalEnumClass(type: $type, '
+      'items: $items, '
+      'defaultValue: $defaultValue)';
 }
 
 /// Universal template for enum item

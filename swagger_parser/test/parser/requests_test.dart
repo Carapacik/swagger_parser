@@ -25,7 +25,10 @@ void main() {
               name: 'postApiAuthRegister',
               requestType: HttpRequestType.post,
               route: '/api/Auth/register',
-              returnType: UniversalType(type: 'string'),
+              returnType: UniversalType(
+                type: 'string',
+                isRequired: true,
+              ),
               contentType: 'text/json',
               parameters: [
                 UniversalRequestType(
@@ -34,7 +37,7 @@ void main() {
                     type: 'RegisterUserDto',
                     name: 'body',
                     jsonKey: 'body',
-                    isRequired: false,
+                    isRequired: true,
                   ),
                 ),
               ],
@@ -49,7 +52,10 @@ void main() {
               name: 'getApiUserInfo',
               requestType: HttpRequestType.get,
               route: '/api/User/info',
-              returnType: UniversalType(type: 'UserInfoDto'),
+              returnType: UniversalType(
+                type: 'UserInfoDto',
+                isRequired: true,
+              ),
               parameters: [
                 UniversalRequestType(
                   name: 'tags',
@@ -59,7 +65,7 @@ void main() {
                     description: 'tags to filter by',
                     jsonKey: 'tags',
                     arrayDepth: 1,
-                    isRequired: false,
+                    isRequired: true,
                   ),
                   parameterType: HttpParameterType.query,
                 ),
@@ -90,7 +96,7 @@ void main() {
                     type: 'file',
                     name: 'avatar',
                     jsonKey: 'avatar',
-                    isRequired: false,
+                    isRequired: true,
                   ),
                   parameterType: HttpParameterType.formData,
                 ),
@@ -101,7 +107,7 @@ void main() {
                     name: 'id',
                     format: 'int32',
                     jsonKey: 'id',
-                    isRequired: false,
+                    isRequired: true,
                   ),
                   parameterType: HttpParameterType.path,
                 ),
@@ -131,7 +137,10 @@ void main() {
               name: 'postApiAuthRegister',
               requestType: HttpRequestType.post,
               route: '/api/Auth/register',
-              returnType: UniversalType(type: 'string'),
+              returnType: UniversalType(
+                type: 'string',
+                isRequired: false,
+              ),
               parameters: [
                 UniversalRequestType(
                   parameterType: HttpParameterType.body,
@@ -139,7 +148,7 @@ void main() {
                     type: 'RegisterUserDto',
                     name: 'body',
                     jsonKey: 'body',
-                    isRequired: false,
+                    isRequired: true,
                   ),
                 ),
               ],
@@ -154,7 +163,10 @@ void main() {
               name: 'getApiUserInfo',
               requestType: HttpRequestType.get,
               route: '/api/User/info',
-              returnType: UniversalType(type: 'UserInfoDto'),
+              returnType: UniversalType(
+                type: 'UserInfoDto',
+                isRequired: true,
+              ),
               parameters: [
                 UniversalRequestType(
                   name: 'limit',
@@ -163,7 +175,7 @@ void main() {
                     name: 'limit',
                     format: 'int32',
                     jsonKey: 'limit',
-                    isRequired: false,
+                    isRequired: true,
                   ),
                   parameterType: HttpParameterType.query,
                 ),
@@ -174,7 +186,7 @@ void main() {
                     name: 'tags',
                     jsonKey: 'tags',
                     arrayDepth: 1,
-                    isRequired: false,
+                    isRequired: true,
                   ),
                   parameterType: HttpParameterType.query,
                 ),
@@ -194,7 +206,7 @@ void main() {
                     name: 'id',
                     format: 'int32',
                     jsonKey: 'id',
-                    isRequired: false,
+                    isRequired: true,
                   ),
                   parameterType: HttpParameterType.path,
                 ),
