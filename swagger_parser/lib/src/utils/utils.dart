@@ -84,14 +84,12 @@ String generatedFileComment({
             : '$_generatedCodeComment\n'
         : '';
 
-const _generatedCodeComment =
-    '''
+const _generatedCodeComment = '''
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 ''';
 
-const _ignoreLintsComment =
-    '''
+const _ignoreLintsComment = '''
 // ignore_for_file: type=lint, unused_import
 ''';
 
