@@ -36,6 +36,11 @@ final class UniversalRequestType {
 
   @override
   int get hashCode => name.hashCode ^ type.hashCode ^ parameterType.hashCode;
+
+  @override
+  String toString() => 'UniversalRequestType(name: $name, '
+      'type: $type, '
+      'parameterType: $parameterType)';
 }
 
 /// Type of parameter in rest client

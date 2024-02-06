@@ -33,4 +33,7 @@ final class UniversalRestClient {
 
   @override
   int get hashCode => name.hashCode ^ imports.hashCode ^ requests.hashCode;
+
+  @override
+  String toString() => 'UniversalRestClient(name: $name, requests: $requests)';
 }

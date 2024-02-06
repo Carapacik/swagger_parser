@@ -78,6 +78,13 @@ final class UniversalRequest {
       parameters.hashCode ^
       isMultiPart.hashCode ^
       isFormUrlEncoded.hashCode;
+
+  @override
+  String toString() => 'UniversalRequest(name: $name, '
+      'requestType: $requestType, '
+      'route: $route, '
+      'parameters: $parameters, '
+      'contentType: $contentType)';
 }
 
 /// Request type
