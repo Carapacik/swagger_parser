@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:path/path.dart' as p;
 import 'package:swagger_parser/src/utils/file_utils.dart';
 import 'package:swagger_parser/swagger_parser.dart';

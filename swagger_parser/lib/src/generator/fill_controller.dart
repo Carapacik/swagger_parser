@@ -94,7 +94,7 @@ final class FillController {
     );
   }
 
-  /// TODO
+  /// Return [GeneratedFile] with all exports from all files
   GeneratedFile fillExportFile({
     required List<GeneratedFile> restClients,
     required List<GeneratedFile> dataClasses,

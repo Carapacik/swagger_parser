@@ -2,9 +2,9 @@ import '../generator/models/universal_data_class.dart';
 import 'case_utils.dart';
 import 'dart_keywords.dart';
 
-/// TODO
+/// Extension for utils
 extension StringTypeX on String {
-  /// TODO
+  /// Convert string to dart type
   String toDartType([String? format]) => switch (this) {
         'integer' => 'int',
         'number' => switch (format) {
@@ -24,7 +24,7 @@ extension StringTypeX on String {
         _ => this
       };
 
-  /// TODO
+  /// Convert string to kotlin type
   String toKotlinType([String? format]) => switch (this) {
         'integer' => 'Int',
         'number' => switch (format) {
@@ -52,7 +52,7 @@ const _objectConst = 'object';
 int _uniqueObjectCounter = 0;
 int _uniqueEnumCounter = 0;
 
-/// TODO
+/// Unique name for object classes
 String uniqueName({bool isEnum = false}) {
   final String name;
   if (isEnum) {

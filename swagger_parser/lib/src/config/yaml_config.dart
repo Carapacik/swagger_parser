@@ -335,7 +335,7 @@ final class YamlConfig {
     );
   }
 
-  /// TODO
+  /// Parse from given arguments many yaml configs
   static List<YamlConfig> parseConfigsFromYamlFile(List<String> arguments) {
     final parser = ArgParser()..addOption('file', abbr: 'f');
     final configFile = getConfigFile(
@@ -408,30 +408,78 @@ final class YamlConfig {
     return configs;
   }
 
-  /// TODO: docs for each parameter
+  /// {@nodoc}
   final String name;
+
+  /// {@nodoc}
   final String outputDirectory;
+
+  /// {@nodoc}
   final String? schemaPath;
+
+  /// {@nodoc}
   final String? schemaUrl;
+
+  /// {@nodoc}
   final bool? requiredByDefault;
+
+  /// {@nodoc}
   final bool? schemaFromUrlToFile;
+
+  /// {@nodoc}
   final PreferSchemaSource? preferSchemaSource;
+
+  /// {@nodoc}
   final ProgrammingLanguage? language;
+
+  /// {@nodoc}
   final JsonSerializer? jsonSerializer;
+
+  /// {@nodoc}
   final String? clientPostfix;
+
+  /// {@nodoc}
   final bool? rootClient;
+
+  /// {@nodoc}
   final String? rootClientName;
+
+  /// {@nodoc}
   final bool? exportFile;
+
+  /// {@nodoc}
   final bool? squashClients;
+
+  /// {@nodoc}
   final bool? pathMethodName;
+
+  /// {@nodoc}
   final bool? putClientsInFolder;
+
+  /// {@nodoc}
   final bool? putInFolder;
+
+  /// {@nodoc}
   final bool? enumsToJson;
+
+  /// {@nodoc}
   final bool? enumsPrefix;
+
+  /// {@nodoc}
   final bool? unknownEnumValue;
+
+  /// {@nodoc}
   final bool? markFilesAsGenerated;
+
+  /// {@nodoc}
   final String? defaultContentType;
+
+  /// {@nodoc}
   final bool? originalHttpResponse;
+
+  /// {@nodoc}
   final List<ReplacementRule> replacementRules;
+
+  /// {@nodoc}
   final List<String> skipParameters;
 }

@@ -15,28 +15,28 @@
                 "type": "object",
                 "properties": {
                   "files": {
-                      "type": "array",
-                      "description": "Sample List of Files",
-                      "items": {
-                        "type": "string",
-                        "format": "binary"
-                      }
+                    "type": "array",
+                    "description": "Sample List of Files",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
                   },
                   "address": {
-                      "description": "Sample Address",
-                      "type": "object",
-                      "properties": {
-                        "street": {
-                            "description": "Sample Street.",
-                            "type": "string"
-                        } 
+                    "description": "Sample Address",
+                    "type": "object",
+                    "properties": {
+                      "street": {
+                        "description": "Sample Street.",
+                        "type": "string"
                       }
+                    }
                   },
                   "image": {
                     "description": "Sample Image",
-                      "type": "string",
-                      "format": "binary",
-                      "nullable": true
+                    "type": "string",
+                    "format": "binary",
+                    "nullable": true
                   }
                 },
                 "required": [

@@ -237,7 +237,7 @@ final class Generator {
     return _fillContent();
   }
 
-  // TODO
+  /// Fetch schema from prefer source
   Future<void> fetchSchemaContent([
     PreferSchemaSource? preferSchemeSource,
   ]) async {

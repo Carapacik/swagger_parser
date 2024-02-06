@@ -17,14 +17,14 @@ abstract class ClientClient {
   factory ClientClient(Dio dio, {String? baseUrl}) = _ClientClient;
 
   /// Test.
-  /// 
+  ///
   /// Test.
-  /// 
+  ///
   /// [files] - Sample List of Files.
-  /// 
+  ///
   /// [address] - Sample Address.
   /// Name not received and was auto-generated.
-  /// 
+  ///
   /// [image] - Sample Image.
   @MultiPart()
   @GET('/test-multipart')
