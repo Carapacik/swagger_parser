@@ -32,6 +32,7 @@ final class Generator {
     String? schemaContent,
     bool? isYaml,
     bool? schemaFromUrlToFile,
+    bool? requiredByDefault,
     PreferSchemaSource? preferSchemeSource,
     ProgrammingLanguage? language,
     String? name,
@@ -59,6 +60,7 @@ final class Generator {
         _schemaFromUrlToFile = schemaFromUrlToFile ?? true,
         _preferSchemeSource = preferSchemeSource ?? PreferSchemaSource.url,
         _outputDirectory = outputDirectory,
+        _requiredByDefault = requiredByDefault ?? true,
         _name = name,
         _programmingLanguage = language ?? ProgrammingLanguage.dart,
         _jsonSerializer = jsonSerializer ?? JsonSerializer.jsonSerializable,
@@ -144,6 +146,11 @@ final class Generator {
   /// Root client name
   final String _rootClientName;
 
+  /// It is used if the value does not have the annotations 'required' and 'nullable'.
+  /// If the value is 'true', then value be 'required',
+  /// if the value is 'false', then 'nullable'.
+  final bool _requiredByDefault;
+
   /// Generate export file
   final bool _exportFile;
 
@@ -187,13 +194,13 @@ final class Generator {
   final List<String> _skipParameters;
 
   /// Result open api info
-  late final OpenApiInfo _openApiInfo;
+  late OpenApiInfo _openApiInfo;
 
   /// Result data classes
-  late final Iterable<UniversalDataClass> _dataClasses;
+  late Iterable<UniversalDataClass> _dataClasses;
 
   /// Result rest clients
-  late final Iterable<UniversalRestClient> _restClients;
+  late Iterable<UniversalRestClient> _restClients;
 
   int _totalFiles = 0;
   int _totalLines = 0;
@@ -230,6 +237,7 @@ final class Generator {
     return _fillContent();
   }
 
+  /// Fetch schema from prefer source
   Future<void> fetchSchemaContent([
     PreferSchemaSource? preferSchemeSource,
   ]) async {
@@ -294,8 +302,9 @@ final class Generator {
       originalHttpResponse: _originalHttpResponse,
       defaultContentType: _defaultContentType,
       skipParameters: _skipParameters,
+      requiredByDefault: _requiredByDefault,
     );
-    _openApiInfo = parser.parseOpenApiInfo();
+    _openApiInfo = parser.openApiInfo;
     _restClients = parser.parseRestClients();
     _dataClasses = parser.parseDataClasses();
   }

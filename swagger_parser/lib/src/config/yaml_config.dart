@@ -9,7 +9,8 @@ import '../generator/models/replacement_rule.dart';
 import '../utils/file_utils.dart';
 import 'config_exception.dart';
 
-/// Handles parsing Yaml config file
+/// Handles parsing config file
+///
 /// If file is specified arguments are parsed from it
 /// Otherwise it tries to access 'swagger_parser.yaml'
 /// which is a default name for config file
@@ -26,6 +27,7 @@ final class YamlConfig {
     this.schemaUrl,
     this.schemaFromUrlToFile,
     this.preferSchemaSource,
+    this.requiredByDefault,
     this.language,
     this.jsonSerializer,
     this.rootClient,
@@ -117,6 +119,13 @@ final class YamlConfig {
       );
     }
 
+    final requiredByDefault = yamlConfig['required_by_default'];
+    if (requiredByDefault is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'required_by_default' must be bool.",
+      );
+    }
+
     PreferSchemaSource? preferSchemaSource;
     final rawPreferSchemeSource =
         yamlConfig['prefer_schema_source']?.toString();
@@ -146,13 +155,12 @@ final class YamlConfig {
       jsonSerializer = JsonSerializer.fromString(rawJsonSerializer);
       if (jsonSerializer == null) {
         throw ConfigException(
-          "'json_serializer' field must be contained in ${JsonSerializer.values.map((e) => e.name)}.",
+          "'json_serializer' field must be contained in ${JsonSerializer.values.map((e) => e.value)}.",
         );
       }
     }
 
-    final rootClient =
-        yamlConfig['root_client'] ?? yamlConfig['root_interface'];
+    final rootClient = yamlConfig['root_client'];
     if (rootClient is! bool?) {
       throw const ConfigException(
         "Config parameter 'root_client' must be bool.",
@@ -302,6 +310,7 @@ final class YamlConfig {
       schemaUrl: schemaUrl,
       schemaFromUrlToFile:
           schemaFromUrlToFile ?? rootConfig?.schemaFromUrlToFile,
+      requiredByDefault: requiredByDefault ?? rootConfig?.requiredByDefault,
       preferSchemaSource: preferSchemaSource ?? rootConfig?.preferSchemaSource,
       language: language ?? rootConfig?.language,
       jsonSerializer: jsonSerializer ?? rootConfig?.jsonSerializer,
@@ -326,6 +335,7 @@ final class YamlConfig {
     );
   }
 
+  /// Parse from given arguments many yaml configs
   static List<YamlConfig> parseConfigsFromYamlFile(List<String> arguments) {
     final parser = ArgParser()..addOption('file', abbr: 'f');
     final configFile = getConfigFile(
@@ -398,28 +408,78 @@ final class YamlConfig {
     return configs;
   }
 
+  /// {@nodoc}
   final String name;
+
+  /// {@nodoc}
   final String outputDirectory;
+
+  /// {@nodoc}
   final String? schemaPath;
+
+  /// {@nodoc}
   final String? schemaUrl;
+
+  /// {@nodoc}
+  final bool? requiredByDefault;
+
+  /// {@nodoc}
   final bool? schemaFromUrlToFile;
+
+  /// {@nodoc}
   final PreferSchemaSource? preferSchemaSource;
+
+  /// {@nodoc}
   final ProgrammingLanguage? language;
+
+  /// {@nodoc}
   final JsonSerializer? jsonSerializer;
+
+  /// {@nodoc}
   final String? clientPostfix;
+
+  /// {@nodoc}
   final bool? rootClient;
+
+  /// {@nodoc}
   final String? rootClientName;
+
+  /// {@nodoc}
   final bool? exportFile;
+
+  /// {@nodoc}
   final bool? squashClients;
+
+  /// {@nodoc}
   final bool? pathMethodName;
+
+  /// {@nodoc}
   final bool? putClientsInFolder;
+
+  /// {@nodoc}
   final bool? putInFolder;
+
+  /// {@nodoc}
   final bool? enumsToJson;
+
+  /// {@nodoc}
   final bool? enumsPrefix;
+
+  /// {@nodoc}
   final bool? unknownEnumValue;
+
+  /// {@nodoc}
   final bool? markFilesAsGenerated;
+
+  /// {@nodoc}
   final String? defaultContentType;
+
+  /// {@nodoc}
   final bool? originalHttpResponse;
+
+  /// {@nodoc}
   final List<ReplacementRule> replacementRules;
+
+  /// {@nodoc}
   final List<String> skipParameters;
 }

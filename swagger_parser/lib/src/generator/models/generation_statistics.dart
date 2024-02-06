@@ -1,4 +1,7 @@
+import 'package:meta/meta.dart';
+
 /// Contains statistics about generation
+@immutable
 class GenerationStatistics {
   /// Constructor for [GenerationStatistics]
   const GenerationStatistics({
@@ -29,14 +32,13 @@ class GenerationStatistics {
   final Duration timeElapsed;
 
   /// Merge two [GenerationStatistics] into one
-  GenerationStatistics merge(GenerationStatistics other) {
-    return GenerationStatistics(
-      totalFiles: totalFiles + other.totalFiles,
-      totalLines: totalLines + other.totalLines,
-      totalRestClients: totalRestClients + other.totalRestClients,
-      totalRequests: totalRequests + other.totalRequests,
-      totalDataClasses: totalDataClasses + other.totalDataClasses,
-      timeElapsed: timeElapsed + other.timeElapsed,
-    );
-  }
+  GenerationStatistics merge(GenerationStatistics other) =>
+      GenerationStatistics(
+        totalFiles: totalFiles + other.totalFiles,
+        totalLines: totalLines + other.totalLines,
+        totalRestClients: totalRestClients + other.totalRestClients,
+        totalRequests: totalRequests + other.totalRequests,
+        totalDataClasses: totalDataClasses + other.totalDataClasses,
+        timeElapsed: timeElapsed + other.timeElapsed,
+      );
 }

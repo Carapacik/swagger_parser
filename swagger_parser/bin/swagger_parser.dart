@@ -28,11 +28,7 @@ Future<void> main(List<String> arguments) async {
         totalStats ??= stats;
         successSchemasCount++;
       } on Object catch (e, s) {
-        schemaFailedMessage(
-          name: config.name,
-          error: e,
-          stack: s,
-        );
+        schemaFailedMessage(e, s, name: config.name);
       }
     }
 

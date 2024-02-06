@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_redundant_argument_values
-
 import 'package:swagger_parser/src/generator/fill_controller.dart';
 import 'package:swagger_parser/src/generator/models/programming_language.dart';
 import 'package:swagger_parser/src/generator/models/universal_request.dart';
@@ -500,14 +498,20 @@ interface ClassNameClient {
             name: 'getStringRequest',
             requestType: HttpRequestType.get,
             route: '/string',
-            returnType: UniversalType(type: 'string'),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [],
           ),
           UniversalRequest(
             name: 'getBoolRequest',
             requestType: HttpRequestType.get,
             route: '/boolean',
-            returnType: UniversalType(type: 'boolean'),
+            returnType: UniversalType(
+              type: 'boolean',
+              isRequired: true,
+            ),
             parameters: [],
           ),
         ],
@@ -553,14 +557,20 @@ abstract class ClassNameClient {
             name: 'getStringRequest',
             requestType: HttpRequestType.get,
             route: '/string',
-            returnType: UniversalType(type: 'string'),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [],
           ),
           UniversalRequest(
             name: 'getBoolRequest',
             requestType: HttpRequestType.get,
             route: '/boolean',
-            returnType: UniversalType(type: 'boolean'),
+            returnType: UniversalType(
+              type: 'boolean',
+              isRequired: true,
+            ),
             parameters: [],
           ),
         ],
@@ -605,6 +615,7 @@ interface ClassNameClient {
                   type: 'string',
                   arrayDepth: 1,
                   name: 'list1',
+                  isRequired: true,
                 ),
                 name: 'list1',
               ),
@@ -614,6 +625,7 @@ interface ClassNameClient {
                   type: 'string',
                   arrayDepth: 3,
                   name: 'list2',
+                  isRequired: true,
                 ),
               ),
             ],
@@ -622,7 +634,11 @@ interface ClassNameClient {
             name: 'listOfList',
             requestType: HttpRequestType.get,
             route: '/list-of-list',
-            returnType: UniversalType(type: 'string', arrayDepth: 2),
+            returnType: UniversalType(
+              type: 'string',
+              arrayDepth: 2,
+              isRequired: true,
+            ),
             parameters: [],
           ),
         ],
@@ -669,6 +685,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   arrayDepth: 1,
                   name: 'list1',
+                  isRequired: true,
                 ),
                 name: 'list1',
               ),
@@ -678,6 +695,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   arrayDepth: 3,
                   name: 'list2',
+                  isRequired: true,
                 ),
               ),
             ],
@@ -686,7 +704,11 @@ abstract class ClassNameClient {
             name: 'listOfList',
             requestType: HttpRequestType.get,
             route: '/list-of-list',
-            returnType: UniversalType(type: 'string', arrayDepth: 2),
+            returnType: UniversalType(
+              type: 'string',
+              arrayDepth: 2,
+              isRequired: true,
+            ),
             parameters: [],
           ),
         ],
@@ -723,11 +745,18 @@ interface ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/',
-            returnType: UniversalType(type: 'string'),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
-                type: UniversalType(type: 'string', name: 'alex'),
+                type: UniversalType(
+                  type: 'string',
+                  name: 'alex',
+                  isRequired: true,
+                ),
                 name: 'name',
               ),
             ],
@@ -764,11 +793,18 @@ abstract class ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/',
-            returnType: UniversalType(type: 'string'),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
-                type: UniversalType(type: 'string', name: 'alex'),
+                type: UniversalType(
+                  type: 'string',
+                  name: 'alex',
+                  isRequired: true,
+                ),
                 name: 'name',
               ),
             ],
@@ -807,22 +843,38 @@ interface ClassNameClient {
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.header,
-                type: UniversalType(type: 'string', name: 'token'),
+                type: UniversalType(
+                  type: 'string',
+                  name: 'token',
+                  isRequired: true,
+                ),
                 name: 'Authorization',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
-                type: UniversalType(type: 'string', name: 'alex'),
+                type: UniversalType(
+                  type: 'string',
+                  name: 'alex',
+                  isRequired: true,
+                ),
                 name: 'name',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.path,
-                type: UniversalType(type: 'int', name: 'id'),
+                type: UniversalType(
+                  type: 'int',
+                  name: 'id',
+                  isRequired: true,
+                ),
                 name: 'id',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
-                type: UniversalType(type: 'Another', name: 'another'),
+                type: UniversalType(
+                  type: 'Another',
+                  name: 'another',
+                  isRequired: true,
+                ),
               ),
             ],
           ),
@@ -865,22 +917,38 @@ abstract class ClassNameClient {
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.header,
-                type: UniversalType(type: 'string', name: 'token'),
+                type: UniversalType(
+                  type: 'string',
+                  name: 'token',
+                  isRequired: true,
+                ),
                 name: 'Authorization',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
-                type: UniversalType(type: 'string', name: 'alex'),
+                type: UniversalType(
+                  type: 'string',
+                  name: 'alex',
+                  isRequired: true,
+                ),
                 name: 'name',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.path,
-                type: UniversalType(type: 'int', name: 'id'),
+                type: UniversalType(
+                  type: 'int',
+                  name: 'id',
+                  isRequired: true,
+                ),
                 name: 'id',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
-                type: UniversalType(type: 'Another', name: 'another'),
+                type: UniversalType(
+                  type: 'Another',
+                  name: 'another',
+                  isRequired: true,
+                ),
               ),
             ],
           ),
@@ -922,12 +990,20 @@ interface ClassNameClient {
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.header,
-                type: UniversalType(type: 'string', name: 'token'),
+                type: UniversalType(
+                  type: 'string',
+                  name: 'token',
+                  isRequired: true,
+                ),
                 name: 'Authorization',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
-                type: UniversalType(type: 'string', name: 'alex'),
+                type: UniversalType(
+                  type: 'string',
+                  name: 'alex',
+                  isRequired: true,
+                ),
                 name: 'name',
               ),
               UniversalRequestType(
@@ -936,17 +1012,26 @@ interface ClassNameClient {
                   type: 'string',
                   format: 'binary',
                   name: 'file',
+                  isRequired: true,
                 ),
                 name: 'file',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
-                type: UniversalType(type: 'file', name: 'secondFile'),
+                type: UniversalType(
+                  type: 'file',
+                  name: 'secondFile',
+                  isRequired: true,
+                ),
                 name: 'file2',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
-                type: UniversalType(type: 'boolean', name: 'parsed'),
+                type: UniversalType(
+                  type: 'boolean',
+                  name: 'parsed',
+                  isRequired: true,
+                ),
                 name: 'parsed-if',
               ),
             ],
@@ -955,12 +1040,19 @@ interface ClassNameClient {
             name: 'singleEntity',
             requestType: HttpRequestType.post,
             route: '/single',
-            returnType: UniversalType(type: 'boolean'),
+            returnType: UniversalType(
+              type: 'boolean',
+              isRequired: true,
+            ),
             contentType: 'multipart/form-data',
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
-                type: UniversalType(type: 'AnotherFile', name: 'file'),
+                type: UniversalType(
+                  type: 'AnotherFile',
+                  name: 'file',
+                  isRequired: true,
+                ),
               ),
             ],
           ),
@@ -1017,12 +1109,20 @@ abstract class ClassNameClient {
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.header,
-                type: UniversalType(type: 'string', name: 'token'),
+                type: UniversalType(
+                  type: 'string',
+                  name: 'token',
+                  isRequired: true,
+                ),
                 name: 'Authorization',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
-                type: UniversalType(type: 'string', name: 'alex'),
+                type: UniversalType(
+                  type: 'string',
+                  name: 'alex',
+                  isRequired: true,
+                ),
                 name: 'name',
               ),
               UniversalRequestType(
@@ -1031,17 +1131,26 @@ abstract class ClassNameClient {
                   type: 'string',
                   format: 'binary',
                   name: 'file',
+                  isRequired: true,
                 ),
                 name: 'file',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
-                type: UniversalType(type: 'file', name: 'secondFile'),
+                type: UniversalType(
+                  type: 'file',
+                  name: 'secondFile',
+                  isRequired: true,
+                ),
                 name: 'file2',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
-                type: UniversalType(type: 'boolean', name: 'parsed'),
+                type: UniversalType(
+                  type: 'boolean',
+                  name: 'parsed',
+                  isRequired: true,
+                ),
                 name: 'parsed-if',
               ),
             ],
@@ -1050,12 +1159,19 @@ abstract class ClassNameClient {
             name: 'singleEntity',
             requestType: HttpRequestType.post,
             route: '/single',
-            returnType: UniversalType(type: 'boolean'),
+            returnType: UniversalType(
+              type: 'boolean',
+              isRequired: true,
+            ),
             contentType: 'multipart/form-data',
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
-                type: UniversalType(type: 'AnotherFile', name: 'file'),
+                type: UniversalType(
+                  type: 'AnotherFile',
+                  name: 'file',
+                  isRequired: true,
+                ),
               ),
             ],
           ),
@@ -1105,12 +1221,20 @@ interface ClassNameClient {
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.header,
-                type: UniversalType(type: 'string', name: 'token'),
+                type: UniversalType(
+                  type: 'string',
+                  name: 'token',
+                  isRequired: true,
+                ),
                 name: 'Authorization',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
-                type: UniversalType(type: 'Lol', name: 'lol'),
+                type: UniversalType(
+                  type: 'Lol',
+                  name: 'lol',
+                  isRequired: true,
+                ),
               ),
             ],
           ),
@@ -1155,12 +1279,20 @@ abstract class ClassNameClient {
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.header,
-                type: UniversalType(type: 'string', name: 'token'),
+                type: UniversalType(
+                  type: 'string',
+                  name: 'token',
+                  isRequired: true,
+                ),
                 name: 'Authorization',
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
-                type: UniversalType(type: 'Lol', name: 'lol'),
+                type: UniversalType(
+                  type: 'Lol',
+                  name: 'lol',
+                  isRequired: true,
+                ),
               ),
             ],
           ),
@@ -1196,7 +1328,10 @@ interface ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/{id}',
-            returnType: UniversalType(type: 'string'),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1262,7 +1397,10 @@ abstract class ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/{id}',
-            returnType: UniversalType(type: 'string'),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1334,6 +1472,7 @@ interface ClassNameClient {
                   type: 'string',
                   name: 'token',
                   defaultValue: 'message123',
+                  isRequired: true,
                 ),
                 name: 'Authorization',
               ),
@@ -1344,6 +1483,7 @@ interface ClassNameClient {
                   format: 'double',
                   name: 'age',
                   defaultValue: '17',
+                  isRequired: true,
                 ),
                 name: 'age',
               ),
@@ -1353,6 +1493,7 @@ interface ClassNameClient {
                   type: 'boolean',
                   name: 'adult',
                   defaultValue: 'false',
+                  isRequired: true,
                 ),
                 name: 'adult',
               ),
@@ -1363,6 +1504,7 @@ interface ClassNameClient {
                   name: 'unit',
                   defaultValue: 'CELSIUS',
                   enumType: 'string',
+                  isRequired: true,
                 ),
                 name: 'unit',
               ),
@@ -1373,6 +1515,7 @@ interface ClassNameClient {
                   name: 'soma',
                   defaultValue: '1',
                   enumType: 'int',
+                  isRequired: true,
                 ),
                 name: 'soma',
               ),
@@ -1425,6 +1568,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   name: 'token',
                   defaultValue: 'message123',
+                  isRequired: true,
                 ),
                 name: 'Authorization',
               ),
@@ -1435,6 +1579,7 @@ abstract class ClassNameClient {
                   format: 'double',
                   name: 'age',
                   defaultValue: '17',
+                  isRequired: true,
                 ),
                 name: 'age',
               ),
@@ -1444,6 +1589,7 @@ abstract class ClassNameClient {
                   type: 'boolean',
                   name: 'adult',
                   defaultValue: 'false',
+                  isRequired: true,
                 ),
                 name: 'adult',
               ),
@@ -1454,6 +1600,7 @@ abstract class ClassNameClient {
                   name: 'unit',
                   defaultValue: 'CELSIUS',
                   enumType: 'string',
+                  isRequired: true,
                 ),
                 name: 'unit',
               ),
@@ -1464,6 +1611,7 @@ abstract class ClassNameClient {
                   name: 'soma',
                   defaultValue: '1',
                   enumType: 'int',
+                  isRequired: true,
                 ),
                 name: 'soma',
               ),
@@ -1501,7 +1649,11 @@ interface ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/request',
-            returnType: UniversalType(type: 'string', nullable: true),
+            returnType: UniversalType(
+              type: 'string',
+              nullable: true,
+              isRequired: false,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1520,7 +1672,10 @@ interface ClassNameClient {
             name: 'getRequest2',
             requestType: HttpRequestType.get,
             route: '/request2',
-            returnType: UniversalType(type: 'string', nullable: false),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1572,7 +1727,10 @@ abstract class ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/request',
-            returnType: UniversalType(type: 'string'),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1601,7 +1759,6 @@ abstract class ClassNameClient {
                   type: 'string',
                   name: 'list3',
                   isRequired: true,
-                  nullable: false,
                 ),
                 name: 'requiredButNotNullable',
               ),
@@ -1611,7 +1768,6 @@ abstract class ClassNameClient {
                   type: 'string',
                   name: 'list4',
                   isRequired: false,
-                  nullable: false,
                 ),
                 name: 'notRequiredAndNotNullable',
               ),
@@ -1663,7 +1819,11 @@ abstract class ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/request',
-            returnType: UniversalType(type: 'string', nullable: true),
+            returnType: UniversalType(
+              type: 'string',
+              nullable: true,
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1671,7 +1831,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   arrayDepth: 4,
                   name: 'deepList',
-                  isRequired: false,
+                  isRequired: true,
                   nullable: true,
                 ),
                 name: 'deepArrayNullable',
@@ -1682,7 +1842,10 @@ abstract class ClassNameClient {
             name: 'getRequest2',
             requestType: HttpRequestType.get,
             route: '/request2',
-            returnType: UniversalType(type: 'string', nullable: false),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1690,7 +1853,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   arrayDepth: 4,
                   name: 'deepList',
-                  isRequired: false,
+                  isRequired: true,
                   nullable: true,
                 ),
                 name: 'deepArrayNullable',
@@ -1730,7 +1893,10 @@ interface ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/request',
-            returnType: UniversalType(type: 'string'),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1759,7 +1925,6 @@ interface ClassNameClient {
                   type: 'string',
                   name: 'list3',
                   isRequired: true,
-                  nullable: false,
                 ),
                 name: 'requiredButNotNullable',
               ),
@@ -1769,7 +1934,6 @@ interface ClassNameClient {
                   type: 'string',
                   name: 'list4',
                   isRequired: false,
-                  nullable: false,
                 ),
                 name: 'notRequiredAndNotNullable',
               ),
@@ -1887,7 +2051,11 @@ interface ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/request',
-            returnType: UniversalType(type: 'string', nullable: true),
+            returnType: UniversalType(
+              type: 'string',
+              nullable: true,
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1906,7 +2074,10 @@ interface ClassNameClient {
             name: 'getRequest2',
             requestType: HttpRequestType.get,
             route: '/request2',
-            returnType: UniversalType(type: 'string', nullable: false),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1958,7 +2129,10 @@ abstract class ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/request',
-            returnType: UniversalType(type: 'string'),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1987,7 +2161,6 @@ abstract class ClassNameClient {
                   type: 'string',
                   name: 'list3',
                   isRequired: true,
-                  nullable: false,
                 ),
                 name: 'requiredButNotNullable',
               ),
@@ -1997,7 +2170,6 @@ abstract class ClassNameClient {
                   type: 'string',
                   name: 'list4',
                   isRequired: false,
-                  nullable: false,
                 ),
                 name: 'notRequiredAndNotNullable',
               ),
@@ -2049,7 +2221,11 @@ abstract class ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/request',
-            returnType: UniversalType(type: 'string', nullable: true),
+            returnType: UniversalType(
+              type: 'string',
+              nullable: true,
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -2057,7 +2233,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   arrayDepth: 4,
                   name: 'deepList',
-                  isRequired: false,
+                  isRequired: true,
                   nullable: true,
                 ),
                 name: 'deepArrayNullable',
@@ -2068,7 +2244,10 @@ abstract class ClassNameClient {
             name: 'getRequest2',
             requestType: HttpRequestType.get,
             route: '/request2',
-            returnType: UniversalType(type: 'string', nullable: false),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -2076,7 +2255,7 @@ abstract class ClassNameClient {
                   type: 'string',
                   arrayDepth: 4,
                   name: 'deepList',
-                  isRequired: false,
+                  isRequired: true,
                   nullable: true,
                 ),
                 name: 'deepArrayNullable',
@@ -2116,7 +2295,10 @@ interface ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/request',
-            returnType: UniversalType(type: 'string'),
+            returnType: UniversalType(
+              type: 'string',
+              isRequired: true,
+            ),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -2145,7 +2327,6 @@ interface ClassNameClient {
                   type: 'string',
                   name: 'list3',
                   isRequired: true,
-                  nullable: false,
                 ),
                 name: 'requiredButNotNullable',
               ),
@@ -2155,7 +2336,6 @@ interface ClassNameClient {
                   type: 'string',
                   name: 'list4',
                   isRequired: false,
-                  nullable: false,
                 ),
                 name: 'notRequiredAndNotNullable',
               ),
