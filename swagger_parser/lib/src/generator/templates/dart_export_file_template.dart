@@ -22,5 +22,5 @@ String dartExportFileTemplate({
       '${restClientsNames.map((e) => "export '$e';").join('\n')}'
       '${restClientsNames.isNotEmpty ? '\n\n' : ''}'
       '${dataClassesNames.isNotEmpty ? '// Data classes\n' : ''}'
-      '${dataClassesNames.map((e) => "export '$e';").join('\n')}';
+      '${dataClassesNames.map((e) => "export '$e';").join('\n')}\n';
 }

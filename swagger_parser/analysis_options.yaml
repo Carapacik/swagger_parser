@@ -1,5 +1,10 @@
 include: package:carapacik_lints/core.yaml
 
+
+analyzer:
+  exclude:
+    - 'test/e2e/tests/**'
+
 linter:
   rules:
     always_use_package_imports: false
