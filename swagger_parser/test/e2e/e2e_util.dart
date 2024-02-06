@@ -22,20 +22,26 @@ Future<void> e2eTest(
   final testFolder = p.join('test', 'e2e', 'tests', testName);
   final schemaPath = p.join(testFolder, 'openapi.json');
   final expectedFolderPath = p.join(testFolder, 'expected_files');
+  final generatedFolderPath = p.join(testFolder, 'generated_files');
   final configFile = schemaFile(schemaPath);
   final schemaContent = configFile!.readAsStringSync();
 
-  final generator = getGenerator.call(expectedFolderPath, schemaContent);
+  final generator = getGenerator.call(
+    generateExpectedFiles ? expectedFolderPath : generatedFolderPath,
+    schemaContent,
+  );
 
-  if (generateExpectedFiles) {
-    await generator.generateFiles();
-    return;
-  }
+  await generator.generateFiles();
 
-  final generatedFiles = await generator.generateContent();
+  await Process.run('dart', ['format', testFolder]);
 
   // Getting a list of all files from expectedFolderPath
   final expectedFiles = Directory(expectedFolderPath)
+      .listSync(recursive: true, followLinks: false)
+      .whereType<File>()
+      .toList();
+
+  final generatedFiles = Directory(generatedFolderPath)
       .listSync(recursive: true, followLinks: false)
       .whereType<File>()
       .toList();
@@ -45,17 +51,21 @@ Future<void> e2eTest(
         p.relative(file.path, from: expectedFolderPath).replaceAll(r'\', '/');
 
     final generatedFile = generatedFiles.firstWhere(
-      (gFile) => gFile.name == relativePath,
+      (gFile) {
+        final relPath = p
+            .relative(gFile.path, from: generatedFolderPath)
+            .replaceAll(r'\', '/');
+        return relPath == relativePath;
+      },
       orElse: () => throw Exception(
         'File not found in generated content: $relativePath',
       ),
     );
 
     // Comparing the contents of the file
-    final fileContent = file.readAsStringSync();
     expect(
-      generatedFile.contents,
-      fileContent,
+      generatedFile.readAsStringSync(),
+      file.readAsStringSync(),
       reason: 'Contents do not match for file: $relativePath',
     );
   }
@@ -66,4 +76,7 @@ Future<void> e2eTest(
     expectedFiles.length,
     reason: 'Number of files does not match',
   );
+
+  // Deleting the generated files
+  Directory(generatedFolderPath).deleteSync(recursive: true);
 }

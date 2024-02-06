@@ -13,6 +13,7 @@ class Object0 with _$Object0 {
     /// Sample Street.
     String? street,
   }) = _Object0;
-  
-  factory Object0.fromJson(Map<String, Object?> json) => _$Object0FromJson(json);
+
+  factory Object0.fromJson(Map<String, Object?> json) =>
+      _$Object0FromJson(json);
 }
