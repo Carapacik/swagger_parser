@@ -1,8 +1,10 @@
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 
 import 'universal_request.dart';
 
 /// Universal template for containing information about Rest client
+@immutable
 final class UniversalRestClient {
   /// Constructor for [UniversalRestClient]
   const UniversalRestClient({
@@ -31,4 +33,7 @@ final class UniversalRestClient {
 
   @override
   int get hashCode => name.hashCode ^ imports.hashCode ^ requests.hashCode;
+
+  @override
+  String toString() => 'UniversalRestClient(name: $name, requests: $requests)';
 }

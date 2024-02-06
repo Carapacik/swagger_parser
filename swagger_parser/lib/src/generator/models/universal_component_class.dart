@@ -1,6 +1,7 @@
 part of 'universal_data_class.dart';
 
 /// Universal template for containing information about component
+@immutable
 final class UniversalComponentClass extends UniversalDataClass {
   /// Constructor for [UniversalComponentClass]
   const UniversalComponentClass({
@@ -47,6 +48,8 @@ final class UniversalComponentClass extends UniversalDataClass {
       typeDef.hashCode;
 
   @override
-  String toString() =>
-      'UniversalComponentClass(\nimports: $imports,\nparameters: $parameters,\nallOf: $allOf,\ntypeDef: $typeDef\n)';
+  String toString() => 'UniversalComponentClass(imports: $imports, '
+      'parameters: $parameters, '
+      'allOf: $allOf, '
+      'typeDef: $typeDef)';
 }
