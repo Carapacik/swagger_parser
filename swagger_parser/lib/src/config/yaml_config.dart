@@ -9,7 +9,8 @@ import '../generator/models/replacement_rule.dart';
 import '../utils/file_utils.dart';
 import 'config_exception.dart';
 
-/// Handles parsing Yaml config file
+/// Handles parsing config file
+///
 /// If file is specified arguments are parsed from it
 /// Otherwise it tries to access 'swagger_parser.yaml'
 /// which is a default name for config file
