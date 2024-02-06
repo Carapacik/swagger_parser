@@ -8,8 +8,8 @@ void main() {
     test('multipart', () async {
       await e2eTest(
         'multipart',
-        (schemaContent) => Generator(
-          outputDirectory: '',
+        (outputDirectory, schemaContent) => Generator(
+          outputDirectory: outputDirectory,
           schemaContent: schemaContent,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,

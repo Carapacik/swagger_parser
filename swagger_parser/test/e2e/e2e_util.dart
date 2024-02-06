@@ -15,15 +15,22 @@ import 'package:test/test.dart';
 /// providing a reliable way to catch regressions or unintended changes in the code generation process.
 Future<void> e2eTest(
   String testName,
-  Generator Function(String schemaContent) getGenerator,
-) async {
+  Generator Function(String outputDirectory, String schemaContent)
+      getGenerator, {
+  bool generateExpectedFiles = false,
+}) async {
   final testFolder = p.join('test', 'e2e', 'tests', testName);
   final schemaPath = p.join(testFolder, 'openapi.json');
   final expectedFolderPath = p.join(testFolder, 'expected_files');
   final configFile = schemaFile(schemaPath);
   final schemaContent = configFile!.readAsStringSync();
 
-  final generator = getGenerator.call(schemaContent);
+  final generator = getGenerator.call(expectedFolderPath, schemaContent);
+
+  if (generateExpectedFiles) {
+    await generator.generateFiles();
+    return;
+  }
 
   final generatedFiles = await generator.generateContent();
 

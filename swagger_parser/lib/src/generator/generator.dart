@@ -194,13 +194,13 @@ final class Generator {
   final List<String> _skipParameters;
 
   /// Result open api info
-  late final OpenApiInfo _openApiInfo;
+  late OpenApiInfo _openApiInfo;
 
   /// Result data classes
-  late final Iterable<UniversalDataClass> _dataClasses;
+  late Iterable<UniversalDataClass> _dataClasses;
 
   /// Result rest clients
-  late final Iterable<UniversalRestClient> _restClients;
+  late Iterable<UniversalRestClient> _restClients;
 
   int _totalFiles = 0;
   int _totalLines = 0;

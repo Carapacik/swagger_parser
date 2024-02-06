@@ -42,7 +42,7 @@ String descriptionComment(
   final result = description.replaceAllMapped(
     lineStart,
     (m) =>
-        '${!tabForFirstLine && m.start == 0 ? '' : tab}/// ${m.start == 0 && m.end == description.length ? m[1] : addDot(m[1])}',
+        '${!tabForFirstLine && m.start == 0 ? '' : tab}///${m[1]!.trim().isEmpty ? '' : ' '}${m.start == 0 && m.end == description.length ? m[1] : addDot(m[1])}',
   );
 
   return '$result\n$end';
@@ -84,12 +84,14 @@ String generatedFileComment({
             : '$_generatedCodeComment\n'
         : '';
 
-const _generatedCodeComment = '''
+const _generatedCodeComment =
+    '''
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 ''';
 
-const _ignoreLintsComment = '''
+const _ignoreLintsComment =
+    '''
 // ignore_for_file: type=lint, unused_import
 ''';
 
