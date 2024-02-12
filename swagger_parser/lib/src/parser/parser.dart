@@ -382,35 +382,33 @@ class OpenApiParser {
                     [];
           }
 
-          if (properties.isNotEmpty) {
-            for (final e in properties.entries) {
-              final typeWithImport = _findType(
-                e.value as Map<String, dynamic>,
-                isRequired: requiredParameters.contains(e.key),
-              );
-              final currentType = typeWithImport.type;
-              if (typeWithImport.import != null) {
-                imports.add(typeWithImport.import!);
-              }
-              types.add(
-                UniversalRequestType(
-                  parameterType: HttpParameterType.part,
+          for (final e in properties.entries) {
+            final typeWithImport = _findType(
+              e.value as Map<String, dynamic>,
+              isRequired: requiredParameters.contains(e.key),
+            );
+            final currentType = typeWithImport.type;
+            if (typeWithImport.import != null) {
+              imports.add(typeWithImport.import!);
+            }
+            types.add(
+              UniversalRequestType(
+                parameterType: HttpParameterType.part,
+                name: e.key,
+                description: currentType.description,
+                type: UniversalType(
+                  type: currentType.type,
                   name: e.key,
                   description: currentType.description,
-                  type: UniversalType(
-                    type: currentType.type,
-                    name: e.key,
-                    description: currentType.description,
-                    format: currentType.format,
-                    defaultValue: currentType.defaultValue,
-                    isRequired: currentType.isRequired,
-                    nullable: currentType.nullable,
-                    arrayDepth: currentType.arrayDepth,
-                    arrayValueNullable: currentType.arrayValueNullable,
-                  ),
+                  format: currentType.format,
+                  defaultValue: currentType.defaultValue,
+                  isRequired: currentType.isRequired,
+                  nullable: currentType.nullable,
+                  arrayDepth: currentType.arrayDepth,
+                  arrayValueNullable: currentType.arrayValueNullable,
                 ),
-              );
-            }
+              ),
+            );
           }
         } else {
           final isRequired = requestBody[_requiredConst]?.toString().toBool();
