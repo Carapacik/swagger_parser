@@ -9,7 +9,5 @@ export 'rest_client.dart';
 export 'clients/client_client.dart';
 
 // Data classes
-export 'models/item.dart';
 export 'models/object0.dart';
 export 'models/object1.dart';
-export 'models/address.dart';

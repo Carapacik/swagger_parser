@@ -32,6 +32,10 @@ Future<void> e2eTest(
     schemaContent,
   );
 
+  if (generateExpectedFiles) {
+    Directory(expectedFolderPath).deleteSync(recursive: true);
+  }
+
   await generator.generateFiles();
 
   await Process.run('dart', ['format', testFolder]);

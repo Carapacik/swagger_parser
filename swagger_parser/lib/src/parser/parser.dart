@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
@@ -66,7 +65,7 @@ class OpenApiParser {
   final _objectClasses = <UniversalComponentClass>[];
   final _enumClasses = <UniversalEnumClass>{};
   final _usedNamesCount = <String, int>{};
-  final _skipObjectClasses = <UniversalComponentClass>[];
+  final _skipDataClasses = <String>[];
 
   static const _additionalPropertiesConst = 'additionalProperties';
   static const _allOfConst = 'allOf';
@@ -360,6 +359,8 @@ class OpenApiParser {
             );
 
             final type = typeWithImport.type.type;
+
+            _skipDataClasses.add(type);
 
             final components = _definitionFileContent[_componentsConst]
                 as Map<String, dynamic>;
@@ -661,7 +662,12 @@ class OpenApiParser {
           _definitionFileContent[_definitionsConst] as Map<String, dynamic>;
     }
     entities.forEach((key, value) {
+      if (_skipDataClasses.contains(key)) {
+        return;
+      }
+
       value as Map<String, dynamic>;
+
       var requiredParameters = <String>[];
       if (value case {_requiredConst: final List<dynamic> rawParameters}) {
         requiredParameters = rawParameters.map((e) => e.toString()).toList();
