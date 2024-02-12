@@ -21,7 +21,6 @@ void main() {
       await e2eTest(
         'multipart_request_with_ref',
         schemaFileName: 'openapi.yaml',
-        generateExpectedFiles: true,
         (outputDirectory, schemaContent) => Generator(
           outputDirectory: outputDirectory,
           schemaContent: schemaContent,

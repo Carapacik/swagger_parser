@@ -52,6 +52,14 @@ const _objectConst = 'object';
 int _uniqueObjectCounter = 0;
 int _uniqueEnumCounter = 0;
 
+///TODO: In general, it is worth putting the processing of class names, methods, fields
+/// in some separate layer from the parser and templates, so as not to write such crutches with a reset
+/// The reset itself is needed to update the status during tests.
+void resetUniqueNameCounters() {
+  _uniqueObjectCounter = 0;
+  _uniqueEnumCounter = 0;
+}
+
 /// Unique name for object classes
 String uniqueName({bool isEnum = false}) {
   final String name;
