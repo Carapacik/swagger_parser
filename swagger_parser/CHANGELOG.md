@@ -1,6 +1,9 @@
+## 1.15.1
+- Support for generation multipart request with ref ([#154](https://github.com/Carapacik/swagger_parser/issues/154))
+
 ## 1.15.0
 - Add new config parameter `required_by_default`
-- Added template for E2E tests
+- Added template for E2E tests 
 
 ## 1.14.2
 - Fixed errors with multipart ([#144](https://github.com/Carapacik/swagger_parser/issues/144))
