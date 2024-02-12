@@ -5,9 +5,9 @@ import 'e2e_util.dart';
 
 void main() {
   group('E2E', () {
-    test('multipart', () async {
+    test('multipart request properties', () async {
       await e2eTest(
-        'multipart',
+        'multipart_request_properties',
         (outputDirectory, schemaContent) => Generator(
           outputDirectory: outputDirectory,
           schemaContent: schemaContent,
