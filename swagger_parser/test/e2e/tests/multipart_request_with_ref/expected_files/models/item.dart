@@ -4,13 +4,16 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'address.dart';
+
 part 'item.freezed.dart';
 part 'item.g.dart';
 
 @Freezed()
 class Item with _$Item {
   const factory Item({
-    List<File>? images,
+    required List<File> images,
+    Address? address,
   }) = _Item;
 
   factory Item.fromJson(Map<String, Object?> json) => _$ItemFromJson(json);

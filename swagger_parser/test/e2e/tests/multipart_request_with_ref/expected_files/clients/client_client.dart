@@ -8,7 +8,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../models/item.dart';
+import '../models/object0.dart';
+import '../models/object1.dart';
 
 part 'client_client.g.dart';
 
@@ -16,17 +17,23 @@ part 'client_client.g.dart';
 abstract class ClientClient {
   factory ClientClient(Dio dio, {String? baseUrl}) = _ClientClient;
 
-  /// create  item
+  /// create  item.
+  ///
+  /// [address] - Name not received and was auto-generated.
   @MultiPart()
   @POST('/multipart/request/props')
   Future<String> postMultipartRequestProps({
-    @Part(name: 'images') List<File>? images,
+    @Part(name: 'images') required List<File> images,
+    @Part(name: 'address') Object0? address,
   });
 
-  /// create  item
+  /// create  item.
+  ///
+  /// [address] - Name not received and was auto-generated.
   @MultiPart()
   @POST('/multipart/request/ref')
   Future<String> postMultipartRequestRef({
-    @Part() required Item file,
+    @Part(name: 'images') required List<File> images,
+    @Part(name: 'address') Object1? address,
   });
 }

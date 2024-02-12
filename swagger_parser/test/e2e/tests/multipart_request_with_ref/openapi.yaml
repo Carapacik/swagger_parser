@@ -18,6 +18,14 @@ paths:
                     description: Binary image
                     format: binary
                     type: string
+                address:
+                  type: object
+                  properties:
+                    street:
+                      type: string
+
+              required: 
+                - images
       responses:
         '200':
           description: dummy
@@ -51,3 +59,10 @@ components:
             description: Binary image
             format: binary
             type: string
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+      required: 
+        - images
