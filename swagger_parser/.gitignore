@@ -3,3 +3,6 @@
 build/
 pubspec.lock
 .idea/
+
+swagger_parser.yaml
+example/schemas/debug.json

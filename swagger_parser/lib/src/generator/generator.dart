@@ -6,6 +6,7 @@ import '../config/yaml_config.dart';
 import '../parser/parser.dart';
 import '../utils/case_utils.dart';
 import '../utils/file_utils.dart';
+import '../utils/type_utils.dart';
 import '../utils/utils.dart';
 import 'fill_controller.dart';
 import 'generator_exception.dart';
@@ -208,6 +209,7 @@ final class Generator {
   /// Generates files based on OpenApi definition file
   Future<(OpenApiInfo, GenerationStatistics)> generateFiles() async {
     final stopwatch = Stopwatch()..start();
+    resetUniqueNameCounters();
 
     await fetchSchemaContent();
     _parseOpenApiDefinitionFile();
@@ -232,6 +234,8 @@ final class Generator {
   /// Generates content of files based on OpenApi definition file
   /// and return list of [GeneratedFile]
   Future<List<GeneratedFile>> generateContent() async {
+    resetUniqueNameCounters();
+
     await fetchSchemaContent();
     _parseOpenApiDefinitionFile();
     return _fillContent();
