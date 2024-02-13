@@ -17,10 +17,11 @@ Future<void> e2eTest(
   String testName,
   Generator Function(String outputDirectory, String schemaContent)
       getGenerator, {
+  String? schemaFileName,
   bool generateExpectedFiles = false,
 }) async {
   final testFolder = p.join('test', 'e2e', 'tests', testName);
-  final schemaPath = p.join(testFolder, 'openapi.json');
+  final schemaPath = p.join(testFolder, schemaFileName ?? 'openapi.json');
   final expectedFolderPath = p.join(testFolder, 'expected_files');
   final generatedFolderPath = p.join(testFolder, 'generated_files');
   final configFile = schemaFile(schemaPath);
@@ -30,6 +31,10 @@ Future<void> e2eTest(
     generateExpectedFiles ? expectedFolderPath : generatedFolderPath,
     schemaContent,
   );
+
+  if (generateExpectedFiles) {
+    Directory(expectedFolderPath).deleteSync(recursive: true);
+  }
 
   await generator.generateFiles();
 

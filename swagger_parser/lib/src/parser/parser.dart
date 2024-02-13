@@ -58,11 +58,14 @@ class OpenApiParser {
   final String _defaultContentType;
   final List<ReplacementRule> _replacementRules;
   final List<String> _skipParameters;
-  late final Map<String, dynamic> _definitionFileContent;
-  final List<UniversalComponentClass> _objectClasses = [];
-  final Set<UniversalEnumClass> _enumClasses = {};
-  final _usedNamesCount = <String, int>{};
+
   late final OpenApiInfo _apiInfo;
+  late final Map<String, dynamic> _definitionFileContent;
+
+  final _objectClasses = <UniversalComponentClass>[];
+  final _enumClasses = <UniversalEnumClass>{};
+  final _usedNamesCount = <String, int>{};
+  final _skipDataClasses = <String>[];
 
   static const _additionalPropertiesConst = 'additionalProperties';
   static const _allOfConst = 'allOf';
@@ -310,12 +313,79 @@ class OpenApiParser {
         }
 
         if (resultContentType == _multipartFormDataConst) {
+          // TODO(StarProxima): In which cases should this work?
+          // if ((contentType[_schemaConst] as Map<String, dynamic>)
+          //     .containsKey(_refConst)) {
+          //   final isRequired = requestBody[_requiredConst]?.toString().toBool();
+          //   final typeWithImport = _findType(
+          //     contentType[_schemaConst] as Map<String, dynamic>,
+          //     isRequired: isRequired ?? _requiredByDefault,
+          //   );
+          //   final currentType = typeWithImport.type;
+          //   if (typeWithImport.import != null) {
+          //     imports.add(typeWithImport.import!);
+          //   }
+          //   types.add(
+          //     UniversalRequestType(
+          //       parameterType: HttpParameterType.part,
+          //       description: currentType.description,
+          //       type: UniversalType(
+          //         type: currentType.type,
+          //         name: 'file',
+          //         description: currentType.description,
+          //         format: currentType.format,
+          //         defaultValue: currentType.defaultValue,
+          //         isRequired: currentType.isRequired,
+          //         nullable: currentType.nullable,
+          //         arrayDepth: currentType.arrayDepth,
+          //         arrayValueNullable: currentType.arrayValueNullable,
+          //       ),
+          //     ),
+          //   );
+          // }
+
+          final schemaContent =
+              contentType[_schemaConst] as Map<String, dynamic>;
+
+          final Map<String, dynamic> properties;
+          final List<String> requiredParameters;
+
           if ((contentType[_schemaConst] as Map<String, dynamic>)
               .containsKey(_refConst)) {
             final isRequired = requestBody[_requiredConst]?.toString().toBool();
             final typeWithImport = _findType(
               contentType[_schemaConst] as Map<String, dynamic>,
               isRequired: isRequired ?? _requiredByDefault,
+            );
+
+            final type = typeWithImport.type.type;
+
+            _skipDataClasses.add(type);
+
+            final components = _definitionFileContent[_componentsConst]
+                as Map<String, dynamic>;
+            final schemas = components[_schemasConst] as Map<String, dynamic>;
+            final dataClass = schemas[type] as Map<String, dynamic>;
+            final props = dataClass[_propertiesConst] as Map<String, dynamic>;
+            final required = dataClass[_requiredConst] as List<dynamic>?;
+
+            properties = props;
+            requiredParameters =
+                required?.map((e) => e.toString()).toList() ?? [];
+          } else {
+            properties =
+                schemaContent[_propertiesConst] as Map<String, dynamic>;
+            requiredParameters =
+                (schemaContent[_requiredConst] as List<dynamic>?)
+                        ?.map((e) => e.toString())
+                        .toList() ??
+                    [];
+          }
+
+          for (final e in properties.entries) {
+            final typeWithImport = _findType(
+              e.value as Map<String, dynamic>,
+              isRequired: requiredParameters.contains(e.key),
             );
             final currentType = typeWithImport.type;
             if (typeWithImport.import != null) {
@@ -324,10 +394,11 @@ class OpenApiParser {
             types.add(
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
+                name: e.key,
                 description: currentType.description,
                 type: UniversalType(
                   type: currentType.type,
-                  name: 'file',
+                  name: e.key,
                   description: currentType.description,
                   format: currentType.format,
                   defaultValue: currentType.defaultValue,
@@ -338,46 +409,6 @@ class OpenApiParser {
                 ),
               ),
             );
-          }
-          final schemaContent =
-              contentType[_schemaConst] as Map<String, dynamic>;
-          if (schemaContent.containsKey(_propertiesConst)) {
-            final requiredParameters =
-                (schemaContent[_requiredConst] as List<dynamic>?)
-                        ?.map((e) => e.toString())
-                        .toList() ??
-                    [];
-
-            for (final e
-                in (schemaContent[_propertiesConst] as Map<String, dynamic>)
-                    .entries) {
-              final typeWithImport = _findType(
-                e.value as Map<String, dynamic>,
-                isRequired: requiredParameters.contains(e.key),
-              );
-              final currentType = typeWithImport.type;
-              if (typeWithImport.import != null) {
-                imports.add(typeWithImport.import!);
-              }
-              types.add(
-                UniversalRequestType(
-                  parameterType: HttpParameterType.part,
-                  name: e.key,
-                  description: currentType.description,
-                  type: UniversalType(
-                    type: currentType.type,
-                    name: e.key,
-                    description: currentType.description,
-                    format: currentType.format,
-                    defaultValue: currentType.defaultValue,
-                    isRequired: currentType.isRequired,
-                    nullable: currentType.nullable,
-                    arrayDepth: currentType.arrayDepth,
-                    arrayValueNullable: currentType.arrayValueNullable,
-                  ),
-                ),
-              );
-            }
           }
         } else {
           final isRequired = requestBody[_requiredConst]?.toString().toBool();
@@ -629,7 +660,12 @@ class OpenApiParser {
           _definitionFileContent[_definitionsConst] as Map<String, dynamic>;
     }
     entities.forEach((key, value) {
+      if (_skipDataClasses.contains(key)) {
+        return;
+      }
+
       value as Map<String, dynamic>;
+
       var requiredParameters = <String>[];
       if (value case {_requiredConst: final List<dynamic> rawParameters}) {
         requiredParameters = rawParameters.map((e) => e.toString()).toList();

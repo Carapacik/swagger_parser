@@ -5,14 +5,28 @@ import 'e2e_util.dart';
 
 void main() {
   group('E2E', () {
-    test('multipart', () async {
+    test('multipart request properties', () async {
       await e2eTest(
-        'multipart',
+        'multipart_request_properties',
         (outputDirectory, schemaContent) => Generator(
           outputDirectory: outputDirectory,
           schemaContent: schemaContent,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+        ),
+      );
+    });
+
+    test('multipart request with ref', () async {
+      await e2eTest(
+        'multipart_request_with_ref',
+        schemaFileName: 'openapi.yaml',
+        (outputDirectory, schemaContent) => Generator(
+          outputDirectory: outputDirectory,
+          schemaContent: schemaContent,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          isYaml: true,
         ),
       );
     });

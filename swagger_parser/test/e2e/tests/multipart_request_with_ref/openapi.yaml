@@ -1,0 +1,68 @@
+openapi: 3.1.0
+info:
+  title: API
+  version: 1.0.0
+paths:
+  /multipart/request/props:
+    post:
+      summary: create  item
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: array
+                  items:
+                    description: Binary image
+                    format: binary
+                    type: string
+                address:
+                  type: object
+                  properties:
+                    street:
+                      type: string
+
+              required: 
+                - images
+      responses:
+        '200':
+          description: dummy
+          content:
+            text/plain:
+              schema:
+                type: string
+  /multipart/request/ref:
+    post:
+      summary: create  item
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        '200':
+          description: dummy
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  schemas:
+    Item:
+      type: object
+      properties:
+        images:
+          type: array
+          items:
+            description: Binary image
+            format: binary
+            type: string
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+      required: 
+        - images
