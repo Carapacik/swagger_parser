@@ -5,7 +5,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 @JsonEnum()
-enum Order {
+enum EnumClass {
   /// The name has been replaced because it contains a keyword. Original name: `-index`.
   @JsonValue('-index')
   valueMinusIndex('-index'),
@@ -27,18 +27,40 @@ enum Order {
   @JsonValue('yaml')
   yaml('yaml'),
 
-  @JsonValue('-5')
-  valueMinus5('-5'),
+  @JsonValue('-1')
+  valueMinus1('-1'),
 
-  @JsonValue('15')
-  value15('15'),
+  @JsonValue('0')
+  value0('0'),
+
+  @JsonValue('1')
+  value1('1'),
+
+  @JsonValue('1itemOne')
+  value1itemOne('1itemOne'),
+
+  @JsonValue('2ItemTwo')
+  value2ItemTwo('2ItemTwo'),
+
+  @JsonValue('3item_three')
+  value3itemThree('3item_three'),
+
+  @JsonValue('4ITEM-FOUR')
+  value4ItemFour('4ITEM-FOUR'),
+
+  /// Incorrect name has been replaced. Original name: `5иллегалчарактер`.
+  @JsonValue('5иллегалчарактер')
+  undefined0('5иллегалчарактер'),
+
+  @JsonValue('6 item six')
+  value6ItemSix('6 item six'),
 
   /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
   $unknown(null);
 
-  const Order(this.json);
+  const EnumClass(this.json);
 
-  factory Order.fromJson(String json) => values.firstWhere(
+  factory EnumClass.fromJson(String json) => values.firstWhere(
         (e) => e.json == json,
         orElse: () => $unknown,
       );

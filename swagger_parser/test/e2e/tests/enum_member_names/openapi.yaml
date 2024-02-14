@@ -8,7 +8,7 @@ paths:
       operationId: api_v1_category_list
       parameters:
       - in: query
-        name: order
+        name: enum_class
         schema:
           type: array
           items:
@@ -20,9 +20,16 @@ paths:
             - name
             - json
             - yaml
-            - "-5"
-            - "15"
-        description: ''
+            - -1
+            - 0
+            - "1"
+            - '1itemOne'
+            - '2ItemTwo'
+            - '3item_three'
+            - '4ITEM-FOUR'
+            - '5иллегалчарактер'
+            - '6 item six'
+        description: 'description'
       tags:
       - api
       responses:

@@ -9,4 +9,4 @@ export 'rest_client.dart';
 export 'clients/api_client.dart';
 
 // Data classes
-export 'models/order.dart';
+export 'models/enum_class.dart';

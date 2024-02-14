@@ -30,9 +30,9 @@ void main() {
         ),
       );
     });
-    test('multipart request with ref', () async {
+    test('enum member names', () async {
       await e2eTest(
-        'enum_members_with_leading_dash_and_pre_existing_enum_members',
+        'enum_member_names',
         schemaFileName: 'openapi.yaml',
         (outputDirectory, schemaContent) => Generator(
           outputDirectory: outputDirectory,

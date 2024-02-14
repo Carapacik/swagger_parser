@@ -5,7 +5,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../models/order.dart';
+import '../models/enum_class.dart';
 
 part 'api_client.g.dart';
 
@@ -13,9 +13,9 @@ part 'api_client.g.dart';
 abstract class ApiClient {
   factory ApiClient(Dio dio, {String? baseUrl}) = _ApiClient;
 
-  /// [order] -
+  /// [enumClass] - description
   @GET('/api/v1/category/')
   Future<void> apiV1CategoryList({
-    @Query('order') required List<Order> order,
+    @Query('enum_class') required List<EnumClass> enumClass,
   });
 }
