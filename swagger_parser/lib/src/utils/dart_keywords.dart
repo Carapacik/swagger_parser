@@ -78,4 +78,5 @@ const dartEnumMemberKeywords = {
   'toString',
   'runtimeType',
   'noSuchMethod',
+  'json',
 };
