@@ -1,11 +1,12 @@
 name: tests
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
   pull_request:
-    types: [opened, reopened, review_requested]
+    types: [opened, reopened, review_requested,]
 
 jobs:
   test:
