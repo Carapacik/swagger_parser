@@ -30,5 +30,18 @@ void main() {
         ),
       );
     });
+    test('multipart request with ref', () async {
+      await e2eTest(
+        'enum_members_with_leading_dash_and_pre_existing_enum_members',
+        schemaFileName: 'openapi.yaml',
+        (outputDirectory, schemaContent) => Generator(
+          outputDirectory: outputDirectory,
+          schemaContent: schemaContent,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          isYaml: true,
+        ),
+      );
+    });
   });
 }

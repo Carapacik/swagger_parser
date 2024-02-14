@@ -1,0 +1,30 @@
+openapi: 3.1.0
+info:
+  title: ''
+  version: 0.0.0 (v1)
+paths:
+  /api/v1/category/:
+    get:
+      operationId: api_v1_category_list
+      parameters:
+      - in: query
+        name: order
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - -index
+            - -name
+            - index
+            - name
+            - json
+            - yaml
+            - "-5"
+            - "15"
+        description: ''
+      tags:
+      - api
+      responses:
+        '204':
+          description: ''
