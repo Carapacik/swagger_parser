@@ -30,5 +30,18 @@ void main() {
         ),
       );
     });
+    test('enum member names', () async {
+      await e2eTest(
+        'enum_member_names',
+        schemaFileName: 'openapi.yaml',
+        (outputDirectory, schemaContent) => Generator(
+          outputDirectory: outputDirectory,
+          schemaContent: schemaContent,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          isYaml: true,
+        ),
+      );
+    });
   });
 }

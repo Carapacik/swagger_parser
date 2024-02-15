@@ -69,3 +69,14 @@ const dartKeywords = {
   'with',
   'yield',
 };
+
+/// Set of words that can't be used as members of an enum
+const dartEnumMemberKeywords = {
+  ...dartKeywords,
+  'values',
+  'index',
+  'toString',
+  'runtimeType',
+  'noSuchMethod',
+  'json',
+};
