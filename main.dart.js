@@ -24559,39 +24559,43 @@ s=a.f
 if(s.length!==0)d+="{\n"
 r=t.qb
 q=A.e7(A.HG(s,new A.alJ(),r),!0,r)
-for(r=q.length,p=t.N,o=0;o<r;++o,d=k){n=q[o]
-m=n.c
-l=n.a
-if(l!=null&&m!==B.cN)l=(m===B.fq||m===B.jf?"name: ":"")+"'"+A.h(l)+"'"
-else l=""
-k=n.b
-j=k.r&&k.f==null?"required ":""
-i=A.iF(k,B.at)
-h=k.b
+for(r=q.length,p=t.N,o=0;o<r;++o,d=m){n=q[o]
+m=n.b
+l=A.iF(m,B.at)
+k=n.c
+j=k===B.cN
+if(j)i=l==="Object"||l==="Object?"
+else i=!1
+if(i)l="dynamic"
+i=n.a
+if(i!=null&&!j)j=(k===B.fq||k===B.jf?"name: ":"")+"'"+A.h(i)+"'"
+else j=""
+i=m.r&&m.f==null?"required ":""
+h=m.b
 h.toString
 g=new A.j3(A.an(p))
 h=g.mv(h)
 g.a!==$&&A.bD()
 g.a=h
 g=g.gd1()
-h=k.f
-if(h!=null){f=k.x>0?"const ":""
-e=k.a
-if(k.w!=null){k=new A.j3(A.an(p))
-h=k.mv(h)
-k.a!==$&&A.bD()
-k.a=h
-k=k.gd1()
-k=A.ej(k,!0,!1,!0,null)
-if(k==null)k=null
+h=m.f
+if(h!=null){f=m.x>0?"const ":""
+e=m.a
+if(m.w!=null){m=new A.j3(A.an(p))
+h=m.mv(h)
+m.a!==$&&A.bD()
+m.a=h
+m=m.gd1()
+m=A.ej(m,!0,!1,!0,null)
+if(m==null)m=null
 else{h=new A.j3(A.an(p))
-k=h.mv(k)
+m=h.mv(m)
 h.a!==$&&A.bD()
-h.a=k
+h.a=m
 h=h.gd1()
-k=h}k=e+"."+A.h(k)}else k=A.ej(h,!0,!1,!1,e)
-k=" = "+f+A.h(k)}else k=""
-k=d+("    @"+m.c+"("+l+") "+j+i+" "+g+k+",\n")}d=s.length!==0?d+"  });\n":d+");\n"
+m=h}m=e+"."+A.h(m)}else m=A.ej(h,!0,!1,!1,e)
+m=" = "+f+A.h(m)}else m=""
+m=d+("    @"+k.c+"("+j+") "+i+l+" "+g+m+",\n")}d=s.length!==0?d+"  });\n":d+");\n"
 return d.charCodeAt(0)==0?d:d},
 aIx(a){return B.b.eC(a.c,new A.akO())?"import 'dart:convert';\n":""},
 aIR(a){return B.b.eC(a.c,new A.al5())?"import 'dart:io';\n\n":""},
