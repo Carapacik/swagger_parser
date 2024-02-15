@@ -135,6 +135,13 @@ Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names) {
     return newName;
   }
 
+  String leadingDashToMinus(String name) {
+    if (name.startsWith('-')) {
+      return 'minus ${name.substring(1)}';
+    }
+    return name;
+  }
+
   for (final name in names) {
     final (newName, renameDescription) = switch (name) {
       _
@@ -148,11 +155,11 @@ Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names) {
           uniqueEnumItemName(),
           'Incorrect name has been replaced. Original name: `$name`.'
         ),
-      _ when dartKeywords.contains(name.toCamel) => (
-          '$_valueConst $name',
+      _ when dartEnumMemberKeywords.contains(name.toCamel) => (
+          '$_valueConst ${leadingDashToMinus(name)}',
           'The name has been replaced because it contains a keyword. Original name: `$name`.'
         ),
-      _ => (name, null),
+      _ => (leadingDashToMinus(name), null),
     };
     items.add(
       UniversalEnumItem(
