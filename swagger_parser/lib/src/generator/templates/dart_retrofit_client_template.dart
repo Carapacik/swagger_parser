@@ -79,11 +79,19 @@ String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
         ? "import 'dart:io';\n\n"
         : '';
 
-String _toParameter(UniversalRequestType parameter) =>
-    "    @${parameter.parameterType.type}(${parameter.name != null && !parameter.parameterType.isBody ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
-    '${_required(parameter.type)}'
-    '${parameter.type.toSuitableType(ProgrammingLanguage.dart)} '
-    '${parameter.type.name!.toCamel}${_defaultValue(parameter.type)},';
+String _toParameter(UniversalRequestType parameter) {
+  var parameterType = parameter.type.toSuitableType(ProgrammingLanguage.dart);
+  // https://github.com/trevorwang/retrofit.dart/issues/631
+  // https://github.com/Carapacik/swagger_parser/issues/110
+  if (parameter.parameterType.isBody &&
+      (parameterType == 'Object' || parameterType == 'Object?')) {
+    parameterType = 'dynamic';
+  }
+  return "    @${parameter.parameterType.type}(${parameter.name != null && !parameter.parameterType.isBody ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
+      '${_required(parameter.type)}'
+      '$parameterType '
+      '${parameter.type.name!.toCamel}${_defaultValue(parameter.type)},';
+}
 
 String _contentTypeHeader(
   UniversalRequest request,
