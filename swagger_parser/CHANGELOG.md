@@ -1,3 +1,6 @@
+## 1.15.2
+- Fixed errors with enum names ([#163](https://github.com/Carapacik/swagger_parser/issues/163)), ([#164](https://github.com/Carapacik/swagger_parser/issues/164))
+
 ## 1.15.1
 - Support for generation multipart request with ref ([#154](https://github.com/Carapacik/swagger_parser/issues/154))
 
