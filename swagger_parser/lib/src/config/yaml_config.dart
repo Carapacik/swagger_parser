@@ -408,78 +408,88 @@ final class YamlConfig {
     return configs;
   }
 
-  /// {@nodoc}
+  /// Optional. Set API name for folder and export file
+  /// If not specified, the file name is used.
   final String name;
 
-  /// {@nodoc}
+  /// Required. Sets output directory for generated files (Clients and DTOs).
   final String outputDirectory;
 
-  /// {@nodoc}
+  /// Sets the OpenApi schema path directory for api definition.
   final String? schemaPath;
 
-  /// {@nodoc}
+  /// Sets the url of the OpenApi schema.
   final String? schemaUrl;
 
-  /// {@nodoc}
+  /// Optional (dart only).
+  /// It is used if the value does not have the annotations 'required' and 'nullable'.
+  /// If the value is 'true', then value be 'required', if the value is 'false', then 'nullable'.
   final bool? requiredByDefault;
 
-  /// {@nodoc}
+  /// Optional. Set to 'false' to not write the schema from the url to the schema file.
   final bool? schemaFromUrlToFile;
 
-  /// {@nodoc}
+  /// Optional. If 'schema_path' and 'schema_url' are specified, what will be used.
+  /// Current available options are: path, url.
   final PreferSchemaSource? preferSchemaSource;
 
-  /// {@nodoc}
+  /// Optional. Sets the programming language.
+  /// Current available languages are: dart, kotlin.
   final ProgrammingLanguage? language;
 
-  /// {@nodoc}
+  /// Optional (dart only).
+  /// Current available serializers are: json_serializable, freezed, dart_mappable.
   final JsonSerializer? jsonSerializer;
 
-  /// {@nodoc}
+  /// Optional. Set postfix for Client class and file.
   final String? clientPostfix;
 
-  /// {@nodoc}
+  /// Optional (dart only). Set 'true' to generate root client
+  /// with interface and all clients instances.
   final bool? rootClient;
 
-  /// {@nodoc}
+  /// Optional (dart only). Set root client name.
   final String? rootClientName;
 
-  /// {@nodoc}
+  /// Optional (dart only). Set 'true' to generate export file.
   final bool? exportFile;
 
-  /// {@nodoc}
+  /// Optional. Set to 'true' to squash all clients in one client.
   final bool? squashClients;
 
-  /// {@nodoc}
+  /// Optional. Set 'true' to use only the endpoint path for the method name.
+  /// Set 'false' to use operationId
   final bool? pathMethodName;
 
-  /// {@nodoc}
+  /// Optional. Set 'true' to put all clients in clients folder.
   final bool? putClientsInFolder;
 
-  /// {@nodoc}
+  /// Optional. Set to 'true' to put the all api in its folder.
   final bool? putInFolder;
 
-  /// {@nodoc}
+  /// Optional (dart only). Set 'true' to include toJson() in enums.
+  /// If set to false, serialization will use .name instead.
   final bool? enumsToJson;
 
-  /// {@nodoc}
+  /// Optional. Set 'true' to set enum prefix from parent component.
   final bool? enumsPrefix;
 
-  /// {@nodoc}
+  /// Optional (dart only). Set 'true' to maintain backwards compatibility when adding new values on the backend.
   final bool? unknownEnumValue;
 
-  /// {@nodoc}
+  /// Optional. Set 'false' to not put a comment at the beginning of the generated files.
   final bool? markFilesAsGenerated;
 
-  /// {@nodoc}
+  /// Optional. Set default content-type for all requests.
   final String? defaultContentType;
 
-  /// {@nodoc}
+  /// Optional (dart only). Set 'true' to wrap all request return types with HttpResponse.
   final bool? originalHttpResponse;
 
-  /// {@nodoc}
+  /// Optional. Set regex replacement rules for the names of the generated classes/enums.
+  /// All rules are applied in order.
   final List<ReplacementRule> replacementRules;
 
-  /// {@nodoc}
+  /// Optional. Skip parameters with names.
   final List<String> skipParameters;
 }

@@ -170,6 +170,7 @@ class OpenApiParser {
     );
   }
 
+  /// Get [OpenApiInfo] from parser
   OpenApiInfo get openApiInfo => _apiInfo;
 
   /// Parses rest clients from `paths` section of definition file
