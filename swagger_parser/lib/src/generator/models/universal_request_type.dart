@@ -45,22 +45,22 @@ final class UniversalRequestType {
 
 /// Type of parameter in rest client
 enum HttpParameterType {
-  /// {@nodoc}
+  /// `@Header`
   header('Header'),
 
-  /// {@nodoc}
+  /// `@Path`
   path('Path'),
 
-  /// {@nodoc}
+  /// `@Body`
   body('Body'),
 
-  /// {@nodoc}
+  /// `@Query`
   query('Query'),
 
-  /// {@nodoc}
+  /// `@Part`
   part('Part'),
 
-  /// {@nodoc}
+  /// `@Part`
   formData('Part');
 
   /// Constructor for [HttpParameterType]

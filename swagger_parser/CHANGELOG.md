@@ -1,3 +1,7 @@
+## 1.15.4
+
+- Fix docs
+
 ## 1.15.3
 
 - Fixed errors with `Object` body in retrofit
