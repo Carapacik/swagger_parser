@@ -1,6 +1,6 @@
-///
+/// The configuration that the OpenApiParser uses
 class ParserConfig {
-  ///
+  /// Creates a [ParserConfig].
   const ParserConfig(
     this.content, {
     required this.isJson,
@@ -36,7 +36,7 @@ class ParserConfig {
   final bool pathMethodName;
 
   /// DART ONLY
-  /// TODO
+  /// Set `true` to merge all clients in single client.
   final bool mergeClients;
 
   /// List of parameter names that should skip during parsing
