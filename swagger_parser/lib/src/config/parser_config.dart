@@ -8,6 +8,7 @@ class ParserConfig {
     this.pathMethodName = false,
     this.requiredByDefault = true,
     this.mergeClients = false,
+    this.enumParentPrefix = true,
     this.skippedParameters = const [],
   });
 
@@ -35,9 +36,11 @@ class ParserConfig {
   /// if `false`, use `operationId`.
   final bool pathMethodName;
 
-  /// DART ONLY
   /// Set `true` to merge all clients in single client.
   final bool mergeClients;
+
+  /// Set 'true' to set enum prefix from parent component.
+  final bool enumParentPrefix;
 
   /// List of parameter names that should skip during parsing
   final List<String> skippedParameters;
