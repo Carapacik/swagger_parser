@@ -1,4 +1,4 @@
-import '../parser/model/universal_data_class.dart';
+import '../parser/swagger_parser_core.dart';
 import 'case_utils.dart';
 import 'dart_keywords.dart';
 

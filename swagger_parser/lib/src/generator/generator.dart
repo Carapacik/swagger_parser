@@ -3,10 +3,7 @@ import 'dart:convert';
 import 'package:path/path.dart' as p;
 
 import '../config/yaml_config.dart';
-import '../parser/model/open_api_info.dart';
-import '../parser/model/universal_data_class.dart';
-import '../parser/model/universal_rest_client.dart';
-import '../parser/parser/parser.dart';
+import '../parser/swagger_parser_core.dart';
 import '../utils/case_utils.dart';
 import '../utils/file_utils.dart';
 import '../utils/type_utils.dart';

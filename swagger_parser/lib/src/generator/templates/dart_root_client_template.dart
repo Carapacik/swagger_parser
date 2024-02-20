@@ -1,4 +1,4 @@
-import '../../parser/model/open_api_info.dart';
+import '../../parser/swagger_parser_core.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/utils.dart';
 

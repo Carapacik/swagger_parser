@@ -1,8 +1,6 @@
 import 'package:collection/collection.dart';
 
-import '../../parser/model/open_api_info.dart';
-import '../../parser/model/universal_data_class.dart';
-import '../../parser/model/universal_rest_client.dart';
+import '../../parser/swagger_parser_core.dart';
 import '../generator_exception.dart';
 import '../templates/dart_dart_mappable_dto_template.dart';
 import '../templates/dart_enum_dto_template.dart';

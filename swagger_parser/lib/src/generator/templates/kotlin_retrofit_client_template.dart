@@ -1,7 +1,4 @@
-import '../../parser/model/universal_request.dart';
-import '../../parser/model/universal_request_type.dart';
-import '../../parser/model/universal_rest_client.dart';
-import '../../parser/model/universal_type.dart';
+import '../../parser/swagger_parser_core.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';

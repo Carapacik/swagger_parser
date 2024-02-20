@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 
-import '../../parser/model/universal_data_class.dart';
-import '../../parser/model/universal_type.dart';
+import '../../parser/swagger_parser_core.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
