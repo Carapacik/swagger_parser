@@ -91,9 +91,9 @@ class OpenApiParser {
   static const _versionConst = 'version';
 }
 
-/// Extension used for YAML map
+/// Extension used for [YamlMap]
 extension on YamlMap {
-  /// Convert YamlMap to Dart map
+  /// Convert [YamlMap] to Dart map
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{};
     for (final entry in entries) {
