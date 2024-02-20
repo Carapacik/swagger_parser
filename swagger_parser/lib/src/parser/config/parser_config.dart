@@ -2,7 +2,7 @@
 class ParserConfig {
   /// Creates a [ParserConfig].
   const ParserConfig(
-    this.content, {
+    this.fileContent, {
     required this.isJson,
     this.defaultContentType = 'application/json',
     this.pathMethodName = false,
@@ -13,7 +13,7 @@ class ParserConfig {
   });
 
   /// Specification file content
-  final Map<String, dynamic> content;
+  final String fileContent;
 
   /// Set `true` if your specification is json.
   /// Set `false` if yaml.

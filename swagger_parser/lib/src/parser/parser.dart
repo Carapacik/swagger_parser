@@ -14,9 +14,9 @@ import '../generator/models/universal_rest_client.dart';
 import '../generator/models/universal_type.dart';
 import '../utils/case_utils.dart';
 import '../utils/type_utils.dart';
-import 'parser_exception.dart';
+import 'exception/parser_exception.dart';
 
-export 'parser_exception.dart';
+export 'exception/parser_exception.dart';
 
 /// General class for parsing OpenApi files into universal models
 class OpenApiParser {
@@ -155,7 +155,7 @@ class OpenApiParser {
         OAS.v3,
       {_swaggerConst: final Object? v} when v.toString().startsWith('2.0') =>
         OAS.v2,
-      _ => throw const ParserException('Unknown version of OpenAPI.'),
+      _ => throw const OpenApiParserException('Unknown version of OpenAPI.'),
     };
     final info = switch (_definitionFileContent) {
       {_infoConst: final Map<String, dynamic> v} => v,
@@ -244,7 +244,7 @@ class OpenApiParser {
                         .containsKey(refParameterName);
 
             if (!isRefParameterExist) {
-              throw ParserException(
+              throw OpenApiParserException(
                 '${parameter[_refConst]} does not exist in schema',
               );
             }
@@ -286,7 +286,8 @@ class OpenApiParser {
       if (map.containsKey(_requestBodyConst)) {
         final requestBody = map[_requestBodyConst] as Map<String, dynamic>;
         if (!requestBody.containsKey(_contentConst)) {
-          throw const ParserException('Request body must always have content.');
+          throw const OpenApiParserException(
+              'Request body must always have content.');
         }
 
         final contentTypes = requestBody[_contentConst] as Map<String, dynamic>;
@@ -308,7 +309,7 @@ class OpenApiParser {
         }
 
         if (contentType == null) {
-          throw const ParserException(
+          throw const OpenApiParserException(
             'Response must always have a content type.',
           );
         }
