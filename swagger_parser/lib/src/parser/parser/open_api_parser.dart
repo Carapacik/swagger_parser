@@ -11,7 +11,7 @@ class OpenApiParser {
   /// Creates a [OpenApiParser].
   OpenApiParser(this.config) {
     _specificationFileContent = config.isJson
-        ? jsonDecode(config.fileContent) as Map<String, dynamic>
+        ? jsonDecode(config.fileContent) as Map<String, Object?>
         : (loadYaml(config.fileContent) as YamlMap).toMap();
     _openApiSpecificationInfo = _parseOpenApiInfo();
   }
@@ -20,11 +20,15 @@ class OpenApiParser {
   final ParserConfig config;
 
   /// Specification content
-  late final Map<String, dynamic> _specificationFileContent;
+  late final Map<String, Object?> _specificationFileContent;
 
   /// `info` section in specification
   late final OpenApiInfo _openApiSpecificationInfo;
 
+  /// Get saved [OpenApiInfo] from [OpenApiParser]
+  OpenApiInfo get openApiInfo => _openApiSpecificationInfo;
+
+  /// Parse OpenApi parameters into [OpenApiInfo]
   OpenApiInfo _parseOpenApiInfo() {
     final schemaVersion = switch (_specificationFileContent) {
       {_openApiConst: final Object? v} when v.toString().startsWith('3.1') =>
@@ -36,7 +40,7 @@ class OpenApiParser {
       _ => throw const OpenApiParserException('Unknown version of OpenAPI.'),
     };
     final info = switch (_specificationFileContent) {
-      {_infoConst: final Map<String, dynamic> v} => v,
+      {_infoConst: final Map<String, Object?> v} => v,
       _ => null,
     };
     return OpenApiInfo(
@@ -94,8 +98,8 @@ class OpenApiParser {
 /// Extension used for [YamlMap]
 extension on YamlMap {
   /// Convert [YamlMap] to Dart map
-  Map<String, dynamic> toMap() {
-    final map = <String, dynamic>{};
+  Map<String, Object?> toMap() {
+    final map = <String, Object?>{};
     for (final entry in entries) {
       if (entry.value is YamlMap || entry.value is Map) {
         map[entry.key.toString()] = (entry.value as YamlMap).toMap();
@@ -109,4 +113,10 @@ extension on YamlMap {
     }
     return map;
   }
+}
+
+/// Extension used for [YamlMap]
+extension on String {
+  /// Used specially for [YamlMap] to covert [String] value to [bool]
+  bool toBool() => toLowerCase() == 'true';
 }
