@@ -1,8 +1,9 @@
+// TODO(Carapacik): docs.
 ///
 library swagger_parser_core;
 
 export 'config/parser_config.dart';
-export 'exception/parser_exception.dart';
+export 'exception/open_api_parser_exception.dart';
 export 'model/open_api_info.dart';
 export 'model/universal_data_class.dart';
 export 'model/universal_request.dart';

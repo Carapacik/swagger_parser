@@ -3,7 +3,7 @@ import 'dart:convert' show jsonDecode;
 import 'package:yaml/yaml.dart';
 
 import '../config/parser_config.dart';
-import '../exception/parser_exception.dart';
+import '../exception/open_api_parser_exception.dart';
 import '../model/open_api_info.dart';
 import '../model/universal_data_class.dart';
 import '../model/universal_rest_client.dart';

@@ -8,15 +8,13 @@ import 'package:yaml/yaml.dart';
 import '../generator/models/replacement_rule.dart';
 import '../utils/case_utils.dart';
 import '../utils/type_utils.dart';
-import 'exception/parser_exception.dart';
+import 'exception/open_api_parser_exception.dart';
 import 'model/open_api_info.dart';
 import 'model/universal_data_class.dart';
 import 'model/universal_request.dart';
 import 'model/universal_request_type.dart';
 import 'model/universal_rest_client.dart';
 import 'model/universal_type.dart';
-
-export 'exception/parser_exception.dart';
 
 /// General class for parsing OpenApi files into universal models
 class OpenApiParser {
