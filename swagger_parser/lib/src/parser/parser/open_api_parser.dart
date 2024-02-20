@@ -1,12 +1,12 @@
 import 'dart:convert' show jsonDecode;
 
-import 'package:swagger_parser/src/generator/models/universal_data_class.dart';
-import 'package:swagger_parser/src/generator/models/universal_rest_client.dart';
 import 'package:yaml/yaml.dart';
 
 import '../config/parser_config.dart';
 import '../exception/parser_exception.dart';
 import '../model/open_api_info.dart';
+import '../model/universal_data_class.dart';
+import '../model/universal_rest_client.dart';
 
 /// General class for parsing OpenApi specification into universal models
 class OpenApiParser {

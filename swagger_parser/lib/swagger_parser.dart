@@ -8,6 +8,4 @@ export 'src/generator/models/generated_file.dart';
 export 'src/generator/models/json_serializer.dart';
 export 'src/generator/models/programming_language.dart';
 export 'src/generator/models/replacement_rule.dart';
-export 'src/generator/models/universal_data_class.dart';
-export 'src/generator/models/universal_rest_client.dart';
-export 'src/parser/parser.dart';
+export 'src/parser/swagger_parser_core.dart';

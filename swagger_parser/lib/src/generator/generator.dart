@@ -4,6 +4,8 @@ import 'package:path/path.dart' as p;
 
 import '../config/yaml_config.dart';
 import '../parser/model/open_api_info.dart';
+import '../parser/model/universal_data_class.dart';
+import '../parser/model/universal_rest_client.dart';
 import '../parser/parser.dart';
 import '../utils/case_utils.dart';
 import '../utils/file_utils.dart';
@@ -17,8 +19,6 @@ import 'models/json_serializer.dart';
 import 'models/prefer_schema_source.dart';
 import 'models/programming_language.dart';
 import 'models/replacement_rule.dart';
-import 'models/universal_data_class.dart';
-import 'models/universal_rest_client.dart';
 
 /// Handles whole cycle of generation.
 /// Can be provided with arguments

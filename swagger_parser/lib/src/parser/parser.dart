@@ -6,15 +6,15 @@ import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 import '../generator/models/replacement_rule.dart';
-import '../generator/models/universal_data_class.dart';
-import '../generator/models/universal_request.dart';
-import '../generator/models/universal_request_type.dart';
-import '../generator/models/universal_rest_client.dart';
-import '../generator/models/universal_type.dart';
 import '../utils/case_utils.dart';
 import '../utils/type_utils.dart';
 import 'exception/parser_exception.dart';
 import 'model/open_api_info.dart';
+import 'model/universal_data_class.dart';
+import 'model/universal_request.dart';
+import 'model/universal_request_type.dart';
+import 'model/universal_rest_client.dart';
+import 'model/universal_type.dart';
 
 export 'exception/parser_exception.dart';
 
@@ -287,7 +287,8 @@ class OpenApiParser {
         final requestBody = map[_requestBodyConst] as Map<String, dynamic>;
         if (!requestBody.containsKey(_contentConst)) {
           throw const OpenApiParserException(
-              'Request body must always have content.');
+            'Request body must always have content.',
+          );
         }
 
         final contentTypes = requestBody[_contentConst] as Map<String, dynamic>;

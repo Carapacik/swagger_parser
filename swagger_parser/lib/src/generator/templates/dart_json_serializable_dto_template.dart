@@ -1,11 +1,11 @@
 import 'package:collection/collection.dart';
 
+import '../../parser/model/universal_data_class.dart';
+import '../../parser/model/universal_type.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
 import '../models/programming_language.dart';
-import '../models/universal_data_class.dart';
-import '../models/universal_type.dart';
 
 /// Provides template for generating dart DTO using JSON serializable
 String dartJsonSerializableDtoTemplate(

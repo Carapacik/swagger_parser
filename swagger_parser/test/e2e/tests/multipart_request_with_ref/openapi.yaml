@@ -24,7 +24,7 @@ paths:
                     street:
                       type: string
 
-              required: 
+              required:
                 - images
       responses:
         '200':
@@ -64,5 +64,5 @@ components:
           properties:
             street:
               type: string
-      required: 
+      required:
         - images

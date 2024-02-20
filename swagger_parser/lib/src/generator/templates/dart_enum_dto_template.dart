@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
 
+import '../../parser/model/universal_data_class.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
 import '../models/json_serializer.dart';
-import '../models/universal_data_class.dart';
 import 'dart_import_dto_template.dart';
 
 /// Provides template for generating dart enum DTO

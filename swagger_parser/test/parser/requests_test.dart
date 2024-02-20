@@ -1,9 +1,5 @@
 import 'package:path/path.dart' as p;
-import 'package:swagger_parser/src/generator/models/universal_request.dart';
-import 'package:swagger_parser/src/generator/models/universal_request_type.dart';
-import 'package:swagger_parser/src/generator/models/universal_rest_client.dart';
-import 'package:swagger_parser/src/generator/models/universal_type.dart';
-import 'package:swagger_parser/src/parser/parser.dart';
+import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 import 'package:swagger_parser/src/utils/file_utils.dart';
 import 'package:test/test.dart';
 
@@ -14,7 +10,7 @@ void main() {
           p.join('test', 'parser', 'schemas', 'basic_requests.2.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final actualRestClients = parser.parseRestClients().toList();
       const expectedRestClients = [
         UniversalRestClient(
@@ -126,7 +122,7 @@ void main() {
           p.join('test', 'parser', 'schemas', 'basic_requests.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final actualRestClients = parser.parseRestClients().toList();
       const expectedRestClients = [
         UniversalRestClient(

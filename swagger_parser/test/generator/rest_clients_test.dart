@@ -1,9 +1,6 @@
 import 'package:swagger_parser/src/generator/fill_controller.dart';
 import 'package:swagger_parser/src/generator/models/programming_language.dart';
-import 'package:swagger_parser/src/generator/models/universal_request.dart';
-import 'package:swagger_parser/src/generator/models/universal_request_type.dart';
-import 'package:swagger_parser/src/generator/models/universal_rest_client.dart';
-import 'package:swagger_parser/src/generator/models/universal_type.dart';
+import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
+import 'package:swagger_parser/swagger_parser.dart';
 
 import '../../utils/type_utils.dart';
-import 'programming_language.dart';
 
 /// Universal template for containing information about type
 @immutable

@@ -2,9 +2,9 @@ import 'dart:io';
 
 import '../generator/models/generation_statistics.dart';
 import '../generator/models/programming_language.dart';
-import '../generator/models/universal_data_class.dart';
-import '../generator/models/universal_type.dart';
 import '../parser/model/open_api_info.dart';
+import '../parser/model/universal_data_class.dart';
+import '../parser/model/universal_type.dart';
 import '../utils/case_utils.dart';
 
 const _green = '\x1B[32m';
