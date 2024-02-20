@@ -1,5 +1,7 @@
 import 'dart:convert' show jsonDecode;
 
+import 'package:swagger_parser/src/generator/models/universal_data_class.dart';
+import 'package:swagger_parser/src/generator/models/universal_rest_client.dart';
 import 'package:yaml/yaml.dart';
 
 import '../config/parser_config.dart';
@@ -27,6 +29,18 @@ class OpenApiParser {
 
   /// Get saved [OpenApiInfo] from [OpenApiParser]
   OpenApiInfo get openApiInfo => _openApiSpecificationInfo;
+
+  /// Parses rest clients from `paths` section of definition file
+  /// and return list of [UniversalRestClient]
+  List<UniversalRestClient> parseRestClients() {
+    throw UnimplementedError();
+  }
+
+  /// Parses data classes from `components` of definition file
+  /// and return list of  [UniversalDataClass]
+  List<UniversalDataClass> parseDataClasses() {
+    throw UnimplementedError();
+  }
 
   /// Parse OpenApi parameters into [OpenApiInfo]
   OpenApiInfo _parseOpenApiInfo() {
@@ -105,7 +119,7 @@ extension on YamlMap {
         map[entry.key.toString()] = (entry.value as YamlMap).toMap();
       } else if (entry.value is YamlList) {
         map[entry.key.toString()] = (entry.value as YamlList)
-            .map<dynamic>((e) => e is YamlMap ? e.toMap() : e)
+            .map<Object?>((e) => e is YamlMap ? e.toMap() : e)
             .toList(growable: false);
       } else {
         map[entry.key.toString()] = entry.value.toString();
