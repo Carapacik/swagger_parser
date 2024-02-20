@@ -1,7 +1,7 @@
+import '../parser/model/open_api_info.dart';
 import '../utils/case_utils.dart';
 import 'models/generated_file.dart';
 import 'models/json_serializer.dart';
-import 'models/open_api_info.dart';
 import 'models/programming_language.dart';
 import 'models/universal_data_class.dart';
 import 'models/universal_rest_client.dart';

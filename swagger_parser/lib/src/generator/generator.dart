@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:path/path.dart' as p;
 
 import '../config/yaml_config.dart';
+import '../parser/model/open_api_info.dart';
 import '../parser/parser.dart';
 import '../utils/case_utils.dart';
 import '../utils/file_utils.dart';
@@ -13,7 +14,6 @@ import 'generator_exception.dart';
 import 'models/generated_file.dart';
 import 'models/generation_statistics.dart';
 import 'models/json_serializer.dart';
-import 'models/open_api_info.dart';
 import 'models/prefer_schema_source.dart';
 import 'models/programming_language.dart';
 import 'models/replacement_rule.dart';

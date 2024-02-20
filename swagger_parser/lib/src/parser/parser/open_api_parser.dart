@@ -2,9 +2,9 @@ import 'dart:convert' show jsonDecode;
 
 import 'package:yaml/yaml.dart';
 
-import '../generator/models/open_api_info.dart';
-import 'config/parser_config.dart';
-import 'exception/parser_exception.dart';
+import '../config/parser_config.dart';
+import '../exception/parser_exception.dart';
+import '../model/open_api_info.dart';
 
 /// General class for parsing OpenApi specification into universal models
 class OpenApiParser {

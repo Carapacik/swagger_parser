@@ -5,7 +5,6 @@ import 'package:collection/collection.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
-import '../generator/models/open_api_info.dart';
 import '../generator/models/replacement_rule.dart';
 import '../generator/models/universal_data_class.dart';
 import '../generator/models/universal_request.dart';
@@ -15,6 +14,7 @@ import '../generator/models/universal_type.dart';
 import '../utils/case_utils.dart';
 import '../utils/type_utils.dart';
 import 'exception/parser_exception.dart';
+import 'model/open_api_info.dart';
 
 export 'exception/parser_exception.dart';
 

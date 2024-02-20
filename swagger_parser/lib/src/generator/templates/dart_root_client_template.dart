@@ -1,6 +1,6 @@
+import '../../parser/model/open_api_info.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/utils.dart';
-import '../models/open_api_info.dart';
 
 String dartRootClientTemplate({
   required OpenApiInfo openApiInfo,
