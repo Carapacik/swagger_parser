@@ -9,10 +9,10 @@ class ParserConfig {
     this.requiredByDefault = true,
     this.mergeClients = false,
     this.enumParentPrefix = true,
-    this.skippedParameters = const [],
+    this.skippedParameters = const <String>[],
   });
 
-  /// Specification file content
+  /// Specification file content as [String]
   final String fileContent;
 
   /// Set `true` if your specification is json.

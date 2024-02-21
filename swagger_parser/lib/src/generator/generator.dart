@@ -7,7 +7,6 @@ import '../parser/swagger_parser_core.dart';
 import '../utils/case_utils.dart';
 import '../utils/file_utils.dart';
 import '../utils/type_utils.dart';
-import '../utils/utils.dart';
 import 'fill_controller.dart';
 import 'generator_exception.dart';
 import 'models/generated_file.dart';
@@ -257,7 +256,7 @@ final class Generator {
             'Unsupported $url extension: $extension',
           ),
       };
-      extractingSchemaFromUrlMessage(url);
+
       _schemaContent = await schemaFromUrl(url);
       if (_schemaFromUrlToFile && path != null) {
         if (!_isYaml) {

@@ -1,6 +1,7 @@
 import 'package:swagger_parser/src/config/yaml_config.dart';
 import 'package:swagger_parser/src/generator/models/prefer_schema_source.dart';
-import 'package:swagger_parser/src/utils/utils.dart';
+import 'package:swagger_parser/src/utils/output/io_output.dart'
+    if (dart.library.html) 'package:swagger_parser/src/utils/output/web_output.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 
 /// Used for run `dart run swagger_parser`
@@ -16,7 +17,7 @@ Future<void> main(List<String> arguments) async {
       await generator.fetchSchemaContent(PreferSchemaSource.url);
     }
 
-    doneExtractMessage();
+    successExtractMessage();
   } on Exception catch (e) {
     exitWithError('Failed to extract schemas from url.\n$e');
   }
