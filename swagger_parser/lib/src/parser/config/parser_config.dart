@@ -4,6 +4,7 @@ class ParserConfig {
   const ParserConfig(
     this.fileContent, {
     required this.isJson,
+    this.name,
     this.defaultContentType = 'application/json',
     this.pathMethodName = false,
     this.requiredByDefault = true,
@@ -18,6 +19,10 @@ class ParserConfig {
   /// Set `true` if your specification is json.
   /// Set `false` if yaml.
   final bool isJson;
+
+  /// Optional. Set API name for folder and export file.
+  /// If not specified, the file name is used.
+  final String? name;
 
   /// DART ONLY
   /// Default content type for all requests and responses.

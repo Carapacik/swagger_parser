@@ -96,13 +96,7 @@ final class YamlConfig {
       outputDirectory = rootConfig.outputDirectory;
     }
 
-    final rawName = yamlConfig['name'];
-    if (rawName is! String?) {
-      throw const ConfigException(
-        "Config parameter 'name' must be String.",
-      );
-    }
-
+    final rawName = yamlConfig['name']?.toString();
     final name = rawName == null || rawName.isEmpty
         ? (schemaPath ?? schemaUrl)!
                 .split('/')
@@ -155,7 +149,7 @@ final class YamlConfig {
       jsonSerializer = JsonSerializer.fromString(rawJsonSerializer);
       if (jsonSerializer == null) {
         throw ConfigException(
-          "'json_serializer' field must be contained in ${JsonSerializer.values.map((e) => e.value)}.",
+          "'json_serializer' field must be contained in ${JsonSerializer.values.map((e) => e.packageName)}.",
         );
       }
     }

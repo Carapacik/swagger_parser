@@ -12,13 +12,13 @@ enum JsonSerializer {
   dartMappable('dart_mappable');
 
   /// Constructor
-  const JsonSerializer(this.value);
+  const JsonSerializer(this.packageName);
 
   /// Package name
-  final String value;
+  final String packageName;
 
   /// Returns [JsonSerializer] from string
   static JsonSerializer? fromString(String value) => values.firstWhereOrNull(
-        (e) => e.value == value,
+        (e) => e.packageName == value,
       );
 }

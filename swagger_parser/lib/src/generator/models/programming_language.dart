@@ -107,6 +107,7 @@ enum ProgrammingLanguage {
     String name, {
     required bool markFilesAsGenerated,
     required String defaultContentType,
+    bool originalHttpResponse = false,
   }) =>
       switch (this) {
         dart => dartRetrofitClientTemplate(
@@ -114,6 +115,7 @@ enum ProgrammingLanguage {
             name: name,
             markFileAsGenerated: markFilesAsGenerated,
             defaultContentType: defaultContentType,
+            originalHttpResponse: originalHttpResponse,
           ),
         kotlin => kotlinRetrofitClientTemplate(
             restClient: restClient,

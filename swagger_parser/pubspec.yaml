@@ -8,7 +8,7 @@ topics:
   - openapi
   - codegen
   - api
-  - json
+  - rest
 environment:
   sdk: ^3.3.0
 

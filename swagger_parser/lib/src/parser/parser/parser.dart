@@ -5,9 +5,9 @@ import 'package:collection/collection.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
-import '../../generator/models/replacement_rule.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
+import '../config/parser_config.dart';
 import '../exception/open_api_parser_exception.dart';
 import '../model/open_api_info.dart';
 import '../model/universal_data_class.dart';
@@ -16,47 +16,18 @@ import '../model/universal_request_type.dart';
 import '../model/universal_rest_client.dart';
 import '../model/universal_type.dart';
 
-/// General class for parsing OpenApi files into universal models
+/// General class for parsing OpenApi specification into universal models
 class OpenApiParser {
-  /// Accepts [fileContent] of the schema file
-  /// and [isYaml] schema format or not
-  OpenApiParser(
-    String fileContent, {
-    String? name,
-    bool isYaml = false,
-    bool enumsPrefix = false,
-    bool pathMethodName = false,
-    bool squashClients = false,
-    bool originalHttpResponse = false,
-    bool requiredByDefault = true,
-    String defaultContentType = 'application/json',
-    List<ReplacementRule> replacementRules = const <ReplacementRule>[],
-    List<String> skipParameters = const <String>[],
-  })  : _name = name,
-        _pathMethodName = pathMethodName,
-        _enumsPrefix = enumsPrefix,
-        _squashClients = squashClients,
-        _originalHttpResponse = originalHttpResponse,
-        _defaultContentType = defaultContentType,
-        _replacementRules = replacementRules,
-        _requiredByDefault = requiredByDefault,
-        _skipParameters = skipParameters {
-    _definitionFileContent = isYaml
-        ? (loadYaml(fileContent) as YamlMap).toMap()
-        : jsonDecode(fileContent) as Map<String, dynamic>;
-    _parseOpenApiInfo();
+  /// Creates a [OpenApiParser].
+  OpenApiParser(this.config) {
+    _definitionFileContent = config.isJson
+        ? jsonDecode(config.fileContent) as Map<String, Object?>
+        : (loadYaml(config.fileContent) as YamlMap).toMap();
+    _apiInfo = _parseOpenApiInfo();
   }
 
-  final bool _pathMethodName;
-  final bool _enumsPrefix;
-  final String? _name;
-  final bool _squashClients;
-  final bool _requiredByDefault;
-  final bool _originalHttpResponse;
-  final String _defaultContentType;
-  final List<ReplacementRule> _replacementRules;
-  final List<String> _skipParameters;
-
+  /// [ParserConfig] that parser use
+  final ParserConfig config;
   late final OpenApiInfo _apiInfo;
   late final Map<String, dynamic> _definitionFileContent;
 
@@ -145,7 +116,7 @@ class OpenApiParser {
   }
 
   /// Parse OpenApi parameters into [OpenApiInfo]
-  void _parseOpenApiInfo() {
+  OpenApiInfo _parseOpenApiInfo() {
     final schemaVersion = switch (_definitionFileContent) {
       {_openApiConst: final Object? v} when v.toString().startsWith('3.1') =>
         OAS.v3_1,
@@ -156,10 +127,10 @@ class OpenApiParser {
       _ => throw const OpenApiParserException('Unknown version of OpenAPI.'),
     };
     final info = switch (_definitionFileContent) {
-      {_infoConst: final Map<String, dynamic> v} => v,
+      {_infoConst: final Map<String, Object?> v} => v,
       _ => null,
     };
-    _apiInfo = OpenApiInfo(
+    return OpenApiInfo(
       schemaVersion: schemaVersion,
       apiVersion: info?[_versionConst]?.toString(),
       title: info?[_titleConst]?.toString(),
@@ -176,7 +147,7 @@ class OpenApiParser {
   Iterable<UniversalRestClient> parseRestClients() {
     final restClients = <UniversalRestClient>[];
     final imports = SplayTreeSet<String>();
-    var resultContentType = _defaultContentType;
+    var resultContentType = config.defaultContentType;
 
     /// Parses return type for client query for OpenApi v3
     UniversalType? returnTypeV3(
@@ -202,7 +173,7 @@ class OpenApiParser {
       final typeWithImport = _findType(
         contentTypeValue[_schemaConst] as Map<String, dynamic>,
         additionalName: additionalName,
-        isRequired: _requiredByDefault,
+        isRequired: config.requiredByDefault,
       );
       if (typeWithImport.import != null) {
         imports.add(typeWithImport.import!);
@@ -211,7 +182,7 @@ class OpenApiParser {
         type: typeWithImport.type.type,
         arrayDepth: typeWithImport.type.arrayDepth,
         arrayValueNullable: typeWithImport.type.arrayValueNullable,
-        isRequired: _requiredByDefault,
+        isRequired: config.requiredByDefault,
       );
     }
 
@@ -251,7 +222,7 @@ class OpenApiParser {
                     as Map<String, dynamic>)[refParameterName]!
                 as Map<String, dynamic>;
           }
-          if (_skipParameters.contains(parameter[_nameConst])) {
+          if (config.skippedParameters.contains(parameter[_nameConst])) {
             continue;
           }
           final isRequired = parameter[_requiredConst]?.toString().toBool();
@@ -260,7 +231,7 @@ class OpenApiParser {
                 ? parameter[_schemaConst] as Map<String, dynamic>
                 : parameter,
             name: parameter[_nameConst].toString(),
-            isRequired: isRequired ?? _requiredByDefault,
+            isRequired: isRequired ?? config.requiredByDefault,
           );
 
           if (typeWithImport.import != null) {
@@ -300,8 +271,8 @@ class OpenApiParser {
               contentTypes[_formUrlEncodedConst] as Map<String, dynamic>;
           resultContentType = _formUrlEncodedConst;
         } else {
-          final content = contentTypes.containsKey(_defaultContentType)
-              ? contentTypes[_defaultContentType]
+          final content = contentTypes.containsKey(config.defaultContentType)
+              ? contentTypes[config.defaultContentType]
               : contentTypes.entries.firstOrNull?.value;
           contentType =
               content == null ? null : content as Map<String, dynamic>;
@@ -320,7 +291,7 @@ class OpenApiParser {
           //   final isRequired = requestBody[_requiredConst]?.toString().toBool();
           //   final typeWithImport = _findType(
           //     contentType[_schemaConst] as Map<String, dynamic>,
-          //     isRequired: isRequired ?? _requiredByDefault,
+          //     isRequired: isRequired ?? config.requiredByDefault,
           //   );
           //   final currentType = typeWithImport.type;
           //   if (typeWithImport.import != null) {
@@ -356,7 +327,7 @@ class OpenApiParser {
             final isRequired = requestBody[_requiredConst]?.toString().toBool();
             final typeWithImport = _findType(
               contentType[_schemaConst] as Map<String, dynamic>,
-              isRequired: isRequired ?? _requiredByDefault,
+              isRequired: isRequired ?? config.requiredByDefault,
             );
 
             final type = typeWithImport.type.type;
@@ -415,7 +386,7 @@ class OpenApiParser {
           final isRequired = requestBody[_requiredConst]?.toString().toBool();
           final typeWithImport = _findType(
             contentType[_schemaConst] as Map<String, dynamic>,
-            isRequired: isRequired ?? _requiredByDefault,
+            isRequired: isRequired ?? config.requiredByDefault,
           );
           final currentType = typeWithImport.type;
           if (typeWithImport.import != null) {
@@ -456,7 +427,7 @@ class OpenApiParser {
       final typeWithImport = _findType(
         code2xxMap[_schemaConst] as Map<String, dynamic>,
         additionalName: additionalName,
-        isRequired: _requiredByDefault,
+        isRequired: config.requiredByDefault,
       );
 
       if (typeWithImport.import != null) {
@@ -466,7 +437,7 @@ class OpenApiParser {
         type: typeWithImport.type.type,
         arrayDepth: typeWithImport.type.arrayDepth,
         arrayValueNullable: typeWithImport.type.arrayValueNullable,
-        isRequired: _requiredByDefault,
+        isRequired: config.requiredByDefault,
       );
     }
 
@@ -499,10 +470,10 @@ class OpenApiParser {
               ? parameter[_schemaConst] as Map<String, dynamic>
               : parameter,
           name: parameter[_nameConst].toString(),
-          isRequired: isRequired ?? _requiredByDefault,
+          isRequired: isRequired ?? config.requiredByDefault,
         );
 
-        if (_skipParameters.contains(parameter[_nameConst])) {
+        if (config.skippedParameters.contains(parameter[_nameConst])) {
           continue;
         }
 
@@ -592,7 +563,7 @@ class OpenApiParser {
 
         String requestName;
 
-        if (_pathMethodName) {
+        if (config.pathMethodName) {
           requestName = (key + path).toCamel;
         } else {
           final operationIdName =
@@ -612,7 +583,6 @@ class OpenApiParser {
           requestType: HttpRequestType.fromString(key)!,
           route: path,
           contentType: resultContentType,
-          isOriginalHttpResponse: _originalHttpResponse,
           returnType: returnType,
           parameters: parameters,
           isDeprecated: requestPath[_deprecatedConst].toString().toBool(),
@@ -632,7 +602,7 @@ class OpenApiParser {
           restClients[sameTagIndex].requests.add(request);
           restClients[sameTagIndex].imports.addAll(imports);
         }
-        resultContentType = _defaultContentType;
+        resultContentType = config.defaultContentType;
         imports.clear();
       });
     });
@@ -701,9 +671,9 @@ class OpenApiParser {
           (value[_enumConst] as List).map((e) => '$e'),
         );
         final type = value[_typeConst].toString();
-        for (final replacementRule in _replacementRules) {
-          key = replacementRule.apply(key)!;
-        }
+        // for (final replacementRule in _replacementRules) {
+        //   key = replacementRule.apply(key)!;
+        // }
 
         dataClasses.add(
           _getUniqueEnumClass(
@@ -744,9 +714,9 @@ class OpenApiParser {
         for (final map in value[_allOfConst] as List<dynamic>) {
           if ((map as Map<String, dynamic>).containsKey(_refConst)) {
             var ref = _formatRef(map);
-            for (final replacementRule in _replacementRules) {
-              ref = replacementRule.apply(ref)!;
-            }
+            // for (final replacementRule in _replacementRules) {
+            //   ref = replacementRule.apply(ref)!;
+            // }
             refs.add(ref);
             continue;
           }
@@ -759,9 +729,9 @@ class OpenApiParser {
       final allOf =
           refs.isNotEmpty ? (refs: refs, properties: parameters) : null;
 
-      for (final replacementRule in _replacementRules) {
-        key = replacementRule.apply(key)!;
-      }
+      // for (final replacementRule in _replacementRules) {
+      //   key = replacementRule.apply(key)!;
+      // }
 
       dataClasses.add(
         UniversalComponentClass(
@@ -797,7 +767,7 @@ class OpenApiParser {
             UniversalType(
               type: element.name,
               name: element.name.toCamel,
-              isRequired: _requiredByDefault,
+              isRequired: config.requiredByDefault,
             ),
           );
           allOfClass.imports.add(element.name);
@@ -830,14 +800,15 @@ class OpenApiParser {
   }
 
   /// Get tag for name
-  String _getTag(Map<String, dynamic> map) => _squashClients && _name != null
-      ? _name!
-      : map.containsKey(_tagsConst)
-          ? (map[_tagsConst] as List<dynamic>)
-              .first
-              .toString()
-              .replaceAll(RegExp(r'[^\w\s]+'), '') // Remove special characters
-          : 'client';
+  String _getTag(Map<String, dynamic> map) =>
+      config.mergeClients && config.name != null
+          ? config.name!
+          : map.containsKey(_tagsConst)
+              ? (map[_tagsConst] as List<dynamic>).first.toString().replaceAll(
+                    RegExp(r'[^\w\s]+'),
+                    '',
+                  )
+              : 'client';
 
   /// Format `$ref` type
   String _formatRef(Map<String, dynamic> map, {bool useSchema = false}) =>
@@ -863,7 +834,7 @@ class OpenApiParser {
         name: name,
         additionalName: name,
         root: false,
-        isRequired: _requiredByDefault,
+        isRequired: config.requiredByDefault,
       );
       final arrayValueNullable = arrayItems[_nullableConst].toString().toBool();
 
@@ -898,13 +869,13 @@ class OpenApiParser {
       );
 
       var newName = variableName;
-      if (_enumsPrefix && additionalName != null) {
+      if (config.enumParentPrefix && additionalName != null) {
         newName = '$additionalName $newName'.toPascal;
       }
 
-      for (final replacementRule in _replacementRules) {
-        newName = replacementRule.apply(newName)!;
-      }
+      // for (final replacementRule in _replacementRules) {
+      //   newName = replacementRule.apply(newName)!;
+      // }
 
       final items = protectEnumItemsNames(
         (map[_enumConst] as List).map((e) => '$e'),
@@ -988,7 +959,7 @@ class OpenApiParser {
             map[_additionalPropertiesConst] as Map<String, dynamic>,
             name: _additionalPropertiesConst,
             root: false,
-            isRequired: _requiredByDefault,
+            isRequired: config.requiredByDefault,
           ),
         );
       }
@@ -1058,7 +1029,7 @@ class OpenApiParser {
           if (item is Map<String, dynamic>) {
             (import: ofImport, type: ofType) = _findType(
               item,
-              isRequired: _requiredByDefault,
+              isRequired: config.requiredByDefault,
             );
           }
         }
@@ -1075,7 +1046,7 @@ class OpenApiParser {
             if (nullableItem != null) {
               final type = _findType(
                 nullableItem,
-                isRequired: _requiredByDefault,
+                isRequired: config.requiredByDefault,
               );
               ofImport = type.import;
               ofType = type.type.copyWith(nullable: true);
@@ -1142,12 +1113,12 @@ class OpenApiParser {
       } else {
         type = import ?? _objectConst;
       }
-      if (import != null) {
-        for (final replacementRule in _replacementRules) {
-          import = replacementRule.apply(import);
-          type = replacementRule.apply(type)!;
-        }
-      }
+      // if (import != null) {
+      // for (final replacementRule in _replacementRules) {
+      //   import = replacementRule.apply(import);
+      //   type = replacementRule.apply(type)!;
+      // }
+      // }
 
       // To detect is this entity is map or not
       final mapType = map[_typeConst].toString() == _objectConst &&

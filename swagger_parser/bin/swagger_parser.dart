@@ -1,4 +1,4 @@
-import 'package:swagger_parser/src/config/yaml_config.dart';
+import 'package:swagger_parser/src/config/config_processor.dart';
 import 'package:swagger_parser/src/generator/models/generation_statistics.dart';
 import 'package:swagger_parser/src/utils/output/io_output.dart'
     if (dart.library.html) 'package:swagger_parser/src/utils/output/web_output.dart';
@@ -9,7 +9,9 @@ Future<void> main(List<String> arguments) async {
   introMessage();
   try {
     /// Run generate from YAML config
-    final configs = YamlConfig.parseConfigsFromYamlFile(arguments);
+    const configProcessor = ConfigProcessor();
+    final yamlMap = configProcessor.readConfigFromFile(arguments);
+    final configs = configProcessor.parseConfig(yamlMap);
 
     GenerationStatistics? totalStats;
     var successSchemasCount = 0;
@@ -17,13 +19,13 @@ Future<void> main(List<String> arguments) async {
     generateMessage();
     for (final config in configs) {
       try {
-        final generator = Generator.fromYamlConfig(config);
+        final generator = Generator.fromConfig(config);
         final (openApi, stats) = await generator.generateFiles();
 
         schemaStatisticsMessage(
-          name: config.name,
           openApi: openApi,
           statistics: stats,
+          name: config.name,
         );
         totalStats = totalStats?.merge(stats);
         totalStats ??= stats;

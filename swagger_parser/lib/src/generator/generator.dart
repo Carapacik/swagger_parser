@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:path/path.dart' as p;
-
-import '../config/yaml_config.dart';
+import '../config/swp_config.dart';
 import '../parser/swagger_parser_core.dart';
 import '../utils/case_utils.dart';
 import '../utils/file_utils.dart';
@@ -12,7 +8,6 @@ import 'generator_exception.dart';
 import 'models/generated_file.dart';
 import 'models/generation_statistics.dart';
 import 'models/json_serializer.dart';
-import 'models/prefer_schema_source.dart';
 import 'models/programming_language.dart';
 import 'models/replacement_rule.dart';
 
@@ -23,14 +18,13 @@ final class Generator {
   /// Applies parameters directly from constructor
   /// and sets them to default if not found
   Generator({
+    required this.config,
     required String outputDirectory,
     String? schemaPath,
     String? schemaUrl,
     String? schemaContent,
     bool? isYaml,
-    bool? schemaFromUrlToFile,
     bool? requiredByDefault,
-    PreferSchemaSource? preferSchemeSource,
     ProgrammingLanguage? language,
     String? name,
     JsonSerializer? jsonSerializer,
@@ -44,18 +38,15 @@ final class Generator {
     bool? pathMethodName,
     bool? putInFolder,
     bool? enumsToJson,
-    bool? enumsPrefix,
+    bool? enumParentPrefix,
     bool? unknownEnumValue,
     String? defaultContentType,
     bool? markFilesAsGenerated,
     List<ReplacementRule>? replacementRules,
-    List<String>? skipParameters,
   })  : _schemaPath = schemaPath,
         _schemaUrl = schemaUrl,
         _schemaContent = schemaContent,
         _isYaml = isYaml ?? false,
-        _schemaFromUrlToFile = schemaFromUrlToFile ?? true,
-        _preferSchemeSource = preferSchemeSource ?? PreferSchemaSource.url,
         _outputDirectory = outputDirectory,
         _requiredByDefault = requiredByDefault ?? true,
         _name = name,
@@ -66,46 +57,41 @@ final class Generator {
         _exportFile = exportFile ?? true,
         _clientPostfix = clientPostfix ?? 'Client',
         _putClientsInFolder = putClientsInFolder ?? false,
-        _squashClients = squashClients ?? false,
         _originalHttpResponse = originalHttpResponse ?? false,
-        _pathMethodName = pathMethodName ?? false,
         _putInFolder = putInFolder ?? false,
         _enumsToJson = enumsToJson ?? false,
-        _enumsPrefix = enumsPrefix ?? false,
         _unknownEnumValue = unknownEnumValue ?? true,
         _markFilesAsGenerated = markFilesAsGenerated ?? true,
-        _defaultContentType = defaultContentType ?? 'application/json',
-        _replacementRules = replacementRules ?? const [],
-        _skipParameters = skipParameters ?? const [];
+        _defaultContentType = defaultContentType ?? 'application/json';
 
   /// Applies parameters set from yaml config file
-  factory Generator.fromYamlConfig(YamlConfig yamlConfig) {
+  factory Generator.fromConfig(SWPConfig config) {
     return Generator(
-      outputDirectory: yamlConfig.outputDirectory,
-      schemaPath: yamlConfig.schemaPath,
-      schemaUrl: yamlConfig.schemaUrl,
-      schemaFromUrlToFile: yamlConfig.schemaFromUrlToFile,
-      preferSchemeSource: yamlConfig.preferSchemaSource,
-      language: yamlConfig.language,
-      name: yamlConfig.name,
-      jsonSerializer: yamlConfig.jsonSerializer,
-      rootClient: yamlConfig.rootClient,
-      rootClientName: yamlConfig.rootClientName,
-      exportFile: yamlConfig.exportFile,
-      clientPostfix: yamlConfig.clientPostfix,
-      putClientsInFolder: yamlConfig.putClientsInFolder,
-      squashClients: yamlConfig.squashClients,
-      originalHttpResponse: yamlConfig.originalHttpResponse,
-      pathMethodName: yamlConfig.pathMethodName,
-      putInFolder: yamlConfig.putInFolder,
-      enumsToJson: yamlConfig.enumsToJson,
-      enumsPrefix: yamlConfig.enumsPrefix,
-      unknownEnumValue: yamlConfig.unknownEnumValue,
-      markFilesAsGenerated: yamlConfig.markFilesAsGenerated,
-      replacementRules: yamlConfig.replacementRules,
-      skipParameters: yamlConfig.skipParameters,
+      config: config,
+      outputDirectory: config.outputDirectory,
+      schemaPath: config.schemaPath,
+      schemaUrl: config.schemaUrl,
+      language: config.language,
+      name: config.name,
+      jsonSerializer: config.jsonSerializer,
+      rootClient: config.rootClient,
+      rootClientName: config.rootClientName,
+      exportFile: config.exportFile,
+      clientPostfix: config.clientPostfix,
+      putClientsInFolder: config.putClientsInFolder,
+      squashClients: config.mergeClients,
+      originalHttpResponse: config.originalHttpResponse,
+      pathMethodName: config.pathMethodName,
+      putInFolder: config.putInFolder,
+      enumsToJson: config.enumsToJson,
+      enumParentPrefix: config.enumParentPrefix,
+      unknownEnumValue: config.unknownEnumValue,
+      markFilesAsGenerated: config.markFilesAsGenerated,
+      replacementRules: config.replacementRules,
     );
   }
+
+  final SWPConfig config;
 
   /// The contents of your schema file
   String? _schemaContent;
@@ -118,12 +104,6 @@ final class Generator {
 
   /// The url to your schema file
   final String? _schemaUrl;
-
-  /// If true, schema will be extracted from url and saved to file
-  final bool _schemaFromUrlToFile;
-
-  /// Prefer schema from url or file
-  final PreferSchemaSource _preferSchemeSource;
 
   /// Output directory
   final String _outputDirectory;
@@ -157,23 +137,14 @@ final class Generator {
   /// Put all clients in clients folder
   final bool _putClientsInFolder;
 
-  /// Squash all clients in one client.
-  final bool _squashClients;
-
   /// Generate request methods with HttpResponse<Entity>
   final bool _originalHttpResponse;
-
-  /// If true, use the endpoint path for the method name, if false, use operationId
-  final bool _pathMethodName;
 
   /// If true, generated all files will be put in folder with name of schema
   final bool _putInFolder;
 
   /// If true, generated enums will have toJson method
   final bool _enumsToJson;
-
-  /// If true, generated enums will have parent component name in its class name
-  final bool _enumsPrefix;
 
   /// If true, adds an unknown value for all enums to maintain backward compatibility when adding new values on the backend.
   final bool _unknownEnumValue;
@@ -183,12 +154,6 @@ final class Generator {
 
   /// Content type for all requests, default 'application/json'
   final String _defaultContentType;
-
-  /// List of rules used to replace patterns in generated class names
-  final List<ReplacementRule> _replacementRules;
-
-  /// Skip parameters when generate
-  final List<String> _skipParameters;
 
   /// Result open api info
   late OpenApiInfo _openApiInfo;
@@ -207,7 +172,7 @@ final class Generator {
     final stopwatch = Stopwatch()..start();
     resetUniqueNameCounters();
 
-    await fetchSchemaContent();
+    // await fetchSchemaContent();
     _parseOpenApiDefinitionFile();
     await _generateFiles();
 
@@ -232,78 +197,81 @@ final class Generator {
   Future<List<GeneratedFile>> generateContent() async {
     resetUniqueNameCounters();
 
-    await fetchSchemaContent();
+    // await fetchSchemaContent();
     _parseOpenApiDefinitionFile();
     return _fillContent();
   }
 
-  /// Fetch schema from prefer source
-  Future<void> fetchSchemaContent([
-    PreferSchemaSource? preferSchemeSource,
-  ]) async {
-    final url = _schemaUrl;
-    final path = _schemaPath;
-
-    if (((preferSchemeSource ?? _preferSchemeSource) ==
-                PreferSchemaSource.url ||
-            path == null) &&
-        url != null) {
-      final extension = p.extension(url).toLowerCase();
-      _isYaml = switch (extension) {
-        '.yaml' => true,
-        '.json' => false,
-        _ => throw GeneratorException(
-            'Unsupported $url extension: $extension',
-          ),
-      };
-
-      _schemaContent = await schemaFromUrl(url);
-      if (_schemaFromUrlToFile && path != null) {
-        if (!_isYaml) {
-          final formattedJson = const JsonEncoder.withIndent('    ')
-              .convert(jsonDecode(_schemaContent!));
-          writeSchemaToFile(formattedJson, path);
-        } else {
-          writeSchemaToFile(_schemaContent!, path);
-        }
-      }
-    } else if (path != null) {
-      final configFile = schemaFile(path);
-      if (configFile == null) {
-        throw GeneratorException("Can't find schema file at $path.");
-      }
-      final extension = p.extension(path).toLowerCase();
-      _isYaml = switch (extension) {
-        '.yaml' => true,
-        '.json' => false,
-        _ => throw GeneratorException(
-            'Unsupported $path extension: $extension',
-          ),
-      };
-      _schemaContent = configFile.readAsStringSync();
-    } else if (_schemaContent == null) {
-      throw GeneratorException(
-        "Parameters 'schemaPath' or 'schemaUrl' or 'schemaContent' are required",
-      );
-    }
-  }
+  // /// Fetch schema from prefer source
+  // Future<void> fetchSchemaContent([
+  //   PreferSchemaSource? preferSchemeSource,
+  // ]) async {
+  //   final url = _schemaUrl;
+  //   final path = _schemaPath;
+  //
+  //   if (((preferSchemeSource ?? _preferSchemeSource) ==
+  //               PreferSchemaSource.url ||
+  //           path == null) &&
+  //       url != null) {
+  //     final extension = p.extension(url).toLowerCase();
+  //     _isYaml = switch (extension) {
+  //       '.yaml' => true,
+  //       '.json' => false,
+  //       _ => throw GeneratorException(
+  //           'Unsupported $url extension: $extension',
+  //         ),
+  //     };
+  //
+  //     _schemaContent = await schemaFromUrl(url);
+  //     if (_schemaFromUrlToFile && path != null) {
+  //       if (!_isYaml) {
+  //         final formattedJson = const JsonEncoder.withIndent('    ')
+  //             .convert(jsonDecode(_schemaContent!));
+  //         writeSchemaToFile(formattedJson, path);
+  //       } else {
+  //         writeSchemaToFile(_schemaContent!, path);
+  //       }
+  //     }
+  //   } else if (path != null) {
+  //     final configFile = schemaFile(path);
+  //     if (configFile == null) {
+  //       throw GeneratorException("Can't find schema file at $path.");
+  //     }
+  //     final extension = p.extension(path).toLowerCase();
+  //     _isYaml = switch (extension) {
+  //       '.yaml' => true,
+  //       '.json' => false,
+  //       _ => throw GeneratorException(
+  //           'Unsupported $path extension: $extension',
+  //         ),
+  //     };
+  //     _schemaContent = configFile.readAsStringSync();
+  //   } else if (_schemaContent == null) {
+  //     throw GeneratorException(
+  //       "Parameters 'schemaPath' or 'schemaUrl' or 'schemaContent' are required",
+  //     );
+  //   }
+  // }
 
   /// Parse definition file content and fill list of [UniversalRestClient]
   /// and list of [UniversalDataClass]
-  void _parseOpenApiDefinitionFile() {
-    final parser = OpenApiParser(
-      _schemaContent!,
-      isYaml: _isYaml,
-      pathMethodName: _pathMethodName,
-      enumsPrefix: _enumsPrefix,
-      name: _name,
-      squashClients: _squashClients,
-      replacementRules: _replacementRules,
-      originalHttpResponse: _originalHttpResponse,
-      defaultContentType: _defaultContentType,
-      skipParameters: _skipParameters,
-      requiredByDefault: _requiredByDefault,
-    );
+  Future<void> _parseOpenApiDefinitionFile() async {
+    var fileContent = '';
+    if (config.schemaPath != null && config.schemaPath!.isNotEmpty) {
+      final configFile = schemaFile(config.schemaPath!);
+      if (configFile == null) {
+        throw GeneratorException(
+          'Can not find schema file at ${config.schemaPath}.',
+        );
+      }
+      fileContent = await configFile.readAsString();
+    } else {
+      // TODO(Carapacik): get schema from url and save to file
+      // than read content
+    }
+    final parserConfig =
+        config.toParserConfig(fileContent: fileContent, isJson: true);
+    final parser = OpenApiParser(parserConfig);
     _openApiInfo = parser.openApiInfo;
     _restClients = parser.parseRestClients();
     _dataClasses = parser.parseDataClasses();
@@ -316,7 +284,7 @@ final class Generator {
     for (final file in files) {
       _totalLines += RegExp('\n').allMatches(file.contents).length;
       await generateFile(
-        '$_outputDirectory${_putInFolder && _name != null ? '/${_name?.toSnake}' : ''}',
+        '$_outputDirectory${_putInFolder && _name != null ? '/${_name.toSnake}' : ''}',
         file,
       );
     }
@@ -336,6 +304,7 @@ final class Generator {
       unknownEnumValue: _unknownEnumValue,
       markFilesAsGenerated: _markFilesAsGenerated,
       defaultContentType: _defaultContentType,
+      originalHttpResponse: _originalHttpResponse,
     );
 
     final restClientFiles =
