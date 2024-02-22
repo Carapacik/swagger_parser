@@ -9,7 +9,7 @@ class ParserConfig {
     this.pathMethodName = false,
     this.requiredByDefault = true,
     this.mergeClients = false,
-    this.enumParentPrefix = true,
+    this.enumsParentPrefix = true,
     this.skippedParameters = const <String>[],
   });
 
@@ -45,7 +45,7 @@ class ParserConfig {
   final bool mergeClients;
 
   /// Set 'true' to set enum prefix from parent component.
-  final bool enumParentPrefix;
+  final bool enumsParentPrefix;
 
   /// List of parameter names that should skip during parsing
   final List<String> skippedParameters;

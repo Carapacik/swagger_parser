@@ -869,7 +869,7 @@ class OpenApiParser {
       );
 
       var newName = variableName;
-      if (config.enumParentPrefix && additionalName != null) {
+      if (config.enumsParentPrefix && additionalName != null) {
         newName = '$additionalName $newName'.toPascal;
       }
 

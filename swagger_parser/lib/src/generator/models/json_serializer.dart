@@ -1,5 +1,3 @@
-import 'package:collection/collection.dart';
-
 /// Used for select json serializer for dto
 enum JsonSerializer {
   /// https://pub.dev/packages/json_serializable
@@ -14,11 +12,14 @@ enum JsonSerializer {
   /// Constructor
   const JsonSerializer(this.packageName);
 
+  /// Returns [JsonSerializer] from string
+  factory JsonSerializer.fromString(String value) => values.firstWhere(
+        (e) => e.packageName == value,
+        orElse: () => throw ArgumentError(
+          "'$value' must be contained in ${JsonSerializer.values.map((e) => e.packageName)}",
+        ),
+      );
+
   /// Package name
   final String packageName;
-
-  /// Returns [JsonSerializer] from string
-  static JsonSerializer? fromString(String value) => values.firstWhereOrNull(
-        (e) => e.packageName == value,
-      );
 }

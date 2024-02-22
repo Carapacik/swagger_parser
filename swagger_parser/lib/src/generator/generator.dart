@@ -84,7 +84,7 @@ final class Generator {
       pathMethodName: config.pathMethodName,
       putInFolder: config.putInFolder,
       enumsToJson: config.enumsToJson,
-      enumParentPrefix: config.enumParentPrefix,
+      enumParentPrefix: config.enumsParentPrefix,
       unknownEnumValue: config.unknownEnumValue,
       markFilesAsGenerated: config.markFilesAsGenerated,
       replacementRules: config.replacementRules,

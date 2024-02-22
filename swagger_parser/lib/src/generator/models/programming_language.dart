@@ -1,5 +1,3 @@
-import 'package:collection/collection.dart';
-
 import '../../parser/swagger_parser_core.dart';
 import '../generator_exception.dart';
 import '../templates/dart_dart_mappable_dto_template.dart';
@@ -28,12 +26,17 @@ enum ProgrammingLanguage {
   /// Constructor with [fileExtension] for every language
   const ProgrammingLanguage(this.fileExtension);
 
+  /// Returns [ProgrammingLanguage] from string
+  factory ProgrammingLanguage.fromString(String value) =>
+      ProgrammingLanguage.values.firstWhere(
+        (e) => e.name == value,
+        orElse: () => throw ArgumentError(
+          "'$value' must be contained in ${ProgrammingLanguage.values.map((e) => e.name)}",
+        ),
+      );
+
   /// Extension for generated files
   final String fileExtension;
-
-  /// Used to get [ProgrammingLanguage] from config
-  static ProgrammingLanguage? fromString(String? value) =>
-      ProgrammingLanguage.values.firstWhereOrNull((e) => e.name == value);
 
   /// Determines template for generating DTOs by language
   String dtoFileContent(
