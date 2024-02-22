@@ -1,6 +1,8 @@
 ## 1.16.0
 
--
+- Wrapping collections variable introduced replacing arrayDepth and mapType: this variable presents a
+  list of all collections wrapping a type (example: List<List<Map<String,
+  List<String>>>> -> [List, List, List, Map, List]) and will resolve them in order of appearance
 
 ## 1.15.4
 
