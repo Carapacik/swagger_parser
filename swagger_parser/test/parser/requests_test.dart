@@ -10,7 +10,7 @@ void main() {
           p.join('test', 'parser', 'schemas', 'basic_requests.2.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final parser = OpenApiParser(schemaContent);
       final actualRestClients = parser.parseRestClients().toList();
       const expectedRestClients = [
         UniversalRestClient(
@@ -60,7 +60,7 @@ void main() {
                     name: 'tags',
                     description: 'tags to filter by',
                     jsonKey: 'tags',
-                    arrayDepth: 1,
+                    wrappingCollections: ['List<'],
                     isRequired: true,
                   ),
                   parameterType: HttpParameterType.query,
@@ -122,7 +122,7 @@ void main() {
           p.join('test', 'parser', 'schemas', 'basic_requests.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final parser = OpenApiParser(schemaContent);
       final actualRestClients = parser.parseRestClients().toList();
       const expectedRestClients = [
         UniversalRestClient(
@@ -181,7 +181,7 @@ void main() {
                     type: 'string',
                     name: 'tags',
                     jsonKey: 'tags',
-                    arrayDepth: 1,
+                    wrappingCollections: ['List<'],
                     isRequired: true,
                   ),
                   parameterType: HttpParameterType.query,

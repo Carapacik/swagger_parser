@@ -209,7 +209,7 @@ class OpenApiParser {
       }
       return UniversalType(
         type: typeWithImport.type.type,
-        arrayDepth: typeWithImport.type.arrayDepth,
+        wrappingCollections: typeWithImport.type.wrappingCollections,
         arrayValueNullable: typeWithImport.type.arrayValueNullable,
         isRequired: _requiredByDefault,
       );
@@ -405,7 +405,7 @@ class OpenApiParser {
                   defaultValue: currentType.defaultValue,
                   isRequired: currentType.isRequired,
                   nullable: currentType.nullable,
-                  arrayDepth: currentType.arrayDepth,
+                  wrappingCollections: currentType.wrappingCollections,
                   arrayValueNullable: currentType.arrayValueNullable,
                 ),
               ),
@@ -434,7 +434,7 @@ class OpenApiParser {
                 defaultValue: currentType.defaultValue,
                 isRequired: currentType.isRequired,
                 nullable: currentType.nullable,
-                arrayDepth: currentType.arrayDepth,
+                wrappingCollections: currentType.wrappingCollections,
                 arrayValueNullable: currentType.arrayValueNullable,
               ),
             ),
@@ -464,7 +464,7 @@ class OpenApiParser {
       }
       return UniversalType(
         type: typeWithImport.type.type,
-        arrayDepth: typeWithImport.type.arrayDepth,
+        wrappingCollections: typeWithImport.type.wrappingCollections,
         arrayValueNullable: typeWithImport.type.arrayValueNullable,
         isRequired: _requiredByDefault,
       );
@@ -831,7 +831,7 @@ class OpenApiParser {
 
   /// Get tag for name
   String _getTag(Map<String, dynamic> map) => _squashClients && _name != null
-      ? _name!
+      ? _name
       : map.containsKey(_tagsConst)
           ? (map[_tagsConst] as List<dynamic>)
               .first
@@ -881,7 +881,45 @@ class OpenApiParser {
               protectDefaultValue(arrayType.type.defaultValue, isArray: true),
           isRequired: isRequired,
           nullable: map[_nullableConst].toString().toBool(),
-          arrayDepth: arrayType.type.arrayDepth + 1,
+          wrappingCollections: List.of(arrayType.type.wrappingCollections)
+            ..insert(0, 'List<'),
+          arrayValueNullable: arrayValueNullable,
+        ),
+        import: arrayType.import,
+      );
+    }
+
+    // Map
+    else if (map[_typeConst].toString() == _objectConst &&
+        map.containsKey(_additionalPropertiesConst) &&
+        (map[_additionalPropertiesConst] is Map<String, dynamic>)) {
+      final arrayItems =
+          map[_additionalPropertiesConst] as Map<String, dynamic>;
+      final arrayType = _findType(
+        arrayItems,
+        name: name,
+        additionalName: name,
+        root: false,
+        isRequired: _requiredByDefault,
+      );
+      final arrayValueNullable = arrayItems[_nullableConst].toString().toBool();
+
+      final (newName, description) =
+          protectName(name, description: map[_descriptionConst]?.toString());
+
+      return (
+        type: UniversalType(
+          type: arrayType.type.type,
+          name: newName?.toCamel,
+          description: description,
+          format: arrayType.type.format,
+          jsonKey: name,
+          defaultValue:
+              protectDefaultValue(arrayType.type.defaultValue, isArray: true),
+          isRequired: isRequired,
+          nullable: map[_nullableConst].toString().toBool(),
+          wrappingCollections: List.of(arrayType.type.wrappingCollections)
+            ..insert(0, 'Map<String, '),
           arrayValueNullable: arrayValueNullable,
         ),
         import: arrayType.import,
@@ -961,60 +999,6 @@ class OpenApiParser {
 
       final typeWithImports = <({UniversalType type, String? import})>[];
 
-      // To detect is this entity is map or not
-      final mapType = map[_typeConst].toString() == _objectConst &&
-              map.containsKey(_additionalPropertiesConst) &&
-              (map[_additionalPropertiesConst] is Map<String, dynamic>) &&
-              !(map[_additionalPropertiesConst] as Map<String, dynamic>)
-                  .containsKey(r'$ref')
-          ? 'string'
-          : null;
-      if (map.containsKey(_propertiesConst)) {
-        (map[_propertiesConst] as Map<String, dynamic>).forEach((key, value) {
-          typeWithImports.add(
-            _findType(
-              value as Map<String, dynamic>,
-              name: key,
-              root: false,
-              isRequired: requiredParameters.contains(key),
-            ),
-          );
-        });
-      }
-      if (map.containsKey(_additionalPropertiesConst) &&
-          map[_additionalPropertiesConst] is Map<String, dynamic>) {
-        typeWithImports.add(
-          _findType(
-            map[_additionalPropertiesConst] as Map<String, dynamic>,
-            name: _additionalPropertiesConst,
-            root: false,
-            isRequired: _requiredByDefault,
-          ),
-        );
-      }
-
-      // Interception of objectClass creation when Map construction is expected
-      if (mapType != null &&
-          typeWithImports.length == 1 &&
-          typeWithImports[0].import == null) {
-        return (
-          type: UniversalType(
-            type: map[_typeConst] as String,
-            name: newName.toCamel,
-            description: description,
-            format: map.containsKey(_formatConst)
-                ? map[_formatConst].toString()
-                : null,
-            jsonKey: newName,
-            mapType: mapType,
-            defaultValue: protectDefaultValue(map[_defaultConst]),
-            nullable: map[_nullableConst].toString().toBool(),
-            isRequired: isRequired,
-          ),
-          import: null,
-        );
-      }
-
       if (_objectClasses.where((oc) => oc.name == newName.toPascal).isEmpty) {
         _objectClasses.add(
           UniversalComponentClass(
@@ -1035,7 +1019,6 @@ class OpenApiParser {
               ? map[_formatConst].toString()
               : null,
           jsonKey: newName,
-          mapType: mapType,
           defaultValue: protectDefaultValue(map[_defaultConst]),
           nullable: map[_nullableConst].toString().toBool(),
           isRequired: isRequired,
@@ -1090,7 +1073,7 @@ class OpenApiParser {
 
       final enumType = defaultValue != null &&
               import != null &&
-              (ofType == null || ofType.arrayDepth == 0)
+              (ofType == null || ofType.wrappingCollections.isEmpty)
           ? type
           : null;
       final (newName, description) =
@@ -1106,11 +1089,11 @@ class OpenApiParser {
           defaultValue: protectDefaultValue(
             defaultValue,
             isEnum: enumType != null,
-            isArray: (ofType?.arrayDepth ?? 0) > 0,
+            isArray: (ofType?.wrappingCollections.length ?? 0) > 0,
           ),
           enumType: enumType,
           isRequired: isRequired,
-          arrayDepth: ofType?.arrayDepth ?? 0,
+          wrappingCollections: ofType?.wrappingCollections ?? [],
           arrayValueNullable: ofType?.arrayValueNullable ?? false,
           nullable: root &&
                   map.containsKey(_nullableConst) &&
@@ -1149,12 +1132,6 @@ class OpenApiParser {
         }
       }
 
-      // To detect is this entity is map or not
-      final mapType = map[_typeConst].toString() == _objectConst &&
-              map.containsKey(_additionalPropertiesConst) &&
-              (map[_additionalPropertiesConst] is Map<String, dynamic>)
-          ? 'string'
-          : null;
       final defaultValue = map[_defaultConst]?.toString();
       final (newName, description) =
           protectName(name, description: map[_descriptionConst]?.toString());
@@ -1168,7 +1145,6 @@ class OpenApiParser {
           description: description,
           format: map[_formatConst]?.toString(),
           jsonKey: name,
-          mapType: mapType,
           defaultValue:
               protectDefaultValue(defaultValue, isEnum: enumType != null),
           enumType: enumType,

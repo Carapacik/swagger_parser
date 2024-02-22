@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 
@@ -16,10 +17,9 @@ final class UniversalType {
     this.jsonKey,
     this.defaultValue,
     this.nullable = false,
-    this.arrayDepth = 0,
+    this.wrappingCollections = const [],
     this.arrayValueNullable = false,
     this.enumType,
-    this.mapType,
   });
 
   /// Object type
@@ -54,16 +54,13 @@ final class UniversalType {
   /// Array depth, 0 if not a list
   /// if arrayDepth = 2
   /// List<List<Object>>
-  final int arrayDepth;
+  final List<String> wrappingCollections;
 
   /// Whether or not this field is nullable
   final bool arrayValueNullable;
 
   /// Whether or not this field is nullable
   final bool nullable;
-
-  /// If not null means this is map with key type
-  final String? mapType;
 
   /// Copy of [UniversalType] with new values
   UniversalType copyWith({
@@ -75,9 +72,8 @@ final class UniversalType {
     String? defaultValue,
     bool? isRequired,
     String? enumType,
-    int? arrayDepth,
+    List<String>? wrappingCollections,
     bool? nullable,
-    String? mapType,
     bool? arrayValueNullable,
   }) {
     return UniversalType(
@@ -89,9 +85,8 @@ final class UniversalType {
       defaultValue: defaultValue ?? this.defaultValue,
       isRequired: isRequired ?? this.isRequired,
       enumType: enumType ?? this.enumType,
-      arrayDepth: arrayDepth ?? this.arrayDepth,
+      wrappingCollections: wrappingCollections ?? this.wrappingCollections,
       nullable: nullable ?? this.nullable,
-      mapType: mapType ?? this.mapType,
       arrayValueNullable: arrayValueNullable ?? this.arrayValueNullable,
     );
   }
@@ -119,9 +114,9 @@ final class UniversalType {
           defaultValue == other.defaultValue &&
           isRequired == other.isRequired &&
           enumType == other.enumType &&
-          arrayDepth == other.arrayDepth &&
+          const DeepCollectionEquality()
+              .equals(wrappingCollections, other.wrappingCollections) &&
           nullable == other.nullable &&
-          mapType == other.mapType &&
           arrayValueNullable == other.arrayValueNullable;
 
   @override
@@ -134,9 +129,8 @@ final class UniversalType {
       defaultValue.hashCode ^
       isRequired.hashCode ^
       enumType.hashCode ^
-      arrayDepth.hashCode ^
+      wrappingCollections.hashCode ^
       nullable.hashCode ^
-      mapType.hashCode ^
       arrayValueNullable.hashCode;
 
   @override
@@ -147,31 +141,24 @@ final class UniversalType {
       'defaultValue: $defaultValue, '
       'isRequired: $isRequired, '
       'enumType: $enumType, '
-      'arrayDepth: $arrayDepth, '
+      'wrappingCollections: $wrappingCollections, '
       'arrayValueNullable: $arrayValueNullable, '
-      'nullable: $nullable, '
-      'mapType: $mapType)';
+      'nullable: $nullable)';
 }
 
 /// Converts [UniversalType] to type from specified language
 extension UniversalTypeX on UniversalType {
   /// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
   String toSuitableType(ProgrammingLanguage lang) {
-    if (arrayDepth == 0 && mapType == null) {
+    if (wrappingCollections.isEmpty) {
       return _questionMark(lang);
     }
     final sb = StringBuffer();
-    for (var i = 0; i < arrayDepth; i++) {
-      sb.write('List<');
-    }
-    if (mapType != null) {
-      sb.write(_mapStart(lang));
+    for (var i = 0; i < wrappingCollections.length; i++) {
+      sb.write(wrappingCollections[i]);
     }
     sb.write(_questionMark(lang));
-    if (mapType != null) {
-      sb.write('>');
-    }
-    for (var i = 0; i < arrayDepth; i++) {
+    for (var i = 0; i < wrappingCollections.length; i++) {
       sb.write('>');
     }
     if (nullable || (!isRequired && defaultValue == null)) {
@@ -181,25 +168,17 @@ extension UniversalTypeX on UniversalType {
   }
 
   String _questionMark(ProgrammingLanguage lang) {
-    final questionMark =
-        (isRequired && !nullable || arrayDepth > 0 || defaultValue != null) &&
-                !arrayValueNullable
-            ? ''
-            : '?';
+    final questionMark = (isRequired && !nullable ||
+                wrappingCollections.isNotEmpty ||
+                defaultValue != null) &&
+            !arrayValueNullable
+        ? ''
+        : '?';
     switch (lang) {
       case ProgrammingLanguage.dart:
         return type.toDartType(format) + questionMark;
       case ProgrammingLanguage.kotlin:
         return type.toKotlinType(format) + questionMark;
-    }
-  }
-
-  String _mapStart(ProgrammingLanguage lang) {
-    switch (lang) {
-      case ProgrammingLanguage.dart:
-        return 'Map<${mapType!.toDartType(format)}, ';
-      case ProgrammingLanguage.kotlin:
-        return 'Map<${mapType!.toKotlinType(format)}, ';
     }
   }
 }

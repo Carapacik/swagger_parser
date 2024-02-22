@@ -617,19 +617,19 @@ data class ClassName(
           UniversalType(
             type: 'integer',
             name: 'list0',
-            arrayDepth: 1,
+            wrappingCollections: ['List<'],
             isRequired: true,
           ),
           UniversalType(
             type: 'string',
             name: 'list1',
-            arrayDepth: 2,
+            wrappingCollections: ['List<', 'List<'],
             isRequired: true,
           ),
           UniversalType(
             type: 'Another',
             name: 'list5',
-            arrayDepth: 5,
+            wrappingCollections: ['List<', 'List<', 'List<', 'List<', 'List<'],
             isRequired: true,
           ),
         ],
@@ -671,19 +671,19 @@ class ClassName {
           UniversalType(
             type: 'integer',
             name: 'list0',
-            arrayDepth: 1,
+            wrappingCollections: ['List<'],
             isRequired: true,
           ),
           UniversalType(
             type: 'string',
             name: 'list1',
-            arrayDepth: 2,
+            wrappingCollections: ['List<', 'List<'],
             isRequired: true,
           ),
           UniversalType(
             type: 'Another',
             name: 'list5',
-            arrayDepth: 5,
+            wrappingCollections: ['List<', 'List<', 'List<', 'List<', 'List<'],
             isRequired: true,
           ),
         ],
@@ -722,19 +722,19 @@ class ClassName with _$ClassName {
           UniversalType(
             type: 'integer',
             name: 'list0',
-            arrayDepth: 1,
+            wrappingCollections: ['List<'],
             isRequired: true,
           ),
           UniversalType(
             type: 'string',
             name: 'list1',
-            arrayDepth: 2,
+            wrappingCollections: ['List<', 'List<'],
             isRequired: true,
           ),
           UniversalType(
             type: 'Another',
             name: 'list5',
-            arrayDepth: 5,
+            wrappingCollections: ['List<', 'List<', 'List<', 'List<', 'List<'],
             isRequired: true,
           ),
         ],
@@ -1145,7 +1145,7 @@ data class ClassName(
           ),
           UniversalType(
             type: 'string',
-            arrayDepth: 1,
+            wrappingCollections: ['List<'],
             name: 'list',
             isRequired: false,
           ),
@@ -1156,7 +1156,7 @@ data class ClassName(
           ),
           UniversalType(
             type: 'Another',
-            arrayDepth: 2,
+            wrappingCollections: ['List<', 'List<'],
             name: 'anotherList',
             isRequired: true,
           ),
@@ -1205,7 +1205,7 @@ class ClassName {
           ),
           UniversalType(
             type: 'string',
-            arrayDepth: 1,
+            wrappingCollections: ['List<'],
             name: 'list',
             isRequired: false,
           ),
@@ -1216,7 +1216,7 @@ class ClassName {
           ),
           UniversalType(
             type: 'Another',
-            arrayDepth: 2,
+            wrappingCollections: ['List<', 'List<'],
             name: 'anotherList',
             isRequired: true,
           ),
@@ -1261,7 +1261,7 @@ class ClassName with _$ClassName {
           ),
           UniversalType(
             type: 'string',
-            arrayDepth: 1,
+            wrappingCollections: ['List<'],
             name: 'list',
             isRequired: false,
           ),
@@ -1272,7 +1272,7 @@ class ClassName with _$ClassName {
           ),
           UniversalType(
             type: 'Another',
-            arrayDepth: 2,
+            wrappingCollections: ['List<', 'List<'],
             name: 'anotherList',
             isRequired: true,
           ),
@@ -1322,7 +1322,7 @@ data class ClassName(
           UniversalType(
             type: 'Another',
             name: 'list',
-            arrayDepth: 1,
+            wrappingCollections: ['List<'],
             isRequired: true,
           ),
         ],
@@ -1381,7 +1381,7 @@ class ClassName {
           UniversalType(
             type: 'Another',
             name: 'list',
-            arrayDepth: 1,
+            wrappingCollections: ['List<'],
             isRequired: true,
           ),
         ],
@@ -2025,7 +2025,7 @@ enum class EnumName {
           parameters: [
             UniversalType(
               type: 'boolean',
-              arrayDepth: 1,
+              wrappingCollections: ['List<'],
               isRequired: true,
             ),
           ],
@@ -2084,7 +2084,7 @@ typedef AnotherValue = Another;
           parameters: [
             UniversalType(
               type: 'boolean',
-              arrayDepth: 1,
+              wrappingCollections: ['List<'],
               isRequired: true,
             ),
           ],
@@ -2132,7 +2132,7 @@ typealias AnotherValue = Another;
         parameters: [
           UniversalType(
             type: 'string',
-            arrayDepth: 4,
+            wrappingCollections: ['List<', 'List<', 'List<', 'List<'],
             name: 'list1',
             isRequired: false,
             nullable: true,
@@ -2199,7 +2199,7 @@ class ClassName {
         parameters: [
           UniversalType(
             type: 'string',
-            arrayDepth: 4,
+            wrappingCollections: ['List<', 'List<', 'List<', 'List<'],
             name: 'list1',
             isRequired: false,
             nullable: true,
@@ -2261,7 +2261,7 @@ class ClassName with _$ClassName {
         parameters: [
           UniversalType(
             type: 'string',
-            arrayDepth: 4,
+            wrappingCollections: ['List<', 'List<', 'List<', 'List<'],
             name: 'list1',
             isRequired: false,
             nullable: true,
@@ -2354,7 +2354,7 @@ data class ClassName(
           UniversalType(
             type: 'string',
             description: 'List of data\nThis data is a list',
-            arrayDepth: 1,
+            wrappingCollections: ['List<'],
             name: 'list',
             isRequired: true,
           ),
@@ -2448,7 +2448,7 @@ class ClassName {
           UniversalType(
             type: 'string',
             description: 'List of data\nThis data is a list',
-            arrayDepth: 1,
+            wrappingCollections: ['List<'],
             name: 'list',
             isRequired: true,
           ),
@@ -2537,7 +2537,7 @@ class ClassName with _$ClassName {
           UniversalType(
             type: 'string',
             description: 'List of data',
-            arrayDepth: 1,
+            wrappingCollections: ['List<'],
             name: 'list',
             isRequired: true,
           ),

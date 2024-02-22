@@ -76,8 +76,7 @@ String generatedFileComment({
         : '';
 
 const _generatedCodeComment = '''
-// coverage:ignore-file
-// GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file\r\n// GENERATED CODE - DO NOT MODIFY BY HAND
 ''';
 
 const _ignoreLintsComment = '''
