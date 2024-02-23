@@ -2,6 +2,10 @@
 
 -
 
+## 1.15.5
+
+- Support schema url without extension
+
 ## 1.15.4
 
 - Fix docs
