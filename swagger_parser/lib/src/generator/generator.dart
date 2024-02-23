@@ -256,9 +256,7 @@ final class Generator {
       _isYaml = switch (extension) {
         '.yaml' => true,
         '.json' => false,
-        _ => throw GeneratorException(
-            'Unsupported $url extension: $extension',
-          ),
+        _ => false,
       };
       extractingSchemaFromUrlMessage(url);
       _schemaContent = await schemaFromUrl(url);

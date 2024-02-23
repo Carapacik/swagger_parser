@@ -92,7 +92,7 @@ swagger_parser:
       put_clients_in_folder: true
       put_in_folder: true
 
-    - schema_url: https://petstore.swagger.io/v2/swagger.json
+    - schema_url: https://petstore.swagger.io/v2/swagger
       name: pet_service
       client_postfix: Service
       put_clients_in_folder: true
