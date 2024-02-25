@@ -1,5 +1,4 @@
 import '../../parser/swagger_parser_core.dart';
-import '../../utils/case_utils.dart';
 import '../../utils/file/io_file.dart';
 import '../config/generator_config.dart';
 import '../model/generated_file.dart';
@@ -64,7 +63,7 @@ class Generator {
     for (final file in files) {
       totalLines += RegExp('\n').allMatches(file.content).length;
       await generateFile(
-        '${config.outputDirectory}${config.putInFolder && config.name.isNotEmpty ? '/${config.name.toSnake}' : ''}',
+        config.outputDirectory,
         file,
       );
     }

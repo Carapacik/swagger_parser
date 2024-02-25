@@ -152,7 +152,7 @@ enum ProgrammingLanguage {
     required bool markFileAsGenerated,
     required List<GeneratedFile> restClients,
     required List<GeneratedFile> dataClasses,
-    GeneratedFile? rootClient,
+    required GeneratedFile? rootClient,
   }) =>
       switch (this) {
         dart => dartExportFileTemplate(

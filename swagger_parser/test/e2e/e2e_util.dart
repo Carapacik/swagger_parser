@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
-import 'package:swagger_parser/src/utils/file/file_utils.dart';
+import 'package:swagger_parser/src/config/swp_config.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:test/test.dart';
 
@@ -15,8 +15,7 @@ import 'package:test/test.dart';
 /// providing a reliable way to catch regressions or unintended changes in the code generation process.
 Future<void> e2eTest(
   String testName,
-  Generator Function(String outputDirectory, String schemaContent)
-      getGenerator, {
+  SWPConfig Function(String outputDirectory, String shemaPath) config, {
   String? schemaFileName,
   bool generateExpectedFiles = false,
 }) async {
@@ -24,19 +23,19 @@ Future<void> e2eTest(
   final schemaPath = p.join(testFolder, schemaFileName ?? 'openapi.json');
   final expectedFolderPath = p.join(testFolder, 'expected_files');
   final generatedFolderPath = p.join(testFolder, 'generated_files');
-  final configFile = schemaFile(schemaPath);
-  final schemaContent = configFile!.readAsStringSync();
 
-  final generator = getGenerator.call(
-    generateExpectedFiles ? expectedFolderPath : generatedFolderPath,
-    schemaContent,
+  final processor = GenProcessor(
+    config.call(
+      generateExpectedFiles ? expectedFolderPath : generatedFolderPath,
+      schemaPath,
+    ),
   );
 
   if (generateExpectedFiles) {
     Directory(expectedFolderPath).deleteSync(recursive: true);
   }
 
-  await generator.generateFiles();
+  await processor.generateFiles();
 
   await Process.run('dart', ['format', testFolder]);
 
@@ -55,7 +54,7 @@ Future<void> e2eTest(
     final relativePath =
         p.relative(file.path, from: expectedFolderPath).replaceAll(r'\', '/');
 
-    final generatedFile = generatedFiles.firstWhere(
+    generatedFiles.firstWhere(
       (gFile) {
         final relPath = p
             .relative(gFile.path, from: generatedFolderPath)
@@ -65,6 +64,20 @@ Future<void> e2eTest(
       orElse: () => throw Exception(
         'File not found in generated content: $relativePath',
       ),
+    );
+  }
+
+  for (final file in expectedFiles) {
+    final relativePath =
+        p.relative(file.path, from: expectedFolderPath).replaceAll(r'\', '/');
+
+    final generatedFile = generatedFiles.firstWhere(
+      (gFile) {
+        final relPath = p
+            .relative(gFile.path, from: generatedFolderPath)
+            .replaceAll(r'\', '/');
+        return relPath == relativePath;
+      },
     );
 
     // Comparing the contents of the file

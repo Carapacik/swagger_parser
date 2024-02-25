@@ -10,20 +10,19 @@ import 'config_exception.dart';
 class SWPConfig {
   /// Creates a [SWPConfig].
   const SWPConfig({
-    required this.schemaPath,
-    required this.schemaUrl,
-    required this.name,
     required this.outputDirectory,
+    this.schemaPath,
+    this.schemaUrl,
+    this.name = 'api',
     this.language = ProgrammingLanguage.dart,
     this.jsonSerializer = JsonSerializer.jsonSerializable,
-    this.rootClient = false,
-    this.rootClientName,
+    this.rootClient = true,
+    this.rootClientName = 'RestClient',
     this.clientPostfix,
-    this.exportFile = false,
+    this.exportFile = true,
     this.putClientsInFolder = false,
-    this.putInFolder = false,
     this.enumsToJson = false,
-    this.unknownEnumValue = false,
+    this.unknownEnumValue = true,
     this.markFilesAsGenerated = true,
     this.originalHttpResponse = false,
     this.replacementRules = const [],
@@ -33,6 +32,31 @@ class SWPConfig {
     this.mergeClients = false,
     this.enumsParentPrefix = true,
     this.skippedParameters = const <String>[],
+  });
+
+  const SWPConfig._({
+    required this.outputDirectory,
+    required this.schemaPath,
+    required this.schemaUrl,
+    required this.name,
+    required this.language,
+    required this.jsonSerializer,
+    required this.rootClient,
+    required this.rootClientName,
+    required this.clientPostfix,
+    required this.exportFile,
+    required this.putClientsInFolder,
+    required this.enumsToJson,
+    required this.unknownEnumValue,
+    required this.markFilesAsGenerated,
+    required this.originalHttpResponse,
+    required this.replacementRules,
+    required this.defaultContentType,
+    required this.pathMethodName,
+    required this.requiredByDefault,
+    required this.mergeClients,
+    required this.enumsParentPrefix,
+    required this.skippedParameters,
   });
 
   /// Creates a [SWPConfig] from [YamlMap].
@@ -82,12 +106,7 @@ class SWPConfig {
 
     final rawName = yamlMap['name']?.toString();
     final name = rawName == null || rawName.isEmpty
-        ? (schemaPath ?? schemaUrl)!
-                .split('/')
-                .lastOrNull
-                ?.split('.')
-                .firstOrNull ??
-            'unknown'
+        ? (schemaPath ?? schemaUrl)!.split('/').last.split('.').first
         : rawName;
 
     final defaultContentType = yamlMap['default_content_type'];
@@ -131,8 +150,9 @@ class SWPConfig {
         "Config parameter 'skipped_parameters' must be list.",
       );
     }
-    final skippedParameters = <String>[];
+    List<String>? skippedParameters;
     if (rawSkippedParameters != null) {
+      skippedParameters = [];
       for (final p in rawSkippedParameters) {
         if (p is! String) {
           throw const ConfigException(
@@ -190,13 +210,6 @@ class SWPConfig {
       );
     }
 
-    final putInFolder = yamlMap['put_in_folder'];
-    if (putInFolder is! bool?) {
-      throw const ConfigException(
-        "Config parameter 'put_in_folder' must be bool.",
-      );
-    }
-
     final enumsToJson = yamlMap['enums_to_json'];
     if (enumsToJson is! bool?) {
       throw const ConfigException(
@@ -231,8 +244,9 @@ class SWPConfig {
         "Config parameter 'replacement_rules' must be list.",
       );
     }
-    final replacementRules = <ReplacementRule>[];
+    List<ReplacementRule>? replacementRules;
     if (rawReplacementRules != null) {
+      replacementRules = [];
       for (final r in rawReplacementRules) {
         if (r is! YamlMap ||
             r['pattern'] is! String ||
@@ -251,30 +265,32 @@ class SWPConfig {
       }
     }
 
-    return SWPConfig(
+    // Default config
+    final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
+
+    return SWPConfig._(
       schemaPath: schemaPath,
       schemaUrl: schemaUrl,
       outputDirectory: outputDirectory,
       name: name,
-      defaultContentType: defaultContentType ?? 'application/json',
-      pathMethodName: pathMethodName ?? false,
-      requiredByDefault: requiredByDefault ?? true,
-      mergeClients: mergeClients ?? false,
-      enumsParentPrefix: enumsParentPrefix ?? true,
-      skippedParameters: skippedParameters,
-      replacementRules: replacementRules,
-      language: language ?? ProgrammingLanguage.dart,
-      jsonSerializer: jsonSerializer ?? JsonSerializer.jsonSerializable,
-      rootClient: rootClient ?? true,
-      rootClientName: rootClientName,
-      clientPostfix: clientPostfix?.trim(),
-      exportFile: exportFile ?? true,
-      putClientsInFolder: putClientsInFolder ?? false,
-      putInFolder: putInFolder ?? false,
-      enumsToJson: enumsToJson ?? false,
-      unknownEnumValue: unknownEnumValue ?? true,
-      markFilesAsGenerated: markFilesAsGenerated ?? true,
-      originalHttpResponse: originalHttpResponse ?? false,
+      pathMethodName: pathMethodName ?? dc.pathMethodName,
+      defaultContentType: defaultContentType ?? dc.defaultContentType,
+      requiredByDefault: requiredByDefault ?? dc.requiredByDefault,
+      mergeClients: mergeClients ?? dc.mergeClients,
+      enumsParentPrefix: enumsParentPrefix ?? dc.enumsParentPrefix,
+      skippedParameters: skippedParameters ?? dc.skippedParameters,
+      exportFile: exportFile ?? dc.exportFile,
+      language: language ?? dc.language,
+      jsonSerializer: jsonSerializer ?? dc.jsonSerializer,
+      rootClient: rootClient ?? dc.rootClient,
+      rootClientName: rootClientName ?? dc.rootClientName,
+      clientPostfix: clientPostfix?.trim() ?? dc.clientPostfix,
+      putClientsInFolder: putClientsInFolder ?? dc.putClientsInFolder,
+      enumsToJson: enumsToJson ?? dc.enumsToJson,
+      unknownEnumValue: unknownEnumValue ?? dc.unknownEnumValue,
+      markFilesAsGenerated: markFilesAsGenerated ?? dc.markFilesAsGenerated,
+      originalHttpResponse: originalHttpResponse ?? dc.originalHttpResponse,
+      replacementRules: replacementRules ?? dc.replacementRules,
     );
   }
 
@@ -309,7 +325,7 @@ class SWPConfig {
 
   /// DART ONLY
   /// Optional. Set root client name.
-  final String? rootClientName;
+  final String rootClientName;
 
   /// DART ONLY
   /// Optional. Set `true` to generate export file.
@@ -317,9 +333,6 @@ class SWPConfig {
 
   /// Optional. Set `true` to put all clients in clients folder.
   final bool putClientsInFolder;
-
-  /// Optional. Set to `true` to put the all api in its folder.
-  final bool putInFolder;
 
   /// DART ONLY
   /// Optional. Set `true` to include toJson() in enums.
@@ -380,7 +393,6 @@ class SWPConfig {
       clientPostfix: clientPostfix,
       exportFile: exportFile,
       putClientsInFolder: putClientsInFolder,
-      putInFolder: putInFolder,
       enumsToJson: enumsToJson,
       unknownEnumValue: unknownEnumValue,
       markFilesAsGenerated: markFilesAsGenerated,

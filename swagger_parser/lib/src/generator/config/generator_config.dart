@@ -16,7 +16,6 @@ class GeneratorConfig {
     this.clientPostfix,
     this.exportFile = true,
     this.putClientsInFolder = false,
-    this.putInFolder = false,
     this.enumsToJson = false,
     this.unknownEnumValue = true,
     this.markFilesAsGenerated = false,
@@ -57,9 +56,6 @@ class GeneratorConfig {
 
   /// Optional. Set `true` to put all clients in clients folder.
   final bool putClientsInFolder;
-
-  /// Optional. Set to `true` to put the all api in its folder.
-  final bool putInFolder;
 
   /// DART ONLY
   /// Optional. Set `true` to include toJson() in enums.
