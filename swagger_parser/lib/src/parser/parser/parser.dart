@@ -69,7 +69,7 @@ class OpenApiParser {
   static const _requiredConst = 'required';
   static const _responsesConst = 'responses';
   static const _schemaConst = 'schema';
-  static const _schemesConst = 'schemas';
+  static const _schemasConst = 'schemas';
   static const _serversConst = 'servers';
   static const _summaryConst = 'summary';
   static const _swaggerConst = 'swagger';
@@ -305,7 +305,7 @@ class OpenApiParser {
 
             final components = _definitionFileContent[_componentsConst]
                 as Map<String, dynamic>;
-            final schemes = components[_schemesConst] as Map<String, dynamic>;
+            final schemes = components[_schemasConst] as Map<String, dynamic>;
             final dataClass = schemes[type] as Map<String, dynamic>;
             final props = dataClass[_propertiesConst] as Map<String, dynamic>;
             final required = dataClass[_requiredConst] as List<dynamic>?;
@@ -587,11 +587,11 @@ class OpenApiParser {
         _apiInfo.schemaVersion == OAS.v3) {
       if (!_definitionFileContent.containsKey(_componentsConst) ||
           !(_definitionFileContent[_componentsConst] as Map<String, dynamic>)
-              .containsKey(_schemesConst)) {
+              .containsKey(_schemasConst)) {
         return [...dataClasses, ..._objectClasses, ..._enumClasses];
       }
       entities = (_definitionFileContent[_componentsConst]
-          as Map<String, dynamic>)[_schemesConst] as Map<String, dynamic>;
+          as Map<String, dynamic>)[_schemasConst] as Map<String, dynamic>;
     } else if (_apiInfo.schemaVersion == OAS.v2) {
       if (!_definitionFileContent.containsKey(_definitionsConst)) {
         return [...dataClasses, ..._objectClasses, ..._enumClasses];

@@ -6,6 +6,19 @@ import 'e2e_util.dart';
 
 void main() {
   group('E2E', () {
+    test('enum member names', () async {
+      await e2eTest(
+        'enum_member_names',
+        schemaFileName: 'openapi.yaml',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+      );
+    });
+
     test('multipart request properties', () async {
       await e2eTest(
         'multipart_request_properties',
@@ -21,18 +34,6 @@ void main() {
     test('multipart request with ref', () async {
       await e2eTest(
         'multipart_request_with_ref',
-        schemaFileName: 'openapi.yaml',
-        (outputDirectory, schemaPath) => SWPConfig(
-          outputDirectory: outputDirectory,
-          schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.freezed,
-          putClientsInFolder: true,
-        ),
-      );
-    });
-    test('enum member names', () async {
-      await e2eTest(
-        'enum_member_names',
         schemaFileName: 'openapi.yaml',
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,

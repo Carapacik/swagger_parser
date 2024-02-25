@@ -49,7 +49,7 @@ paths:
               schema:
                 type: string
 components:
-  schemes:
+  schemas:
     Item:
       type: object
       properties:

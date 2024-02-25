@@ -23,8 +23,6 @@ Future<void> e2eTest(
   final schemaPath = p.join(testFolder, schemaFileName ?? 'openapi.json');
   final expectedFolderPath = p.join(testFolder, 'expected_files');
   final generatedFolderPath = p.join(testFolder, 'generated_files');
-  // final configFile = schemaFile(schemaPath);
-  // final schemaContent = configFile!.readAsStringSync();
 
   final processor = GenProcessor(
     config.call(
@@ -32,11 +30,6 @@ Future<void> e2eTest(
       schemaPath,
     ),
   );
-
-  // final generator = genProcessor.call(
-  //   generateExpectedFiles ? expectedFolderPath : generatedFolderPath,
-  //   schemaContent,
-  // );
 
   if (generateExpectedFiles) {
     Directory(expectedFolderPath).deleteSync(recursive: true);
@@ -61,7 +54,7 @@ Future<void> e2eTest(
     final relativePath =
         p.relative(file.path, from: expectedFolderPath).replaceAll(r'\', '/');
 
-    final generatedFile = generatedFiles.firstWhere(
+    generatedFiles.firstWhere(
       (gFile) {
         final relPath = p
             .relative(gFile.path, from: generatedFolderPath)
@@ -71,6 +64,20 @@ Future<void> e2eTest(
       orElse: () => throw Exception(
         'File not found in generated content: $relativePath',
       ),
+    );
+  }
+
+  for (final file in expectedFiles) {
+    final relativePath =
+        p.relative(file.path, from: expectedFolderPath).replaceAll(r'\', '/');
+
+    final generatedFile = generatedFiles.firstWhere(
+      (gFile) {
+        final relPath = p
+            .relative(gFile.path, from: generatedFolderPath)
+            .replaceAll(r'\', '/');
+        return relPath == relativePath;
+      },
     );
 
     // Comparing the contents of the file
