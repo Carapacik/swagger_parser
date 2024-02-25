@@ -1,5 +1,5 @@
 // ignore_for_file: avoid_print
-import '../../generator/models/generation_statistics.dart';
+import '../../generator/model/generation_statistic.dart';
 import '../../parser/swagger_parser_core.dart';
 import '../utils.dart';
 
@@ -47,7 +47,7 @@ void successExtractMessage() {
 
 void schemaStatisticsMessage({
   required OpenApiInfo openApi,
-  required GenerationStatistics statistics,
+  required GenerationStatistic statistics,
   String? name,
 }) {
   final version = openApi.apiVersion != null ? 'v${openApi.apiVersion}' : '';
@@ -70,7 +70,7 @@ void schemaStatisticsMessage({
 void summaryStatisticsMessage({
   required int successCount,
   required int schemesCount,
-  required GenerationStatistics statistics,
+  required GenerationStatistic statistics,
 }) {
   print(
     'Summary (${statistics.timeElapsed.inMilliseconds / 1000} seconds):\n'

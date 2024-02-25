@@ -1,6 +1,7 @@
-import '../generator/models/programming_language.dart';
+import '../generator/model/programming_language.dart';
 import '../parser/swagger_parser_core.dart';
 import '../utils/case_utils.dart';
+import 'type_utils.dart';
 
 /// Provides imports as String from list of imports
 String dartImports({required Set<String> imports, String? pathPrefix}) {

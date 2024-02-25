@@ -1,3 +1,5 @@
+import '../model/replacement_rule.dart';
+
 /// The configuration that the OpenApiParser uses
 class ParserConfig {
   /// Creates a [ParserConfig].
@@ -11,6 +13,7 @@ class ParserConfig {
     this.mergeClients = false,
     this.enumsParentPrefix = true,
     this.skippedParameters = const <String>[],
+    this.replacementRules = const [],
   });
 
   /// Specification file content as [String]
@@ -49,4 +52,8 @@ class ParserConfig {
 
   /// List of parameter names that should skip during parsing
   final List<String> skippedParameters;
+
+  /// Optional. Set regex replacement rules for the names of the generated classes/enums.
+  /// All rules are applied in order.
+  final List<ReplacementRule> replacementRules;
 }

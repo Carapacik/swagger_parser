@@ -1,9 +1,8 @@
 import 'package:yaml/yaml.dart';
 
 import '../generator/config/generator_config.dart';
-import '../generator/models/json_serializer.dart';
-import '../generator/models/programming_language.dart';
-import '../generator/models/replacement_rule.dart';
+import '../generator/model/json_serializer.dart';
+import '../generator/model/programming_language.dart';
 import '../parser/swagger_parser_core.dart';
 import 'config_exception.dart';
 
@@ -365,12 +364,14 @@ class SWPConfig {
   /// List of parameter names that should skip during parsing
   final List<String> skippedParameters;
 
+  /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
       name: name,
       outputDirectory: outputDirectory,
       language: language,
       jsonSerializer: jsonSerializer,
+      defaultContentType: defaultContentType,
       rootClient: rootClient,
       rootClientName: rootClientName,
       clientPostfix: clientPostfix,
@@ -385,6 +386,7 @@ class SWPConfig {
     );
   }
 
+  /// Convert [SWPConfig] to [ParserConfig]
   ParserConfig toParserConfig({
     required String fileContent,
     required bool isJson,
@@ -399,6 +401,7 @@ class SWPConfig {
       mergeClients: mergeClients,
       enumsParentPrefix: enumsParentPrefix,
       skippedParameters: skippedParameters,
+      replacementRules: replacementRules,
     );
   }
 }

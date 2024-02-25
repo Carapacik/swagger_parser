@@ -4,7 +4,7 @@ import '../../parser/swagger_parser_core.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
-import '../models/json_serializer.dart';
+import '../model/json_serializer.dart';
 import 'dart_import_dto_template.dart';
 
 /// Provides template for generating dart enum DTO

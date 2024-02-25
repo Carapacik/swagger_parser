@@ -1,13 +1,11 @@
 import 'dart:io';
 
-import '../../generator/models/generation_statistics.dart';
+import '../../generator/model/generation_statistic.dart';
 import '../../parser/swagger_parser_core.dart';
 import '../utils.dart';
 
 const _green = '\x1B[32m';
-// ignore: unused_element
 const _yellow = '\x1B[33m';
-// ignore: unused_element
 const _blue = '\x1B[34m';
 const _lightBlue = '\x1B[36m';
 const _red = '\x1B[31m';
@@ -57,7 +55,7 @@ void successExtractMessage() {
 
 void schemaStatisticsMessage({
   required OpenApiInfo openApi,
-  required GenerationStatistics statistics,
+  required GenerationStatistic statistics,
   String? name,
 }) {
   final version = openApi.apiVersion != null ? 'v${openApi.apiVersion}' : '';
@@ -80,7 +78,7 @@ void schemaStatisticsMessage({
 void summaryStatisticsMessage({
   required int successCount,
   required int schemesCount,
-  required GenerationStatistics statistics,
+  required GenerationStatistic statistics,
 }) {
   stdout.writeln(
     'Summary (${statistics.timeElapsed.inMilliseconds / 1000} seconds):\n'

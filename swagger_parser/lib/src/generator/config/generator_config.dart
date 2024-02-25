@@ -1,6 +1,6 @@
-import '../models/json_serializer.dart';
-import '../models/programming_language.dart';
-import '../models/replacement_rule.dart';
+import '../../parser/model/replacement_rule.dart';
+import '../model/json_serializer.dart';
+import '../model/programming_language.dart';
 
 /// The configuration that the Generator uses
 class GeneratorConfig {
@@ -10,6 +10,7 @@ class GeneratorConfig {
     required this.outputDirectory,
     this.language = ProgrammingLanguage.dart,
     this.jsonSerializer = JsonSerializer.jsonSerializable,
+    this.defaultContentType = 'application/json',
     this.rootClient = false,
     this.rootClientName,
     this.clientPostfix,
@@ -75,6 +76,13 @@ class GeneratorConfig {
   /// DART ONLY
   /// Optional. Set `true` to wrap all request return types with HttpResponse.
   final bool originalHttpResponse;
+
+  /// DART ONLY
+  /// Default content type for all requests and responses.
+  ///
+  /// If the content type does not match the default, generates:
+  /// @Headers(<String, String>{'Content-Type': 'PARSED CONTENT TYPE'})
+  final String defaultContentType;
 
   /// Optional. Set regex replacement rules for the names of the generated classes/enums.
   /// All rules are applied in order.

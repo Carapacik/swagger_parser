@@ -1,7 +1,4 @@
 import 'package:meta/meta.dart';
-import 'package:swagger_parser/swagger_parser.dart';
-
-import '../../utils/type_utils.dart';
 
 /// Universal template for containing information about type
 @immutable
@@ -151,55 +148,4 @@ final class UniversalType {
       'arrayValueNullable: $arrayValueNullable, '
       'nullable: $nullable, '
       'mapType: $mapType)';
-}
-
-/// Converts [UniversalType] to type from specified language
-extension UniversalTypeX on UniversalType {
-  /// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
-  String toSuitableType(ProgrammingLanguage lang) {
-    if (arrayDepth == 0 && mapType == null) {
-      return _questionMark(lang);
-    }
-    final sb = StringBuffer();
-    for (var i = 0; i < arrayDepth; i++) {
-      sb.write('List<');
-    }
-    if (mapType != null) {
-      sb.write(_mapStart(lang));
-    }
-    sb.write(_questionMark(lang));
-    if (mapType != null) {
-      sb.write('>');
-    }
-    for (var i = 0; i < arrayDepth; i++) {
-      sb.write('>');
-    }
-    if (nullable || (!isRequired && defaultValue == null)) {
-      sb.write('?');
-    }
-    return sb.toString();
-  }
-
-  String _questionMark(ProgrammingLanguage lang) {
-    final questionMark =
-        (isRequired && !nullable || arrayDepth > 0 || defaultValue != null) &&
-                !arrayValueNullable
-            ? ''
-            : '?';
-    switch (lang) {
-      case ProgrammingLanguage.dart:
-        return type.toDartType(format) + questionMark;
-      case ProgrammingLanguage.kotlin:
-        return type.toKotlinType(format) + questionMark;
-    }
-  }
-
-  String _mapStart(ProgrammingLanguage lang) {
-    switch (lang) {
-      case ProgrammingLanguage.dart:
-        return 'Map<${mapType!.toDartType(format)}, ';
-      case ProgrammingLanguage.kotlin:
-        return 'Map<${mapType!.toKotlinType(format)}, ';
-    }
-  }
 }

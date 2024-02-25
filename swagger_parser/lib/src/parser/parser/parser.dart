@@ -69,7 +69,7 @@ class OpenApiParser {
   static const _requiredConst = 'required';
   static const _responsesConst = 'responses';
   static const _schemaConst = 'schema';
-  static const _schemesConst = 'schemes';
+  static const _schemesConst = 'schemas';
   static const _serversConst = 'servers';
   static const _summaryConst = 'summary';
   static const _swaggerConst = 'swagger';
@@ -144,7 +144,7 @@ class OpenApiParser {
 
   /// Parses rest clients from `paths` section of definition file
   /// and return list of [UniversalRestClient]
-  Iterable<UniversalRestClient> parseRestClients() {
+  List<UniversalRestClient> parseRestClients() {
     final restClients = <UniversalRestClient>[];
     final imports = SplayTreeSet<String>();
     var resultContentType = config.defaultContentType;
@@ -285,37 +285,6 @@ class OpenApiParser {
         }
 
         if (resultContentType == _multipartFormDataConst) {
-          // TODO(StarProxima): In which cases should this work?
-          // if ((contentType[_schemaConst] as Map<String, dynamic>)
-          //     .containsKey(_refConst)) {
-          //   final isRequired = requestBody[_requiredConst]?.toString().toBool();
-          //   final typeWithImport = _findType(
-          //     contentType[_schemaConst] as Map<String, dynamic>,
-          //     isRequired: isRequired ?? config.requiredByDefault,
-          //   );
-          //   final currentType = typeWithImport.type;
-          //   if (typeWithImport.import != null) {
-          //     imports.add(typeWithImport.import!);
-          //   }
-          //   types.add(
-          //     UniversalRequestType(
-          //       parameterType: HttpParameterType.part,
-          //       description: currentType.description,
-          //       type: UniversalType(
-          //         type: currentType.type,
-          //         name: 'file',
-          //         description: currentType.description,
-          //         format: currentType.format,
-          //         defaultValue: currentType.defaultValue,
-          //         isRequired: currentType.isRequired,
-          //         nullable: currentType.nullable,
-          //         arrayDepth: currentType.arrayDepth,
-          //         arrayValueNullable: currentType.arrayValueNullable,
-          //       ),
-          //     ),
-          //   );
-          // }
-
           final schemaContent =
               contentType[_schemaConst] as Map<String, dynamic>;
 
@@ -611,7 +580,7 @@ class OpenApiParser {
 
   /// Parses data classes from `components` of definition file
   /// to list of [UniversalDataClass]
-  Iterable<UniversalDataClass> parseDataClasses() {
+  List<UniversalDataClass> parseDataClasses() {
     final dataClasses = <UniversalDataClass>[];
     late final Map<String, dynamic> entities;
     if (_apiInfo.schemaVersion == OAS.v3_1 ||
@@ -671,9 +640,9 @@ class OpenApiParser {
           (value[_enumConst] as List).map((e) => '$e'),
         );
         final type = value[_typeConst].toString();
-        // for (final replacementRule in _replacementRules) {
-        //   key = replacementRule.apply(key)!;
-        // }
+        for (final replacementRule in config.replacementRules) {
+          key = replacementRule.apply(key)!;
+        }
 
         dataClasses.add(
           _getUniqueEnumClass(
@@ -714,9 +683,9 @@ class OpenApiParser {
         for (final map in value[_allOfConst] as List<dynamic>) {
           if ((map as Map<String, dynamic>).containsKey(_refConst)) {
             var ref = _formatRef(map);
-            // for (final replacementRule in _replacementRules) {
-            //   ref = replacementRule.apply(ref)!;
-            // }
+            for (final replacementRule in config.replacementRules) {
+              ref = replacementRule.apply(ref)!;
+            }
             refs.add(ref);
             continue;
           }
@@ -729,9 +698,9 @@ class OpenApiParser {
       final allOf =
           refs.isNotEmpty ? (refs: refs, properties: parameters) : null;
 
-      // for (final replacementRule in _replacementRules) {
-      //   key = replacementRule.apply(key)!;
-      // }
+      for (final replacementRule in config.replacementRules) {
+        key = replacementRule.apply(key)!;
+      }
 
       dataClasses.add(
         UniversalComponentClass(
@@ -873,9 +842,9 @@ class OpenApiParser {
         newName = '$additionalName $newName'.toPascal;
       }
 
-      // for (final replacementRule in _replacementRules) {
-      //   newName = replacementRule.apply(newName)!;
-      // }
+      for (final replacementRule in config.replacementRules) {
+        newName = replacementRule.apply(newName)!;
+      }
 
       final items = protectEnumItemsNames(
         (map[_enumConst] as List).map((e) => '$e'),
@@ -1113,12 +1082,12 @@ class OpenApiParser {
       } else {
         type = import ?? _objectConst;
       }
-      // if (import != null) {
-      // for (final replacementRule in _replacementRules) {
-      //   import = replacementRule.apply(import);
-      //   type = replacementRule.apply(type)!;
-      // }
-      // }
+      if (import != null) {
+        for (final replacementRule in config.replacementRules) {
+          import = replacementRule.apply(import);
+          type = replacementRule.apply(type)!;
+        }
+      }
 
       // To detect is this entity is map or not
       final mapType = map[_typeConst].toString() == _objectConst &&

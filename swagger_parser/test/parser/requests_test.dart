@@ -1,6 +1,6 @@
 import 'package:path/path.dart' as p;
 import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
-import 'package:swagger_parser/src/utils/file_utils.dart';
+import 'package:swagger_parser/src/utils/file/io_file.dart';
 import 'package:test/test.dart';
 
 void main() {

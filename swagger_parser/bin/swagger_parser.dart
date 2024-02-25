@@ -1,5 +1,5 @@
 import 'package:swagger_parser/src/config/config_processor.dart';
-import 'package:swagger_parser/src/generator/models/generation_statistics.dart';
+import 'package:swagger_parser/src/generator/model/generation_statistic.dart';
 import 'package:swagger_parser/src/utils/output/io_output.dart'
     if (dart.library.html) 'package:swagger_parser/src/utils/output/web_output.dart';
 import 'package:swagger_parser/swagger_parser.dart';
@@ -13,33 +13,33 @@ Future<void> main(List<String> arguments) async {
     final yamlMap = configProcessor.readConfigFromFile(arguments);
     final configs = configProcessor.parseConfig(yamlMap);
 
-    GenerationStatistics? totalStats;
+    GenerationStatistic? totalStatistic;
     var successSchemasCount = 0;
 
     generateMessage();
     for (final config in configs) {
       try {
-        final generator = Generator.fromConfig(config);
-        final (openApi, stats) = await generator.generateFiles();
+        final processor = GenProcessor(config);
+        final (openApi, statistics) = await processor.generateFiles();
 
         schemaStatisticsMessage(
           openApi: openApi,
-          statistics: stats,
+          statistics: statistics,
           name: config.name,
         );
-        totalStats = totalStats?.merge(stats);
-        totalStats ??= stats;
+        totalStatistic = totalStatistic?.merge(statistics);
+        totalStatistic ??= statistics;
         successSchemasCount++;
       } on Object catch (e, s) {
         schemaFailedMessage(e, s, name: config.name);
       }
     }
 
-    if (configs.length > 1 && totalStats != null) {
+    if (configs.length > 1 && totalStatistic != null) {
       summaryStatisticsMessage(
         successCount: successSchemasCount,
         schemesCount: configs.length,
-        statistics: totalStats,
+        statistics: totalStatistic,
       );
     }
 

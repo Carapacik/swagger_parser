@@ -1,5 +1,5 @@
 import '../../utils/utils.dart';
-import '../models/generated_file.dart';
+import '../model/generated_file.dart';
 
 /// Provides template for generating dart export file
 String dartExportFileTemplate({

@@ -18,7 +18,7 @@ class OpenApiParser {
     _openApiSpecificationInfo = _parseOpenApiInfo();
   }
 
-  /// [ParserConfig] that parser use
+  /// [ParserConfig] that [OpenApiParser] use
   final ParserConfig config;
 
   /// Specification content
