@@ -6,6 +6,7 @@
     - `skipp_parameters` to `skipped_parameters`
 - Fixed error
   with `required_by_default` ([#168](https://github.com/Carapacik/swagger_parser/issues/168))
+- Remove config parameter 'put_in_folder'
 
 ## 1.15.5
 

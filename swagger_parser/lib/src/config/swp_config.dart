@@ -21,7 +21,6 @@ class SWPConfig {
     this.clientPostfix,
     this.exportFile = true,
     this.putClientsInFolder = false,
-    this.putInFolder = false,
     this.enumsToJson = false,
     this.unknownEnumValue = true,
     this.markFilesAsGenerated = true,
@@ -47,7 +46,6 @@ class SWPConfig {
     required this.clientPostfix,
     required this.exportFile,
     required this.putClientsInFolder,
-    required this.putInFolder,
     required this.enumsToJson,
     required this.unknownEnumValue,
     required this.markFilesAsGenerated,
@@ -212,13 +210,6 @@ class SWPConfig {
       );
     }
 
-    final putInFolder = yamlMap['put_in_folder'];
-    if (putInFolder is! bool?) {
-      throw const ConfigException(
-        "Config parameter 'put_in_folder' must be bool.",
-      );
-    }
-
     final enumsToJson = yamlMap['enums_to_json'];
     if (enumsToJson is! bool?) {
       throw const ConfigException(
@@ -294,7 +285,6 @@ class SWPConfig {
       rootClientName: rootClientName ?? dc.rootClientName,
       clientPostfix: clientPostfix?.trim() ?? dc.clientPostfix,
       putClientsInFolder: putClientsInFolder ?? dc.putClientsInFolder,
-      putInFolder: putInFolder ?? dc.putInFolder,
       enumsToJson: enumsToJson ?? dc.enumsToJson,
       unknownEnumValue: unknownEnumValue ?? dc.unknownEnumValue,
       markFilesAsGenerated: markFilesAsGenerated ?? dc.markFilesAsGenerated,
@@ -342,9 +332,6 @@ class SWPConfig {
 
   /// Optional. Set `true` to put all clients in clients folder.
   final bool putClientsInFolder;
-
-  /// Optional. Set to `true` to put the all api in its folder.
-  final bool putInFolder;
 
   /// DART ONLY
   /// Optional. Set `true` to include toJson() in enums.
@@ -405,7 +392,6 @@ class SWPConfig {
       clientPostfix: clientPostfix,
       exportFile: exportFile,
       putClientsInFolder: putClientsInFolder,
-      putInFolder: putInFolder,
       enumsToJson: enumsToJson,
       unknownEnumValue: unknownEnumValue,
       markFilesAsGenerated: markFilesAsGenerated,
