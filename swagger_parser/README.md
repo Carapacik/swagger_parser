@@ -56,7 +56,7 @@ swagger_parser:
   # You must provide the file path and/or url to the OpenApi schema.
   
   # Sets the OpenApi schema path directory for api definition.
-  schema_path: schemas/openapi.json
+  schema_path: schemes/openapi.json
 
   # Sets the url of the OpenApi schema.
   schema_url: https://petstore.swagger.io/v2/swagger.json
@@ -157,8 +157,8 @@ swagger_parser:
   # Each schema inherits the parameters described in swagger_parser,
   # any parameter for any schema can be set manually.
   # Cannot be used at the same time as schema_path.
-  schemas:
-    - schema_path: schemas/openapi.json
+  schemes:
+    - schema_path: schemes/openapi.json
       root_client_name: ApiMicroservice
       json_serializer: freezed
       put_in_folder: true
@@ -177,7 +177,7 @@ swagger_parser:
       put_clients_in_folder: true
       put_in_folder: true
 
-    - schema_path: schemas/pet_store.json
+    - schema_path: schemes/pet_store.json
       schema_url: https://petstore.swagger.io/v2/swagger.json
       output_directory: lib/api/kotlin
       language: kotlin

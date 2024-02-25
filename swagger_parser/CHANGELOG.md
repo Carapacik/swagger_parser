@@ -44,7 +44,7 @@
 - Fixed retrofit template
 - Remove special characters from tags
 - Add new config parameter `skip_parameters`
-- Extract schemas from url ([#150](https://github.com/Carapacik/swagger_parser/issues/150))
+- Extract schemes from url ([#150](https://github.com/Carapacik/swagger_parser/issues/150))
 
 ## 1.13.1
 
@@ -75,7 +75,7 @@
 ## 1.11.3
 
 - Fixed error with annotating client methods with the first specified content type header in OpenAPI
-  V2 schemas if the specified one is not the default.
+  V2 schemes if the specified one is not the default.
 
 ## 1.11.2
 
@@ -127,7 +127,7 @@
 
 ## 1.10.0
 
-- Support for generating schemas by url (
+- Support for generating schemes by url (
   see [example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml))
 - Add new config parameter `schema_url`
 - Add new config parameter `schema_from_url_to_file`
@@ -155,7 +155,7 @@
 
 ## 1.8.0
 
-- Multiple schemas support (
+- Multiple schemes support (
   see [example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml))
 - Support for specifying nullable types via anyOf
 - Edit root client template

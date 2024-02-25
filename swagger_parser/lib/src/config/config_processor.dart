@@ -46,30 +46,30 @@ class ConfigProcessor {
 
     final schemaPath = yamlMap['schema_path'] as String?;
     final schemaUrl = yamlMap['schema_url'] as String?;
-    final schemas = yamlMap['schemas'] as YamlList?;
+    final schemes = yamlMap['schemes'] as YamlList?;
 
-    if (schemas == null && schemaUrl == null && schemaPath == null) {
+    if (schemes == null && schemaUrl == null && schemaPath == null) {
       throw Exception(
-        "Config parameter 'schema_path', 'schema_url' or 'schemas' is required.",
+        "Config parameter 'schema_path', 'schema_url' or 'schemes' is required.",
       );
     }
 
-    if (schemas != null && schemaPath != null ||
-        schemas != null && schemaUrl != null) {
+    if (schemes != null && schemaPath != null ||
+        schemes != null && schemaUrl != null) {
       throw Exception(
-        "Config parameter 'schema_path' or 'schema_url' can't be used with 'schemas'.",
+        "Config parameter 'schema_path' or 'schema_url' can't be used with 'schemes'.",
       );
     }
 
-    if (schemas != null) {
+    if (schemes != null) {
       final rootConfig = SWPConfig.fromYaml(
         yamlMap,
         isRootConfig: true,
       );
 
-      for (final schema in schemas) {
+      for (final schema in schemes) {
         if (schema is! YamlMap) {
-          throw Exception("Config parameter 'schemas' must be list of maps.");
+          throw Exception("Config parameter 'schemes' must be list of maps.");
         }
         final config = SWPConfig.fromYaml(
           schema,

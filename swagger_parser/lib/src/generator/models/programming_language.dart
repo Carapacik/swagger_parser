@@ -1,5 +1,4 @@
 import '../../parser/swagger_parser_core.dart';
-import '../generator_exception.dart';
 import '../templates/dart_dart_mappable_dto_template.dart';
 import '../templates/dart_enum_dto_template.dart';
 import '../templates/dart_export_file_template.dart';
@@ -101,7 +100,7 @@ enum ProgrammingLanguage {
           );
         }
     }
-    throw GeneratorException('Unknown type exception');
+    throw ArgumentError('Unknown type exception');
   }
 
   /// Determines template for generating Rest client by language

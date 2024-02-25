@@ -105,7 +105,7 @@
     }
   },
   "components": {
-    "schemas": {
+    "schemes": {
       "RegisterUserDto": {
         "allOf": [
           {

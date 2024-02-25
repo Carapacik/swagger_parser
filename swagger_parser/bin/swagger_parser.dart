@@ -38,14 +38,14 @@ Future<void> main(List<String> arguments) async {
     if (configs.length > 1 && totalStats != null) {
       summaryStatisticsMessage(
         successCount: successSchemasCount,
-        schemasCount: configs.length,
+        schemesCount: configs.length,
         statistics: totalStats,
       );
     }
 
     successMessage(
       successSchemasCount: successSchemasCount,
-      schemasCount: configs.length,
+      schemesCount: configs.length,
     );
   } on Exception catch (e) {
     exitWithError('Failed to generate files.\n$e');

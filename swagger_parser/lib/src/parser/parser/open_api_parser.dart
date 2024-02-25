@@ -99,7 +99,7 @@ class OpenApiParser {
   static const _requiredConst = 'required';
   static const _responsesConst = 'responses';
   static const _schemaConst = 'schema';
-  static const _schemasConst = 'schemas';
+  static const _schemesConst = 'schemes';
   static const _serversConst = 'servers';
   static const _summaryConst = 'summary';
   static const _swaggerConst = 'swagger';

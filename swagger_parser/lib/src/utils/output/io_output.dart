@@ -31,22 +31,22 @@ void generateMessage() {
 
 void successMessage({
   required int successSchemasCount,
-  required int schemasCount,
+  required int schemesCount,
 }) {
   if (successSchemasCount == 0) {
     stdout.writeln(
       '${_red}The generation was completed with errors.\n'
-      'No schemas were generated.$_reset',
+      'No schemes were generated.$_reset',
     );
-  } else if (successSchemasCount != schemasCount) {
+  } else if (successSchemasCount != schemesCount) {
     stdout.writeln(
       '${_red}The generation was completed with errors.\n'
-      '${schemasCount - successSchemasCount} schemas were not generated.$_reset',
+      '${schemesCount - successSchemasCount} schemes were not generated.$_reset',
     );
   } else {
     stdout.writeln(
-      '${schemasCount > 1 ? _green : ''}The generation was completed successfully. '
-      'You can run the generation using build_runner.${schemasCount > 1 ? _reset : ''}',
+      '${schemesCount > 1 ? _green : ''}The generation was completed successfully. '
+      'You can run the generation using build_runner.${schemesCount > 1 ? _reset : ''}',
     );
   }
 }
@@ -79,12 +79,12 @@ void schemaStatisticsMessage({
 
 void summaryStatisticsMessage({
   required int successCount,
-  required int schemasCount,
+  required int schemesCount,
   required GenerationStatistics statistics,
 }) {
   stdout.writeln(
     'Summary (${statistics.timeElapsed.inMilliseconds / 1000} seconds):\n'
-    '${successCount != schemasCount ? '$successCount/$schemasCount' : '$schemasCount'} schemas, '
+    '${successCount != schemesCount ? '$successCount/$schemesCount' : '$schemesCount'} schemes, '
     '${formatNumber(statistics.totalRestClients)} clients, '
     '${formatNumber(statistics.totalRequests)} requests, '
     '${formatNumber(statistics.totalDataClasses)} data classes.\n'

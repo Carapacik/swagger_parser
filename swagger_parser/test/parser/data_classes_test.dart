@@ -7,7 +7,7 @@ void main() {
   group('Empty data class', () {
     test('2.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'empty_class.2.0.json');
+          p.join('test', 'parser', 'schemes', 'empty_class.2.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
@@ -22,7 +22,7 @@ void main() {
 
     test('3.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'empty_class.3.0.json');
+          p.join('test', 'parser', 'schemes', 'empty_class.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
@@ -39,7 +39,7 @@ void main() {
   group('Types check', () {
     test('basic types check 2.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'basic_types_class.2.0.json');
+          p.join('test', 'parser', 'schemes', 'basic_types_class.2.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
@@ -147,7 +147,7 @@ void main() {
 
     test('basic types check 3.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'basic_types_class.3.0.json');
+          p.join('test', 'parser', 'schemes', 'basic_types_class.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
@@ -255,7 +255,7 @@ void main() {
 
     test('composite types check 2.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'reference_types_class.2.0.json');
+          p.join('test', 'parser', 'schemes', 'reference_types_class.2.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
@@ -306,7 +306,7 @@ void main() {
 
     test('composite types check 3.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'reference_types_class.3.0.json');
+          p.join('test', 'parser', 'schemes', 'reference_types_class.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
@@ -357,7 +357,7 @@ void main() {
 
     test('of-like params types check 3.1', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'of_like_class.3.1.json');
+          p.join('test', 'parser', 'schemes', 'of_like_class.3.1.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
@@ -453,7 +453,7 @@ void main() {
       final schemaPath = p.join(
         'test',
         'parser',
-        'schemas',
+        'schemes',
         'additional_properties_class.3.0.json',
       );
       final configFile = schemaFile(schemaPath);
@@ -511,7 +511,7 @@ void main() {
       final schemaPath = p.join(
         'test',
         'parser',
-        'schemas',
+        'schemes',
         'additional_properties_class.2.0.json',
       );
       final configFile = schemaFile(schemaPath);
@@ -563,7 +563,7 @@ void main() {
     });
 
     test('Enum name test', () async {
-      final schemaPath = p.join('test', 'parser', 'schemas', 'enum_class.json');
+      final schemaPath = p.join('test', 'parser', 'schemes', 'enum_class.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
