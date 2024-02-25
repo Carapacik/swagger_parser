@@ -118,10 +118,10 @@ class SWPConfig {
       );
     }
 
-    final enumsParentPrefix = yamlMap['enum_parent_prefix'];
+    final enumsParentPrefix = yamlMap['enums_parent_prefix'];
     if (enumsParentPrefix is! bool?) {
       throw const ConfigException(
-        "Config parameter 'enum_parent_prefix' must be bool.",
+        "Config parameter 'enums_parent_prefix' must be bool.",
       );
     }
 
@@ -262,6 +262,7 @@ class SWPConfig {
       mergeClients: mergeClients ?? false,
       enumsParentPrefix: enumsParentPrefix ?? true,
       skippedParameters: skippedParameters,
+      exportFile: exportFile ?? true,
       language: language ?? ProgrammingLanguage.dart,
       jsonSerializer: jsonSerializer ?? JsonSerializer.jsonSerializable,
       clientPostfix: clientPostfix?.trim(),

@@ -1,10 +1,16 @@
 ## 1.16.0
 
--
+- Refactor config and rename parameters:
+    - `squash_clients` to `merge_clients`
+    - `enums_prefix` to `enums_parent_prefix`
+    - `skipp_parameters` to `skipped_parameters`
+- Fixed error
+  with `required_by_default` ([#168](https://github.com/Carapacik/swagger_parser/issues/168))
 
 ## 1.15.5
 
-- Support schema url without extension
+- Support schema url without
+  extension ([#160](https://github.com/Carapacik/swagger_parser/issues/160))
 
 ## 1.15.4
 
