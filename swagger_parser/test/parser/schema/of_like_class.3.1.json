@@ -2,21 +2,21 @@
   "openapi": "3.1.0",
   "paths": {},
   "components": {
-    "schemes": {
+    "schemas": {
       "OneOfElement": {
         "type": "object",
         "properties": {
           "allClass": {
             "allOf": [
               {
-                "$ref": "#/components/schemes/EnumClass"
+                "$ref": "#/components/schemas/EnumClass"
               }
             ]
           },
           "anyClass": {
             "anyOf": [
               {
-                "$ref": "#/components/schemes/EnumClass"
+                "$ref": "#/components/schemas/EnumClass"
               }
             ],
             "default": "value1"
@@ -24,7 +24,7 @@
           "oneClass": {
             "oneOf": [
               {
-                "$ref": "#/components/schemes/EnumClass"
+                "$ref": "#/components/schemas/EnumClass"
               }
             ]
           },
@@ -47,7 +47,7 @@
             "oneOf": [
               {
                 "items": {
-                  "$ref": "#/components/schemes/EnumClass"
+                  "$ref": "#/components/schemas/EnumClass"
                 },
                 "type": "array"
               }
@@ -57,7 +57,7 @@
           "nullableClass": {
             "anyOf": [
               {
-                "$ref": "#/components/schemes/EnumClass"
+                "$ref": "#/components/schemas/EnumClass"
               },
               {
                 "type": "null"
@@ -68,7 +68,7 @@
             "anyOf": [
               {
                 "items": {
-                  "$ref": "#/components/schemes/EnumClass"
+                  "$ref": "#/components/schemas/EnumClass"
                 },
                 "type": "array"
               },

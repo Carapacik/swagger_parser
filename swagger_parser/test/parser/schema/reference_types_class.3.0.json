@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "paths": {},
   "components": {
-    "schemes": {
+    "schemas": {
       "ClassName": {
         "allOf": [
           {
@@ -12,7 +12,7 @@
                 "type": "integer"
               },
               "another": {
-                "$ref": "#/components/schemes/AnotherClass"
+                "$ref": "#/components/schemas/AnotherClass"
               }
             }
           }
