@@ -5,9 +5,6 @@ import '../../parser/swagger_parser_core.dart';
 import '../utils.dart';
 
 const _green = '\x1B[32m';
-const _yellow = '\x1B[33m';
-const _blue = '\x1B[34m';
-const _lightBlue = '\x1B[36m';
 const _red = '\x1B[31m';
 const _reset = '\x1B[0m';
 

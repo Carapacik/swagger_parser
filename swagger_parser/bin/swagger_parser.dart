@@ -1,7 +1,6 @@
 import 'package:swagger_parser/src/config/config_processor.dart';
 import 'package:swagger_parser/src/generator/model/generation_statistic.dart';
-import 'package:swagger_parser/src/utils/output/io_output.dart'
-    if (dart.library.html) 'package:swagger_parser/src/utils/output/web_output.dart';
+import 'package:swagger_parser/src/utils/output/output_utils.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 
 /// Used for run `dart run swagger_parser`
