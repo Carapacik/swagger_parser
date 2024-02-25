@@ -1528,7 +1528,11 @@ class ClassName with _$ClassName {
         ];
 
         const fillController = FillController(
-          config: GeneratorConfig(name: '', outputDirectory: ''),
+          config: GeneratorConfig(
+            name: '',
+            outputDirectory: '',
+            unknownEnumValue: false,
+          ),
         );
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
@@ -1729,6 +1733,7 @@ enum EnumNameString {
             name: '',
             outputDirectory: '',
             jsonSerializer: JsonSerializer.freezed,
+            unknownEnumValue: false,
           ),
         );
         final files = <GeneratedFile>[];

@@ -7,7 +7,7 @@ void main() {
   group('Paths check', () {
     test('basic paths check 2.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemes', 'basic_requests.2.0.json');
+          p.join('test', 'parser', 'schema', 'basic_requests.2.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
@@ -119,7 +119,7 @@ void main() {
 
     test('basic paths check 3.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemes', 'basic_requests.3.0.json');
+          p.join('test', 'parser', 'schema', 'basic_requests.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
       final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
