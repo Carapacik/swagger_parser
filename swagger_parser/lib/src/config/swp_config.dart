@@ -265,6 +265,7 @@ class SWPConfig {
       }
     }
 
+    // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
     return SWPConfig._(
