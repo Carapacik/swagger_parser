@@ -117,8 +117,9 @@ swagger_parser:
   # Optional. Set 'true' to set enum prefix from parent component.
   enums_parent_prefix: true
 
-  # Optional (dart only). Set 'true' to maintain backwards compatibility when adding new values on the backend.
-  unknown_enum_value: false
+  # Optional (dart only). Set 'true' to maintain backwards compatibility 
+  # when adding new values on the backend.
+  unknown_enum_value: true
 
   # Optional. Set 'false' to not put a comment at the beginning of the generated files.
   mark_files_as_generated: true

@@ -31,7 +31,11 @@ abstract class SomeClient {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -47,7 +51,13 @@ interface SomeClient {}
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController = FillController(putClientsInFolder: true);
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          putClientsInFolder: true,
+        ),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -67,8 +77,12 @@ abstract class SomeClient {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
-        putClientsInFolder: true,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+          putClientsInFolder: true,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -84,7 +98,13 @@ interface SomeClient {}
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
-      const fillController = FillController(clientPostfix: 'Api');
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          clientPostfix: 'Api',
+        ),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -104,8 +124,12 @@ abstract class ClassNameApi {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
-        clientPostfix: 'Api',
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+          clientPostfix: 'Api',
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -121,7 +145,13 @@ interface SomeApi {}
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController = FillController(clientPostfix: '');
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          clientPostfix: '',
+        ),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -141,8 +171,12 @@ abstract class Some {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
-        clientPostfix: '',
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+          clientPostfix: '',
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -167,7 +201,9 @@ interface Some {}
         },
         requests: [],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -208,7 +244,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -242,7 +280,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -328,7 +370,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -442,7 +486,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -516,7 +564,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -576,7 +626,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -643,7 +697,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -714,7 +770,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -763,7 +823,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -812,7 +874,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -880,7 +946,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -955,7 +1023,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -1058,7 +1130,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'dart:convert';
@@ -1178,7 +1252,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -1240,7 +1318,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1299,7 +1379,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -1365,7 +1449,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1435,7 +1521,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -1523,7 +1613,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1620,7 +1712,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -1692,7 +1788,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1785,7 +1883,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1863,7 +1963,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -1952,7 +2056,11 @@ interface ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -1989,7 +2097,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -2027,7 +2137,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -2094,7 +2208,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -2187,7 +2303,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -2265,7 +2383,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -2354,7 +2476,11 @@ interface ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''

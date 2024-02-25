@@ -1644,6 +1644,7 @@ enum EnumNameStringWithLeadingNumbers {
             name: '',
             outputDirectory: '',
             enumsToJson: true,
+            unknownEnumValue: false,
           ),
         );
         final files = <GeneratedFile>[];
