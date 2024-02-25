@@ -73,7 +73,7 @@ final class FillController {
   GeneratedFile fillExportFile({
     required List<GeneratedFile> restClients,
     required List<GeneratedFile> dataClasses,
-    GeneratedFile? rootClient,
+    required GeneratedFile? rootClient,
   }) {
     return GeneratedFile(
       name: 'export.${config.language.fileExtension}',

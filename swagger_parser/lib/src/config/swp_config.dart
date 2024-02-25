@@ -16,7 +16,7 @@ class SWPConfig {
     this.name = 'name',
     this.language = ProgrammingLanguage.dart,
     this.jsonSerializer = JsonSerializer.jsonSerializable,
-    this.rootClient = false,
+    this.rootClient = true,
     this.rootClientName = 'RestClient',
     this.clientPostfix,
     this.exportFile = true,

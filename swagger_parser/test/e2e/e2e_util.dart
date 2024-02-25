@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
-import 'package:swagger_parser/src/utils/file/file_utils.dart';
+import 'package:swagger_parser/src/config/swp_config.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:test/test.dart';
 
@@ -15,8 +15,7 @@ import 'package:test/test.dart';
 /// providing a reliable way to catch regressions or unintended changes in the code generation process.
 Future<void> e2eTest(
   String testName,
-  Generator Function(String outputDirectory, String schemaContent)
-      getGenerator, {
+  SWPConfig Function(String outputDirectory, String shemaPath) config, {
   String? schemaFileName,
   bool generateExpectedFiles = false,
 }) async {
@@ -24,19 +23,26 @@ Future<void> e2eTest(
   final schemaPath = p.join(testFolder, schemaFileName ?? 'openapi.json');
   final expectedFolderPath = p.join(testFolder, 'expected_files');
   final generatedFolderPath = p.join(testFolder, 'generated_files');
-  final configFile = schemaFile(schemaPath);
-  final schemaContent = configFile!.readAsStringSync();
+  // final configFile = schemaFile(schemaPath);
+  // final schemaContent = configFile!.readAsStringSync();
 
-  final generator = getGenerator.call(
-    generateExpectedFiles ? expectedFolderPath : generatedFolderPath,
-    schemaContent,
+  final processor = GenProcessor(
+    config.call(
+      generateExpectedFiles ? expectedFolderPath : generatedFolderPath,
+      schemaPath,
+    ),
   );
+
+  // final generator = genProcessor.call(
+  //   generateExpectedFiles ? expectedFolderPath : generatedFolderPath,
+  //   schemaContent,
+  // );
 
   if (generateExpectedFiles) {
     Directory(expectedFolderPath).deleteSync(recursive: true);
   }
 
-  await generator.generateFiles();
+  await processor.generateFiles();
 
   await Process.run('dart', ['format', testFolder]);
 

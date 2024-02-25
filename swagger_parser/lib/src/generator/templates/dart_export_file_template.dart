@@ -6,7 +6,7 @@ String dartExportFileTemplate({
   required bool markFileAsGenerated,
   required List<GeneratedFile> restClients,
   required List<GeneratedFile> dataClasses,
-  GeneratedFile? rootClient,
+  required GeneratedFile? rootClient,
 }) {
   final restClientsNames = restClients.map((e) => e.name).toSet();
   final dataClassesNames = dataClasses.map((e) => e.name).toSet();

@@ -1,3 +1,4 @@
+import 'package:swagger_parser/src/config/swp_config.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:test/test.dart';
 
@@ -8,9 +9,9 @@ void main() {
     test('multipart request properties', () async {
       await e2eTest(
         'multipart_request_properties',
-        (outputDirectory, schemaContent) => Generator(
+        (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
-          schemaContent: schemaContent,
+          schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
         ),
@@ -21,12 +22,11 @@ void main() {
       await e2eTest(
         'multipart_request_with_ref',
         schemaFileName: 'openapi.yaml',
-        (outputDirectory, schemaContent) => Generator(
+        (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
-          schemaContent: schemaContent,
+          schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          isYaml: true,
         ),
       );
     });
@@ -34,12 +34,11 @@ void main() {
       await e2eTest(
         'enum_member_names',
         schemaFileName: 'openapi.yaml',
-        (outputDirectory, schemaContent) => Generator(
+        (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
-          schemaContent: schemaContent,
+          schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          isYaml: true,
         ),
       );
     });
