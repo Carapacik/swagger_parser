@@ -13,7 +13,7 @@ class SWPConfig {
     required this.outputDirectory,
     this.schemaPath,
     this.schemaUrl,
-    this.name = 'name',
+    this.name = 'api',
     this.language = ProgrammingLanguage.dart,
     this.jsonSerializer = JsonSerializer.jsonSerializable,
     this.rootClient = true,
@@ -108,11 +108,7 @@ class SWPConfig {
 
     final rawName = yamlMap['name']?.toString();
     final name = rawName == null || rawName.isEmpty
-        ? (schemaPath ?? schemaUrl)!
-            .split('/')
-            .lastOrNull
-            ?.split('.')
-            .firstOrNull
+        ? (schemaPath ?? schemaUrl)!.split('/').last.split('.').first
         : rawName;
 
     final defaultContentType = yamlMap['default_content_type'];
@@ -278,13 +274,13 @@ class SWPConfig {
       }
     }
 
-    final dc = SWPConfig(outputDirectory: outputDirectory);
+    final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
     return SWPConfig._(
       schemaPath: schemaPath,
       schemaUrl: schemaUrl,
       outputDirectory: outputDirectory,
-      name: name ?? dc.name,
+      name: name,
       pathMethodName: pathMethodName ?? dc.pathMethodName,
       defaultContentType: defaultContentType ?? dc.defaultContentType,
       requiredByDefault: requiredByDefault ?? dc.requiredByDefault,
