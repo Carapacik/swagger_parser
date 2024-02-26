@@ -8,8 +8,7 @@ void generateArchive(List<GeneratedFile> files) {
   final encoder = ZipEncoder();
   final archive = Archive();
   for (final file in files) {
-    archive
-        .addFile(ArchiveFile(file.name, file.contents.length, file.contents));
+    archive.addFile(ArchiveFile(file.name, file.content.length, file.content));
   }
   final outputStream = OutputStream();
   final bytes = encoder.encode(
