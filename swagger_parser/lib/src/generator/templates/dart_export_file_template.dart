@@ -15,8 +15,10 @@ String dartExportFileTemplate({
   return '${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}'
       '${restClientsNames.isNotEmpty ? '// Clients\n' : ''}'
       '${restClientsNames.map((e) => "export '$e';").join('\n')}'
+      '${dataClassesNames.isNotEmpty && restClientsNames.isNotEmpty ? '\n' : ''}'
       '${dataClassesNames.isNotEmpty ? '// Data classes\n' : ''}'
-      '${dataClassesNames.map((e) => "export '$e';").join('\n')}\n'
+      '${dataClassesNames.map((e) => "export '$e';").join('\n')}'
+      '${rootClientName != null && (dataClassesNames.isNotEmpty || restClientsNames.isNotEmpty) ? '\n' : ''}'
       '${rootClientName != null ? '// Root client\n' : ''}'
       '${rootClientName != null ? "export '$rootClientName';" : ''}'
       '${rootClientName != null ? '\n\n' : ''}';
