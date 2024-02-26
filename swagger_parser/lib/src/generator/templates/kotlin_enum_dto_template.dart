@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 
+import '../../parser/swagger_parser_core.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/utils.dart';
-import '../models/universal_data_class.dart';
 
 /// Provides template for generating kotlin enum DTO
 String kotlinEnumDtoTemplate(

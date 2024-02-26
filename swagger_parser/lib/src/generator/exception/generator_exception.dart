@@ -1,6 +1,6 @@
-/// Exception thrown when a generator is not correct
+/// Exception thrown when in generator is not correct
 class GeneratorException implements Exception {
-  /// Constructor for [GeneratorException]
+  /// Creates a  [GeneratorException].
   GeneratorException(this.message);
 
   /// A message describing the generator error

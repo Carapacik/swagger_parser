@@ -1,6 +1,6 @@
-import 'package:swagger_parser/src/config/yaml_config.dart';
-import 'package:swagger_parser/src/generator/models/generation_statistics.dart';
-import 'package:swagger_parser/src/utils/utils.dart';
+import 'package:swagger_parser/src/config/config_processor.dart';
+import 'package:swagger_parser/src/generator/model/generation_statistic.dart';
+import 'package:swagger_parser/src/utils/output/output_utils.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 
 /// Used for run `dart run swagger_parser`
@@ -8,41 +8,43 @@ Future<void> main(List<String> arguments) async {
   introMessage();
   try {
     /// Run generate from YAML config
-    final configs = YamlConfig.parseConfigsFromYamlFile(arguments);
+    const configProcessor = ConfigProcessor();
+    final yamlMap = configProcessor.readConfigFromFile(arguments);
+    final configs = configProcessor.parseConfig(yamlMap);
 
-    GenerationStatistics? totalStats;
+    GenerationStatistic? totalStatistic;
     var successSchemasCount = 0;
 
     generateMessage();
     for (final config in configs) {
       try {
-        final generator = Generator.fromYamlConfig(config);
-        final (openApi, stats) = await generator.generateFiles();
+        final processor = GenProcessor(config);
+        final (openApi, statistics) = await processor.generateFiles();
 
         schemaStatisticsMessage(
-          name: config.name,
           openApi: openApi,
-          statistics: stats,
+          statistics: statistics,
+          name: config.name,
         );
-        totalStats = totalStats?.merge(stats);
-        totalStats ??= stats;
+        totalStatistic = totalStatistic?.merge(statistics);
+        totalStatistic ??= statistics;
         successSchemasCount++;
       } on Object catch (e, s) {
         schemaFailedMessage(e, s, name: config.name);
       }
     }
 
-    if (configs.length > 1 && totalStats != null) {
+    if (configs.length > 1 && totalStatistic != null) {
       summaryStatisticsMessage(
         successCount: successSchemasCount,
-        schemasCount: configs.length,
-        statistics: totalStats,
+        schemesCount: configs.length,
+        statistics: totalStatistic,
       );
     }
 
-    doneMessage(
+    successMessage(
       successSchemasCount: successSchemasCount,
-      schemasCount: configs.length,
+      schemesCount: configs.length,
     );
   } on Exception catch (e) {
     exitWithError('Failed to generate files.\n$e');
