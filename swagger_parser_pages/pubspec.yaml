@@ -3,10 +3,10 @@ description: Web interface for swagger_parser
 publish_to: none
 version: 1.0.0+1
 environment:
-  sdk: ^3.2.0
+  sdk: ^3.3.0
 
 dependencies:
-  archive: ^3.4.9
+  archive: ^3.4.10
   flutter:
     sdk: flutter
   flutter_web_plugins:
@@ -14,10 +14,10 @@ dependencies:
   swagger_parser:
     path:
       ../swagger_parser
-  url_launcher: ^6.2.1
+  url_launcher: ^6.2.5
 
 dev_dependencies:
-  carapacik_lints: ^1.6.0
+  carapacik_lints: ^1.7.0
 
 flutter:
   uses-material-design: true

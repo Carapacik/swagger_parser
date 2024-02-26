@@ -1,3 +1,7 @@
+## 1.16.1
+
+- Fix swagger_parser_pages (https://carapacik.github.io/swagger_parser)
+
 ## 1.16.0
 
 - Wrapping collections variable introduced replacing arrayDepth and mapType: this variable presents

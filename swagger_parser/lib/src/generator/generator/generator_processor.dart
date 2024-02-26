@@ -43,14 +43,15 @@ class GenProcessor {
 
   /// Generates content of files based on OpenApi definition file
   /// and return list of [GeneratedFile]
-  Future<List<GeneratedFile>> generateContent() async {
+  Future<List<GeneratedFile>> generateContent(
+    ({String fileContent, bool isJson}) configParameters,
+  ) async {
     resetUniqueNameCounters();
 
-    const configProcessor = ConfigProcessor();
-    final (fileContent, isJson) = await configProcessor.fileContent(config);
-
-    final parserConfig =
-        config.toParserConfig(fileContent: fileContent, isJson: isJson);
+    final parserConfig = config.toParserConfig(
+      fileContent: configParameters.fileContent,
+      isJson: configParameters.isJson,
+    );
     final parser = OpenApiParser(parserConfig);
 
     final generatorConfig = config.toGeneratorConfig();
