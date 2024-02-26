@@ -52,7 +52,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Pet"
+                    "$ref": "#/components/schemes/Pet"
                   }
                 }
               }
@@ -63,7 +63,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemes/Error"
                 }
               }
             }
@@ -79,7 +79,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPet"
+                "$ref": "#/components/schemes/NewPet"
               }
             }
           }
@@ -90,7 +90,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pet"
+                  "$ref": "#/components/schemes/Pet"
                 }
               }
             }
@@ -100,7 +100,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemes/Error"
                 }
               }
             }
@@ -130,7 +130,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pet"
+                  "$ref": "#/components/schemes/Pet"
                 }
               }
             }
@@ -140,7 +140,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemes/Error"
                 }
               }
             }
@@ -171,7 +171,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemes/Error"
                 }
               }
             }
@@ -181,11 +181,11 @@
     }
   },
   "components": {
-    "schemas": {
+    "schemes": {
       "Pet": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/NewPet"
+            "$ref": "#/components/schemes/NewPet"
           },
           {
             "type": "object",

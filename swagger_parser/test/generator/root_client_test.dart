@@ -1,14 +1,17 @@
-import 'package:swagger_parser/src/generator/fill_controller.dart';
-import 'package:swagger_parser/src/generator/models/universal_rest_client.dart';
+import 'package:swagger_parser/src/generator/config/generator_config.dart';
+import 'package:swagger_parser/src/generator/generator/fill_controller.dart';
+import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Empty root client', () {
     test('dart', () async {
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRootClient([]);
       const expectedContents = '';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -17,7 +20,9 @@ void main() {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
       ];
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRootClient(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -39,7 +44,7 @@ class RestClient {
   OneClient get one => _one ??= OneClient(_dio, baseUrl: _baseUrl);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -52,7 +57,9 @@ class RestClient {
         const UniversalRestClient(name: 'Four', imports: {}, requests: []),
         const UniversalRestClient(name: 'Five', imports: {}, requests: []),
       ];
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRootClient(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -90,7 +97,7 @@ class RestClient {
   FiveClient get five => _five ??= FiveClient(_dio, baseUrl: _baseUrl);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -99,7 +106,13 @@ class RestClient {
       final clients = [
         const UniversalRestClient(name: 'One', imports: {}, requests: []),
       ];
-      const fillController = FillController(putClientsInFolder: true);
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          putClientsInFolder: true,
+        ),
+      );
       final filledContent = fillController.fillRootClient(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -121,7 +134,7 @@ class RestClient {
   OneClient get one => _one ??= OneClient(_dio, baseUrl: _baseUrl);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -134,7 +147,13 @@ class RestClient {
         const UniversalRestClient(name: 'Four', imports: {}, requests: []),
         const UniversalRestClient(name: 'Five', imports: {}, requests: []),
       ];
-      const fillController = FillController(putClientsInFolder: true);
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          putClientsInFolder: true,
+        ),
+      );
       final filledContent = fillController.fillRootClient(clients);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -172,7 +191,7 @@ class RestClient {
   FiveClient get five => _five ??= FiveClient(_dio, baseUrl: _baseUrl);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 }

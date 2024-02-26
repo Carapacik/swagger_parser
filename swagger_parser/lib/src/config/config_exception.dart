@@ -1,6 +1,6 @@
-/// Exception thrown when a yaml config is not correct
+/// Exception thrown when a config is not correct
 class ConfigException implements Exception {
-  /// Constructor for [ConfigException]
+  /// Creates a  [ConfigException].
   const ConfigException(this.message);
 
   /// A message describing the config error

@@ -81,6 +81,7 @@ class CaseUtils {
   }
 }
 
+/// Extension to easily format String
 extension StringToCaseX on String {
   /// Return text formatted to camelCase
   String get toCamel => CaseUtils(this).camelCase;

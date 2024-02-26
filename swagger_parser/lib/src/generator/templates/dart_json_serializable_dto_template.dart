@@ -1,11 +1,10 @@
 import 'package:collection/collection.dart';
 
+import '../../parser/swagger_parser_core.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
-import '../models/programming_language.dart';
-import '../models/universal_data_class.dart';
-import '../models/universal_type.dart';
+import '../model/programming_language.dart';
 
 /// Provides template for generating dart DTO using JSON serializable
 String dartJsonSerializableDtoTemplate(
@@ -62,6 +61,6 @@ String _required(UniversalType t) =>
 /// return defaultValue if have
 String _defaultValue(UniversalType t) => t.defaultValue != null
     ? ' = '
-        '${t.arrayDepth > 0 ? 'const ' : ''}'
+        '${t.wrappingCollections.isNotEmpty ? 'const ' : ''}'
         '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}'
     : '';

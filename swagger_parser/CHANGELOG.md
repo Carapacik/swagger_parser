@@ -1,6 +1,21 @@
+## 1.16.0
+
+- Wrapping collections variable introduced replacing arrayDepth and mapType: this variable presents
+  a list of all collections wrapping a type (example: List<List<Map<String,
+  List<String>>>> -> [List, List, List, Map, List]) and will resolve them in order of
+  appearance ([#128](https://github.com/Carapacik/swagger_parser/issues/128))
+- Fixed error
+  with `required_by_default` ([#168](https://github.com/Carapacik/swagger_parser/issues/168))
+- Refactor config and rename parameters:
+    - `squash_clients` to `merge_clients`
+    - `enums_prefix` to `enums_parent_prefix`
+    - `skipp_parameters` to `skipped_parameters`
+- Remove config parameter `put_in_folder`
+
 ## 1.15.5
 
-- Support schema url without extension
+- Support schema url without
+  extension ([#160](https://github.com/Carapacik/swagger_parser/issues/160))
 
 ## 1.15.4
 
@@ -40,7 +55,7 @@
 - Fixed retrofit template
 - Remove special characters from tags
 - Add new config parameter `skip_parameters`
-- Extract schemas from url ([#150](https://github.com/Carapacik/swagger_parser/issues/150))
+- Extract schemes from url ([#150](https://github.com/Carapacik/swagger_parser/issues/150))
 
 ## 1.13.1
 
@@ -71,7 +86,7 @@
 ## 1.11.3
 
 - Fixed error with annotating client methods with the first specified content type header in OpenAPI
-  V2 schemas if the specified one is not the default.
+  V2 schemes if the specified one is not the default.
 
 ## 1.11.2
 
@@ -123,7 +138,7 @@
 
 ## 1.10.0
 
-- Support for generating schemas by url (
+- Support for generating schemes by url (
   see [example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml))
 - Add new config parameter `schema_url`
 - Add new config parameter `schema_from_url_to_file`
@@ -151,7 +166,7 @@
 
 ## 1.8.0
 
-- Multiple schemas support (
+- Multiple schemes support (
   see [example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml))
 - Support for specifying nullable types via anyOf
 - Edit root client template

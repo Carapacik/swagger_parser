@@ -54,27 +54,30 @@ An example of YAML is shown below. A default value is specified for each of the 
 ```yaml
 swagger_parser:
   # You must provide the file path and/or url to the OpenApi schema.
-  
+
   # Sets the OpenApi schema path directory for api definition.
-  schema_path: schemas/openapi.json
+  schema_path: schemes/openapi.json
 
   # Sets the url of the OpenApi schema.
   schema_url: https://petstore.swagger.io/v2/swagger.json
-  
+
   # Required. Sets output directory for generated files (Clients and DTOs).
   output_directory: lib/api
+
+  # Optional. Set API name for folder and export file
+  # If not specified, the file name is used.
+  name: null
 
   # Optional. Sets the programming language.
   # Current available languages are: dart, kotlin.
   language: dart
 
-  # Optional. If 'schema_path' and 'schema_url' are specified, what will be used.
-  # Current available options are: path, url.
-  prefer_schema_source: url
-
   # Optional (dart only).
   # Current available serializers are: json_serializable, freezed, dart_mappable.
   json_serializer: json_serializable
+
+  # Optional. Set default content-type for all requests.
+  default_content_type: "application/json"
 
   # Optional (dart only).
   # It is used if the value does not have the annotations 'required' and 'nullable'. 
@@ -88,13 +91,6 @@ swagger_parser:
   # Optional (dart only). Set root client name.
   root_client_name: RestClient
 
-  # Optional. Set default content-type for all requests.
-  default_content_type: "application/json"
-
-  # Optional. Set API name for folder and export file
-  # If not specified, the file name is used.
-  name: null
-
   # Optional (dart only). Set 'true' to generate export file.
   export_file: true
 
@@ -105,10 +101,7 @@ swagger_parser:
   put_clients_in_folder: false
 
   # Optional. Set to 'true' to squash all clients in one client.
-  squash_clients: false
-
-  # Optional. Set to 'false' to not write the schema from the url to the schema file.
-  schema_from_url_to_file: true
+  merge_clients: false
 
   # Optional. Set postfix for Client class and file.
   client_postfix: Client
@@ -122,9 +115,10 @@ swagger_parser:
   enums_to_json: false
 
   # Optional. Set 'true' to set enum prefix from parent component.
-  enums_prefix: false
+  enums_parent_prefix: true
 
-  # Optional (dart only). Set 'true' to maintain backwards compatibility when adding new values on the backend.
+  # Optional (dart only). Set 'true' to maintain backwards compatibility 
+  # when adding new values on the backend.
   unknown_enum_value: true
 
   # Optional. Set 'false' to not put a comment at the beginning of the generated files.
@@ -141,7 +135,7 @@ swagger_parser:
       replacement: ""
 
   # Optional. Skip parameters with names.
-  skip_parameters:
+  skipped_parameters:
     - 'X-Some-Token'
 ```
 
@@ -157,8 +151,8 @@ swagger_parser:
   # Each schema inherits the parameters described in swagger_parser,
   # any parameter for any schema can be set manually.
   # Cannot be used at the same time as schema_path.
-  schemas:
-    - schema_path: schemas/openapi.json
+  schemes:
+    - schema_path: schemes/openapi.json
       root_client_name: ApiMicroservice
       json_serializer: freezed
       put_in_folder: true
@@ -177,7 +171,7 @@ swagger_parser:
       put_clients_in_folder: true
       put_in_folder: true
 
-    - schema_path: schemas/pet_store.json
+    - schema_path: schemes/pet_store.json
       schema_url: https://petstore.swagger.io/v2/swagger.json
       output_directory: lib/api/kotlin
       language: kotlin

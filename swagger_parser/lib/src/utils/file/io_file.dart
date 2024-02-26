@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:path/path.dart' as p;
 
-import '../generator/models/generated_file.dart';
+import '../../generator/model/generated_file.dart';
 
 /// Checks if config exists at [filePath]
 /// Config can be a file provided in arguments,
@@ -31,16 +31,18 @@ File? schemaFile(String filePath) {
   return file.existsSync() ? file : null;
 }
 
-void writeSchemaToFile(String schemaContent, String filePath) {
-  File(p.join(_rootDirectoryPath, filePath)).writeAsStringSync(schemaContent);
-}
-
+///
 Future<String> schemaFromUrl(String url) async {
   final client = HttpClient();
   final request = await client.getUrl(Uri.parse(url));
   final response = await request.close();
   final data = await response.transform<String>(utf8.decoder).join();
   return data;
+}
+
+///
+void writeSchemaToFile(String schemaContent, String filePath) {
+  File(p.join(_rootDirectoryPath, filePath)).writeAsStringSync(schemaContent);
 }
 
 /// Creates DTO file
@@ -50,7 +52,8 @@ Future<void> generateFile(
 ) async {
   final file = File(p.join(outputDirectory, generatedFile.name));
   await file.create(recursive: true);
-  await file.writeAsString(generatedFile.contents);
+  await file.writeAsString(generatedFile.content);
 }
 
+///
 String get _rootDirectoryPath => Directory.current.path;
