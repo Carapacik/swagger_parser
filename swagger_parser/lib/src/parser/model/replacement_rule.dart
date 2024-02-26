@@ -25,8 +25,6 @@ final class ReplacementRule {
       : replacement;
 
   /// Applies the replacement rule to the given input string
-  String? apply(String? input) => input?.replaceAll(
-        pattern,
-        replacementInCorrectCase,
-      );
+  String? apply(String? input) =>
+      input?.replaceAll(pattern, replacementInCorrectCase);
 }

@@ -1,13 +1,10 @@
 import 'package:collection/collection.dart';
 
+import '../../parser/swagger_parser_core.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
-import '../models/programming_language.dart';
-import '../models/universal_request.dart';
-import '../models/universal_request_type.dart';
-import '../models/universal_rest_client.dart';
-import '../models/universal_type.dart';
+import '../model/programming_language.dart';
 
 /// Provides template for generating dart Retrofit client
 String dartRetrofitClientTemplate({
@@ -15,6 +12,7 @@ String dartRetrofitClientTemplate({
   required String name,
   required bool markFileAsGenerated,
   required String defaultContentType,
+  bool originalHttpResponse = false,
 }) {
   final sb = StringBuffer(
     '''
@@ -29,13 +27,23 @@ abstract class $name {
 ''',
   );
   for (final request in restClient.requests) {
-    sb.write(_toClientRequest(request, defaultContentType));
+    sb.write(
+      _toClientRequest(
+        request,
+        defaultContentType,
+        originalHttpResponse: originalHttpResponse,
+      ),
+    );
   }
   sb.write('}\n');
   return sb.toString();
 }
 
-String _toClientRequest(UniversalRequest request, String defaultContentType) {
+String _toClientRequest(
+  UniversalRequest request,
+  String defaultContentType, {
+  required bool originalHttpResponse,
+}) {
   final responseType = request.returnType == null
       ? 'void'
       : request.returnType!.toSuitableType(ProgrammingLanguage.dart);
@@ -43,7 +51,7 @@ String _toClientRequest(UniversalRequest request, String defaultContentType) {
     '''
 
   ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}@${request.requestType.name.toUpperCase()}('${request.route}')
-  Future<${request.isOriginalHttpResponse ? 'HttpResponse<$responseType>' : responseType}> ${request.name}(''',
+  Future<${originalHttpResponse ? 'HttpResponse<$responseType>' : responseType}> ${request.name}(''',
   );
   if (request.parameters.isNotEmpty) {
     sb.write('{\n');
@@ -129,6 +137,6 @@ String _required(UniversalType t) =>
 /// return defaultValue if have
 String _defaultValue(UniversalType t) => t.defaultValue != null
     ? ' = '
-        '${t.arrayDepth > 0 ? 'const ' : ''}'
+        '${t.wrappingCollections.isNotEmpty ? 'const ' : ''}'
         '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toCamel)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}'
     : '';

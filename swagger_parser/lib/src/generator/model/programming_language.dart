@@ -1,6 +1,6 @@
-import 'package:collection/collection.dart';
-
-import '../generator_exception.dart';
+import '../../parser/swagger_parser_core.dart';
+import '../model/generated_file.dart';
+import '../model/json_serializer.dart';
 import '../templates/dart_dart_mappable_dto_template.dart';
 import '../templates/dart_enum_dto_template.dart';
 import '../templates/dart_export_file_template.dart';
@@ -13,11 +13,6 @@ import '../templates/kotlin_enum_dto_template.dart';
 import '../templates/kotlin_moshi_dto_template.dart';
 import '../templates/kotlin_retrofit_client_template.dart';
 import '../templates/kotlin_typedef_template.dart';
-import 'generated_file.dart';
-import 'json_serializer.dart';
-import 'open_api_info.dart';
-import 'universal_data_class.dart';
-import 'universal_rest_client.dart';
 
 /// Enumerates supported programming languages to determine templates
 enum ProgrammingLanguage {
@@ -30,12 +25,17 @@ enum ProgrammingLanguage {
   /// Constructor with [fileExtension] for every language
   const ProgrammingLanguage(this.fileExtension);
 
+  /// Returns [ProgrammingLanguage] from string
+  factory ProgrammingLanguage.fromString(String value) =>
+      ProgrammingLanguage.values.firstWhere(
+        (e) => e.name == value,
+        orElse: () => throw ArgumentError(
+          "'$value' must be contained in ${ProgrammingLanguage.values.map((e) => e.name)}",
+        ),
+      );
+
   /// Extension for generated files
   final String fileExtension;
-
-  /// Used to get [ProgrammingLanguage] from config
-  static ProgrammingLanguage? fromString(String? value) =>
-      ProgrammingLanguage.values.firstWhereOrNull((e) => e.name == value);
 
   /// Determines template for generating DTOs by language
   String dtoFileContent(
@@ -100,7 +100,7 @@ enum ProgrammingLanguage {
           );
         }
     }
-    throw GeneratorException('Unknown type exception');
+    throw ArgumentError('Unknown type exception');
   }
 
   /// Determines template for generating Rest client by language
@@ -109,6 +109,7 @@ enum ProgrammingLanguage {
     String name, {
     required bool markFilesAsGenerated,
     required String defaultContentType,
+    bool originalHttpResponse = false,
   }) =>
       switch (this) {
         dart => dartRetrofitClientTemplate(
@@ -116,6 +117,7 @@ enum ProgrammingLanguage {
             name: name,
             markFileAsGenerated: markFilesAsGenerated,
             defaultContentType: defaultContentType,
+            originalHttpResponse: originalHttpResponse,
           ),
         kotlin => kotlinRetrofitClientTemplate(
             restClient: restClient,
@@ -150,7 +152,7 @@ enum ProgrammingLanguage {
     required bool markFileAsGenerated,
     required List<GeneratedFile> restClients,
     required List<GeneratedFile> dataClasses,
-    GeneratedFile? rootClient,
+    required GeneratedFile? rootClient,
   }) =>
       switch (this) {
         dart => dartExportFileTemplate(

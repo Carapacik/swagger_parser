@@ -6,7 +6,7 @@ environment:
 
 dependencies:
   dart_mappable: ^4.2.0
-  dio: ^5.4.0
+  dio: ^5.4.1
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
   retrofit: ^4.1.0

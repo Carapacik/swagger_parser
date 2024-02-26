@@ -23,7 +23,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AnotherEntity"
+                    "$ref": "#/components/schemes/AnotherEntity"
                   }
                 }
               },
@@ -31,7 +31,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AnotherEntity"
+                    "$ref": "#/components/schemes/AnotherEntity"
                   }
                 }
               },
@@ -39,7 +39,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AnotherEntity"
+                    "$ref": "#/components/schemes/AnotherEntity"
                   }
                 }
               }
@@ -80,7 +80,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AnotherEntity"
+                    "$ref": "#/components/schemes/AnotherEntity"
                   }
                 }
               },
@@ -88,7 +88,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AnotherEntity"
+                    "$ref": "#/components/schemes/AnotherEntity"
                   }
                 }
               },
@@ -96,7 +96,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AnotherEntity"
+                    "$ref": "#/components/schemes/AnotherEntity"
                   }
                 }
               }
@@ -184,17 +184,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AnotherEntity"
+                "$ref": "#/components/schemes/AnotherEntity"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/AnotherEntity"
+                "$ref": "#/components/schemes/AnotherEntity"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/AnotherEntity"
+                "$ref": "#/components/schemes/AnotherEntity"
               }
             }
           }
@@ -273,7 +273,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
+                    "$ref": "#/components/schemes/WeatherForecast"
                   }
                 }
               },
@@ -281,7 +281,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
+                    "$ref": "#/components/schemes/WeatherForecast"
                   }
                 }
               },
@@ -289,7 +289,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
+                    "$ref": "#/components/schemes/WeatherForecast"
                   }
                 }
               }
@@ -305,17 +305,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WeatherForecast"
+                "$ref": "#/components/schemes/WeatherForecast"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/WeatherForecast"
+                "$ref": "#/components/schemes/WeatherForecast"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/WeatherForecast"
+                "$ref": "#/components/schemes/WeatherForecast"
               }
             }
           }
@@ -326,17 +326,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/WeatherForecast"
+                  "$ref": "#/components/schemes/WeatherForecast"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WeatherForecast"
+                  "$ref": "#/components/schemes/WeatherForecast"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WeatherForecast"
+                  "$ref": "#/components/schemes/WeatherForecast"
                 }
               }
             }
@@ -392,17 +392,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/WeatherForecast"
+                  "$ref": "#/components/schemes/WeatherForecast"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WeatherForecast"
+                  "$ref": "#/components/schemes/WeatherForecast"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WeatherForecast"
+                  "$ref": "#/components/schemes/WeatherForecast"
                 }
               }
             }
@@ -463,17 +463,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AnotherEntity"
+                "$ref": "#/components/schemes/AnotherEntity"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/AnotherEntity"
+                "$ref": "#/components/schemes/AnotherEntity"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/AnotherEntity"
+                "$ref": "#/components/schemes/AnotherEntity"
               }
             }
           }
@@ -484,17 +484,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/WeatherForecast"
+                  "$ref": "#/components/schemes/WeatherForecast"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WeatherForecast"
+                  "$ref": "#/components/schemes/WeatherForecast"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WeatherForecast"
+                  "$ref": "#/components/schemes/WeatherForecast"
                 }
               }
             }
@@ -538,17 +538,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnotherEntity"
+                  "$ref": "#/components/schemes/AnotherEntity"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnotherEntity"
+                  "$ref": "#/components/schemes/AnotherEntity"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnotherEntity"
+                  "$ref": "#/components/schemes/AnotherEntity"
                 }
               }
             }
@@ -558,7 +558,7 @@
     }
   },
   "components": {
-    "schemas": {
+    "schemes": {
       "AnotherEntity": {
         "required": [
           "isKek",
@@ -622,7 +622,7 @@
             "format": "int32"
           },
           "another": {
-            "$ref": "#/components/schemas/AnotherEntity"
+            "$ref": "#/components/schemes/AnotherEntity"
           }
         },
         "additionalProperties": false

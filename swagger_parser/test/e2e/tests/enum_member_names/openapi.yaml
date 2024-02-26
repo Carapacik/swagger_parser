@@ -7,31 +7,31 @@ paths:
     get:
       operationId: api_v1_category_list
       parameters:
-      - in: query
-        name: enum_class
-        schema:
-          type: array
-          items:
-            type: string
-            enum:
-            - -index
-            - -name
-            - index
-            - name
-            - json
-            - yaml
-            - -1
-            - 0
-            - "1"
-            - '1itemOne'
-            - '2ItemTwo'
-            - '3item_three'
-            - '4ITEM-FOUR'
-            - '5иллегалчарактер'
-            - '6 item six'
-        description: 'description'
+        - in: query
+          name: enum_class
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - -index
+                - -name
+                - index
+                - name
+                - json
+                - yaml
+                - -1
+                - 0
+                - "1"
+                - '1itemOne'
+                - '2ItemTwo'
+                - '3item_three'
+                - '4ITEM-FOUR'
+                - '5иллегалчарактер'
+                - '6 item six'
+          description: 'description'
       tags:
-      - api
+        - api
       responses:
         '204':
           description: ''
