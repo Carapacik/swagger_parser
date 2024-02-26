@@ -1545,10 +1545,8 @@ import 'package:json_annotation/json_annotation.dart';
 enum EnumName {
   @JsonValue(1)
   value1,
-
   @JsonValue(2)
   value2,
-
   @JsonValue(3)
   value3;
 }
@@ -1561,16 +1559,12 @@ import 'package:json_annotation/json_annotation.dart';
 enum EnumNameString {
   @JsonValue('itemOne')
   itemOne,
-
   @JsonValue('ItemTwo')
   itemTwo,
-
   @JsonValue('item_three')
   itemThree,
-
   @JsonValue('ITEM-FOUR')
   itemFour,
-
   /// Incorrect name has been replaced. Original name: `пятый`.
   @JsonValue('пятый')
   undefined0;
@@ -1832,13 +1826,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 enum EnumName {
   @JsonValue(1)
   value1(1),
-
   @JsonValue(2)
   value2(2),
-
   @JsonValue(3)
   value3(3),
-
   /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
   $unknown(null);
 
@@ -1862,19 +1853,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 enum EnumNameString {
   @JsonValue('itemOne')
   itemOne('itemOne'),
-
   @JsonValue('ItemTwo')
   itemTwo('ItemTwo'),
-
   @JsonValue('item_three')
   itemThree('item_three'),
-
   @JsonValue('ITEM-FOUR')
   itemFour('ITEM-FOUR'),
-
   @JsonValue('Item five')
   itemFive('Item five'),
-
   /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
   $unknown(null);
 

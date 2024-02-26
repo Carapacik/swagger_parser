@@ -28,8 +28,8 @@ class GenProcessor {
 
     final generatorConfig = config.toGeneratorConfig();
     final info = parser.openApiInfo;
-    final dataClasses = parser.parseDataClasses();
     final restClients = parser.parseRestClients();
+    final dataClasses = parser.parseDataClasses();
     final generator = Generator(
       generatorConfig,
       info: info,
@@ -54,8 +54,8 @@ class GenProcessor {
 
     final generatorConfig = config.toGeneratorConfig();
     final info = parser.openApiInfo;
-    final dataClasses = parser.parseDataClasses();
     final restClients = parser.parseRestClients();
+    final dataClasses = parser.parseDataClasses();
     final generator = Generator(
       generatorConfig,
       info: info,

@@ -27,13 +27,8 @@ String dartEnumDtoTemplate(
     final jsonParam = unknownEnumValue || enumsToJson;
 
     final values = '${enumClass.items.mapIndexed(
-          (i, e) => _enumValue(
-            i,
-            enumClass.type,
-            e,
-            jsonParam: jsonParam,
-          ),
-        ).join(',\n')}${unknownEnumValue ? ',' : ';'}';
+          (i, e) => _enumValue(i, enumClass.type, e, jsonParam: jsonParam),
+        ).join(',')}${unknownEnumValue ? ',' : ';'}';
     final unknownEnumValueStr = unknownEnumValue ? _unkownEnumValue() : '';
     final constructorStr = jsonParam ? _constructor(className) : '';
     final fromJsonStr = unknownEnumValue ? _fromJson(className, enumClass) : '';

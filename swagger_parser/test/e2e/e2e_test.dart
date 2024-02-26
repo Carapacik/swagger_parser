@@ -9,13 +9,14 @@ void main() {
     test('enum member names', () async {
       await e2eTest(
         'enum_member_names',
-        schemaFileName: 'openapi.yaml',
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          enumsParentPrefix: false,
         ),
+        schemaFileName: 'openapi.yaml',
       );
     });
 
@@ -28,19 +29,20 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
         ),
+        schemaFileName: 'openapi.json',
       );
     });
 
     test('multipart request with ref', () async {
       await e2eTest(
         'multipart_request_with_ref',
-        schemaFileName: 'openapi.yaml',
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
         ),
+        schemaFileName: 'openapi.yaml',
       );
     });
   });

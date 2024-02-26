@@ -12,7 +12,7 @@ class GeneratorConfig {
     this.jsonSerializer = JsonSerializer.jsonSerializable,
     this.defaultContentType = 'application/json',
     this.rootClient = true,
-    this.rootClientName,
+    this.rootClientName = 'RestClient',
     this.clientPostfix,
     this.exportFile = true,
     this.putClientsInFolder = false,

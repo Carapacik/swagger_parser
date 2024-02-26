@@ -26,9 +26,13 @@ class OpenApiParser {
     _apiInfo = _parseOpenApiInfo();
   }
 
-  /// [ParserConfig] that parser use
+  /// [ParserConfig] that [OpenApiParser] use
   final ParserConfig config;
+
+  /// `info` section in specification
   late final OpenApiInfo _apiInfo;
+
+  /// Specification content
   late final Map<String, dynamic> _definitionFileContent;
 
   final _objectClasses = <UniversalComponentClass>[];
@@ -139,7 +143,7 @@ class OpenApiParser {
     );
   }
 
-  /// Get [OpenApiInfo] from parser
+  /// Get saved [OpenApiInfo] from [OpenApiParser]
   OpenApiInfo get openApiInfo => _apiInfo;
 
   /// Parses rest clients from `paths` section of definition file
@@ -579,7 +583,7 @@ class OpenApiParser {
   }
 
   /// Parses data classes from `components` of definition file
-  /// to list of [UniversalDataClass]
+  /// and return list of  [UniversalDataClass]
   List<UniversalDataClass> parseDataClasses() {
     final dataClasses = <UniversalDataClass>[];
     late final Map<String, dynamic> entities;
@@ -1123,18 +1127,17 @@ class OpenApiParser {
   }
 }
 
-/// Extension used for YAML map
+/// Extension used for [YamlMap]
 extension on YamlMap {
-  /// Convert to Dart map
-  Map<String, dynamic> toMap() {
-    final map = <String, dynamic>{};
-
+  /// Convert [YamlMap] to Dart map
+  Map<String, Object?> toMap() {
+    final map = <String, Object?>{};
     for (final entry in entries) {
       if (entry.value is YamlMap || entry.value is Map) {
         map[entry.key.toString()] = (entry.value as YamlMap).toMap();
       } else if (entry.value is YamlList) {
         map[entry.key.toString()] = (entry.value as YamlList)
-            .map<dynamic>((e) => e is YamlMap ? e.toMap() : e)
+            .map<Object?>((e) => e is YamlMap ? e.toMap() : e)
             .toList(growable: false);
       } else {
         map[entry.key.toString()] = entry.value.toString();
@@ -1144,8 +1147,8 @@ extension on YamlMap {
   }
 }
 
-/// Extension used for YAML map
+/// Extension used for [YamlMap]
 extension on String {
-  /// used specially for YAML map
+  /// Used specially for [YamlMap] to covert [String] value to [bool]
   bool toBool() => toLowerCase() == 'true';
 }
