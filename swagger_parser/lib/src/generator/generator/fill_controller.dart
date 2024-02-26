@@ -12,7 +12,10 @@ final class FillController {
     this.info = const OpenApiInfo(schemaVersion: OAS.v3_1),
   });
 
+  /// Api info
   final OpenApiInfo info;
+
+  /// Config
   final GeneratorConfig config;
 
   /// Return [GeneratedFile] generated from given [UniversalDataClass]

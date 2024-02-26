@@ -7,21 +7,15 @@ import 'dart_keywords.dart';
 extension UniversalTypeX on UniversalType {
   /// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
   String toSuitableType(ProgrammingLanguage lang) {
-    if (arrayDepth == 0 && mapType == null) {
+    if (wrappingCollections.isEmpty) {
       return _questionMark(lang);
     }
     final sb = StringBuffer();
-    for (var i = 0; i < arrayDepth; i++) {
-      sb.write('List<');
-    }
-    if (mapType != null) {
-      sb.write(_mapStart(lang));
+    for (var i = 0; i < wrappingCollections.length; i++) {
+      sb.write(wrappingCollections[i].collectionsString);
     }
     sb.write(_questionMark(lang));
-    if (mapType != null) {
-      sb.write('>');
-    }
-    for (var i = 0; i < arrayDepth; i++) {
+    for (var i = 0; i < wrappingCollections.length; i++) {
       sb.write('>');
     }
     if (nullable || (!isRequired && defaultValue == null)) {
@@ -31,25 +25,17 @@ extension UniversalTypeX on UniversalType {
   }
 
   String _questionMark(ProgrammingLanguage lang) {
-    final questionMark =
-        (isRequired && !nullable || arrayDepth > 0 || defaultValue != null) &&
-                !arrayValueNullable
-            ? ''
-            : '?';
+    final questionMark = (isRequired && !nullable ||
+                wrappingCollections.isNotEmpty ||
+                defaultValue != null) &&
+            !arrayValueNullable
+        ? ''
+        : '?';
     switch (lang) {
       case ProgrammingLanguage.dart:
         return type.toDartType(format) + questionMark;
       case ProgrammingLanguage.kotlin:
         return type.toKotlinType(format) + questionMark;
-    }
-  }
-
-  String _mapStart(ProgrammingLanguage lang) {
-    switch (lang) {
-      case ProgrammingLanguage.dart:
-        return 'Map<${mapType!.toDartType(format)}, ';
-      case ProgrammingLanguage.kotlin:
-        return 'Map<${mapType!.toKotlinType(format)}, ';
     }
   }
 }

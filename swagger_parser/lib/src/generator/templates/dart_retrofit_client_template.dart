@@ -137,6 +137,6 @@ String _required(UniversalType t) =>
 /// return defaultValue if have
 String _defaultValue(UniversalType t) => t.defaultValue != null
     ? ' = '
-        '${t.arrayDepth > 0 ? 'const ' : ''}'
+        '${t.wrappingCollections.isNotEmpty ? 'const ' : ''}'
         '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toCamel)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}'
     : '';

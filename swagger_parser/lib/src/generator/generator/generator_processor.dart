@@ -14,6 +14,7 @@ class GenProcessor {
   /// and sets them to default if not found
   const GenProcessor(this.config);
 
+  /// Config
   final SWPConfig config;
 
   /// Generates files based on OpenApi definition file

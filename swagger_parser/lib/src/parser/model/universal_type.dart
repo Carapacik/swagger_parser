@@ -1,4 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
+
+import 'universal_collections.dart';
 
 /// Universal template for containing information about type
 @immutable
@@ -13,10 +16,9 @@ final class UniversalType {
     this.jsonKey,
     this.defaultValue,
     this.nullable = false,
-    this.arrayDepth = 0,
+    this.wrappingCollections = const [],
     this.arrayValueNullable = false,
     this.enumType,
-    this.mapType,
   });
 
   /// Object type
@@ -51,16 +53,13 @@ final class UniversalType {
   /// Array depth, 0 if not a list
   /// if arrayDepth = 2
   /// List<List<Object>>
-  final int arrayDepth;
+  final List<UniversalCollections> wrappingCollections;
 
   /// Whether or not this field is nullable
   final bool arrayValueNullable;
 
   /// Whether or not this field is nullable
   final bool nullable;
-
-  /// If not null means this is map with key type
-  final String? mapType;
 
   /// Copy of [UniversalType] with new values
   UniversalType copyWith({
@@ -72,9 +71,8 @@ final class UniversalType {
     String? defaultValue,
     bool? isRequired,
     String? enumType,
-    int? arrayDepth,
+    List<UniversalCollections>? wrappingCollections,
     bool? nullable,
-    String? mapType,
     bool? arrayValueNullable,
   }) {
     return UniversalType(
@@ -86,9 +84,8 @@ final class UniversalType {
       defaultValue: defaultValue ?? this.defaultValue,
       isRequired: isRequired ?? this.isRequired,
       enumType: enumType ?? this.enumType,
-      arrayDepth: arrayDepth ?? this.arrayDepth,
+      wrappingCollections: wrappingCollections ?? this.wrappingCollections,
       nullable: nullable ?? this.nullable,
-      mapType: mapType ?? this.mapType,
       arrayValueNullable: arrayValueNullable ?? this.arrayValueNullable,
     );
   }
@@ -116,9 +113,9 @@ final class UniversalType {
           defaultValue == other.defaultValue &&
           isRequired == other.isRequired &&
           enumType == other.enumType &&
-          arrayDepth == other.arrayDepth &&
+          const DeepCollectionEquality()
+              .equals(wrappingCollections, other.wrappingCollections) &&
           nullable == other.nullable &&
-          mapType == other.mapType &&
           arrayValueNullable == other.arrayValueNullable;
 
   @override
@@ -131,9 +128,8 @@ final class UniversalType {
       defaultValue.hashCode ^
       isRequired.hashCode ^
       enumType.hashCode ^
-      arrayDepth.hashCode ^
+      wrappingCollections.hashCode ^
       nullable.hashCode ^
-      mapType.hashCode ^
       arrayValueNullable.hashCode;
 
   @override
@@ -144,8 +140,7 @@ final class UniversalType {
       'defaultValue: $defaultValue, '
       'isRequired: $isRequired, '
       'enumType: $enumType, '
-      'arrayDepth: $arrayDepth, '
+      'wrappingCollections: $wrappingCollections, '
       'arrayValueNullable: $arrayValueNullable, '
-      'nullable: $nullable, '
-      'mapType: $mapType)';
+      'nullable: $nullable)';
 }

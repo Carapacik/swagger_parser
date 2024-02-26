@@ -643,19 +643,28 @@ data class ClassName(
           UniversalType(
             type: 'integer',
             name: 'list0',
-            arrayDepth: 1,
+            wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
           UniversalType(
             type: 'string',
             name: 'list1',
-            arrayDepth: 2,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+            ],
             isRequired: true,
           ),
           UniversalType(
             type: 'Another',
             name: 'list5',
-            arrayDepth: 5,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+            ],
             isRequired: true,
           ),
         ],
@@ -699,19 +708,28 @@ class ClassName {
           UniversalType(
             type: 'integer',
             name: 'list0',
-            arrayDepth: 1,
+            wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
           UniversalType(
             type: 'string',
             name: 'list1',
-            arrayDepth: 2,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+            ],
             isRequired: true,
           ),
           UniversalType(
             type: 'Another',
             name: 'list5',
-            arrayDepth: 5,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+            ],
             isRequired: true,
           ),
         ],
@@ -754,19 +772,28 @@ class ClassName with _$ClassName {
           UniversalType(
             type: 'integer',
             name: 'list0',
-            arrayDepth: 1,
+            wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
           UniversalType(
             type: 'string',
             name: 'list1',
-            arrayDepth: 2,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+            ],
             isRequired: true,
           ),
           UniversalType(
             type: 'Another',
             name: 'list5',
-            arrayDepth: 5,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+            ],
             isRequired: true,
           ),
         ],
@@ -1201,7 +1228,7 @@ data class ClassName(
           ),
           UniversalType(
             type: 'string',
-            arrayDepth: 1,
+            wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: false,
           ),
@@ -1212,7 +1239,10 @@ data class ClassName(
           ),
           UniversalType(
             type: 'Another',
-            arrayDepth: 2,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+            ],
             name: 'anotherList',
             isRequired: true,
           ),
@@ -1263,7 +1293,7 @@ class ClassName {
           ),
           UniversalType(
             type: 'string',
-            arrayDepth: 1,
+            wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: false,
           ),
@@ -1274,7 +1304,10 @@ class ClassName {
           ),
           UniversalType(
             type: 'Another',
-            arrayDepth: 2,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+            ],
             name: 'anotherList',
             isRequired: true,
           ),
@@ -1323,7 +1356,7 @@ class ClassName with _$ClassName {
           ),
           UniversalType(
             type: 'string',
-            arrayDepth: 1,
+            wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: false,
           ),
@@ -1334,7 +1367,10 @@ class ClassName with _$ClassName {
           ),
           UniversalType(
             type: 'Another',
-            arrayDepth: 2,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+            ],
             name: 'anotherList',
             isRequired: true,
           ),
@@ -1388,7 +1424,7 @@ data class ClassName(
           UniversalType(
             type: 'Another',
             name: 'list',
-            arrayDepth: 1,
+            wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
         ],
@@ -1449,7 +1485,7 @@ class ClassName {
           UniversalType(
             type: 'Another',
             name: 'list',
-            arrayDepth: 1,
+            wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
         ],
@@ -1578,11 +1614,9 @@ enum KeywordsName {
   /// The name has been replaced because it contains a keyword. Original name: `FALSE`.
   @JsonValue('FALSE')
   valueFalse,
-
   /// The name has been replaced because it contains a keyword. Original name: `for`.
   @JsonValue('for')
   valueFor,
-
   /// The name has been replaced because it contains a keyword. Original name: `do`.
   @JsonValue('do')
   valueDo;
@@ -1596,20 +1630,15 @@ import 'package:json_annotation/json_annotation.dart';
 enum EnumNameStringWithLeadingNumbers {
   @JsonValue('1itemOne')
   value1itemOne,
-
   @JsonValue('2ItemTwo')
   value2ItemTwo,
-
   @JsonValue('3item_three')
   value3itemThree,
-
   @JsonValue('4ITEM-FOUR')
   value4ItemFour,
-
   /// Incorrect name has been replaced. Original name: `5иллегалчарактер`.
   @JsonValue('5иллегалчарактер')
   undefined0,
-
   @JsonValue('6 item six')
   value6ItemSix;
 }
@@ -1656,10 +1685,8 @@ import 'package:json_annotation/json_annotation.dart';
 enum EnumName {
   @JsonValue(1)
   value1(1),
-
   @JsonValue(2)
   value2(2),
-
   @JsonValue(3)
   value3(3);
 
@@ -1678,13 +1705,10 @@ import 'package:json_annotation/json_annotation.dart';
 enum EnumNameString {
   @JsonValue('itemOne')
   itemOne('itemOne'),
-
   @JsonValue('ItemTwo')
   itemTwo('ItemTwo'),
-
   @JsonValue('item_three')
   itemThree('item_three'),
-
   @JsonValue('ITEM-FOUR')
   itemFour('ITEM-FOUR');
 
@@ -1741,10 +1765,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 enum EnumName {
   @JsonValue(1)
   value1,
-
   @JsonValue(2)
   value2,
-
   @JsonValue(3)
   value3;
 }
@@ -1757,13 +1779,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 enum EnumNameString {
   @JsonValue('itemOne')
   itemOne,
-
   @JsonValue('ItemTwo')
   itemTwo,
-
   @JsonValue('item_three')
   itemThree,
-
   @JsonValue('ITEM-FOUR')
   itemFour;
 }
@@ -1776,11 +1795,9 @@ enum KeywordsName {
   /// The name has been replaced because it contains a keyword. Original name: `FALSE`.
   @JsonValue('FALSE')
   valueFalse,
-
   /// The name has been replaced because it contains a keyword. Original name: `for`.
   @JsonValue('for')
   valueFor,
-
   /// The name has been replaced because it contains a keyword. Original name: `do`.
   @JsonValue('do')
   valueDo;
@@ -1986,16 +2003,12 @@ import 'package:json_annotation/json_annotation.dart';
 enum EnumName {
   @JsonValue(-2)
   valueMinus2(-2),
-
   @JsonValue(-1)
   valueMinus1(-1),
-
   @JsonValue(0)
   value0(0),
-
   @JsonValue(1)
   value1(1),
-
   /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
   $unknown(null);
 
@@ -2035,16 +2048,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 enum EnumName {
   @JsonValue(-2)
   valueMinus2(-2),
-
   @JsonValue(-1)
   valueMinus1(-1),
-
   @JsonValue(0)
   value0(0),
-
   @JsonValue(1)
   value1(1),
-
   /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
   $unknown(null);
 
@@ -2117,7 +2126,7 @@ enum class EnumName {
           parameters: [
             UniversalType(
               type: 'boolean',
-              arrayDepth: 1,
+              wrappingCollections: [UniversalCollections.list],
               isRequired: true,
             ),
           ],
@@ -2178,7 +2187,7 @@ typedef AnotherValue = Another;
           parameters: [
             UniversalType(
               type: 'boolean',
-              arrayDepth: 1,
+              wrappingCollections: [UniversalCollections.list],
               isRequired: true,
             ),
           ],
@@ -2230,7 +2239,12 @@ typealias AnotherValue = Another;
         parameters: [
           UniversalType(
             type: 'string',
-            arrayDepth: 4,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+            ],
             name: 'list1',
             isRequired: false,
             nullable: true,
@@ -2299,7 +2313,12 @@ class ClassName {
         parameters: [
           UniversalType(
             type: 'string',
-            arrayDepth: 4,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+            ],
             name: 'list1',
             isRequired: false,
             nullable: true,
@@ -2365,7 +2384,12 @@ class ClassName with _$ClassName {
         parameters: [
           UniversalType(
             type: 'string',
-            arrayDepth: 4,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+            ],
             name: 'list1',
             isRequired: false,
             nullable: true,
@@ -2462,7 +2486,7 @@ data class ClassName(
           UniversalType(
             type: 'string',
             description: 'List of data\nThis data is a list',
-            arrayDepth: 1,
+            wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: true,
           ),
@@ -2558,7 +2582,7 @@ class ClassName {
           UniversalType(
             type: 'string',
             description: 'List of data\nThis data is a list',
-            arrayDepth: 1,
+            wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: true,
           ),
@@ -2651,7 +2675,7 @@ class ClassName with _$ClassName {
           UniversalType(
             type: 'string',
             description: 'List of data',
-            arrayDepth: 1,
+            wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: true,
           ),

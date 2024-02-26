@@ -667,7 +667,7 @@ interface ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 1,
+                  wrappingCollections: [UniversalCollections.list],
                   name: 'list1',
                   isRequired: true,
                 ),
@@ -677,7 +677,11 @@ interface ClassNameClient {
                 parameterType: HttpParameterType.body,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 3,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'list2',
                   isRequired: true,
                 ),
@@ -690,7 +694,10 @@ interface ClassNameClient {
             route: '/list-of-list',
             returnType: UniversalType(
               type: 'string',
-              arrayDepth: 2,
+              wrappingCollections: [
+                UniversalCollections.list,
+                UniversalCollections.list,
+              ],
               isRequired: true,
             ),
             parameters: [],
@@ -739,7 +746,7 @@ abstract class ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 1,
+                  wrappingCollections: [UniversalCollections.list],
                   name: 'list1',
                   isRequired: true,
                 ),
@@ -749,7 +756,11 @@ abstract class ClassNameClient {
                 parameterType: HttpParameterType.body,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 3,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'list2',
                   isRequired: true,
                 ),
@@ -762,7 +773,10 @@ abstract class ClassNameClient {
             route: '/list-of-list',
             returnType: UniversalType(
               type: 'string',
-              arrayDepth: 2,
+              wrappingCollections: [
+                UniversalCollections.list,
+                UniversalCollections.list,
+              ],
               isRequired: true,
             ),
             parameters: [],
@@ -1421,7 +1435,7 @@ interface ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 1,
+                  wrappingCollections: [UniversalCollections.list],
                   name: 'list',
                   isRequired: false,
                 ),
@@ -1492,7 +1506,7 @@ abstract class ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 1,
+                  wrappingCollections: [UniversalCollections.list],
                   name: 'list',
                   isRequired: false,
                 ),
@@ -1755,7 +1769,12 @@ interface ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 4,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'deepList',
                   isRequired: false,
                   nullable: true,
@@ -1777,7 +1796,12 @@ interface ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 4,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'deepList',
                   isRequired: false,
                   nullable: true,
@@ -1834,7 +1858,12 @@ abstract class ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 4,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'list1',
                   isRequired: false,
                   nullable: true,
@@ -1929,7 +1958,12 @@ abstract class ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 4,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'deepList',
                   isRequired: true,
                   nullable: true,
@@ -1951,7 +1985,12 @@ abstract class ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 4,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'deepList',
                   isRequired: true,
                   nullable: true,
@@ -2006,7 +2045,12 @@ interface ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 4,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'list1',
                   isRequired: false,
                   nullable: true,
@@ -2175,7 +2219,12 @@ interface ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 4,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'deepList',
                   isRequired: false,
                   nullable: true,
@@ -2197,7 +2246,12 @@ interface ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 4,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'deepList',
                   isRequired: false,
                   nullable: true,
@@ -2254,7 +2308,12 @@ abstract class ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 4,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'list1',
                   isRequired: false,
                   nullable: true,
@@ -2349,7 +2408,12 @@ abstract class ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 4,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'deepList',
                   isRequired: true,
                   nullable: true,
@@ -2371,7 +2435,12 @@ abstract class ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 4,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'deepList',
                   isRequired: true,
                   nullable: true,
@@ -2426,7 +2495,12 @@ interface ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  arrayDepth: 4,
+                  wrappingCollections: [
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                    UniversalCollections.list,
+                  ],
                   name: 'list1',
                   isRequired: false,
                   nullable: true,

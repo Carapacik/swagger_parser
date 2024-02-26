@@ -34,6 +34,7 @@ class SWPConfig {
     this.skippedParameters = const <String>[],
   });
 
+  /// Internal constructor of [SWPConfig]
   const SWPConfig._({
     required this.outputDirectory,
     required this.schemaPath,
