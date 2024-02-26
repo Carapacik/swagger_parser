@@ -2,6 +2,7 @@
 /// [swagger_parser](https://pub.dev/packages/swagger_parser)
 library swagger_parser;
 
+export 'src/config/swp_config.dart';
 export 'src/generator/config/generator_config.dart';
 export 'src/generator/generator/fill_controller.dart';
 export 'src/generator/generator/generator.dart';
