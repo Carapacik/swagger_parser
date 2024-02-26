@@ -586,7 +586,7 @@ void main() {
       final enumClass = dataClasses.whereType<UniversalEnumClass>().first;
       expect(enumClass.name, 'Status');
     });
-    test('wrapping collections test', () async {
+    test('wrapping collections test for swagger 3.0', () async {
       final schemaPath = p.join(
         'test',
         'parser',
@@ -638,6 +638,88 @@ void main() {
               jsonKey: 'title',
               isRequired: false,
               nullable: true,
+            ),
+            UniversalType(
+              type: 'DataClass1',
+              name: 'errors',
+              jsonKey: 'errors',
+              isRequired: false,
+              wrappingCollections: [
+                UniversalCollections.list,
+                UniversalCollections.map,
+                UniversalCollections.list,
+                UniversalCollections.list,
+                UniversalCollections.map,
+              ],
+            ),
+          ],
+        ),
+      ];
+
+      expect(dataClasses.length, expectedDataClasses.length);
+      final item1 = dataClasses[0] as UniversalComponentClass;
+      final item2 = dataClasses[1] as UniversalComponentClass;
+      final expectedItem1 = expectedDataClasses[0] as UniversalComponentClass;
+      final expectedItem2 = expectedDataClasses[1] as UniversalComponentClass;
+      expect(item1.parameters.length, expectedItem1.parameters.length);
+      for (var i = 0; i < item1.parameters.length; i++) {
+        expect(
+          item1.parameters[i],
+          expectedItem1.parameters[i],
+        );
+      }
+      expect(item2, expectedItem2);
+    });
+
+    test('wrapping collections test for swagger 2.0', () async {
+      final schemaPath = p.join(
+        'test',
+        'parser',
+        'schema',
+        'wrapping_collections.2.0.json',
+      );
+      final configFile = schemaFile(schemaPath);
+      final schemaContent = configFile!.readAsStringSync();
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final dataClasses = parser.parseDataClasses().toList();
+      final expectedDataClasses = <UniversalDataClass>[
+        const UniversalComponentClass(
+          name: 'DataClass1',
+          imports: {},
+          parameters: [
+            UniversalType(
+              type: 'string',
+              name: 'type',
+              jsonKey: 'type',
+              isRequired: false,
+            ),
+            UniversalType(
+              type: 'string',
+              name: 'instance',
+              jsonKey: 'instance',
+              isRequired: false,
+            ),
+            UniversalType(
+              type: 'string',
+              name: 'errors',
+              jsonKey: 'errors',
+              isRequired: false,
+              wrappingCollections: [
+                UniversalCollections.map,
+                UniversalCollections.list,
+              ],
+            ),
+          ],
+        ),
+        const UniversalComponentClass(
+          name: 'DataClass2',
+          imports: {'DataClass1'},
+          parameters: [
+            UniversalType(
+              type: 'string',
+              name: 'title',
+              jsonKey: 'title',
+              isRequired: false,
             ),
             UniversalType(
               type: 'DataClass1',

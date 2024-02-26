@@ -1,14 +1,6 @@
 {
   "openapi": "3.0.0",
-  "info": {
-    "version": "1.0",
-    "title": "RecipeBook",
-    "description": "A sample API that uses a recipe book as an example to demonstrate features in the OpenAPI 3.0 specification",
-    "contact": {
-      "name": "Roman Laptev",
-      "email": "carapacik@gmail.com"
-    }
-  },
+  "info": {},
   "paths": {},
   "components": {
     "schemas": {
