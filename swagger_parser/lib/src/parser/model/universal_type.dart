@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 
-import '../../utils/type_utils.dart';
+import 'universal_collections.dart';
 
 /// Universal template for containing information about type
 @immutable
@@ -54,7 +54,7 @@ final class UniversalType {
   /// Array depth, 0 if not a list
   /// if arrayDepth = 2
   /// List<List<Object>>
-  final List<String> wrappingCollections;
+  final List<UniversalCollections> wrappingCollections;
 
   /// Whether or not this field is nullable
   final bool arrayValueNullable;
@@ -72,7 +72,7 @@ final class UniversalType {
     String? defaultValue,
     bool? isRequired,
     String? enumType,
-    List<String>? wrappingCollections,
+    List<UniversalCollections>? wrappingCollections,
     bool? nullable,
     bool? arrayValueNullable,
   }) {
@@ -144,41 +144,4 @@ final class UniversalType {
       'wrappingCollections: $wrappingCollections, '
       'arrayValueNullable: $arrayValueNullable, '
       'nullable: $nullable)';
-}
-
-/// Converts [UniversalType] to type from specified language
-extension UniversalTypeX on UniversalType {
-  /// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
-  String toSuitableType(ProgrammingLanguage lang) {
-    if (wrappingCollections.isEmpty) {
-      return _questionMark(lang);
-    }
-    final sb = StringBuffer();
-    for (var i = 0; i < wrappingCollections.length; i++) {
-      sb.write(wrappingCollections[i]);
-    }
-    sb.write(_questionMark(lang));
-    for (var i = 0; i < wrappingCollections.length; i++) {
-      sb.write('>');
-    }
-    if (nullable || (!isRequired && defaultValue == null)) {
-      sb.write('?');
-    }
-    return sb.toString();
-  }
-
-  String _questionMark(ProgrammingLanguage lang) {
-    final questionMark = (isRequired && !nullable ||
-                wrappingCollections.isNotEmpty ||
-                defaultValue != null) &&
-            !arrayValueNullable
-        ? ''
-        : '?';
-    switch (lang) {
-      case ProgrammingLanguage.dart:
-        return type.toDartType(format) + questionMark;
-      case ProgrammingLanguage.kotlin:
-        return type.toKotlinType(format) + questionMark;
-    }
-  }
 }

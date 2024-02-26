@@ -1,3 +1,4 @@
+import 'package:swagger_parser/src/parser/model/universal_collections.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:test/test.dart';
 
@@ -643,19 +644,28 @@ data class ClassName(
           UniversalType(
             type: 'integer',
             name: 'list0',
-            wrappingCollections: ['List<'],
+            wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
           UniversalType(
             type: 'string',
             name: 'list1',
-            wrappingCollections: ['List<', 'List<'],
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list
+            ],
             isRequired: true,
           ),
           UniversalType(
             type: 'Another',
             name: 'list5',
-            wrappingCollections: ['List<', 'List<', 'List<', 'List<', 'List<'],
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list
+            ],
             isRequired: true,
           ),
         ],
@@ -699,19 +709,28 @@ class ClassName {
           UniversalType(
             type: 'integer',
             name: 'list0',
-            wrappingCollections: ['List<'],
+            wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
           UniversalType(
             type: 'string',
             name: 'list1',
-            wrappingCollections: ['List<', 'List<'],
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list
+            ],
             isRequired: true,
           ),
           UniversalType(
             type: 'Another',
             name: 'list5',
-            wrappingCollections: ['List<', 'List<', 'List<', 'List<', 'List<'],
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list
+            ],
             isRequired: true,
           ),
         ],
@@ -754,19 +773,28 @@ class ClassName with _$ClassName {
           UniversalType(
             type: 'integer',
             name: 'list0',
-            wrappingCollections: ['List<'],
+            wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
           UniversalType(
             type: 'string',
             name: 'list1',
-            wrappingCollections: ['List<', 'List<'],
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list
+            ],
             isRequired: true,
           ),
           UniversalType(
             type: 'Another',
             name: 'list5',
-            wrappingCollections: ['List<', 'List<', 'List<', 'List<', 'List<'],
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list
+            ],
             isRequired: true,
           ),
         ],
@@ -1201,7 +1229,7 @@ data class ClassName(
           ),
           UniversalType(
             type: 'string',
-            wrappingCollections: ['List<'],
+            wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: false,
           ),
@@ -1212,7 +1240,10 @@ data class ClassName(
           ),
           UniversalType(
             type: 'Another',
-            wrappingCollections: ['List<', 'List<'],
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list
+            ],
             name: 'anotherList',
             isRequired: true,
           ),
@@ -1263,7 +1294,7 @@ class ClassName {
           ),
           UniversalType(
             type: 'string',
-            wrappingCollections: ['List<'],
+            wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: false,
           ),
@@ -1274,7 +1305,10 @@ class ClassName {
           ),
           UniversalType(
             type: 'Another',
-            wrappingCollections: ['List<', 'List<'],
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list
+            ],
             name: 'anotherList',
             isRequired: true,
           ),
@@ -1323,7 +1357,7 @@ class ClassName with _$ClassName {
           ),
           UniversalType(
             type: 'string',
-            wrappingCollections: ['List<'],
+            wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: false,
           ),
@@ -1334,7 +1368,10 @@ class ClassName with _$ClassName {
           ),
           UniversalType(
             type: 'Another',
-            wrappingCollections: ['List<', 'List<'],
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list
+            ],
             name: 'anotherList',
             isRequired: true,
           ),
@@ -1388,7 +1425,7 @@ data class ClassName(
           UniversalType(
             type: 'Another',
             name: 'list',
-            wrappingCollections: ['List<'],
+            wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
         ],
@@ -1449,7 +1486,7 @@ class ClassName {
           UniversalType(
             type: 'Another',
             name: 'list',
-            wrappingCollections: ['List<'],
+            wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
         ],
@@ -2117,7 +2154,7 @@ enum class EnumName {
           parameters: [
             UniversalType(
               type: 'boolean',
-              wrappingCollections: ['List<'],
+              wrappingCollections: [UniversalCollections.list],
               isRequired: true,
             ),
           ],
@@ -2178,7 +2215,7 @@ typedef AnotherValue = Another;
           parameters: [
             UniversalType(
               type: 'boolean',
-              wrappingCollections: ['List<'],
+              wrappingCollections: [UniversalCollections.list],
               isRequired: true,
             ),
           ],
@@ -2230,7 +2267,12 @@ typealias AnotherValue = Another;
         parameters: [
           UniversalType(
             type: 'string',
-            wrappingCollections: ['List<', 'List<', 'List<', 'List<'],
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list
+            ],
             name: 'list1',
             isRequired: false,
             nullable: true,
@@ -2299,7 +2341,12 @@ class ClassName {
         parameters: [
           UniversalType(
             type: 'string',
-            wrappingCollections: ['List<', 'List<', 'List<', 'List<'],
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list
+            ],
             name: 'list1',
             isRequired: false,
             nullable: true,
@@ -2365,7 +2412,12 @@ class ClassName with _$ClassName {
         parameters: [
           UniversalType(
             type: 'string',
-            wrappingCollections: ['List<', 'List<', 'List<', 'List<'],
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list
+            ],
             name: 'list1',
             isRequired: false,
             nullable: true,
@@ -2462,7 +2514,7 @@ data class ClassName(
           UniversalType(
             type: 'string',
             description: 'List of data\nThis data is a list',
-            wrappingCollections: ['List<'],
+            wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: true,
           ),
@@ -2558,7 +2610,7 @@ class ClassName {
           UniversalType(
             type: 'string',
             description: 'List of data\nThis data is a list',
-            wrappingCollections: ['List<'],
+            wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: true,
           ),
@@ -2651,7 +2703,7 @@ class ClassName with _$ClassName {
           UniversalType(
             type: 'string',
             description: 'List of data',
-            wrappingCollections: ['List<'],
+            wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: true,
           ),

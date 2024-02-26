@@ -1,4 +1,5 @@
 import 'package:path/path.dart' as p;
+import 'package:swagger_parser/src/parser/model/universal_collections.dart';
 import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 import 'package:swagger_parser/src/utils/file/io_file.dart';
 import 'package:test/test.dart';
@@ -130,14 +131,18 @@ void main() {
             type: 'string',
             name: 'array1',
             jsonKey: 'array1',
-            arrayDepth: 1,
+            wrappingCollections: [UniversalCollections.list],
             isRequired: false,
           ),
           UniversalType(
             type: 'string',
             name: 'array2',
             jsonKey: 'array2',
-            arrayDepth: 3,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list,
+            ],
             isRequired: false,
           ),
         ],
@@ -238,14 +243,18 @@ void main() {
             type: 'string',
             name: 'array1',
             jsonKey: 'array1',
-            arrayDepth: 1,
+            wrappingCollections: [UniversalCollections.list],
             isRequired: false,
           ),
           UniversalType(
             type: 'string',
             name: 'array2',
             jsonKey: 'array2',
-            arrayDepth: 3,
+            wrappingCollections: [
+              UniversalCollections.list,
+              UniversalCollections.list,
+              UniversalCollections.list
+            ],
             isRequired: false,
           ),
         ],
@@ -405,7 +414,7 @@ void main() {
               name: 'oneType',
               jsonKey: 'oneType',
               defaultValue: '[]',
-              arrayDepth: 1,
+              wrappingCollections: [UniversalCollections.list],
               isRequired: false,
             ),
             UniversalType(
@@ -420,7 +429,7 @@ void main() {
               name: 'nullableType',
               jsonKey: 'nullableType',
               defaultValue: '[]',
-              arrayDepth: 1,
+              wrappingCollections: [UniversalCollections.list],
               nullable: true,
               isRequired: false,
             ),
@@ -471,7 +480,7 @@ void main() {
               description: 'data',
               jsonKey: 'data',
               isRequired: false,
-              mapType: 'string',
+              wrappingCollections: [UniversalCollections.map],
             ),
           ],
         ),
@@ -485,7 +494,7 @@ void main() {
               description: 'data',
               jsonKey: 'data',
               isRequired: false,
-              mapType: 'string',
+              wrappingCollections: [UniversalCollections.map],
             ),
           ],
         ),
@@ -540,7 +549,7 @@ void main() {
               type: 'ValueClass',
               name: 'map',
               jsonKey: 'map',
-              mapType: 'string',
+              wrappingCollections: [UniversalCollections.map],
               isRequired: true,
             ),
           ],

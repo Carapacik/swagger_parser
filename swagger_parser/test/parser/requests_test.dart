@@ -1,4 +1,5 @@
 import 'package:path/path.dart' as p;
+import 'package:swagger_parser/src/parser/model/universal_collections.dart';
 import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 import 'package:swagger_parser/src/utils/file/io_file.dart';
 import 'package:test/test.dart';
@@ -10,7 +11,7 @@ void main() {
           p.join('test', 'parser', 'schema', 'basic_requests.2.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final actualRestClients = parser.parseRestClients().toList();
       const expectedRestClients = [
         UniversalRestClient(
@@ -60,7 +61,7 @@ void main() {
                     name: 'tags',
                     description: 'tags to filter by',
                     jsonKey: 'tags',
-                    wrappingCollections: ['List<'],
+                    wrappingCollections: [UniversalCollections.list],
                     isRequired: true,
                   ),
                   parameterType: HttpParameterType.query,
@@ -122,7 +123,7 @@ void main() {
           p.join('test', 'parser', 'schema', 'basic_requests.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final actualRestClients = parser.parseRestClients().toList();
       const expectedRestClients = [
         UniversalRestClient(
@@ -181,7 +182,7 @@ void main() {
                     type: 'string',
                     name: 'tags',
                     jsonKey: 'tags',
-                    wrappingCollections: ['List<'],
+                    wrappingCollections: [UniversalCollections.list],
                     isRequired: true,
                   ),
                   parameterType: HttpParameterType.query,
