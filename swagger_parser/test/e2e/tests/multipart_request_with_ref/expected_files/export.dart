@@ -4,8 +4,8 @@
 
 // Clients
 export 'clients/client_client.dart';
-export 'models/address.dart';
 // Data classes
-export 'models/item.dart';
+export 'models/object0.dart';
+export 'models/object1.dart';
 // Root client
 export 'rest_client.dart';
