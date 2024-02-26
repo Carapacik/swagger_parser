@@ -651,7 +651,7 @@ data class ClassName(
             name: 'list1',
             wrappingCollections: [
               UniversalCollections.list,
-              UniversalCollections.list
+              UniversalCollections.list,
             ],
             isRequired: true,
           ),
@@ -663,7 +663,7 @@ data class ClassName(
               UniversalCollections.list,
               UniversalCollections.list,
               UniversalCollections.list,
-              UniversalCollections.list
+              UniversalCollections.list,
             ],
             isRequired: true,
           ),
@@ -716,7 +716,7 @@ class ClassName {
             name: 'list1',
             wrappingCollections: [
               UniversalCollections.list,
-              UniversalCollections.list
+              UniversalCollections.list,
             ],
             isRequired: true,
           ),
@@ -728,7 +728,7 @@ class ClassName {
               UniversalCollections.list,
               UniversalCollections.list,
               UniversalCollections.list,
-              UniversalCollections.list
+              UniversalCollections.list,
             ],
             isRequired: true,
           ),
@@ -780,7 +780,7 @@ class ClassName with _$ClassName {
             name: 'list1',
             wrappingCollections: [
               UniversalCollections.list,
-              UniversalCollections.list
+              UniversalCollections.list,
             ],
             isRequired: true,
           ),
@@ -792,7 +792,7 @@ class ClassName with _$ClassName {
               UniversalCollections.list,
               UniversalCollections.list,
               UniversalCollections.list,
-              UniversalCollections.list
+              UniversalCollections.list,
             ],
             isRequired: true,
           ),
@@ -1241,7 +1241,7 @@ data class ClassName(
             type: 'Another',
             wrappingCollections: [
               UniversalCollections.list,
-              UniversalCollections.list
+              UniversalCollections.list,
             ],
             name: 'anotherList',
             isRequired: true,
@@ -1306,7 +1306,7 @@ class ClassName {
             type: 'Another',
             wrappingCollections: [
               UniversalCollections.list,
-              UniversalCollections.list
+              UniversalCollections.list,
             ],
             name: 'anotherList',
             isRequired: true,
@@ -1369,7 +1369,7 @@ class ClassName with _$ClassName {
             type: 'Another',
             wrappingCollections: [
               UniversalCollections.list,
-              UniversalCollections.list
+              UniversalCollections.list,
             ],
             name: 'anotherList',
             isRequired: true,
@@ -2243,7 +2243,7 @@ typealias AnotherValue = Another;
               UniversalCollections.list,
               UniversalCollections.list,
               UniversalCollections.list,
-              UniversalCollections.list
+              UniversalCollections.list,
             ],
             name: 'list1',
             isRequired: false,
@@ -2317,7 +2317,7 @@ class ClassName {
               UniversalCollections.list,
               UniversalCollections.list,
               UniversalCollections.list,
-              UniversalCollections.list
+              UniversalCollections.list,
             ],
             name: 'list1',
             isRequired: false,
@@ -2388,7 +2388,7 @@ class ClassName with _$ClassName {
               UniversalCollections.list,
               UniversalCollections.list,
               UniversalCollections.list,
-              UniversalCollections.list
+              UniversalCollections.list,
             ],
             name: 'list1',
             isRequired: false,

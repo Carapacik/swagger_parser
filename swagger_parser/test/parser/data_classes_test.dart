@@ -252,7 +252,7 @@ void main() {
             wrappingCollections: [
               UniversalCollections.list,
               UniversalCollections.list,
-              UniversalCollections.list
+              UniversalCollections.list,
             ],
             isRequired: false,
           ),

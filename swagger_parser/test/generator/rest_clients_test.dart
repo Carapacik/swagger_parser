@@ -680,7 +680,7 @@ interface ClassNameClient {
                   wrappingCollections: [
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'list2',
                   isRequired: true,
@@ -696,7 +696,7 @@ interface ClassNameClient {
               type: 'string',
               wrappingCollections: [
                 UniversalCollections.list,
-                UniversalCollections.list
+                UniversalCollections.list,
               ],
               isRequired: true,
             ),
@@ -759,7 +759,7 @@ abstract class ClassNameClient {
                   wrappingCollections: [
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'list2',
                   isRequired: true,
@@ -775,7 +775,7 @@ abstract class ClassNameClient {
               type: 'string',
               wrappingCollections: [
                 UniversalCollections.list,
-                UniversalCollections.list
+                UniversalCollections.list,
               ],
               isRequired: true,
             ),
@@ -1773,7 +1773,7 @@ interface ClassNameClient {
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: false,
@@ -1800,7 +1800,7 @@ interface ClassNameClient {
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: false,
@@ -1862,7 +1862,7 @@ abstract class ClassNameClient {
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'list1',
                   isRequired: false,
@@ -1962,7 +1962,7 @@ abstract class ClassNameClient {
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: true,
@@ -1989,7 +1989,7 @@ abstract class ClassNameClient {
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: true,
@@ -2049,7 +2049,7 @@ interface ClassNameClient {
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'list1',
                   isRequired: false,
@@ -2223,7 +2223,7 @@ interface ClassNameClient {
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: false,
@@ -2250,7 +2250,7 @@ interface ClassNameClient {
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: false,
@@ -2312,7 +2312,7 @@ abstract class ClassNameClient {
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'list1',
                   isRequired: false,
@@ -2412,7 +2412,7 @@ abstract class ClassNameClient {
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: true,
@@ -2439,7 +2439,7 @@ abstract class ClassNameClient {
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: true,
@@ -2499,7 +2499,7 @@ interface ClassNameClient {
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
-                    UniversalCollections.list
+                    UniversalCollections.list,
                   ],
                   name: 'list1',
                   isRequired: false,

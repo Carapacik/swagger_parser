@@ -16,6 +16,7 @@ import '../model/universal_request.dart';
 import '../model/universal_request_type.dart';
 import '../model/universal_rest_client.dart';
 import '../model/universal_type.dart';
+import '../utils/utils.dart';
 
 /// General class for parsing OpenApi specification into universal models
 class OpenApiParser {
@@ -159,12 +160,12 @@ class OpenApiParser {
       Map<String, dynamic> map,
       String additionalName,
     ) {
-      final code2xxMap = _code2xxMap(map);
-      if (code2xxMap == null || !code2xxMap.containsKey(_contentConst)) {
+      final code2xx = code2xxMap(map);
+      if (code2xx == null || !code2xx.containsKey(_contentConst)) {
         return null;
       }
-      final contentType = (code2xxMap[_contentConst] as Map<String, dynamic>)
-          .entries
+      final contentType = (code2xx[_contentConst] as Map<String, dynamic>?)
+          ?.entries
           .firstOrNull;
       if (contentType == null) {
         return null;
@@ -394,12 +395,12 @@ class OpenApiParser {
       Map<String, dynamic> map,
       String additionalName,
     ) {
-      final code2xxMap = _code2xxMap(map);
-      if (code2xxMap == null || !code2xxMap.containsKey(_schemaConst)) {
+      final code2xx = code2xxMap(map);
+      if (code2xx == null || !code2xx.containsKey(_schemaConst)) {
         return null;
       }
       final typeWithImport = _findType(
-        code2xxMap[_schemaConst] as Map<String, dynamic>,
+        code2xx[_schemaConst] as Map<String, dynamic>? ?? {},
         additionalName: additionalName,
         isRequired: config.requiredByDefault,
       );
@@ -750,27 +751,6 @@ class OpenApiParser {
       allOfClass.parameters.addAll(allOfClass.allOf!.properties);
     }
     return dataClasses;
-  }
-
-  /// Return map[2xx] if code 2xx contains in map
-  Map<String, dynamic>? _code2xxMap(Map<String, dynamic> map) {
-    const codes2xx = {
-      '200',
-      '201',
-      '202',
-      '203',
-      '204',
-      '205',
-      '206',
-      '207',
-      '208',
-      '226',
-    };
-    final key = map.keys.where(codes2xx.contains).firstOrNull;
-    if (key == null) {
-      return null;
-    }
-    return map[key] as Map<String, dynamic>;
   }
 
   /// Get tag for name

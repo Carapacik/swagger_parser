@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-import 'package:swagger_parser/swagger_parser.dart';
 
 import 'universal_collections.dart';
 
