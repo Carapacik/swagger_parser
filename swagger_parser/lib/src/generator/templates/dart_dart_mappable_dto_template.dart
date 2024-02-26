@@ -4,8 +4,8 @@ import '../../parser/swagger_parser_core.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
-import '../models/json_serializer.dart';
-import '../models/programming_language.dart';
+import '../model/json_serializer.dart';
+import '../model/programming_language.dart';
 import 'dart_import_dto_template.dart';
 
 String dartDartMappableDtoTemplate(

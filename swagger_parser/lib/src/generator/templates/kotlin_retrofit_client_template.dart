@@ -2,7 +2,7 @@ import '../../parser/swagger_parser_core.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
-import '../models/programming_language.dart';
+import '../model/programming_language.dart';
 
 /// Return file contents for kotlin retrofit client
 /// File contents are generated using universal rest client

@@ -1,15 +1,10 @@
 import 'dart:io';
 
-import '../../generator/models/generation_statistics.dart';
+import '../../generator/model/generation_statistic.dart';
 import '../../parser/swagger_parser_core.dart';
 import '../utils.dart';
 
 const _green = '\x1B[32m';
-// ignore: unused_element
-const _yellow = '\x1B[33m';
-// ignore: unused_element
-const _blue = '\x1B[34m';
-const _lightBlue = '\x1B[36m';
 const _red = '\x1B[31m';
 const _reset = '\x1B[0m';
 
@@ -31,22 +26,22 @@ void generateMessage() {
 
 void successMessage({
   required int successSchemasCount,
-  required int schemasCount,
+  required int schemesCount,
 }) {
   if (successSchemasCount == 0) {
     stdout.writeln(
       '${_red}The generation was completed with errors.\n'
-      'No schemas were generated.$_reset',
+      'No schemes were generated.$_reset',
     );
-  } else if (successSchemasCount != schemasCount) {
+  } else if (successSchemasCount != schemesCount) {
     stdout.writeln(
       '${_red}The generation was completed with errors.\n'
-      '${schemasCount - successSchemasCount} schemas were not generated.$_reset',
+      '${schemesCount - successSchemasCount} schemes were not generated.$_reset',
     );
   } else {
     stdout.writeln(
-      '${schemasCount > 1 ? _green : ''}The generation was completed successfully. '
-      'You can run the generation using build_runner.${schemasCount > 1 ? _reset : ''}',
+      '${schemesCount > 1 ? _green : ''}The generation was completed successfully. '
+      'You can run the generation using build_runner.${schemesCount > 1 ? _reset : ''}',
     );
   }
 }
@@ -57,7 +52,7 @@ void successExtractMessage() {
 
 void schemaStatisticsMessage({
   required OpenApiInfo openApi,
-  required GenerationStatistics statistics,
+  required GenerationStatistic statistics,
   String? name,
 }) {
   final version = openApi.apiVersion != null ? 'v${openApi.apiVersion}' : '';
@@ -79,12 +74,12 @@ void schemaStatisticsMessage({
 
 void summaryStatisticsMessage({
   required int successCount,
-  required int schemasCount,
-  required GenerationStatistics statistics,
+  required int schemesCount,
+  required GenerationStatistic statistics,
 }) {
   stdout.writeln(
     'Summary (${statistics.timeElapsed.inMilliseconds / 1000} seconds):\n'
-    '${successCount != schemasCount ? '$successCount/$schemasCount' : '$schemasCount'} schemas, '
+    '${successCount != schemesCount ? '$successCount/$schemesCount' : '$schemesCount'} schemes, '
     '${formatNumber(statistics.totalRestClients)} clients, '
     '${formatNumber(statistics.totalRequests)} requests, '
     '${formatNumber(statistics.totalDataClasses)} data classes.\n'

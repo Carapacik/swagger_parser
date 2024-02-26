@@ -1,5 +1,6 @@
-import 'package:swagger_parser/src/generator/fill_controller.dart';
-import 'package:swagger_parser/src/generator/models/programming_language.dart';
+import 'package:swagger_parser/src/generator/config/generator_config.dart';
+import 'package:swagger_parser/src/generator/generator/fill_controller.dart';
+import 'package:swagger_parser/src/generator/model/programming_language.dart';
 import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 import 'package:test/test.dart';
 
@@ -8,7 +9,9 @@ void main() {
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -21,14 +24,18 @@ abstract class SomeClient {
   factory SomeClient(Dio dio, {String? baseUrl}) = _SomeClient;
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -36,7 +43,7 @@ import retrofit2.http.*
 
 interface SomeClient {}
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -44,7 +51,13 @@ interface SomeClient {}
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController = FillController(putClientsInFolder: true);
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          putClientsInFolder: true,
+        ),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -57,15 +70,19 @@ abstract class SomeClient {
   factory SomeClient(Dio dio, {String? baseUrl}) = _SomeClient;
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
-        putClientsInFolder: true,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+          putClientsInFolder: true,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -73,7 +90,7 @@ import retrofit2.http.*
 
 interface SomeClient {}
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -81,7 +98,13 @@ interface SomeClient {}
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
-      const fillController = FillController(clientPostfix: 'Api');
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          clientPostfix: 'Api',
+        ),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -94,15 +117,19 @@ abstract class ClassNameApi {
   factory ClassNameApi(Dio dio, {String? baseUrl}) = _ClassNameApi;
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
-        clientPostfix: 'Api',
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+          clientPostfix: 'Api',
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -110,7 +137,7 @@ import retrofit2.http.*
 
 interface SomeApi {}
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -118,7 +145,13 @@ interface SomeApi {}
     test('dart + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
-      const fillController = FillController(clientPostfix: '');
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          clientPostfix: '',
+        ),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -131,15 +164,19 @@ abstract class Some {
   factory Some(Dio dio, {String? baseUrl}) = _Some;
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
       const restClient =
           UniversalRestClient(name: 'Some', imports: {}, requests: []);
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
-        clientPostfix: '',
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+          clientPostfix: '',
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -147,7 +184,7 @@ import retrofit2.http.*
 
 interface Some {}
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -164,7 +201,9 @@ interface Some {}
         },
         requests: [],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -183,7 +222,7 @@ abstract class ClassNameClient {
   factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
     test('kotlin + retrofit', () async {
       // Imports in Kotlin are not supported yet. You can always add PR
@@ -205,7 +244,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -221,7 +262,7 @@ abstract class ClassNameClient {
   Future<void> getRequest();
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
@@ -239,7 +280,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -250,7 +295,7 @@ interface ClassNameClient {
     suspend fun getRequest()
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -325,7 +370,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -365,7 +412,7 @@ abstract class ClassNameClient {
   Future<void> traceRequest();
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
@@ -439,7 +486,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -474,7 +525,7 @@ interface ClassNameClient {
     suspend fun traceRequest()
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -513,7 +564,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -535,7 +588,7 @@ abstract class ClassNameClient {
   Future<bool> getBoolRequest();
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
@@ -573,7 +626,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -590,7 +647,7 @@ interface ClassNameClient {
     suspend fun getBoolRequest(): Boolean
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -640,7 +697,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -662,7 +721,7 @@ abstract class ClassNameClient {
   Future<List<List<String>>> listOfList();
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
@@ -711,7 +770,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -728,7 +791,7 @@ interface ClassNameClient {
     suspend fun listOfList(): List<List<String>>
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -760,7 +823,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -778,7 +843,7 @@ abstract class ClassNameClient {
   });
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
@@ -809,7 +874,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -822,7 +891,7 @@ interface ClassNameClient {
     ): String
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -877,7 +946,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -898,7 +969,7 @@ abstract class ClassNameClient {
   });
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
@@ -952,7 +1023,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -968,7 +1043,7 @@ interface ClassNameClient {
     )
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -1055,7 +1130,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'dart:convert';
@@ -1089,7 +1166,7 @@ abstract class ClassNameClient {
   });
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
@@ -1175,7 +1252,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -1199,7 +1280,7 @@ interface ClassNameClient {
     ): Boolean
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -1237,7 +1318,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1259,7 +1342,7 @@ abstract class ClassNameClient {
   });
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
@@ -1296,7 +1379,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -1311,7 +1398,7 @@ interface ClassNameClient {
     )
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -1362,7 +1449,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1382,7 +1471,7 @@ abstract class ClassNameClient {
   });
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
@@ -1432,7 +1521,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -1447,7 +1540,7 @@ interface ClassNameClient {
     ): String
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -1520,7 +1613,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1545,7 +1640,7 @@ abstract class ClassNameClient {
   });
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
@@ -1617,7 +1712,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -1634,7 +1733,7 @@ interface ClassNameClient {
     )
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('Dart + retrofit nullability of request parameters', () async {
@@ -1689,7 +1788,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1712,7 +1813,7 @@ abstract class ClassNameClient {
   });
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('dart + retrofit nullable parameters', () async {
@@ -1782,7 +1883,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -1804,7 +1907,7 @@ abstract class ClassNameClient {
   });
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('Kotlin nullability of request parameters', () async {
@@ -1860,7 +1963,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -1878,7 +1985,7 @@ interface ClassNameClient {
     ): String
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin nullable parameters', () async {
@@ -1949,7 +2056,11 @@ interface ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -1966,7 +2077,7 @@ interface ClassNameClient {
     ): String
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -1986,7 +2097,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -2005,7 +2118,7 @@ abstract class ClassNameClient {
   Future<void> some();
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + retrofit', () async {
@@ -2024,7 +2137,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -2036,7 +2153,7 @@ interface ClassNameClient {
     suspend fun some()
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('Dart + retrofit nullability of request parameters', () async {
@@ -2091,7 +2208,9 @@ interface ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -2114,7 +2233,7 @@ abstract class ClassNameClient {
   });
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('dart + retrofit nullable parameters', () async {
@@ -2184,7 +2303,9 @@ abstract class ClassNameClient {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
 import 'package:dio/dio.dart';
@@ -2206,7 +2327,7 @@ abstract class ClassNameClient {
   });
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('Kotlin nullability of request parameters', () async {
@@ -2262,7 +2383,11 @@ abstract class ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -2280,7 +2405,7 @@ interface ClassNameClient {
     ): String
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin nullable parameters', () async {
@@ -2351,7 +2476,11 @@ interface ClassNameClient {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''
@@ -2368,7 +2497,7 @@ interface ClassNameClient {
     ): String
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 }

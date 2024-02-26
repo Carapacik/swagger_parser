@@ -1,16 +1,16 @@
 import 'package:path/path.dart' as p;
 import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
-import 'package:swagger_parser/src/utils/file_utils.dart';
+import 'package:swagger_parser/src/utils/file/io_file.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Empty data class', () {
     test('2.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'empty_class.2.0.json');
+          p.join('test', 'parser', 'schema', 'empty_class.2.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final actualDataClass = parser.parseDataClasses().first;
       const expectedDataClass = UniversalComponentClass(
         name: 'ClassName',
@@ -22,10 +22,10 @@ void main() {
 
     test('3.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'empty_class.3.0.json');
+          p.join('test', 'parser', 'schema', 'empty_class.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final actualDataClass = parser.parseDataClasses().first;
       const expectedDataClass = UniversalComponentClass(
         name: 'ClassName',
@@ -39,10 +39,10 @@ void main() {
   group('Types check', () {
     test('basic types check 2.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'basic_types_class.2.0.json');
+          p.join('test', 'parser', 'schema', 'basic_types_class.2.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final actualDataClass = parser.parseDataClasses().first;
       const expectedDataClass = UniversalComponentClass(
         name: 'ClassName',
@@ -130,14 +130,14 @@ void main() {
             type: 'string',
             name: 'array1',
             jsonKey: 'array1',
-            wrappingCollections: ['List<'],
+            arrayDepth: 1,
             isRequired: false,
           ),
           UniversalType(
             type: 'string',
             name: 'array2',
             jsonKey: 'array2',
-            wrappingCollections: ['List<', 'List<', 'List<'],
+            arrayDepth: 3,
             isRequired: false,
           ),
         ],
@@ -147,10 +147,10 @@ void main() {
 
     test('basic types check 3.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'basic_types_class.3.0.json');
+          p.join('test', 'parser', 'schema', 'basic_types_class.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final actualDataClass = parser.parseDataClasses().first;
       const expectedDataClass = UniversalComponentClass(
         name: 'ClassName',
@@ -238,14 +238,14 @@ void main() {
             type: 'string',
             name: 'array1',
             jsonKey: 'array1',
-            wrappingCollections: ['List<'],
+            arrayDepth: 1,
             isRequired: false,
           ),
           UniversalType(
             type: 'string',
             name: 'array2',
             jsonKey: 'array2',
-            wrappingCollections: ['List<', 'List<', 'List<'],
+            arrayDepth: 3,
             isRequired: false,
           ),
         ],
@@ -255,10 +255,10 @@ void main() {
 
     test('composite types check 2.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'reference_types_class.2.0.json');
+          p.join('test', 'parser', 'schema', 'reference_types_class.2.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final dataClasses = parser.parseDataClasses().toList();
       const expectedDataClasses = [
         UniversalComponentClass(
@@ -306,10 +306,10 @@ void main() {
 
     test('composite types check 3.0', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'reference_types_class.3.0.json');
+          p.join('test', 'parser', 'schema', 'reference_types_class.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final dataClasses = parser.parseDataClasses().toList();
       const expectedDataClasses = <UniversalDataClass>[
         UniversalComponentClass(
@@ -357,10 +357,10 @@ void main() {
 
     test('of-like params types check 3.1', () async {
       final schemaPath =
-          p.join('test', 'parser', 'schemas', 'of_like_class.3.1.json');
+          p.join('test', 'parser', 'schema', 'of_like_class.3.1.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final dataClasses = parser.parseDataClasses().toList();
       final expectedDataClasses = <UniversalDataClass>[
         const UniversalComponentClass(
@@ -405,7 +405,7 @@ void main() {
               name: 'oneType',
               jsonKey: 'oneType',
               defaultValue: '[]',
-              wrappingCollections: ['List<'],
+              arrayDepth: 1,
               isRequired: false,
             ),
             UniversalType(
@@ -420,7 +420,7 @@ void main() {
               name: 'nullableType',
               jsonKey: 'nullableType',
               defaultValue: '[]',
-              wrappingCollections: ['List<'],
+              arrayDepth: 1,
               nullable: true,
               isRequired: false,
             ),
@@ -453,12 +453,12 @@ void main() {
       final schemaPath = p.join(
         'test',
         'parser',
-        'schemas',
+        'schema',
         'additional_properties_class.3.0.json',
       );
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final dataClasses = parser.parseDataClasses().toList();
       final expectedDataClasses = <UniversalDataClass>[
         const UniversalComponentClass(
@@ -471,7 +471,7 @@ void main() {
               description: 'data',
               jsonKey: 'data',
               isRequired: false,
-              wrappingCollections: ['Map<String, '],
+              mapType: 'string',
             ),
           ],
         ),
@@ -485,7 +485,7 @@ void main() {
               description: 'data',
               jsonKey: 'data',
               isRequired: false,
-              wrappingCollections: ['Map<String, '],
+              mapType: 'string',
             ),
           ],
         ),
@@ -511,12 +511,12 @@ void main() {
       final schemaPath = p.join(
         'test',
         'parser',
-        'schemas',
+        'schema',
         'additional_properties_class.2.0.json',
       );
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final dataClasses = parser.parseDataClasses().toList();
       final expectedDataClasses = <UniversalDataClass>[
         const UniversalComponentClass(
@@ -540,7 +540,7 @@ void main() {
               type: 'ValueClass',
               name: 'map',
               jsonKey: 'map',
-              wrappingCollections: ['Map<String, '],
+              mapType: 'string',
               isRequired: true,
             ),
           ],
@@ -563,10 +563,16 @@ void main() {
     });
 
     test('Enum name test', () async {
-      final schemaPath = p.join('test', 'parser', 'schemas', 'enum_class.json');
+      final schemaPath = p.join('test', 'parser', 'schema', 'enum_class.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(schemaContent);
+      final parser = OpenApiParser(
+        ParserConfig(
+          schemaContent,
+          isJson: true,
+          enumsParentPrefix: false,
+        ),
+      );
       final dataClasses = parser.parseDataClasses();
       expect(dataClasses, hasLength(2));
       final enumClass = dataClasses.whereType<UniversalEnumClass>().first;

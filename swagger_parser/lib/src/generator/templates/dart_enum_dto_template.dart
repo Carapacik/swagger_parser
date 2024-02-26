@@ -4,7 +4,7 @@ import '../../parser/swagger_parser_core.dart';
 import '../../utils/case_utils.dart';
 import '../../utils/type_utils.dart';
 import '../../utils/utils.dart';
-import '../models/json_serializer.dart';
+import '../model/json_serializer.dart';
 import 'dart_import_dto_template.dart';
 
 /// Provides template for generating dart enum DTO
@@ -27,13 +27,8 @@ String dartEnumDtoTemplate(
     final jsonParam = unknownEnumValue || enumsToJson;
 
     final values = '${enumClass.items.mapIndexed(
-          (i, e) => _enumValue(
-            i,
-            enumClass.type,
-            e,
-            jsonParam: jsonParam,
-          ),
-        ).join(',\n')}${unknownEnumValue ? ',' : ';'}';
+          (i, e) => _enumValue(i, enumClass.type, e, jsonParam: jsonParam),
+        ).join(',')}${unknownEnumValue ? ',' : ';'}';
     final unknownEnumValueStr = unknownEnumValue ? _unkownEnumValue() : '';
     final constructorStr = jsonParam ? _constructor(className) : '';
     final fromJsonStr = unknownEnumValue ? _fromJson(className, enumClass) : '';

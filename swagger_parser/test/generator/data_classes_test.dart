@@ -1,8 +1,4 @@
-import 'package:swagger_parser/src/generator/fill_controller.dart';
-import 'package:swagger_parser/src/generator/models/generated_file.dart';
-import 'package:swagger_parser/src/generator/models/json_serializer.dart';
-import 'package:swagger_parser/src/generator/models/programming_language.dart';
-import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
+import 'package:swagger_parser/swagger_parser.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -13,7 +9,9 @@ void main() {
         imports: {},
         parameters: [],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -29,7 +27,7 @@ class ClassName {
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('dart + freezed', () async {
@@ -39,7 +37,11 @@ class ClassName {
         parameters: [],
       );
       const fillController = FillController(
-        jsonSerializer: JsonSerializer.freezed,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
@@ -55,7 +57,7 @@ class ClassName with _$ClassName {
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + moshi', () async {
@@ -65,7 +67,11 @@ class ClassName with _$ClassName {
         parameters: [],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
@@ -75,7 +81,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class ClassName()
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -92,7 +98,9 @@ data class ClassName()
         },
         parameters: [],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -114,7 +122,7 @@ class ClassName {
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('dart + freezed', () async {
@@ -130,7 +138,11 @@ class ClassName {
         parameters: [],
       );
       const fillController = FillController(
-        jsonSerializer: JsonSerializer.freezed,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
@@ -152,7 +164,7 @@ class ClassName with _$ClassName {
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + moshi', () async {
@@ -233,7 +245,9 @@ class ClassName with _$ClassName {
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'dart:io';
@@ -277,7 +291,7 @@ class ClassName {
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('dart + freezed', () async {
@@ -353,7 +367,11 @@ class ClassName {
         ],
       );
       const fillController = FillController(
-        jsonSerializer: JsonSerializer.freezed,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
@@ -384,7 +402,7 @@ class ClassName with _$ClassName {
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('dart + dart_mappable', () async {
@@ -460,7 +478,11 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController(
-        jsonSerializer: JsonSerializer.dartMappable,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.dartMappable,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
@@ -503,7 +525,7 @@ class ClassName with ClassNameMappable {
 }
 ''';
       expect(
-        filledContent.contents,
+        filledContent.content,
         equalsIgnoringWhitespace(expectedContents),
       );
     });
@@ -581,7 +603,11 @@ class ClassName with ClassNameMappable {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
@@ -604,7 +630,7 @@ data class ClassName(
     var anotherType: Another,
 )
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -634,7 +660,9 @@ data class ClassName(
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -660,7 +688,7 @@ class ClassName {
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('dart + freezed', () async {
@@ -689,7 +717,11 @@ class ClassName {
         ],
       );
       const fillController = FillController(
-        jsonSerializer: JsonSerializer.freezed,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
@@ -711,7 +743,7 @@ class ClassName with _$ClassName {
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + moshi', () async {
@@ -740,7 +772,11 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
@@ -754,7 +790,7 @@ data class ClassName(
     var list5: List<List<List<List<List<Another>>>>>,
 )
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -790,7 +826,9 @@ data class ClassName(
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -819,7 +857,7 @@ class ClassName {
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('dart + freezed', () async {
@@ -854,7 +892,11 @@ class ClassName {
         ],
       );
       const fillController = FillController(
-        jsonSerializer: JsonSerializer.freezed,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
@@ -878,7 +920,7 @@ class ClassName with _$ClassName {
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + moshi', () async {
@@ -913,7 +955,11 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
@@ -931,7 +977,7 @@ data class ClassName(
     var anotherType: Another,
 )
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -975,7 +1021,9 @@ data class ClassName(
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -1005,7 +1053,7 @@ class ClassName {
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('dart + freezed', () async {
@@ -1048,7 +1096,11 @@ class ClassName {
         ],
       );
       const fillController = FillController(
-        jsonSerializer: JsonSerializer.freezed,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
@@ -1077,7 +1129,7 @@ class ClassName with _$ClassName {
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + moshi', () async {
@@ -1113,7 +1165,11 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
@@ -1128,7 +1184,7 @@ data class ClassName(
     var nullableType: Double = -1.1,
 )
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -1162,7 +1218,9 @@ data class ClassName(
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -1190,7 +1248,7 @@ class ClassName {
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('dart + freezed', () async {
@@ -1223,7 +1281,11 @@ class ClassName {
         ],
       );
       const fillController = FillController(
-        jsonSerializer: JsonSerializer.freezed,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
@@ -1246,7 +1308,7 @@ class ClassName with _$ClassName {
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + moshi', () async {
@@ -1279,7 +1341,11 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = '''
@@ -1294,7 +1360,7 @@ data class ClassName(
     var anotherList: List<List<Another>>,
 )
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
   });
 
@@ -1327,7 +1393,9 @@ data class ClassName(
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -1355,7 +1423,7 @@ class ClassName {
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('dart + freezed', () async {
@@ -1387,7 +1455,11 @@ class ClassName {
         ],
       );
       const fillController = FillController(
-        jsonSerializer: JsonSerializer.freezed,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
@@ -1410,7 +1482,7 @@ class ClassName with _$ClassName {
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + moshi', () async {
@@ -1455,7 +1527,13 @@ class ClassName with _$ClassName {
           ),
         ];
 
-        const fillController = FillController(unknownEnumValue: false);
+        const fillController = FillController(
+          config: GeneratorConfig(
+            name: '',
+            outputDirectory: '',
+            unknownEnumValue: false,
+          ),
+        );
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
@@ -1467,10 +1545,8 @@ import 'package:json_annotation/json_annotation.dart';
 enum EnumName {
   @JsonValue(1)
   value1,
-
   @JsonValue(2)
   value2,
-
   @JsonValue(3)
   value3;
 }
@@ -1483,16 +1559,12 @@ import 'package:json_annotation/json_annotation.dart';
 enum EnumNameString {
   @JsonValue('itemOne')
   itemOne,
-
   @JsonValue('ItemTwo')
   itemTwo,
-
   @JsonValue('item_three')
   itemThree,
-
   @JsonValue('ITEM-FOUR')
   itemFour,
-
   /// Incorrect name has been replaced. Original name: `пятый`.
   @JsonValue('пятый')
   undefined0;
@@ -1543,10 +1615,10 @@ enum EnumNameStringWithLeadingNumbers {
 }
 ''';
 
-        expect(files[0].contents, expectedContent0);
-        expect(files[1].contents, expectedContent1);
-        expect(files[2].contents, expectedContent2);
-        expect(files[3].contents, expectedContent3);
+        expect(files[0].content, expectedContent0);
+        expect(files[1].content, expectedContent1);
+        expect(files[2].content, expectedContent2);
+        expect(files[3].content, expectedContent3);
       });
 
       test('with toJson() in enums', () async {
@@ -1565,8 +1637,14 @@ enum EnumNameStringWithLeadingNumbers {
           ),
         ];
 
-        const fillController =
-            FillController(enumsToJson: true, unknownEnumValue: false);
+        const fillController = FillController(
+          config: GeneratorConfig(
+            name: '',
+            outputDirectory: '',
+            enumsToJson: true,
+            unknownEnumValue: false,
+          ),
+        );
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
@@ -1618,8 +1696,8 @@ enum EnumNameString {
 }
 ''';
 
-        expect(files[0].contents, expectedContent0);
-        expect(files[1].contents, expectedContent1);
+        expect(files[0].content, expectedContent0);
+        expect(files[1].content, expectedContent1);
       });
     });
 
@@ -1645,8 +1723,12 @@ enum EnumNameString {
           ),
         ];
         const fillController = FillController(
-          jsonSerializer: JsonSerializer.freezed,
-          unknownEnumValue: false,
+          config: GeneratorConfig(
+            name: '',
+            outputDirectory: '',
+            jsonSerializer: JsonSerializer.freezed,
+            unknownEnumValue: false,
+          ),
         );
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
@@ -1704,9 +1786,9 @@ enum KeywordsName {
   valueDo;
 }
 ''';
-        expect(files[0].contents, expectedContent0);
-        expect(files[1].contents, expectedContent1);
-        expect(files[2].contents, expectedContent2);
+        expect(files[0].content, expectedContent0);
+        expect(files[1].content, expectedContent1);
+        expect(files[2].content, expectedContent2);
       });
 
       test('with toJson()', () async {
@@ -1725,8 +1807,12 @@ enum KeywordsName {
           ),
         ];
         const fillController = FillController(
-          jsonSerializer: JsonSerializer.freezed,
-          enumsToJson: true,
+          config: GeneratorConfig(
+            name: '',
+            outputDirectory: '',
+            jsonSerializer: JsonSerializer.freezed,
+            enumsToJson: true,
+          ),
         );
         final files = <GeneratedFile>[];
         for (final enumClass in dataClasses) {
@@ -1740,13 +1826,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 enum EnumName {
   @JsonValue(1)
   value1(1),
-
   @JsonValue(2)
   value2(2),
-
   @JsonValue(3)
   value3(3),
-
   /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
   $unknown(null);
 
@@ -1770,19 +1853,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 enum EnumNameString {
   @JsonValue('itemOne')
   itemOne('itemOne'),
-
   @JsonValue('ItemTwo')
   itemTwo('ItemTwo'),
-
   @JsonValue('item_three')
   itemThree('item_three'),
-
   @JsonValue('ITEM-FOUR')
   itemFour('ITEM-FOUR'),
-
   @JsonValue('Item five')
   itemFive('Item five'),
-
   /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
   $unknown(null);
 
@@ -1798,8 +1876,8 @@ enum EnumNameString {
   String? toJson() => json;
 }
 ''';
-        expect(files[0].contents, expectedContent0);
-        expect(files[1].contents, expectedContent1);
+        expect(files[0].content, expectedContent0);
+        expect(files[1].content, expectedContent1);
       });
     });
 
@@ -1824,7 +1902,11 @@ enum EnumNameString {
         ),
       ];
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final files = <GeneratedFile>[];
       for (final enumClass in dataClasses) {
@@ -1879,9 +1961,9 @@ enum class KeywordsName {
     VALUE_DO,
 }
 ''';
-      expect(files[0].contents, expectedContent0);
-      expect(files[1].contents, expectedContent1);
-      expect(files[2].contents, expectedContent2);
+      expect(files[0].content, expectedContent0);
+      expect(files[1].content, expectedContent1);
+      expect(files[2].content, expectedContent2);
     });
   });
 
@@ -1892,7 +1974,9 @@ enum class KeywordsName {
         type: 'int',
         items: UniversalEnumItem.listFromNames({'-2', '-1', '0', '1'}),
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final file = fillController.fillDtoContent(dataClass);
 
       const expectedContent = r'''
@@ -1926,7 +2010,7 @@ enum EnumName {
 }
 ''';
 
-      expect(file.contents, expectedContent);
+      expect(file.content, expectedContent);
     });
 
     test('dart + freezed', () async {
@@ -1936,7 +2020,11 @@ enum EnumName {
         items: UniversalEnumItem.listFromNames({'-2', '-1', '0', '1'}),
       );
       const fillController = FillController(
-        jsonSerializer: JsonSerializer.freezed,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+        ),
       );
       final file = fillController.fillDtoContent(dataClass);
 
@@ -1971,7 +2059,7 @@ enum EnumName {
 }
 ''';
 
-      expect(file.contents, expectedContent);
+      expect(file.content, expectedContent);
     });
 
     test('kotlin + moshi', () async {
@@ -1981,7 +2069,11 @@ enum EnumName {
         items: UniversalEnumItem.listFromNames({'-2', '-1', '0', '1'}),
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final file = fillController.fillDtoContent(dataClass);
       const expectedContent = '''
@@ -2000,7 +2092,7 @@ enum class EnumName {
     VALUE_1,
 }
 ''';
-      expect(file.contents, expectedContent);
+      expect(file.content, expectedContent);
     });
   });
 
@@ -2043,7 +2135,9 @@ enum class EnumName {
           typeDef: true,
         ),
       ];
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final files = <GeneratedFile>[];
       for (final enumClass in dataClasses) {
         files.add(fillController.fillDtoContent(enumClass));
@@ -2059,9 +2153,9 @@ import 'another.dart';
 
 typedef AnotherValue = Another;
 ''';
-      expect(files[0].contents, expectedContent0);
-      expect(files[1].contents, expectedContent1);
-      expect(files[2].contents, expectedContent2);
+      expect(files[0].content, expectedContent0);
+      expect(files[1].content, expectedContent1);
+      expect(files[2].content, expectedContent2);
     });
 
     test('kotlin', () async {
@@ -2103,7 +2197,11 @@ typedef AnotherValue = Another;
         ),
       ];
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final files = <GeneratedFile>[];
       for (final enumClass in dataClasses) {
@@ -2118,9 +2216,9 @@ typealias BooleanList = List<Boolean>;
       const expectedContent2 = '''
 typealias AnotherValue = Another;
 ''';
-      expect(files[0].contents, expectedContent0);
-      expect(files[1].contents, expectedContent1);
-      expect(files[2].contents, expectedContent2);
+      expect(files[0].content, expectedContent0);
+      expect(files[1].content, expectedContent1);
+      expect(files[2].content, expectedContent2);
     });
   });
 
@@ -2161,7 +2259,9 @@ typealias AnotherValue = Another;
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -2189,7 +2289,7 @@ class ClassName {
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('dart + freezed', () async {
@@ -2229,7 +2329,11 @@ class ClassName {
         ],
       );
       const fillController = FillController(
-        jsonSerializer: JsonSerializer.freezed,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
@@ -2251,7 +2355,7 @@ class ClassName with _$ClassName {
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + moshi', () async {
@@ -2291,7 +2395,11 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContent = '''
@@ -2307,7 +2415,7 @@ data class ClassName(
     var list5: String?,
 )
 ''';
-      expect(filledContent.contents, expectedContent);
+      expect(filledContent.content, expectedContent);
     });
   });
 
@@ -2360,7 +2468,9 @@ data class ClassName(
           ),
         ],
       );
-      const fillController = FillController();
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
 import 'package:json_annotation/json_annotation.dart';
@@ -2403,7 +2513,7 @@ class ClassName {
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('dart + freezed', () async {
@@ -2455,7 +2565,11 @@ class ClassName {
         ],
       );
       const fillController = FillController(
-        jsonSerializer: JsonSerializer.freezed,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContents = r'''
@@ -2492,7 +2606,7 @@ class ClassName with _$ClassName {
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
 }
 ''';
-      expect(filledContent.contents, expectedContents);
+      expect(filledContent.content, expectedContents);
     });
 
     test('kotlin + moshi ', () async {
@@ -2544,7 +2658,11 @@ class ClassName with _$ClassName {
         ],
       );
       const fillController = FillController(
-        programmingLanguage: ProgrammingLanguage.kotlin,
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+        ),
       );
       final filledContent = fillController.fillDtoContent(dataClass);
       const expectedContent = '''
@@ -2569,7 +2687,7 @@ data class ClassName(
     var list: List<String>,
 )
 ''';
-      expect(filledContent.contents, expectedContent);
+      expect(filledContent.content, expectedContent);
     });
   });
 }

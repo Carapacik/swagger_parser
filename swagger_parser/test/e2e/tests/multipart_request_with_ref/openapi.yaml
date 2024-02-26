@@ -40,7 +40,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Item'
+              $ref: '#/components/schemes/Item'
       responses:
         '200':
           description: dummy

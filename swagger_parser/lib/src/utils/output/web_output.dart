@@ -1,5 +1,5 @@
 // ignore_for_file: avoid_print
-import '../../generator/models/generation_statistics.dart';
+import '../../generator/model/generation_statistic.dart';
 import '../../parser/swagger_parser_core.dart';
 import '../utils.dart';
 
@@ -21,17 +21,17 @@ void generateMessage() {
 
 void successMessage({
   required int successSchemasCount,
-  required int schemasCount,
+  required int schemesCount,
 }) {
   if (successSchemasCount == 0) {
     print(
       'The generation was completed with errors.\n'
-      'No schemas were generated.',
+      'No schemes were generated.',
     );
-  } else if (successSchemasCount != schemasCount) {
+  } else if (successSchemasCount != schemesCount) {
     print(
       'The generation was completed with errors.\n'
-      '${schemasCount - successSchemasCount} schemas were not generated.',
+      '${schemesCount - successSchemasCount} schemes were not generated.',
     );
   } else {
     print(
@@ -47,7 +47,7 @@ void successExtractMessage() {
 
 void schemaStatisticsMessage({
   required OpenApiInfo openApi,
-  required GenerationStatistics statistics,
+  required GenerationStatistic statistics,
   String? name,
 }) {
   final version = openApi.apiVersion != null ? 'v${openApi.apiVersion}' : '';
@@ -69,12 +69,12 @@ void schemaStatisticsMessage({
 
 void summaryStatisticsMessage({
   required int successCount,
-  required int schemasCount,
-  required GenerationStatistics statistics,
+  required int schemesCount,
+  required GenerationStatistic statistics,
 }) {
   print(
     'Summary (${statistics.timeElapsed.inMilliseconds / 1000} seconds):\n'
-    '${successCount != schemasCount ? '$successCount/$schemasCount' : '$schemasCount'} schemas, '
+    '${successCount != schemesCount ? '$successCount/$schemesCount' : '$schemesCount'} schemes, '
     '${formatNumber(statistics.totalRestClients)} clients, '
     '${formatNumber(statistics.totalRequests)} requests, '
     '${formatNumber(statistics.totalDataClasses)} data classes.\n'
