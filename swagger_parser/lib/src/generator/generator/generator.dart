@@ -49,29 +49,7 @@ class Generator {
 
   /// Generates content of files based on OpenApi definition file
   /// and return list of [GeneratedFile]
-
-  Future<List<GeneratedFile>> generateContent() async {
-    return _fillContent();
-  }
-
-  /// Main function used to create files
-  Future<(int, int)> _generateFiles() async {
-    var totalFiles = 0;
-    var totalLines = 0;
-    final files = _fillContent();
-    totalFiles += files.length;
-    for (final file in files) {
-      totalLines += RegExp('\n').allMatches(file.content).length;
-      await generateFile(
-        config.outputDirectory,
-        file,
-      );
-    }
-    return (totalFiles, totalLines);
-  }
-
-  /// Generate "virtual" files content
-  List<GeneratedFile> _fillContent() {
+  List<GeneratedFile> generateContent() {
     final fillController = FillController(config: config, info: info);
 
     final dataClassesFiles =
@@ -102,5 +80,21 @@ class Generator {
     ];
 
     return files;
+  }
+
+  /// Main function used to create files
+  Future<(int, int)> _generateFiles() async {
+    var totalFiles = 0;
+    var totalLines = 0;
+    final files = generateContent();
+    totalFiles += files.length;
+    for (final file in files) {
+      totalLines += RegExp('\n').allMatches(file.content).length;
+      await generateFile(
+        config.outputDirectory,
+        file,
+      );
+    }
+    return (totalFiles, totalLines);
   }
 }

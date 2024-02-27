@@ -47,7 +47,7 @@ class _GeneratorContentState extends State<GeneratorContent> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 400, maxHeight: 500),
+                constraints: const BoxConstraints(maxWidth: 400, maxHeight: 600),
                 child: Column(
                   children: [
                     SizedBox(

@@ -1,5 +1,5 @@
 import 'dart:collection';
-import 'dart:convert';
+import 'dart:convert' show jsonDecode;
 
 import 'package:collection/collection.dart';
 import 'package:path/path.dart' as p;
