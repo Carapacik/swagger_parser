@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:swagger_parser_pages/utils/file_utils.dart';
@@ -39,27 +42,78 @@ class _GeneratorContentState extends State<GeneratorContent> {
   @override
   Widget build(BuildContext context) => Center(
         child: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
           runSpacing: 20,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 400, maxHeight: 500),
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final result = await FilePicker.platform.pickFiles(
+                            type: FileType.custom,
+                            allowedExtensions: ['json', 'yaml', 'JSON', 'YAML'],
+                          );
+                          if (result != null) {
+                            final fileBytes = result.files.first.bytes;
+                            final fileName = result.files.first.name;
+                            setState(() {
+                              _isJson = fileName.split('.').lastOrNull?.toLowerCase() != 'yaml';
+                            });
+                            if (fileBytes != null) {
+                              final s = utf8.decode(fileBytes);
+                              _fileContent.text = s;
+                            }
+                          }
+                        },
+                        child: const Text('Choose file'),
+                      ),
                     ),
-                    hintText: 'Paste your OpenApi definition file content',
-                    hintStyle: const TextStyle(fontSize: 18),
-                  ),
-                  controller: _fileContent,
-                  keyboardType: TextInputType.multiline,
-                  textAlignVertical: TextAlignVertical.top,
-                  maxLines: null,
-                  expands: true,
-                  style: const TextStyle(fontSize: 18),
+                    const SizedBox(height: 24),
+                    ListenableBuilder(
+                      listenable: _fileContent,
+                      builder: (context, child) => _fileContent.text.isEmpty
+                          ? const SizedBox.shrink()
+                          : Padding(
+                              padding: const EdgeInsets.only(bottom: 48),
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 48,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFFc92b16).withOpacity(0.8),
+                                  ),
+                                  onPressed: () async {
+                                    _fileContent.clear();
+                                  },
+                                  child: const Text('Clear'),
+                                ),
+                              ),
+                            ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          hintText: 'Paste your OpenApi definition file content',
+                          hintStyle: const TextStyle(fontSize: 18),
+                        ),
+                        controller: _fileContent,
+                        keyboardType: TextInputType.multiline,
+                        textAlignVertical: TextAlignVertical.top,
+                        maxLines: null,
+                        expands: true,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

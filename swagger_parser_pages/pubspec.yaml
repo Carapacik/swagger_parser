@@ -7,13 +7,13 @@ environment:
 
 dependencies:
   archive: ^3.4.10
+  file_picker: ^6.1.1
   flutter:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  swagger_parser:
-    path:
-      ../swagger_parser
+  super_drag_and_drop: ^0.8.5
+  swagger_parser: ^1.16.1
   url_launcher: ^6.2.5
 
 dev_dependencies:
