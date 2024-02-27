@@ -12,7 +12,6 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  super_drag_and_drop: ^0.8.5
   swagger_parser: ^1.16.1
   url_launcher: ^6.2.5
 
