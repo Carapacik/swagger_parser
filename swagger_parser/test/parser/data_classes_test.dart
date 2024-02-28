@@ -42,7 +42,7 @@ void main() {
           p.join('test', 'parser', 'schema', 'required_parameter_object.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: true));
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
       final actualDataClass = parser.parseDataClasses().first;
       const expectedDataClass = UniversalComponentClass(
         name: 'ClassName',
@@ -52,8 +52,7 @@ void main() {
             name: 'email',
             jsonKey: 'email',
             isRequired: true,
-          )],
-        typeDef: false
+          ),],
       );
       expect(actualDataClass, expectedDataClass);
     });
