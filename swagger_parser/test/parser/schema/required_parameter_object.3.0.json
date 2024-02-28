@@ -1,0 +1,16 @@
+{
+  "openapi": "3.0.0",
+  "paths": {},
+  "components": {
+    "schemas": {
+      "ClassName": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -10,7 +10,7 @@ void main() {
           p.join('test', 'parser', 'schema', 'empty_class.2.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: false));
       final actualDataClass = parser.parseDataClasses().first;
       const expectedDataClass = UniversalComponentClass(
         name: 'ClassName',
@@ -25,12 +25,35 @@ void main() {
           p.join('test', 'parser', 'schema', 'empty_class.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: false));
       final actualDataClass = parser.parseDataClasses().first;
       const expectedDataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [],
+      );
+      expect(actualDataClass, expectedDataClass);
+    });
+  });
+
+  group('Required parameter class', () {
+    test('3.0', () async {
+      final schemaPath =
+          p.join('test', 'parser', 'schema', 'required_parameter_object.3.0.json');
+      final configFile = schemaFile(schemaPath);
+      final schemaContent = configFile!.readAsStringSync();
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: true));
+      final actualDataClass = parser.parseDataClasses().first;
+      const expectedDataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        parameters: [UniversalType(
+            type: 'string',
+            name: 'email',
+            jsonKey: 'email',
+            isRequired: true,
+          )],
+        typeDef: false
       );
       expect(actualDataClass, expectedDataClass);
     });
@@ -42,7 +65,7 @@ void main() {
           p.join('test', 'parser', 'schema', 'basic_types_class.2.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: false));
       final actualDataClass = parser.parseDataClasses().first;
       const expectedDataClass = UniversalComponentClass(
         name: 'ClassName',
@@ -154,7 +177,7 @@ void main() {
           p.join('test', 'parser', 'schema', 'basic_types_class.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: false));
       final actualDataClass = parser.parseDataClasses().first;
       const expectedDataClass = UniversalComponentClass(
         name: 'ClassName',
@@ -266,7 +289,7 @@ void main() {
           p.join('test', 'parser', 'schema', 'reference_types_class.2.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: false));
       final dataClasses = parser.parseDataClasses().toList();
       const expectedDataClasses = [
         UniversalComponentClass(
@@ -317,7 +340,7 @@ void main() {
           p.join('test', 'parser', 'schema', 'reference_types_class.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: false));
       final dataClasses = parser.parseDataClasses().toList();
       const expectedDataClasses = <UniversalDataClass>[
         UniversalComponentClass(
@@ -368,7 +391,7 @@ void main() {
           p.join('test', 'parser', 'schema', 'of_like_class.3.1.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: false));
       final dataClasses = parser.parseDataClasses().toList();
       final expectedDataClasses = <UniversalDataClass>[
         const UniversalComponentClass(
@@ -466,7 +489,7 @@ void main() {
       );
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: false));
       final dataClasses = parser.parseDataClasses().toList();
       final expectedDataClasses = <UniversalDataClass>[
         const UniversalComponentClass(
@@ -524,7 +547,7 @@ void main() {
       );
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: false));
       final dataClasses = parser.parseDataClasses().toList();
       final expectedDataClasses = <UniversalDataClass>[
         const UniversalComponentClass(
@@ -577,7 +600,7 @@ void main() {
       final parser = OpenApiParser(
         ParserConfig(
           schemaContent,
-          isJson: true,
+          isJson: true, requiredByDefault: false,
           enumsParentPrefix: false,
         ),
       );
@@ -595,7 +618,7 @@ void main() {
       );
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: false));
       final dataClasses = parser.parseDataClasses().toList();
       final expectedDataClasses = <UniversalDataClass>[
         const UniversalComponentClass(
@@ -680,7 +703,7 @@ void main() {
       );
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: false));
       final dataClasses = parser.parseDataClasses().toList();
       final expectedDataClasses = <UniversalDataClass>[
         const UniversalComponentClass(
