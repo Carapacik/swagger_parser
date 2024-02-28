@@ -5,18 +5,19 @@
 [![Star on Github](https://img.shields.io/github/stars/Carapacik/swagger_parser?logo=github)](https://github.com/Carapacik/swagger_parser)
 [![Last commit on Github](https://img.shields.io/github/last-commit/Carapacik/swagger_parser?logo=github)](https://github.com/Carapacik/swagger_parser)
 [![Tests](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml)
-<a href="https://omega-r.com/"><img src="https://raw.githubusercontent.com/Carapacik/swagger_parser/main/.github/readme/omega_logo.png" width="200" align="right"/></a>
 
-## Dart package that generates REST clients and data classes from OpenApi definition file
+## Swagger Parser is a Dart package that takes an OpenApi definition file and generates REST clients based on **retrofit** and data classes for your project.
 
-## Features
-
-- Supports OpenApi v2, v3.0 and v3.1
-- Support JSON and YAML format
-- Generate REST client files based on Retrofit
-- Generate data classes, using one of the following serializer:
-  - [json_serializable](https://pub.dev/packages/json_serializable)
-  - [freezed](https://pub.dev/packages/freezed)
-  - [dart_mappable](https://pub.dev/packages/dart_mappable)
-- Support for multiple languages (Dart, Kotlin)
-- Web interface at https://carapacik.github.io/swagger_parser
+* Supports OpenApi v2, v3.0 and v3.1
+* Can generate files from `JSON` and `YAML` format
+* Generation by definition link or from file
+* Support for multiple definitions
+* Supports **Dart** and **Kotlin**
+  * Serializers supported for _dart_:  
+    * [json_serializable](https://pub.dev/packages/json_serializable)
+    * [freezed](https://pub.dev/packages/freezed)
+    * [dart_mappable](https://pub.dev/packages/dart_mappable)
+  * Serializers supported for _kotlin_:
+    * [moshi](https://github.com/square/moshi)
+***
+We also have a web interface so you can try out swagger parser: https://carapacik.github.io/swagger_parser
