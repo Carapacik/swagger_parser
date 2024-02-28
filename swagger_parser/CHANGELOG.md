@@ -1,3 +1,8 @@
+## 1.16.2
+
+- Add new exceptions to export
+- Fixed file name from schemeUrl
+
 ## 1.16.1
 
 - Fix swagger_parser_pages (https://carapacik.github.io/swagger_parser)

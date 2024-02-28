@@ -11,7 +11,7 @@
   },
   "host": "petstore.swagger.io",
   "basePath": "/api",
-  "schemes": [
+  "schemas": [
     "http"
   ],
   "consumes": [
