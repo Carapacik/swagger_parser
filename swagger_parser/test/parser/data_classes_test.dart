@@ -36,6 +36,24 @@ void main() {
     });
   });
 
+  group('Empty object class', () {
+    test('3.0', () async {
+      final schemaPath =
+          p.join('test', 'parser', 'schema', 'empty_object.3.0.json');
+      final configFile = schemaFile(schemaPath);
+      final schemaContent = configFile!.readAsStringSync();
+      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true));
+      final actualDataClass = parser.parseDataClasses().first;
+      const expectedDataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        parameters: [],
+        typeDef: false
+      );
+      expect(actualDataClass, expectedDataClass);
+    });
+  });
+
   group('Types check', () {
     test('basic types check 2.0', () async {
       final schemaPath =

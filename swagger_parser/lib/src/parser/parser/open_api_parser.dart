@@ -639,8 +639,10 @@ class OpenApiParser {
         );
       }
 
-      if (value.containsKey(_propertiesConst)) {
-        findParametersAndImports(value);
+      if (value[_typeConst] == _objectConst) {
+        if (value.containsKey(_propertiesConst)) {
+          findParametersAndImports(value);
+        }        
       } else if (value.containsKey(_enumConst)) {
         final items = protectEnumItemsNames(
           (value[_enumConst] as List).map((e) => '$e'),
