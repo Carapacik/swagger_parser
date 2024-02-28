@@ -5,9 +5,8 @@
 ## 1.16.0
 
 - Wrapping collections variable introduced replacing arrayDepth and mapType: this variable presents
-  a list of all collections wrapping a type (example: List<List<Map<String,
-  List<String>>>> -> [List, List, List, Map, List]) and will resolve them in order of
-  appearance ([#128](https://github.com/Carapacik/swagger_parser/issues/128))
+  a list of all collections wrapping a type and will resolve them in order of appearance
+  ([#128](https://github.com/Carapacik/swagger_parser/issues/128))
 - Fixed error
   with `required_by_default` ([#168](https://github.com/Carapacik/swagger_parser/issues/168))
 - Refactor config and rename parameters:
