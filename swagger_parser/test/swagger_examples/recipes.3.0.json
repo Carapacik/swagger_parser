@@ -19,17 +19,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemes/RegisterUserDto"
+                "$ref": "#/components/schemas/RegisterUserDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemes/RegisterUserDto"
+                "$ref": "#/components/schemas/RegisterUserDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemes/RegisterUserDto"
+                "$ref": "#/components/schemas/RegisterUserDto"
               }
             }
           }
@@ -57,17 +57,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemes/UserDto"
+                "$ref": "#/components/schemas/UserDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemes/UserDto"
+                "$ref": "#/components/schemas/UserDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemes/UserDto"
+                "$ref": "#/components/schemas/UserDto"
               }
             }
           }
@@ -120,7 +120,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemes/ProfileDto"
+                  "$ref": "#/components/schemas/ProfileDto"
                 }
               }
             }
@@ -148,17 +148,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemes/EditProfileDto"
+                "$ref": "#/components/schemas/EditProfileDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemes/EditProfileDto"
+                "$ref": "#/components/schemas/EditProfileDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemes/EditProfileDto"
+                "$ref": "#/components/schemas/EditProfileDto"
               }
             }
           }
@@ -351,7 +351,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemes/RecipeDto"
+                    "$ref": "#/components/schemas/RecipeDto"
                   }
                 }
               }
@@ -406,7 +406,7 @@
                   "Ingredients": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemes/IngredientDto"
+                      "$ref": "#/components/schemas/IngredientDto"
                     }
                   }
                 }
@@ -472,7 +472,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemes/DailyRecipeDto"
+                  "$ref": "#/components/schemas/DailyRecipeDto"
                 }
               }
             }
@@ -511,7 +511,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemes/RecipeDto"
+                    "$ref": "#/components/schemas/RecipeDto"
                   }
                 }
               }
@@ -624,7 +624,7 @@
                   "Ingredients": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemes/IngredientDto"
+                      "$ref": "#/components/schemas/IngredientDto"
                     }
                   }
                 }
@@ -710,7 +710,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemes/RecipeDto"
+                    "$ref": "#/components/schemas/RecipeDto"
                   }
                 }
               }
@@ -752,7 +752,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemes/DetailRecipeDto"
+                  "$ref": "#/components/schemas/DetailRecipeDto"
                 }
               }
             }
@@ -784,7 +784,7 @@
     }
   },
   "components": {
-    "schemes": {
+    "schemas": {
       "DailyRecipeDto": {
         "type": "object",
         "properties": {
@@ -882,7 +882,7 @@
           "ingredients": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemes/IngredientDto"
+              "$ref": "#/components/schemas/IngredientDto"
             },
             "nullable": true
           }
@@ -1047,7 +1047,7 @@
         "additionalProperties": false
       }
     },
-    "securitySchemes": {
+    "securityschemas": {
       "oauth2": {
         "type": "apiKey",
         "description": "Standard Authorization header using the Bearer scheme",
