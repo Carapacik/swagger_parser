@@ -135,12 +135,12 @@ class ConfigProcessor {
             .convert(jsonDecode(schemaContent));
         writeSchemaToFile(
           formattedJson,
-          config.name + p.basename(config.schemaUrl!) + extension,
+          p.basenameWithoutExtension(config.schemaUrl!) + extension,
         );
       } else {
         writeSchemaToFile(
           schemaContent,
-          config.name + p.basename(config.schemaUrl!) + extension,
+          p.basenameWithoutExtension(config.schemaUrl!) + extension,
         );
       }
       return (schemaContent, isJson);
