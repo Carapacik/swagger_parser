@@ -102,8 +102,8 @@ class ConfigProcessor {
           'Can not file schema file at ${config.schemaPath}',
         );
       }
-      final extension = p.extension(config.schemaPath!).toLowerCase();
-      isJson = switch (extension) {
+      final fileExtension = p.extension(config.schemaPath!).toLowerCase();
+      isJson = switch (fileExtension) {
         '.json' => true,
         '.yaml' => false,
         _ => true,
@@ -123,8 +123,8 @@ class ConfigProcessor {
   Future<(String, bool)> schemaFromUrlToFile(SWPConfig config) async {
     // It can transfer to GenProcessor.
     if (config.schemaUrl != null) {
-      final extension = p.extension(config.schemaUrl!).toLowerCase();
-      final isJson = switch (extension) {
+      final fileExtension = p.extension(config.schemaUrl!).toLowerCase();
+      final isJson = switch (fileExtension) {
         '.json' => true,
         '.yaml' => false,
         _ => true,
@@ -135,12 +135,12 @@ class ConfigProcessor {
             .convert(jsonDecode(schemaContent));
         writeSchemaToFile(
           formattedJson,
-          config.name + p.basename(config.schemaUrl!) + extension,
+          p.basenameWithoutExtension(config.schemaUrl!) + fileExtension,
         );
       } else {
         writeSchemaToFile(
           schemaContent,
-          config.name + p.basename(config.schemaUrl!) + extension,
+          p.basenameWithoutExtension(config.schemaUrl!) + fileExtension,
         );
       }
       return (schemaContent, isJson);

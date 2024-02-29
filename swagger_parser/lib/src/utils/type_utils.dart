@@ -33,7 +33,10 @@ extension UniversalTypeX on UniversalType {
         : '?';
     switch (lang) {
       case ProgrammingLanguage.dart:
-        return type.toDartType(format) + questionMark;
+        // https://github.com/trevorwang/retrofit.dart/issues/631
+        // https://github.com/Carapacik/swagger_parser/issues/110
+        return type.toDartType(format) +
+            (type.toDartType(format) == 'dynamic' ? '' : questionMark);
       case ProgrammingLanguage.kotlin:
         return type.toKotlinType(format) + questionMark;
     }
@@ -58,7 +61,9 @@ extension StringTypeX on String {
           },
         'file' => 'File',
         'boolean' => 'bool',
-        'object' || 'null' => 'Object',
+        // https://github.com/trevorwang/retrofit.dart/issues/631
+        // https://github.com/Carapacik/swagger_parser/issues/110
+        'object' || 'null' => 'dynamic',
         _ => this
       };
 
