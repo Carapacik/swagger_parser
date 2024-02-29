@@ -26,7 +26,7 @@ void main() {
       p.join(Directory.systemTemp.absolute.path, 'temp_test_project');
   final clientOutputPath = p.join(testProjectPath, 'lib', 'api');
 
-  setUp(() async {
+  setUpAll(() async {
     // Create the test project
     final createProjectResult =
         await Process.run('dart', ['create', testProjectPath, '--force']);
@@ -89,42 +89,61 @@ global_options:
   });
 
   // Delete the test project
-  tearDown(() async {
+  tearDownAll(() async {
+    final tempProjectDir = Directory(testProjectPath);
     // if (tempProjectDir.existsSync()) {
     //   await tempProjectDir.delete(recursive: true);
     // }
-    if (Directory(clientOutputPath).existsSync()) {
-      await Directory(clientOutputPath).delete(recursive: true);
+  });
+
+  // Run the swagger_parser generation on every schema file
+  // This will result in the package having many clients
+  group('testSwaggerParserGeneration', () {
+    for (final schemaFile in schemaFiles) {
+      for (final jsonSerializer in JsonSerializer.values) {
+        final schemaFileName = p.basename(schemaFile.path);
+        // We will be using the name of the schema file as the folder name
+        // To be compatible with how dart allows folders to be named
+        // We will remove all non-alphabetical characters
+        final folderName =
+            schemaFileName.replaceAll(RegExp('[^a-zA-Z]'), '').toLowerCase();
+        final clientOutputPath =
+            p.join(testProjectPath, 'lib', 'api', folderName);
+        test('$schemaFileName - ${jsonSerializer.name}', () async {
+          await testSwaggerParserGeneration(
+              schemaFile, clientOutputPath, jsonSerializer);
+        });
+      }
+      break;
     }
   });
 
-  for (final schemaFile in schemaFiles) {
-    for (final jsonSerializer in JsonSerializer.values) {
-      test('static___${p.basename(schemaFile.path)}___${jsonSerializer.name}',
-          () async {
-        await staticTestSchema(
-          SWPConfig(
-            outputDirectory: clientOutputPath,
-            schemaPath: schemaFile.absolute.path,
-            jsonSerializer: jsonSerializer,
-            putClientsInFolder: true,
-            enumsParentPrefix: false,
-          ),
-          testProjectPath,
-        );
-      });
-    }
-  }
+  // Run the build_runner on the test project
+  test('testBuildRunner', () async {
+    await testBuildRunner(testProjectPath);
+  });
 }
 
-Future<void> staticTestSchema(
-  SWPConfig config,
-  String testProjectPath,
+// This function will test the generation of the client for a given schema file
+Future<void> testSwaggerParserGeneration(
+  File schemaFile,
+  String clientOutputPath,
+  JsonSerializer jsonSerializer,
 ) async {
-  // Create the files
+  final config = SWPConfig(
+    outputDirectory: clientOutputPath,
+    schemaPath: schemaFile.absolute.path,
+    jsonSerializer: jsonSerializer,
+    putClientsInFolder: true,
+    enumsParentPrefix: false,
+  );
   final processor = GenProcessor(config);
   await processor.generateFiles();
+}
 
+Future<void> testBuildRunner(
+  String testProjectPath,
+) async {
   // Run code generation
   final buildResult = await Process.run(
     'dart',
