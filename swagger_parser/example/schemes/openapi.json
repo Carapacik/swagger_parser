@@ -181,7 +181,7 @@
     }
   },
   "components": {
-    "schemes": {
+    "schemas": {
       "Pet": {
         "allOf": [
           {
