@@ -111,7 +111,6 @@ global_options:
               schemaFile, clientOutputPath, jsonSerializer);
         });
       }
-      break;
     }
   });
 
