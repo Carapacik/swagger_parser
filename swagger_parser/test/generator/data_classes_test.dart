@@ -285,7 +285,7 @@ class ClassName {
   final DateTime dateTimeStringType;
   final File fileType;
   final bool boolType;
-  final Object objectType;
+  final dynamic objectType;
   final Another anotherType;
 
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
@@ -395,7 +395,7 @@ class ClassName with _$ClassName {
     required DateTime dateTimeStringType,
     required File fileType,
     required bool boolType,
-    required Object objectType,
+    required dynamic objectType,
     required Another anotherType,
   }) = _ClassName;
   
@@ -518,7 +518,7 @@ class ClassName with ClassNameMappable {
   final DateTime dateTimeStringType;
   final File fileType;
   final bool boolType;
-  final Object objectType;
+  final dynamic objectType;
   final Another anotherType;
 
   static ClassName fromJson(Map<String, dynamic> json) => ClassNameMapper.ensureInitialized().decodeMap<ClassName>(json);
@@ -2528,7 +2528,7 @@ class ClassName {
   /// Mega mind
   @JsonKey(name: 'mega_MIND')
   final String megaMind;
-  final Object emptyDescription;
+  final dynamic emptyDescription;
 
   /// List of data.
   /// This data is a list.
@@ -2616,7 +2616,7 @@ class ClassName with _$ClassName {
     /// Mega mind
     @JsonKey(name: 'mega_MIND')
     required String megaMind,
-    required Object emptyDescription,
+    required dynamic emptyDescription,
 
     /// List of data.
     /// This data is a list.
