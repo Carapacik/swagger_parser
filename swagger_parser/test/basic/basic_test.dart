@@ -117,7 +117,7 @@ global_options:
   // Run the build_runner on the test project
   test('testBuildRunner', () async {
     await testBuildRunner(testProjectPath);
-  });
+  }, timeout: Timeout(Duration(minutes: 5)));
 }
 
 // This function will test the generation of the client for a given schema file
