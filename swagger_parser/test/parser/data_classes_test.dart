@@ -38,21 +38,24 @@ void main() {
 
   group('Required by default disable parameter class', () {
     test('3.0', () async {
-      final schemaPath =
-          p.join('test', 'parser', 'schema', 'required_parameter_object.3.0.json');
+      final schemaPath = p.join(
+          'test', 'parser', 'schema', 'required_parameter_object.3.0.json');
       final configFile = schemaFile(schemaPath);
       final schemaContent = configFile!.readAsStringSync();
-      final parser = OpenApiParser(ParserConfig(schemaContent, isJson: true, requiredByDefault: false));
+      final parser = OpenApiParser(
+          ParserConfig(schemaContent, isJson: true, requiredByDefault: false));
       final actualDataClass = parser.parseDataClasses().first;
       const expectedDataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
-        parameters: [UniversalType(
+        parameters: [
+          UniversalType(
             type: 'string',
             name: 'email',
             jsonKey: 'email',
             isRequired: false,
-          ),],
+          ),
+        ],
       );
       expect(actualDataClass, expectedDataClass);
     });
@@ -600,7 +603,7 @@ void main() {
       final parser = OpenApiParser(
         ParserConfig(
           schemaContent,
-          isJson: true, 
+          isJson: true,
           enumsParentPrefix: false,
         ),
       );

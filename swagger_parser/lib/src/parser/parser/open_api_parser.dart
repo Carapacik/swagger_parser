@@ -629,7 +629,8 @@ class OpenApiParser {
               propertyValue as Map<String, dynamic>,
               name: propertyName,
               additionalName: key,
-              isRequired: requiredParameters.contains(propertyName) || config.requiredByDefault,
+              isRequired: requiredParameters.contains(propertyName) ||
+                  config.requiredByDefault,
             );
             parameters.add(typeWithImport.type);
             if (typeWithImport.import != null) {
