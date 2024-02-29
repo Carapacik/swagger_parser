@@ -456,7 +456,8 @@ void main() {
       expect(item2, expectedItem2);
     });
 
-    test('additionalProperties entity that should not parse to dynamic test 3.0',
+    test(
+        'additionalProperties entity that should not parse to dynamic test 3.0',
         () async {
       final schemaPath = p.join(
         'test',
