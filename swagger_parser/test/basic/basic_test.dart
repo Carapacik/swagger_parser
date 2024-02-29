@@ -24,9 +24,14 @@ void main() {
   // Set the path to the temp test project
   final testProjectPath =
       p.join(Directory.systemTemp.absolute.path, 'temp_test_project');
-  final clientOutputPath = p.join(testProjectPath, 'lib', 'api');
 
   setUpAll(() async {
+    // Delete the test project if it exists
+    final tempProjectDir = Directory(testProjectPath);
+    if (tempProjectDir.existsSync()) {
+      await tempProjectDir.delete(recursive: true);
+    }
+
     // Create the test project
     final createProjectResult =
         await Process.run('dart', ['create', testProjectPath, '--force']);
@@ -86,14 +91,6 @@ global_options:
   json_serializable:
     runs_before:
       - retrofit_generator''');
-  });
-
-  // Delete the test project
-  tearDownAll(() async {
-    final tempProjectDir = Directory(testProjectPath);
-    // if (tempProjectDir.existsSync()) {
-    //   await tempProjectDir.delete(recursive: true);
-    // }
   });
 
   // Run the swagger_parser generation on every schema file
