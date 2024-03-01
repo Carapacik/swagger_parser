@@ -24,12 +24,7 @@ void main() {
       .toList();
 
   // Set the path to the temp test project
-  final testProjectDir = Directory(
-    p.join(
-      Directory.systemTemp.absolute.path,
-      'test_project',
-    ),
-  );
+  final testProjectDir = Directory.systemTemp.createTempSync('test_project');
 
   setUpAll(() async {
     if (testProjectDir.existsSync()) {
