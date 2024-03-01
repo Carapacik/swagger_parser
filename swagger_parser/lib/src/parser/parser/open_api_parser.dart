@@ -6,6 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 import '../../utils/case_utils.dart';
+import '../../utils/output/io_output.dart';
 import '../../utils/type_utils.dart';
 import '../config/parser_config.dart';
 import '../exception/open_api_parser_exception.dart';
@@ -247,16 +248,21 @@ class OpenApiParser {
           final parameterType = HttpParameterType.values.firstWhere(
             (e) => e.name == (parameter[_inConst].toString()),
           );
-          types.add(
-            UniversalRequestType(
-              parameterType: parameterType,
-              type: typeWithImport.type,
-              description: parameter[_descriptionConst]?.toString(),
-              name: parameterType.isBody && parameter[_nameConst] == _bodyConst
-                  ? null
-                  : parameter[_nameConst].toString(),
-            ),
-          );
+          if (parameterType == HttpParameterType.cookie) {
+            cookieWarnMessage();
+          } else {
+            types.add(
+              UniversalRequestType(
+                parameterType: parameterType,
+                type: typeWithImport.type,
+                description: parameter[_descriptionConst]?.toString(),
+                name:
+                    parameterType.isBody && parameter[_nameConst] == _bodyConst
+                        ? null
+                        : parameter[_nameConst].toString(),
+              ),
+            );
+          }
         }
       }
       if (map.containsKey(_requestBodyConst)) {
@@ -504,16 +510,20 @@ class OpenApiParser {
         final parameterType = HttpParameterType.values.firstWhere(
           (e) => e.name == (parameter[_inConst].toString()),
         );
-        types.add(
-          UniversalRequestType(
-            parameterType: parameterType,
-            type: typeWithImport.type,
-            description: parameter[_descriptionConst]?.toString(),
-            name: parameterType.isBody && parameter[_nameConst] == _bodyConst
-                ? null
-                : parameter[_nameConst].toString(),
-          ),
-        );
+        if (parameterType == HttpParameterType.cookie) {
+          cookieWarnMessage();
+        } else {
+          types.add(
+            UniversalRequestType(
+              parameterType: parameterType,
+              type: typeWithImport.type,
+              description: parameter[_descriptionConst]?.toString(),
+              name: parameterType.isBody && parameter[_nameConst] == _bodyConst
+                  ? null
+                  : parameter[_nameConst].toString(),
+            ),
+          );
+        }
       }
       return types;
     }
