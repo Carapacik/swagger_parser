@@ -12,10 +12,10 @@ import 'static_utils.dart';
 /// and validate that the generated code can statically compile
 /// To run just for a single schema file, use the following command:
 ///
-/// `dart test --concurrency=1  --name "client_generation {filename without .yaml extention} { one of [JsonSerializer.values]}|build_and_validate_client"`
+/// `dart test --run-skipped --concurrency=1  --name "client_generation {filename without .yaml extention} { one of [JsonSerializer.values]}|build_and_validate_client"`
 ///
 /// For example:
-/// `dart test --concurrency=1 --name "client_generation openapi freezed|build_and_validate_client"`
+/// `dart test --run-skipped --concurrency=1 --name "client_generation openapi freezed|build_and_validate_client"`
 void main() {
   // Get all the schema files
   final schemaFiles = Directory(p.join('test', 'schemas'))
@@ -79,7 +79,7 @@ Future<void> runSwaggerParserGeneration(
   bool throwOnFailure = false,
 }) async {
   final config = SWPConfig(
-    outputDirectory: clientOutputPath,
+    outputDirectory: clientOutputPath + jsonSerializer.name,
     schemaPath: schemaFile.absolute.path,
     jsonSerializer: jsonSerializer,
     putClientsInFolder: true,
