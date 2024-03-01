@@ -72,6 +72,7 @@ class OpenApiParser {
   static const _propertiesConst = 'properties';
   static const _refConst = r'$ref';
   static const _requestBodyConst = 'requestBody';
+  static const _requestBodiesConst = 'requestBodies';
   static const _requiredConst = 'required';
   static const _responsesConst = 'responses';
   static const _schemaConst = 'schema';
@@ -259,7 +260,32 @@ class OpenApiParser {
         }
       }
       if (map.containsKey(_requestBodyConst)) {
-        final requestBody = map[_requestBodyConst] as Map<String, dynamic>;
+        var requestBody = map[_requestBodyConst] as Map<String, dynamic>;
+
+        final isRefBody = requestBody.containsKey(_refConst);
+
+        if (isRefBody) {
+          final refBodyName = _formatRef(requestBody);
+
+          final isRefBodyExist = _definitionFileContent
+                  .containsKey(_componentsConst) &&
+              (_definitionFileContent[_componentsConst] as Map<String, dynamic>)
+                  .containsKey(_requestBodiesConst) &&
+              ((_definitionFileContent[_componentsConst]
+                          as Map<String, dynamic>)[_requestBodiesConst]
+                      as Map<String, dynamic>)
+                  .containsKey(refBodyName);
+
+          if (!isRefBodyExist) {
+            throw OpenApiParserException(
+              '${requestBody[_refConst]} does not exist in schema',
+            );
+          }
+          requestBody = ((_definitionFileContent[_componentsConst]
+                  as Map<String, dynamic>)[_requestBodiesConst]
+              as Map<String, dynamic>)[refBodyName] as Map<String, dynamic>;
+        }
+
         if (!requestBody.containsKey(_contentConst)) {
           throw const OpenApiParserException(
             'Request body must always have content.',
@@ -435,10 +461,30 @@ class OpenApiParser {
           resultContentType = consumes.first as String;
         }
       }
-      for (final parameter in map[_parametersConst] as List<dynamic>) {
+      for (var parameter in map[_parametersConst] as List<dynamic>) {
         final isRequired = (parameter as Map<String, dynamic>)[_requiredConst]
             ?.toString()
             .toBool();
+
+        final isRefParameter = parameter.containsKey(_refConst);
+
+        if (isRefParameter) {
+          // find ref parameter
+          final refParameterName = _formatRef(parameter);
+          final isRefParameterExist = _definitionFileContent
+                  .containsKey(_parametersConst) &&
+              (_definitionFileContent[_parametersConst] as Map<String, dynamic>)
+                  .containsKey(refParameterName);
+
+          if (!isRefParameterExist) {
+            throw OpenApiParserException(
+              '${parameter[_refConst]} does not exist in schema',
+            );
+          }
+          parameter = (_definitionFileContent[_parametersConst]
+                  as Map<String, dynamic>)[refParameterName]!
+              as Map<String, dynamic>;
+        }
 
         final typeWithImport = _findType(
           parameter[_schemaConst] != null
@@ -491,7 +537,9 @@ class OpenApiParser {
 
       pathValue.forEach((key, requestPath) {
         // `servers` contains List<dynamic>
-        if (key == _serversConst || key == _parametersConst) {
+        if (key == _serversConst ||
+            key == _parametersConst ||
+            key.startsWith('x-')) {
           return;
         }
 
@@ -1027,14 +1075,13 @@ class OpenApiParser {
       String? import;
       String type;
       if (map.containsKey(_refConst)) {
-        import = _formatRef(map).toPascal;
+        import = _formatRef(map);
       } else if (map.containsKey(_additionalPropertiesConst) &&
           map[_additionalPropertiesConst] is Map<String, dynamic> &&
           (map[_additionalPropertiesConst] as Map<String, dynamic>)
               .containsKey(_refConst)) {
         import =
-            _formatRef(map[_additionalPropertiesConst] as Map<String, dynamic>)
-                .toPascal;
+            _formatRef(map[_additionalPropertiesConst] as Map<String, dynamic>);
       }
 
       if (map.containsKey(_typeConst)) {
