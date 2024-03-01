@@ -9,7 +9,7 @@ Future<void> setupBaseProject({
 }) async {
   // Create the test project
   final createProjectResult =
-      await Process.run('dart', ['create', projectPath, '--force']);
+      await Process.run('dart', ['create', projectPath, '--no-pub', '--force']);
   assert(
     createProjectResult.exitCode == 0,
     'Failed to create project ${createProjectResult.stderr}',
@@ -66,6 +66,21 @@ global_options:
   json_serializable:
     runs_before:
       - retrofit_generator''');
+
+  // Run pub get
+  final runPubGetResult = await Process.run(
+    'dart',
+    [
+      'pub',
+      'get',
+    ],
+    workingDirectory: projectPath,
+  );
+
+  assert(
+    runPubGetResult.exitCode == 0,
+    'Failed to run pug get ${runPubGetResult.stderr}',
+  );
 }
 
 /// Returns a formatted string with the exit code, stdout and stderr of a process

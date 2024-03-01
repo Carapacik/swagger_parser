@@ -16,6 +16,9 @@ import 'static_utils.dart';
 ///
 /// For example:
 /// `dart test --run-skipped --concurrency=1 --name "client_generation openapi freezed|build_and_validate_client"`
+///
+/// To run all tests:
+/// `dart test --run-skipped ".\test\static\static_test.dart"`
 void main() {
   // Get all the schema files
   final schemaFiles = Directory(p.join('test', 'schemas'))
@@ -24,7 +27,7 @@ void main() {
       .toList();
 
   // Set the path to the temp test project
-  final testProjectDir = Directory.systemTemp.createTempSync('test_project');
+  final testProjectDir = Directory('test_project');
 
   setUpAll(() async {
     if (testProjectDir.existsSync()) {
@@ -74,7 +77,7 @@ Future<void> runSwaggerParserGeneration(
   bool throwOnFailure = false,
 }) async {
   final config = SWPConfig(
-    outputDirectory: clientOutputPath + jsonSerializer.name,
+    outputDirectory: '${clientOutputPath}_${jsonSerializer.name}',
     schemaPath: schemaFile.absolute.path,
     jsonSerializer: jsonSerializer,
     putClientsInFolder: true,
