@@ -24,6 +24,11 @@ void generateMessage() {
   stdout.writeln('Generate...');
 }
 
+void cookieWarnMessage() {
+  stdout.writeln(
+      '${_red}Warning: Cookie parameters are not supported by this generator, they will be ignored$_reset');
+}
+
 void successMessage({
   required int successSchemasCount,
   required int schemesCount,
