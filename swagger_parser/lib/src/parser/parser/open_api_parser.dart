@@ -72,6 +72,7 @@ class OpenApiParser {
   static const _propertiesConst = 'properties';
   static const _refConst = r'$ref';
   static const _requestBodyConst = 'requestBody';
+  static const _requestBodiesConst = 'requestBodies';
   static const _requiredConst = 'required';
   static const _responsesConst = 'responses';
   static const _schemaConst = 'schema';
@@ -259,7 +260,32 @@ class OpenApiParser {
         }
       }
       if (map.containsKey(_requestBodyConst)) {
-        final requestBody = map[_requestBodyConst] as Map<String, dynamic>;
+        var requestBody = map[_requestBodyConst] as Map<String, dynamic>;
+
+        final isRefBody = requestBody.containsKey(_refConst);
+
+        if (isRefBody) {
+          final refBodyName = _formatRef(requestBody);
+
+          final isRefBodyExist = _definitionFileContent
+                  .containsKey(_componentsConst) &&
+              (_definitionFileContent[_componentsConst] as Map<String, dynamic>)
+                  .containsKey(_requestBodiesConst) &&
+              ((_definitionFileContent[_componentsConst]
+                          as Map<String, dynamic>)[_requestBodiesConst]
+                      as Map<String, dynamic>)
+                  .containsKey(refBodyName);
+
+          if (!isRefBodyExist) {
+            throw OpenApiParserException(
+              '${requestBody[_refConst]} does not exist in schema',
+            );
+          }
+          requestBody = ((_definitionFileContent[_componentsConst]
+                  as Map<String, dynamic>)[_requestBodiesConst]
+              as Map<String, dynamic>)[refBodyName] as Map<String, dynamic>;
+        }
+
         if (!requestBody.containsKey(_contentConst)) {
           throw const OpenApiParserException(
             'Request body must always have content.',
