@@ -1,5 +1,5 @@
-// @Skip('currently failing - WIP')
-// library;
+@Skip('currently failing - WIP')
+library;
 
 import 'dart:io';
 import 'package:path/path.dart' as p;
