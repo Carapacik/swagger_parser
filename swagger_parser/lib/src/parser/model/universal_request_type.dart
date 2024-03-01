@@ -59,6 +59,8 @@ enum HttpParameterType {
 
   /// `@Part`
   part('Part'),
+  //
+  cookie('Cookie'),
 
   /// `@Part`
   formData('Part');
