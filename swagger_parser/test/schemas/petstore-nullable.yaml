@@ -191,6 +191,7 @@ paths:
           required: true
           type: integer
           format: int64
+          x-nullable: true
         - name: name
           in: formData
           description: Updated name of the pet
@@ -201,6 +202,7 @@ paths:
           description: Updated status of the pet
           required: false
           type: string
+          x-nullable: true
       responses:
         '405':
           description: Invalid input
@@ -359,6 +361,7 @@ paths:
           description: ID of the order that needs to be deleted
           required: true
           type: string
+          x-example: orderid123
       responses:
         '400':
           description: Invalid ID supplied
@@ -653,11 +656,13 @@ definitions:
       id:
         type: integer
         format: int64
+        x-nullable: true
       category:
         $ref: '#/definitions/Category'
       name:
         type: string
         example: doggie
+        x-nullable: true
       photoUrls:
         type: array
         xml:
@@ -665,7 +670,9 @@ definitions:
           wrapped: true
         items:
           type: string
+          x-nullable: true
       tags:
+        x-nullable: true
         type: array
         xml:
           name: tag
@@ -674,6 +681,7 @@ definitions:
           $ref: '#/definitions/Tag'
       status:
         type: string
+        x-nullable: true
         description: pet status in the store
         enum:
           - available

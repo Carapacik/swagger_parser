@@ -75,30 +75,23 @@ paths:
         - petstore_auth:
             - 'write:pets'
             - 'read:pets'
-  /pet/findByStatus:
+  /pet/getAll:
     get:
       tags:
         - pet
-      summary: Finds Pets by status
-      description: Multiple status values can be provided with comma separated strings
-      operationId: findPetsByStatus
+      summary: Get all pets
+      description: ''
+      operationId: getAllPets
       produces:
         - application/xml
         - application/json
       parameters:
-        - name: status
+        - name: lastUpdated
           in: query
-          description: Status values that need to be considered for filter
-          required: true
-          type: array
-          items:
-            type: string
-            enum:
-              - available
-              - pending
-              - sold
-            default: available
-          collectionFormat: csv
+          description: "When this endpoint was hit last to help identify if the client already has the latest copy."
+          required: false
+          type: "string"
+          format: "date-time"
       responses:
         '200':
           description: successful operation
@@ -106,8 +99,8 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Pet'
-        '400':
-          description: Invalid status value
+        '204':
+          description: Client already has latest copy of this endpoint
       security:
         - petstore_auth:
             - 'write:pets'

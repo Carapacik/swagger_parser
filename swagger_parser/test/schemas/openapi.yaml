@@ -1,907 +1,702 @@
-openapi: 3.0.3
+---
+swagger: "2.0"
 info:
+  description: "This is a sample server Petstore server.  You can find out more about\
+    \ Swagger at [https://swagger.io](https://swagger.io) or on [irc.freenode.net, #swagger](https://swagger.io/irc/).\
+    \  For this sample, you can use the api key `special-key` to test the authorization\
+    \ filters."
+  version: "1.0.0"
+  title: "Swagger Petstore"
+  termsOfService: "https://swagger.io/terms/"
   contact:
-    email: team@openapitools.org
-  description: Echo Server API
+    email: "apiteam@swagger.io"
   license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  title: Echo Server API
-  version: 0.1.0
-servers:
-- url: http://localhost:3000/
+    name: "Apache 2.0"
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+host: "petstore.swagger.io"
+basePath: "/v2"
+tags:
+- name: "pet"
+  description: "Everything about your Pets"
+  externalDocs:
+    description: "Find out more"
+    url: "https://swagger.io"
+- name: "store"
+  description: "Access to Petstore orders"
+- name: "user"
+  description: "Operations about user"
+  externalDocs:
+    description: "Find out more about our store"
+    url: "https://swagger.io"
+schemes:
+- "http"
 paths:
-  /path/string/{path_string}/integer/{path_integer}/{enum_nonref_string_path}/{enum_ref_string_path}:
-    get:
-      description: Test path parameter(s)
-      operationId: "tests/path/string/{path_string}/integer/{path_integer}/{enum_nonref_string_path}/{enum_ref_string_path}"
+  /pet:
+    post:
+      tags:
+      - "pet"
+      summary: "Add a new pet to the store"
+      description: ""
+      operationId: "addPet"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
       parameters:
-      - explode: false
-        in: path
-        name: path_string
+      - in: "body"
+        name: "body"
+        description: "Pet object that needs to be added to the store"
         required: true
         schema:
-          type: string
-        style: simple
-      - explode: false
-        in: path
-        name: path_integer
-        required: true
-        schema:
-          type: integer
-        style: simple
-      - explode: false
-        in: path
-        name: enum_nonref_string_path
-        required: true
-        schema:
-          enum:
-          - success
-          - failure
-          - unclassified
-          type: string
-        style: simple
-      - explode: false
-        in: path
-        name: enum_ref_string_path
-        required: true
-        schema:
-          $ref: '#/components/schemas/StringEnumRef'
-        style: simple
+          $ref: "#/definitions/Pet"
       responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test path parameter(s)
-      tags:
-      - path
-  /form/integer/boolean/string:
-    post:
-      description: Test form parameter(s)
-      operationId: test/form/integer/boolean/string
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/test_form_integer_boolean_string_request'
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test form parameter(s)
-      tags:
-      - form
-  /form/oneof:
-    post:
-      description: Test form parameter(s) for oneOf schema
-      operationId: test/form/oneof
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/test_form_oneof_request'
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test form parameter(s) for oneOf schema
-      tags:
-      - form
-  /header/integer/boolean/string/enums:
-    get:
-      description: Test header parameter(s)
-      operationId: test/header/integer/boolean/string/enums
-      parameters:
-      - explode: true
-        in: header
-        name: integer_header
-        required: false
-        schema:
-          type: integer
-        style: form
-      - explode: true
-        in: header
-        name: boolean_header
-        required: false
-        schema:
-          type: boolean
-        style: form
-      - explode: true
-        in: header
-        name: string_header
-        required: false
-        schema:
-          type: string
-        style: form
-      - explode: true
-        in: header
-        name: enum_nonref_string_header
-        required: false
-        schema:
-          enum:
-          - success
-          - failure
-          - unclassified
-          type: string
-        style: form
-      - explode: true
-        in: header
-        name: enum_ref_string_header
-        required: false
-        schema:
-          $ref: '#/components/schemas/StringEnumRef'
-        style: form
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test header parameter(s)
-      tags:
-      - header
-  /query/enum_ref_string:
-    get:
-      description: Test query parameter(s)
-      operationId: test/enum_ref_string
-      parameters:
-      - explode: true
-        in: query
-        name: enum_nonref_string_query
-        required: false
-        schema:
-          enum:
-          - success
-          - failure
-          - unclassified
-          type: string
-        style: form
-      - explode: true
-        in: query
-        name: enum_ref_string_query
-        required: false
-        schema:
-          $ref: '#/components/schemas/StringEnumRef'
-        style: form
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test query parameter(s)
-      tags:
-      - query
-  /query/datetime/date/string:
-    get:
-      description: Test query parameter(s)
-      operationId: test/query/datetime/date/string
-      parameters:
-      - explode: true
-        in: query
-        name: datetime_query
-        required: false
-        schema:
-          format: date-time
-          type: string
-        style: form
-      - explode: true
-        in: query
-        name: date_query
-        required: false
-        schema:
-          format: date
-          type: string
-        style: form
-      - explode: true
-        in: query
-        name: string_query
-        required: false
-        schema:
-          type: string
-        style: form
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test query parameter(s)
-      tags:
-      - query
-  /query/integer/boolean/string:
-    get:
-      description: Test query parameter(s)
-      operationId: test/query/integer/boolean/string
-      parameters:
-      - explode: true
-        in: query
-        name: integer_query
-        required: false
-        schema:
-          type: integer
-        style: form
-      - explode: true
-        in: query
-        name: boolean_query
-        required: false
-        schema:
-          type: boolean
-        style: form
-      - explode: true
-        in: query
-        name: string_query
-        required: false
-        schema:
-          type: string
-        style: form
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test query parameter(s)
-      tags:
-      - query
-  /query/style_form/explode_true/array_string:
-    get:
-      description: Test query parameter(s)
-      operationId: test/query/style_form/explode_true/array_string
-      parameters:
-      - explode: true
-        in: query
-        name: query_object
-        required: false
-        schema:
-          $ref: '#/components/schemas/test_query_style_form_explode_true_array_string_query_object_parameter'
-        style: form
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test query parameter(s)
-      tags:
-      - query
-  /query/style_form/explode_false/array_integer:
-    get:
-      description: Test query parameter(s)
-      operationId: test/query/style_form/explode_false/array_integer
-      parameters:
-      - explode: false
-        in: query
-        name: query_object
-        required: false
-        schema:
-          items:
-            type: integer
-          type: array
-        style: form
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test query parameter(s)
-      tags:
-      - query
-  /query/style_form/explode_false/array_string:
-    get:
-      description: Test query parameter(s)
-      operationId: test/query/style_form/explode_false/array_string
-      parameters:
-      - explode: false
-        in: query
-        name: query_object
-        required: false
-        schema:
-          items:
-            type: string
-          type: array
-        style: form
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test query parameter(s)
-      tags:
-      - query
-  /query/style_form/explode_true/object:
-    get:
-      description: Test query parameter(s)
-      operationId: test/query/style_form/explode_true/object
-      parameters:
-      - explode: true
-        in: query
-        name: query_object
-        required: false
-        schema:
-          $ref: '#/components/schemas/Pet'
-        style: form
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test query parameter(s)
-      tags:
-      - query
-  /query/style_form/explode_true/object/allOf:
-    get:
-      description: Test query parameter(s)
-      operationId: test/query/style_form/explode_true/object/allOf
-      parameters:
-      - explode: true
-        in: query
-        name: query_object
-        required: false
-        schema:
-          $ref: '#/components/schemas/DataQuery'
-        style: form
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test query parameter(s)
-      tags:
-      - query
-  /query/style_deepObject/explode_true/object:
-    get:
-      description: Test query parameter(s)
-      operationId: test/query/style_deepObject/explode_true/object
-      parameters:
-      - explode: true
-        in: query
-        name: query_object
-        required: false
-        schema:
-          $ref: '#/components/schemas/Pet'
-        style: deepObject
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test query parameter(s)
-      tags:
-      - query
-  /query/style_deepObject/explode_true/object/allOf:
-    get:
-      description: Test query parameter(s)
-      operationId: test/query/style_deepObject/explode_true/object/allOf
-      parameters:
-      - explode: true
-        in: query
-        name: query_object
-        required: false
-        schema:
-          $ref: '#/components/schemas/test_query_style_deepObject_explode_true_object_allOf_query_object_parameter'
-        style: deepObject
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test query parameter(s)
-      tags:
-      - query
-  /body/application/octetstream/binary:
-    post:
-      description: Test body parameter(s)
-      operationId: test/body/application/octetstream/binary
-      requestBody:
-        content:
-          application/octet-stream:
-            schema:
-              format: binary
-              type: string
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test body parameter(s)
-      tags:
-      - body
-  /echo/body/Pet:
-    post:
-      description: Test body parameter(s)
-      operationId: test/echo/body/Pet
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-          description: Successful operation
-      summary: Test body parameter(s)
-      tags:
-      - body
-  /echo/body/allOf/Pet:
-    post:
-      description: Test body parameter(s)
-      operationId: test/echo/body/allOf/Pet
-      requestBody:
-        $ref: '#/components/requestBodies/AllOfPet'
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-          description: Successful operation
-      summary: Test body parameter(s)
-      tags:
-      - body
-  /echo/body/Pet/response_string:
-    post:
-      description: Test empty response body
-      operationId: test/echo/body/Pet/response_string
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test empty response body
-      tags:
-      - body
-  /echo/body/Tag/response_string:
-    post:
-      description: Test empty json (request body)
-      operationId: test/echo/body/Tag/response_string
-      requestBody:
-        $ref: '#/components/requestBodies/Tag'
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test empty json (request body)
-      tags:
-      - body
-  /echo/body/FreeFormObject/response_string:
-    post:
-      description: Test free form object
-      operationId: test/echo/body/FreeFormObject/response_string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-        description: Free form object
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test free form object
-      tags:
-      - body
-  /echo/body/string_enum:
-    post:
-      description: Test string enum response body
-      operationId: test/echo/body/string_enum
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StringEnumRef'
-        description: String enum
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StringEnumRef'
-          description: Successful operation
-      summary: Test string enum response body
-      tags:
-      - body
-  /binary/gif:
-    post:
-      description: Test binary (gif) response body
-      operationId: test/binary/gif
-      responses:
-        "200":
-          content:
-            image/gif:
-              schema:
-                format: binary
-                type: string
-          description: Successful operation
-      summary: Test binary (gif) response body
-      tags:
-      - body
-  /body/application/octetstream/single_binary:
-    post:
-      description: Test single binary in multipart mime
-      operationId: test/body/multipart/formdata/single_binary
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/test_body_multipart_formdata_single_binary_request'
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test single binary in multipart mime
-      tags:
-      - body
-  /body/application/octetstream/array_of_binary:
-    post:
-      description: Test array of binary in multipart mime
-      operationId: test/body/multipart/formdata/array_of_binary
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/test_body_multipart_formdata_array_of_binary_request'
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
-      summary: Test array of binary in multipart mime
-      tags:
-      - body
-  /auth/http/basic:
-    post:
-      description: To test HTTP basic authentication
-      operationId: test/auth/http/basic
-      responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
+        405:
+          description: "Invalid input"
       security:
-      - http_auth: []
-      summary: To test HTTP basic authentication
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    put:
       tags:
-      - auth
-  /auth/http/bearer:
-    post:
-      description: To test HTTP bearer authentication
-      operationId: test/auth/http/bearer
+      - "pet"
+      summary: "Update an existing pet"
+      description: ""
+      operationId: "updatePet"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Pet object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: "#/definitions/Pet"
       responses:
-        "200":
-          content:
-            text/plain:
-              schema:
-                type: string
-          description: Successful operation
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Pet not found"
+        405:
+          description: "Validation exception"
       security:
-      - http_bearer_auth: []
-      summary: To test HTTP bearer authentication
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /pet/findByStatus:
+    get:
       tags:
-      - auth
-components:
-  requestBodies:
-    Pet:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Pet'
-      description: Pet object that needs to be added to the store
-    AllOfPet:
-      content:
-        application/json:
-          schema:
-            allOf:
-            - $ref: '#/components/schemas/Pet'
-      description: Pet object that needs to be added to the store
-    Tag:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Tag'
-      description: Tag object
-  schemas:
-    Category:
-      example:
-        name: Dogs
-        id: 1
-      properties:
-        id:
-          example: 1
-          format: int64
-          type: integer
-        name:
-          example: Dogs
-          type: string
-      type: object
-      xml:
-        name: category
-    Tag:
-      example:
-        name: name
-        id: 0
-      properties:
-        id:
-          format: int64
-          type: integer
-        name:
-          type: string
-      type: object
-      xml:
-        name: tag
-    Pet:
-      example:
-        photoUrls:
-        - photoUrls
-        - photoUrls
-        name: doggie
-        id: 10
-        category:
-          name: Dogs
-          id: 1
-        tags:
-        - name: name
-          id: 0
-        - name: name
-          id: 0
-        status: available
-      properties:
-        id:
-          example: 10
-          format: int64
-          type: integer
-        name:
-          example: doggie
-          type: string
-        category:
-          $ref: '#/components/schemas/Category'
-        photoUrls:
-          items:
-            type: string
-            xml:
-              name: photoUrl
-          type: array
-          xml:
-            wrapped: true
-        tags:
-          items:
-            $ref: '#/components/schemas/Tag'
-          type: array
-          xml:
-            wrapped: true
-        status:
-          description: pet status in the store
+      - "pet"
+      summary: "Finds Pets by status"
+      description: "Multiple status values can be provided with comma separated strings"
+      operationId: "findPetsByStatus"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "status"
+        in: "query"
+        description: "Status values that need to be considered for filter"
+        required: true
+        type: "array"
+        items:
+          type: "string"
           enum:
-          - available
-          - pending
-          - sold
-          type: string
-      required:
-      - name
-      - photoUrls
-      type: object
-      xml:
-        name: pet
-    StringEnumRef:
-      enum:
-      - success
-      - failure
-      - unclassified
-      type: string
-    DefaultValue:
-      description: to test the default value of properties
-      properties:
-        array_string_enum_ref_default:
-          default:
-          - success
-          - failure
+          - "available"
+          - "pending"
+          - "sold"
+          default: "available"
+        collectionFormat: "csv"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Pet"
+        400:
+          description: "Invalid status value"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /pet/findByTags:
+    get:
+      tags:
+      - "pet"
+      summary: "Finds Pets by tags"
+      description: "Multiple tags can be provided with comma separated strings. Use\
+        \ tag1, tag2, tag3 for testing."
+      operationId: "findPetsByTags"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "Tags to filter by"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "csv"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Pet"
+        400:
+          description: "Invalid tag value"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /pet/{petId}:
+    get:
+      tags:
+      - "pet"
+      summary: "Find pet by ID"
+      description: "Returns a single pet"
+      operationId: "getPetById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "petId"
+        in: "path"
+        description: "ID of pet to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Pet"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Pet not found"
+      security:
+      - api_key: []
+    post:
+      tags:
+      - "pet"
+      summary: "Updates a pet in the store with form data"
+      description: ""
+      operationId: "updatePetWithForm"
+      consumes:
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "petId"
+        in: "path"
+        description: "ID of pet that needs to be updated"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "name"
+        in: "formData"
+        description: "Updated name of the pet"
+        required: false
+        type: "string"
+      - name: "status"
+        in: "formData"
+        description: "Updated status of the pet"
+        required: false
+        type: "string"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    delete:
+      tags:
+      - "pet"
+      summary: "Deletes a pet"
+      description: ""
+      operationId: "deletePet"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "api_key"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "petId"
+        in: "path"
+        description: "Pet id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid pet value"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /pet/{petId}/uploadImage:
+    post:
+      tags:
+      - "pet"
+      summary: "uploads an image"
+      description: ""
+      operationId: "uploadFile"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "petId"
+        in: "path"
+        description: "ID of pet to update"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "additionalMetadata"
+        in: "formData"
+        description: "Additional data to pass to server"
+        required: false
+        type: "string"
+      - name: "file"
+        in: "formData"
+        description: "file to upload"
+        required: false
+        type: "file"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /store/inventory:
+    get:
+      tags:
+      - "store"
+      summary: "Returns pet inventories by status"
+      description: "Returns a map of status codes to quantities"
+      operationId: "getInventory"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            additionalProperties:
+              type: "integer"
+              format: "int32"
+      security:
+      - api_key: []
+  /store/order:
+    post:
+      tags:
+      - "store"
+      summary: "Place an order for a pet"
+      description: ""
+      operationId: "placeOrder"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "order placed for purchasing the pet"
+        required: true
+        schema:
+          $ref: "#/definitions/Order"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Order"
+        400:
+          description: "Invalid Order"
+  /store/order/{orderId}:
+    get:
+      tags:
+      - "store"
+      summary: "Find purchase order by ID"
+      description: "For valid response try integer IDs with value <= 5 or > 10. Other\
+        \ values will generate exceptions"
+      operationId: "getOrderById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "orderId"
+        in: "path"
+        description: "ID of pet that needs to be fetched"
+        required: true
+        type: "integer"
+        maximum: 5.0
+        minimum: 1.0
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Order"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Order not found"
+    delete:
+      tags:
+      - "store"
+      summary: "Delete purchase order by ID"
+      description: "For valid response try integer IDs with value < 1000. Anything\
+        \ above 1000 or nonintegers will generate API errors"
+      operationId: "deleteOrder"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "orderId"
+        in: "path"
+        description: "ID of the order that needs to be deleted"
+        required: true
+        type: "string"
+        minimum: 1.0
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Order not found"
+  /user:
+    post:
+      tags:
+      - "user"
+      summary: "Create user"
+      description: "This can only be done by the logged in user."
+      operationId: "createUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+  /user/createWithArray:
+    post:
+      tags:
+      - "user"
+      summary: "Creates list of users with given input array"
+      description: ""
+      operationId: "createUsersWithArrayInput"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "List of user object"
+        required: true
+        schema:
+          type: "array"
           items:
-            $ref: '#/components/schemas/StringEnumRef'
-          type: array
-        array_string_enum_default:
-          default:
-          - success
-          - failure
+            $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+  /user/createWithList:
+    post:
+      tags:
+      - "user"
+      summary: "Creates list of users with given input array"
+      description: ""
+      operationId: "createUsersWithListInput"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "List of user object"
+        required: true
+        schema:
+          type: "array"
           items:
-            enum:
-            - success
-            - failure
-            - unclassified
-            type: string
-          type: array
-        array_string_default:
-          default:
-          - failure
-          - skipped
-          items:
-            type: string
-          type: array
-        array_integer_default:
-          default:
-          - 1
-          - 3
-          items:
-            type: integer
-          type: array
-        array_string:
-          items:
-            type: string
-          type: array
-        array_string_nullable:
-          items:
-            type: string
-          nullable: true
-          type: array
-        array_string_extension_nullable:
-          items:
-            type: string
-          type: array
-          x-nullable: true
-        string_nullable:
-          nullable: true
-          type: string
-      type: object
-    Bird:
-      properties:
-        size:
-          type: string
-        color:
-          type: string
-      type: object
-    Query:
-      properties:
-        id:
-          description: Query
-          format: int64
-          type: integer
-        outcomes:
-          default:
-          - SUCCESS
-          - FAILURE
-          items:
-            enum:
-            - SUCCESS
-            - FAILURE
-            - SKIPPED
-            type: string
-          type: array
-      type: object
-      x-parent: true
-    DataQuery:
-      allOf:
-      - properties:
-          suffix:
-            description: test suffix
-            type: string
-          text:
-            description: Some text containing white spaces
-            example: Some text
-            type: string
-          date:
-            description: A date
-            format: date-time
-            type: string
-        type: object
-      - $ref: '#/components/schemas/Query'
-    NumberPropertiesOnly:
-      properties:
-        number:
-          type: number
-        float:
-          format: float
-          type: number
-        double:
-          format: double
-          maximum: 50.2
-          minimum: 0.8
-          type: number
-      type: object
-    test_form_integer_boolean_string_request:
-      properties:
-        integer_form:
-          type: integer
-        boolean_form:
-          type: boolean
-        string_form:
-          type: string
-      type: object
-    test_form_oneof_request_oneOf:
-      properties:
-        form1:
-          type: string
-        form2:
-          type: integer
-      type: object
-    test_form_oneof_request_oneOf_1:
-      properties:
-        form3:
-          type: string
-        form4:
-          type: boolean
-      type: object
-    test_form_oneof_request:
-      oneOf:
-      - $ref: '#/components/schemas/test_form_oneof_request_oneOf'
-      - $ref: '#/components/schemas/test_form_oneof_request_oneOf_1'
-      - $ref: '#/components/schemas/Tag'
-      type: object
-    test_query_style_form_explode_true_array_string_query_object_parameter:
-      properties:
-        values:
-          items:
-            type: string
-          type: array
-      type: object
-    test_query_style_deepObject_explode_true_object_allOf_query_object_parameter:
-      allOf:
-      - $ref: '#/components/schemas/Bird'
-      - $ref: '#/components/schemas/Category'
-    test_body_multipart_formdata_single_binary_request:
-      properties:
-        my-file:
-          format: binary
-          type: string
-      type: object
-    test_body_multipart_formdata_array_of_binary_request:
-      properties:
-        files:
-          items:
-            format: binary
-            type: string
-          type: array
-      required:
-      - files
-      type: object
-  securitySchemes:
-    http_auth:
-      scheme: basic
-      type: http
-    http_bearer_auth:
-      scheme: bearer
-      type: http
-
+            $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+  /user/login:
+    get:
+      tags:
+      - "user"
+      summary: "Logs user into the system"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "query"
+        description: "The user name for login"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "The password for login in clear text"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the user"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+        400:
+          description: "Invalid username/password supplied"
+  /user/logout:
+    get:
+      tags:
+      - "user"
+      summary: "Logs out current logged in user session"
+      description: ""
+      operationId: "logoutUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters: []
+      responses:
+        default:
+          description: "successful operation"
+  /user/{username}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by user name"
+      description: ""
+      operationId: "getUserByName"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "The name that needs to be fetched. Use user1 for testing. "
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "User not found"
+    put:
+      tags:
+      - "user"
+      summary: "Updated user"
+      description: "This can only be done by the logged in user."
+      operationId: "updateUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "name that need to be deleted"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        400:
+          description: "Invalid user supplied"
+        404:
+          description: "User not found"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "The name that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "User not found"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/api/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Order:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      petId:
+        type: "integer"
+        format: "int64"
+      quantity:
+        type: "integer"
+        format: "int32"
+      shipDate:
+        type: "string"
+        format: "date-time"
+      status:
+        type: "string"
+        description: "Order Status"
+        enum:
+        - "placed"
+        - "approved"
+        - "delivered"
+      complete:
+        type: "boolean"
+        default: false
+    xml:
+      name: "Order"
+  Category:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+    xml:
+      name: "Category"
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+      phone:
+        type: "string"
+      userStatus:
+        type: "integer"
+        format: "int32"
+        description: "User Status"
+    xml:
+      name: "User"
+  Tag:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+    xml:
+      name: "Tag"
+  Pet:
+    type: "object"
+    required:
+    - "name"
+    - "photoUrls"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      category:
+        $ref: "#/definitions/Category"
+      name:
+        type: "string"
+        example: "doggie"
+      photoUrls:
+        type: "array"
+        xml:
+          name: "photoUrl"
+          wrapped: true
+        items:
+          type: "string"
+      tags:
+        type: "array"
+        xml:
+          name: "tag"
+          wrapped: true
+        items:
+          $ref: "#/definitions/Tag"
+      status:
+        type: "string"
+        description: "pet status in the store"
+        enum:
+        - "available"
+        - "pending"
+        - "sold"
+    xml:
+      name: "Pet"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "https://swagger.io"

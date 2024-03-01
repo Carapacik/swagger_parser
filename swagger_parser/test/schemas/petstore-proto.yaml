@@ -8,6 +8,10 @@ info:
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
 host: petstore.swagger.io
 basePath: /v2
+consumes:
+  - application/octet-stream
+produces:
+  - application/octet-stream
 tags:
   - name: pet
     description: Everything about your Pets

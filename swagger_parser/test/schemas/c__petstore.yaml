@@ -550,6 +550,28 @@ paths:
           description: Invalid username supplied
         '404':
           description: User not found
+  '/user/testIntAndBool':
+    get:
+      tags:
+        - user
+      summary: test integer and boolean query parameters in API
+      description: This can test integer and boolean query parameters in API.
+      operationId: testIntAndBool
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: keep
+          in: query
+          description: Whether to keep user data after deletion
+          type: boolean
+        - name: keepDay
+          in: query
+          description: how many days user data is kept after deletion
+          type: integer
+      responses:
+        '200':
+          description: successful operation
 securityDefinitions:
   petstore_auth:
     type: oauth2
@@ -693,3 +715,28 @@ definitions:
         type: string
       message:
         type: string
+  another_model:
+    description: to test mapping features
+    type: object
+    properties:
+      another_property:
+        type: integer
+        format: int32
+      uuid_property:
+        type: string
+        format: uuid
+        default: 1111-2222-3333-4444
+  model_with_set_propertes:
+    description: to test set properties
+    type: object
+    properties:
+      tag_set:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/Tag'
+      string_set:
+        type: array
+        uniqueItems: true
+        items:
+          type: string

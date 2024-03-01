@@ -306,7 +306,7 @@ paths:
         - in: body
           name: body
           description: order placed for purchasing the pet
-          required: true
+          required: false
           schema:
             $ref: '#/definitions/Order'
       responses:

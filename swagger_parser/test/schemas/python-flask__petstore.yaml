@@ -693,3 +693,11 @@ definitions:
         type: string
       message:
         type: string
+  EnumModel:
+    enum:
+      - available>
+      - pending<
+      - sold
+      - 1
+      - 2
+    type: string
