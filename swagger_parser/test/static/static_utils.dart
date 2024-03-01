@@ -5,7 +5,6 @@ import 'package:path/path.dart' as p;
 // to run swagger_parser and the generated clients
 Future<void> setupBaseProject({
   required String projectPath,
-  required String swaggerParserPath,
 }) async {
   // Create the test project
   final createProjectResult =
@@ -13,21 +12,6 @@ Future<void> setupBaseProject({
   assert(
     createProjectResult.exitCode == 0,
     'Failed to create project ${createProjectResult.stderr}',
-  );
-
-  // Add swagger_parser to the pubspec.yaml
-  final addSwaggerParseResult = await Process.run(
-    'dart',
-    [
-      'pub',
-      'add',
-      "swagger_parser:{'path':'$swaggerParserPath'}",
-    ],
-    workingDirectory: projectPath,
-  );
-  assert(
-    addSwaggerParseResult.exitCode == 0,
-    'Failed to add swagger_parser dependency ${addSwaggerParseResult.stderr}',
   );
 
   // Add all dependencies to the pubspec.yaml

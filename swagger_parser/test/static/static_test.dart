@@ -35,7 +35,6 @@ void main() {
     }
     await setupBaseProject(
       projectPath: testProjectDir.path,
-      swaggerParserPath: p.current,
     );
   });
 
