@@ -1,11 +1,9 @@
 ## 1.16.3
 
-- Temporary fix for ([#110](https://github.com/Carapacik/swagger_parser/issues/110)
-- Ignore parameters start with `x-`
-  for ([#185](https://github.com/Carapacik/swagger_parser/issues/185))
+- Temporary fix for ([#110](https://github.com/Carapacik/swagger_parser/issues/110))
+- Ignore parameters start with `x-` for ([#185](https://github.com/Carapacik/swagger_parser/issues/185))
 - Fixed parameter type ([#186](https://github.com/Carapacik/swagger_parser/issues/186)
-- Fixed handle `$ref` ([#187](https://github.com/Carapacik/swagger_parser/issues/187))
-  and ([#183](https://github.com/Carapacik/swagger_parser/issues/183))
+- Fixed handle `$ref` ([#187](https://github.com/Carapacik/swagger_parser/issues/187)) and ([#183](https://github.com/Carapacik/swagger_parser/issues/183))
 
 ## 1.16.2
 
@@ -18,11 +16,8 @@
 
 ## 1.16.0
 
-- Wrapping collections variable introduced replacing arrayDepth and mapType: this variable presents
-  a list of all collections wrapping a type and will resolve them in order of appearance
-  ([#128](https://github.com/Carapacik/swagger_parser/issues/128))
-- Fixed error
-  with `required_by_default` ([#168](https://github.com/Carapacik/swagger_parser/issues/168))
+- Wrapping collections variable introduced replacing arrayDepth and mapType: this variable presents a list of all collections wrapping a type and will resolve them in order of appearance ([#128](https://github.com/Carapacik/swagger_parser/issues/128))
+- Fixed error with `required_by_default` ([#168](https://github.com/Carapacik/swagger_parser/issues/168))
 - Refactor config and rename parameters:
     - `squash_clients` to `merge_clients`
     - `enums_prefix` to `enums_parent_prefix`
@@ -31,8 +26,7 @@
 
 ## 1.15.5
 
-- Support schema url without
-  extension ([#160](https://github.com/Carapacik/swagger_parser/issues/160))
+- Support schema url without extension ([#160](https://github.com/Carapacik/swagger_parser/issues/160))
 
 ## 1.15.4
 
@@ -40,18 +34,15 @@
 
 ## 1.15.3
 
-- Fixed errors with `Object` body in retrofit
-  client ([#110](https://github.com/Carapacik/swagger_parser/issues/110))
+- Fixed errors with `Object` body in retrofit client ([#110](https://github.com/Carapacik/swagger_parser/issues/110))
 
 ## 1.15.2
 
-- Fixed errors with enum
-  names ([#163](https://github.com/Carapacik/swagger_parser/issues/163)), ([#164](https://github.com/Carapacik/swagger_parser/issues/164))
+- Fixed errors with enum names ([#163](https://github.com/Carapacik/swagger_parser/issues/163)), ([#164](https://github.com/Carapacik/swagger_parser/issues/164))
 
 ## 1.15.1
 
-- Support for generation multipart request with
-  ref ([#154](https://github.com/Carapacik/swagger_parser/issues/154))
+- Support for generation multipart request with ref ([#154](https://github.com/Carapacik/swagger_parser/issues/154))
 
 ## 1.15.0
 
@@ -76,15 +67,13 @@
 
 ## 1.13.1
 
-- Fixed error with path-level parameters cause
-  crash ([#147](https://github.com/Carapacik/swagger_parser/issues/147))
+- Fixed error with path-level parameters cause crash ([#147](https://github.com/Carapacik/swagger_parser/issues/147))
 - Fixed `dart:io` import in template
 
 ## 1.13.0
 
 - Added support for [dart_mappable](https://pub.dev/packages/dart_mappable)
-- Changed `freezed` schema property to `json_serializer`, which can be set
-  to `freezed`, `dart_mappable` or `json_serializable` (default).
+- Changed `freezed` schema property to `json_serializer`, which can be set to `freezed`, `dart_mappable` or `json_serializable` (default).
 - Fixed enum generation name that are defined inside an array
 
 ## 1.12.2
@@ -93,8 +82,7 @@
 
 ## 1.12.1
 
-- Fixed error with `ref` in a case other than
-  PascalCase ([#139](https://github.com/Carapacik/swagger_parser/issues/139))
+- Fixed error with `ref` in a case other than PascalCase ([#139](https://github.com/Carapacik/swagger_parser/issues/139))
 
 ## 1.12.0
 
@@ -102,8 +90,7 @@
 
 ## 1.11.3
 
-- Fixed error with annotating client methods with the first specified content type header in OpenAPI
-  V2 schemes if the specified one is not the default.
+- Fixed error with annotating client methods with the first specified content type header in OpenAPI V2 schemes if the specified one is not the default.
 
 ## 1.11.2
 
@@ -116,33 +103,26 @@
 
 ## 1.11.0
 
-- Added unknown value to all enums to maintain backwards compatibility when adding new values on the
-  backend
-- Add new config parameter `unknown_enum_value` (dart
-  only) ([#106](https://github.com/Carapacik/swagger_parser/issues/106))
+- Added unknown value to all enums to maintain backwards compatibility when adding new values on the backend
+- Add new config parameter `unknown_enum_value` (dart only) ([#106](https://github.com/Carapacik/swagger_parser/issues/106))
 - Add new config parameter `default_content_type`
-- Support String values with spaces for
-  enums ([#127](https://github.com/Carapacik/swagger_parser/issues/127))
+- Support String values with spaces for enums ([#127](https://github.com/Carapacik/swagger_parser/issues/127))
 
 ## 1.10.6
 
-- Fixed map objects parsing as separate
-  entities ([#124](https://github.com/Carapacik/swagger_parser/issues/124))
+- Fixed map objects parsing as separate entities ([#124](https://github.com/Carapacik/swagger_parser/issues/124))
 
 ## 1.10.5
 
-- Fixed error with parsing dictionary
-  objects ([#113](https://github.com/Carapacik/swagger_parser/issues/113))
+- Fixed error with parsing dictionary objects ([#113](https://github.com/Carapacik/swagger_parser/issues/113))
 
 ## 1.10.4
 
-- Fixed error
-  with `additionalProperties` ([#114](https://github.com/Carapacik/swagger_parser/issues/114))
+- Fixed error with `additionalProperties` ([#114](https://github.com/Carapacik/swagger_parser/issues/114))
 
 ## 1.10.3
 
-- Add new config parameter `original_http_response` (dart
-  only) ([#115](https://github.com/Carapacik/swagger_parser/issues/115))
+- Add new config parameter `original_http_response` (dart only) ([#115](https://github.com/Carapacik/swagger_parser/issues/115))
 
 ## 1.10.2
 
@@ -150,21 +130,18 @@
 
 ## 1.10.1
 
-- Fix error with query parameter
-  named `body` ([#108](https://github.com/Carapacik/swagger_parser/issues/108))
+- Fix error with query parameter named `body` ([#108](https://github.com/Carapacik/swagger_parser/issues/108))
 
 ## 1.10.0
 
-- Support for generating schemes by url (
-  see [example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml))
+- Support for generating schemes by url (see [example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml))
 - Add new config parameter `schema_url`
 - Add new config parameter `schema_from_url_to_file`
 - Add new config parameter `prefer_schema_source`
 
 ## 1.9.2
 
-- Fix error with `required` in
-  clients ([#101](https://github.com/Carapacik/swagger_parser/issues/103))
+- Fix error with `required` in clients ([#101](https://github.com/Carapacik/swagger_parser/issues/103))
 
 ## 1.9.1
 
@@ -176,15 +153,12 @@
 
 - Added display of generation statistics for each scheme and total
 - The command to start generation has been changed to `dart run swagger_parser`
-- Fix error with `required` params in unnamed
-  classes ([#98](https://github.com/Carapacik/swagger_parser/issues/98))
-- Fix error with missing File
-  import ([#101](https://github.com/Carapacik/swagger_parser/issues/101))
+- Fix error with `required` params in unnamed classes ([#98](https://github.com/Carapacik/swagger_parser/issues/98))
+- Fix error with missing `File` import ([#101](https://github.com/Carapacik/swagger_parser/issues/101))
 
 ## 1.8.0
 
-- Multiple schemes support (
-  see [example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml))
+- Multiple schemes support (see [example](https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser/example/swagger_parser.yaml))
 - Support for specifying nullable types via anyOf
 - Edit root client template
 - Add new config parameter `root_client_name`
@@ -202,8 +176,7 @@
 
 ## 1.6.3
 
-- Fix error with `allOf` results in the schema with
-  type `object` ([#91](https://github.com/Carapacik/swagger_parser/issues/91))
+- Fix error with `allOf` results in the schema with type `object` ([#91](https://github.com/Carapacik/swagger_parser/issues/91))
 
 ## 1.6.2
 
@@ -223,18 +196,15 @@
 
 ## 1.5.3
 
-- Fix error with imports in dto
-  component ([#86](https://github.com/Carapacik/swagger_parser/issues/86))
+- Fix error with imports in dto component ([#86](https://github.com/Carapacik/swagger_parser/issues/86))
 
 ## 1.5.2
 
-- Fix grouping words for acronyms and
-  abbreviations ([#85](https://github.com/Carapacik/swagger_parser/issues/85))
+- Fix grouping words for acronyms and abbreviations ([#85](https://github.com/Carapacik/swagger_parser/issues/85))
 
 ## 1.5.1
 
-- Fixed method name generation in a language other than
-  English ([#83](https://github.com/Carapacik/swagger_parser/issues/83))
+- Fixed method name generation in a language other than English ([#83](https://github.com/Carapacik/swagger_parser/issues/83))
 
 ## 1.5.0
 
@@ -242,10 +212,8 @@
 
 ## 1.4.0
 
-- By default value nullable and not required for process default
-  values ([#76](https://github.com/Carapacik/swagger_parser/issues/76))
-- Add support for common parameters for various
-  paths ([#78](https://github.com/Carapacik/swagger_parser/issues/78))
+- By default value nullable and not required for process default values ([#76](https://github.com/Carapacik/swagger_parser/issues/76))
+- Add support for common parameters for various paths ([#78](https://github.com/Carapacik/swagger_parser/issues/78))
 
 ## 1.3.5
 
@@ -257,8 +225,7 @@
 
 ## 1.3.3
 
-- Fix error with unnamed classes uniques
-  names ([#74](https://github.com/Carapacik/swagger_parser/issues/74))
+- Fix error with unnamed classes uniques names ([#74](https://github.com/Carapacik/swagger_parser/issues/74))
 
 ## 1.3.2
 
@@ -270,9 +237,7 @@
 
 ## 1.3.0
 
-- Add possibility to add enum prefix from parent
-  component ([#29](https://github.com/Carapacik/swagger_parser/issues/29)). Change `enums_prefix` to
-  true to enable this option
+- Add possibility to add enum prefix from parent component ([#29](https://github.com/Carapacik/swagger_parser/issues/29)). Change `enums_prefix` to true to enable this option
 
 ## 1.2.4
 
@@ -284,27 +249,20 @@
 
 ## 1.2.2
 
-- Fixed error with parse nullable item in
-  array ([#68](https://github.com/Carapacik/swagger_parser/issues/68))
+- Fixed error with parse nullable item in array ([#68](https://github.com/Carapacik/swagger_parser/issues/68))
 
 ## 1.2.1
 
-- Updated `retrofit_generator` dependency
-  to [7.0.8](https://github.com/trevorwang/retrofit.dart/releases/tag/7.0.8) and added config option
-  to generate `.toJson()` methods in enums (`retrofit_generator` will use `.toJson()` instead
-  of `.name` in this case)
+- Updated `retrofit_generator` dependency to [7.0.8](https://github.com/trevorwang/retrofit.dart/releases/tag/7.0.8) and added config option to generate `.toJson()` methods in enums (`retrofit_generator` will use `.toJson()` instead of `.name` in this case)
 
 ## 1.2.0
 
-- Updated `retrofit_generator` dependency
-  to [7.0.7](https://github.com/trevorwang/retrofit.dart/releases/tag/7.0.7) and consequently
-  removed unused `.toJson()` generated methods in enums
+- Updated `retrofit_generator` dependency to [7.0.7](https://github.com/trevorwang/retrofit.dart/releases/tag/7.0.7) and consequently removed unused `.toJson()` generated methods in enums
 
 ## 1.1.0
 
 - Add regex replacement for generated class names
-- Fixed error with null raw parameter in OpenApi
-  v2 ([#63](https://github.com/Carapacik/swagger_parser/issues/63))
+- Fixed error with null raw parameter in OpenApi v2 ([#63](https://github.com/Carapacik/swagger_parser/issues/63))
 
 ## 1.0.7
 
@@ -312,19 +270,16 @@
 
 ## 1.0.6
 
-- Fixed generation default enum
-  values ([#58](https://github.com/Carapacik/swagger_parser/issues/58))
+- Fixed generation default enum values ([#58](https://github.com/Carapacik/swagger_parser/issues/58))
 - Add new keywords to check the name of variables
 
 ## 1.0.5
 
-- Fixed generation default enum values in
-  client ([#56](https://github.com/Carapacik/swagger_parser/issues/56))
+- Fixed generation default enum values in client ([#56](https://github.com/Carapacik/swagger_parser/issues/56))
 
 ## 1.0.4
 
-- Fixed parsing ` Body ` in OpenApi
-  v2 ([#53](https://github.com/Carapacik/swagger_parser/issues/53))
+- Fixed parsing ` Body ` in OpenApi v2 ([#53](https://github.com/Carapacik/swagger_parser/issues/53))
 - Add multiline comments ([#54](https://github.com/Carapacik/swagger_parser/issues/54))
 - Fixed items name in enum generation ([#55](https://github.com/Carapacik/swagger_parser/issues/55))
 
@@ -334,13 +289,11 @@
 
 ## 1.0.2
 
-- Fixed error
-  with ` application/x-www-form-urlencoded ` ([#45](https://github.com/Carapacik/swagger_parser/issues/45))
+- Fixed error with ` application/x-www-form-urlencoded ` ([#45](https://github.com/Carapacik/swagger_parser/issues/45))
 
 ## 1.0.1
 
-- Fixed error with ` nullable ` in
-  array ([#43](https://github.com/Carapacik/swagger_parser/issues/43))
+- Fixed error with ` nullable ` in array ([#43](https://github.com/Carapacik/swagger_parser/issues/43))
 
 ## 1.0.0+1
 
@@ -365,8 +318,7 @@
 
 ## 0.10.1
 
-- Fixed error with ` servers ` in
-  requests ([#32](https://github.com/Carapacik/swagger_parser/issues/32))
+- Fixed error with ` servers ` in requests ([#32](https://github.com/Carapacik/swagger_parser/issues/32))
 - Use ` operationId ` for method name(if such a field exists)
 
 ## 0.10.0
@@ -386,8 +338,7 @@
 
 ## 0.8.1
 
-- Added DateTime to the format for processing
-  types ([#16](https://github.com/Carapacik/swagger_parser/issues/16))
+- Added DateTime to the format for processing types ([#16](https://github.com/Carapacik/swagger_parser/issues/16))
 
 ## 0.8.0
 
