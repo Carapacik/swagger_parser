@@ -6,7 +6,6 @@ import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 import '../../utils/case_utils.dart';
-import '../../utils/output/io_output.dart';
 import '../../utils/type_utils.dart';
 import '../config/parser_config.dart';
 import '../exception/open_api_parser_exception.dart';
@@ -245,11 +244,14 @@ class OpenApiParser {
           if (typeWithImport.import != null) {
             imports.add(typeWithImport.import!);
           }
-          final parameterType = HttpParameterType.values.firstWhere(
+          final parameterType = HttpParameterType.values.firstWhereOrNull(
             (e) => e.name == (parameter[_inConst].toString()),
           );
-          if (parameterType == HttpParameterType.cookie) {
-            cookieWarnMessage();
+          if (parameterType == null) {
+            // ignore: avoid_print
+            print(
+              'Warning:\nparameterType ${parameter[_inConst]} not supported',
+            );
           } else {
             types.add(
               UniversalRequestType(
@@ -507,11 +509,16 @@ class OpenApiParser {
         if (typeWithImport.import != null) {
           imports.add(typeWithImport.import!);
         }
-        final parameterType = HttpParameterType.values.firstWhere(
-          (e) => e.name == (parameter[_inConst].toString()),
+        final parameterType = HttpParameterType.values.firstWhereOrNull(
+          (e) =>
+              e.name ==
+              ((parameter as Map<String, dynamic>)[_inConst].toString()),
         );
-        if (parameterType == HttpParameterType.cookie) {
-          cookieWarnMessage();
+        if (parameterType == null) {
+          // ignore: avoid_print
+          print(
+            'Warning:\nparameterType ${parameter[_inConst]} not supported',
+          );
         } else {
           types.add(
             UniversalRequestType(
