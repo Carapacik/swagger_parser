@@ -1,11 +1,16 @@
 ## 1.16.3
 
-- Temporary fix for ([#110](https://github.com/Carapacik/swagger_parser/issues/110))
+- Temporary fix for ([#110](https://github.com/Carapacik/swagger_parser/issues/110)
+- Ignore parameters start with `x-`
+  for ([#185](https://github.com/Carapacik/swagger_parser/issues/185))
+- Fixed parameter type ([#186](https://github.com/Carapacik/swagger_parser/issues/186)
+- Fixed handle `$ref` ([#187](https://github.com/Carapacik/swagger_parser/issues/187))
+  and ([#183](https://github.com/Carapacik/swagger_parser/issues/183))
 
 ## 1.16.2
 
 - Add new exceptions to export
-- Fixed file name from schemeUrl
+- Fixed file name from `schemeUrl`
 
 ## 1.16.1
 
