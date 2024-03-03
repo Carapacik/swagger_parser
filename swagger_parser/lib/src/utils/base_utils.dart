@@ -1,6 +1,6 @@
 import '../generator/model/programming_language.dart';
 import '../parser/swagger_parser_core.dart';
-import '../utils/case_utils.dart';
+import '../parser/utils/case_utils.dart';
 import 'type_utils.dart';
 
 /// Provides imports as String from list of imports

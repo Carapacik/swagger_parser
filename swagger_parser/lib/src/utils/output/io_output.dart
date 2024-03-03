@@ -2,7 +2,7 @@ import 'dart:io';
 
 import '../../generator/model/generation_statistic.dart';
 import '../../parser/swagger_parser_core.dart';
-import '../utils.dart';
+import '../base_utils.dart';
 
 const _green = '\x1B[32m';
 const _red = '\x1B[31m';
@@ -22,11 +22,6 @@ void introMessage() {
 
 void generateMessage() {
   stdout.writeln('Generate...');
-}
-
-void cookieWarnMessage() {
-  stdout.writeln(
-      '${_red}Warning: Cookie parameters are not supported by this generator, they will be ignored$_reset');
 }
 
 void successMessage({

@@ -1,5 +1,5 @@
 import '../../parser/swagger_parser_core.dart';
-import '../../utils/case_utils.dart';
+import '../../parser/utils/case_utils.dart';
 import '../config/generator_config.dart';
 import '../model/generated_file.dart';
 import '../model/programming_language.dart';

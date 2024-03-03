@@ -30,7 +30,7 @@ abstract class ClientClient {
   @GET('/test-multipart')
   Future<void> testMultipart({
     @Part(name: 'files') required List<File> files,
-    @Part(name: 'address') Object0? address,
-    @Part(name: 'image') File? image,
+    @Part(name: 'address') required Object0 address,
+    @Part(name: 'image') required File? image,
   });
 }
