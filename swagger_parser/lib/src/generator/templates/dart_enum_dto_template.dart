@@ -112,7 +112,7 @@ String _enumValueDartMappable(
 }) {
   final protectedJsonKey = protectJsonKey(item.jsonKey);
   return '''
-${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}${indentation(2)}@MappableValue(${type == 'string' ? "'${protectedJsonKey}'" : protectedJsonKey}) 
+${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}${indentation(2)}@MappableValue(${type == 'string' ? "'$protectedJsonKey'" : protectedJsonKey}) 
 ${indentation(2)}${item.name.toCamel}''';
 }
 
