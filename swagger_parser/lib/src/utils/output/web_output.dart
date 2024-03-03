@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 import '../../generator/model/generation_statistic.dart';
 import '../../parser/swagger_parser_core.dart';
-import '../utils.dart';
+import '../base_utils.dart';
 
 void introMessage() {
   print(

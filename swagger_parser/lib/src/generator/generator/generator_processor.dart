@@ -1,7 +1,6 @@
 import '../../config/config_processor.dart';
 import '../../config/swp_config.dart';
 import '../../parser/swagger_parser_core.dart';
-import '../../utils/type_utils.dart';
 import '../model/generated_file.dart';
 import '../model/generation_statistic.dart';
 import 'generator.dart';

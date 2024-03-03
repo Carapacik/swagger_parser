@@ -14,3 +14,4 @@ export 'model/universal_request_type.dart';
 export 'model/universal_rest_client.dart';
 export 'model/universal_type.dart';
 export 'parser/open_api_parser.dart';
+export 'utils/type_utils.dart';
