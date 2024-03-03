@@ -1052,9 +1052,11 @@ class OpenApiParser {
             }
           }
         }
+        ofType = ofType?.copyWith(name: name?.toPascal);
       }
 
       final type = ofType?.type ?? _objectConst;
+
       final import = ofImport;
       final defaultValue = map[_defaultConst]?.toString();
 
@@ -1117,6 +1119,7 @@ class OpenApiParser {
           import = replacementRule.apply(import);
           type = replacementRule.apply(type)!;
         }
+        type = type.toPascal;
       }
 
       final defaultValue = map[_defaultConst]?.toString();

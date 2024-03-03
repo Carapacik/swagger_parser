@@ -95,10 +95,16 @@ String _toParameter(UniversalRequestType parameter) {
       (parameterType == 'Object' || parameterType == 'Object?')) {
     parameterType = 'dynamic';
   }
+
+  // https://github.com/trevorwang/retrofit.dart/issues/661
+  // The Word `value` cant be used a a keyword argument
+  final keywordArguments =
+      parameter.type.name!.toCamel.replaceFirst("value", "value_");
+
   return "    @${parameter.parameterType.type}(${parameter.name != null && !parameter.parameterType.isBody ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
       '${_required(parameter.type)}'
       '$parameterType '
-      '${parameter.type.name!.toCamel}${_defaultValue(parameter.type)},';
+      '$keywordArguments${_defaultValue(parameter.type)},';
 }
 
 String _contentTypeHeader(

@@ -96,20 +96,24 @@ String _enumValue(
   String type,
   UniversalEnumItem item, {
   required bool jsonParam,
-}) =>
-    '''
-${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}  @JsonValue(${type == 'string' ? "'${item.jsonKey}'" : item.jsonKey})
-  ${item.name.toCamel}${jsonParam ? '(${type == 'string' ? "'${item.jsonKey}'" : item.jsonKey})' : ''}''';
+}) {
+  final protectedJsonKey = protectJsonKey(item.jsonKey);
+  return '''
+${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}  @JsonValue(${type == 'string' ? "'$protectedJsonKey'" : protectedJsonKey})
+  ${item.name.toCamel}${jsonParam ? '(${type == 'string' ? "'$protectedJsonKey'" : protectedJsonKey})' : ''}''';
+}
 
 String _enumValueDartMappable(
   int index,
   String type,
   UniversalEnumItem item, {
   required bool jsonParam,
-}) =>
-    '''
-${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}${indentation(2)}@MappableValue(${type == 'string' ? "'${item.jsonKey}'" : item.jsonKey}) 
+}) {
+  final protectedJsonKey = protectJsonKey(item.jsonKey);
+  return '''
+${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}${indentation(2)}@MappableValue(${type == 'string' ? "'$protectedJsonKey'" : protectedJsonKey}) 
 ${indentation(2)}${item.name.toCamel}''';
+}
 
 String _toJson(UniversalEnumClass enumClass, String className) =>
     '\n\n  ${enumClass.type.toDartType()}? toJson() => json;';
