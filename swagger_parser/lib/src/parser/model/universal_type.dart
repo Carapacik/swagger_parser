@@ -17,7 +17,6 @@ final class UniversalType {
     this.defaultValue,
     this.nullable = false,
     this.wrappingCollections = const [],
-    this.arrayValueNullable = false,
     this.enumType,
   });
 
@@ -56,9 +55,6 @@ final class UniversalType {
   final List<UniversalCollections> wrappingCollections;
 
   /// Whether or not this field is nullable
-  final bool arrayValueNullable;
-
-  /// Whether or not this field is nullable
   final bool nullable;
 
   /// Copy of [UniversalType] with new values
@@ -73,7 +69,6 @@ final class UniversalType {
     String? enumType,
     List<UniversalCollections>? wrappingCollections,
     bool? nullable,
-    bool? arrayValueNullable,
   }) {
     return UniversalType(
       type: type ?? this.type,
@@ -86,7 +81,6 @@ final class UniversalType {
       enumType: enumType ?? this.enumType,
       wrappingCollections: wrappingCollections ?? this.wrappingCollections,
       nullable: nullable ?? this.nullable,
-      arrayValueNullable: arrayValueNullable ?? this.arrayValueNullable,
     );
   }
 
@@ -115,8 +109,7 @@ final class UniversalType {
           enumType == other.enumType &&
           const DeepCollectionEquality()
               .equals(wrappingCollections, other.wrappingCollections) &&
-          nullable == other.nullable &&
-          arrayValueNullable == other.arrayValueNullable;
+          nullable == other.nullable;
 
   @override
   int get hashCode =>
@@ -129,8 +122,7 @@ final class UniversalType {
       isRequired.hashCode ^
       enumType.hashCode ^
       wrappingCollections.hashCode ^
-      nullable.hashCode ^
-      arrayValueNullable.hashCode;
+      nullable.hashCode;
 
   @override
   String toString() => 'UniversalType(type: $type, '
@@ -141,6 +133,5 @@ final class UniversalType {
       'isRequired: $isRequired, '
       'enumType: $enumType, '
       'wrappingCollections: $wrappingCollections, '
-      'arrayValueNullable: $arrayValueNullable, '
       'nullable: $nullable)';
 }

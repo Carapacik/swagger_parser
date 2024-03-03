@@ -1,3 +1,7 @@
+## 1.16.4
+
+- Fixed errors with `required_by_default`
+
 ## 1.16.3
 
 - Temporary fix for ([#110](https://github.com/Carapacik/swagger_parser/issues/110))

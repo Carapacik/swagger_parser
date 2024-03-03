@@ -1,7 +1,7 @@
 import '../../parser/swagger_parser_core.dart';
-import '../../utils/case_utils.dart';
+import '../../parser/utils/case_utils.dart';
+import '../../utils/base_utils.dart';
 import '../../utils/type_utils.dart';
-import '../../utils/utils.dart';
 import '../model/programming_language.dart';
 
 /// Provides template for generating kotlin DTO using Moshi
