@@ -1,6 +1,6 @@
 import '../../parser/swagger_parser_core.dart';
-import '../../utils/case_utils.dart';
-import '../../utils/utils.dart';
+import '../../parser/utils/case_utils.dart';
+import '../../utils/base_utils.dart';
 
 String dartRootClientTemplate({
   required OpenApiInfo openApiInfo,

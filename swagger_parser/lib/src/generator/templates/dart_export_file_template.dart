@@ -1,4 +1,4 @@
-import '../../utils/utils.dart';
+import '../../utils/base_utils.dart';
 import '../model/generated_file.dart';
 
 /// Provides template for generating dart export file

@@ -135,7 +135,7 @@ void main() {
               route: '/api/Auth/register',
               returnType: UniversalType(
                 type: 'string',
-                isRequired: false,
+                isRequired: true,
               ),
               parameters: [
                 UniversalRequestType(
@@ -211,7 +211,7 @@ void main() {
                   type: UniversalType(
                     type: 'file',
                     name: 'avatar',
-                    isRequired: false,
+                    isRequired: true,
                   ),
                   parameterType: HttpParameterType.part,
                 ),
