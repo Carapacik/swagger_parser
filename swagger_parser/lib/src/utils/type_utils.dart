@@ -204,10 +204,13 @@ Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names) {
         ),
       _ => (leadingDashToMinus(name), null),
     };
+
+    final protectedJsonKey = protectJsonKey(name);
+
     items.add(
       UniversalEnumItem(
         name: newName,
-        jsonKey: name,
+        jsonKey: protectedJsonKey,
         description: renameDescription,
       ),
     );
@@ -253,4 +256,12 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_][a-zA-Z\d_]*$');
       (_, _) => '$description\n$error',
     },
   );
+}
+
+// Protect json key from incorrect symbols, keywords, etc.
+String protectJsonKey(String? name) {
+  if (name == null) {
+    return '';
+  }
+  return name.replaceAll(r'$', r'\$');
 }
