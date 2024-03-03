@@ -1049,9 +1049,11 @@ class OpenApiParser {
             }
           }
         }
+        ofType = ofType?.copyWith(name: name?.toPascal);
       }
 
       final type = ofType?.type ?? _objectConst;
+
       final import = ofImport;
       final defaultValue = map[_defaultConst]?.toString();
 
@@ -1065,7 +1067,7 @@ class OpenApiParser {
 
       return (
         type: UniversalType(
-          type: type.toPascal,
+          type: type,
           name: newName?.toCamel,
           description: description,
           format: ofType?.format,
@@ -1113,6 +1115,7 @@ class OpenApiParser {
           import = replacementRule.apply(import);
           type = replacementRule.apply(type)!;
         }
+        type = type.toPascal;
       }
 
       final defaultValue = map[_defaultConst]?.toString();
@@ -1123,7 +1126,7 @@ class OpenApiParser {
 
       return (
         type: UniversalType(
-          type: type.toPascal,
+          type: type,
           name: newName?.toCamel,
           description: description,
           format: map[_formatConst]?.toString(),
