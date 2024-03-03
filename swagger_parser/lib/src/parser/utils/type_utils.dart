@@ -213,3 +213,7 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_][a-zA-Z\d_]*$');
     },
   );
 }
+
+String? protectJsonKey(String? name) {
+  return name?.replaceAll(r'$', r'\$');
+}
