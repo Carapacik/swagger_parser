@@ -47,7 +47,7 @@ String _jsonKey(UniversalType t) {
     return '';
   }
   if (t.jsonKey != null && t.name != t.jsonKey) {
-    sb.write("    @JsonKey(name: '${t.jsonKey}')\n");
+    sb.write("    @JsonKey(name: '${protectJsonKey(t.jsonKey)}')\n");
   }
   if (t.defaultValue != null) {
     sb.write('    @Default(${_defaultValue(t)})\n');

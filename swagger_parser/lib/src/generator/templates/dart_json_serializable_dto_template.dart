@@ -51,7 +51,7 @@ String _jsonKey(UniversalType t) {
   if (t.jsonKey == null || t.name == t.jsonKey) {
     return '';
   }
-  return "  @JsonKey(name: '${t.jsonKey}')\n";
+  return "  @JsonKey(name: '${protectJsonKey(t.jsonKey)}')\n";
 }
 
 /// return required if isRequired
