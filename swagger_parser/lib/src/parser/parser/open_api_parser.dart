@@ -1065,7 +1065,7 @@ class OpenApiParser {
 
       return (
         type: UniversalType(
-          type: type,
+          type: type.toPascal,
           name: newName?.toCamel,
           description: description,
           format: ofType?.format,
@@ -1123,7 +1123,7 @@ class OpenApiParser {
 
       return (
         type: UniversalType(
-          type: type,
+          type: type.toPascal,
           name: newName?.toCamel,
           description: description,
           format: map[_formatConst]?.toString(),
