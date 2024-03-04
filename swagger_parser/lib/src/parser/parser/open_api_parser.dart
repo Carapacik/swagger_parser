@@ -375,15 +375,22 @@ class OpenApiParser {
             if (typeWithImport.import != null) {
               imports.add(typeWithImport.import!);
             }
+
+            final (protectedName, renameDescription) = protectName(e.key);
+            final decscription = (currentType.description == null &&
+                    renameDescription == null)
+                ? null
+                : (currentType.description ?? '') + (renameDescription ?? '');
+
             types.add(
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
-                name: e.key,
+                name: protectedName,
                 description: currentType.description,
                 type: UniversalType(
                   type: currentType.type,
-                  name: e.key,
-                  description: currentType.description,
+                  name: protectedName,
+                  description: decscription,
                   format: currentType.format,
                   defaultValue: currentType.defaultValue,
                   isRequired: currentType.isRequired,
