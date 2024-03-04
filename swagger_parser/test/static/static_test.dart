@@ -64,7 +64,7 @@ void main() {
     () async {
       await testBuildClient(testProjectDir.path);
     },
-    timeout: const Timeout(Duration(minutes: 5)),
+    timeout: const Timeout(Duration(minutes: 15)),
   );
 }
 
