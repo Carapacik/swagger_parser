@@ -911,19 +911,6 @@ class OpenApiParser {
       }
     }
 
-    // Append suffix to data classes
-    for (final (index, dataclass) in dataClasses.indexed) {
-      if (dataclass is UniversalComponentClass) {
-        dataClasses[index] = dataclass.copyWith(
-          name: dataclass.name + config.modelSuffix,
-        );
-      } else if (dataclass is UniversalEnumClass) {
-        dataClasses[index] = dataclass.copyWith(
-          name: dataclass.name + config.modelSuffix,
-        );
-      }
-    }
-
     return dataClasses;
   }
 
@@ -1234,18 +1221,22 @@ class OpenApiParser {
       } else {
         type = import ?? _objectConst;
       }
-      if (import != null) {
-        for (final replacementRule in config.replacementRules) {
-          import = replacementRule.apply(import);
-          type = replacementRule.apply(type)!;
-        }
-      }
 
       // Handle PascalCase for type
       import = import?.toPascal;
       componentTypeName = type;
       if (!usingBuiltInType) {
         type = type.toPascal;
+      }
+      // Only apply replacement rules after the componentTypeName has been set
+      if (import != null) {
+        for (final replacementRule in config.replacementRules) {
+          import = replacementRule.apply(import);
+          type = replacementRule.apply(type)!;
+        }
+        // Append the suffix
+        type = type + config.modelSuffix;
+        import = import! + config.modelSuffix;
       }
 
       final defaultValue = map[_defaultConst]?.toString();
