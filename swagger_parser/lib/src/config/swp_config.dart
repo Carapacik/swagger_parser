@@ -32,6 +32,7 @@ class SWPConfig {
     this.mergeClients = false,
     this.enumsParentPrefix = true,
     this.skippedParameters = const <String>[],
+    this.modelSuffix = 'Model',
   });
 
   /// Internal constructor of [SWPConfig]
@@ -58,6 +59,7 @@ class SWPConfig {
     required this.mergeClients,
     required this.enumsParentPrefix,
     required this.skippedParameters,
+    required this.modelSuffix,
   });
 
   /// Creates a [SWPConfig] from [YamlMap].
@@ -121,6 +123,13 @@ class SWPConfig {
     if (pathMethodName is! bool?) {
       throw const ConfigException(
         "Config parameter 'path_method_name' must be bool.",
+      );
+    }
+
+    final modelSuffix = yamlMap['model_suffix'];
+    if (modelSuffix is! String?) {
+      throw const ConfigException(
+        "Config parameter 'model_suffix' must be String.",
       );
     }
 
@@ -292,6 +301,7 @@ class SWPConfig {
       markFilesAsGenerated: markFilesAsGenerated ?? dc.markFilesAsGenerated,
       originalHttpResponse: originalHttpResponse ?? dc.originalHttpResponse,
       replacementRules: replacementRules ?? dc.replacementRules,
+      modelSuffix: dc.modelSuffix,
     );
   }
 
@@ -307,6 +317,10 @@ class SWPConfig {
 
   /// Required. Sets output directory for generated files (Clients and DTOs).
   final String outputDirectory;
+
+  /// Optional. Set suffix for model classes.
+  /// Default value is 'Model'.
+  final String modelSuffix;
 
   /// Optional. Sets the programming language.
   /// Current available languages are: dart, kotlin.
