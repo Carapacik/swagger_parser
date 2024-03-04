@@ -52,4 +52,22 @@ final class UniversalComponentClass extends UniversalDataClass {
       'parameters: $parameters, '
       'allOf: $allOf, '
       'typeDef: $typeDef)';
+
+  UniversalComponentClass copyWith({
+    String? name,
+    Set<String>? imports,
+    List<UniversalType>? parameters,
+    ({List<String> refs, List<UniversalType> properties})? allOf,
+    bool? typeDef,
+    String? description,
+  }) {
+    return UniversalComponentClass(
+      name: name ?? this.name,
+      imports: imports ?? this.imports,
+      parameters: parameters ?? this.parameters,
+      allOf: allOf ?? this.allOf,
+      typeDef: typeDef ?? this.typeDef,
+      description: description ?? this.description,
+    );
+  }
 }
