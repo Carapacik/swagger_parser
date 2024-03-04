@@ -6,6 +6,7 @@ class ParserConfig {
   const ParserConfig(
     this.fileContent, {
     required this.isJson,
+    this.modelSuffix = 'Model',
     this.name,
     this.defaultContentType = 'application/json',
     this.pathMethodName = false,
@@ -56,4 +57,7 @@ class ParserConfig {
   /// Optional. Set regex replacement rules for the names of the generated classes/enums.
   /// All rules are applied in order.
   final List<ReplacementRule> replacementRules;
+
+  /// Required. Set suffix for model classes.
+  final String modelSuffix;
 }

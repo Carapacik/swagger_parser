@@ -424,6 +424,7 @@ class SWPConfig {
     return ParserConfig(
       fileContent,
       isJson: isJson,
+      modelSuffix: modelSuffix,
       name: name,
       defaultContentType: defaultContentType,
       pathMethodName: pathMethodName,

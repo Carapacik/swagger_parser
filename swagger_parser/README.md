@@ -1,4 +1,5 @@
 # Swagger Parser
+
 [![pub version](https://img.shields.io/pub/v/swagger_parser?logo=dart)](https://pub.dev/packages/swagger_parser)
 [![pub likes](https://img.shields.io/pub/likes/swagger_parser?logo=dart)](https://pub.dev/packages/swagger_parser)
 [![dart style](https://img.shields.io/badge/style-carapacik__lints%20-brightgreen?logo=dart)](https://pub.dev/packages/carapacik_lints)
@@ -64,6 +65,10 @@ swagger_parser:
   # Required. Sets output directory for generated files (Clients and DTOs).
   output_directory: lib/api
 
+  # Optional. Set suffix for model classes.
+  # Default value is 'Model'.
+  model_suffix: Model
+
   # Optional. Set API name for folder and export file
   # If not specified, the file name is used.
   name: null
@@ -80,7 +85,7 @@ swagger_parser:
   default_content_type: "application/json"
 
   # Optional (dart only).
-  # It is used if the value does not have the annotations 'required' and 'nullable'. 
+  # It is used if the value does not have the annotations 'required' and 'nullable'.
   # If the value is 'true', then value be 'required', if the value is 'false', then 'nullable'.
   required_by_default: true
 
@@ -110,14 +115,14 @@ swagger_parser:
   # Set 'false' to use operationId
   path_method_name: false
 
-  # Optional (dart only). Set 'true' to include toJson() in enums. 
+  # Optional (dart only). Set 'true' to include toJson() in enums.
   # If set to false, serialization will use .name instead.
   enums_to_json: false
 
   # Optional. Set 'true' to set enum prefix from parent component.
   enums_parent_prefix: true
 
-  # Optional (dart only). Set 'true' to maintain backwards compatibility 
+  # Optional (dart only). Set 'true' to maintain backwards compatibility
   # when adding new values on the backend.
   unknown_enum_value: true
 
@@ -136,7 +141,7 @@ swagger_parser:
 
   # Optional. Skip parameters with names.
   skipped_parameters:
-    - 'X-Some-Token'
+    - "X-Some-Token"
 ```
 
 For multiple schemes:
@@ -147,7 +152,7 @@ swagger_parser:
   output_directory: lib/api
   squash_clients: true
 
-  # Optional. You can pass a list of schemes. 
+  # Optional. You can pass a list of schemes.
   # Each schema inherits the parameters described in swagger_parser,
   # any parameter for any schema can be set manually.
   # Cannot be used at the same time as schema_path.
@@ -177,13 +182,15 @@ swagger_parser:
       language: kotlin
 ```
 
-
 ### Run the generator
+
 To generate code, run the `swagger_parser` program inside directory where your `pubspec.yaml` file is located:
+
 ```shell
 dart run swagger_parser
 ```
-If you name your configuration file something other than `swagger_parser.yaml` or `pubspec.yaml` 
+
+If you name your configuration file something other than `swagger_parser.yaml` or `pubspec.yaml`
 you will need to specify the name of the YAML file as an argument.
 
 ```shell
@@ -191,7 +198,9 @@ dart run swagger_parser -f <path to your config file>
 ```
 
 ### (Only for freezed) Generate files using [build_runner](https://pub.dev/packages/build_runner) for retrofit, json_serializable and freezed
+
 #### For `freezed` with `retrofit` use build.yaml file with this content:
+
 ```yaml
 global_options:
   freezed:
@@ -201,7 +210,9 @@ global_options:
     runs_before:
       - retrofit_generator
 ```
+
 To run the code generation with build_runner, execute the following command:
+
 ```shell
 dart run build_runner build -d
 ```
