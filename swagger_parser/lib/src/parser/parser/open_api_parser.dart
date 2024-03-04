@@ -618,6 +618,29 @@ class OpenApiParser {
           }
         }
 
+        // Handle duplicate named parameters
+        final protectedParameters = <UniversalRequestType>[];
+        final groupedParameters = groupBy(parameters, (e) => e.type.name);
+        for (final entry in groupedParameters.values) {
+          if (entry.length == 1) {
+            protectedParameters.add(entry.first);
+          } else {
+            var counter = 0;
+            for (final parameter in entry) {
+              final protectedParameter = UniversalRequestType(
+                name: parameter.name,
+                type:
+                    // ignore: prefer_single_quotes
+                    parameter.type.copyWith(name: "${parameter.name}$counter"),
+                parameterType: parameter.parameterType,
+                description: parameter.description,
+              );
+              protectedParameters.add(protectedParameter);
+              counter++;
+            }
+          }
+        }
+
         final request = UniversalRequest(
           name: requestName,
           description: description,
@@ -625,7 +648,7 @@ class OpenApiParser {
           route: path,
           contentType: resultContentType,
           returnType: returnType,
-          parameters: parameters,
+          parameters: protectedParameters,
           isDeprecated:
               requestPath[_deprecatedConst].toString().toBool() ?? false,
         );
@@ -819,6 +842,65 @@ class OpenApiParser {
       }
       allOfClass.parameters.addAll(allOfClass.allOf!.properties);
     }
+
+    // Rename parameters / enum members with the same name
+    for (final (index, dataclass) in dataClasses.indexed) {
+      if (dataclass is UniversalComponentClass) {
+        final protectedParameters = <UniversalType>[];
+        final groupedParameters = groupBy(dataclass.parameters, (e) => e.name);
+
+        for (final MapEntry(value: groupParameters)
+            in groupedParameters.entries) {
+          if (groupParameters.length == 1) {
+            protectedParameters.add(groupParameters[0]);
+          } else {
+            var counter = 0;
+            for (final parameter in groupParameters) {
+              protectedParameters
+                  .add(parameter.copyWith(name: '${parameter.name}$counter'));
+              counter++;
+            }
+          }
+        }
+        dataClasses[index] = UniversalComponentClass(
+          name: dataclass.name,
+          imports: dataclass.imports,
+          allOf: dataclass.allOf,
+          description: dataclass.description,
+          typeDef: dataclass.typeDef,
+          parameters: protectedParameters,
+        );
+      } else if (dataclass is UniversalEnumClass) {
+        final protectedItems = <UniversalEnumItem>{};
+        final groupedItems = groupBy(dataclass.items, (e) => e.name);
+        for (final MapEntry(value: groupItems) in groupedItems.entries) {
+          if (groupItems.length == 1) {
+            protectedItems.add(groupItems.first);
+          } else {
+            var counter = 0;
+            for (final item in groupItems) {
+              protectedItems.add(
+                UniversalEnumItem(
+                  jsonKey: item.jsonKey,
+                  name: '${item.name}$counter',
+                  description: item.description,
+                ),
+              );
+              counter++;
+            }
+          }
+        }
+        dataClasses[index] = UniversalEnumClass(
+          originalName: dataclass.originalName,
+          name: dataclass.name,
+          type: dataclass.type,
+          items: protectedItems,
+          defaultValue: dataclass.defaultValue,
+          description: dataclass.description,
+        );
+      }
+    }
+
     return dataClasses;
   }
 
