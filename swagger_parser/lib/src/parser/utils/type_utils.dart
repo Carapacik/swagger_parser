@@ -179,12 +179,22 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_][a-zA-Z\d_]*$');
 
 /// Protect name from incorrect symbols, keywords, etc.
 (String? newName, String? description) protectName(
-  String? name, {
+  String? initialName, {
   String? description,
   bool uniqueIfNull = false,
   bool isEnum = false,
   bool isMethod = false,
 }) {
+  var name = initialName;
+
+  // This will handle lists names in multipart requests
+  // This will rename `image[]` to `image`
+  if (initialName != null && initialName.endsWith('[]')) {
+    name = initialName.substring(0, initialName.length - 2);
+  } else {
+    name = initialName;
+  }
+
   final (newName, error) = switch (name) {
     null || '' => uniqueIfNull
         ? (
