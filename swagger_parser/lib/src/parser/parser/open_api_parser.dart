@@ -911,6 +911,19 @@ class OpenApiParser {
       }
     }
 
+    // Append suffix to data classes
+    for (final (index, dataclass) in dataClasses.indexed) {
+      if (dataclass is UniversalComponentClass) {
+        dataClasses[index] = dataclass.copyWith(
+          name: dataclass.name + config.modelSuffix,
+        );
+      } else if (dataclass is UniversalEnumClass) {
+        dataClasses[index] = dataclass.copyWith(
+          name: dataclass.name + config.modelSuffix,
+        );
+      }
+    }
+
     return dataClasses;
   }
 
