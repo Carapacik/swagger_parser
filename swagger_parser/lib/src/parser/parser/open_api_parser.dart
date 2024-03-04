@@ -618,6 +618,28 @@ class OpenApiParser {
           }
         }
 
+        final protectedParameters = <UniversalRequestType>[];
+        final groupedParameters = groupBy(parameters, (e) => e.type.name);
+        for (final entry in groupedParameters.values) {
+          if (entry.length == 1) {
+            protectedParameters.add(entry.first);
+          } else {
+            var counter = 0;
+            for (final parameter in entry) {
+              final protectedParameter = UniversalRequestType(
+                name: parameter.name,
+                type:
+                    // ignore: prefer_single_quotes
+                    parameter.type.copyWith(name: "${parameter.name}$counter"),
+                parameterType: parameter.parameterType,
+                description: parameter.description,
+              );
+              protectedParameters.add(protectedParameter);
+              counter++;
+            }
+          }
+        }
+
         final request = UniversalRequest(
           name: requestName,
           description: description,
@@ -625,7 +647,7 @@ class OpenApiParser {
           route: path,
           contentType: resultContentType,
           returnType: returnType,
-          parameters: parameters,
+          parameters: protectedParameters,
           isDeprecated:
               requestPath[_deprecatedConst].toString().toBool() ?? false,
         );
