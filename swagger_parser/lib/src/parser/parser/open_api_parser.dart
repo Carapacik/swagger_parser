@@ -336,19 +336,23 @@ class OpenApiParser {
             final isRequired =
                 requestBody[_requiredConst]?.toString().toBool() ??
                     config.requiredByDefault;
-            final typeWithImport = _findType(
+            final typeWithImportAndComponentTypeName = _findType(
               contentType[_schemaConst] as Map<String, dynamic>,
               isRequired: isRequired,
             );
 
-            final type = typeWithImport.type.type;
+            final type = typeWithImportAndComponentTypeName.type.type;
+            final componentTypeName =
+                typeWithImportAndComponentTypeName.componentTypeName;
+            print(componentTypeName);
 
             _skipDataClasses.add(type);
 
             final components = _definitionFileContent[_componentsConst]
                 as Map<String, dynamic>;
             final schemes = components[_schemasConst] as Map<String, dynamic>;
-            final dataClass = schemes[type] as Map<String, dynamic>;
+            final dataClass =
+                schemes[componentTypeName] as Map<String, dynamic>;
             final props = dataClass[_propertiesConst] as Map<String, dynamic>;
             final required = dataClass[_requiredConst] as List<dynamic>?;
 
@@ -931,7 +935,7 @@ class OpenApiParser {
       );
 
   /// Find type of map
-  ({UniversalType type, String? import}) _findType(
+  ({UniversalType type, String? import, String? componentTypeName}) _findType(
     Map<String, dynamic> map, {
     required bool isRequired,
     bool root = true,
@@ -968,6 +972,7 @@ class OpenApiParser {
             ..insert(0, UniversalCollections.list),
         ),
         import: arrayType.import,
+        componentTypeName: null,
       );
     }
     // Map
@@ -1003,6 +1008,7 @@ class OpenApiParser {
             ..insert(0, UniversalCollections.map),
         ),
         import: arrayType.import,
+        componentTypeName: null,
       );
     }
     // Enum
@@ -1050,6 +1056,7 @@ class OpenApiParser {
           enumType: map[_typeConst]?.toString(),
         ),
         import: enumClass.name,
+        componentTypeName: null,
       );
     }
     //  Object or additionalProperties
@@ -1100,6 +1107,7 @@ class OpenApiParser {
           isRequired: isRequired,
         ),
         import: newName.toPascal,
+        componentTypeName: null,
       );
     }
     // Type in allOf, anyOf or oneOf
@@ -1108,6 +1116,8 @@ class OpenApiParser {
         map.containsKey(_oneOfConst)) {
       String? ofImport;
       UniversalType? ofType;
+      // ignore: unused_local_variable
+      String? componentTypeName;
 
       final of = map[_allOfConst] ?? map[_anyOfConst] ?? map[_oneOfConst];
       if (of is List<dynamic>) {
@@ -1115,7 +1125,11 @@ class OpenApiParser {
         if (of.length == 1) {
           final item = of[0];
           if (item is Map<String, dynamic>) {
-            (import: ofImport, type: ofType) = _findType(
+            (
+              import: ofImport,
+              type: ofType,
+              componentTypeName: componentTypeName
+            ) = _findType(
               item,
               isRequired: config.requiredByDefault,
             );
@@ -1179,27 +1193,32 @@ class OpenApiParser {
               (ofType?.nullable ?? false),
         ),
         import: import,
+        componentTypeName: null,
       );
     }
     // Type or ref
     else {
       String? import;
       String type;
+      String? componentTypeName;
+      bool usingBuiltInType = false;
       if (map.containsKey(_refConst)) {
-        import = _formatRef(map).toPascal;
+        import = _formatRef(map);
       } else if (map.containsKey(_additionalPropertiesConst) &&
           map[_additionalPropertiesConst] is Map<String, dynamic> &&
           (map[_additionalPropertiesConst] as Map<String, dynamic>)
               .containsKey(_refConst)) {
         import =
-            _formatRef(map[_additionalPropertiesConst] as Map<String, dynamic>)
-                .toPascal;
+            _formatRef(map[_additionalPropertiesConst] as Map<String, dynamic>);
       }
 
       if (map.containsKey(_typeConst)) {
-        type = import != null && map[_typeConst].toString() == _objectConst
-            ? import
-            : map[_typeConst].toString();
+        if (import != null && map[_typeConst].toString() == _objectConst) {
+          type = import;
+        } else {
+          usingBuiltInType = true;
+          type = map[_typeConst].toString();
+        }
       } else {
         type = import ?? _objectConst;
       }
@@ -1208,6 +1227,12 @@ class OpenApiParser {
           import = replacementRule.apply(import);
           type = replacementRule.apply(type)!;
         }
+      }
+
+      // Handle PascalCase for type
+      import = import?.toPascal;
+      componentTypeName = type;
+      if (!usingBuiltInType) {
         type = type.toPascal;
       }
 
@@ -1234,6 +1259,7 @@ class OpenApiParser {
                   !config.requiredByDefault),
         ),
         import: import,
+        componentTypeName: componentTypeName,
       );
     }
   }
