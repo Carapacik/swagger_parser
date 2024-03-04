@@ -344,7 +344,6 @@ class OpenApiParser {
             final type = typeWithImportAndComponentTypeName.type.type;
             final componentTypeName =
                 typeWithImportAndComponentTypeName.componentTypeName;
-            print(componentTypeName);
 
             _skipDataClasses.add(type);
 
