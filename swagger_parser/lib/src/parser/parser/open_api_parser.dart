@@ -773,13 +773,24 @@ class OpenApiParser {
         if (typeWithImport.import != null) {
           imports.add(typeWithImport.import!);
         }
+
+        final (protectedName, renameDescription) =
+            protectName(key, isTypeDef: true);
+
+        var description = value[_descriptionConst]?.toString();
+        if (description != null && renameDescription != null) {
+          description = '$description\n\n$renameDescription';
+        } else if (renameDescription != null || description != null) {
+          description = renameDescription ?? description;
+        }
+
         dataClasses.add(
           UniversalComponentClass(
-            name: key,
+            name: protectedName!.toPascal,
             imports: imports,
             parameters: parameters,
             typeDef: true,
-            description: value[_descriptionConst]?.toString(),
+            description: description,
           ),
         );
         if (!value.containsKey(_allOfConst)) {

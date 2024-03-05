@@ -72,6 +72,20 @@ const dartKeywords = {
   'while',
   'with',
   'yield',
+  'String',
+  'List',
+  'Set',
+  'Map',
+  'Runes',
+  'Symbol',
+  'Null',
+  'Object',
+  'Enum',
+  'Future',
+  'Iterable',
+  'Stream',
+  'Never',
+  'DateTime',
 };
 
 /// Set of words that can't be used as members of an enum

@@ -184,6 +184,7 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_][a-zA-Z\d_]*$');
   bool uniqueIfNull = false,
   bool isEnum = false,
   bool isMethod = false,
+  bool isTypeDef = false,
 }) {
   var name = initialName;
 
@@ -206,7 +207,7 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_][a-zA-Z\d_]*$');
         uniqueName(isEnum: isEnum),
         'Incorrect name has been replaced. Original name: `$name`.'
       ),
-    _ when dartKeywords.contains(name.toCamel) => (
+    _ when dartKeywords.contains(isTypeDef ? name : name.toCamel) => (
         '$name ${isEnum ? _enumConst : _valueConst}',
         'The name has been replaced because it contains a keyword. Original name: `$name`.'
       ),
