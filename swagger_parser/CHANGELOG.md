@@ -1,4 +1,4 @@
-## 1.16.5
+## 1.17.0
 
 - Add new config parameter `extras_parameter_by_default` from [retrofit 4.1.0](https://pub.dev/packages/retrofit/changelog#410) for ([#208][https://github.com/Carapacik/swagger_parser/issues/208])
 
