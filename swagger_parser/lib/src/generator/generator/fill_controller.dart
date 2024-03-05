@@ -48,6 +48,7 @@ final class FillController {
         restClient.name.toPascal + postfix.toPascal,
         markFilesAsGenerated: config.markFilesAsGenerated,
         defaultContentType: config.defaultContentType,
+        addExtraParameter: config.extrasParameterByDefault,
         originalHttpResponse: config.originalHttpResponse,
       ),
     );

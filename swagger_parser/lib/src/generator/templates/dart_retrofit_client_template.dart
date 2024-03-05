@@ -12,6 +12,7 @@ String dartRetrofitClientTemplate({
   required String name,
   required bool markFileAsGenerated,
   required String defaultContentType,
+  required bool extrasParameterByDefault,
   bool originalHttpResponse = false,
 }) {
   final sb = StringBuffer(
@@ -32,6 +33,7 @@ abstract class $name {
         request,
         defaultContentType,
         originalHttpResponse: originalHttpResponse,
+        extrasParameterByDefault: extrasParameterByDefault,
       ),
     );
   }
@@ -43,6 +45,7 @@ String _toClientRequest(
   UniversalRequest request,
   String defaultContentType, {
   required bool originalHttpResponse,
+  required bool extrasParameterByDefault,
 }) {
   final responseType = request.returnType == null
       ? 'void'
@@ -53,7 +56,7 @@ String _toClientRequest(
   ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}@${request.requestType.name.toUpperCase()}('${request.route}')
   Future<${originalHttpResponse ? 'HttpResponse<$responseType>' : responseType}> ${request.name}(''',
   );
-  if (request.parameters.isNotEmpty) {
+  if (request.parameters.isNotEmpty || extrasParameterByDefault) {
     sb.write('{\n');
   }
   final sortedByRequired = List<UniversalRequestType>.from(
@@ -62,7 +65,10 @@ String _toClientRequest(
   for (final parameter in sortedByRequired) {
     sb.write('${_toParameter(parameter)}\n');
   }
-  if (request.parameters.isNotEmpty) {
+  if (extrasParameterByDefault) {
+    sb.write(_addExtraParameter());
+  }
+  if (request.parameters.isNotEmpty || extrasParameterByDefault) {
     sb.write('  });\n');
   } else {
     sb.write(');\n');
@@ -86,6 +92,8 @@ String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
     )
         ? "import 'dart:io';\n\n"
         : '';
+
+String _addExtraParameter() => '    @Extras() Map<String, dynamic>? extras,\n';
 
 String _toParameter(UniversalRequestType parameter) {
   var parameterType = parameter.type.toSuitableType(ProgrammingLanguage.dart);

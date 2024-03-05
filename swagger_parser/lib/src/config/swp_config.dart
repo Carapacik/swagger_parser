@@ -27,6 +27,7 @@ class SWPConfig {
     this.originalHttpResponse = false,
     this.replacementRules = const [],
     this.defaultContentType = 'application/json',
+    this.extrasParameterByDefault = false,
     this.pathMethodName = false,
     this.requiredByDefault = true,
     this.mergeClients = false,
@@ -53,6 +54,7 @@ class SWPConfig {
     required this.originalHttpResponse,
     required this.replacementRules,
     required this.defaultContentType,
+    required this.extrasParameterByDefault,
     required this.pathMethodName,
     required this.requiredByDefault,
     required this.mergeClients,
@@ -114,6 +116,13 @@ class SWPConfig {
     if (defaultContentType is! String?) {
       throw const ConfigException(
         "Config parameter 'default_content_type' must be String.",
+      );
+    }
+
+    final extrasParameterByDefault = yamlMap['extras_parameter_by_default'];
+    if (extrasParameterByDefault is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'add_extra_parameter' must be bool.",
       );
     }
 
@@ -276,6 +285,8 @@ class SWPConfig {
       name: name,
       pathMethodName: pathMethodName ?? dc.pathMethodName,
       defaultContentType: defaultContentType ?? dc.defaultContentType,
+      extrasParameterByDefault:
+          extrasParameterByDefault ?? dc.extrasParameterByDefault,
       requiredByDefault: requiredByDefault ?? dc.requiredByDefault,
       mergeClients: mergeClients ?? dc.mergeClients,
       enumsParentPrefix: enumsParentPrefix ?? dc.enumsParentPrefix,
@@ -363,6 +374,14 @@ class SWPConfig {
   final String defaultContentType;
 
   /// DART ONLY
+  /// Add extra parameter to all requests. Supported after retrofit 4.1.0.
+  ///
+  ///
+  /// @POST('/path/')
+  /// Future<String> myMethod({@Extras() Map<String, dynamic>? extras});
+  final bool extrasParameterByDefault;
+
+  /// DART ONLY
   /// It is used if the value does not have the annotations `required` and `nullable`.
   /// If the value is `true`, then value be `required`.
   /// If the value is `false`, then `nullable`.
@@ -389,6 +408,7 @@ class SWPConfig {
       language: language,
       jsonSerializer: jsonSerializer,
       defaultContentType: defaultContentType,
+      extrasParameterByDefault: extrasParameterByDefault,
       rootClient: rootClient,
       rootClientName: rootClientName,
       clientPostfix: clientPostfix,
