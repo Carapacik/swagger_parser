@@ -12,7 +12,7 @@ String dartRetrofitClientTemplate({
   required String name,
   required bool markFileAsGenerated,
   required String defaultContentType,
-  required bool extrasParameterByDefault,
+  bool extrasParameterByDefault = false,
   bool originalHttpResponse = false,
 }) {
   final sb = StringBuffer(

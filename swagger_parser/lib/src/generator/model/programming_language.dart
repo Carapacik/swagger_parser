@@ -109,7 +109,7 @@ enum ProgrammingLanguage {
     String name, {
     required bool markFilesAsGenerated,
     required String defaultContentType,
-    required bool extrasParameterByDefault,
+    bool extrasParameterByDefault = false,
     bool originalHttpResponse = false,
   }) =>
       switch (this) {
