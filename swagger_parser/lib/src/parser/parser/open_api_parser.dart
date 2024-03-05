@@ -1228,15 +1228,12 @@ class OpenApiParser {
       if (!usingBuiltInType) {
         type = type.toPascal;
       }
-      // Only apply replacement rules after the componentTypeName has been set
+
       if (import != null) {
         for (final replacementRule in config.replacementRules) {
           import = replacementRule.apply(import);
           type = replacementRule.apply(type)!;
         }
-        // Append the suffix
-        type = type + config.modelSuffix;
-        import = import! + config.modelSuffix;
       }
 
       final defaultValue = map[_defaultConst]?.toString();
