@@ -81,7 +81,8 @@ swagger_parser:
 
   # Optional (dart only).
   # Support @Extras annotation for interceptors.
-  add_extra_parameter: true
+  # If the value is 'true', then the annotation will be added to all requests.
+  extras_parameter_by_default: false
 
   # Optional (dart only).
   # It is used if the value does not have the annotations 'required' and 'nullable'. 
