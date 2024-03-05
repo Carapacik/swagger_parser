@@ -60,6 +60,12 @@ class SWPConfig {
     required this.skippedParameters,
   });
 
+  static ReplacementRule get defaultModelSuffixReplacementRule =>
+      ReplacementRule(
+        pattern: RegExp(r'$'),
+        replacement: 'Model',
+      );
+
   /// Creates a [SWPConfig] from [YamlMap].
   factory SWPConfig.fromYaml(
     YamlMap yamlMap, {
@@ -124,8 +130,8 @@ class SWPConfig {
       );
     }
 
-    final modelSuffix = yamlMap['model_suffix'] ?? 'Model';
-    if (modelSuffix is! String) {
+    final modelSuffix = yamlMap['model_suffix'];
+    if (modelSuffix is! String?) {
       throw const ConfigException(
         "Config parameter 'model_suffix' must be String.",
       );
@@ -281,10 +287,12 @@ class SWPConfig {
     replacementRules ??= dc.replacementRules;
     if (!replacementRules.any((element) => element.pattern.pattern == r'$')) {
       replacementRules.add(
-        ReplacementRule(
-          pattern: RegExp(r'$'),
-          replacement: modelSuffix,
-        ),
+        modelSuffix != null
+            ? ReplacementRule(
+                pattern: RegExp(r'$'),
+                replacement: modelSuffix,
+              )
+            : SWPConfig.defaultModelSuffixReplacementRule,
       );
     }
 

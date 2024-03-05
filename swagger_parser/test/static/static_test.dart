@@ -76,12 +76,12 @@ Future<void> runSwaggerParserGeneration(
   bool throwOnFailure = false,
 }) async {
   final config = SWPConfig(
-    outputDirectory: '${clientOutputPath}_${jsonSerializer.name}',
-    schemaPath: schemaFile.absolute.path,
-    jsonSerializer: jsonSerializer,
-    putClientsInFolder: true,
-    enumsParentPrefix: false,
-  );
+      outputDirectory: '${clientOutputPath}_${jsonSerializer.name}',
+      schemaPath: schemaFile.absolute.path,
+      jsonSerializer: jsonSerializer,
+      putClientsInFolder: true,
+      enumsParentPrefix: false,
+      replacementRules: [SWPConfig.defaultModelSuffixReplacementRule]);
   dynamic error;
   StackTrace? stacktrace;
   try {
