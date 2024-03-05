@@ -122,7 +122,7 @@ class SWPConfig {
     final extrasParameterByDefault = yamlMap['extras_parameter_by_default'];
     if (extrasParameterByDefault is! bool?) {
       throw const ConfigException(
-        "Config parameter 'add_extra_parameter' must be bool.",
+        "Config parameter 'extras_parameter_by_default' must be bool.",
       );
     }
 
