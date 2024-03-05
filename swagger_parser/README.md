@@ -80,6 +80,11 @@ swagger_parser:
   default_content_type: "application/json"
 
   # Optional (dart only).
+  # Support @Extras annotation for interceptors.
+  # If the value is 'true', then the annotation will be added to all requests.
+  extras_parameter_by_default: false
+
+  # Optional (dart only).
   # It is used if the value does not have the annotations 'required' and 'nullable'. 
   # If the value is 'true', then value be 'required', if the value is 'false', then 'nullable'.
   required_by_default: true

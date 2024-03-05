@@ -109,6 +109,7 @@ enum ProgrammingLanguage {
     String name, {
     required bool markFilesAsGenerated,
     required String defaultContentType,
+    bool extrasParameterByDefault = false,
     bool originalHttpResponse = false,
   }) =>
       switch (this) {
@@ -117,6 +118,7 @@ enum ProgrammingLanguage {
             name: name,
             markFileAsGenerated: markFilesAsGenerated,
             defaultContentType: defaultContentType,
+            extrasParameterByDefault: extrasParameterByDefault,
             originalHttpResponse: originalHttpResponse,
           ),
         kotlin => kotlinRetrofitClientTemplate(
