@@ -774,6 +774,11 @@ class OpenApiParser {
           imports.add(typeWithImport.import!);
         }
 
+        // Run replacement rules
+        for (final replacementRule in config.replacementRules) {
+          key = replacementRule.apply(key)!;
+        }
+
         final (protectedName, renameDescription) =
             protectName(key, isTypeDef: true);
 
