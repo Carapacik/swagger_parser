@@ -15,6 +15,7 @@ String dartDartMappableDtoTemplate(
   final className = dataClass.name.toPascal;
   return '''
 ${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}
+${ioImport(dataClass)}
 ${dartImportDtoTemplate(JsonSerializer.dartMappable)}
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.mapper.dart';

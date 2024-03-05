@@ -43,6 +43,24 @@ final class UniversalEnumClass extends UniversalDataClass {
   String toString() => 'UniversalEnumClass(type: $type, '
       'items: $items, '
       'defaultValue: $defaultValue)';
+
+  UniversalEnumClass copyWith({
+    String? name,
+    String? type,
+    Set<UniversalEnumItem>? items,
+    String? originalName,
+    String? defaultValue,
+    String? description,
+  }) {
+    return UniversalEnumClass(
+      name: name ?? this.name,
+      type: type ?? this.type,
+      items: items ?? this.items,
+      originalName: originalName ?? this.originalName,
+      defaultValue: defaultValue ?? this.defaultValue,
+      description: description ?? this.description,
+    );
+  }
 }
 
 /// Universal template for enum item

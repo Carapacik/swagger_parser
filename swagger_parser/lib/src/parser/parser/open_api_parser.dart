@@ -336,19 +336,22 @@ class OpenApiParser {
             final isRequired =
                 requestBody[_requiredConst]?.toString().toBool() ??
                     config.requiredByDefault;
-            final typeWithImport = _findType(
+            final typeWithImportAndComponentTypeName = _findType(
               contentType[_schemaConst] as Map<String, dynamic>,
               isRequired: isRequired,
             );
 
-            final type = typeWithImport.type.type;
+            final type = typeWithImportAndComponentTypeName.type.type;
+            final componentTypeName =
+                typeWithImportAndComponentTypeName.componentTypeName;
 
             _skipDataClasses.add(type);
 
             final components = _definitionFileContent[_componentsConst]
                 as Map<String, dynamic>;
             final schemes = components[_schemasConst] as Map<String, dynamic>;
-            final dataClass = schemes[type] as Map<String, dynamic>;
+            final dataClass =
+                schemes[componentTypeName] as Map<String, dynamic>;
             final props = dataClass[_propertiesConst] as Map<String, dynamic>;
             final required = dataClass[_requiredConst] as List<dynamic>?;
 
@@ -375,15 +378,22 @@ class OpenApiParser {
             if (typeWithImport.import != null) {
               imports.add(typeWithImport.import!);
             }
+
+            final (protectedName, renameDescription) = protectName(e.key);
+            final decscription = (currentType.description == null &&
+                    renameDescription == null)
+                ? null
+                : (currentType.description ?? '') + (renameDescription ?? '');
+
             types.add(
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
-                name: e.key,
+                name: protectedName,
                 description: currentType.description,
                 type: UniversalType(
                   type: currentType.type,
-                  name: e.key,
-                  description: currentType.description,
+                  name: protectedName,
+                  description: decscription,
                   format: currentType.format,
                   defaultValue: currentType.defaultValue,
                   isRequired: currentType.isRequired,
@@ -618,6 +628,29 @@ class OpenApiParser {
           }
         }
 
+        // Handle duplicate named parameters
+        final protectedParameters = <UniversalRequestType>[];
+        final groupedParameters = groupBy(parameters, (e) => e.type.name);
+        for (final entry in groupedParameters.values) {
+          if (entry.length == 1) {
+            protectedParameters.add(entry.first);
+          } else {
+            var counter = 0;
+            for (final parameter in entry) {
+              final protectedParameter = UniversalRequestType(
+                name: parameter.name,
+                type:
+                    // ignore: prefer_single_quotes
+                    parameter.type.copyWith(name: "${parameter.name}$counter"),
+                parameterType: parameter.parameterType,
+                description: parameter.description,
+              );
+              protectedParameters.add(protectedParameter);
+              counter++;
+            }
+          }
+        }
+
         final request = UniversalRequest(
           name: requestName,
           description: description,
@@ -625,7 +658,7 @@ class OpenApiParser {
           route: path,
           contentType: resultContentType,
           returnType: returnType,
-          parameters: parameters,
+          parameters: protectedParameters,
           isDeprecated:
               requestPath[_deprecatedConst].toString().toBool() ?? false,
         );
@@ -740,13 +773,29 @@ class OpenApiParser {
         if (typeWithImport.import != null) {
           imports.add(typeWithImport.import!);
         }
+
+        // Run replacement rules
+        for (final replacementRule in config.replacementRules) {
+          key = replacementRule.apply(key)!;
+        }
+
+        final (protectedName, renameDescription) =
+            protectName(key, isTypeDef: true);
+
+        var description = value[_descriptionConst]?.toString();
+        if (description != null && renameDescription != null) {
+          description = '$description\n\n$renameDescription';
+        } else if (renameDescription != null || description != null) {
+          description = renameDescription ?? description;
+        }
+
         dataClasses.add(
           UniversalComponentClass(
-            name: key,
+            name: protectedName!.toPascal,
             imports: imports,
             parameters: parameters,
             typeDef: true,
-            description: value[_descriptionConst]?.toString(),
+            description: description,
           ),
         );
         if (!value.containsKey(_allOfConst)) {
@@ -819,6 +868,65 @@ class OpenApiParser {
       }
       allOfClass.parameters.addAll(allOfClass.allOf!.properties);
     }
+
+    // Rename parameters / enum members with the same name
+    for (final (index, dataclass) in dataClasses.indexed) {
+      if (dataclass is UniversalComponentClass) {
+        final protectedParameters = <UniversalType>[];
+        final groupedParameters = groupBy(dataclass.parameters, (e) => e.name);
+
+        for (final MapEntry(value: groupParameters)
+            in groupedParameters.entries) {
+          if (groupParameters.length == 1) {
+            protectedParameters.add(groupParameters[0]);
+          } else {
+            var counter = 0;
+            for (final parameter in groupParameters) {
+              protectedParameters
+                  .add(parameter.copyWith(name: '${parameter.name}$counter'));
+              counter++;
+            }
+          }
+        }
+        dataClasses[index] = UniversalComponentClass(
+          name: dataclass.name,
+          imports: dataclass.imports,
+          allOf: dataclass.allOf,
+          description: dataclass.description,
+          typeDef: dataclass.typeDef,
+          parameters: protectedParameters,
+        );
+      } else if (dataclass is UniversalEnumClass) {
+        final protectedItems = <UniversalEnumItem>{};
+        final groupedItems = groupBy(dataclass.items, (e) => e.name);
+        for (final MapEntry(value: groupItems) in groupedItems.entries) {
+          if (groupItems.length == 1) {
+            protectedItems.add(groupItems.first);
+          } else {
+            var counter = 0;
+            for (final item in groupItems) {
+              protectedItems.add(
+                UniversalEnumItem(
+                  jsonKey: item.jsonKey,
+                  name: '${item.name}$counter',
+                  description: item.description,
+                ),
+              );
+              counter++;
+            }
+          }
+        }
+        dataClasses[index] = UniversalEnumClass(
+          originalName: dataclass.originalName,
+          name: dataclass.name,
+          type: dataclass.type,
+          items: protectedItems,
+          defaultValue: dataclass.defaultValue,
+          description: dataclass.description,
+        );
+      }
+    }
+
     return dataClasses;
   }
 
@@ -842,7 +950,7 @@ class OpenApiParser {
       );
 
   /// Find type of map
-  ({UniversalType type, String? import}) _findType(
+  ({UniversalType type, String? import, String? componentTypeName}) _findType(
     Map<String, dynamic> map, {
     required bool isRequired,
     bool root = true,
@@ -879,6 +987,7 @@ class OpenApiParser {
             ..insert(0, UniversalCollections.list),
         ),
         import: arrayType.import,
+        componentTypeName: null,
       );
     }
     // Map
@@ -914,6 +1023,7 @@ class OpenApiParser {
             ..insert(0, UniversalCollections.map),
         ),
         import: arrayType.import,
+        componentTypeName: null,
       );
     }
     // Enum
@@ -961,6 +1071,7 @@ class OpenApiParser {
           enumType: map[_typeConst]?.toString(),
         ),
         import: enumClass.name,
+        componentTypeName: null,
       );
     }
     //  Object or additionalProperties
@@ -1011,6 +1122,7 @@ class OpenApiParser {
           isRequired: isRequired,
         ),
         import: newName.toPascal,
+        componentTypeName: null,
       );
     }
     // Type in allOf, anyOf or oneOf
@@ -1019,6 +1131,8 @@ class OpenApiParser {
         map.containsKey(_oneOfConst)) {
       String? ofImport;
       UniversalType? ofType;
+      // ignore: unused_local_variable
+      String? componentTypeName;
 
       final of = map[_allOfConst] ?? map[_anyOfConst] ?? map[_oneOfConst];
       if (of is List<dynamic>) {
@@ -1026,7 +1140,11 @@ class OpenApiParser {
         if (of.length == 1) {
           final item = of[0];
           if (item is Map<String, dynamic>) {
-            (import: ofImport, type: ofType) = _findType(
+            (
+              import: ofImport,
+              type: ofType,
+              componentTypeName: componentTypeName
+            ) = _findType(
               item,
               isRequired: config.requiredByDefault,
             );
@@ -1090,36 +1208,48 @@ class OpenApiParser {
               (ofType?.nullable ?? false),
         ),
         import: import,
+        componentTypeName: null,
       );
     }
     // Type or ref
     else {
       String? import;
       String type;
+      String? componentTypeName;
+      bool usingBuiltInType = false;
       if (map.containsKey(_refConst)) {
-        import = _formatRef(map).toPascal;
+        import = _formatRef(map);
       } else if (map.containsKey(_additionalPropertiesConst) &&
           map[_additionalPropertiesConst] is Map<String, dynamic> &&
           (map[_additionalPropertiesConst] as Map<String, dynamic>)
               .containsKey(_refConst)) {
         import =
-            _formatRef(map[_additionalPropertiesConst] as Map<String, dynamic>)
-                .toPascal;
+            _formatRef(map[_additionalPropertiesConst] as Map<String, dynamic>);
       }
 
       if (map.containsKey(_typeConst)) {
-        type = import != null && map[_typeConst].toString() == _objectConst
-            ? import
-            : map[_typeConst].toString();
+        if (import != null && map[_typeConst].toString() == _objectConst) {
+          type = import;
+        } else {
+          usingBuiltInType = true;
+          type = map[_typeConst].toString();
+        }
       } else {
         type = import ?? _objectConst;
       }
+
+      // Handle PascalCase for type
+      import = import?.toPascal;
+      componentTypeName = type;
+      if (!usingBuiltInType) {
+        type = type.toPascal;
+      }
+
       if (import != null) {
         for (final replacementRule in config.replacementRules) {
           import = replacementRule.apply(import);
           type = replacementRule.apply(type)!;
         }
-        type = type.toPascal;
       }
 
       final defaultValue = map[_defaultConst]?.toString();
@@ -1145,6 +1275,7 @@ class OpenApiParser {
                   !config.requiredByDefault),
         ),
         import: import,
+        componentTypeName: componentTypeName,
       );
     }
   }

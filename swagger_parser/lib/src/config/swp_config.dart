@@ -60,6 +60,12 @@ class SWPConfig {
     required this.skippedParameters,
   });
 
+  static ReplacementRule get defaultModelSuffixReplacementRule =>
+      ReplacementRule(
+        pattern: RegExp(r'$'),
+        replacement: 'Model',
+      );
+
   /// Creates a [SWPConfig] from [YamlMap].
   factory SWPConfig.fromYaml(
     YamlMap yamlMap, {
@@ -121,6 +127,13 @@ class SWPConfig {
     if (pathMethodName is! bool?) {
       throw const ConfigException(
         "Config parameter 'path_method_name' must be bool.",
+      );
+    }
+
+    final modelSuffix = yamlMap['model_suffix'];
+    if (modelSuffix is! String?) {
+      throw const ConfigException(
+        "Config parameter 'model_suffix' must be String.",
       );
     }
 
@@ -269,6 +282,20 @@ class SWPConfig {
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
+    // Set a replacement rule for the model suffix
+    // This wont override any of the user's rules though
+    replacementRules ??= dc.replacementRules;
+    if (!replacementRules.any((element) => element.pattern.pattern == r'$')) {
+      replacementRules.add(
+        modelSuffix != null
+            ? ReplacementRule(
+                pattern: RegExp(r'$'),
+                replacement: modelSuffix,
+              )
+            : SWPConfig.defaultModelSuffixReplacementRule,
+      );
+    }
+
     return SWPConfig._(
       schemaPath: schemaPath,
       schemaUrl: schemaUrl,
@@ -291,7 +318,7 @@ class SWPConfig {
       unknownEnumValue: unknownEnumValue ?? dc.unknownEnumValue,
       markFilesAsGenerated: markFilesAsGenerated ?? dc.markFilesAsGenerated,
       originalHttpResponse: originalHttpResponse ?? dc.originalHttpResponse,
-      replacementRules: replacementRules ?? dc.replacementRules,
+      replacementRules: replacementRules,
     );
   }
 

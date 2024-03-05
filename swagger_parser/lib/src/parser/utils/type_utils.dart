@@ -179,12 +179,23 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_][a-zA-Z\d_]*$');
 
 /// Protect name from incorrect symbols, keywords, etc.
 (String? newName, String? description) protectName(
-  String? name, {
+  String? initialName, {
   String? description,
   bool uniqueIfNull = false,
   bool isEnum = false,
   bool isMethod = false,
+  bool isTypeDef = false,
 }) {
+  var name = initialName;
+
+  // This will handle lists names in multipart requests
+  // This will rename `image[]` to `image`
+  if (initialName != null && initialName.endsWith('[]')) {
+    name = initialName.substring(0, initialName.length - 2);
+  } else {
+    name = initialName;
+  }
+
   final (newName, error) = switch (name) {
     null || '' => uniqueIfNull
         ? (
@@ -196,7 +207,7 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_][a-zA-Z\d_]*$');
         uniqueName(isEnum: isEnum),
         'Incorrect name has been replaced. Original name: `$name`.'
       ),
-    _ when dartKeywords.contains(name.toCamel) => (
+    _ when dartKeywords.contains(isTypeDef ? name : name.toCamel) => (
         '$name ${isEnum ? _enumConst : _valueConst}',
         'The name has been replaced because it contains a keyword. Original name: `$name`.'
       ),
@@ -216,5 +227,5 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_][a-zA-Z\d_]*$');
 
 /// Protect JsonKeys from incorrect symbols, keywords, etc.
 String? protectJsonKey(String? name) {
-  return name?.replaceAll(r'$', r'\$');
+  return name?.replaceAll(r'\', r'\\').replaceAll(r'$', r'\$');
 }
