@@ -12,6 +12,7 @@ class GeneratorConfig {
     this.jsonSerializer = JsonSerializer.jsonSerializable,
     this.defaultContentType = 'application/json',
     this.rootClient = true,
+    this.extrasParameterByDefault = false,
     this.rootClientName = 'RestClient',
     this.clientPostfix,
     this.exportFile = true,
@@ -79,6 +80,14 @@ class GeneratorConfig {
   /// If the content type does not match the default, generates:
   /// @Headers(<String, String>{'Content-Type': 'PARSED CONTENT TYPE'})
   final String defaultContentType;
+
+  /// DART ONLY
+  /// Add extras parameter to all requests. Supported after retrofit 4.1.0.
+  ///
+  ///
+  /// @POST('/path/')
+  /// Future<String> myMethod({@Extras() Map<String, dynamic>? extras});
+  final bool extrasParameterByDefault;
 
   /// Optional. Set regex replacement rules for the names of the generated classes/enums.
   /// All rules are applied in order.

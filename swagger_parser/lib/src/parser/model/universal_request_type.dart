@@ -54,6 +54,9 @@ enum HttpParameterType {
   /// `@Body`
   body('Body'),
 
+  /// `@Extras`
+  extras('Extras'),
+
   /// `@Query`
   query('Query'),
 

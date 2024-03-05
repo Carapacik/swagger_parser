@@ -909,7 +909,7 @@ interface ClassNameClient {
     });
   });
 
-  group('All request types of parameter', () {
+  group('All request types of parameter except extras type', () {
     test('dart + retrofit', () async {
       const restClient = UniversalRestClient(
         name: 'ClassName',
@@ -2119,6 +2119,230 @@ interface ClassNameClient {
         @Query("notRequiredAndNotNullable") list4: String?,
         @Query("RequiredAndNullable") list5: String?,
     ): String
+}
+''';
+      expect(filledContent.content, expectedContents);
+    });
+  });
+
+  group('None parameter with @Extras option for dart', () {
+    test('dart + retrofit', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {},
+        requests: [
+          UniversalRequest(
+            name: 'getRequest',
+            requestType: HttpRequestType.get,
+            route: '/{id}',
+            returnType: null,
+            parameters: [],
+          ),
+        ],
+      );
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          extrasParameterByDefault: true,
+        ),
+      );
+      final filledContent = fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'class_name_client.g.dart';
+
+@RestApi()
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
+
+  @GET('/{id}')
+  Future<void> getRequest({
+    @Extras() Map<String, dynamic>? extras,
+  });
+}
+''';
+      expect(filledContent.content, expectedContents);
+    });
+
+    test('kotlin + retrofit', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {},
+        requests: [],
+      );
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+          extrasParameterByDefault: true,
+        ),
+      );
+      final filledContent = fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import retrofit2.http.*
+
+interface ClassNameClient {}
+''';
+      expect(filledContent.content, expectedContents);
+    });
+  });
+
+  group('All request types of parameter with @Extras option for dart', () {
+    test('dart + retrofit', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {},
+        requests: [
+          UniversalRequest(
+            name: 'getRequest',
+            requestType: HttpRequestType.get,
+            route: '/{id}',
+            returnType: null,
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.header,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'token',
+                  isRequired: true,
+                ),
+                name: 'Authorization',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'alex',
+                  isRequired: true,
+                ),
+                name: 'name',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.path,
+                type: UniversalType(
+                  type: 'int',
+                  name: 'id',
+                  isRequired: true,
+                ),
+                name: 'id',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.body,
+                type: UniversalType(
+                  type: 'Another',
+                  name: 'another',
+                  isRequired: true,
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          extrasParameterByDefault: true,
+        ),
+      );
+      final filledContent = fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'class_name_client.g.dart';
+
+@RestApi()
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
+
+  @GET('/{id}')
+  Future<void> getRequest({
+    @Header('Authorization') required String token,
+    @Query('name') required String alex,
+    @Path('id') required int id,
+    @Body() required Another another,
+    @Extras() Map<String, dynamic>? extras,
+  });
+}
+''';
+      expect(filledContent.content, expectedContents);
+    });
+
+    test('kotlin + retrofit', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {},
+        requests: [
+          UniversalRequest(
+            name: 'getRequest',
+            requestType: HttpRequestType.get,
+            route: '/{id}',
+            returnType: null,
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.header,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'token',
+                  isRequired: true,
+                ),
+                name: 'Authorization',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.query,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'alex',
+                  isRequired: true,
+                ),
+                name: 'name',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.path,
+                type: UniversalType(
+                  type: 'int',
+                  name: 'id',
+                  isRequired: true,
+                ),
+                name: 'id',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.body,
+                type: UniversalType(
+                  type: 'Another',
+                  name: 'another',
+                  isRequired: true,
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          language: ProgrammingLanguage.kotlin,
+          extrasParameterByDefault: true,
+        ),
+      );
+      final filledContent = fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import retrofit2.http.*
+
+interface ClassNameClient {
+    @GET("/{id}")
+    suspend fun getRequest(
+        @Header("Authorization") token: String,
+        @Query("name") alex: String,
+        @Path("id") id: int,
+        @Body another: Another,
+    )
 }
 ''';
       expect(filledContent.content, expectedContents);
