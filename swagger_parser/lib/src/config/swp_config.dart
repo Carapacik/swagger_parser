@@ -376,6 +376,7 @@ class SWPConfig {
   /// DART ONLY
   /// Add extra parameter to all requests. Supported after retrofit 4.1.0.
   ///
+  /// If  value is 'true', then the annotation will be added to all requests.
   ///
   /// @POST('/path/')
   /// Future<String> myMethod({@Extras() Map<String, dynamic>? extras});
