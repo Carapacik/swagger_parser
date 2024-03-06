@@ -372,7 +372,7 @@ class OpenApiParser {
                 (e.value as Map<String, dynamic>)[_nullableConst] == true;
             final typeWithImport = _findType(
               e.value as Map<String, dynamic>,
-              isRequired: (isNullable && !isRequiredFromRequestBody)
+              isRequired: isNullable
                   ? false
                   : (isRequiredFromRequestBody || config.requiredByDefault),
               // isRequired: isRequiredFromRequestBody || config.requiredByDefault,
