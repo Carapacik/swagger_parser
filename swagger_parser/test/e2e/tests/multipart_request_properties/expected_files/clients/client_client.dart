@@ -31,6 +31,6 @@ abstract class ClientClient {
   Future<void> testMultipart({
     @Part(name: 'files') required List<File> files,
     @Part(name: 'address') required Object0 address,
-    @Part(name: 'image') required File? image,
+    @Part(name: 'image') File? image,
   });
 }
