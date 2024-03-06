@@ -9,6 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/object0.dart';
+import '../models/object1.dart';
 
 part 'client_client.g.dart';
 
@@ -27,10 +28,21 @@ abstract class ClientClient {
   ///
   /// [image] - Sample Image.
   @MultiPart()
-  @GET('/test-multipart')
-  Future<void> testMultipart({
+  @GET('/test-multipart-required-true')
+  Future<void> testMultipartRequiredTrue({
     @Part(name: 'files') required List<File> files,
     @Part(name: 'address') required Object0 address,
+    @Part(name: 'name') required String? name,
+    @Part(name: 'image') File? image,
+  });
+
+  /// [address] - Name not received and was auto-generated.
+  @MultiPart()
+  @GET('/test-multipart-required-false')
+  Future<void> testMultipartRequiredFalse({
+    @Part(name: 'files') required List<File> files,
+    @Part(name: 'address') required Object1 address,
+    @Part(name: 'name') required String? name,
     @Part(name: 'image') File? image,
   });
 }
