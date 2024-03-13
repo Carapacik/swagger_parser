@@ -1088,7 +1088,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'alex',
-                  isRequired: true,
+                  isRequired: false,
                 ),
                 name: 'name',
               ),
@@ -1167,10 +1167,10 @@ abstract class ClassNameClient {
   @POST('/send')
   Future<void> sendMultiPart({
     @Header('Authorization') required String token,
-    @Part(name: 'name') required String alex,
     @Part(name: 'file') required File file,
     @Part(name: 'file2') required File secondFile,
     @Part(name: 'parsed-if') required bool parsed,
+    @Part(name: 'name') String? alex,
   });
 
   @MultiPart()
@@ -1209,7 +1209,7 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   name: 'alex',
-                  isRequired: true,
+                  isRequired: false,
                 ),
                 name: 'name',
               ),
@@ -1281,7 +1281,7 @@ interface ClassNameClient {
     @POST("/send")
     suspend fun sendMultiPart(
         @Header("Authorization") token: String,
-        @Part("name") alex: String,
+        @Part("name") alex: String?,
         @Part("file") file: MultipartBody.Part,
         @Part("file2") secondFile: MultipartBody.Part,
         @Part("parsed-if") parsed: Boolean,
@@ -2125,7 +2125,7 @@ interface ClassNameClient {
     });
   });
 
-  group('None parameter with @Extras option for dart', () {
+  group('One empty request with @Extras option for dart', () {
     test('dart + retrofit', () async {
       const restClient = UniversalRestClient(
         name: 'ClassName',

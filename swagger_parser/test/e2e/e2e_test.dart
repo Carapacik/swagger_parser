@@ -32,6 +32,20 @@ void main() {
       );
     });
 
+    test('multipart request properties with requiredByDefault false', () async {
+      await e2eTest(
+        'multipart_request_properties_required_by_default_false',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          requiredByDefault: false,
+        ),
+        schemaFileName: '../multipart_request_properties/openapi.json',
+      );
+    });
+
     test('multipart request with ref', () async {
       await e2eTest(
         'multipart_request_with_ref',
