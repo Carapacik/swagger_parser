@@ -366,10 +366,16 @@ class OpenApiParser {
           }
 
           for (final e in properties.entries) {
+            final isRequiredFromRequestBody =
+                requiredParameters.contains(e.key);
+            final isNullable =
+                (e.value as Map<String, dynamic>)[_nullableConst] == true;
             final typeWithImport = _findType(
               e.value as Map<String, dynamic>,
-              isRequired: requiredParameters.contains(e.key) ||
-                  config.requiredByDefault,
+              isRequired: isNullable
+                  ? false
+                  : (isRequiredFromRequestBody || config.requiredByDefault),
+              // isRequired: isRequiredFromRequestBody || config.requiredByDefault,
             );
             final currentType = typeWithImport.type;
             if (typeWithImport.import != null) {
