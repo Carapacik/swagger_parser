@@ -1,11 +1,11 @@
 {
   "openapi": "3.0.1",
   "paths": {
-    "/test-multipart": {
+    "/test-multipart-required-true": {
       "get": {
         "summary": "Test",
         "description": "Test",
-        "operationId": "test-multipart",
+        "operationId": "test-multipart-required-true",
         "requestBody": {
           "description": "requestBody description",
           "required": true,
@@ -32,6 +32,10 @@
                       }
                     }
                   },
+                  "name": {
+                    "type": "string",
+                    "nullable": true
+                  },
                   "image": {
                     "description": "Sample Image",
                     "type": "string",
@@ -40,7 +44,58 @@
                   }
                 },
                 "required": [
-                  "files"
+                  "files",
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/test-multipart-required-false": {
+      "get": {
+        "operationId": "test-multipart-required-false",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "address": {
+                    "type": "object",
+                    "properties": {
+                      "street": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "name": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "files",
+                  "name"
                 ]
               }
             }
