@@ -571,6 +571,24 @@ void main() {
       expect(item2, expectedItem2);
     });
 
+    test('Enum name value test', () async {
+      final schemaPath =
+          p.join('test', 'parser', 'schema', 'enum_name_value_class.json');
+      final configFile = schemaFile(schemaPath);
+      final schemaContent = configFile!.readAsStringSync();
+      final parser = OpenApiParser(
+        ParserConfig(
+          schemaContent,
+          isJson: true,
+          enumsParentPrefix: false,
+        ),
+      );
+      final dataClasses = parser.parseDataClasses();
+      expect(dataClasses, hasLength(2));
+      final enumClass = dataClasses.whereType<UniversalEnumClass>().first;
+      expect(enumClass.name, 'Aggregates');
+    });
+
     test('Enum name test', () async {
       final schemaPath = p.join('test', 'parser', 'schema', 'enum_class.json');
       final configFile = schemaFile(schemaPath);

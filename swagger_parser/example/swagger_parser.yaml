@@ -17,7 +17,7 @@ swagger_parser:
 
   # Optional (dart only).
   # Current available serializers are: json_serializable, freezed, dart_mappable.
-  json_serializer: json_serializable
+  json_serializer: dart_mappable
 
   # Optional. Set default content-type for all requests.
   default_content_type: "application/json"
@@ -60,14 +60,14 @@ swagger_parser:
 
   # Optional (dart only). Set 'true' to include toJson() in enums. 
   # If set to false, serialization will use .name instead.
-  enums_to_json: false
+  enums_to_json: true
 
   # Optional. Set 'true' to set enum prefix from parent component.
   enums_parent_prefix: true
 
   # Optional (dart only). Set 'true' to maintain backwards compatibility 
   # when adding new values on the backend.
-  unknown_enum_value: true
+  unknown_enum_value: false
 
   # Optional. Set 'false' to not put a comment at the beginning of the generated files.
   mark_files_as_generated: true

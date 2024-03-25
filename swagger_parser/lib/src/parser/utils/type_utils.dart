@@ -1,4 +1,7 @@
+import 'package:collection/collection.dart';
+
 import '../model/universal_data_class.dart';
+import '../parser/open_api_parser.dart';
 import 'case_utils.dart';
 import 'dart_keywords.dart';
 
@@ -105,7 +108,9 @@ String? protectDefaultValue(
   }
 
   if (isEnum) {
-    return protectEnumItemsNames([nameStr]).first.name;
+    return protectEnumItemsNames({
+      'enums': [nameStr]
+    }).first.name;
   }
 
   if (isArray) {
@@ -121,9 +126,10 @@ String? protectDefaultValue(
 }
 
 /// Protect enum items names from incorrect symbols, keywords, etc.
-Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names) {
+Set<UniversalEnumItem> protectEnumItemsNames(Map<String, dynamic> enumMap) {
   var counter = 0;
   final items = <UniversalEnumItem>{};
+  final names = enumMap['enum'] as List<dynamic>;
 
   String uniqueEnumItemName() {
     final newName = 'undefined $counter';
@@ -131,9 +137,20 @@ Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names) {
     return newName;
   }
 
-  String numberEnumItemName(String name) {
-    final startsWithMinus = name.startsWith('-');
-    final newName = 'value ${startsWithMinus ? 'minus' : ''} $name';
+  String numberEnumItemName(dynamic enumValue) {
+    final oneOfMap = enumMap['oneOf'] as List<dynamic>?;
+    if (oneOfMap != null) {
+      final oneOfItem =
+          oneOfMap.firstWhereOrNull((e) => e['const'] == enumValue)
+              as Map<String, dynamic>?;
+
+      if (oneOfItem != null && oneOfItem['title'] != null) {
+        return oneOfItem['title'].toString();
+      }
+    }
+
+    final startsWithMinus = enumValue.toString().startsWith('-');
+    final newName = 'value ${startsWithMinus ? 'minus' : ''} $enumValue';
     return newName;
   }
 
@@ -147,26 +164,26 @@ Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names) {
   for (final name in names) {
     final (newName, renameDescription) = switch (name) {
       _
-          when _startWithNumberRegExp.hasMatch(name) &&
+          when _startWithNumberRegExp.hasMatch(name.toString()) &&
               _enumNameRegExp.hasMatch(numberEnumItemName(name).toCamel) =>
         (
           numberEnumItemName(name),
           null,
         ),
-      _ when !_enumNameRegExp.hasMatch(name) => (
+      _ when !_enumNameRegExp.hasMatch(name.toString()) => (
           uniqueEnumItemName(),
           'Incorrect name has been replaced. Original name: `$name`.'
         ),
-      _ when dartEnumMemberKeywords.contains(name.toCamel) => (
-          '$_valueConst ${leadingDashToMinus(name)}',
+      _ when dartEnumMemberKeywords.contains(name.toString().toCamel) => (
+          '$_valueConst ${leadingDashToMinus(name.toString())}',
           'The name has been replaced because it contains a keyword. Original name: `$name`.'
         ),
-      _ => (leadingDashToMinus(name), null),
+      _ => (leadingDashToMinus(name.toString()), null),
     };
     items.add(
       UniversalEnumItem(
         name: newName,
-        jsonKey: name,
+        jsonKey: name.toString(),
         description: renameDescription,
       ),
     );

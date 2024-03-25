@@ -31,8 +31,12 @@ String dartEnumDtoTemplate(
     final unknownEnumValueStr = unknownEnumValue ? _unkownEnumValue() : '';
     final constructorStr = jsonParam ? _constructor(className) : '';
     final fromJsonStr = unknownEnumValue ? _fromJson(className, enumClass) : '';
-    final jsonFieldStr = jsonParam ? _jsonField(enumClass) : '';
-    final toJsonStr = enumsToJson ? _toJson(enumClass, className) : '';
+    final jsonFieldStr =
+        jsonParam ? _jsonField(enumClass, unknownEnumValue) : '';
+    final toJsonStr =
+        enumsToJson ? _toJson(enumClass, className, unknownEnumValue) : '';
+    final toStringStr = _toString(enumClass);
+    final compareToStr = _compareTo(className, enumClass, unknownEnumValue);
 
     return '''
 ${generatedFileComment(
@@ -40,8 +44,15 @@ ${generatedFileComment(
     )}${dartImportDtoTemplate(jsonSerializer)}
 
 ${descriptionComment(enumClass.description)}@JsonEnum()
-enum $className {
-$values$unknownEnumValueStr$constructorStr$fromJsonStr$jsonFieldStr$toJsonStr
+enum $className implements Comparable<$className> {
+$values
+$unknownEnumValueStr
+$constructorStr
+$fromJsonStr
+$jsonFieldStr
+$toJsonStr
+$toStringStr
+$compareToStr
 }
 ''';
   }
@@ -58,6 +69,13 @@ String _dartEnumDartMappableTemplate(
 
   final values =
       '${enumClass.items.mapIndexed((i, e) => _enumValueDartMappable(i, enumClass.type, e, jsonParam: jsonParam)).join(',\n')}${unknownEnumValue ? ',' : ';'}';
+  final unknownEnumValueStr = unknownEnumValue ? _unkownEnumValue(true) : '';
+  final jsonFieldStr = jsonParam ? _jsonField(enumClass, unknownEnumValue) : '';
+  final constructorStr = jsonParam ? _constructor(className) : '';
+  final toJsonStr =
+      enumsToJson ? _toJson(enumClass, className, unknownEnumValue) : '';
+  final toStringStr = _toString(enumClass);
+  final compareToStr = _compareTo(className, enumClass, unknownEnumValue);
 
   return '''
 ${generatedFileComment(
@@ -67,29 +85,68 @@ ${generatedFileComment(
 part '${enumClass.name.toSnake}.mapper.dart';
 
 ${descriptionComment(enumClass.description)}@MappableEnum()
-enum $className {
+enum $className implements Comparable<$className> {
 $values
+$unknownEnumValueStr
+$jsonFieldStr
+$constructorStr
+$toJsonStr
+$toStringStr
+$compareToStr
 }
 ''';
 }
 
-String _constructor(String className) => '\n\n  const $className(this.json);\n';
+String _constructor(String className) =>
+    '\n${indentation(1)} const $className(this.value);';
 
-String _jsonField(UniversalEnumClass enumClass) =>
-    '\n  final ${enumClass.type.toDartType()}? json;';
+String _jsonField(UniversalEnumClass enumClass, bool unknownEnumValue) =>
+    '\n${indentation(1)} final ${enumClass.type.toDartType()}${_hasNullItem(enumClass, unknownEnumValue) ? '?' : ''} value;';
 
-String _unkownEnumValue() => r'''
+String _unkownEnumValue([bool mappable = false]) {
+  if (mappable) {
+    return r'''
+  /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
+  @MappableValue(null)
+  $unknown(null);''';
+  }
 
+  return r'''
   /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
   $unknown(null);''';
+}
 
 String _fromJson(String className, UniversalEnumClass enumClass) => '''
 
   factory $className.fromJson(${enumClass.type.toDartType()} json) => values.firstWhere(
-        (e) => e.json == json,
+        (e) => e.value == json,
         orElse: () => \$unknown,
-      );
-''';
+      );''';
+
+bool _hasNullItem(UniversalEnumClass enumClass, bool unknownEnumValue) =>
+    unknownEnumValue || enumClass.items.any((e) => e.jsonKey == 'null');
+
+String _compareTo(
+    String className, UniversalEnumClass enumClass, bool unknownEnumValue) {
+  if (_hasNullItem(enumClass, unknownEnumValue)) {
+    return '''
+
+  @override
+  int compareTo($className other) {
+    return (value ?? 0) - (other.value ?? 0);
+  }''';
+  }
+
+  return '''
+
+  @override
+  int compareTo($className other) => value - other.value;''';
+}
+
+String _toString(UniversalEnumClass enumClass) => '''
+
+  @override
+  String toString() => super.toString().split('.').last;''';
 
 String _enumValue(
   int index,
@@ -112,8 +169,9 @@ String _enumValueDartMappable(
   final protectedJsonKey = protectJsonKey(item.jsonKey);
   return '''
 ${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}${indentation(2)}@MappableValue(${type == 'string' ? "'$protectedJsonKey'" : protectedJsonKey}) 
-${indentation(2)}${item.name.toCamel}''';
+${indentation(2)}${item.name.toCamel}${jsonParam ? '(${type == 'string' ? "'$protectedJsonKey'" : protectedJsonKey})' : ''}''';
 }
 
-String _toJson(UniversalEnumClass enumClass, String className) =>
-    '\n\n  ${enumClass.type.toDartType()}? toJson() => json;';
+String _toJson(UniversalEnumClass enumClass, String className,
+        bool unknownEnumValue) =>
+    '\n${indentation(1)} ${enumClass.type.toDartType()}${_hasNullItem(enumClass, unknownEnumValue) ? '?' : ''} toJson() => value;';
