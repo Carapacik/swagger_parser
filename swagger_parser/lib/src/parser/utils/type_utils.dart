@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 
 import '../model/universal_data_class.dart';
-import '../parser/open_api_parser.dart';
 import 'case_utils.dart';
 import 'dart_keywords.dart';
 
@@ -109,7 +108,7 @@ String? protectDefaultValue(
 
   if (isEnum) {
     return protectEnumItemsNames({
-      'enums': [nameStr]
+      'enum': [nameStr],
     }).first.name;
   }
 

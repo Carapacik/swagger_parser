@@ -127,7 +127,10 @@ bool _hasNullItem(UniversalEnumClass enumClass, bool unknownEnumValue) =>
     unknownEnumValue || enumClass.items.any((e) => e.jsonKey == 'null');
 
 String _compareTo(
-    String className, UniversalEnumClass enumClass, bool unknownEnumValue) {
+  String className,
+  UniversalEnumClass enumClass,
+  bool unknownEnumValue,
+) {
   if (_hasNullItem(enumClass, unknownEnumValue)) {
     return '''
 
@@ -172,6 +175,9 @@ ${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}${ind
 ${indentation(2)}${item.name.toCamel}${jsonParam ? '(${type == 'string' ? "'$protectedJsonKey'" : protectedJsonKey})' : ''}''';
 }
 
-String _toJson(UniversalEnumClass enumClass, String className,
-        bool unknownEnumValue) =>
+String _toJson(
+  UniversalEnumClass enumClass,
+  String className,
+  bool unknownEnumValue,
+) =>
     '\n${indentation(1)} ${enumClass.type.toDartType()}${_hasNullItem(enumClass, unknownEnumValue) ? '?' : ''} toJson() => value;';
