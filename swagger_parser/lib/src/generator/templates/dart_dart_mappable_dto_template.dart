@@ -64,9 +64,17 @@ String _parametersToString(List<UniversalType> parameters) {
   return sortedByRequired
       .mapIndexed(
         (i, e) =>
-            '${indentation(4)}${_required(e)}this.${e.name}${getDefaultValue(e)},',
+            '${_jsonKey(e)}${indentation(4)}${_required(e)}this.${e.name}${getDefaultValue(e)},',
       )
       .join('\n');
+}
+
+/// if jsonKey is different from the name
+String _jsonKey(UniversalType t) {
+  if (t.jsonKey == null || t.name == t.jsonKey) {
+    return '';
+  }
+  return "${indentation(4)}@MappableField(key: '${protectJsonKey(t.jsonKey)}')\n";
 }
 
 String getDefaultValue(UniversalType t) {
