@@ -182,43 +182,6 @@
   },
   "components": {
     "schemas": {
-      "Aggregates": {
-        "enum": [
-          1,
-          2,
-          4,
-          8,
-          16
-        ],
-        "type": "integer",
-        "oneOf": [
-          {
-            "const": 1,
-            "title": "Count",
-            "description": "Count"
-          },
-          {
-            "const": 2,
-            "title": "Sum",
-            "description": "Sum"
-          },
-          {
-            "const": 4,
-            "title": "Max",
-            "description": "Max"
-          },
-          {
-            "const": 8,
-            "title": "Min",
-            "description": "Min"
-          },
-          {
-            "const": 16,
-            "title": "Average",
-            "description": "Average"
-          }
-        ]
-      },
       "Pet": {
         "allOf": [
           {

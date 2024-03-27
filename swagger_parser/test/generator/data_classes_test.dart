@@ -1690,11 +1690,11 @@ enum EnumName {
   @JsonValue(3)
   value3(3);
 
-  const EnumName(this.json);
+  const EnumName(this.value);
 
-  final int? json;
+  final int? value;
 
-  int? toJson() => json;
+  int? toJson() => value;
 }
 ''';
 
@@ -1712,11 +1712,11 @@ enum EnumNameString {
   @JsonValue('ITEM-FOUR')
   itemFour('ITEM-FOUR');
 
-  const EnumNameString(this.json);
+  const EnumNameString(this.value);
 
-  final String? json;
+  final String? value;
 
-  String? toJson() => json;
+  String? toJson() => value;
 }
 ''';
 
@@ -1850,16 +1850,16 @@ enum EnumName {
   /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
   $unknown(null);
 
-  const EnumName(this.json);
+  const EnumName(this.value);
 
   factory EnumName.fromJson(int json) => values.firstWhere(
         (e) => e.json == json,
         orElse: () => $unknown,
       );
 
-  final int? json;
+  final int? value;
 
-  int? toJson() => json;
+  int? toJson() => value;
 }
 ''';
 
@@ -1881,16 +1881,16 @@ enum EnumNameString {
   /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
   $unknown(null);
 
-  const EnumNameString(this.json);
+  const EnumNameString(this.value);
 
   factory EnumNameString.fromJson(String json) => values.firstWhere(
-        (e) => e.json == json,
+        (e) => e.value == json,
         orElse: () => $unknown,
       );
 
-  final String? json;
+  final String? value;
 
-  String? toJson() => json;
+  String? toJson() => value;
 }
 ''';
         expect(files[0].content, expectedContent0);

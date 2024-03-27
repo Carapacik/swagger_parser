@@ -108,7 +108,7 @@ String? protectDefaultValue(
 
   if (isEnum) {
     return protectEnumItemsNames({
-      'enum': [nameStr],
+      'enum': <String>{nameStr},
     }).first.name;
   }
 
@@ -128,7 +128,7 @@ String? protectDefaultValue(
 Set<UniversalEnumItem> protectEnumItemsNames(Map<String, dynamic> enumMap) {
   var counter = 0;
   final items = <UniversalEnumItem>{};
-  final names = enumMap['enum'] as List<dynamic>;
+  final names = enumMap['enum'] as Set<dynamic>;
 
   String uniqueEnumItemName() {
     final newName = 'undefined $counter';
