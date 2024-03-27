@@ -53,7 +53,7 @@ String _fieldsToString(List<UniversalType> parameters) {
   return sortedByRequired
       .mapIndexed(
         (i, e) =>
-            '${indentation(2)}final ${e.toSuitableType(ProgrammingLanguage.dart)} ${e.name};',
+            '${_jsonKey(e)}${indentation(2)}final ${e.toSuitableType(ProgrammingLanguage.dart)} ${e.name};',
       )
       .join('\n');
 }
@@ -64,7 +64,7 @@ String _parametersToString(List<UniversalType> parameters) {
   return sortedByRequired
       .mapIndexed(
         (i, e) =>
-            '${_jsonKey(e)}${indentation(4)}${_required(e)}this.${e.name}${getDefaultValue(e)},',
+            '${indentation(4)}${_required(e)}this.${e.name}${getDefaultValue(e)},',
       )
       .join('\n');
 }
@@ -74,7 +74,7 @@ String _jsonKey(UniversalType t) {
   if (t.jsonKey == null || t.name == t.jsonKey) {
     return '';
   }
-  return "${indentation(4)}@MappableField(key: '${protectJsonKey(t.jsonKey)}')\n";
+  return "${indentation(2)}@MappableField(key: '${protectJsonKey(t.jsonKey)}')\n";
 }
 
 String getDefaultValue(UniversalType t) {
