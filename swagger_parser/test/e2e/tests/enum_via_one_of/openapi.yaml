@@ -1,0 +1,81 @@
+openapi: 3.1.0
+info:
+  title: ''
+  version: 0.0.0 (v1)
+paths:
+  /api/log/:
+    get:
+      operationId: api_log_list
+      parameters:
+        - in: query
+          name: LogLevelQuery
+          schema:
+            type: array
+            items:
+              type: integer
+              oneOf:
+                - title: Trace
+                  const: 0
+                  description: "A trace log level"
+                - title: Debug
+                  const: 1
+                  description: "A debug log level"
+                - title: Information
+                  const: 2
+                  description: "A information log level"
+          description: 'LogLevel description'
+        - in: query
+          name: LogLevelStringQuery
+          schema:
+            type: string
+            items:
+              $ref: '#/components/schemas/LogLevelString'
+          description: 'LogLevelString description'
+      tags:
+        - api
+      responses:
+        '204':
+          description: ''
+components:
+  schemas:
+    LogLevelString:
+      type: string
+      enum:
+        - zero
+        - one
+        - two
+      oneOf:
+        - title: Trace
+          const: zero
+          description: "A trace log level"
+        - title: Debug
+          const: one
+          description: "A debug log level"
+        - title: Information
+          const: two
+          description: "A information log level"
+    Aggregates:
+      enum:
+        - 1
+        - 2
+        - 4
+        - 8
+        - 16
+      type: integer
+      oneOf:
+        - const: 1
+          title: Count
+          description: Count
+        - const: 2
+          title: Sum
+          description: Sum
+        - const: 4
+          title: Max
+          description: Max
+        - const: 8
+          title: Min
+          description: Min
+        - const: 16
+          title: Average
+          description: Average
+
