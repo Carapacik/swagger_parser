@@ -66,7 +66,7 @@ class UniversalEnumItem {
   /// Convert list of strings to set of [UniversalEnumItem]
   /// Only for testing
   static Set<UniversalEnumItem> listFromNames(Iterable<String> names) {
-    return protectEnumItemsNames(names);
+    return protectEnumItemsNames({'enum': names});
   }
 
   @override

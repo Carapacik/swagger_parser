@@ -19,6 +19,20 @@ void main() {
       );
     });
 
+    test('enum via one of', () async {
+      await e2eTest(
+        'enum_via_one_of',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        generateExpectedFiles: true,
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('multipart request properties', () async {
       await e2eTest(
         'multipart_request_properties',

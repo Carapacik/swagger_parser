@@ -107,7 +107,7 @@ String _toParameter(UniversalRequestType parameter) {
   // https://github.com/trevorwang/retrofit.dart/issues/661
   // The Word `value` cant be used a a keyword argument
   final keywordArguments =
-      parameter.type.name!.toCamel.replaceFirst("value", "value_");
+      parameter.type.name!.toCamel.replaceFirst('value', 'value_');
 
   return "    @${parameter.parameterType.type}(${parameter.name != null && !parameter.parameterType.isBody ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
       '${_required(parameter.type)}'

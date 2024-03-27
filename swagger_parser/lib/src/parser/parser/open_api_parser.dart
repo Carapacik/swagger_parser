@@ -716,9 +716,7 @@ class OpenApiParser {
       if (value.containsKey(_propertiesConst)) {
         findParametersAndImports(value);
       } else if (value.containsKey(_enumConst)) {
-        final items = protectEnumItemsNames(
-          (value[_enumConst] as List).map((e) => '$e'),
-        );
+        final items = protectEnumItemsNames(value);
         final type = value[_typeConst].toString();
         for (final replacementRule in config.replacementRules) {
           key = replacementRule.apply(key)!;
@@ -941,9 +939,7 @@ class OpenApiParser {
         newName = replacementRule.apply(newName)!;
       }
 
-      final items = protectEnumItemsNames(
-        (map[_enumConst] as List).map((e) => '$e'),
-      );
+      final items = protectEnumItemsNames(map);
 
       final enumClass = _getUniqueEnumClass(
         name: newName,
