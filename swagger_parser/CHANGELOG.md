@@ -1,3 +1,7 @@
+## 1.17.2
+
+- Add `MappableField` to dart_mappable template
+
 ## 1.17.1
 
 - Fixed error with nullable in multipart ([#211](https://github.com/Carapacik/swagger_parser/issues/211))
