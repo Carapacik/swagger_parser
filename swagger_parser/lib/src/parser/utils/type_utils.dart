@@ -129,10 +129,8 @@ Set<UniversalEnumItem> protectEnumItemsNames(Map<String, dynamic> enumMap) {
   var counter = 0;
   final items = <UniversalEnumItem>{};
   final names = (enumMap['enum'] is List<dynamic>
-          ? (enumMap['enum'] as List<dynamic>).toSet()
-          : enumMap['enum'] as Set<dynamic>)
-      .map((e) => e?.toString())
-      .toSet();
+      ? (enumMap['enum'] as List<dynamic>).toSet()
+      : enumMap['enum'] as Set<dynamic>);
 
   String uniqueEnumItemName() {
     final newName = 'undefined $counter';
@@ -140,7 +138,8 @@ Set<UniversalEnumItem> protectEnumItemsNames(Map<String, dynamic> enumMap) {
     return newName;
   }
 
-  String numberEnumItemName(dynamic enumValue) {
+  // ignore: inference_failure_on_untyped_parameter
+  String numberEnumItemName(enumValue) {
     final oneOfMap = enumMap['oneOf'] as List<dynamic>?;
     if (oneOfMap != null) {
       final oneOfItem =
@@ -164,29 +163,29 @@ Set<UniversalEnumItem> protectEnumItemsNames(Map<String, dynamic> enumMap) {
     return name;
   }
 
-  for (final name in names.where((e) => e != null)) {
+  for (final name in names) {
     final (newName, renameDescription) = switch (name) {
       _
-          when _startWithNumberRegExp.hasMatch(name!) &&
+          when _startWithNumberRegExp.hasMatch(name.toString()) &&
               _enumNameRegExp.hasMatch(numberEnumItemName(name).toCamel) =>
         (
           numberEnumItemName(name),
           null,
         ),
-      _ when !_enumNameRegExp.hasMatch(name) => (
+      _ when !_enumNameRegExp.hasMatch(name.toString()) => (
           uniqueEnumItemName(),
           'Incorrect name has been replaced. Original name: `$name`.'
         ),
-      _ when dartEnumMemberKeywords.contains(name.toCamel) => (
-          '$_valueConst ${leadingDashToMinus(name)}',
+      _ when dartEnumMemberKeywords.contains(name.toString().toCamel) => (
+          '$_valueConst ${leadingDashToMinus(name.toString())}',
           'The name has been replaced because it contains a keyword. Original name: `$name`.'
         ),
-      _ => (leadingDashToMinus(name), null),
+      _ => (leadingDashToMinus(name.toString()), null),
     };
     items.add(
       UniversalEnumItem(
         name: newName,
-        jsonKey: name,
+        jsonKey: name.toString(),
         description: renameDescription,
       ),
     );
