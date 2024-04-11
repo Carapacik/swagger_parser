@@ -128,7 +128,11 @@ String? protectDefaultValue(
 Set<UniversalEnumItem> protectEnumItemsNames(Map<String, dynamic> enumMap) {
   var counter = 0;
   final items = <UniversalEnumItem>{};
-  final names = enumMap['enum'] as Set<dynamic>;
+  final names = (enumMap['enum'] is List<dynamic>
+          ? (enumMap['enum'] as List<dynamic>).toSet()
+          : enumMap['enum'] as Set<dynamic>)
+      .map((e) => e?.toString())
+      .toSet();
 
   String uniqueEnumItemName() {
     final newName = 'undefined $counter';
@@ -160,29 +164,29 @@ Set<UniversalEnumItem> protectEnumItemsNames(Map<String, dynamic> enumMap) {
     return name;
   }
 
-  for (final name in names) {
+  for (final name in names.where((e) => e != null)) {
     final (newName, renameDescription) = switch (name) {
       _
-          when _startWithNumberRegExp.hasMatch(name.toString()) &&
+          when _startWithNumberRegExp.hasMatch(name!) &&
               _enumNameRegExp.hasMatch(numberEnumItemName(name).toCamel) =>
         (
           numberEnumItemName(name),
           null,
         ),
-      _ when !_enumNameRegExp.hasMatch(name.toString()) => (
+      _ when !_enumNameRegExp.hasMatch(name) => (
           uniqueEnumItemName(),
           'Incorrect name has been replaced. Original name: `$name`.'
         ),
-      _ when dartEnumMemberKeywords.contains(name.toString().toCamel) => (
-          '$_valueConst ${leadingDashToMinus(name.toString())}',
+      _ when dartEnumMemberKeywords.contains(name.toCamel) => (
+          '$_valueConst ${leadingDashToMinus(name)}',
           'The name has been replaced because it contains a keyword. Original name: `$name`.'
         ),
-      _ => (leadingDashToMinus(name.toString()), null),
+      _ => (leadingDashToMinus(name), null),
     };
     items.add(
       UniversalEnumItem(
         name: newName,
-        jsonKey: name.toString(),
+        jsonKey: name,
         description: renameDescription,
       ),
     );
