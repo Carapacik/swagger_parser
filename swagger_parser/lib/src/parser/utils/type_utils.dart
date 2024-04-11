@@ -143,6 +143,7 @@ Set<UniversalEnumItem> protectEnumItemsNames(Map<String, dynamic> enumMap) {
     final oneOfMap = enumMap['oneOf'] as List<dynamic>?;
     if (oneOfMap != null) {
       final oneOfItem =
+          // ignore: avoid_dynamic_calls
           oneOfMap.firstWhereOrNull((e) => e['const'] == enumValue)
               as Map<String, dynamic>?;
 
