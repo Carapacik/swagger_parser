@@ -13,7 +13,7 @@ jobs:
       run:
         working-directory: ./swagger_parser_pages
     steps:
-      - uses: actions/checkout@v4.1.2
+      - uses: actions/checkout@v4.1.4
       - uses: subosito/flutter-action@v2.15.0
         with:
           channel: stable
