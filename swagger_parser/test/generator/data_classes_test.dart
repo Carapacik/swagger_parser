@@ -530,6 +530,51 @@ class ClassName with ClassNameMappable {
       );
     });
 
+    test('dart + dart_mappable with custom json key', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        parameters: [
+          UniversalType(
+            type: 'string',
+            name: 'imageUrl',
+            jsonKey: 'imageURL',
+            isRequired: true,
+          ),
+        ],
+      );
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.dartMappable,
+        ),
+      );
+      final filledContent = fillController.fillDtoContent(dataClass);
+      const expectedContents = '''
+import 'package:dart_mappable/dart_mappable.dart';
+
+part 'class_name.mapper.dart';
+
+@MappableClass()
+class ClassName with ClassNameMappable {
+
+  const ClassName({
+    required this.imageUrl,
+  });
+
+  @MappableField(key: 'imageURL')
+  final String imageUrl;
+
+  static ClassName fromJson(Map<String, dynamic> json) => ClassNameMapper.ensureInitialized().decodeMap<ClassName>(json);
+}
+''';
+      expect(
+        filledContent.content,
+        equalsIgnoringWhitespace(expectedContents),
+      );
+    });
+
     test('kotlin + moshi', () async {
       const dataClass = UniversalComponentClass(
         name: 'ClassName',

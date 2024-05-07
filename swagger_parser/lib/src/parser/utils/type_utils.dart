@@ -195,7 +195,7 @@ Set<UniversalEnumItem> protectEnumItemsNames(Map<String, dynamic> enumMap) {
   return items;
 }
 
-final _nameRegExp = RegExp(r'^[a-zA-Z_][a-zA-Z\d_]*$');
+final _nameRegExp = RegExp(r'^[a-zA-Z_-][a-zA-Z\d_-]*$');
 
 /// Protect name from incorrect symbols, keywords, etc.
 (String? newName, String? description) protectName(
