@@ -1,4 +1,4 @@
-import 'dart:convert' show jsonDecode;
+import 'dart:convert' show json;
 
 import 'package:yaml/yaml.dart';
 
@@ -7,16 +7,18 @@ import '../utils/case_utils.dart';
 
 /// Class used to correct data class, method and field names in OpenAPI
 class OpenApiCorrector {
-  OpenApiCorrector(this.config);
+  /// Creates a [OpenApiCorrector].
+  const OpenApiCorrector(this.config);
 
   /// [ParserConfig] that [OpenApiParser] use
   final ParserConfig config;
 
+  /// Corrects the OpenAPI definition file content
   Map<String, dynamic> correct() {
     var fileContent = config.fileContent;
 
     final definitionFileContent = config.isJson
-        ? jsonDecode(fileContent) as Map<String, dynamic>
+        ? json.decode(fileContent) as Map<String, dynamic>
         : (loadYaml(fileContent) as YamlMap).toMap();
 
     final components =
@@ -34,7 +36,7 @@ class OpenApiCorrector {
     }
 
     return config.isJson
-        ? jsonDecode(fileContent) as Map<String, dynamic>
+        ? json.decode(fileContent) as Map<String, dynamic>
         : (loadYaml(fileContent) as YamlMap).toMap();
   }
 }
