@@ -24,6 +24,7 @@ class GenProcessor {
     final (fileContent, isJson) = await configProcessor.fileContent(config);
     final parserConfig =
         config.toParserConfig(fileContent: fileContent, isJson: isJson);
+
     final parser = OpenApiParser(parserConfig);
 
     final generatorConfig = config.toGeneratorConfig();
