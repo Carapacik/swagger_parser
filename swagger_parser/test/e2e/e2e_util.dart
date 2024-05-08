@@ -30,8 +30,14 @@ Future<void> e2eTest(
     ),
   );
 
-  if (generateExpectedFiles) {
-    Directory(expectedFolderPath).deleteSync(recursive: true);
+  final expectedFilesFolder = Directory(expectedFolderPath);
+  if (generateExpectedFiles && expectedFilesFolder.existsSync()) {
+    expectedFilesFolder.deleteSync(recursive: true);
+  }
+
+  final generatedFilesFolder = Directory(generatedFolderPath);
+  if (generatedFilesFolder.existsSync()) {
+    generatedFilesFolder.deleteSync(recursive: true);
   }
 
   await processor.generateFiles();

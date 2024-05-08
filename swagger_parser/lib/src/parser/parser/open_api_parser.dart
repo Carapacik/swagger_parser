@@ -1,11 +1,11 @@
 import 'dart:collection';
-import 'dart:convert' show jsonDecode;
 
 import 'package:collection/collection.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 import '../config/parser_config.dart';
+import '../corrector/open_api_corrector.dart';
 import '../exception/open_api_parser_exception.dart';
 import '../model/open_api_info.dart';
 import '../model/universal_collections.dart';
@@ -22,9 +22,7 @@ import '../utils/type_utils.dart';
 class OpenApiParser {
   /// Creates a [OpenApiParser].
   OpenApiParser(this.config) {
-    _definitionFileContent = config.isJson
-        ? jsonDecode(config.fileContent) as Map<String, Object?>
-        : (loadYaml(config.fileContent) as YamlMap).toMap();
+    _definitionFileContent = OpenApiCorrector(config).correct();
     _apiInfo = _parseOpenApiInfo();
   }
 
@@ -1152,26 +1150,6 @@ class OpenApiParser {
         import: import,
       );
     }
-  }
-}
-
-/// Extension used for [YamlMap]
-extension on YamlMap {
-  /// Convert [YamlMap] to Dart map
-  Map<String, Object?> toMap() {
-    final map = <String, Object?>{};
-    for (final entry in entries) {
-      if (entry.value is YamlMap || entry.value is Map) {
-        map[entry.key.toString()] = (entry.value as YamlMap).toMap();
-      } else if (entry.value is YamlList) {
-        map[entry.key.toString()] = (entry.value as YamlList)
-            .map<Object?>((e) => e is YamlMap ? e.toMap() : e)
-            .toList(growable: false);
-      } else {
-        map[entry.key.toString()] = entry.value.toString();
-      }
-    }
-    return map;
   }
 }
 
