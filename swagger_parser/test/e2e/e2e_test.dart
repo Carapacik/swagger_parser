@@ -68,6 +68,9 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          replacementRules: [
+            ReplacementRule(pattern: RegExp('V1'), replacement: ''),
+          ],
         ),
         schemaFileName: 'openapi.yaml',
       );
