@@ -178,7 +178,7 @@ class OpenApiParser {
       final typeWithImport = _findType(
         contentTypeValue[_schemaConst] as Map<String, dynamic>,
         additionalName: additionalName,
-        // Return type The return type is most often required in any case
+        // Return type is most often required in any case
         isRequired: true,
       );
       if (typeWithImport.import != null) {
@@ -445,7 +445,7 @@ class OpenApiParser {
       final typeWithImport = _findType(
         code2xx[_schemaConst] as Map<String, dynamic>? ?? {},
         additionalName: additionalName,
-        // Return type The return type is most often required in any case
+        // Return type is most often required in any case
         isRequired: true,
       );
       if (typeWithImport.import != null) {
