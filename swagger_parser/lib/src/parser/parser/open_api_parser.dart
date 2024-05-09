@@ -178,7 +178,8 @@ class OpenApiParser {
       final typeWithImport = _findType(
         contentTypeValue[_schemaConst] as Map<String, dynamic>,
         additionalName: additionalName,
-        isRequired: config.requiredByDefault,
+        // Return type The return type is most often required in any case
+        isRequired: true,
       );
       if (typeWithImport.import != null) {
         imports.add(typeWithImport.import!);
@@ -190,7 +191,7 @@ class OpenApiParser {
         wrappingCollections:
             // List<dynamic> is not supported by Retrofit, use dynamic instead
             type.type == _objectConst ? const [] : type.wrappingCollections,
-        isRequired: config.requiredByDefault,
+        isRequired: typeWithImport.type.isRequired,
       );
     }
 
@@ -440,19 +441,24 @@ class OpenApiParser {
       if (code2xx == null || !code2xx.containsKey(_schemaConst)) {
         return null;
       }
+
       final typeWithImport = _findType(
         code2xx[_schemaConst] as Map<String, dynamic>? ?? {},
         additionalName: additionalName,
-        isRequired: config.requiredByDefault,
+        // Return type The return type is most often required in any case
+        isRequired: true,
       );
-
       if (typeWithImport.import != null) {
         imports.add(typeWithImport.import!);
       }
+
+      final type = typeWithImport.type;
       return UniversalType(
-        type: typeWithImport.type.type,
-        wrappingCollections: typeWithImport.type.wrappingCollections,
-        isRequired: config.requiredByDefault,
+        type: type.type,
+        wrappingCollections:
+            // List<dynamic> is not supported by Retrofit, use dynamic instead
+            type.type == _objectConst ? const [] : type.wrappingCollections,
+        isRequired: typeWithImport.type.isRequired,
       );
     }
 
@@ -720,11 +726,6 @@ class OpenApiParser {
 
       value as Map<String, dynamic>;
 
-      var requiredParameters = <String>[];
-      if (value case {_requiredConst: final List<dynamic> rawParameters}) {
-        requiredParameters = rawParameters.map((e) => e.toString()).toList();
-      }
-
       final refs = <String>[];
       final parameters = <UniversalType>[];
       final imports = SplayTreeSet<String>();
@@ -766,8 +767,8 @@ class OpenApiParser {
         final typeWithImport = _findType(
           value,
           name: key,
-          isRequired:
-              requiredParameters.contains(key) || config.requiredByDefault,
+          // typeDef is always non-nullable
+          isRequired: true,
         );
         parameters.add(typeWithImport.type);
         if (typeWithImport.import != null) {

@@ -72,7 +72,7 @@
                       "type": "object",
                       "description": "data",
                       "additionalProperties": {
-                        "type": "object"
+                        "$ref": "#/components/schemas/Example"
                       }
                     }
                   },

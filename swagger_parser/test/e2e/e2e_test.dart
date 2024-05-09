@@ -59,6 +59,7 @@ void main() {
       );
     });
 
+    // https://github.com/Carapacik/swagger_parser/issues/223
     test('corrector', () async {
       await e2eTest(
         'corrector',
@@ -72,6 +73,8 @@ void main() {
       );
     });
 
+    // https://github.com/Carapacik/swagger_parser/issues/224
+    // https://github.com/Carapacik/swagger_parser/issues/214
     test('request_unnamed_types', () async {
       await e2eTest(
         'request_unnamed_types',
@@ -88,7 +91,6 @@ void main() {
     test('request_unnamed_types with requiredByDefault false', () async {
       await e2eTest(
         'request_unnamed_types_required_by_default_false',
-        generateExpectedFiles: true,
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
