@@ -1,0 +1,66 @@
+{
+  "openapi": "3.0.1",
+  "paths": {
+  
+    "/test": {
+      "get": {
+        "operationId": "test",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "list": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "name": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "type": "string"
+                  }
+                },
+                "required": ["list", "name"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "list": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "name": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "lastname": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["list", "name"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+}

@@ -608,14 +608,14 @@ void main() {
               name: 'type',
               jsonKey: 'type',
               nullable: true,
-              isRequired: true,
+              isRequired: false,
             ),
             UniversalType(
               type: 'string',
               name: 'instance',
               jsonKey: 'instance',
               nullable: true,
-              isRequired: true,
+              isRequired: false,
             ),
             UniversalType(
               type: 'string',
@@ -637,8 +637,8 @@ void main() {
               type: 'string',
               name: 'title',
               jsonKey: 'title',
-              isRequired: true,
               nullable: true,
+              isRequired: false,
             ),
             UniversalType(
               type: 'DataClass1',

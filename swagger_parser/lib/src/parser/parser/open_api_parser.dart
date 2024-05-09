@@ -363,16 +363,14 @@ class OpenApiParser {
                     [];
           }
 
-          for (final e in properties.entries) {
-            final isRequiredFromRequestBody =
-                requiredParameters.contains(e.key);
-            final isNullable =
-                (e.value as Map<String, dynamic>)[_nullableConst] == true;
+          for (final propName in properties.keys) {
+            final propValue = properties[propName] as Map<String, dynamic>;
+            final isRequired = requiredParameters.contains(propName);
+            final isNullable = propValue[_nullableConst] == true;
             final typeWithImport = _findType(
-              e.value as Map<String, dynamic>,
-              isRequired: !isNullable &&
-                  (isRequiredFromRequestBody || config.requiredByDefault),
-              // isRequired: isRequiredFromRequestBody || config.requiredByDefault,
+              propValue,
+              isRequired:
+                  isRequired || (!isNullable && config.requiredByDefault),
             );
             final currentType = typeWithImport.type;
             if (typeWithImport.import != null) {
@@ -381,11 +379,11 @@ class OpenApiParser {
             types.add(
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
-                name: e.key,
+                name: propName,
                 description: currentType.description,
                 type: UniversalType(
                   type: currentType.type,
-                  name: e.key,
+                  name: propName,
                   description: currentType.description,
                   format: currentType.format,
                   defaultValue: currentType.defaultValue,
@@ -654,6 +652,42 @@ class OpenApiParser {
     return restClients;
   }
 
+  /// Used for find properties in map
+  (List<UniversalType>, Set<String>) _findParametersAndImports(
+    Map<String, dynamic> map, {
+    required bool requiredByDefault,
+    String? additionalName,
+  }) {
+    final parameters = <UniversalType>[];
+    final imports = <String>{};
+
+    var requiredParameters = <String>[];
+    if (map case {_requiredConst: final List<dynamic> rawParameters}) {
+      requiredParameters = rawParameters.map((e) => e.toString()).toList();
+    }
+
+    if (map case {_propertiesConst: final Map<String, dynamic> props}) {
+      for (final propertyName in props.keys) {
+        final propertyValue = props[propertyName] as Map<String, dynamic>;
+        final isNullable = propertyValue[_nullableConst] == true;
+
+        final typeWithImport = _findType(
+          propertyValue,
+          name: propertyName,
+          additionalName: additionalName,
+          isRequired: requiredParameters.contains(propertyName) ||
+              (!isNullable && requiredByDefault),
+        );
+        parameters.add(typeWithImport.type);
+        if (typeWithImport.import != null) {
+          imports.add(typeWithImport.import!);
+        }
+      }
+    }
+
+    return (parameters, imports);
+  }
+
   /// Parses data classes from `components` of definition file
   /// and return list of  [UniversalDataClass]
   List<UniversalDataClass> parseDataClasses() {
@@ -692,26 +726,18 @@ class OpenApiParser {
       final imports = SplayTreeSet<String>();
 
       /// Used for find properties in map
-      void findParametersAndImports(Map<String, dynamic> map) {
-        (map[_propertiesConst] as Map<String, dynamic>).forEach(
-          (propertyName, propertyValue) {
-            final typeWithImport = _findType(
-              propertyValue as Map<String, dynamic>,
-              name: propertyName,
-              additionalName: key,
-              isRequired: requiredParameters.contains(propertyName) ||
-                  config.requiredByDefault,
-            );
-            parameters.add(typeWithImport.type);
-            if (typeWithImport.import != null) {
-              imports.add(typeWithImport.import!);
-            }
-          },
+      void localFindParametersAndImports(Map<String, dynamic> map) {
+        final (findParameters, findImports) = _findParametersAndImports(
+          map,
+          additionalName: key,
+          requiredByDefault: config.requiredByDefault,
         );
+        parameters.addAll(findParameters);
+        imports.addAll(findImports);
       }
 
       if (value.containsKey(_propertiesConst)) {
-        findParametersAndImports(value);
+        localFindParametersAndImports(value);
       } else if (value.containsKey(_enumConst)) {
         final items = protectEnumItemsNames(
           (value[_enumConst] as List).map((e) => '$e'),
@@ -768,7 +794,7 @@ class OpenApiParser {
             continue;
           }
           if (map.containsKey(_propertiesConst)) {
-            findParametersAndImports(map);
+            localFindParametersAndImports(map);
           }
         }
       }
@@ -986,15 +1012,17 @@ class OpenApiParser {
         description: map[_descriptionConst]?.toString(),
       );
 
-      final typeWithImports = <({UniversalType type, String? import})>[];
+      final (parameters, imports) = _findParametersAndImports(
+        map,
+        requiredByDefault: config.requiredByDefault,
+      );
 
       if (_objectClasses.where((oc) => oc.name == newName.toPascal).isEmpty) {
         _objectClasses.add(
           UniversalComponentClass(
             name: newName.toPascal,
-            imports:
-                typeWithImports.map((e) => e.import).whereNotNull().toSet(),
-            parameters: typeWithImports.map((e) => e.type).toList(),
+            imports: imports,
+            parameters: parameters,
           ),
         );
       }

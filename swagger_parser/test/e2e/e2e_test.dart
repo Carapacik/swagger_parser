@@ -71,5 +71,18 @@ void main() {
         schemaFileName: 'openapi.yaml',
       );
     });
+
+    test('request_unnamed_types', () async {
+      await e2eTest(
+        'request_unnamed_types',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.json',
+      );
+    });
   });
 }
