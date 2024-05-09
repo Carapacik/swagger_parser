@@ -22,6 +22,16 @@ paths:
                   $ref: '#/components/schemes/_class_name4'
                 p5:
                   $ref: '#/components/schemes/-class-name-5'
+                v1:
+                  $ref: '#/components/schemes/V1data1[Att]'
+                v2:
+                  $ref: '#/components/schemes/data{Att}V12'
+                v3:
+                  $ref: '#/components/schemes/_(Att)V1_data3'
+                v4:
+                  $ref: '#/components/schemes/data<Att>V14'
+
+              
       responses:
         '200':
           description: dummy
@@ -34,15 +44,22 @@ components:
   schemas:
     ClassName1:
       type: object
-
     Class_name_2:
       type: object
-    
     className3:
       type: object
-
     _class_name4:
       type: object
-
     -class-name-5:
       type: object
+
+    V1data1[Att]:
+      type: object
+    data{Att}V12:
+      type: object
+    _(Att)V1_data3:
+      type: object
+    data<Att>V14:
+      type: object
+
+    
