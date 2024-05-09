@@ -1,12 +1,10 @@
 {
   "openapi": "3.0.1",
   "paths": {
-  
-    "/test": {
-      "get": {
+    "/test1": {
+      "post": {
         "operationId": "test",
         "requestBody": {
-          "required": false,
           "content": {
             "application/json": {
               "schema": {
@@ -15,7 +13,7 @@
                   "list": {
                     "type": "array",
                     "items": {
-                      "type": "string"
+                      "type": "object"
                     }
                   },
                   "name": {
@@ -26,7 +24,70 @@
                     "type": "string"
                   }
                 },
-                "required": ["list", "name"]
+                "required": [
+                  "list",
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/test2": {
+      "get": {
+        "operationId": "test",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "list1": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Example"
+                    }
+                  },
+                  "list2": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "description": "data",
+                      "additionalProperties": {
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "name": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "list1",
+                  "name"
+                ]
               }
             }
           }
@@ -53,7 +114,10 @@
                       "type": "string"
                     }
                   },
-                  "required": ["list", "name"]
+                  "required": [
+                    "list",
+                    "name"
+                  ]
                 }
               }
             }
@@ -61,6 +125,16 @@
         }
       }
     }
-
+  },
+  "components": {
+    "schemas": {
+      "Example": {
+        "type": "object",
+        "description": "data",
+        "additionalProperties": {
+          "type": "object"
+        }
+      }
+    }
   }
 }

@@ -183,9 +183,13 @@ class OpenApiParser {
       if (typeWithImport.import != null) {
         imports.add(typeWithImport.import!);
       }
+
+      final type = typeWithImport.type;
       return UniversalType(
-        type: typeWithImport.type.type,
-        wrappingCollections: typeWithImport.type.wrappingCollections,
+        type: type.type,
+        wrappingCollections:
+            // List<dynamic> is not supported by Retrofit, use dynamic instead
+            type.type == _objectConst ? const [] : type.wrappingCollections,
         isRequired: config.requiredByDefault,
       );
     }

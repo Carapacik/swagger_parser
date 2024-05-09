@@ -10,7 +10,7 @@ part 'object0.g.dart';
 @Freezed()
 class Object0 with _$Object0 {
   const factory Object0({
-    required List<String> list,
+    required List<dynamic> list,
     required String? name,
     required String lastname,
   }) = _Object0;

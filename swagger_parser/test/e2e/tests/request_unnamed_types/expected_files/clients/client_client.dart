@@ -5,8 +5,9 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../models/get_test_response.dart';
+import '../models/get_test2_response.dart';
 import '../models/object0.dart';
+import '../models/object1.dart';
 
 part 'client_client.g.dart';
 
@@ -15,8 +16,14 @@ abstract class ClientClient {
   factory ClientClient(Dio dio, {String? baseUrl}) = _ClientClient;
 
   /// [body] - Name not received and was auto-generated.
-  @GET('/test')
-  Future<GetTestResponse> test({
-    @Body() Object0? body,
+  @POST('/test1')
+  Future<dynamic> test({
+    @Body() required Object0 body,
+  });
+
+  /// [body] - Name not received and was auto-generated.
+  @GET('/test2')
+  Future<GetTest2Response> test({
+    @Body() Object1? body,
   });
 }

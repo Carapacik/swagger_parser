@@ -5,7 +5,9 @@
 // Clients
 export 'clients/client_client.dart';
 // Data classes
-export 'models/get_test_response.dart';
+export 'models/example.dart';
 export 'models/object0.dart';
+export 'models/get_test2_response.dart';
+export 'models/object1.dart';
 // Root client
 export 'rest_client.dart';

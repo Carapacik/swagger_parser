@@ -84,5 +84,20 @@ void main() {
         schemaFileName: 'openapi.json',
       );
     });
+
+    test('request_unnamed_types with requiredByDefault false', () async {
+      await e2eTest(
+        'request_unnamed_types_required_by_default_false',
+        generateExpectedFiles: true,
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          requiredByDefault: false,
+        ),
+        schemaFileName: '../request_unnamed_types/openapi.json',
+      );
+    });
   });
 }
