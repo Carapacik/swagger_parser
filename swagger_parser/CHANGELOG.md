@@ -1,9 +1,9 @@
 ## 1.17.3
 
 - Fixed unnecessary null types with `required_by_default: false`
-- Fixed generation of class parameters that are set directly from the request specification ([#224](https://github.com/Carapacik/swagger_parser/pull/224))
-- Fixed changing case and applying replacement rules to class names ([#223](https://github.com/Carapacik/swagger_parser/pull/223))
-- Maps with `additionalProperties` are now generated correctly ([#214](https://github.com/Carapacik/swagger_parser/pull/214))
+- Fixed generation of class parameters that are set directly from the request specification ([#224](https://github.com/Carapacik/swagger_parser/issues/224))
+- Fixed changing case and applying replacement rules to class names ([#223](https://github.com/Carapacik/swagger_parser/issues/223))
+- Maps with `additionalProperties` are now generated correctly ([#214](https://github.com/Carapacik/swagger_parser/issues/214))
 
 ## 1.17.2
 
