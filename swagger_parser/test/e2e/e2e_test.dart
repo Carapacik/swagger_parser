@@ -59,6 +59,7 @@ void main() {
       );
     });
 
+    // https://github.com/Carapacik/swagger_parser/issues/223
     test('corrector', () async {
       await e2eTest(
         'corrector',
@@ -67,8 +68,40 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          replacementRules: [
+            ReplacementRule(pattern: RegExp('V1'), replacement: ''),
+          ],
         ),
         schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    // https://github.com/Carapacik/swagger_parser/issues/224
+    // https://github.com/Carapacik/swagger_parser/issues/214
+    test('request_unnamed_types', () async {
+      await e2eTest(
+        'request_unnamed_types',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.json',
+      );
+    });
+
+    test('request_unnamed_types with requiredByDefault false', () async {
+      await e2eTest(
+        'request_unnamed_types_required_by_default_false',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          requiredByDefault: false,
+        ),
+        schemaFileName: '../request_unnamed_types/openapi.json',
       );
     });
   });

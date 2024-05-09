@@ -6,7 +6,7 @@ class CaseUtils {
   }
 
   late final List<String> _words;
-  static const _separateSymbolsList = r' #,-./@\_{}';
+  static const _separateSymbolsList = r' #,-./@\_{}()[]<>:;`~!$%^&*+=|\';
   static final _upperCaseRegex = RegExp('[A-Z]');
   static final _lowerCaseRegex = RegExp('[a-z]');
   final _upperCaseTwoLettersRowWords = <String>{};

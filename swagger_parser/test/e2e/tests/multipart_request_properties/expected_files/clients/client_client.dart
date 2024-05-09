@@ -32,7 +32,7 @@ abstract class ClientClient {
   Future<void> testMultipartRequiredTrue({
     @Part(name: 'files') required List<File> files,
     @Part(name: 'address') required Object0 address,
-    @Part(name: 'name') String? name,
+    @Part(name: 'name') required String? name,
     @Part(name: 'image') File? image,
   });
 
@@ -42,7 +42,7 @@ abstract class ClientClient {
   Future<void> testMultipartRequiredFalse({
     @Part(name: 'files') required List<File> files,
     @Part(name: 'address') required Object1 address,
-    @Part(name: 'name') String? name,
+    @Part(name: 'name') required String? name,
     @Part(name: 'image') File? image,
   });
 }

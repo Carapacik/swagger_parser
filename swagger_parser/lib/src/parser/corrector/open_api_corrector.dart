@@ -26,9 +26,16 @@ class OpenApiCorrector {
     final schemes = components?['schemas'] as Map<String, dynamic>?;
 
     if (schemes != null) {
-      // Format all class names to PascalCase
+      // Apply replacement rules to all class names and format to PascalCase
       for (final type in schemes.keys) {
-        final correctType = type.toPascal;
+        var correctType = type;
+
+        for (final rule in config.replacementRules) {
+          correctType = rule.apply(correctType)!;
+        }
+
+        correctType = correctType.toPascal;
+
         if (correctType != type) {
           fileContent = fileContent.replaceAll(type, correctType);
         }
