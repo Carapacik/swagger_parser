@@ -2,4 +2,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, unused_import
 
-typedef ClassName3 = dynamic;
+typedef ClassName2Dto = dynamic;

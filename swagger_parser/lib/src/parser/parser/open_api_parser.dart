@@ -748,9 +748,6 @@ class OpenApiParser {
           (value[_enumConst] as List).map((e) => '$e'),
         );
         final type = value[_typeConst].toString();
-        for (final replacementRule in config.replacementRules) {
-          key = replacementRule.apply(key)!;
-        }
 
         dataClasses.add(
           _getUniqueEnumClass(
@@ -791,10 +788,8 @@ class OpenApiParser {
       if (value.containsKey(_allOfConst)) {
         for (final map in value[_allOfConst] as List<dynamic>) {
           if ((map as Map<String, dynamic>).containsKey(_refConst)) {
-            var ref = _formatRef(map);
-            for (final replacementRule in config.replacementRules) {
-              ref = replacementRule.apply(ref)!;
-            }
+            final ref = _formatRef(map);
+
             refs.add(ref);
             continue;
           }
@@ -806,10 +801,6 @@ class OpenApiParser {
 
       final allOf =
           refs.isNotEmpty ? (refs: refs, properties: parameters) : null;
-
-      for (final replacementRule in config.replacementRules) {
-        key = replacementRule.apply(key)!;
-      }
 
       dataClasses.add(
         UniversalComponentClass(
@@ -1009,10 +1000,11 @@ class OpenApiParser {
                 .isNotEmpty &&
             !(map[_additionalPropertiesConst] as Map<String, dynamic>)
                 .containsKey(_refConst))) {
+      final originalName = name ?? additionalName;
       // false positive result
       // ignore: unnecessary_null_checks
       final (newName!, description) = protectName(
-        name ?? additionalName,
+        originalName,
         uniqueIfNull: true,
         description: map[_descriptionConst]?.toString(),
       );
@@ -1022,10 +1014,16 @@ class OpenApiParser {
         requiredByDefault: config.requiredByDefault,
       );
 
-      if (_objectClasses.where((oc) => oc.name == newName.toPascal).isEmpty) {
+      var type = newName.toPascal;
+
+      for (final replacementRule in config.replacementRules) {
+        type = replacementRule.apply(type)!;
+      }
+
+      if (_objectClasses.where((oc) => oc.name == type).isEmpty) {
         _objectClasses.add(
           UniversalComponentClass(
-            name: newName.toPascal,
+            name: type,
             imports: imports,
             parameters: parameters,
           ),
@@ -1034,19 +1032,19 @@ class OpenApiParser {
 
       return (
         type: UniversalType(
-          type: newName.toPascal,
+          type: type,
           name: newName.toCamel,
           description: description,
           format: map.containsKey(_formatConst)
               ? map[_formatConst].toString()
               : null,
-          jsonKey: newName,
+          jsonKey: originalName,
           defaultValue: protectDefaultValue(map[_defaultConst]),
           nullable: map[_nullableConst].toString().toBool() ??
               !config.requiredByDefault,
           isRequired: isRequired,
         ),
-        import: newName.toPascal,
+        import: type,
       );
     }
     // Type in allOf, anyOf or oneOf
@@ -1151,10 +1149,6 @@ class OpenApiParser {
         type = import ?? _objectConst;
       }
       if (import != null) {
-        for (final replacementRule in config.replacementRules) {
-          import = replacementRule.apply(import);
-          type = replacementRule.apply(type)!;
-        }
         type = type.toPascal;
       }
 

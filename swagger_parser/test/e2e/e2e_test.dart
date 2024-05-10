@@ -68,8 +68,10 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          requiredByDefault: false,
           replacementRules: [
             ReplacementRule(pattern: RegExp('V1'), replacement: ''),
+            ReplacementRule(pattern: RegExp(r'$'), replacement: 'DTO'),
           ],
         ),
         schemaFileName: 'openapi.yaml',

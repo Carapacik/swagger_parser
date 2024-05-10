@@ -37,7 +37,18 @@ class OpenApiCorrector {
         correctType = correctType.toPascal;
 
         if (correctType != type) {
-          fileContent = fileContent.replaceAll(type, correctType);
+          // Escape all special characters for regular expressions
+          final escapedType = type.replaceAllMapped(
+            RegExp(r'[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]'),
+            (m) =>
+                // Add a backslash before each special character
+                '\\${m[0]}',
+          );
+
+          fileContent = fileContent.replaceAllMapped(
+            RegExp('[ "\'/]$escapedType[ "\':]'),
+            (match) => match[0]!.replaceAll(type, correctType),
+          );
         }
       }
     }
