@@ -106,5 +106,19 @@ void main() {
         schemaFileName: '../request_unnamed_types/openapi.json',
       );
     });
+
+    test('nullable_types', () async {
+      await e2eTest(
+        'nullable_types',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          requiredByDefault: false,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
   });
 }

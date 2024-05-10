@@ -877,7 +877,7 @@ class OpenApiParser {
     // Array
     if (map.containsKey(_typeConst) && map[_typeConst] == _arrayConst) {
       final arrayItems = map[_itemsConst] as Map<String, dynamic>;
-      final arrayType = _findType(
+      final (:type, :import) = _findType(
         arrayItems,
         name: name,
         additionalName: name,
@@ -888,32 +888,37 @@ class OpenApiParser {
       final (newName, description) =
           protectName(name, description: map[_descriptionConst]?.toString());
 
+      final nullable = map[_nullableConst].toString().toBool() ??
+          (root && !isRequired && !config.requiredByDefault);
+
       return (
         type: UniversalType(
-          type: arrayType.type.type,
+          type: type.type,
           name: newName?.toCamel,
           description: description,
-          format: arrayType.type.format,
+          format: type.format,
           jsonKey: name,
-          defaultValue:
-              protectDefaultValue(arrayType.type.defaultValue, isArray: true),
+          defaultValue: protectDefaultValue(type.defaultValue, isArray: true),
           isRequired: isRequired,
-          nullable: map[_nullableConst].toString().toBool() ??
-              !config.requiredByDefault,
-          wrappingCollections: List.of(arrayType.type.wrappingCollections)
-            ..insert(0, UniversalCollections.list),
+          nullable: type.nullable,
+          wrappingCollections: [
+            if (nullable)
+              UniversalCollections.nullableList
+            else
+              UniversalCollections.list,
+            ...type.wrappingCollections,
+          ],
         ),
-        import: arrayType.import,
+        import: import,
       );
     }
     // Map
-    else if (map[_typeConst].toString() == _objectConst &&
-        map.containsKey(_additionalPropertiesConst) &&
+    else if (map.containsKey(_additionalPropertiesConst) &&
+        map[_typeConst].toString() == _objectConst &&
         (map[_additionalPropertiesConst] is Map<String, dynamic>)) {
-      final arrayItems =
-          map[_additionalPropertiesConst] as Map<String, dynamic>;
-      final arrayType = _findType(
-        arrayItems,
+      final mapItem = map[_additionalPropertiesConst] as Map<String, dynamic>;
+      final (:type, :import) = _findType(
+        mapItem,
         name: name,
         additionalName: name,
         root: false,
@@ -923,22 +928,27 @@ class OpenApiParser {
       final (newName, description) =
           protectName(name, description: map[_descriptionConst]?.toString());
 
+      final nullable = map[_nullableConst].toString().toBool() ??
+          (root && !isRequired && !config.requiredByDefault);
       return (
         type: UniversalType(
-          type: arrayType.type.type,
+          type: type.type,
           name: newName?.toCamel,
           description: description,
-          format: arrayType.type.format,
+          format: type.format,
           jsonKey: name,
-          defaultValue:
-              protectDefaultValue(arrayType.type.defaultValue, isArray: true),
+          defaultValue: protectDefaultValue(type.defaultValue, isArray: true),
           isRequired: isRequired,
-          nullable: map[_nullableConst].toString().toBool() ??
-              !config.requiredByDefault,
-          wrappingCollections: List.of(arrayType.type.wrappingCollections)
-            ..insert(0, UniversalCollections.map),
+          nullable: type.nullable,
+          wrappingCollections: [
+            if (nullable)
+              UniversalCollections.nullableMap
+            else
+              UniversalCollections.map,
+            ...type.wrappingCollections,
+          ],
         ),
-        import: arrayType.import,
+        import: import,
       );
     }
     // Enum
@@ -994,12 +1004,13 @@ class OpenApiParser {
             (map.containsKey(_propertiesConst) &&
                 (map[_propertiesConst] is Map<String, dynamic>) &&
                 (map[_propertiesConst] as Map<String, dynamic>).isNotEmpty) ||
-        (map.containsKey(_additionalPropertiesConst) &&
-            (map[_additionalPropertiesConst] is Map<String, dynamic>) &&
-            (map[_additionalPropertiesConst] as Map<String, dynamic>)
-                .isNotEmpty &&
-            !(map[_additionalPropertiesConst] as Map<String, dynamic>)
-                .containsKey(_refConst))) {
+        !map.containsKey(_typeConst) &&
+            (map.containsKey(_additionalPropertiesConst) &&
+                (map[_additionalPropertiesConst] is Map<String, dynamic>) &&
+                (map[_additionalPropertiesConst] as Map<String, dynamic>)
+                    .isNotEmpty &&
+                !(map[_additionalPropertiesConst] as Map<String, dynamic>)
+                    .containsKey(_refConst))) {
       final originalName = name ?? additionalName;
       // false positive result
       // ignore: unnecessary_null_checks
@@ -1041,7 +1052,7 @@ class OpenApiParser {
           jsonKey: originalName,
           defaultValue: protectDefaultValue(map[_defaultConst]),
           nullable: map[_nullableConst].toString().toBool() ??
-              !config.requiredByDefault,
+              (root && !isRequired && !config.requiredByDefault),
           isRequired: isRequired,
         ),
         import: type,
@@ -1050,39 +1061,76 @@ class OpenApiParser {
     // Type in allOf, anyOf or oneOf
     else if (map.containsKey(_allOfConst) ||
         map.containsKey(_anyOfConst) ||
-        map.containsKey(_oneOfConst)) {
+        map.containsKey(_oneOfConst) ||
+        map[_typeConst] is List) {
       String? ofImport;
       UniversalType? ofType;
 
-      final of = map[_allOfConst] ?? map[_anyOfConst] ?? map[_oneOfConst];
-      if (of is List<dynamic>) {
+      final ofList = map[_allOfConst] ??
+          map[_anyOfConst] ??
+          map[_oneOfConst] ??
+          (map[_typeConst] as List<dynamic>)
+              .map((e) => <String, dynamic>{_typeConst: e.toString()})
+              .toList();
+      if (ofList is List<dynamic>) {
         // Find type in of one-element allOf, anyOf or oneOf
-        if (of.length == 1) {
-          final item = of[0];
+        if (ofList.length == 1) {
+          final item = ofList[0];
           if (item is Map<String, dynamic>) {
             (import: ofImport, type: ofType) = _findType(
               item,
+              root: false,
               isRequired: config.requiredByDefault,
             );
           }
         }
         // Find nullable type in of two-element anyOf
-        else if (map.containsKey(_anyOfConst) && of.length == 2) {
-          final item1 = of[0];
-          final item2 = of[1];
+        else if (ofList.length == 2) {
+          final item1 = ofList[0];
+          final item2 = ofList[1];
           if (item1 is Map<String, dynamic> && item2 is Map<String, dynamic>) {
             final nullableItem = item1[_typeConst] == 'null'
                 ? item2
                 : item2[_typeConst] == 'null'
                     ? item1
                     : null;
+
             if (nullableItem != null) {
-              final type = _findType(
+              // Add to support this:
+              // anyOf:
+              //   - type: array
+              //   - tupe: null
+              // items:
+              //   type: string
+              final nMap = {...map}
+                ..remove(_anyOfConst)
+                ..remove(_allOfConst)
+                ..remove(_oneOfConst)
+                ..remove(_typeConst);
+
+              nullableItem.addAll(nMap);
+
+              final (:type, :import) = _findType(
                 nullableItem,
-                isRequired: config.requiredByDefault,
+                root: root,
+                isRequired: isRequired,
               );
-              ofImport = type.import;
-              ofType = type.type.copyWith(nullable: true);
+              ofImport = import;
+              if (type.wrappingCollections.isEmpty) {
+                ofType = type.copyWith(nullable: true);
+              } else {
+                final first = type.wrappingCollections.first;
+                final wrappingCollections = [...type.wrappingCollections]
+                  ..first = switch (first) {
+                    UniversalCollections.list =>
+                      UniversalCollections.nullableList,
+                    UniversalCollections.map =>
+                      UniversalCollections.nullableMap,
+                    _ => first,
+                  };
+                ofType =
+                    type.copyWith(wrappingCollections: wrappingCollections);
+              }
             }
           }
         }
@@ -1117,11 +1165,9 @@ class OpenApiParser {
           enumType: enumType,
           isRequired: isRequired,
           wrappingCollections: ofType?.wrappingCollections ?? [],
-          nullable: root &&
-                  map.containsKey(_nullableConst) &&
-                  (map[_nullableConst].toString().toBool() ??
-                      !config.requiredByDefault) ||
-              (ofType?.nullable ?? false),
+          nullable: ofType?.nullable ??
+              (map[_nullableConst].toString().toBool() ??
+                  (root && !isRequired && !config.requiredByDefault)),
         ),
         import: import,
       );
@@ -1169,10 +1215,8 @@ class OpenApiParser {
               protectDefaultValue(defaultValue, isEnum: enumType != null),
           enumType: enumType,
           isRequired: isRequired,
-          nullable: root &&
-              map.containsKey(_nullableConst) &&
-              (map[_nullableConst].toString().toBool() ??
-                  !config.requiredByDefault),
+          nullable: map[_nullableConst].toString().toBool() ??
+              (root && !isRequired && !config.requiredByDefault),
         ),
         import: import,
       );
@@ -1183,5 +1227,6 @@ class OpenApiParser {
 /// Extension used for [YamlMap]
 extension on String? {
   /// Used specially for [YamlMap] to covert [String] value to [bool]
-  bool? toBool() => this == null ? null : this!.toLowerCase() == 'true';
+  bool? toBool() =>
+      this == null || this == 'null' ? null : this!.toLowerCase() == 'true';
 }
