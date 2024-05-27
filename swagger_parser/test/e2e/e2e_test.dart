@@ -40,7 +40,6 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          requiredByDefault: false,
         ),
         schemaFileName: '../multipart_request_properties/openapi.json',
       );
@@ -68,7 +67,6 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          requiredByDefault: false,
           replacementRules: [
             ReplacementRule(pattern: RegExp('V1'), replacement: ''),
             ReplacementRule(pattern: RegExp(r'$'), replacement: 'DTO'),
@@ -101,7 +99,6 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          requiredByDefault: false,
         ),
         schemaFileName: '../request_unnamed_types/openapi.json',
       );
@@ -115,7 +112,6 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          requiredByDefault: false,
         ),
         schemaFileName: 'openapi.yaml',
       );

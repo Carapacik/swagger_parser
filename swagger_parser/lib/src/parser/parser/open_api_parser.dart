@@ -234,8 +234,8 @@ class OpenApiParser {
           if (config.skippedParameters.contains(parameter[_nameConst])) {
             continue;
           }
-          final isRequired = parameter[_requiredConst]?.toString().toBool() ??
-              config.requiredByDefault;
+          final isRequired =
+              parameter[_requiredConst]?.toString().toBool() ?? false;
           final typeWithImport = _findType(
             parameter[_schemaConst] != null
                 ? parameter[_schemaConst] as Map<String, dynamic>
@@ -337,8 +337,7 @@ class OpenApiParser {
           if ((contentType[_schemaConst] as Map<String, dynamic>)
               .containsKey(_refConst)) {
             final isRequired =
-                requestBody[_requiredConst]?.toString().toBool() ??
-                    config.requiredByDefault;
+                requestBody[_requiredConst]?.toString().toBool() ?? false;
             final typeWithImport = _findType(
               contentType[_schemaConst] as Map<String, dynamic>,
               isRequired: isRequired,
@@ -371,11 +370,9 @@ class OpenApiParser {
           for (final propName in properties.keys) {
             final propValue = properties[propName] as Map<String, dynamic>;
             final isRequired = requiredParameters.contains(propName);
-            final isNullable = propValue[_nullableConst] == true;
             final typeWithImport = _findType(
               propValue,
-              isRequired:
-                  isRequired || (!isNullable && config.requiredByDefault),
+              isRequired: isRequired,
             );
             final currentType = typeWithImport.type;
             if (typeWithImport.import != null) {
@@ -400,8 +397,8 @@ class OpenApiParser {
             );
           }
         } else {
-          final isRequired = requestBody[_requiredConst]?.toString().toBool() ??
-              config.requiredByDefault;
+          final isRequired =
+              requestBody[_requiredConst]?.toString().toBool() ?? false;
           final typeWithImport = _findType(
             contentType[_schemaConst] as Map<String, dynamic>,
             isRequired: isRequired,
@@ -486,7 +483,7 @@ class OpenApiParser {
             (rawParameter as Map<String, dynamic>)[_requiredConst]
                     ?.toString()
                     .toBool() ??
-                config.requiredByDefault;
+                false;
 
         final isRefParameter = rawParameter.containsKey(_refConst);
         var parameter = Map<String, dynamic>.of(rawParameter);
@@ -665,7 +662,6 @@ class OpenApiParser {
   /// Used for find properties in map
   (List<UniversalType>, Set<String>) _findParametersAndImports(
     Map<String, dynamic> map, {
-    required bool requiredByDefault,
     String? additionalName,
   }) {
     final parameters = <UniversalType>[];
@@ -679,14 +675,11 @@ class OpenApiParser {
     if (map case {_propertiesConst: final Map<String, dynamic> props}) {
       for (final propertyName in props.keys) {
         final propertyValue = props[propertyName] as Map<String, dynamic>;
-        final isNullable = propertyValue[_nullableConst] == true;
-
         final typeWithImport = _findType(
           propertyValue,
           name: propertyName,
           additionalName: additionalName,
-          isRequired: requiredParameters.contains(propertyName) ||
-              (!isNullable && requiredByDefault),
+          isRequired: requiredParameters.contains(propertyName),
         );
         parameters.add(typeWithImport.type);
         if (typeWithImport.import != null) {
@@ -735,7 +728,6 @@ class OpenApiParser {
         final (findParameters, findImports) = _findParametersAndImports(
           map,
           additionalName: key,
-          requiredByDefault: config.requiredByDefault,
         );
         parameters.addAll(findParameters);
         imports.addAll(findImports);
@@ -836,7 +828,7 @@ class OpenApiParser {
             UniversalType(
               type: element.name,
               name: element.name.toCamel,
-              isRequired: config.requiredByDefault,
+              isRequired: false,
             ),
           );
           allOfClass.imports.add(element.name);
@@ -882,14 +874,14 @@ class OpenApiParser {
         name: name,
         additionalName: name,
         root: false,
-        isRequired: config.requiredByDefault,
+        isRequired: isRequired,
       );
 
       final (newName, description) =
           protectName(name, description: map[_descriptionConst]?.toString());
 
-      final nullable = map[_nullableConst].toString().toBool() ??
-          (root && !isRequired && !config.requiredByDefault);
+      final nullable =
+          map[_nullableConst].toString().toBool() ?? (root && !isRequired);
 
       return (
         type: UniversalType(
@@ -899,7 +891,7 @@ class OpenApiParser {
           format: type.format,
           jsonKey: name,
           defaultValue: protectDefaultValue(type.defaultValue, isArray: true),
-          isRequired: isRequired,
+          isRequired: type.isRequired,
           nullable: type.nullable,
           wrappingCollections: [
             if (nullable)
@@ -922,14 +914,14 @@ class OpenApiParser {
         name: name,
         additionalName: name,
         root: false,
-        isRequired: config.requiredByDefault,
+        isRequired: isRequired,
       );
 
       final (newName, description) =
           protectName(name, description: map[_descriptionConst]?.toString());
 
-      final nullable = map[_nullableConst].toString().toBool() ??
-          (root && !isRequired && !config.requiredByDefault);
+      final nullable =
+          map[_nullableConst].toString().toBool() ?? (root && !isRequired);
       return (
         type: UniversalType(
           type: type.type,
@@ -938,7 +930,7 @@ class OpenApiParser {
           format: type.format,
           jsonKey: name,
           defaultValue: protectDefaultValue(type.defaultValue, isArray: true),
-          isRequired: isRequired,
+          isRequired: type.isRequired,
           nullable: type.nullable,
           wrappingCollections: [
             if (nullable)
@@ -1022,7 +1014,6 @@ class OpenApiParser {
 
       final (parameters, imports) = _findParametersAndImports(
         map,
-        requiredByDefault: config.requiredByDefault,
       );
 
       var type = newName.toPascal;
@@ -1051,8 +1042,8 @@ class OpenApiParser {
               : null,
           jsonKey: originalName,
           defaultValue: protectDefaultValue(map[_defaultConst]),
-          nullable: map[_nullableConst].toString().toBool() ??
-              (root && !isRequired && !config.requiredByDefault),
+          nullable:
+              map[_nullableConst].toString().toBool() ?? (root && !isRequired),
           isRequired: isRequired,
         ),
         import: type,
@@ -1080,7 +1071,7 @@ class OpenApiParser {
             (import: ofImport, type: ofType) = _findType(
               item,
               root: false,
-              isRequired: config.requiredByDefault,
+              isRequired: false,
             );
           }
         }
@@ -1113,7 +1104,7 @@ class OpenApiParser {
               final (:type, :import) = _findType(
                 nullableItem,
                 root: root,
-                isRequired: isRequired,
+                isRequired: false,
               );
               ofImport = import;
               if (type.wrappingCollections.isEmpty) {
@@ -1167,7 +1158,7 @@ class OpenApiParser {
           wrappingCollections: ofType?.wrappingCollections ?? [],
           nullable: ofType?.nullable ??
               (map[_nullableConst].toString().toBool() ??
-                  (root && !isRequired && !config.requiredByDefault)),
+                  (root && !isRequired)),
         ),
         import: import,
       );
@@ -1215,8 +1206,8 @@ class OpenApiParser {
               protectDefaultValue(defaultValue, isEnum: enumType != null),
           enumType: enumType,
           isRequired: isRequired,
-          nullable: map[_nullableConst].toString().toBool() ??
-              (root && !isRequired && !config.requiredByDefault),
+          nullable:
+              map[_nullableConst].toString().toBool() ?? (root && !isRequired),
         ),
         import: import,
       );
