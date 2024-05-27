@@ -91,4 +91,188 @@ void main() {
       );
     });
   });
+
+  group('basic', () {
+    test('additional_properties_class.2.0', () async {
+      await e2eTest(
+        'basic/additional_properties_class.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'additional_properties_class.2.0.json',
+      );
+    });
+
+    test('additional_properties_class.3.0', () async {
+      await e2eTest(
+        'basic/additional_properties_class.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'additional_properties_class.3.0.json',
+      );
+    });
+
+    test('basic_requests.2.0', () async {
+      await e2eTest(
+        'basic/basic_requests.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'basic_requests.2.0.json',
+      );
+    });
+
+    test('basic_requests.3.0', () async {
+      await e2eTest(
+        'basic/basic_requests.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'basic_requests.3.0.json',
+      );
+    });
+
+    test('basic_types_class.2.0', () async {
+      await e2eTest(
+        'basic/basic_types_class.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'basic_types_class.2.0.json',
+      );
+    });
+
+    test('basic_types_class.3.0', () async {
+      await e2eTest(
+        'basic/basic_types_class.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'basic_types_class.3.0.json',
+      );
+    });
+
+    test('empty_class.2.0', () async {
+      await e2eTest(
+        'basic/empty_class.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'empty_class.2.0.json',
+      );
+    });
+
+    test('empty_class.3.0', () async {
+      await e2eTest(
+        'basic/empty_class.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'empty_class.3.0.json',
+      );
+    });
+
+    test('enum_class', () async {
+      await e2eTest(
+        'basic/enum_class',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'enum_class.json',
+      );
+    });
+
+    test('of_like_class.3.1', () async {
+      await e2eTest(
+        'basic/of_like_class.3.1',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'of_like_class.3.1.json',
+      );
+    });
+
+    test('reference_types_class.2.0', () async {
+      await e2eTest(
+        'basic/reference_types_class.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'reference_types_class.2.0.json',
+      );
+    });
+
+    test('reference_types_class.3.0', () async {
+      await e2eTest(
+        'basic/reference_types_class.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'reference_types_class.3.0.json',
+      );
+    });
+
+    test('wrapping_collections.2.0', () async {
+      await e2eTest(
+        'basic/wrapping_collections.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'wrapping_collections.2.0.json',
+      );
+    });
+
+    test('wrapping_collections.3.0', () async {
+      await e2eTest(
+        'basic/wrapping_collections.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'wrapping_collections.3.0.json',
+      );
+    });
+  });
 }

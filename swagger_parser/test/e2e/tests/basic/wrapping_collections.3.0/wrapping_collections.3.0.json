@@ -1,0 +1,60 @@
+{
+  "openapi": "3.0.0",
+  "info": {},
+  "paths": {},
+  "components": {
+    "schemas": {
+      "DataClass1": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "additionalProperties": {}
+      },
+      "DataClass2": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/components/schemas/DataClass1"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "additionalProperties": {}
+      }
+    }
+  }
+}
