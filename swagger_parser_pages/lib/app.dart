@@ -7,12 +7,11 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: 'Swagger Parser',
-        restorationScopeId: 'app',
+        restorationScopeId: 'swagger parser',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorSchemeSeed: const Color(0xFFD0BCFF),
           brightness: Brightness.dark,
-          useMaterial3: true,
         ),
         themeMode: ThemeMode.dark,
         home: const MainPage(),

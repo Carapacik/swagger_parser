@@ -1,22 +1,23 @@
 name: swagger_parser_pages
 description: Web interface for swagger_parser
 publish_to: none
-version: 1.0.0+2
+version: 1.0.0+1
 environment:
-  sdk: ^3.3.0
+  sdk: '>=3.4.0 <4.0.0'
 
 dependencies:
-  archive: ^3.4.10
-  file_picker: ^6.1.1
+  archive: ^3.6.0
+  file_picker: ^8.0.3
   flutter:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  swagger_parser: ^1.16.1
-  url_launcher: ^6.2.5
+  swagger_parser: ^1.17.3
+  url_launcher: ^6.2.6
+  web: ^0.5.1
 
 dev_dependencies:
-  carapacik_lints: ^1.7.0
+  carapacik_lints: ^1.8.1
 
 flutter:
   uses-material-design: true
