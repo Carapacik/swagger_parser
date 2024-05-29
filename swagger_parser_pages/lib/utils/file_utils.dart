@@ -1,8 +1,10 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
+import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
 import 'package:swagger_parser/swagger_parser.dart';
+import 'package:web/web.dart' as web;
 
 void generateArchive(List<GeneratedFile> files) {
   final encoder = ZipEncoder();
@@ -16,20 +18,22 @@ void generateArchive(List<GeneratedFile> files) {
     level: Deflate.BEST_COMPRESSION,
     output: outputStream,
   );
+  if (bytes == null || bytes is! Uint8List) {
+    throw Exception('Error with encode');
+  }
 
-  final blob = html.Blob(<List<int>?>[bytes]);
-  final url = html.Url.createObjectUrlFromBlob(blob);
-  final anchor = html.document.createElement('a') as html.AnchorElement
-    // ignore: unsafe_html
+  final blobWeb = web.Blob(<JSUint8Array>[bytes.toJS].toJS);
+  final url = web.URL.createObjectURL(blobWeb);
+  final anchor = web.document.createElement('a') as web.HTMLAnchorElement
     ..href = url
     ..style.display = 'none'
     ..download = 'generated.zip';
-  html.document.body!.children.add(anchor);
+  web.document.body!.children.add(anchor);
 
   // download
   anchor.click();
 
   // cleanup
-  html.document.body!.children.remove(anchor);
-  html.Url.revokeObjectUrl(url);
+  web.document.body!.children.delete(anchor);
+  web.URL.revokeObjectURL(url);
 }
