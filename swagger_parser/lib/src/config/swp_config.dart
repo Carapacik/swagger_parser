@@ -29,7 +29,6 @@ class SWPConfig {
     this.defaultContentType = 'application/json',
     this.extrasParameterByDefault = false,
     this.pathMethodName = false,
-    this.requiredByDefault = true,
     this.mergeClients = false,
     this.enumsParentPrefix = true,
     this.skippedParameters = const <String>[],
@@ -56,7 +55,6 @@ class SWPConfig {
     required this.defaultContentType,
     required this.extrasParameterByDefault,
     required this.pathMethodName,
-    required this.requiredByDefault,
     required this.mergeClients,
     required this.enumsParentPrefix,
     required this.skippedParameters,
@@ -287,7 +285,6 @@ class SWPConfig {
       defaultContentType: defaultContentType ?? dc.defaultContentType,
       extrasParameterByDefault:
           extrasParameterByDefault ?? dc.extrasParameterByDefault,
-      requiredByDefault: requiredByDefault ?? dc.requiredByDefault,
       mergeClients: mergeClients ?? dc.mergeClients,
       enumsParentPrefix: enumsParentPrefix ?? dc.enumsParentPrefix,
       skippedParameters: skippedParameters ?? dc.skippedParameters,
@@ -382,12 +379,6 @@ class SWPConfig {
   /// Future<String> myMethod({@Extras() Map<String, dynamic>? extras});
   final bool extrasParameterByDefault;
 
-  /// DART ONLY
-  /// It is used if the value does not have the annotations `required` and `nullable`.
-  /// If the value is `true`, then value be `required`.
-  /// If the value is `false`, then `nullable`.
-  final bool requiredByDefault;
-
   /// If `true`, use the endpoint path for the method name.
   /// if `false`, use `operationId`.
   final bool pathMethodName;
@@ -434,7 +425,6 @@ class SWPConfig {
       name: name,
       defaultContentType: defaultContentType,
       pathMethodName: pathMethodName,
-      requiredByDefault: requiredByDefault,
       mergeClients: mergeClients,
       enumsParentPrefix: enumsParentPrefix,
       skippedParameters: skippedParameters,

@@ -5,14 +5,20 @@
 // Clients
 export 'clients/client_client.dart';
 // Data classes
-export 'models/class_name1.dart';
-export 'models/class_name2.dart';
-export 'models/class_name3.dart';
-export 'models/private_class_name4.dart';
-export 'models/class_name5.dart';
-export 'models/data1_att.dart';
-export 'models/data_att2.dart';
-export 'models/private_att_data3.dart';
-export 'models/data_att4.dart';
+export 'models/class_name1_dto.dart';
+export 'models/class_name2_dto.dart';
+export 'models/class_name3_dto.dart';
+export 'models/private_class_name4_dto.dart';
+export 'models/class_name5_dto.dart';
+export 'models/class_name56_dto.dart';
+export 'models/data1_att_dto.dart';
+export 'models/data_att2_dto.dart';
+export 'models/private_att_data3_dto.dart';
+export 'models/data_att4_dto.dart';
+export 'models/object0_dto.dart';
+export 'models/p1_class_dto.dart';
+export 'models/object1_dto.dart';
+export 'models/enum0_dto.dart';
+export 'models/p2_enum_dto.dart';
 // Root client
 export 'rest_client.dart';

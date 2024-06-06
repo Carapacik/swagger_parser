@@ -83,15 +83,19 @@ class CaseUtils {
 
 /// Extension to easily format String
 extension StringToCaseX on String {
+  // (!) We have to use two times, the results for the first and second
+  // application may be different, e.g. p_n_d -> PND -> Pnd
+
   /// Return text formatted to camelCase
-  String get toCamel => CaseUtils(this).camelCase;
+  String get toCamel => CaseUtils(CaseUtils(this).camelCase).camelCase;
 
   /// Return text formatted to PascalCase
-  String get toPascal => CaseUtils(this).pascalCase;
+  String get toPascal => CaseUtils(CaseUtils(this).pascalCase).pascalCase;
 
   /// Return text formatted to snake_case
-  String get toSnake => CaseUtils(this).snakeCase;
+  String get toSnake => CaseUtils(CaseUtils(this).snakeCase).snakeCase;
 
   /// Return text formatted to SCREAMING_SNAKE_CASE
-  String get toScreamingSnake => CaseUtils(this).screamingSnakeCase;
+  String get toScreamingSnake =>
+      CaseUtils(CaseUtils(this).screamingSnakeCase).screamingSnakeCase;
 }

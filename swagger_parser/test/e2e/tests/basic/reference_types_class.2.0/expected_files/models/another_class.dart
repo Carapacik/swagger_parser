@@ -1,0 +1,19 @@
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, unused_import
+
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'another_class.freezed.dart';
+part 'another_class.g.dart';
+
+@Freezed()
+class AnotherClass with _$AnotherClass {
+  const factory AnotherClass({
+    int? id,
+    String? name,
+  }) = _AnotherClass;
+
+  factory AnotherClass.fromJson(Map<String, Object?> json) =>
+      _$AnotherClassFromJson(json);
+}

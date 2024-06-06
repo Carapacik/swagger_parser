@@ -26,7 +26,6 @@ class _GeneratorContentState extends State<GeneratorContent> {
   bool _enumsParentPrefix = false;
   bool _unknownEnumValue = true;
   bool _pathMethodName = false;
-  bool _requiredByDefault = true;
   bool _mergeClients = false;
   bool _markFilesAsGenerated = true;
 
@@ -47,7 +46,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 400, maxHeight: 600),
+                constraints:
+                    const BoxConstraints(maxWidth: 400, maxHeight: 600),
                 child: Column(
                   children: [
                     SizedBox(
@@ -63,7 +63,11 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             final fileBytes = result.files.first.bytes;
                             final fileName = result.files.first.name;
                             setState(() {
-                              _isJson = fileName.split('.').lastOrNull?.toLowerCase() != 'yaml';
+                              _isJson = fileName
+                                      .split('.')
+                                      .lastOrNull
+                                      ?.toLowerCase() !=
+                                  'yaml';
                             });
                             if (fileBytes != null) {
                               final s = utf8.decode(fileBytes);
@@ -86,7 +90,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
                                 height: 48,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFFc92b16).withOpacity(0.8),
+                                    backgroundColor: const Color(0xFFc92b16)
+                                        .withOpacity(0.8),
                                   ),
                                   onPressed: () async {
                                     _fileContent.clear();
@@ -102,7 +107,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          hintText: 'Paste your OpenApi definition file content',
+                          hintText:
+                              'Paste your OpenApi definition file content',
                           hintStyle: const TextStyle(fontSize: 18),
                         ),
                         controller: _fileContent,
@@ -126,7 +132,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
                   children: [
                     const Text(
                       'Config parameters',
-                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
+                      style:
+                          TextStyle(fontSize: 32, fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 24),
                     Center(
@@ -145,8 +152,9 @@ class _GeneratorContentState extends State<GeneratorContent> {
                     const SizedBox(height: 16),
                     AnimatedCrossFade(
                       duration: const Duration(milliseconds: 600),
-                      crossFadeState:
-                          _language == ProgrammingLanguage.dart ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                      crossFadeState: _language == ProgrammingLanguage.dart
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
                       sizeCurve: Curves.fastOutSlowIn,
                       // for correct animation
                       firstChild: Container(),
@@ -157,10 +165,12 @@ class _GeneratorContentState extends State<GeneratorContent> {
                           initialSelection: JsonSerializer.jsonSerializable,
                           dropdownMenuEntries: JsonSerializer.values
                               .map(
-                                (e) => DropdownMenuEntry(value: e, label: e.name),
+                                (e) =>
+                                    DropdownMenuEntry(value: e, label: e.name),
                               )
                               .toList(growable: false),
-                          onSelected: (js) => setState(() => _jsonSerializer = js!),
+                          onSelected: (js) =>
+                              setState(() => _jsonSerializer = js!),
                         ),
                       ),
                     ),
@@ -187,8 +197,9 @@ class _GeneratorContentState extends State<GeneratorContent> {
                     ),
                     AnimatedCrossFade(
                       duration: const Duration(milliseconds: 600),
-                      crossFadeState:
-                          _language == ProgrammingLanguage.dart ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                      crossFadeState: _language == ProgrammingLanguage.dart
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
                       sizeCurve: Curves.fastOutSlowIn,
                       firstChild: Container(),
                       secondChild: TextField(
@@ -205,8 +216,9 @@ class _GeneratorContentState extends State<GeneratorContent> {
                     ),
                     AnimatedCrossFade(
                       duration: const Duration(milliseconds: 600),
-                      crossFadeState:
-                          _language == ProgrammingLanguage.dart ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                      crossFadeState: _language == ProgrammingLanguage.dart
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
                       sizeCurve: Curves.fastOutSlowIn,
                       firstChild: Container(),
                       secondChild: StatefulBuilder(
@@ -218,7 +230,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
                             'Generate root client for REST clients',
                           ),
                           value: _rootClient,
-                          onChanged: (value) => setState(() => _rootClient = value!),
+                          onChanged: (value) =>
+                              setState(() => _rootClient = value!),
                         ),
                       ),
                     ),
@@ -238,19 +251,10 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        title: const Text('Is required by default'),
-                        value: _requiredByDefault,
-                        onChanged: (value) => setState(() => _requiredByDefault = value!),
-                      ),
-                    ),
-                    StatefulBuilder(
-                      builder: (context, setState) => CheckboxListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
                         title: const Text('Put all clients in clients folder'),
                         value: _putClientsInFolder,
-                        onChanged: (value) => setState(() => _putClientsInFolder = value!),
+                        onChanged: (value) =>
+                            setState(() => _putClientsInFolder = value!),
                       ),
                     ),
                     StatefulBuilder(
@@ -260,7 +264,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         ),
                         title: const Text('Squash all clients in one client'),
                         value: _mergeClients,
-                        onChanged: (value) => setState(() => _mergeClients = value!),
+                        onChanged: (value) =>
+                            setState(() => _mergeClients = value!),
                       ),
                     ),
                     StatefulBuilder(
@@ -270,7 +275,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         ),
                         title: const Text('Generate method name from url path'),
                         value: _pathMethodName,
-                        onChanged: (value) => setState(() => _pathMethodName = value!),
+                        onChanged: (value) =>
+                            setState(() => _pathMethodName = value!),
                       ),
                     ),
                     StatefulBuilder(
@@ -280,13 +286,15 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         ),
                         title: const Text('Mark files as generated'),
                         value: _markFilesAsGenerated,
-                        onChanged: (value) => setState(() => _markFilesAsGenerated = value!),
+                        onChanged: (value) =>
+                            setState(() => _markFilesAsGenerated = value!),
                       ),
                     ),
                     AnimatedCrossFade(
                       duration: const Duration(milliseconds: 600),
-                      crossFadeState:
-                          _language == ProgrammingLanguage.dart ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                      crossFadeState: _language == ProgrammingLanguage.dart
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
                       sizeCurve: Curves.fastOutSlowIn,
                       // for correct animation
                       firstChild: Container(),
@@ -297,7 +305,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
                           ),
                           title: const Text('Generate to json in Enum'),
                           value: _enumsToJson,
-                          onChanged: (value) => setState(() => _enumsToJson = value!),
+                          onChanged: (value) =>
+                              setState(() => _enumsToJson = value!),
                         ),
                       ),
                     ),
@@ -310,7 +319,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
                           'Generate enum name with prefix from parent component',
                         ),
                         value: _enumsParentPrefix,
-                        onChanged: (value) => setState(() => _enumsParentPrefix = value!),
+                        onChanged: (value) =>
+                            setState(() => _enumsParentPrefix = value!),
                       ),
                     ),
                     StatefulBuilder(
@@ -318,9 +328,11 @@ class _GeneratorContentState extends State<GeneratorContent> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        title: const Text(r'Generate $unknown element in enums'),
+                        title:
+                            const Text(r'Generate $unknown element in enums'),
                         value: _unknownEnumValue,
-                        onChanged: (value) => setState(() => _unknownEnumValue = value!),
+                        onChanged: (value) =>
+                            setState(() => _unknownEnumValue = value!),
                       ),
                     ),
                     const SizedBox(height: 32),
@@ -348,7 +360,6 @@ class _GeneratorContentState extends State<GeneratorContent> {
                               unknownEnumValue: _unknownEnumValue,
                               markFilesAsGenerated: _markFilesAsGenerated,
                               pathMethodName: _pathMethodName,
-                              requiredByDefault: _requiredByDefault,
                               mergeClients: _mergeClients,
                             ),
                             fileContent: _fileContent.text,
@@ -375,7 +386,8 @@ Future<void> _generateOutputs(
   final sm = ScaffoldMessenger.of(context);
   final generator = GenProcessor(config);
   try {
-    final files = await generator.generateContent((fileContent: fileContent, isJson: isJson));
+    final files = await generator
+        .generateContent((fileContent: fileContent, isJson: isJson));
     generateArchive(files);
   } on Object catch (e, st) {
     sm.showSnackBar(

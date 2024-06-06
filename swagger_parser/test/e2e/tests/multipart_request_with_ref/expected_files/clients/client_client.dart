@@ -24,7 +24,7 @@ abstract class ClientClient {
   @POST('/multipart/request/props')
   Future<String> postMultipartRequestProps({
     @Part(name: 'images') required List<File> images,
-    @Part(name: 'address') required Object0 address,
+    @Part(name: 'address') Object0? address,
   });
 
   /// create  item.
@@ -34,6 +34,6 @@ abstract class ClientClient {
   @POST('/multipart/request/ref')
   Future<String> postMultipartRequestRef({
     @Part(name: 'images') required List<File> images,
-    @Part(name: 'address') required Object1 address,
+    @Part(name: 'address') Object1? address,
   });
 }

@@ -9,25 +9,23 @@ extension UniversalTypeX on UniversalType {
       return _questionMark(lang);
     }
     final sb = StringBuffer();
-    for (var i = 0; i < wrappingCollections.length; i++) {
-      sb.write(wrappingCollections[i].collectionsString);
+    for (final collection in wrappingCollections) {
+      sb.write(collection.collectionsString);
     }
     sb.write(_questionMark(lang));
-    for (var i = 0; i < wrappingCollections.length; i++) {
-      sb.write('>');
+    for (final collection in wrappingCollections.reversed) {
+      sb.write('>${collection.questionMark}');
     }
-    if (nullable || (!isRequired && defaultValue == null)) {
-      sb.write('?');
-    }
+
     return sb.toString();
   }
 
   String _questionMark(ProgrammingLanguage lang) {
-    final questionMark = isRequired && !nullable ||
-            wrappingCollections.isNotEmpty ||
-            defaultValue != null
-        ? ''
-        : '?';
+    final questionMark =
+        (isRequired || wrappingCollections.isNotEmpty) && !nullable ||
+                defaultValue != null
+            ? ''
+            : '?';
     switch (lang) {
       case ProgrammingLanguage.dart:
         // https://github.com/trevorwang/retrofit.dart/issues/631
