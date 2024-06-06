@@ -8,4 +8,3 @@ linter:
     avoid_equals_and_hash_code_on_mutable_classes: false
     package_api_docs: true
     prefer_relative_imports: true
-    unnecessary_library_name: false

@@ -1090,7 +1090,7 @@ class OpenApiParser {
               // Add to support this:
               // anyOf:
               //   - type: array
-              //   - tupe: null
+              //   - type: null
               // items:
               //   type: string
               final nMap = {...map}
