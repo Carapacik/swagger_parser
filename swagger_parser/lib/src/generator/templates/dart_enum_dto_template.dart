@@ -98,9 +98,16 @@ String _enumValue(
   required bool jsonParam,
 }) {
   final protectedJsonKey = protectJsonKey(item.jsonKey);
+  final value = type == 'string'
+      ? "'$protectedJsonKey'"
+      : protectedJsonKey?.isEmpty ?? true
+          ? "''"
+          : protectedJsonKey;
+
+  final name = item.name.isEmpty ? 'empty' : item.name;
   return '''
-${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}  @JsonValue(${type == 'string' ? "'$protectedJsonKey'" : protectedJsonKey})
-  ${item.name.toCamel}${jsonParam ? '(${type == 'string' ? "'$protectedJsonKey'" : protectedJsonKey})' : ''}''';
+${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}  @JsonValue($value)
+  ${name.toCamel}${jsonParam ? '($value)' : ''}''';
 }
 
 String _enumValueDartMappable(
