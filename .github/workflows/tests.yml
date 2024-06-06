@@ -18,7 +18,7 @@ jobs:
       matrix:
         sdk:
           - stable
-          - 3.0.7
+          - 3.2.6
     steps:
       - uses: actions/checkout@v4.1.6
       - uses: dart-lang/setup-dart@v1.6.4
