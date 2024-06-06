@@ -9,6 +9,7 @@ paths:
       parameters:
         - in: query
           name: enum_class
+          required: true
           schema:
             type: array
             items:

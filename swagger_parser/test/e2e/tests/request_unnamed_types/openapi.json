@@ -5,6 +5,7 @@
       "post": {
         "operationId": "test",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {

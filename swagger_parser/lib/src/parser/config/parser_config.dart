@@ -9,7 +9,6 @@ class ParserConfig {
     this.name,
     this.defaultContentType = 'application/json',
     this.pathMethodName = false,
-    this.requiredByDefault = true,
     this.mergeClients = false,
     this.enumsParentPrefix = true,
     this.skippedParameters = const <String>[],
@@ -33,12 +32,6 @@ class ParserConfig {
   /// If the content type does not match the default, generates:
   /// @Headers(<String, String>{'Content-Type': 'PARSED CONTENT TYPE'})
   final String defaultContentType;
-
-  /// DART ONLY
-  /// It is used if the value does not have the annotations `required` and `nullable`.
-  /// If the value is `true`, then value be `required`.
-  /// If the value is `false`, then `nullable`.
-  final bool requiredByDefault;
 
   /// If `true`, use the endpoint path for the method name.
   /// if `false`, use `operationId`.

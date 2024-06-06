@@ -25,6 +25,9 @@
                   "address": {
                     "description": "Sample Address",
                     "type": "object",
+                    "required":[
+                      "street"
+                    ],
                     "properties": {
                       "street": {
                         "description": "Sample Street.",

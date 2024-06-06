@@ -5,7 +5,7 @@ import 'e2e_util.dart';
 
 void main() {
   group('E2E', () {
-    test('enum member names', () async {
+    test('enum_member_names', () async {
       await e2eTest(
         'enum_member_names',
         (outputDirectory, schemaPath) => SWPConfig(
@@ -19,7 +19,7 @@ void main() {
       );
     });
 
-    test('multipart request properties', () async {
+    test('multipart_request_properties', () async {
       await e2eTest(
         'multipart_request_properties',
         (outputDirectory, schemaPath) => SWPConfig(
@@ -32,21 +32,7 @@ void main() {
       );
     });
 
-    test('multipart request properties with requiredByDefault false', () async {
-      await e2eTest(
-        'multipart_request_properties_required_by_default_false',
-        (outputDirectory, schemaPath) => SWPConfig(
-          outputDirectory: outputDirectory,
-          schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.freezed,
-          putClientsInFolder: true,
-          requiredByDefault: false,
-        ),
-        schemaFileName: '../multipart_request_properties/openapi.json',
-      );
-    });
-
-    test('multipart request with ref', () async {
+    test('multipart_request_with_ref', () async {
       await e2eTest(
         'multipart_request_with_ref',
         (outputDirectory, schemaPath) => SWPConfig(
@@ -70,6 +56,7 @@ void main() {
           putClientsInFolder: true,
           replacementRules: [
             ReplacementRule(pattern: RegExp('V1'), replacement: ''),
+            ReplacementRule(pattern: RegExp(r'$'), replacement: 'DTO'),
           ],
         ),
         schemaFileName: 'openapi.yaml',
@@ -91,17 +78,200 @@ void main() {
       );
     });
 
-    test('request_unnamed_types with requiredByDefault false', () async {
+    test('nullable_types', () async {
       await e2eTest(
-        'request_unnamed_types_required_by_default_false',
+        'nullable_types',
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          requiredByDefault: false,
         ),
-        schemaFileName: '../request_unnamed_types/openapi.json',
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+  });
+
+  group('basic', () {
+    test('additional_properties_class.2.0', () async {
+      await e2eTest(
+        'basic/additional_properties_class.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'additional_properties_class.2.0.json',
+      );
+    });
+
+    test('additional_properties_class.3.0', () async {
+      await e2eTest(
+        'basic/additional_properties_class.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'additional_properties_class.3.0.json',
+      );
+    });
+
+    test('basic_requests.2.0', () async {
+      await e2eTest(
+        'basic/basic_requests.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'basic_requests.2.0.json',
+      );
+    });
+
+    test('basic_requests.3.0', () async {
+      await e2eTest(
+        'basic/basic_requests.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'basic_requests.3.0.json',
+      );
+    });
+
+    test('basic_types_class.2.0', () async {
+      await e2eTest(
+        'basic/basic_types_class.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'basic_types_class.2.0.json',
+      );
+    });
+
+    test('basic_types_class.3.0', () async {
+      await e2eTest(
+        'basic/basic_types_class.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'basic_types_class.3.0.json',
+      );
+    });
+
+    test('empty_class.2.0', () async {
+      await e2eTest(
+        'basic/empty_class.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'empty_class.2.0.json',
+      );
+    });
+
+    test('empty_class.3.0', () async {
+      await e2eTest(
+        'basic/empty_class.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'empty_class.3.0.json',
+      );
+    });
+
+    test('enum_class', () async {
+      await e2eTest(
+        'basic/enum_class',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'enum_class.json',
+      );
+    });
+
+    test('of_like_class.3.1', () async {
+      await e2eTest(
+        'basic/of_like_class.3.1',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'of_like_class.3.1.json',
+      );
+    });
+
+    test('reference_types_class.2.0', () async {
+      await e2eTest(
+        'basic/reference_types_class.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'reference_types_class.2.0.json',
+      );
+    });
+
+    test('reference_types_class.3.0', () async {
+      await e2eTest(
+        'basic/reference_types_class.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'reference_types_class.3.0.json',
+      );
+    });
+
+    test('wrapping_collections.2.0', () async {
+      await e2eTest(
+        'basic/wrapping_collections.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'wrapping_collections.2.0.json',
+      );
+    });
+
+    test('wrapping_collections.3.0', () async {
+      await e2eTest(
+        'basic/wrapping_collections.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'wrapping_collections.3.0.json',
       );
     });
   });
