@@ -21,7 +21,9 @@ part '${dataClass.name.toSnake}.g.dart';
 
 ${descriptionComment(dataClass.description)}@JsonSerializable()
 class $className {
-  const $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersInConstructor(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''});
+  const $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersInConstructor(
+    dataClass.parameters,
+  )}${dataClass.parameters.isNotEmpty ? '\n  }' : ''});
   
   factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
   ${_parametersInClass(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n' : ''}
@@ -62,5 +64,8 @@ String _required(UniversalType t) =>
 String _defaultValue(UniversalType t) => t.defaultValue != null
     ? ' = '
         '${t.wrappingCollections.isNotEmpty ? 'const ' : ''}'
-        '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}'
+        '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(
+            t.defaultValue,
+            type: t.type,
+          )}'
     : '';
