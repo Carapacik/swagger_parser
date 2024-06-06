@@ -12,7 +12,7 @@ dependencies:
   retrofit: ^4.1.0
 
 dev_dependencies:
-  build_runner: ^2.4.11
+  build_runner: ^2.4.9
   carapacik_lints: ^1.6.0
   dart_mappable_builder: ^4.2.3
   freezed: ^2.5.2
