@@ -1,3 +1,9 @@
+## 1.18.0
+- Some fixes for the replacement rules
+- Support for nullable lists and maps
+- Handle empty enum value case (thanks to @Sadhorsephile)
+- Remove config parameter `required_by_default`, behaviour is now consistent `required_by_default: false`
+
 ## 1.17.3
 
 - Fixed unnecessary null types with `required_by_default: false`

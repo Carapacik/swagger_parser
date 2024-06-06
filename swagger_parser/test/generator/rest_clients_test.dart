@@ -1435,7 +1435,7 @@ interface ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  wrappingCollections: [UniversalCollections.list],
+                  wrappingCollections: [UniversalCollections.nullableList],
                   name: 'list',
                   isRequired: false,
                 ),
@@ -1506,7 +1506,7 @@ abstract class ClassNameClient {
                 parameterType: HttpParameterType.query,
                 type: UniversalType(
                   type: 'string',
-                  wrappingCollections: [UniversalCollections.list],
+                  wrappingCollections: [UniversalCollections.nullableList],
                   name: 'list',
                   isRequired: false,
                 ),
@@ -1770,14 +1770,13 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   wrappingCollections: [
-                    UniversalCollections.list,
+                    UniversalCollections.nullableList,
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: false,
-                  nullable: true,
                 ),
                 name: 'deepArrayNullable',
               ),
@@ -1797,7 +1796,7 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   wrappingCollections: [
-                    UniversalCollections.list,
+                    UniversalCollections.nullableList,
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
@@ -1833,7 +1832,7 @@ abstract class ClassNameClient {
 
   @GET('/request2')
   Future<String> getRequest2({
-    @Query('deepArrayNullable') List<List<List<List<String>>>>? deepList,
+    @Query('deepArrayNullable') List<List<List<List<String?>>>>? deepList,
   });
 }
 ''';
@@ -1859,14 +1858,13 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   wrappingCollections: [
-                    UniversalCollections.list,
+                    UniversalCollections.nullableList,
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
                   ],
                   name: 'list1',
                   isRequired: false,
-                  nullable: true,
                 ),
                 name: 'deepArrayNullable',
               ),
@@ -1959,14 +1957,13 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   wrappingCollections: [
-                    UniversalCollections.list,
+                    UniversalCollections.nullableList,
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: true,
-                  nullable: true,
                 ),
                 name: 'deepArrayNullable',
               ),
@@ -1986,14 +1983,13 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   wrappingCollections: [
-                    UniversalCollections.list,
+                    UniversalCollections.nullableList,
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: true,
-                  nullable: true,
                 ),
                 name: 'deepArrayNullable',
               ),
@@ -2046,14 +2042,13 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   wrappingCollections: [
-                    UniversalCollections.list,
+                    UniversalCollections.nullableList,
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
                   ],
                   name: 'list1',
                   isRequired: false,
-                  nullable: true,
                 ),
                 name: 'deepArrayNullable',
               ),
@@ -2444,14 +2439,13 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   wrappingCollections: [
-                    UniversalCollections.list,
+                    UniversalCollections.nullableList,
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: false,
-                  nullable: true,
                 ),
                 name: 'deepArrayNullable',
               ),
@@ -2471,14 +2465,13 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   wrappingCollections: [
-                    UniversalCollections.list,
+                    UniversalCollections.nullableList,
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: false,
-                  nullable: true,
                 ),
                 name: 'deepArrayNullable',
               ),
@@ -2533,14 +2526,13 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   wrappingCollections: [
-                    UniversalCollections.list,
+                    UniversalCollections.nullableList,
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
                   ],
                   name: 'list1',
                   isRequired: false,
-                  nullable: true,
                 ),
                 name: 'deepArrayNullable',
               ),
@@ -2633,14 +2625,13 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   wrappingCollections: [
-                    UniversalCollections.list,
+                    UniversalCollections.nullableList,
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: true,
-                  nullable: true,
                 ),
                 name: 'deepArrayNullable',
               ),
@@ -2660,14 +2651,13 @@ abstract class ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   wrappingCollections: [
-                    UniversalCollections.list,
+                    UniversalCollections.nullableList,
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
                   ],
                   name: 'deepList',
                   isRequired: true,
-                  nullable: true,
                 ),
                 name: 'deepArrayNullable',
               ),
@@ -2720,14 +2710,13 @@ interface ClassNameClient {
                 type: UniversalType(
                   type: 'string',
                   wrappingCollections: [
-                    UniversalCollections.list,
+                    UniversalCollections.nullableList,
                     UniversalCollections.list,
                     UniversalCollections.list,
                     UniversalCollections.list,
                   ],
                   name: 'list1',
                   isRequired: false,
-                  nullable: true,
                 ),
                 name: 'deepArrayNullable',
               ),

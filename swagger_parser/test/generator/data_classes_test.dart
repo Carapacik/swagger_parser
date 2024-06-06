@@ -1273,7 +1273,7 @@ data class ClassName(
           ),
           UniversalType(
             type: 'string',
-            wrappingCollections: [UniversalCollections.list],
+            wrappingCollections: [UniversalCollections.nullableList],
             name: 'list',
             isRequired: false,
           ),
@@ -1338,7 +1338,7 @@ class ClassName {
           ),
           UniversalType(
             type: 'string',
-            wrappingCollections: [UniversalCollections.list],
+            wrappingCollections: [UniversalCollections.nullableList],
             name: 'list',
             isRequired: false,
           ),
@@ -1401,7 +1401,7 @@ class ClassName with _$ClassName {
           ),
           UniversalType(
             type: 'string',
-            wrappingCollections: [UniversalCollections.list],
+            wrappingCollections: [UniversalCollections.nullableList],
             name: 'list',
             isRequired: false,
           ),
@@ -2285,7 +2285,7 @@ typealias AnotherValue = Another;
           UniversalType(
             type: 'string',
             wrappingCollections: [
-              UniversalCollections.list,
+              UniversalCollections.nullableList,
               UniversalCollections.list,
               UniversalCollections.list,
               UniversalCollections.list,
@@ -2339,7 +2339,7 @@ class ClassName {
   
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
-  final List<List<List<List<String>>>>? list1;
+  final List<List<List<List<String?>>>>? list1;
   final String? list2;
   final String list3;
   final String? list4;
@@ -2359,7 +2359,7 @@ class ClassName {
           UniversalType(
             type: 'string',
             wrappingCollections: [
-              UniversalCollections.list,
+              UniversalCollections.nullableList,
               UniversalCollections.list,
               UniversalCollections.list,
               UniversalCollections.list,
@@ -2411,7 +2411,7 @@ class ClassName with _$ClassName {
   const factory ClassName({
     required String list3,
     required String? list5,
-    List<List<List<List<String>>>>? list1,
+    List<List<List<List<String?>>>>? list1,
     String? list2,
     String? list4,
   }) = _ClassName;
@@ -2430,7 +2430,7 @@ class ClassName with _$ClassName {
           UniversalType(
             type: 'string',
             wrappingCollections: [
-              UniversalCollections.list,
+              UniversalCollections.nullableList,
               UniversalCollections.list,
               UniversalCollections.list,
               UniversalCollections.list,
@@ -2477,7 +2477,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ClassName(
-    var list1: List<List<List<List<String>>>>?,
+    var list1: List<List<List<List<String?>>>>?,
     var list2: String?,
     var list3: String,
     var list4: String?,

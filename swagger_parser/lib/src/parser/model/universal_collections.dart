@@ -4,7 +4,13 @@ enum UniversalCollections {
   map,
 
   /// List collection
-  list;
+  list,
+
+  /// Nullable Map collection
+  nullableMap,
+
+  /// Nullable List collection
+  nullableList;
 
   /// Creates a [UniversalCollections]
   const UniversalCollections();
@@ -12,8 +18,19 @@ enum UniversalCollections {
   /// Returns String representation of collection
   String get collectionsString {
     return switch (this) {
-      UniversalCollections.list => 'List<',
-      UniversalCollections.map => 'Map<String, '
+      UniversalCollections.list || UniversalCollections.nullableList => 'List<',
+      UniversalCollections.map ||
+      UniversalCollections.nullableMap =>
+        'Map<String, '
+    };
+  }
+
+  String get questionMark {
+    return switch (this) {
+      UniversalCollections.nullableList ||
+      UniversalCollections.nullableMap =>
+        '?',
+      UniversalCollections.list || UniversalCollections.map => ''
     };
   }
 }

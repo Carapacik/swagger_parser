@@ -12,7 +12,7 @@ class GetTest2Response with _$GetTest2Response {
   const factory GetTest2Response({
     required List<String> list,
     required String? name,
-    required String lastname,
+    String? lastname,
   }) = _GetTest2Response;
 
   factory GetTest2Response.fromJson(Map<String, Object?> json) =>
