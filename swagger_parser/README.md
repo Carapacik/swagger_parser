@@ -31,17 +31,18 @@ In your pubspec.yaml, add the following dependencies:
 
 ```yaml
 dependencies:
-  # dart_mappable: ^4.2.1 # for dart_mappable
-  # dio: ^5.4.1
-  # freezed_annotation: ^2.4.1 # for freezed
-  # json_annotation: ^4.8.1
+  # dart_mappable: ^4.2.2 # for dart_mappable
+  # dio: ^5.4.3
+  # freezed_annotation: ^2.5.2 # for freezed
+  # json_annotation: ^4.9.0
   # retrofit: ^4.1.0
 
 dev_dependencies:
-  # build_runner: ^2.4.8
-  # dart_mappable_builder: ^4.2.1 # for dart_mappable
-  # freezed: ^2.4.7 # for freezed
-  # json_serializable: ^6.7.1
+  # build_runner: ^2.4.11
+  # carapacik_lints: ^1.6.0
+  # dart_mappable_builder: ^4.2.3 # for dart_mappable
+  # freezed: ^2.5.2 # for freezed
+  # json_serializable: ^6.8.0
   # retrofit_generator: ^8.1.0
   swagger_parser:
 ```
@@ -83,11 +84,6 @@ swagger_parser:
   # Support @Extras annotation for interceptors.
   # If the value is 'true', then the annotation will be added to all requests.
   extras_parameter_by_default: false
-
-  # Optional (dart only).
-  # It is used if the value does not have the annotations 'required' and 'nullable'. 
-  # If the value is 'true', then value be 'required', if the value is 'false', then 'nullable'.
-  required_by_default: true
 
   # Optional (dart only). Set 'true' to generate root client
   # with interface and all clients instances.

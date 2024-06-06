@@ -1,6 +1,6 @@
 /// Provides generation functions that generates REST clients and data classes from OpenApi definition file
 /// [swagger_parser](https://pub.dev/packages/swagger_parser)
-library swagger_parser;
+library;
 
 export 'src/config/config_exception.dart';
 export 'src/config/swp_config.dart';

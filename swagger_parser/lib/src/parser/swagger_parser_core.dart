@@ -1,7 +1,7 @@
 /// Parse Open Api definition to universal dart models
 ///
 /// Used by [swagger_parser](https://pub.dev/packages/swagger_parser)
-library swagger_parser_core;
+library;
 
 export 'config/parser_config.dart';
 export 'exception/open_api_parser_exception.dart';
