@@ -1,7 +1,7 @@
 ## 1.18.0
+- Handle empty enum value case ([#238](https://github.com/Carapacik/swagger_parser/pull/238))
 - Some fixes for the replacement rules
 - Support for nullable lists and maps
-- Handle empty enum value case (thanks to @Sadhorsephile)
 - Remove config parameter `required_by_default`, behaviour is now consistent `required_by_default: false`
 
 ## 1.17.3

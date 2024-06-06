@@ -22,7 +22,9 @@ part '${dataClass.name.toSnake}.g.dart';
 
 ${descriptionComment(dataClass.description)}@Freezed()
 class $className with _\$$className {
-  const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;
+  const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(
+    dataClass.parameters,
+  )}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;
   \n  factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
 }
 ''';
@@ -62,4 +64,7 @@ String _required(UniversalType t) =>
 
 /// return defaultValue if have
 String _defaultValue(UniversalType t) =>
-    '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}';
+    '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(
+        t.defaultValue,
+        type: t.type,
+      )}';

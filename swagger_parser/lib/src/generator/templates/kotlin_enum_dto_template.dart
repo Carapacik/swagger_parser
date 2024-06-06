@@ -23,7 +23,9 @@ String _parameters(UniversalEnumClass dataClass) => dataClass.items
     .mapIndexed(
       (i, e) =>
           '${i != 0 && e.description != null ? '\n\n' : '\n'}${descriptionComment(e.description, tab: '    ')}'
-          '${dataClass.type != 'string' || e.jsonKey != e.name.toScreamingSnake ? '    @Json("${protectJsonKey(e.jsonKey)}")' : ''}\n    '
+          '${dataClass.type != 'string' || e.jsonKey != e.name.toScreamingSnake ? '    @Json("${protectJsonKey(
+              e.jsonKey,
+            )}")' : ''}\n    '
           '${e.name.toScreamingSnake},',
     )
     .join();
