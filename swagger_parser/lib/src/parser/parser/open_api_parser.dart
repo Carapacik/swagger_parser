@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:path/path.dart' as p;
@@ -39,6 +40,7 @@ class OpenApiParser {
   final _enumClasses = <UniversalEnumClass>{};
   final _usedNamesCount = <String, int>{};
   final _skipDataClasses = <String>[];
+  final _objectNamesCount = <String, int>{};
 
   static const _additionalPropertiesConst = 'additionalProperties';
   static const _allOfConst = 'allOf';
@@ -1020,6 +1022,15 @@ class OpenApiParser {
 
       for (final replacementRule in config.replacementRules) {
         type = replacementRule.apply(type)!;
+      }
+
+      // Check for duplicate type names
+      if (_objectNamesCount.containsKey(type)) {
+        _objectNamesCount[type] = _objectNamesCount[type]! + 1;
+        type = '$type${_objectNamesCount[type]}';
+        stdout.writeln('Found duplicate object name: $type');
+      } else {
+        _objectNamesCount[type] = 1;
       }
 
       if (_objectClasses.where((oc) => oc.name == type).isEmpty) {
