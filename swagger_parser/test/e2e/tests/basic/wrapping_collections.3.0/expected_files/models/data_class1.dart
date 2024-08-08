@@ -10,9 +10,9 @@ part 'data_class1.g.dart';
 @Freezed()
 class DataClass1 with _$DataClass1 {
   const factory DataClass1({
+    required Map<String, List<String>> errors,
     String? type,
     String? instance,
-    Map<String, List<String>>? errors,
   }) = _DataClass1;
 
   factory DataClass1.fromJson(Map<String, Object?> json) =>

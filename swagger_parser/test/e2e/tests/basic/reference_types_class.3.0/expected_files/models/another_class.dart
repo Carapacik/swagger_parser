@@ -10,8 +10,8 @@ part 'another_class.g.dart';
 @Freezed()
 class AnotherClass with _$AnotherClass {
   const factory AnotherClass({
-    int? id,
-    String? name,
+    required int id,
+    required String name,
   }) = _AnotherClass;
 
   factory AnotherClass.fromJson(Map<String, Object?> json) =>
