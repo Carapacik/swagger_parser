@@ -677,11 +677,16 @@ class OpenApiParser {
     if (map case {_propertiesConst: final Map<String, dynamic> props}) {
       for (final propertyName in props.keys) {
         final propertyValue = props[propertyName] as Map<String, dynamic>;
+        final nullablePropertyValue =
+            propertyValue[_nullableConst].toString().toBool();
+        final isNullable = nullablePropertyValue ?? false;
+
+        final isRequired = requiredParameters.contains(propertyName);
         final typeWithImport = _findType(
           propertyValue,
           name: propertyName,
           additionalName: additionalName,
-          isRequired: requiredParameters.contains(propertyName),
+          isRequired: isRequired || !isNullable,
         );
         parameters.add(typeWithImport.type);
         if (typeWithImport.import != null) {
