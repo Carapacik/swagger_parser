@@ -12,20 +12,20 @@ part 'class_name.g.dart';
 @Freezed()
 class ClassName with _$ClassName {
   const factory ClassName({
-    int? integer1,
-    double? float1,
-    double? double1,
-    String? string1,
-    num? number1,
-    File? string2,
-    DateTime? string3,
-    String? string4,
-    String? string5,
-    File? file1,
-    bool? bool1,
-    dynamic object1,
-    List<String>? array1,
-    List<List<List<String>>>? array2,
+    required int integer1,
+    required double float1,
+    required double double1,
+    required String string1,
+    required num number1,
+    required File string2,
+    required DateTime string3,
+    required String string4,
+    required String string5,
+    required File file1,
+    required bool bool1,
+    required dynamic object1,
+    required List<String> array1,
+    required List<List<List<String>>> array2,
   }) = _ClassName;
 
   factory ClassName.fromJson(Map<String, Object?> json) =>
