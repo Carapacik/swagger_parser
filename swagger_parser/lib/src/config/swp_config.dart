@@ -367,16 +367,17 @@ class SWPConfig {
   /// Default content type for all requests and responses.
   ///
   /// If the content type does not match the default, generates:
-  /// @Headers(<String, String>{'Content-Type': 'PARSED CONTENT TYPE'})
+  /// `@Headers(<String, String>{'Content-Type': 'PARSED CONTENT TYPE'})`
   final String defaultContentType;
 
   /// DART ONLY
   /// Add extra parameter to all requests. Supported after retrofit 4.1.0.
   ///
   /// If  value is 'true', then the annotation will be added to all requests.
-  ///
+  /// ```dart
   /// @POST('/path/')
   /// Future<String> myMethod({@Extras() Map<String, dynamic>? extras});
+  /// ```
   final bool extrasParameterByDefault;
 
   /// If `true`, use the endpoint path for the method name.
