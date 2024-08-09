@@ -30,7 +30,7 @@ class ParserConfig {
   /// Default content type for all requests and responses.
   ///
   /// If the content type does not match the default, generates:
-  /// @Headers(<String, String>{'Content-Type': 'PARSED CONTENT TYPE'})
+  /// `@Headers(<String, String>{'Content-Type': 'PARSED CONTENT TYPE'})`
   final String defaultContentType;
 
   /// If `true`, use the endpoint path for the method name.
