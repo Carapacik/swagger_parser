@@ -10,6 +10,7 @@ import '../model/programming_language.dart';
 String dartJsonSerializableDtoTemplate(
   UniversalComponentClass dataClass, {
   required bool markFileAsGenerated,
+  required bool includeIfNull,
 }) {
   final className = dataClass.name.toPascal;
   return '''
@@ -19,7 +20,7 @@ ${generatedFileComment(
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.g.dart';
 
-${descriptionComment(dataClass.description)}@JsonSerializable()
+${descriptionComment(dataClass.description)}@JsonSerializable(${_includeIfNull(includeIfNull)})
 class $className {
   const $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersInConstructor(
     dataClass.parameters,
@@ -31,6 +32,9 @@ class $className {
 }
 ''';
 }
+
+String _includeIfNull(bool includeIfNull) =>
+    includeIfNull ? '' : 'includeIfNull: false';
 
 String _parametersInClass(List<UniversalType> parameters) => parameters
     .mapIndexed(

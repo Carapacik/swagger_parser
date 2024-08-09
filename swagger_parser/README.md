@@ -128,6 +128,9 @@ swagger_parser:
   # Optional (dart only). Set 'true' to wrap all request return types with HttpResponse.
   original_http_response: false
 
+  # Optional (dart only) Set 'false' to exclude null fields from json
+  include_if_null: true
+
   # Optional. Set regex replacement rules for the names of the generated classes/enums.
   # All rules are applied in order.
   replacement_rules:

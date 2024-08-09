@@ -2759,4 +2759,69 @@ data class ClassName(
       expect(filledContent.content, expectedContent);
     });
   });
+
+  group('includeIfNull', () {
+    test('dart + json_serializable', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        parameters: [],
+      );
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          includeIfNull: false,
+        ),
+      );
+      final filledContent = fillController.fillDtoContent(dataClass);
+      const expectedContents = r'''
+import 'package:json_annotation/json_annotation.dart';
+
+part 'class_name.g.dart';
+
+@JsonSerializable(includeIfNull: false)
+class ClassName {
+  const ClassName();
+  
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
+  
+  Map<String, Object?> toJson() => _$ClassNameToJson(this);
+}
+''';
+      expect(filledContent.content, expectedContents);
+    });
+  });
+
+  test('dart + freezed', () async {
+    const dataClass = UniversalComponentClass(
+      name: 'ClassName',
+      imports: {},
+      parameters: [],
+    );
+    const fillController = FillController(
+      config: GeneratorConfig(
+        name: '',
+        outputDirectory: '',
+        jsonSerializer: JsonSerializer.freezed,
+        includeIfNull: false,
+      ),
+    );
+    final filledContent = fillController.fillDtoContent(dataClass);
+    const expectedContents = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'class_name.freezed.dart';
+part 'class_name.g.dart';
+
+@Freezed()
+class ClassName with _$ClassName {
+@JsonSerializable(includeIfNull: false)
+  const factory ClassName() = _ClassName;
+  
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
+}
+''';
+    expect(filledContent.content, expectedContents);
+  });
 }

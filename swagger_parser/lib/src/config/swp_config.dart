@@ -32,6 +32,7 @@ class SWPConfig {
     this.mergeClients = false,
     this.enumsParentPrefix = true,
     this.skippedParameters = const <String>[],
+    this.includeIfNull = true,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -58,6 +59,7 @@ class SWPConfig {
     required this.mergeClients,
     required this.enumsParentPrefix,
     required this.skippedParameters,
+    required this.includeIfNull,
   });
 
   /// Creates a [SWPConfig] from [YamlMap].
@@ -273,6 +275,13 @@ class SWPConfig {
       }
     }
 
+    final includeIfNull = yamlMap['include_if_null'];
+    if (includeIfNull is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'includeIfNull' must be bool.",
+      );
+    }
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -300,6 +309,7 @@ class SWPConfig {
       markFilesAsGenerated: markFilesAsGenerated ?? dc.markFilesAsGenerated,
       originalHttpResponse: originalHttpResponse ?? dc.originalHttpResponse,
       replacementRules: replacementRules ?? dc.replacementRules,
+      includeIfNull: includeIfNull ?? dc.includeIfNull,
     );
   }
 
@@ -393,6 +403,10 @@ class SWPConfig {
   /// List of parameter names that should skip during parsing
   final List<String> skippedParameters;
 
+  /// DART ONLY
+  /// Optional. Set `false` to not include if field is null.
+  final bool includeIfNull;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -412,6 +426,7 @@ class SWPConfig {
       markFilesAsGenerated: markFilesAsGenerated,
       originalHttpResponse: originalHttpResponse,
       replacementRules: replacementRules,
+      includeIfNull: includeIfNull,
     );
   }
 

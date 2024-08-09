@@ -8,6 +8,7 @@ final class UniversalComponentClass extends UniversalDataClass {
     required super.name,
     required this.imports,
     required this.parameters,
+    this.includeIfNull = false,
     this.allOf,
     this.typeDef = false,
     super.description,
@@ -15,6 +16,8 @@ final class UniversalComponentClass extends UniversalDataClass {
 
   /// List of additional references to components
   final Set<String> imports;
+
+  final bool includeIfNull;
 
   /// List of class fields
   final List<UniversalType> parameters;

@@ -44,6 +44,7 @@ enum ProgrammingLanguage {
     required bool enumsToJson,
     required bool unknownEnumValue,
     required bool markFilesAsGenerated,
+    required bool includeIfNull,
   }) {
     switch (this) {
       case dart:
@@ -68,16 +69,19 @@ enum ProgrammingLanguage {
               return dartFreezedDtoTemplate(
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
+                includeIfNull: includeIfNull,
               );
             case JsonSerializer.jsonSerializable:
               return dartJsonSerializableDtoTemplate(
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
+                includeIfNull: includeIfNull,
               );
             case JsonSerializer.dartMappable:
               return dartDartMappableDtoTemplate(
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
+                includeIfNull: includeIfNull,
               );
           }
         }

@@ -10,6 +10,7 @@ import '../model/programming_language.dart';
 String dartFreezedDtoTemplate(
   UniversalComponentClass dataClass, {
   required bool markFileAsGenerated,
+  required bool includeIfNull,
 }) {
   final className = dataClass.name.toPascal;
   return '''
@@ -21,7 +22,7 @@ part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';
 
 ${descriptionComment(dataClass.description)}@Freezed()
-class $className with _\$$className {
+class $className with _\$$className {${_includeIfNull(includeIfNull)}
   const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(
     dataClass.parameters,
   )}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;
@@ -29,6 +30,9 @@ class $className with _\$$className {
 }
 ''';
 }
+
+String _includeIfNull(bool includeIfNull) =>
+    includeIfNull ? '' : '\n@JsonSerializable(includeIfNull: false)';
 
 String _parametersToString(List<UniversalType> parameters) {
   final sortedByRequired =

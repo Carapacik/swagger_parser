@@ -21,6 +21,7 @@ class GeneratorConfig {
     this.unknownEnumValue = true,
     this.markFilesAsGenerated = false,
     this.originalHttpResponse = false,
+    this.includeIfNull = true,
     this.replacementRules = const [],
   });
 
@@ -80,6 +81,10 @@ class GeneratorConfig {
   /// If the content type does not match the default, generates:
   /// `@Headers(<String, String>{'Content-Type': 'PARSED CONTENT TYPE'})`
   final String defaultContentType;
+
+  /// DART ONLY
+  /// Optional. Set `false` to not include if null.
+  final bool includeIfNull;
 
   /// DART ONLY
   /// Add extra parameter to all requests. Supported after retrofit 4.1.0.

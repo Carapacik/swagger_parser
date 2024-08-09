@@ -11,6 +11,7 @@ import 'dart_import_dto_template.dart';
 String dartDartMappableDtoTemplate(
   UniversalComponentClass dataClass, {
   required bool markFileAsGenerated,
+  required bool includeIfNull,
 }) {
   final className = dataClass.name.toPascal;
   return '''
@@ -19,7 +20,7 @@ ${dartImportDtoTemplate(JsonSerializer.dartMappable)}
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.mapper.dart';
 
-${descriptionComment(dataClass.description)}@MappableClass()
+${descriptionComment(dataClass.description)}@MappableClass(${_includeIfNull(includeIfNull)})
 class $className with ${className}Mappable {
 
 ${indentation(2)}const $className(${getParameters(dataClass)});
@@ -40,6 +41,9 @@ String getParameters(UniversalComponentClass dataClass) {
     return '';
   }
 }
+
+String _includeIfNull(bool includeIfNull) =>
+    includeIfNull ? '' : 'ignoreNull: true';
 
 String getFields(UniversalComponentClass dataClass) {
   if (dataClass.parameters.isNotEmpty) {
