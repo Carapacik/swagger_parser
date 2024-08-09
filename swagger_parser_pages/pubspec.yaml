@@ -19,5 +19,8 @@ dependencies:
 dev_dependencies:
   carapacik_lints: ^1.9.1
 
+dependency_overrides: 
+  web: ^1.0.0
+
 flutter:
   uses-material-design: true
