@@ -14,13 +14,10 @@ dependencies:
     sdk: flutter
   swagger_parser: ^1.18.1
   url_launcher: ^6.3.0
-  web: ^1.0.0
+  web:
 
 dev_dependencies:
   carapacik_lints: ^1.9.1
-
-dependency_overrides: 
-  web: ^1.0.0
 
 flutter:
   uses-material-design: true
