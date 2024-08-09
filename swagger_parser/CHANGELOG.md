@@ -1,3 +1,7 @@
+## 1.18.1
+- Fix errors with `nullable: false`
+- Fix same property name conflict([#235](https://github.com/Carapacik/swagger_parser/issues/235))
+
 ## 1.18.0
 - Handle empty enum value case ([#238](https://github.com/Carapacik/swagger_parser/pull/238))
 - Some fixes for the replacement rules

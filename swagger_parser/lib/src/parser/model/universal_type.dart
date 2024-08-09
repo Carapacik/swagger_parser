@@ -51,7 +51,7 @@ final class UniversalType {
 
   /// Array depth, 0 if not a list
   /// if arrayDepth = 2
-  /// List<List<Object>>
+  /// `List<List<Object>>`
   final List<UniversalCollections> wrappingCollections;
 
   /// Whether or not this field is nullable
