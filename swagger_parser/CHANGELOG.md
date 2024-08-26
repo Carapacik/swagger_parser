@@ -1,5 +1,5 @@
 ## 1.18.2
-- Added support for Int64 types
+- Added support for `int64` types
 
 ## 1.18.1
 - Fix errors with `nullable: false`
