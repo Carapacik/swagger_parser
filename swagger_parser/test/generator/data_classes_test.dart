@@ -2766,7 +2766,12 @@ data class ClassName(
       imports: {},
       description: 'Test class',
       parameters: [
-        UniversalType(type: 'integer', format: 'int64', name: 'int64Type' ,isRequired: false),
+        UniversalType(
+          type: 'integer',
+          format: 'int64',
+          name: 'int64Type',
+          isRequired: false,
+        ),
       ],
     );
     const fillController = FillController(
