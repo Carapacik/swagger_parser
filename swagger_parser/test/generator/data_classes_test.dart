@@ -2766,7 +2766,7 @@ data class ClassName(
       imports: {},
       description: 'Test class',
       parameters: [
-        UniversalType(type: 'integer', format: 'int64', isRequired: false),
+        UniversalType(type: 'integer', format: 'int64', name: 'int64Type' ,isRequired: false),
       ],
     );
     const fillController = FillController(
@@ -2785,12 +2785,12 @@ part 'class_name.g.dart';
 @JsonSerializable()
 class ClassName {
   const ClassName({
-    this.null,
+    this.int64Type,
   });
   
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
-  final BigInt? null;
+  final BigInt? int64Type;
 
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
 }
