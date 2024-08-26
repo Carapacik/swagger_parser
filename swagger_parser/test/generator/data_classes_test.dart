@@ -2759,4 +2759,48 @@ data class ClassName(
       expect(filledContent.content, expectedContent);
     });
   });
+
+  test('int64 to bigint ', () async {
+    const dataClass = UniversalComponentClass(
+      name: 'ClassName',
+      imports: {},
+      description: 'Test class',
+      parameters: [
+        UniversalType(
+          type: 'integer',
+          format: 'int64',
+          name: 'int64Type',
+          isRequired: false,
+        ),
+      ],
+    );
+    const fillController = FillController(
+      config: GeneratorConfig(
+        name: '',
+        outputDirectory: '',
+      ),
+    );
+    final filledContent = fillController.fillDtoContent(dataClass);
+    const expectedContent = r'''
+import 'package:json_annotation/json_annotation.dart';
+
+part 'class_name.g.dart';
+
+/// Test class
+@JsonSerializable()
+class ClassName {
+  const ClassName({
+    this.int64Type,
+  });
+  
+  factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
+  
+  final BigInt? int64Type;
+
+  Map<String, Object?> toJson() => _$ClassNameToJson(this);
+}
+''';
+
+    expect(filledContent.content, expectedContent);
+  });
 }
