@@ -99,7 +99,7 @@ class ConfigProcessor {
       final file = schemaFile(config.schemaPath!);
       if (file == null) {
         throw ConfigException(
-          'Can not file schema file at ${config.schemaPath}',
+          'Can not find schema file at ${config.schemaPath}',
         );
       }
       final fileExtension = p.extension(config.schemaPath!).toLowerCase();
