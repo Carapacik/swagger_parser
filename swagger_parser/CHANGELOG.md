@@ -1,3 +1,6 @@
+## 1.18.2
+- Added support for Int64 types
+
 ## 1.18.1
 - Fix errors with `nullable: false`
 - Fix same property name conflict([#235](https://github.com/Carapacik/swagger_parser/issues/235))
