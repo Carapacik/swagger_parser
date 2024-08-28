@@ -1,3 +1,6 @@
+## 1.18.3
+- Remove support of BigInt in Dart for `int64` types
+
 ## 1.18.2
 - Added support for `int64` types
 
