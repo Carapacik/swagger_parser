@@ -23374,20 +23374,18 @@ dO:function dO(a){this.a=$
 this.b=a},
 UH:function UH(){},
 JO(a,b){var s
-$label1$1:{if("integer"===a){$label0$0:{s="int"
-if("int32"===b)break $label0$0
-if("int64"===b){s="BigInt"
-break $label0$0}break $label0$0}break $label1$1}if("number"===a){$label2$2:{if("float"===b||"double"===b){s="double"
-break $label2$2}if("string"===b){s="String"
-break $label2$2}s="num"
-break $label2$2}break $label1$1}if("string"===a){$label3$3:{if("binary"===b){s="File"
-break $label3$3}if("date"===b||"date-time"===b){s="DateTime"
-break $label3$3}s="String"
-break $label3$3}break $label1$1}if("file"===a){s="File"
-break $label1$1}if("boolean"===a){s="bool"
-break $label1$1}if("object"===a||"null"===a){s="dynamic"
-break $label1$1}s=a
-break $label1$1}return s},
+$label0$0:{if("integer"===a){s="int"
+break $label0$0}s="String"
+if("number"===a){$label1$1:{if("float"===b||"double"===b){s="double"
+break $label1$1}if("string"===b)break $label1$1
+s="num"
+break $label1$1}break $label0$0}if("string"===a){$label2$2:{if("binary"===b){s="File"
+break $label2$2}if("date"===b||"date-time"===b){s="DateTime"
+break $label2$2}break $label2$2}break $label0$0}if("file"===a){s="File"
+break $label0$0}if("boolean"===a){s="bool"
+break $label0$0}if("object"===a||"null"===a){s="dynamic"
+break $label0$0}s=a
+break $label0$0}return s},
 aEB(a,b){var s,r="MultipartBody.Part"
 $label0$0:{if("integer"===a){s="Int"
 break $label0$0}s="String"
