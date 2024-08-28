@@ -6,11 +6,7 @@ import 'dart_keywords.dart';
 extension StringTypeX on String {
   /// Convert string to dart type
   String toDartType([String? format]) => switch (this) {
-        'integer' => switch (format) {
-            'int32' => 'int',
-            'int64' => 'BigInt',
-            _ => 'int',
-          },
+        'integer' => 'int',
         'number' => switch (format) {
             'float' || 'double' => 'double',
             // This can happen
