@@ -13,6 +13,7 @@ class GeneratorConfig {
     this.defaultContentType = 'application/json',
     this.rootClient = true,
     this.extrasParameterByDefault = false,
+    this.dioOptionsParameterByDefault = false,
     this.rootClientName = 'RestClient',
     this.clientPostfix,
     this.exportFile = true,
@@ -90,6 +91,16 @@ class GeneratorConfig {
   /// Future<String> myMethod({@Extras() Map<String, dynamic>? extras});
   /// ```
   final bool extrasParameterByDefault;
+
+  /// DART ONLY
+  /// Add dio options parameter to all requests.
+  ///
+  /// If  value is 'true', then the annotation will be added to all requests.
+  /// ```dart
+  /// @POST('/path/')
+  /// Future<String> myMethod({@DioOptions() RequestOptions? options});
+  /// ```
+  final bool dioOptionsParameterByDefault;
 
   /// Optional. Set regex replacement rules for the names of the generated classes/enums.
   /// All rules are applied in order.
