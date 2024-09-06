@@ -17,7 +17,7 @@ class RestClient {
   final Dio _dio;
   final String? _baseUrl;
 
-  String get version => '0.0.0 (v1)';
+  static String get version => '0.0.0 (v1)';
 
   ApiClient? _api;
 

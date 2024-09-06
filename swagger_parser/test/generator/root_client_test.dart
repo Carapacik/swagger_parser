@@ -41,7 +41,7 @@ class RestClient {
   final Dio _dio;
   final String? _baseUrl;
 
-  String get version => '1.0.0';
+  static String get version => '1.0.0';
 
   OneClient? _one;
 
@@ -76,7 +76,7 @@ class RestClient {
   final Dio _dio;
   final String? _baseUrl;
 
-  String get version => '';
+  static String get version => '';
 
   OneClient? _one;
 
@@ -119,7 +119,7 @@ class RestClient {
   final Dio _dio;
   final String? _baseUrl;
 
-  String get version => '';
+  static String get version => '';
 
   OneClient? _one;
   TwoClient? _two;
@@ -170,7 +170,7 @@ class RestClient {
   final Dio _dio;
   final String? _baseUrl;
 
-  String get version => '';
+  static String get version => '';
 
   OneClient? _one;
 
@@ -217,7 +217,7 @@ class RestClient {
   final Dio _dio;
   final String? _baseUrl;
 
-  String get version => '';
+  static String get version => '';
 
   OneClient? _one;
   TwoClient? _two;

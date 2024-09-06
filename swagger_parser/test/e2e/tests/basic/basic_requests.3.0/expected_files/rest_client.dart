@@ -17,7 +17,7 @@ class RestClient {
   final Dio _dio;
   final String? _baseUrl;
 
-  String get version => '';
+  static String get version => '';
 
   AuthClient? _auth;
   UserClient? _user;
