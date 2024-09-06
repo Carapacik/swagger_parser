@@ -1,4 +1,7 @@
 ## 1.18.3
+- Add version getter to root client
+
+## 1.18.3
 - Remove support of BigInt in Dart for `int64` types
 
 ## 1.18.2
