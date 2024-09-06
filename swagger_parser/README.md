@@ -85,6 +85,11 @@ swagger_parser:
   # If the value is 'true', then the annotation will be added to all requests.
   extras_parameter_by_default: false
 
+  # Optional (dart only).
+  # Support @DioOptions annotation for interceptors.
+  # If the value is 'true', then the annotation will be added to all requests.
+  dio_options_parameter_by_default: false
+
   # Optional (dart only). Set 'true' to generate root client
   # with interface and all clients instances.
   root_client: true
