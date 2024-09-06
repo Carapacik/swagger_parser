@@ -45,6 +45,8 @@ ${descriptionComment(comment)}class $className {
   final Dio _dio;
   final String? _baseUrl;
 
+  String get version => '${openApiInfo.apiVersion ?? ''}';
+
 ${_privateFields(clientsNames, postfix)}
 
 ${_getters(clientsNames, postfix)}
