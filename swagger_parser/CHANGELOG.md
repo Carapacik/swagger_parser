@@ -1,5 +1,9 @@
-## 1.18.3
-- Add version getter to root client
+## 1.19.0
+- Add version getter to root client:
+```dart
+final version = RestClient.version;
+```
+- Add `dio_options_parameter_by_default`
 
 ## 1.18.3
 - Remove support of BigInt in Dart for `int64` types
