@@ -19,6 +19,8 @@ class RestClient {
   final Dio _dio;
   final String? _baseUrl;
 
+  static String get version => '1.0';
+
   TestClient? _test;
 
   TestClient get test => _test ??= TestClient(_dio, baseUrl: _baseUrl);

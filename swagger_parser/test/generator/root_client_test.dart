@@ -15,6 +15,43 @@ void main() {
     });
   });
 
+  group('Version getter', () {
+    test('dart', () async {
+      final clients = [
+        const UniversalRestClient(name: 'One', imports: {}, requests: []),
+      ];
+      const fillController = FillController(
+        config: GeneratorConfig(name: '', outputDirectory: ''),
+        info: OpenApiInfo(apiVersion: '1.0.0', schemaVersion: OAS.v3_1),
+      );
+      final filledContent = fillController.fillRootClient(clients);
+      const expectedContents = '''
+import 'package:dio/dio.dart';
+
+import 'one/one_client.dart';
+
+///  `v1.0.0`
+class RestClient {
+  RestClient(
+    Dio dio, {
+    String? baseUrl,
+  })  : _dio = dio,
+        _baseUrl = baseUrl;
+
+  final Dio _dio;
+  final String? _baseUrl;
+
+  static String get version => '1.0.0';
+
+  OneClient? _one;
+
+  OneClient get one => _one ??= OneClient(_dio, baseUrl: _baseUrl);
+}
+''';
+      expect(filledContent.content, expectedContents);
+    });
+  });
+
   group('root client with one client', () {
     test('dart', () async {
       final clients = [
@@ -38,6 +75,8 @@ class RestClient {
 
   final Dio _dio;
   final String? _baseUrl;
+
+  static String get version => '';
 
   OneClient? _one;
 
@@ -79,6 +118,8 @@ class RestClient {
 
   final Dio _dio;
   final String? _baseUrl;
+
+  static String get version => '';
 
   OneClient? _one;
   TwoClient? _two;
@@ -129,6 +170,8 @@ class RestClient {
   final Dio _dio;
   final String? _baseUrl;
 
+  static String get version => '';
+
   OneClient? _one;
 
   OneClient get one => _one ??= OneClient(_dio, baseUrl: _baseUrl);
@@ -173,6 +216,8 @@ class RestClient {
 
   final Dio _dio;
   final String? _baseUrl;
+
+  static String get version => '';
 
   OneClient? _one;
   TwoClient? _two;
