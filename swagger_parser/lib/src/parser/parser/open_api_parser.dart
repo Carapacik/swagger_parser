@@ -679,7 +679,15 @@ class OpenApiParser {
         final propertyValue = props[propertyName] as Map<String, dynamic>;
         final nullablePropertyValue =
             propertyValue[_nullableConst].toString().toBool();
-        final isNullable = nullablePropertyValue ?? false;
+
+        var isNullable = nullablePropertyValue ?? false;
+        if (!isNullable) {
+          if (propertyValue case {_anyOfConst: final List<dynamic> anyOf}) {
+            isNullable = anyOf.any(
+              (e) => e is Map<String, dynamic> && e['type'] == 'null',
+            );
+          }
+        }
 
         final isRequired = requiredParameters.contains(propertyName);
         final typeWithImport = _findType(
