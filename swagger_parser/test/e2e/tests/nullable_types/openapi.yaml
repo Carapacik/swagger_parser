@@ -70,6 +70,16 @@ components:
         - p2_null_item
         - p2_null_all
         - p3
+        - required_null_anyOf
+        - p1_anyOf
+        - p2_anyOf
+        - p3_anyOf
+        - p1_oneOf
+        - p2_oneOf
+        - p3_oneOf
+        - p1_allOf
+        - p2_allOf
+        - p3_allOf
       properties:
         p1:
           type: string
@@ -168,6 +178,19 @@ components:
                   - string
                   - null
 
+        nonNull_anyOf:
+          anyOf:
+            - type: string
+            - type: int
+        optional_null_anyOf:
+          anyOf:
+            - type: string
+            - type: null
+        required_null_anyOf:
+          anyOf:
+            - type: string
+            - type: null
+
         p1_anyOf:
           anyOf:
             - type: string
@@ -253,6 +276,9 @@ components:
           allOf:
             - type: object
             - type: null
+          required:
+            - p1
+            - p2
           properties:
             p1:
               allOf:
