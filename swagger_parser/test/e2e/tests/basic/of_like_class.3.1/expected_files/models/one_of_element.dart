@@ -16,10 +16,11 @@ class OneOfElement with _$OneOfElement {
     required EnumClass oneClass,
     required int allType,
     required DateTime anyType,
-    required EnumClass? nullableClass,
+    required EnumClass? nullableButRequiredClass,
+    @Default([]) List<EnumClass>? nullableType,
+    EnumClass? nullableClass,
     @Default(EnumClass.value1) EnumClass anyClass,
     @Default([]) List<EnumClass> oneType,
-    @Default([]) List<EnumClass>? nullableType,
   }) = _OneOfElement;
 
   factory OneOfElement.fromJson(Map<String, Object?> json) =>

@@ -5,6 +5,7 @@
     "schemas": {
       "OneOfElement": {
         "type": "object",
+        "required": ["nullableButRequiredClass"],
         "properties": {
           "allClass": {
             "allOf": [
@@ -53,6 +54,16 @@
               }
             ],
             "default": "[]"
+          },
+          "nullableButRequiredClass": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EnumClass"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "nullableClass": {
             "anyOf": [

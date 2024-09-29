@@ -26,6 +26,8 @@ class ClassWithNullableTypes with _$ClassWithNullableTypes {
     @JsonKey(name: 'p1_list') required String? p1List,
     @JsonKey(name: 'p2_list') required List<String?>? p2List,
     @JsonKey(name: 'p3_list') required Object1? p3List,
+    @JsonKey(name: 'nonNull_anyOf') required dynamic nonNullAnyOf,
+    @JsonKey(name: 'required_null_anyOf') required String? requiredNullAnyOf,
     @JsonKey(name: 'p1_anyOf') required String? p1AnyOf,
     @JsonKey(name: 'p2_anyOf') required List<String?>? p2AnyOf,
     @JsonKey(name: 'p3_anyOf') required Object2? p3AnyOf,
@@ -38,6 +40,7 @@ class ClassWithNullableTypes with _$ClassWithNullableTypes {
     @JsonKey(name: 'p1_n') String? p1N,
     @JsonKey(name: 'p2_n') List<String?>? p2N,
     @JsonKey(name: 'p3_n') P3n? p3N,
+    @JsonKey(name: 'optional_null_anyOf') String? optionalNullAnyOf,
   }) = _ClassWithNullableTypes;
 
   factory ClassWithNullableTypes.fromJson(Map<String, Object?> json) =>
