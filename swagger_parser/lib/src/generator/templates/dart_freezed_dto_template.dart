@@ -26,8 +26,47 @@ class $className with _\$$className {
     dataClass.parameters,
   )}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;
   \n  factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
-}
+${dataClass.parameters.map(_validationString).nonNulls.join()}}
 ''';
+}
+
+String? _validationString(UniversalType type) {
+  final sb = StringBuffer();
+  if (type.min != null) {
+    sb.write('  static const double ${type.name}Min = ${type.min};\n');
+  }
+
+  if (type.max != null) {
+    sb.write('  static const double ${type.name}Max = ${type.max};\n');
+  }
+
+  if (type.minItems != null) {
+    sb.write('  static const int ${type.name}MinItems = ${type.minItems};\n');
+  }
+
+  if (type.maxItems != null) {
+    sb.write('  static const int ${type.name}MaxItems = ${type.maxItems};\n');
+  }
+
+  if (type.minLength != null) {
+    sb.write('  static const int ${type.name}MinLength = ${type.minLength};\n');
+  }
+
+  if (type.maxLength != null) {
+    sb.write('  static const int ${type.name}MaxLength = ${type.maxLength};\n');
+  }
+
+  if (type.pattern != null) {
+    sb.write(
+        '  static const String ${type.name}Pattern = r"${type.pattern}";\n');
+  }
+
+  if (type.uniqueItems != null) {
+    sb.write(
+        '  static const bool ${type.name}UniqueItems = ${type.uniqueItems};\n');
+  }
+
+  return sb.isEmpty ? null : sb.toString();
 }
 
 String _parametersToString(List<UniversalType> parameters) {
