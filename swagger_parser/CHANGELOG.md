@@ -1,3 +1,6 @@
+## 1.19.1
+- Fix generation with `anyOf`, `oneOf` and `allOf` properties
+
 ## 1.19.0
 - Add version getter to root client:
 ```dart
@@ -20,6 +23,7 @@ final version = RestClient.version;
 - Some fixes for the replacement rules
 - Support for nullable lists and maps
 - Remove config parameter `required_by_default`, behaviour is now consistent `required_by_default: false`
+- Requires Dart 3.4
 
 ## 1.17.3
 
