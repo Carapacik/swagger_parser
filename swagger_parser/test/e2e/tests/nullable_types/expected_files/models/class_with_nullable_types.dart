@@ -57,3 +57,66 @@ class ClassWithNullableTypes with _$ClassWithNullableTypes {
   static const int validArrayMaxItems = 100;
   static const bool validArrayUniqueItems = true;
 }
+
+extension ClassWithNullableTypesValidationX on ClassWithNullableTypes {
+  bool validate() {
+    try {
+      if (validInt < validIntMin) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (validInt > validIntMax) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (validString.length < validStringMinLength) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (validString.length > validStringMaxLength) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (!RegExp(validStringPattern).hasMatch(validString)) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (validArray.length < validArrayMinItems) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (validArray.length > validArrayMaxItems) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (validArrayUniqueItems &&
+          validArray.toSet().length != validArray.length) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+}
