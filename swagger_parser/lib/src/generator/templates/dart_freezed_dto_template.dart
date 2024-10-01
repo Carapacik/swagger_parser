@@ -10,6 +10,7 @@ import '../model/programming_language.dart';
 String dartFreezedDtoTemplate(
   UniversalComponentClass dataClass, {
   required bool markFileAsGenerated,
+  bool generateValidator = false,
 }) {
   final className = dataClass.name.toPascal;
   return '''
@@ -26,8 +27,8 @@ class $className with _\$$className {
     dataClass.parameters,
   )}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;
   \n  factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
-${dataClass.parameters.map(_validationString).nonNulls.join()}}
-${_validateMethod(className, dataClass.parameters)}''';
+${generateValidator ? dataClass.parameters.map(_validationString).nonNulls.join() : ''}}
+${generateValidator ? _validateMethod(className, dataClass.parameters) : ''}''';
 }
 
 String _validateMethod(String className, List<UniversalType> types) {
