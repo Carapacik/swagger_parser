@@ -81,6 +81,22 @@ components:
         - p2_allOf
         - p3_allOf
       properties:
+        valid_int:
+          type: integer
+          maximum: 100
+          minimum: 0
+        valid_string:
+          type: string
+          maxLength: 100
+          minLength: 0
+          pattern: "^[a-zA-Z0-9]*$"
+        valid_array:
+            type: array
+            items:
+                type: string
+            maxItems: 100
+            minItems: 0
+            uniqueItems: true
         p1:
           type: string
         p2:

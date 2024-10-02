@@ -701,7 +701,29 @@ class OpenApiParser {
           additionalName: additionalName,
           isRequired: isRequired || !isNullable,
         );
-        parameters.add(typeWithImport.type);
+
+        final max = double.tryParse(propertyValue['maximum'].toString());
+        final min = double.tryParse(propertyValue['minimum'].toString());
+        final maxLength = int.tryParse(propertyValue['maxLength'].toString());
+        final minLength = int.tryParse(propertyValue['minLength'].toString());
+        final maxItems = int.tryParse(propertyValue['maxItems'].toString());
+        final minItems = int.tryParse(propertyValue['minItems'].toString());
+        final patternString = propertyValue['pattern'].toString();
+        final pattern = patternString == 'null' ? null : patternString;
+        final uniqueItems = propertyValue['uniqueItems'].toString().toBool();
+
+        final typeWithValidationParams = typeWithImport.type.copyWith(
+          min: min,
+          max: max,
+          minLength: minLength,
+          maxLength: maxLength,
+          maxItems: maxItems,
+          minItems: minItems,
+          pattern: pattern,
+          uniqueItems: uniqueItems,
+        );
+
+        parameters.add(typeWithValidationParams);
         if (typeWithImport.import != null) {
           imports.add(typeWithImport.import!);
         }
