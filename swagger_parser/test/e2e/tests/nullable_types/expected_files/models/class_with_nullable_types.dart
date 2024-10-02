@@ -61,56 +61,57 @@ class ClassWithNullableTypes with _$ClassWithNullableTypes {
 extension ClassWithNullableTypesValidationX on ClassWithNullableTypes {
   bool validate() {
     try {
-      if (validInt < validIntMin) {
+      if (validInt < ClassWithNullableTypes.validIntMin) {
         return false;
       }
     } catch (e) {
       return false;
     }
     try {
-      if (validInt > validIntMax) {
+      if (validInt > ClassWithNullableTypes.validIntMax) {
         return false;
       }
     } catch (e) {
       return false;
     }
     try {
-      if (validString.length < validStringMinLength) {
+      if (validString.length < ClassWithNullableTypes.validStringMinLength) {
         return false;
       }
     } catch (e) {
       return false;
     }
     try {
-      if (validString.length > validStringMaxLength) {
+      if (validString.length > ClassWithNullableTypes.validStringMaxLength) {
         return false;
       }
     } catch (e) {
       return false;
     }
     try {
-      if (!RegExp(validStringPattern).hasMatch(validString)) {
+      if (!RegExp(ClassWithNullableTypes.validStringPattern)
+          .hasMatch(validString)) {
         return false;
       }
     } catch (e) {
       return false;
     }
     try {
-      if (validArray.length < validArrayMinItems) {
+      if (validArray.length < ClassWithNullableTypes.validArrayMinItems) {
         return false;
       }
     } catch (e) {
       return false;
     }
     try {
-      if (validArray.length > validArrayMaxItems) {
+      if (validArray.length > ClassWithNullableTypes.validArrayMaxItems) {
         return false;
       }
     } catch (e) {
       return false;
     }
     try {
-      if (validArrayUniqueItems &&
+      if (ClassWithNullableTypes.validArrayUniqueItems &&
           validArray.toSet().length != validArray.length) {
         return false;
       }
