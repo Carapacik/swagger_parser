@@ -35,10 +35,12 @@ String _validateMethod(String className, List<UniversalType> types) {
   final bodyBuffer = StringBuffer();
 
   for (final type in types) {
+    final staticName = '$className.${type.name}';
+
     if (type.min != null) {
       bodyBuffer
         ..write('try {\n')
-        ..write('  if (${type.name} < ${type.name}Min) {\n')
+        ..write('  if (${type.name} < ${staticName}Min) {\n')
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
@@ -49,7 +51,7 @@ String _validateMethod(String className, List<UniversalType> types) {
     if (type.max != null) {
       bodyBuffer
         ..write('try {\n')
-        ..write('  if (${type.name} > ${type.name}Max) {\n')
+        ..write('  if (${type.name} > ${staticName}Max) {\n')
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
@@ -60,7 +62,7 @@ String _validateMethod(String className, List<UniversalType> types) {
     if (type.minItems != null) {
       bodyBuffer
         ..write('try {\n')
-        ..write('  if (${type.name}.length < ${type.name}MinItems) {\n')
+        ..write('  if (${type.name}.length < ${staticName}MinItems) {\n')
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
@@ -71,7 +73,7 @@ String _validateMethod(String className, List<UniversalType> types) {
     if (type.maxItems != null) {
       bodyBuffer
         ..write('try {\n')
-        ..write('  if (${type.name}.length > ${type.name}MaxItems) {\n')
+        ..write('  if (${type.name}.length > ${staticName}MaxItems) {\n')
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
@@ -82,7 +84,7 @@ String _validateMethod(String className, List<UniversalType> types) {
     if (type.minLength != null) {
       bodyBuffer
         ..write('try {\n')
-        ..write('  if (${type.name}.length < ${type.name}MinLength) {\n')
+        ..write('  if (${type.name}.length < ${staticName}MinLength) {\n')
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
@@ -93,7 +95,7 @@ String _validateMethod(String className, List<UniversalType> types) {
     if (type.maxLength != null) {
       bodyBuffer
         ..write('try {\n')
-        ..write('  if (${type.name}.length > ${type.name}MaxLength) {\n')
+        ..write('  if (${type.name}.length > ${staticName}MaxLength) {\n')
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
@@ -105,7 +107,7 @@ String _validateMethod(String className, List<UniversalType> types) {
       bodyBuffer
         ..write('try {\n')
         ..write(
-            '  if (!RegExp(${type.name}Pattern).hasMatch(${type.name})) {\n')
+            '  if (!RegExp(${staticName}Pattern).hasMatch(${type.name})) {\n')
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
@@ -117,7 +119,7 @@ String _validateMethod(String className, List<UniversalType> types) {
       bodyBuffer
         ..write('try {\n')
         ..write(
-            '  if (${type.name}UniqueItems && ${type.name}.toSet().length != ${type.name}.length) {\n')
+            '  if (${staticName}UniqueItems && ${type.name}.toSet().length != ${type.name}.length) {\n')
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
