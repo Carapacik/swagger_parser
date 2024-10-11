@@ -21,13 +21,18 @@ class OpenApiCorrector {
         ? json.decode(fileContent) as Map<String, dynamic>
         : (loadYaml(fileContent) as YamlMap).toMap();
 
+    // OpenAPI 3.0 and 3.1
     final components =
         definitionFileContent['components'] as Map<String, dynamic>?;
     final schemes = components?['schemas'] as Map<String, dynamic>?;
+    // OpenAPI 2.0
+    final definitions = definitionFileContent['definitions'] as Map<String, dynamic>?;
 
-    if (schemes != null) {
+    final models = schemes ?? definitions;
+
+    if (models != null) {
       // Apply replacement rules to all class names and format to PascalCase
-      for (final type in schemes.keys) {
+      for (final type in models.keys) {
         var correctType = type;
 
         for (final rule in config.replacementRules) {
