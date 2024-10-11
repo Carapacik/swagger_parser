@@ -26,7 +26,8 @@ class OpenApiCorrector {
         definitionFileContent['components'] as Map<String, dynamic>?;
     final schemes = components?['schemas'] as Map<String, dynamic>?;
     // OpenAPI 2.0
-    final definitions = definitionFileContent['definitions'] as Map<String, dynamic>?;
+    final definitions =
+        definitionFileContent['definitions'] as Map<String, dynamic>?;
 
     final models = schemes ?? definitions;
 
