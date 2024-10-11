@@ -702,15 +702,25 @@ class OpenApiParser {
           isRequired: isRequired || !isNullable,
         );
 
-        final max = double.tryParse(propertyValue['maximum'].toString());
-        final min = double.tryParse(propertyValue['minimum'].toString());
-        final maxLength = int.tryParse(propertyValue['maxLength'].toString());
-        final minLength = int.tryParse(propertyValue['minLength'].toString());
-        final maxItems = int.tryParse(propertyValue['maxItems'].toString());
-        final minItems = int.tryParse(propertyValue['minItems'].toString());
-        final patternString = propertyValue['pattern'].toString();
+        var validation = propertyValue;
+        final anyOf = propertyValue[_anyOfConst];
+        if (anyOf != null && anyOf is List<dynamic> && anyOf.length == 2) {
+          final first = anyOf.first as Map<String, dynamic>;
+          final last = anyOf.last as Map<String, dynamic>;
+          if (last['type'] == 'null') {
+            validation = first;
+          }
+        }
+
+        final max = double.tryParse(validation['maximum'].toString());
+        final min = double.tryParse(validation['minimum'].toString());
+        final maxLength = int.tryParse(validation['maxLength'].toString());
+        final minLength = int.tryParse(validation['minLength'].toString());
+        final maxItems = int.tryParse(validation['maxItems'].toString());
+        final minItems = int.tryParse(validation['minItems'].toString());
+        final patternString = validation['pattern'].toString();
         final pattern = patternString == 'null' ? null : patternString;
-        final uniqueItems = propertyValue['uniqueItems'].toString().toBool();
+        final uniqueItems = validation['uniqueItems'].toString().toBool();
 
         final typeWithValidationParams = typeWithImport.type.copyWith(
           min: min,
