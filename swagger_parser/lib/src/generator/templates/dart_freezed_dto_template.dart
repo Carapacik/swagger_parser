@@ -151,11 +151,15 @@ String _validateMethod(String className, List<UniversalType> types) {
 String? _validationString(UniversalType type) {
   final sb = StringBuffer();
   if (type.min != null) {
-    sb.write('  static const double ${type.name}Min = ${type.min};\n');
+    final numType = type.type == 'integer' ? int : double;
+    final min = numType == int ? type.min?.toInt() : type.min;
+    sb.write('  static const $numType ${type.name}Min = $min;\n');
   }
 
   if (type.max != null) {
-    sb.write('  static const double ${type.name}Max = ${type.max};\n');
+    final numType = type.type == 'integer' ? int : double;
+    final max = numType == int ? type.max?.toInt() : type.max;
+    sb.write('  static const $numType ${type.name}Max = $max;\n');
   }
 
   if (type.minItems != null) {
