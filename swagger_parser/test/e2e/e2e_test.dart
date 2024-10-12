@@ -249,6 +249,39 @@ void main() {
       );
     });
 
+    test('replacement_rules.2.0', () async {
+      await e2eTest(
+        'basic/replacement_rules.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          putClientsInFolder: true,
+          replacementRules: [
+            ReplacementRule(pattern: RegExp('List'), replacement: 'Lizt'),
+            ReplacementRule(pattern: RegExp(r'$'), replacement: 'DTO'),
+          ],
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('replacement_rules.3.1', () async {
+      await e2eTest(
+        'basic/replacement_rules.3.1',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          replacementRules: [
+            ReplacementRule(pattern: RegExp('V1'), replacement: ''),
+            ReplacementRule(pattern: RegExp(r'$'), replacement: 'DTO'),
+          ],
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('wrapping_collections.2.0', () async {
       await e2eTest(
         'basic/wrapping_collections.2.0',
