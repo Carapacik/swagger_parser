@@ -90,6 +90,19 @@ void main() {
         schemaFileName: 'openapi.yaml',
       );
     });
+
+    test('nullable_types.2.0', () async {
+      await e2eTest(
+        'nullable_types.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'swagger.yaml',
+      );
+    });
   });
 
   group('basic', () {
