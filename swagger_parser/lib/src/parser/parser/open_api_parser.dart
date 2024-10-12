@@ -84,6 +84,7 @@ class OpenApiParser {
   static const _titleConst = 'title';
   static const _typeConst = 'type';
   static const _versionConst = 'version';
+  static const _xNullableConst = 'x-nullable';
 
   UniversalEnumClass _getUniqueEnumClass({
     required final String name,
@@ -677,10 +678,12 @@ class OpenApiParser {
     if (map case {_propertiesConst: final Map<String, dynamic> props}) {
       for (final propertyName in props.keys) {
         final propertyValue = props[propertyName] as Map<String, dynamic>;
-        final nullablePropertyValue =
-            propertyValue[_nullableConst].toString().toBool();
+        var isNullable = propertyValue[_nullableConst].toString().toBool();
+        // OpenAPI 2.0 nullable value
+        isNullable =
+            isNullable ?? propertyValue[_xNullableConst].toString().toBool();
 
-        final isNullable = nullablePropertyValue ??
+        isNullable = isNullable ??
             switch (propertyValue) {
               {_anyOfConst: final List<dynamic> anyOf} => anyOf.any(
                   (e) => e is Map<String, dynamic> && e['type'] == 'null',
