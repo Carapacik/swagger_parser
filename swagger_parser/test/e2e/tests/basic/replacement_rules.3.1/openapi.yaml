@@ -1,0 +1,114 @@
+openapi: 3.1.0
+info:
+  title: API
+  version: 1.0.0
+paths:
+  /api/v1/:
+    get:
+      operationId: get_api_v1
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                p1:
+                  $ref: '#/components/schemes/ClassName1'
+                p2:
+                  $ref: '#/components/schemes/Class_name_2'
+                p3:
+                  $ref: '#/components/schemes/className3'
+                p4:
+                  $ref: '#/components/schemes/_class_name4'
+                p5:
+                  $ref: '#/components/schemes/-class-name-5'
+                p6:
+                  $ref: '#/components/schemes/-class-name-56'
+                v1:
+                  $ref: '#/components/schemes/V1data1[Att]'
+                v2:
+                  $ref: '#/components/schemes/data{Att}V12'
+                v3:
+                  $ref: '#/components/schemes/_(Att)V1_data3'
+                v4:
+                  $ref: '#/components/schemes/data<Att>V14'
+                p1_class:
+                  type: object
+                  properties:
+                    test:
+                      type: string
+                      format: date-time
+                p2_enum:
+                  type: string
+                  enum:
+                    - teV1st1
+                    - V1_test2
+                    - testV13 
+              required:
+                - p1
+                - p3
+                - p5
+                - v1
+                - v3
+      responses:
+          '200':
+            description: dummy
+            content:
+              text/plain:
+                schema:
+                  type: string
+    post:
+      operationId: post_api_v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                p1_class:
+                  type: object
+                  properties:
+                    test:
+                      type: string
+                      format: date-time
+                p2_enum:
+                  type: string
+                  enum:
+                    - teV1st1
+                    - V1_test2
+                    - testV13 
+              required:
+                - p1_class
+      responses:
+        '200':
+          description: dummy
+          content:
+            text/plain:
+              schema:
+                type: string
+          
+components:
+  schemas:
+    ClassName1:
+      type: object
+    Class_name_2:
+      type: object
+    className3:
+      type: object
+    _class_name4:
+      type: object
+    -class-name-5:
+      type: object
+    -class-name-56:
+      type: object
+
+    V1data1[Att]:
+      type: object
+    data{Att}V12:
+      type: object
+    _(Att)V1_data3:
+      type: object
+    data<Att>V14:
+      type: object
+
+    
