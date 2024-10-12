@@ -77828,9 +77828,9 @@ return"\n"+("        @"+n.c+m+" "+r+": "+q+s)+","},
 $S:146}
 A.a4S.prototype={}
 A.a45.prototype={
-afa(){var s,r,q,p,o,n,m,l,k=this.a,j=k.a,i=k.b,h=t.nA,g=h.a((i?t.P.a(B.cR.fR(j)):A.aaF(t.fl.a(A.aw5(j)))).h(0,"components")),f=h.a(g==null?null:g.h(0,"schemas"))
-if(f!=null)for(h=f.gbt(),h=h.gY(h),s=t.N,k=k.x;h.q();){r={}
-q=r.a=h.gG()
+afa(){var s,r,q,p,o,n,m,l,k=this.a,j=k.a,i=k.b,h=i?t.P.a(B.cR.fR(j)):A.aaF(t.fl.a(A.aw5(j))),g=t.nA,f=g.a(h.h(0,"components")),e=g.a(f==null?null:f.h(0,"schemas")),d=g.a(h.h(0,"definitions")),c=e==null?d:e
+if(c!=null)for(g=c.gbt(),g=g.gY(g),s=t.N,k=k.x;g.q();){r={}
+q=r.a=g.gG()
 for(p=q,o=0;!1;++o,p=n){n=k[o].Q8(p)
 r.a=n}m=new A.dO(A.aa(s))
 p=m.fK(p)
