@@ -65,7 +65,8 @@ String _validateMethod(String className, List<UniversalType> types) {
       bodyBuffer
         ..write('try {\n')
         ..write(
-            '  if ($nullCheckCondition $typeName.length < ${staticName}MinItems) {\n')
+          '  if ($nullCheckCondition $typeName.length < ${staticName}MinItems) {\n',
+        )
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
@@ -77,7 +78,8 @@ String _validateMethod(String className, List<UniversalType> types) {
       bodyBuffer
         ..write('try {\n')
         ..write(
-            '  if ($nullCheckCondition $typeName.length > ${staticName}MaxItems) {\n')
+          '  if ($nullCheckCondition $typeName.length > ${staticName}MaxItems) {\n',
+        )
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
@@ -89,7 +91,8 @@ String _validateMethod(String className, List<UniversalType> types) {
       bodyBuffer
         ..write('try {\n')
         ..write(
-            '  if ($nullCheckCondition $typeName.length < ${staticName}MinLength) {\n')
+          '  if ($nullCheckCondition $typeName.length < ${staticName}MinLength) {\n',
+        )
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
@@ -101,7 +104,8 @@ String _validateMethod(String className, List<UniversalType> types) {
       bodyBuffer
         ..write('try {\n')
         ..write(
-            '  if ($nullCheckCondition $typeName.length > ${staticName}MaxLength) {\n')
+          '  if ($nullCheckCondition $typeName.length > ${staticName}MaxLength) {\n',
+        )
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
@@ -113,7 +117,8 @@ String _validateMethod(String className, List<UniversalType> types) {
       bodyBuffer
         ..write('try {\n')
         ..write(
-            '  if ($nullCheckCondition !RegExp(${staticName}Pattern).hasMatch($typeName)) {\n')
+          '  if ($nullCheckCondition !RegExp(${staticName}Pattern).hasMatch($typeName)) {\n',
+        )
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
@@ -125,7 +130,8 @@ String _validateMethod(String className, List<UniversalType> types) {
       bodyBuffer
         ..write('try {\n')
         ..write(
-            '  if ($nullCheckCondition ${staticName}UniqueItems && $typeName.toSet().length != $typeName.length) {\n')
+          '  if ($nullCheckCondition ${staticName}UniqueItems && $typeName.toSet().length != $typeName.length) {\n',
+        )
         ..write('    return false;\n')
         ..write('  }\n')
         ..write('} catch (e) {\n')
@@ -180,12 +186,14 @@ String? _validationString(UniversalType type) {
 
   if (type.pattern != null) {
     sb.write(
-        '  static const String ${type.name}Pattern = r"${type.pattern}";\n');
+      '  static const String ${type.name}Pattern = r"${type.pattern}";\n',
+    );
   }
 
   if (type.uniqueItems != null) {
     sb.write(
-        '  static const bool ${type.name}UniqueItems = ${type.uniqueItems};\n');
+      '  static const bool ${type.name}UniqueItems = ${type.uniqueItems};\n',
+    );
   }
 
   return sb.isEmpty ? null : sb.toString();
