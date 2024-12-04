@@ -18,6 +18,14 @@ final class UniversalType {
     this.nullable = false,
     this.wrappingCollections = const [],
     this.enumType,
+    this.min,
+    this.max,
+    this.minItems,
+    this.maxItems,
+    this.minLength,
+    this.maxLength,
+    this.pattern,
+    this.uniqueItems,
   });
 
   /// Object type
@@ -56,6 +64,14 @@ final class UniversalType {
 
   /// Whether or not this field is nullable
   final bool nullable;
+  final double? min;
+  final double? max;
+  final int? minItems;
+  final int? maxItems;
+  final int? minLength;
+  final int? maxLength;
+  final String? pattern;
+  final bool? uniqueItems;
 
   /// Copy of [UniversalType] with new values
   UniversalType copyWith({
@@ -69,6 +85,14 @@ final class UniversalType {
     String? enumType,
     List<UniversalCollections>? wrappingCollections,
     bool? nullable,
+    double? min,
+    double? max,
+    int? minItems,
+    int? maxItems,
+    int? minLength,
+    int? maxLength,
+    String? pattern,
+    bool? uniqueItems,
   }) {
     return UniversalType(
       type: type ?? this.type,
@@ -81,6 +105,14 @@ final class UniversalType {
       enumType: enumType ?? this.enumType,
       wrappingCollections: wrappingCollections ?? this.wrappingCollections,
       nullable: nullable ?? this.nullable,
+      min: min ?? this.min,
+      max: max ?? this.max,
+      minItems: minItems ?? this.minItems,
+      maxItems: maxItems ?? this.maxItems,
+      minLength: minLength ?? this.minLength,
+      maxLength: maxLength ?? this.maxLength,
+      pattern: pattern ?? this.pattern,
+      uniqueItems: uniqueItems ?? this.uniqueItems,
     );
   }
 
@@ -109,7 +141,15 @@ final class UniversalType {
           enumType == other.enumType &&
           const DeepCollectionEquality()
               .equals(wrappingCollections, other.wrappingCollections) &&
-          nullable == other.nullable;
+          nullable == other.nullable &&
+          min == other.min &&
+          max == other.max &&
+          minItems == other.minItems &&
+          maxItems == other.maxItems &&
+          minLength == other.minLength &&
+          maxLength == other.maxLength &&
+          pattern == other.pattern &&
+          uniqueItems == other.uniqueItems;
 
   @override
   int get hashCode =>
@@ -122,7 +162,15 @@ final class UniversalType {
       isRequired.hashCode ^
       enumType.hashCode ^
       wrappingCollections.hashCode ^
-      nullable.hashCode;
+      nullable.hashCode ^
+      min.hashCode ^
+      max.hashCode ^
+      minItems.hashCode ^
+      maxItems.hashCode ^
+      minLength.hashCode ^
+      maxLength.hashCode ^
+      pattern.hashCode ^
+      uniqueItems.hashCode;
 
   @override
   String toString() => 'UniversalType(type: $type, '
@@ -133,5 +181,13 @@ final class UniversalType {
       'isRequired: $isRequired, '
       'enumType: $enumType, '
       'wrappingCollections: $wrappingCollections, '
-      'nullable: $nullable)';
+      'nullable: $nullable, '
+      'min: $min, '
+      'max: $max, '
+      'minItems: $minItems, '
+      'maxItems: $maxItems, '
+      'minLength: $minLength, '
+      'maxLength: $maxLength, '
+      'pattern: $pattern, '
+      'uniqueItems: $uniqueItems)';
 }

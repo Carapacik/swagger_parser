@@ -17,6 +17,9 @@ part 'class_with_nullable_types.g.dart';
 @Freezed()
 class ClassWithNullableTypes with _$ClassWithNullableTypes {
   const factory ClassWithNullableTypes({
+    @JsonKey(name: 'valid_int') required int validInt,
+    @JsonKey(name: 'valid_string') required String validString,
+    @JsonKey(name: 'valid_array') required List<String> validArray,
     required String p1,
     required List<String> p2,
     @JsonKey(name: 'p2_null') required List<String>? p2Null,
@@ -45,4 +48,76 @@ class ClassWithNullableTypes with _$ClassWithNullableTypes {
 
   factory ClassWithNullableTypes.fromJson(Map<String, Object?> json) =>
       _$ClassWithNullableTypesFromJson(json);
+  static const double validIntMin = 0.0;
+  static const double validIntMax = 100.0;
+  static const int validStringMinLength = 0;
+  static const int validStringMaxLength = 100;
+  static const String validStringPattern = r"^[a-zA-Z0-9]*$";
+  static const int validArrayMinItems = 0;
+  static const int validArrayMaxItems = 100;
+  static const bool validArrayUniqueItems = true;
+}
+
+extension ClassWithNullableTypesValidationX on ClassWithNullableTypes {
+  bool validate() {
+    try {
+      if (validInt < ClassWithNullableTypes.validIntMin) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (validInt > ClassWithNullableTypes.validIntMax) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (validString.length < ClassWithNullableTypes.validStringMinLength) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (validString.length > ClassWithNullableTypes.validStringMaxLength) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (!RegExp(ClassWithNullableTypes.validStringPattern)
+          .hasMatch(validString)) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (validArray.length < ClassWithNullableTypes.validArrayMinItems) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (validArray.length > ClassWithNullableTypes.validArrayMaxItems) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      if (ClassWithNullableTypes.validArrayUniqueItems &&
+          validArray.toSet().length != validArray.length) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
 }
