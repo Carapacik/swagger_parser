@@ -14,7 +14,7 @@ jobs:
         working-directory: ./swagger_parser_pages
     steps:
       - uses: actions/checkout@v4.2.2
-      - uses: subosito/flutter-action@v2.16.0
+      - uses: subosito/flutter-action@v2.17.0
         with:
           channel: stable
       - name: Install dependencies
