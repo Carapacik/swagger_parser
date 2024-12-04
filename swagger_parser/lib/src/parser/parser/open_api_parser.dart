@@ -361,8 +361,12 @@ class OpenApiParser {
             requiredParameters =
                 required?.map((e) => e.toString()).toList() ?? [];
           } else {
-            properties =
-                schemaContent[_propertiesConst] as Map<String, dynamic>;
+            if (schemaContent[_propertiesConst] is Map<String, dynamic>) {
+              properties =
+                  schemaContent[_propertiesConst] as Map<String, dynamic>;
+            } else {
+              properties = {};
+            }
             requiredParameters =
                 (schemaContent[_requiredConst] as List<dynamic>?)
                         ?.map((e) => e.toString())
