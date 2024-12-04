@@ -33,6 +33,7 @@ class SWPConfig {
     this.mergeClients = false,
     this.enumsParentPrefix = true,
     this.skippedParameters = const <String>[],
+    this.generateValidator = false,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -60,6 +61,7 @@ class SWPConfig {
     required this.mergeClients,
     required this.enumsParentPrefix,
     required this.skippedParameters,
+    required this.generateValidator,
   });
 
   /// Creates a [SWPConfig] from [YamlMap].
@@ -283,6 +285,13 @@ class SWPConfig {
       }
     }
 
+    final generateValidator = yamlMap['generate_validator'];
+    if (generateValidator is! bool?) {
+      throw const ConfigException(
+        "Config parameter 'generate_validator' must be bool.",
+      );
+    }
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -312,6 +321,7 @@ class SWPConfig {
       markFilesAsGenerated: markFilesAsGenerated ?? dc.markFilesAsGenerated,
       originalHttpResponse: originalHttpResponse ?? dc.originalHttpResponse,
       replacementRules: replacementRules ?? dc.replacementRules,
+      generateValidator: generateValidator ?? dc.generateValidator,
     );
   }
 
@@ -415,6 +425,9 @@ class SWPConfig {
   /// List of parameter names that should skip during parsing
   final List<String> skippedParameters;
 
+  /// Set `true` to generate validator for freezed.
+  final bool generateValidator;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -435,6 +448,7 @@ class SWPConfig {
       markFilesAsGenerated: markFilesAsGenerated,
       originalHttpResponse: originalHttpResponse,
       replacementRules: replacementRules,
+      generateValidator: generateValidator,
     );
   }
 
