@@ -29,6 +29,7 @@ final class FillController {
           enumsToJson: config.enumsToJson,
           unknownEnumValue: config.unknownEnumValue,
           markFilesAsGenerated: config.markFilesAsGenerated,
+          generateValidator: config.generateValidator,
         ),
       );
 

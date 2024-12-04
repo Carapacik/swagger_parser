@@ -83,6 +83,7 @@ void main() {
         'nullable_types',
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
+          generateValidator: true,
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,

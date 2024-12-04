@@ -708,7 +708,39 @@ class OpenApiParser {
           additionalName: additionalName,
           isRequired: isRequired || !isNullable,
         );
-        parameters.add(typeWithImport.type);
+
+        var validation = propertyValue;
+        final anyOf = propertyValue[_anyOfConst];
+        if (anyOf != null && anyOf is List<dynamic> && anyOf.length == 2) {
+          final first = anyOf.first as Map<String, dynamic>;
+          final last = anyOf.last as Map<String, dynamic>;
+          if (last['type'] == 'null') {
+            validation = first;
+          }
+        }
+
+        final max = double.tryParse(validation['maximum'].toString());
+        final min = double.tryParse(validation['minimum'].toString());
+        final maxLength = int.tryParse(validation['maxLength'].toString());
+        final minLength = int.tryParse(validation['minLength'].toString());
+        final maxItems = int.tryParse(validation['maxItems'].toString());
+        final minItems = int.tryParse(validation['minItems'].toString());
+        final patternString = validation['pattern'].toString();
+        final pattern = patternString == 'null' ? null : patternString;
+        final uniqueItems = validation['uniqueItems'].toString().toBool();
+
+        final typeWithValidationParams = typeWithImport.type.copyWith(
+          min: min,
+          max: max,
+          minLength: minLength,
+          maxLength: maxLength,
+          maxItems: maxItems,
+          minItems: minItems,
+          pattern: pattern,
+          uniqueItems: uniqueItems,
+        );
+
+        parameters.add(typeWithValidationParams);
         if (typeWithImport.import != null) {
           imports.add(typeWithImport.import!);
         }

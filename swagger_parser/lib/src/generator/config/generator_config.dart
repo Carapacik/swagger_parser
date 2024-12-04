@@ -23,6 +23,7 @@ class GeneratorConfig {
     this.markFilesAsGenerated = false,
     this.originalHttpResponse = false,
     this.replacementRules = const [],
+    this.generateValidator = false,
   });
 
   /// Optional. Set API name for folder and export file
@@ -105,4 +106,7 @@ class GeneratorConfig {
   /// Optional. Set regex replacement rules for the names of the generated classes/enums.
   /// All rules are applied in order.
   final List<ReplacementRule> replacementRules;
+
+  /// Optional. Set `true` to generate validator function and prams for freezed.
+  final bool generateValidator;
 }
