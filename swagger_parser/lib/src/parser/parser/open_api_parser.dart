@@ -84,6 +84,7 @@ class OpenApiParser {
   static const _titleConst = 'title';
   static const _typeConst = 'type';
   static const _versionConst = 'version';
+  static const _xNullableConst = 'x-nullable';
 
   UniversalEnumClass _getUniqueEnumClass({
     required final String name,
@@ -360,8 +361,12 @@ class OpenApiParser {
             requiredParameters =
                 required?.map((e) => e.toString()).toList() ?? [];
           } else {
-            properties =
-                schemaContent[_propertiesConst] as Map<String, dynamic>;
+            if (schemaContent[_propertiesConst] is Map<String, dynamic>) {
+              properties =
+                  schemaContent[_propertiesConst] as Map<String, dynamic>;
+            } else {
+              properties = {};
+            }
             requiredParameters =
                 (schemaContent[_requiredConst] as List<dynamic>?)
                         ?.map((e) => e.toString())
@@ -677,10 +682,12 @@ class OpenApiParser {
     if (map case {_propertiesConst: final Map<String, dynamic> props}) {
       for (final propertyName in props.keys) {
         final propertyValue = props[propertyName] as Map<String, dynamic>;
-        final nullablePropertyValue =
-            propertyValue[_nullableConst].toString().toBool();
+        var isNullable = propertyValue[_nullableConst].toString().toBool();
+        // OpenAPI 2.0 nullable value
+        isNullable =
+            isNullable ?? propertyValue[_xNullableConst].toString().toBool();
 
-        final isNullable = nullablePropertyValue ??
+        isNullable = isNullable ??
             switch (propertyValue) {
               {_anyOfConst: final List<dynamic> anyOf} => anyOf.any(
                   (e) => e is Map<String, dynamic> && e['type'] == 'null',

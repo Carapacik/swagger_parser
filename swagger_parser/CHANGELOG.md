@@ -1,5 +1,16 @@
+## 1.20.1
+- Fixed errors with config parsing
+
+## 1.20.0
+- Add validation params to generated `freezed` classes
+- Fixed errors with empty schema properties([#280](https://github.com/Carapacik/swagger_parser/issues/280))
+
+## 1.19.2
+- Fix replacement rules for OpenAPI v2([#266](https://github.com/Carapacik/swagger_parser/issues/266))
+- Add `x-nullable` field for null definition in OpenAPI v2([#268](https://github.com/Carapacik/swagger_parser/issues/268))
+
 ## 1.19.1
-- Fix generation with `anyOf`, `oneOf` and `allOf` properties
+- Fix generation with `anyOf`, `oneOf` and `allOf` properties([#260](https://github.com/Carapacik/swagger_parser/issues/260))
 
 ## 1.19.0
 - Add version getter to root client:

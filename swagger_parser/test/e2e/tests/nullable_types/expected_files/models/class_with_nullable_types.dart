@@ -48,8 +48,8 @@ class ClassWithNullableTypes with _$ClassWithNullableTypes {
 
   factory ClassWithNullableTypes.fromJson(Map<String, Object?> json) =>
       _$ClassWithNullableTypesFromJson(json);
-  static const double validIntMin = 0.0;
-  static const double validIntMax = 100.0;
+  static const int validIntMin = 0;
+  static const int validIntMax = 100;
   static const int validStringMinLength = 0;
   static const int validStringMaxLength = 100;
   static const String validStringPattern = r"^[a-zA-Z0-9]*$";

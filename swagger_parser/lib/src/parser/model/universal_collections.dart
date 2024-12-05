@@ -16,21 +16,20 @@ enum UniversalCollections {
   const UniversalCollections();
 
   /// Returns String representation of collection
-  String get collectionsString {
-    return switch (this) {
-      UniversalCollections.list || UniversalCollections.nullableList => 'List<',
-      UniversalCollections.map ||
-      UniversalCollections.nullableMap =>
-        'Map<String, '
-    };
-  }
+  String get collectionsString => switch (this) {
+        UniversalCollections.list ||
+        UniversalCollections.nullableList =>
+          'List<',
+        UniversalCollections.map ||
+        UniversalCollections.nullableMap =>
+          'Map<String, '
+      };
 
-  String get questionMark {
-    return switch (this) {
-      UniversalCollections.nullableList ||
-      UniversalCollections.nullableMap =>
-        '?',
-      UniversalCollections.list || UniversalCollections.map => ''
-    };
-  }
+  /// Returns question mark for collection
+  String get questionMark => switch (this) {
+        UniversalCollections.nullableList ||
+        UniversalCollections.nullableMap =>
+          '?',
+        UniversalCollections.list || UniversalCollections.map => ''
+      };
 }
