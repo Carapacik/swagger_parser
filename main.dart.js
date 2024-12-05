@@ -77583,7 +77583,8 @@ l=a.d
 k=l.length!==0?"{":""
 j=A.aIm(l)
 l=l.length!==0?"\n  }":""
-return r+q+"import 'package:freezed_annotation/freezed_annotation.dart';\n"+o+"\npart '"+n+".freezed.dart';\npart '"+s+".g.dart';\n\n"+m+"@Freezed()\nclass "+p+" with _$"+p+" {\n  const factory "+p+"("+k+j+l+") = _"+p+";\n  \n  factory "+p+e+p+"FromJson(json);\n}\n"
+s=r+q+"import 'package:freezed_annotation/freezed_annotation.dart';\n"+o+"\npart '"+n+".freezed.dart';\npart '"+s+".g.dart';\n\n"+m+"@Freezed()\nclass "+p+" with _$"+p+" {\n  const factory "+p+"("+k+j+l+") = _"+p+";\n  \n  factory "+p+e+p+"FromJson(json);\n}\n"
+break
 case 0:s=a.a
 r=A.Q(s)
 q=r.a
@@ -77604,7 +77605,9 @@ k=A.aIl(m)
 j=m.length!==0?"\n  }":""
 i=A.aIk(m)
 m=m.length!==0?"\n":""
-return r+q+"import 'package:json_annotation/json_annotation.dart';\n"+o+"\npart '"+s+".g.dart';\n\n"+n+"@JsonSerializable()\nclass "+p+" {\n  const "+p+"("+l+k+j+");\n  \n  factory "+p+e+p+"FromJson(json);\n  "+i+m+"\n  Map<String, Object?> toJson() => _$"+p+"ToJson(this);\n}\n"
+m=r+q+"import 'package:json_annotation/json_annotation.dart';\n"+o+"\npart '"+s+".g.dart';\n\n"+n+"@JsonSerializable()\nclass "+p+" {\n  const "+p+"("+l+k+j+");\n  \n  factory "+p+e+p+"FromJson(json);\n  "+i+m+"\n  Map<String, Object?> toJson() => _$"+p+"ToJson(this);\n}\n"
+s=m
+break
 case 2:s=a.a
 r=A.Q(s)
 q=r.a
@@ -77615,7 +77618,9 @@ r===$&&A.a()
 p=new A.p(r,q.gaJ(),A.C(r).i("p<1,j>")).az(0)
 if(a0)r=g
 else r=""
-return r+"\n"+A.aoI(B.fQ)+"\n"+A.al4(a.c,h)+"\npart '"+A.Q(A.Q(s).gbZ()).gbZ()+".mapper.dart';\n\n"+A.ew(a.b,"","",!0)+"@MappableClass()\nclass "+p+" with "+p+"Mappable {\n\n"+B.c.a3(" ",2)+"const "+p+"("+A.aJZ(a)+");\n\n"+A.aJT(a)+"\n\n"+B.c.a3(" ",2)+"static "+p+" fromJson(Map<String, dynamic> json) => "+p+"Mapper.ensureInitialized().decodeMap<"+p+">(json);\n}\n"}}break
+s=r+"\n"+A.aoI(B.fQ)+"\n"+A.al4(a.c,h)+"\npart '"+A.Q(A.Q(s).gbZ()).gbZ()+".mapper.dart';\n\n"+A.ew(a.b,"","",!0)+"@MappableClass()\nclass "+p+" with "+p+"Mappable {\n\n"+B.c.a3(" ",2)+"const "+p+"("+A.aJZ(a)+");\n\n"+A.aJT(a)+"\n\n"+B.c.a3(" ",2)+"static "+p+" fromJson(Map<String, dynamic> json) => "+p+"Mapper.ensureInitialized().decodeMap<"+p+">(json);\n}\n"
+break
+default:s=h}return s}break
 case 1:if(a instanceof A.ia){if(a0)s=f
 else s=""
 r=A.Q(a.a)
