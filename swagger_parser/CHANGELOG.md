@@ -1,3 +1,6 @@
+## 1.20.1
+- Fixed errors with config parsing
+
 ## 1.20.0
 - Add validation params to generated `freezed` classes
 - Fixed errors with empty schema properties([#280](https://github.com/Carapacik/swagger_parser/issues/280))
