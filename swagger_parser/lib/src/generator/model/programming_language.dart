@@ -63,25 +63,21 @@ enum ProgrammingLanguage {
               markFileAsGenerated: markFilesAsGenerated,
             );
           }
-
-          switch (jsonSerializer) {
-            case JsonSerializer.freezed:
-              return dartFreezedDtoTemplate(
+          return switch (jsonSerializer) {
+            JsonSerializer.freezed => dartFreezedDtoTemplate(
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
                 generateValidator: generateValidator,
-              );
-            case JsonSerializer.jsonSerializable:
-              return dartJsonSerializableDtoTemplate(
+              ),
+            JsonSerializer.jsonSerializable => dartJsonSerializableDtoTemplate(
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
-              );
-            case JsonSerializer.dartMappable:
-              return dartDartMappableDtoTemplate(
+              ),
+            JsonSerializer.dartMappable => dartDartMappableDtoTemplate(
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
-              );
-          }
+              )
+          };
         }
       case kotlin:
         if (dataClass is UniversalEnumClass) {
