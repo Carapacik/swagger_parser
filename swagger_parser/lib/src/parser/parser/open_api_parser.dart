@@ -55,6 +55,7 @@ class OpenApiParser {
   static const _descriptionConst = 'description';
   static const _deprecatedConst = 'deprecated';
   static const _enumConst = 'enum';
+  static const _enumNamesConst = 'x-enumNames';
   static const _formatConst = 'format';
   static const _formUrlEncodedConst = 'application/x-www-form-urlencoded';
   static const _inConst = 'in';
