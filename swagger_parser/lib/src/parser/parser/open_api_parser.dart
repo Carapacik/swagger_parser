@@ -796,9 +796,14 @@ class OpenApiParser {
       if (value.containsKey(_propertiesConst)) {
         localFindParametersAndImports(value);
       } else if (value.containsKey(_enumConst)) {
-        final items = protectEnumItemsNames(
-          (value[_enumConst] as List).map((e) => '$e'),
-        );
+        final Set<UniversalEnumItem> items;
+        final values = (value[_enumConst] as List).map((e) => '$e');
+        if (value.containsKey(_enumNamesConst)) {
+          final names = (value[_enumNamesConst] as List).map((e) => '$e');
+          items = protectEnumItemsNamesAndValues(names, values);
+        } else {
+          items = protectEnumItemsNames(values);
+        }
         final type = value[_typeConst].toString();
 
         dataClasses.add(
