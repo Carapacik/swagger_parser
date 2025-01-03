@@ -175,6 +175,24 @@ Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names) {
   return items;
 }
 
+/// Protect enum items names from incorrect symbols, keywords, etc.
+Set<UniversalEnumItem> protectEnumItemsNamesAndValues(Iterable<String> names, Iterable<String> values) {
+  final items = <UniversalEnumItem>{};
+  final nameList = names.toList();
+  final valueList = values.toList();
+
+  for (int i = 0; i < nameList.length; i++) {
+    items.add(
+      UniversalEnumItem(
+        name: nameList[i],
+        jsonKey: valueList[i],
+      ),
+    );
+  }
+
+  return items;
+}
+
 final _nameRegExp = RegExp(r'^[a-zA-Z_-][a-zA-Z\d_-]*$');
 
 /// Protect name from incorrect symbols, keywords, etc.

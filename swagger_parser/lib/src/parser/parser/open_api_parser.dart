@@ -1021,9 +1021,14 @@ class OpenApiParser {
         newName = replacementRule.apply(newName)!;
       }
 
-      final items = protectEnumItemsNames(
-        (map[_enumConst] as List).map((e) => '$e'),
-      );
+      final Set<UniversalEnumItem> items;
+      final values = (map[_enumConst] as List).map((e) => '$e');
+      if (map.containsKey(_enumNamesConst)) {
+        final names = (map[_enumNamesConst] as List).map((e) => '$e');
+        items = protectEnumItemsNamesAndValues(names, values);
+      } else {
+        items = protectEnumItemsNames(values);
+      }
 
       final enumClass = _getUniqueEnumClass(
         name: newName,
