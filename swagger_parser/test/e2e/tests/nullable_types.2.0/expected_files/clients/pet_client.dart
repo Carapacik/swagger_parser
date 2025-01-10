@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/pet.dart';
-import '../models/status_status.dart';
+import '../models/status.dart';
 
 part 'pet_client.g.dart';
 
@@ -38,7 +38,7 @@ abstract class PetClient {
   /// [status] - Status values that need to be considered for filter.
   @GET('/pet/findByStatus')
   Future<List<Pet>> findPetsByStatus({
-    @Query('status') required List<StatusStatus> status,
+    @Query('status') required List<Status> status,
   });
 
   /// Finds Pets by tags.

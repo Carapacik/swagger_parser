@@ -4,4 +4,4 @@
 
 // Data classes
 export 'models/class_name.dart';
-export 'models/status_status.dart';
+export 'models/class_name_status.dart';
