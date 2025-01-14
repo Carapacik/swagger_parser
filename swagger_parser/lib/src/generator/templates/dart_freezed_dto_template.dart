@@ -157,8 +157,7 @@ String _factories(UniversalComponentClass dataClass, String className) {
     return '''
   const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(
       dataClass.parameters,
-    )}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;
-''';
+    )}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;''';
   }
 
   final factories = <String>[];
