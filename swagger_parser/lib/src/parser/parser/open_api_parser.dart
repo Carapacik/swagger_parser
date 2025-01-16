@@ -54,12 +54,14 @@ class OpenApiParser {
   static const _definitionsConst = 'definitions';
   static const _descriptionConst = 'description';
   static const _deprecatedConst = 'deprecated';
+  static const _discriminatorConst = 'discriminator';
   static const _enumConst = 'enum';
   static const _formatConst = 'format';
   static const _formUrlEncodedConst = 'application/x-www-form-urlencoded';
   static const _inConst = 'in';
   static const _infoConst = 'info';
   static const _itemsConst = 'items';
+  static const _mappingConst = 'mapping';
   static const _multipartFormDataConst = 'multipart/form-data';
   static const _nameConst = 'name';
   static const _nullableConst = 'nullable';
@@ -70,6 +72,7 @@ class OpenApiParser {
   static const _parametersConst = 'parameters';
   static const _pathsConst = 'paths';
   static const _propertiesConst = 'properties';
+  static const _propertyNameConst = 'propertyName';
   static const _refConst = r'$ref';
   static const _requestBodyConst = 'requestBody';
   static const _requestBodiesConst = 'requestBodies';
@@ -895,6 +898,27 @@ class OpenApiParser {
       }
       allOfClass.parameters.addAll(allOfClass.allOf!.properties);
     }
+
+    // check for discriminated oneOf
+    final discriminatedOneOfClasses = dataClasses.where(
+      (dc) => dc is UniversalComponentClass && dc.discriminator != null,
+    );
+    for (final discriminatedOneOfClass in discriminatedOneOfClasses) {
+      if (discriminatedOneOfClass is! UniversalComponentClass) {
+        continue;
+      }
+      final discriminator = discriminatedOneOfClass.discriminator!;
+      // for each ref, we lookup the matching dataclass and add its properties to the discriminator mapping, its imports are added to the discriminatedOneOfClass's imports
+      for (final ref in discriminator.discriminatorValueToRefMapping.values) {
+        final refedClass = dataClasses.firstWhere((dc) => dc.name == ref);
+        if (refedClass is! UniversalComponentClass) {
+          continue;
+        }
+        discriminator.refProperties[ref] = refedClass.parameters;
+        discriminatedOneOfClass.imports.addAll(refedClass.imports);
+      }
+    }
+
     return dataClasses;
   }
 
@@ -931,7 +955,7 @@ class OpenApiParser {
       final (:type, :import) = _findType(
         arrayItems,
         name: name,
-        additionalName: name,
+        additionalName: additionalName,
         root: false,
         isRequired: isRequired,
       );
@@ -1122,9 +1146,69 @@ class OpenApiParser {
         map.containsKey(_anyOfConst) ||
         map.containsKey(_oneOfConst) ||
         map[_typeConst] is List) {
+      // Handle discriminated oneOf
+      if (map.containsKey(_oneOfConst) &&
+          map.containsKey(_discriminatorConst) &&
+          (map[_discriminatorConst] as Map<String, dynamic>)
+              .containsKey(_propertyNameConst) &&
+          (map[_discriminatorConst] as Map<String, dynamic>)
+              .containsKey(_mappingConst)) {
+        final discriminator = map[_discriminatorConst] as Map<String, dynamic>;
+        final propertyName = discriminator[_propertyNameConst] as String;
+        final refMapping = discriminator[_mappingConst] as Map<String, dynamic>;
+
+        // Create a base union class for the discriminated types
+        final baseClassName =
+            '${additionalName ?? ''} ${name ?? ''} Union'.toPascal;
+        final (newName, description) = protectName(
+          baseClassName,
+          uniqueIfNull: true,
+          description: map[_descriptionConst]?.toString(),
+        );
+
+        // Cleanup the refMapping to contain only the class name
+        final cleanedRefMapping = <String, String>{};
+        for (final key in refMapping.keys) {
+          final refMap = <String, dynamic>{_refConst: refMapping[key]};
+          cleanedRefMapping[key] = _formatRef(refMap);
+        }
+
+        // Create a sealed class to represent the discriminated union
+        _objectClasses.add(
+          UniversalComponentClass(
+            name: newName!.toPascal,
+            imports: SplayTreeSet<String>(),
+            parameters: [
+              UniversalType(
+                type: 'String',
+                name: propertyName,
+                isRequired: true,
+              ),
+            ],
+            discriminator: (
+              propertyName: propertyName,
+              discriminatorValueToRefMapping: cleanedRefMapping,
+              // This property is populated by the parser after all the data classes are created
+              refProperties: <String, List<UniversalType>>{},
+            ),
+          ),
+        );
+
+        return (
+          type: UniversalType(
+            type: newName.toPascal,
+            name: name?.toCamel,
+            description: description,
+            isRequired: isRequired,
+            nullable: map[_nullableConst].toString().toBool() ??
+                (root && !isRequired),
+          ),
+          import: newName.toPascal,
+        );
+      }
+
       String? ofImport;
       UniversalType? ofType;
-
       final ofList = map[_allOfConst] ??
           map[_anyOfConst] ??
           map[_oneOfConst] ??
