@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 import 'dart:typed_data';
@@ -10,19 +11,17 @@ void generateArchive(List<GeneratedFile> files) {
   final encoder = ZipEncoder();
   final archive = Archive();
   for (final file in files) {
-    archive.addFile(ArchiveFile(file.name, file.content.length, file.content));
+    final contentBytes = utf8.encode(file.content);
+    archive.addFile(ArchiveFile(file.name, contentBytes.length, contentBytes));
   }
-  final outputStream = OutputStream();
+  final outputStream = OutputMemoryStream();
   final bytes = encoder.encode(
     archive,
-    level: Deflate.BEST_COMPRESSION,
+    level: DeflateLevel.bestCompression,
     output: outputStream,
   );
-  if (bytes == null || bytes is! Uint8List) {
-    throw Exception('Error with encode');
-  }
 
-  final blobWeb = web.Blob(<JSUint8Array>[bytes.toJS].toJS);
+  final blobWeb = web.Blob(<JSUint8Array>[Uint8List.fromList(bytes).toJS].toJS);
   final url = web.URL.createObjectURL(blobWeb);
   final anchor = web.document.createElement('a') as web.HTMLAnchorElement
     ..href = url
