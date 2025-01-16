@@ -1,3 +1,7 @@
+## 1.21.0
+- Add support for union types `oneOf`([#265](https://github.com/Carapacik/swagger_parser/issues/265), [#286](https://github.com/Carapacik/swagger_parser/issues/265))
+- Fixed config property inheritance
+
 ## 1.20.1
 - Fixed errors with config parsing
 
