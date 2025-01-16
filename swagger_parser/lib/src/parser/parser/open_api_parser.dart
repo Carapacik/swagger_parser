@@ -901,7 +901,8 @@ class OpenApiParser {
 
     // check for discriminated oneOf
     final discriminatedOneOfClasses = dataClasses.where(
-        (dc) => dc is UniversalComponentClass && dc.discriminator != null);
+      (dc) => dc is UniversalComponentClass && dc.discriminator != null,
+    );
     for (final discriminatedOneOfClass in discriminatedOneOfClasses) {
       if (discriminatedOneOfClass is! UniversalComponentClass) {
         continue;

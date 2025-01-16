@@ -161,10 +161,13 @@ String _factories(UniversalComponentClass dataClass, String className) {
   }
 
   final factories = <String>[];
-  for (final discriminatorValue in dataClass.discriminator!.discriminatorValueToRefMapping.keys) {
+  for (final discriminatorValue
+      in dataClass.discriminator!.discriminatorValueToRefMapping.keys) {
     final factoryName = discriminatorValue.toCamel;
-    final discriminatorRef = dataClass.discriminator!.discriminatorValueToRefMapping[discriminatorValue]!;
-    final factoryParameters = dataClass.discriminator!.refProperties[discriminatorRef]!;
+    final discriminatorRef = dataClass
+        .discriminator!.discriminatorValueToRefMapping[discriminatorValue]!;
+    final factoryParameters =
+        dataClass.discriminator!.refProperties[discriminatorRef]!;
     final unionItemClassName = discriminatorRef.toPascal;
 
     factories.add('''
@@ -224,10 +227,12 @@ String? _validationString(UniversalType type) {
 }
 
 String _parametersToString(List<UniversalType> parameters) {
-  final sortedByRequired = List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)));
+  final sortedByRequired =
+      List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)));
   return sortedByRequired
       .mapIndexed(
-        (i, e) => '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '    ')}'
+        (i, e) =>
+            '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '    ')}'
             '${_jsonKey(e)}    ${_required(e)}'
             '${e.toSuitableType(ProgrammingLanguage.dart)} ${e.name},',
       )
@@ -250,10 +255,12 @@ String _jsonKey(UniversalType t) {
 }
 
 /// return required if isRequired
-String _required(UniversalType t) => t.isRequired && t.defaultValue == null ? 'required ' : '';
+String _required(UniversalType t) =>
+    t.isRequired && t.defaultValue == null ? 'required ' : '';
 
 /// return defaultValue if have
-String _defaultValue(UniversalType t) => '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(
-    t.defaultValue,
-    type: t.type,
-  )}';
+String _defaultValue(UniversalType t) =>
+    '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(
+        t.defaultValue,
+        type: t.type,
+      )}';
