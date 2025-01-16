@@ -21,11 +21,9 @@ ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';
 
-${descriptionComment(dataClass.description)}@Freezed()
-class $className with _\$$className {
-  const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(
-    dataClass.parameters,
-  )}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;
+${descriptionComment(dataClass.description)}@Freezed(${dataClass.discriminator != null ? "unionKey: '${dataClass.discriminator!.propertyName}'" : ''})
+${dataClass.discriminator != null ? 'sealed ' : ''}class $className with _\$$className {
+${_factories(dataClass, className)}
   \n  factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
 ${generateValidator ? dataClass.parameters.map(_validationString).nonNulls.join() : ''}}
 ${generateValidator ? _validateMethod(className, dataClass.parameters) : ''}''';
@@ -152,6 +150,35 @@ String _validateMethod(String className, List<UniversalType> types) {
     ..write('}\n');
 
   return funcBuffer.toString();
+}
+
+String _factories(UniversalComponentClass dataClass, String className) {
+  if (dataClass.discriminator == null) {
+    return '''
+  const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(
+      dataClass.parameters,
+    )}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;''';
+  }
+
+  final factories = <String>[];
+  for (final discriminatorValue
+      in dataClass.discriminator!.discriminatorValueToRefMapping.keys) {
+    final factoryName = discriminatorValue.toCamel;
+    final discriminatorRef = dataClass
+        .discriminator!.discriminatorValueToRefMapping[discriminatorValue]!;
+    final factoryParameters =
+        dataClass.discriminator!.refProperties[discriminatorRef]!;
+    final unionItemClassName = discriminatorRef.toPascal;
+
+    factories.add('''
+  @FreezedUnionValue('$discriminatorValue')
+  const factory $className.$factoryName(${factoryParameters.isNotEmpty ? '{' : ''}${_parametersToString(
+      factoryParameters,
+    )}${factoryParameters.isNotEmpty ? '\n  }' : ''}) = $unionItemClassName;
+''');
+  }
+
+  return factories.join('\n');
 }
 
 String? _validationString(UniversalType type) {

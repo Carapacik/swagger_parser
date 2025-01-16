@@ -10,6 +10,7 @@ final class UniversalComponentClass extends UniversalDataClass {
     required this.parameters,
     this.allOf,
     this.typeDef = false,
+    this.discriminator,
     super.description,
   });
 
@@ -21,6 +22,18 @@ final class UniversalComponentClass extends UniversalDataClass {
 
   /// Temp field for containing info about `allOf` for future processing
   final ({List<String> refs, List<UniversalType> properties})? allOf;
+
+  /// When using a discriminated oneOf, this contains the information about the property name, the mapping of the ref to the property name, and the properties of each of the oneOf variants
+  final ({
+    // The name of the property that is used to discriminate the oneOf variants
+    String propertyName,
+
+    // The mapping of the property value to the ref
+    Map<String, String> discriminatorValueToRefMapping,
+
+    // The list of properties stored for each ref
+    Map<String, List<UniversalType>> refProperties,
+  })? discriminator;
 
   /// Whether or not this schema is a basic type
   /// "Date": {

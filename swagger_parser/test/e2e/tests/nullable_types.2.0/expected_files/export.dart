@@ -7,7 +7,7 @@ export 'clients/pet_client.dart';
 // Data classes
 export 'models/category.dart';
 export 'models/pet.dart';
-export 'models/status_status.dart';
+export 'models/status.dart';
 export 'models/pet_status.dart';
 // Root client
 export 'rest_client.dart';
