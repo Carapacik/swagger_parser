@@ -185,6 +185,19 @@ void main() {
       );
     });
 
+    test('discriminated_one_of.3.0', () async {
+      await e2eTest(
+        'basic/discriminated_one_of.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'discriminated_one_of.3.0.json',
+      );
+    });
+
     test('empty_class.2.0', () async {
       await e2eTest(
         'basic/empty_class.2.0',

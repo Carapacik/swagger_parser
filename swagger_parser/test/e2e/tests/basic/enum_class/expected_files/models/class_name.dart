@@ -4,7 +4,7 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'status_status.dart';
+import 'class_name_status.dart';
 
 part 'class_name.freezed.dart';
 part 'class_name.g.dart';
@@ -13,7 +13,7 @@ part 'class_name.g.dart';
 class ClassName with _$ClassName {
   const factory ClassName({
     /// Status values that need to be considered for filter
-    required List<StatusStatus> status,
+    required List<ClassNameStatus> status,
   }) = _ClassName;
 
   factory ClassName.fromJson(Map<String, Object?> json) =>
