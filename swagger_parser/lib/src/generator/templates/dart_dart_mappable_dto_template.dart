@@ -13,14 +13,28 @@ String dartDartMappableDtoTemplate(
   required bool markFileAsGenerated,
 }) {
   final className = dataClass.name.toPascal;
+
+  final parent = dataClass.discriminatorValue?.parentClass;
+
   return '''
 ${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}
 ${dartImportDtoTemplate(JsonSerializer.dartMappable)}
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.mapper.dart';
 
-${descriptionComment(dataClass.description)}@MappableClass()
-class $className with ${className}Mappable {
+${descriptionComment(dataClass.description)}@MappableClass(${() {
+    if (dataClass.discriminator != null) {
+      return [
+        "discriminatorKey: '${dataClass.discriminator!.propertyName}'",
+        "includeSubClasses: [${dataClass.discriminator!.discriminatorValueToRefMapping.keys.join(', ')}]",
+      ].join(", ");
+    }
+    if (dataClass.discriminatorValue != null) {
+      return "discriminatorValue: '${dataClass.discriminatorValue!.propertyValue}'";
+    }
+    return "";
+  }()})
+class $className ${parent != null ? "extends $parent " : ""}with ${className}Mappable {
 
 ${indentation(2)}const $className(${getParameters(dataClass)});
 
@@ -32,16 +46,26 @@ ${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${clas
 }
 
 String getParameters(UniversalComponentClass dataClass) {
-  if (dataClass.parameters.isNotEmpty) {
-    return '{\n${_parametersToString(dataClass.parameters)}\n${indentation(2)}}';
+  // if this class has discriminated values, don't populate the discriminator field
+  // in the parent class
+  final parameters = dataClass.parameters
+      .where((it) => it.name != dataClass.discriminator?.propertyName)
+      .toList();
+  if (parameters.isNotEmpty) {
+    return '{\n${_parametersToString(parameters)}\n${indentation(2)}}';
   } else {
     return '';
   }
 }
 
 String getFields(UniversalComponentClass dataClass) {
-  if (dataClass.parameters.isNotEmpty) {
-    return '${_fieldsToString(dataClass.parameters)}\n';
+  // if this class has discriminated values, don't populate the discriminator field
+  // in the parent class
+  final parameters = dataClass.parameters
+      .where((it) => it.name != dataClass.discriminator?.propertyName)
+      .toList();
+  if (parameters.isNotEmpty) {
+    return '${_fieldsToString(parameters)}\n';
   } else {
     return '';
   }

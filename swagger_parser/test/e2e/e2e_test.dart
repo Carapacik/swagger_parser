@@ -214,6 +214,19 @@ void main() {
       );
     });
 
+    test('discriminated_one_of.3.0_mappable', () async {
+      await e2eTest(
+        'basic/discriminated_one_of.3.0_mappable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.dartMappable,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'discriminated_one_of.3.0.json',
+      );
+    });
+
     test('empty_class.2.0', () async {
       await e2eTest(
         'basic/empty_class.2.0',

@@ -924,6 +924,13 @@ class OpenApiParser {
         }
         discriminator.refProperties[ref] = refedClass.parameters;
         discriminatedOneOfClass.imports.addAll(refedClass.imports);
+        discriminatedOneOfClass.imports.add(refedClass.import);
+
+        refedClass.imports.add(discriminatedOneOfClass.import);
+        refedClass.discriminatorValue = (
+          propertyValue: ref,
+          parentClass: discriminatedOneOfClass.name,
+        );
       }
     }
 

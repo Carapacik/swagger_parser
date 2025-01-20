@@ -1,21 +1,24 @@
 part of 'universal_data_class.dart';
 
 /// Universal template for containing information about component
-@immutable
 final class UniversalComponentClass extends UniversalDataClass {
   /// Constructor for [UniversalComponentClass]
-  const UniversalComponentClass({
+  UniversalComponentClass({
     required super.name,
     required this.imports,
     required this.parameters,
     this.allOf,
     this.typeDef = false,
     this.discriminator,
+    this.discriminatorValue,
     super.description,
   });
 
   /// List of additional references to components
   final Set<String> imports;
+
+  /// The import of this class
+  String get import => name.toPascal;
 
   /// List of class fields
   final List<UniversalType> parameters;
@@ -34,6 +37,13 @@ final class UniversalComponentClass extends UniversalDataClass {
     // The list of properties stored for each ref
     Map<String, List<UniversalType>> refProperties,
   })? discriminator;
+
+  /// When using a discriminated oneOf, where this class is one of the discriminated values, this field contains the information about the parent
+  ({
+    // The name of the property that is used to discriminate the oneOf variants
+    String propertyValue,
+    String parentClass,
+  })? discriminatorValue;
 
   /// Whether or not this schema is a basic type
   /// "Date": {
