@@ -4,8 +4,11 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'cat.dart';
 import 'cat_type.dart';
+import 'dog.dart';
 import 'dog_type.dart';
+import 'human.dart';
 import 'human_type.dart';
 
 part 'family_members_union.freezed.dart';
