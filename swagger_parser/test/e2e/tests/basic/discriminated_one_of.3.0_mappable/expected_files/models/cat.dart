@@ -15,7 +15,6 @@ class Cat extends FamilyMembersUnion with CatMappable {
     required this.type,
     required this.mewCount,
   });
-
   final CatType type;
   final int mewCount;
 

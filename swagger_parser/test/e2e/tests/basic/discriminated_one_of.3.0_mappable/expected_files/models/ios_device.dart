@@ -14,7 +14,6 @@ class IosDevice extends MobileDevice with IosDeviceMappable {
   const IosDevice({
     required this.type,
   });
-
   final IosDeviceType type;
 
   static IosDevice fromJson(Map<String, dynamic> json) =>

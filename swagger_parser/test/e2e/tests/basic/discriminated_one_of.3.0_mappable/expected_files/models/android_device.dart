@@ -14,7 +14,6 @@ class AndroidDevice extends MobileDevice with AndroidDeviceMappable {
   const AndroidDevice({
     required this.type,
   });
-
   final AndroidDeviceType type;
 
   static AndroidDevice fromJson(Map<String, dynamic> json) =>

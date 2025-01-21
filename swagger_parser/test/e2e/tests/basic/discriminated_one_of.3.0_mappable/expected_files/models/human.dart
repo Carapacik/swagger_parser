@@ -15,7 +15,6 @@ class Human extends FamilyMembersUnion with HumanMappable {
     required this.type,
     required this.job,
   });
-
   final HumanType type;
   final String job;
 

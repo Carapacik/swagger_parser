@@ -16,6 +16,27 @@ part 'mobile_device.mapper.dart';
 class MobileDevice with MobileDeviceMappable {
   const MobileDevice();
 
+  T when<T>({
+    required T Function(IosDevice ios) ios,
+    required T Function(AndroidDevice android) android,
+  }) {
+    return maybeWhen(
+      ios: ios,
+      android: android,
+    )!;
+  }
+
+  T? maybeWhen<T>({
+    required T Function(IosDevice ios) ios,
+    required T Function(AndroidDevice android) android,
+  }) {
+    return switch (this) {
+      IosDevice _ => ios(this as IosDevice),
+      AndroidDevice _ => android(this as AndroidDevice),
+      _ => throw Exception("Unhandled type: ${this.runtimeType}"),
+    };
+  }
+
   static MobileDevice fromJson(Map<String, dynamic> json) =>
       MobileDeviceMapper.ensureInitialized().decodeMap<MobileDevice>(json);
 }
