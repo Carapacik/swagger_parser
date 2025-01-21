@@ -863,6 +863,7 @@ class OpenApiParser {
       final allOf =
           refs.isNotEmpty ? (refs: refs, properties: parameters) : null;
 
+      final discriminator = _parseDiscriminatorInfo(value);
       dataClasses.add(
         UniversalComponentClass(
           name: key,
@@ -870,6 +871,7 @@ class OpenApiParser {
           parameters: allOf != null ? [] : parameters,
           allOf: allOf,
           description: value[_descriptionConst]?.toString(),
+          discriminator: discriminator,
         ),
       );
     });
@@ -928,7 +930,10 @@ class OpenApiParser {
 
         refedClass.imports.add(discriminatedOneOfClass.import);
         refedClass.discriminatorValue = (
-          propertyValue: ref,
+          propertyValue: discriminatedOneOfClass
+              .discriminator!.discriminatorValueToRefMapping.entries
+              .firstWhere((it) => it.value == ref)
+              .key,
           parentClass: discriminatedOneOfClass.name,
         );
       }
@@ -1175,12 +1180,6 @@ class OpenApiParser {
             _propertyNameConst,
           ) &&
           (map[_discriminatorConst] as Map<String, dynamic>).containsKey(
-            _mappingConst,
-          )) {
-        final discriminator = map[_discriminatorConst] as Map<String, dynamic>;
-        final propertyName = discriminator[_propertyNameConst] as String;
-        final refMapping = discriminator[_mappingConst] as Map<String, dynamic>;
-
         // Create a base union class for the discriminated types
         final baseClassName =
             '${additionalName ?? ''} ${name ?? ''} Union'.toPascal;
@@ -1190,12 +1189,7 @@ class OpenApiParser {
           description: map[_descriptionConst]?.toString(),
         );
 
-        // Cleanup the refMapping to contain only the class name
-        final cleanedRefMapping = <String, String>{};
-        for (final key in refMapping.keys) {
-          final refMap = <String, dynamic>{_refConst: refMapping[key]};
-          cleanedRefMapping[key] = _formatRef(refMap);
-        }
+        final discriminator = _parseDiscriminatorInfo(map);
 
         // Create a sealed class to represent the discriminated union
         _objectClasses.add(
@@ -1205,16 +1199,11 @@ class OpenApiParser {
             parameters: [
               UniversalType(
                 type: 'String',
-                name: propertyName,
+                name: discriminator?.propertyName,
                 isRequired: true,
               ),
             ],
-            discriminator: (
-              propertyName: propertyName,
-              discriminatorValueToRefMapping: cleanedRefMapping,
-              // This property is populated by the parser after all the data classes are created
-              refProperties: <String, List<UniversalType>>{},
-            ),
+            discriminator: discriminator,
           ),
         );
 
@@ -1396,6 +1385,28 @@ class OpenApiParser {
         import: import,
       );
     }
+  }
+
+  Discriminator? _parseDiscriminatorInfo(Map<String, dynamic> map) {
+    if (!map.containsKey(_oneOfConst)) {
+      return null;
+    }
+    final discriminator = map[_discriminatorConst] as Map<String, dynamic>;
+    final propertyName = discriminator[_propertyNameConst] as String;
+    final refMapping = discriminator[_mappingConst] as Map<String, dynamic>;
+
+    // Cleanup the refMapping to contain only the class name
+    final cleanedRefMapping = <String, String>{};
+    for (final key in refMapping.keys) {
+      final refMap = <String, dynamic>{_refConst: refMapping[key]};
+      cleanedRefMapping[key] = _formatRef(refMap);
+    }
+    return (
+      propertyName: propertyName,
+      discriminatorValueToRefMapping: cleanedRefMapping,
+      // This property is populated by the parser after all the data classes are created
+      refProperties: <String, List<UniversalType>>{},
+    );
   }
 }
 
