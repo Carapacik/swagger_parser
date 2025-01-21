@@ -30,14 +30,14 @@ class FamilyMembersUnion with FamilyMembersUnionMappable {
   }
 
   T? maybeWhen<T>({
-    required T Function(Cat cat) cat,
-    required T Function(Dog dog) dog,
-    required T Function(Human human) human,
+    T Function(Cat cat)? cat,
+    T Function(Dog dog)? dog,
+    T Function(Human human)? human,
   }) {
     return switch (this) {
-      Cat _ => cat(this as Cat),
-      Dog _ => dog(this as Dog),
-      Human _ => human(this as Human),
+      Cat _ => cat?.call(this as Cat),
+      Dog _ => dog?.call(this as Dog),
+      Human _ => human?.call(this as Human),
       _ => throw Exception("Unhandled type: ${this.runtimeType}"),
     };
   }

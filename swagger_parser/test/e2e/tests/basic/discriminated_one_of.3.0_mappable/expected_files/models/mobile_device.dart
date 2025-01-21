@@ -27,12 +27,12 @@ class MobileDevice with MobileDeviceMappable {
   }
 
   T? maybeWhen<T>({
-    required T Function(IosDevice ios) ios,
-    required T Function(AndroidDevice android) android,
+    T Function(IosDevice ios)? ios,
+    T Function(AndroidDevice android)? android,
   }) {
     return switch (this) {
-      IosDevice _ => ios(this as IosDevice),
-      AndroidDevice _ => android(this as AndroidDevice),
+      IosDevice _ => ios?.call(this as IosDevice),
+      AndroidDevice _ => android?.call(this as AndroidDevice),
       _ => throw Exception("Unhandled type: ${this.runtimeType}"),
     };
   }

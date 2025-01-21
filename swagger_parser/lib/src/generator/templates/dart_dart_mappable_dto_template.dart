@@ -59,10 +59,10 @@ String getDiscriminatorConvenienceMethods(UniversalComponentClass dataClass){
     )!;
   }
   T? maybeWhen<T>({
-  ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => 'required T Function(${e.value} ${e.key.toCamel}) ${e.key.toCamel},').join('\n')}
+  ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => 'T Function(${e.value} ${e.key.toCamel})? ${e.key.toCamel},').join('\n')}
   }) {
     return switch (this) {
-    ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => '${e.value} _ => ${e.key.toCamel}(this as ${e.value}),').join('\n')}
+    ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => '${e.value} _ => ${e.key.toCamel}?.call(this as ${e.value}),').join('\n')}
       _ => throw Exception("Unhandled type: \${this.runtimeType}"),
     };
   }
