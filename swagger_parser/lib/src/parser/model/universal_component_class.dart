@@ -1,5 +1,22 @@
 part of 'universal_data_class.dart';
 
+typedef Discriminator = ({
+// The name of the property that is used to discriminate the oneOf variants
+  String propertyName,
+
+// The mapping of the property value to the ref
+  Map<String, String> discriminatorValueToRefMapping,
+
+// The list of properties stored for each ref
+  Map<String, List<UniversalType>> refProperties,
+});
+
+typedef DiscriminatorValue = ({
+// The name of the property that is used to discriminate the oneOf variants
+  String propertyValue,
+  String parentClass,
+});
+
 /// Universal template for containing information about component
 final class UniversalComponentClass extends UniversalDataClass {
   /// Constructor for [UniversalComponentClass]
@@ -27,23 +44,10 @@ final class UniversalComponentClass extends UniversalDataClass {
   final ({List<String> refs, List<UniversalType> properties})? allOf;
 
   /// When using a discriminated oneOf, this contains the information about the property name, the mapping of the ref to the property name, and the properties of each of the oneOf variants
-  final ({
-    // The name of the property that is used to discriminate the oneOf variants
-    String propertyName,
-
-    // The mapping of the property value to the ref
-    Map<String, String> discriminatorValueToRefMapping,
-
-    // The list of properties stored for each ref
-    Map<String, List<UniversalType>> refProperties,
-  })? discriminator;
+  final Discriminator? discriminator;
 
   /// When using a discriminated oneOf, where this class is one of the discriminated values, this field contains the information about the parent
-  ({
-    // The name of the property that is used to discriminate the oneOf variants
-    String propertyValue,
-    String parentClass,
-  })? discriminatorValue;
+  DiscriminatorValue? discriminatorValue;
 
   /// Whether or not this schema is a basic type
   /// "Date": {

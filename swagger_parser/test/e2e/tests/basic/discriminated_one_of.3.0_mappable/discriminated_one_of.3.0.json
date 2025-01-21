@@ -41,42 +41,102 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["Cat"]
+            "enum": [
+              "Cat"
+            ]
           },
           "mewCount": {
             "type": "integer",
             "description": "Number of times the cat meows."
           }
         },
-        "required": ["type", "mewCount"]
+        "required": [
+          "type",
+          "mewCount"
+        ]
       },
       "Dog": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["Dog"]
+            "enum": [
+              "Dog"
+            ]
           },
           "barkSound": {
             "type": "string",
             "description": "The sound of the dog's bark."
           }
         },
-        "required": ["type", "barkSound"]
+        "required": [
+          "type",
+          "barkSound"
+        ]
       },
       "Human": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["Human"]
+            "enum": [
+              "Human"
+            ]
           },
           "job": {
             "type": "string",
             "description": "The job of the human."
           }
         },
-        "required": ["type", "job"]
+        "required": [
+          "type",
+          "job"
+        ]
+      },
+      "MobileDevice": {
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "ios": "#/components/schemas/IOSDevice",
+            "android": "#/components/schemas/AndroidDevice"
+          }
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/IOSDevice"
+          },
+          {
+            "$ref": "#/components/schemas/AndroidDevice"
+          }
+        ]
+      },
+      "IOSDevice": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "ios"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "AndroidDevice": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "android"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ]
       }
     }
   }
