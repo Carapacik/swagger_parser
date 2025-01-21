@@ -18,9 +18,9 @@ class FamilyMembersUnion with FamilyMembersUnionMappable {
   const FamilyMembersUnion();
 
   T when<T>({
-    required T Function(Cat Cat) cat,
-    required T Function(Dog Dog) dog,
-    required T Function(Human Human) human,
+    required T Function(Cat cat) cat,
+    required T Function(Dog dog) dog,
+    required T Function(Human human) human,
   }) {
     return maybeWhen(
       cat: cat,
@@ -30,9 +30,9 @@ class FamilyMembersUnion with FamilyMembersUnionMappable {
   }
 
   T? maybeWhen<T>({
-    required T Function(Cat Cat) cat,
-    required T Function(Dog Dog) dog,
-    required T Function(Human Human) human,
+    required T Function(Cat cat) cat,
+    required T Function(Dog dog) dog,
+    required T Function(Human human) human,
   }) {
     return switch (this) {
       Cat _ => cat(this as Cat),

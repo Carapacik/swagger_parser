@@ -50,14 +50,14 @@ String getDiscriminatorConvenienceMethods(UniversalComponentClass dataClass){
   }
   return '''
   T when<T>({
-  ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => 'required T Function(${e.value} ${e.key}) ${e.key.toCamel},').join('\n')}
+  ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => 'required T Function(${e.value} ${e.key.toCamel}) ${e.key.toCamel},').join('\n')}
   }) {
     return maybeWhen(
     ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => '${e.key.toCamel}: ${e.key.toCamel},').join('\n')}
     )!;
   }
   T? maybeWhen<T>({
-  ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => 'required T Function(${e.value} ${e.key}) ${e.key.toCamel},').join('\n')}
+  ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => 'required T Function(${e.value} ${e.key.toCamel}) ${e.key.toCamel},').join('\n')}
   }) {
     return switch (this) {
     ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => '${e.value} _ => ${e.key.toCamel}(this as ${e.value}),').join('\n')}
