@@ -13,7 +13,6 @@ class Family with FamilyMappable {
   const Family({
     required this.members,
   });
-
   final List<FamilyMembersUnion> members;
 
   static Family fromJson(Map<String, dynamic> json) =>

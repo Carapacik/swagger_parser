@@ -15,7 +15,6 @@ class Dog extends FamilyMembersUnion with DogMappable {
     required this.type,
     required this.barkSound,
   });
-
   final DogType type;
   final String barkSound;
 

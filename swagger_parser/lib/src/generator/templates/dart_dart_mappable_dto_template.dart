@@ -37,12 +37,34 @@ ${descriptionComment(dataClass.description)}@MappableClass(${() {
 class $className ${parent != null ? "extends $parent " : ""}with ${className}Mappable {
 
 ${indentation(2)}const $className(${getParameters(dataClass)});
-
 ${getFields(dataClass)}
-
+${getDiscriminatorConvenienceMethods(dataClass)}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
 }
 ''';
+}
+
+String getDiscriminatorConvenienceMethods(UniversalComponentClass dataClass){
+  if (dataClass.discriminator == null){
+    return '';
+  }
+  return '''
+  T when<T>({
+  ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => 'required T Function(${e.value} ${e.key}) ${e.key.toCamel},').join('\n')}
+  }) {
+    return maybeWhen(
+    ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => '${e.key.toCamel}: ${e.key.toCamel},').join('\n')}
+    )!;
+  }
+  T? maybeWhen<T>({
+  ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => 'required T Function(${e.value} ${e.key}) ${e.key.toCamel},').join('\n')}
+  }) {
+    return switch (this) {
+    ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => '${e.value} _ => ${e.key.toCamel}(this as ${e.value}),').join('\n')}
+      _ => throw Exception("Unhandled type: \${this.runtimeType}"),
+    };
+  }
+  ''';
 }
 
 String getParameters(UniversalComponentClass dataClass) {
