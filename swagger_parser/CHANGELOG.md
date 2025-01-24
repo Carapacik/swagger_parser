@@ -1,3 +1,6 @@
+## 1.21.1
+- Fixed config properties inheritance with multi-scheme urls([#293](https://github.com/Carapacik/swagger_parser/issues/293))
+
 ## 1.21.0
 - Add support for union types `oneOf`([#265](https://github.com/Carapacik/swagger_parser/issues/265), [#286](https://github.com/Carapacik/swagger_parser/issues/265))
 - Fixed config property inheritance
