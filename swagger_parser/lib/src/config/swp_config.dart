@@ -70,11 +70,8 @@ class SWPConfig {
     bool isRootConfig = false,
     SWPConfig? rootConfig,
   }) {
-    var schemaPath =
+    final schemaPath =
         yamlMap['schema_path']?.toString() ?? rootConfig?.schemaPath;
-    if (isRootConfig && schemaPath == null) {
-      schemaPath = '';
-    }
 
     final schemaUrl =
         yamlMap['schema_url']?.toString() ?? rootConfig?.schemaUrl;
@@ -87,7 +84,7 @@ class SWPConfig {
       }
     }
 
-    if (schemaPath == null && schemaUrl == null) {
+    if (!isRootConfig && schemaPath == null && schemaUrl == null) {
       throw const ConfigException(
         "Config parameters 'schema_path' or 'schema_url' are required.",
       );
