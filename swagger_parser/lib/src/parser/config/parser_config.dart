@@ -13,6 +13,7 @@ class ParserConfig {
     this.enumsParentPrefix = true,
     this.skippedParameters = const <String>[],
     this.replacementRules = const [],
+    this.useXNullable = false,
   });
 
   /// Specification file content as [String]
@@ -49,4 +50,8 @@ class ParserConfig {
   /// Optional. Set regex replacement rules for the names of the generated classes/enums.
   /// All rules are applied in order.
   final List<ReplacementRule> replacementRules;
+
+  /// Does the Schema use x-nullable to indicate nullable fields
+  /// Only used for OpenApi v2
+  final bool useXNullable;
 }

@@ -709,7 +709,9 @@ class OpenApiParser {
           propertyValue,
           name: propertyName,
           additionalName: additionalName,
-          isRequired: isRequired || !isNullable,
+          isRequired: (_apiInfo.schemaVersion == OAS.v2 && !config.useXNullable)
+              ? isRequired
+              : isRequired || !isNullable,
         );
 
         var validation = propertyValue;

@@ -34,6 +34,7 @@ class SWPConfig {
     this.enumsParentPrefix = true,
     this.skippedParameters = const <String>[],
     this.generateValidator = false,
+    this.useXNullable = false,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -62,6 +63,7 @@ class SWPConfig {
     required this.enumsParentPrefix,
     required this.skippedParameters,
     required this.generateValidator,
+    required this.useXNullable,
   });
 
   /// Creates a [SWPConfig] from [YamlMap].
@@ -204,6 +206,9 @@ class SWPConfig {
     final generateValidator =
         yamlMap['generate_validator'] as bool? ?? rootConfig?.generateValidator;
 
+    final useXNullable =
+        yamlMap['use_x_nullable'] as bool? ?? rootConfig?.useXNullable;
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -234,6 +239,7 @@ class SWPConfig {
       originalHttpResponse: originalHttpResponse ?? dc.originalHttpResponse,
       replacementRules: replacementRules ?? dc.replacementRules,
       generateValidator: generateValidator ?? dc.generateValidator,
+      useXNullable: useXNullable ?? dc.useXNullable,
     );
   }
 
@@ -340,6 +346,9 @@ class SWPConfig {
   /// Set `true` to generate validator for freezed.
   final bool generateValidator;
 
+  /// Set `true` if Schema uses x-nullable to indicate nullable fields
+  final bool useXNullable;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -379,6 +388,7 @@ class SWPConfig {
       enumsParentPrefix: enumsParentPrefix,
       skippedParameters: skippedParameters,
       replacementRules: replacementRules,
+      useXNullable: useXNullable,
     );
   }
 }
