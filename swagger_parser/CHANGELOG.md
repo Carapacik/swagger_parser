@@ -1,3 +1,7 @@
+## 1.21.2
+- Add `use_x_nullable` parameter to config([#295](https://github.com/Carapacik/swagger_parser/pull/295))
+- Fixed error with config([#296](https://github.com/Carapacik/swagger_parser/pull/296))
+
 ## 1.21.1
 - Fixed config properties inheritance with multi-scheme urls([#293](https://github.com/Carapacik/swagger_parser/issues/293))
 
