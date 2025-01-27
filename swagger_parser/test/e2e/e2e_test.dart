@@ -100,6 +100,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          useXNullable: true,
         ),
         schemaFileName: 'swagger.yaml',
       );
@@ -115,6 +116,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          useXNullable: true,
         ),
         schemaFileName: 'additional_properties_class.2.0.json',
       );
@@ -141,6 +143,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          useXNullable: true,
         ),
         schemaFileName: 'basic_requests.2.0.json',
       );
@@ -167,6 +170,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          useXNullable: true,
         ),
         schemaFileName: 'basic_types_class.2.0.json',
       );
@@ -206,6 +210,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          useXNullable: true,
         ),
         schemaFileName: 'empty_class.2.0.json',
       );
@@ -258,6 +263,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          useXNullable: true,
         ),
         schemaFileName: 'reference_types_class.2.0.json',
       );
@@ -283,6 +289,7 @@ void main() {
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           putClientsInFolder: true,
+          useXNullable: true,
           replacementRules: [
             ReplacementRule(pattern: RegExp('List'), replacement: 'Lizt'),
             ReplacementRule(pattern: RegExp(r'$'), replacement: 'DTO'),
@@ -317,6 +324,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          useXNullable: true,
         ),
         schemaFileName: 'wrapping_collections.2.0.json',
       );
