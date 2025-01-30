@@ -72,12 +72,9 @@ class SWPConfig {
     bool isRootConfig = false,
     SWPConfig? rootConfig,
   }) {
-    var schemaPath =
+    final schemaPath =
         yamlMap['schema_path']?.toString() ?? rootConfig?.schemaPath;
 
-    if (isRootConfig && schemaPath == null) {
-      schemaPath = '';
-    }
     final schemaUrl =
         yamlMap['schema_url']?.toString() ?? rootConfig?.schemaUrl;
     if (schemaUrl != null) {
@@ -89,7 +86,7 @@ class SWPConfig {
       }
     }
 
-    if (schemaPath == null && schemaUrl == null) {
+    if (!isRootConfig && schemaPath == null && schemaUrl == null) {
       throw const ConfigException(
         "Config parameters 'schema_path' or 'schema_url' are required.",
       );
@@ -116,7 +113,7 @@ class SWPConfig {
 
     final rawName = yamlMap['name']?.toString();
     final name = rawName == null || rawName.isEmpty
-        ? (schemaPath ?? schemaUrl)!.split('/').last.split('.').first
+        ? (schemaPath ?? schemaUrl ?? '').split('/').last.split('.').first
         : rawName;
 
     final defaultContentType = yamlMap['default_content_type'] as String? ??
