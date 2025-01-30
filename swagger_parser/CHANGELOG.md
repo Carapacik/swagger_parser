@@ -1,3 +1,6 @@
+## 1.21.3
+- Fixed errors with config([#293](https://github.com/Carapacik/swagger_parser/pull/293), [#296](https://github.com/Carapacik/swagger_parser/pull/296))
+
 ## 1.21.2
 - Add `use_x_nullable` parameter to config([#295](https://github.com/Carapacik/swagger_parser/pull/295))
 - Fixed error with config([#296](https://github.com/Carapacik/swagger_parser/pull/296))
