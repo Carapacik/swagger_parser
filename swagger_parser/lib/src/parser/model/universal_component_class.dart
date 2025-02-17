@@ -1,21 +1,41 @@
 part of 'universal_data_class.dart';
 
+typedef Discriminator = ({
+// The name of the property that is used to discriminate the oneOf variants
+  String propertyName,
+
+// The mapping of the property value to the ref
+  Map<String, String> discriminatorValueToRefMapping,
+
+// The list of properties stored for each ref
+  Map<String, List<UniversalType>> refProperties,
+});
+
+typedef DiscriminatorValue = ({
+// The name of the property that is used to discriminate the oneOf variants
+  String propertyValue,
+  String parentClass,
+});
+
 /// Universal template for containing information about component
-@immutable
 final class UniversalComponentClass extends UniversalDataClass {
   /// Constructor for [UniversalComponentClass]
-  const UniversalComponentClass({
+  UniversalComponentClass({
     required super.name,
     required this.imports,
     required this.parameters,
     this.allOf,
     this.typeDef = false,
     this.discriminator,
+    this.discriminatorValue,
     super.description,
   });
 
   /// List of additional references to components
   final Set<String> imports;
+
+  /// The import of this class
+  String get import => name.toPascal;
 
   /// List of class fields
   final List<UniversalType> parameters;
@@ -24,16 +44,10 @@ final class UniversalComponentClass extends UniversalDataClass {
   final ({List<String> refs, List<UniversalType> properties})? allOf;
 
   /// When using a discriminated oneOf, this contains the information about the property name, the mapping of the ref to the property name, and the properties of each of the oneOf variants
-  final ({
-    // The name of the property that is used to discriminate the oneOf variants
-    String propertyName,
+  final Discriminator? discriminator;
 
-    // The mapping of the property value to the ref
-    Map<String, String> discriminatorValueToRefMapping,
-
-    // The list of properties stored for each ref
-    Map<String, List<UniversalType>> refProperties,
-  })? discriminator;
+  /// When using a discriminated oneOf, where this class is one of the discriminated values, this field contains the information about the parent
+  DiscriminatorValue? discriminatorValue;
 
   /// Whether or not this schema is a basic type
   /// "Date": {
