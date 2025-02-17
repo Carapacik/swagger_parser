@@ -6,5 +6,4 @@ linter:
   rules:
     always_use_package_imports: false
     avoid_equals_and_hash_code_on_mutable_classes: false
-    package_api_docs: true
     prefer_relative_imports: true
