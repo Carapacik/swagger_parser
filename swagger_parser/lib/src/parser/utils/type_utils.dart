@@ -23,8 +23,16 @@ extension StringTypeX on String {
         // https://github.com/trevorwang/retrofit.dart/issues/631
         // https://github.com/Carapacik/swagger_parser/issues/110
         'object' || 'null' => 'dynamic',
-        _ => this
+        _ => startsWith('[') ? _parseTypeList(this) : this
       };
+
+  String _parseTypeList(String types) {
+    final typesList = types.replaceAll(RegExp(r'[\[\] ]'), '').split(',');
+    if (typesList.length == 2 && typesList.contains('null')) {
+      return typesList.firstWhere((e) => e != 'null').toDartType();
+    }
+    return 'dynamic';
+  }
 
   /// Convert string to kotlin type
   String toKotlinType([String? format]) => switch (this) {
