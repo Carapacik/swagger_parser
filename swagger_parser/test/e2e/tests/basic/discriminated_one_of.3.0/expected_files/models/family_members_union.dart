@@ -19,7 +19,7 @@ sealed class FamilyMembersUnion with _$FamilyMembersUnion {
 
     /// Number of times the cat meows.
     required int mewCount,
-  }) = Cat;
+  }) = FamilyMembersUnionCat;
 
   @FreezedUnionValue('Dog')
   const factory FamilyMembersUnion.dog({
@@ -27,7 +27,7 @@ sealed class FamilyMembersUnion with _$FamilyMembersUnion {
 
     /// The sound of the dog's bark.
     required String barkSound,
-  }) = Dog;
+  }) = FamilyMembersUnionDog;
 
   @FreezedUnionValue('Human')
   const factory FamilyMembersUnion.human({
@@ -35,7 +35,7 @@ sealed class FamilyMembersUnion with _$FamilyMembersUnion {
 
     /// The job of the human.
     required String job,
-  }) = Human;
+  }) = FamilyMembersUnionHuman;
 
   factory FamilyMembersUnion.fromJson(Map<String, Object?> json) =>
       _$FamilyMembersUnionFromJson(json);
