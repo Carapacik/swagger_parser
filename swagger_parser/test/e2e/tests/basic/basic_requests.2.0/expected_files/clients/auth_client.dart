@@ -15,7 +15,5 @@ abstract class AuthClient {
 
   @Headers(<String, String>{'Content-Type': 'text/json'})
   @POST('/api/Auth/register')
-  Future<String> postApiAuthRegister({
-    @Body() RegisterUserDto? body,
-  });
+  Future<String> postApiAuthRegister({@Body() RegisterUserDto? body});
 }

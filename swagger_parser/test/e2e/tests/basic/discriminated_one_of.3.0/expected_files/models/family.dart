@@ -11,9 +11,7 @@ part 'family.g.dart';
 
 @Freezed()
 class Family with _$Family {
-  const factory Family({
-    required List<FamilyMembersUnion> members,
-  }) = _Family;
+  const factory Family({required List<FamilyMembersUnion> members}) = _Family;
 
   factory Family.fromJson(Map<String, Object?> json) => _$FamilyFromJson(json);
 }

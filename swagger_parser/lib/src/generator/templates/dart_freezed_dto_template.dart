@@ -14,9 +14,7 @@ String dartFreezedDtoTemplate(
 }) {
   final className = dataClass.name.toPascal;
   return '''
-${generatedFileComment(
-    markFileAsGenerated: markFileAsGenerated,
-  )}${ioImport(dataClass)}import 'package:freezed_annotation/freezed_annotation.dart';
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${ioImport(dataClass)}import 'package:freezed_annotation/freezed_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';
@@ -142,12 +140,13 @@ String _validateMethod(String className, List<UniversalType> types) {
     return '';
   }
 
-  final funcBuffer = StringBuffer()
-    ..write('extension ${className}ValidationX on $className {\n')
-    ..write('bool validate() {\n')
-    ..write(bodyBuffer)
-    ..write('  return true;\n}\n')
-    ..write('}\n');
+  final funcBuffer =
+      StringBuffer()
+        ..write('extension ${className}ValidationX on $className {\n')
+        ..write('bool validate() {\n')
+        ..write(bodyBuffer)
+        ..write('  return true;\n}\n')
+        ..write('}\n');
 
   return funcBuffer.toString();
 }
@@ -155,26 +154,24 @@ String _validateMethod(String className, List<UniversalType> types) {
 String _factories(UniversalComponentClass dataClass, String className) {
   if (dataClass.discriminator == null) {
     return '''
-  const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(
-      dataClass.parameters,
-    )}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;''';
+  const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;''';
   }
 
   final factories = <String>[];
   for (final discriminatorValue
       in dataClass.discriminator!.discriminatorValueToRefMapping.keys) {
     final factoryName = discriminatorValue.toCamel;
-    final discriminatorRef = dataClass
-        .discriminator!.discriminatorValueToRefMapping[discriminatorValue]!;
+    final discriminatorRef =
+        dataClass
+            .discriminator!
+            .discriminatorValueToRefMapping[discriminatorValue]!;
     final factoryParameters =
         dataClass.discriminator!.refProperties[discriminatorRef]!;
     final unionItemClassName = className + discriminatorValue.toPascal;
 
     factories.add('''
   @FreezedUnionValue('$discriminatorValue')
-  const factory $className.$factoryName(${factoryParameters.isNotEmpty ? '{' : ''}${_parametersToString(
-      factoryParameters,
-    )}${factoryParameters.isNotEmpty ? '\n  }' : ''}) = $unionItemClassName;
+  const factory $className.$factoryName(${factoryParameters.isNotEmpty ? '{' : ''}${_parametersToString(factoryParameters)}${factoryParameters.isNotEmpty ? '\n  }' : ''}) = $unionItemClassName;
 ''');
   }
 
@@ -227,8 +224,9 @@ String? _validationString(UniversalType type) {
 }
 
 String _parametersToString(List<UniversalType> parameters) {
-  final sortedByRequired =
-      List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)));
+  final sortedByRequired = List<UniversalType>.from(
+    parameters.sorted((a, b) => a.compareTo(b)),
+  );
   return sortedByRequired
       .mapIndexed(
         (i, e) =>
@@ -260,7 +258,4 @@ String _required(UniversalType t) =>
 
 /// return defaultValue if have
 String _defaultValue(UniversalType t) =>
-    '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(
-        t.defaultValue,
-        type: t.type,
-      )}';
+    '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}';

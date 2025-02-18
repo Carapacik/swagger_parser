@@ -178,16 +178,8 @@ class ClassName with _$ClassName {
         name: 'ClassName',
         imports: {},
         parameters: [
-          UniversalType(
-            type: 'integer',
-            name: 'intType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'number',
-            name: 'numberType',
-            isRequired: true,
-          ),
+          UniversalType(type: 'integer', name: 'intType', isRequired: true),
+          UniversalType(type: 'number', name: 'numberType', isRequired: true),
           UniversalType(
             type: 'number',
             format: 'double',
@@ -200,11 +192,7 @@ class ClassName with _$ClassName {
             name: 'floatNumberType',
             isRequired: true,
           ),
-          UniversalType(
-            type: 'string',
-            name: 'stringType',
-            isRequired: true,
-          ),
+          UniversalType(type: 'string', name: 'stringType', isRequired: true),
           UniversalType(
             type: 'string',
             format: 'binary',
@@ -223,26 +211,10 @@ class ClassName with _$ClassName {
             name: 'dateTimeStringType',
             isRequired: true,
           ),
-          UniversalType(
-            type: 'file',
-            name: 'fileType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'boolean',
-            name: 'boolType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'object',
-            name: 'objectType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'Another',
-            name: 'anotherType',
-            isRequired: true,
-          ),
+          UniversalType(type: 'file', name: 'fileType', isRequired: true),
+          UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
+          UniversalType(type: 'object', name: 'objectType', isRequired: true),
+          UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
         ],
       );
       const fillController = FillController(
@@ -299,16 +271,8 @@ class ClassName {
         name: 'ClassName',
         imports: {},
         parameters: [
-          UniversalType(
-            type: 'integer',
-            name: 'intType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'number',
-            name: 'numberType',
-            isRequired: true,
-          ),
+          UniversalType(type: 'integer', name: 'intType', isRequired: true),
+          UniversalType(type: 'number', name: 'numberType', isRequired: true),
           UniversalType(
             type: 'number',
             format: 'double',
@@ -321,11 +285,7 @@ class ClassName {
             name: 'floatNumberType',
             isRequired: true,
           ),
-          UniversalType(
-            type: 'string',
-            name: 'stringType',
-            isRequired: true,
-          ),
+          UniversalType(type: 'string', name: 'stringType', isRequired: true),
           UniversalType(
             type: 'string',
             format: 'binary',
@@ -344,26 +304,10 @@ class ClassName {
             name: 'dateTimeStringType',
             isRequired: true,
           ),
-          UniversalType(
-            type: 'file',
-            name: 'fileType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'boolean',
-            name: 'boolType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'object',
-            name: 'objectType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'Another',
-            name: 'anotherType',
-            isRequired: true,
-          ),
+          UniversalType(type: 'file', name: 'fileType', isRequired: true),
+          UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
+          UniversalType(type: 'object', name: 'objectType', isRequired: true),
+          UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
         ],
       );
       const fillController = FillController(
@@ -410,16 +354,8 @@ class ClassName with _$ClassName {
         name: 'ClassName',
         imports: {},
         parameters: [
-          UniversalType(
-            type: 'integer',
-            name: 'intType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'number',
-            name: 'numberType',
-            isRequired: true,
-          ),
+          UniversalType(type: 'integer', name: 'intType', isRequired: true),
+          UniversalType(type: 'number', name: 'numberType', isRequired: true),
           UniversalType(
             type: 'number',
             format: 'double',
@@ -432,11 +368,7 @@ class ClassName with _$ClassName {
             name: 'floatNumberType',
             isRequired: true,
           ),
-          UniversalType(
-            type: 'string',
-            name: 'stringType',
-            isRequired: true,
-          ),
+          UniversalType(type: 'string', name: 'stringType', isRequired: true),
           UniversalType(
             type: 'string',
             format: 'binary',
@@ -455,26 +387,10 @@ class ClassName with _$ClassName {
             name: 'dateTimeStringType',
             isRequired: true,
           ),
-          UniversalType(
-            type: 'file',
-            name: 'fileType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'boolean',
-            name: 'boolType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'object',
-            name: 'objectType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'Another',
-            name: 'anotherType',
-            isRequired: true,
-          ),
+          UniversalType(type: 'file', name: 'fileType', isRequired: true),
+          UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
+          UniversalType(type: 'object', name: 'objectType', isRequired: true),
+          UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
         ],
       );
       const fillController = FillController(
@@ -524,10 +440,7 @@ class ClassName with ClassNameMappable {
   static ClassName fromJson(Map<String, dynamic> json) => ClassNameMapper.ensureInitialized().decodeMap<ClassName>(json);
 }
 ''';
-      expect(
-        filledContent.content,
-        equalsIgnoringWhitespace(expectedContents),
-      );
+      expect(filledContent.content, equalsIgnoringWhitespace(expectedContents));
     });
 
     test('dart + dart_mappable with custom json key', () async {
@@ -569,10 +482,7 @@ class ClassName with ClassNameMappable {
   static ClassName fromJson(Map<String, dynamic> json) => ClassNameMapper.ensureInitialized().decodeMap<ClassName>(json);
 }
 ''';
-      expect(
-        filledContent.content,
-        equalsIgnoringWhitespace(expectedContents),
-      );
+      expect(filledContent.content, equalsIgnoringWhitespace(expectedContents));
     });
 
     test('kotlin + moshi', () async {
@@ -580,16 +490,8 @@ class ClassName with ClassNameMappable {
         name: 'ClassName',
         imports: {},
         parameters: [
-          UniversalType(
-            type: 'integer',
-            name: 'intType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'number',
-            name: 'numberType',
-            isRequired: true,
-          ),
+          UniversalType(type: 'integer', name: 'intType', isRequired: true),
+          UniversalType(type: 'number', name: 'numberType', isRequired: true),
           UniversalType(
             type: 'number',
             format: 'double',
@@ -602,11 +504,7 @@ class ClassName with ClassNameMappable {
             name: 'floatNumberType',
             isRequired: true,
           ),
-          UniversalType(
-            type: 'string',
-            name: 'stringType',
-            isRequired: true,
-          ),
+          UniversalType(type: 'string', name: 'stringType', isRequired: true),
           UniversalType(
             type: 'string',
             format: 'binary',
@@ -625,26 +523,10 @@ class ClassName with ClassNameMappable {
             name: 'dateTimeStringType',
             isRequired: true,
           ),
-          UniversalType(
-            type: 'file',
-            name: 'fileType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'boolean',
-            name: 'boolType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'object',
-            name: 'objectType',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'Another',
-            name: 'anotherType',
-            isRequired: true,
-          ),
+          UniversalType(type: 'file', name: 'fileType', isRequired: true),
+          UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
+          UniversalType(type: 'object', name: 'objectType', isRequired: true),
+          UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
         ],
       );
       const fillController = FillController(
@@ -1266,22 +1148,14 @@ data class ClassName(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
-          UniversalType(
-            type: 'integer',
-            name: 'intType',
-            isRequired: false,
-          ),
+          UniversalType(type: 'integer', name: 'intType', isRequired: false),
           UniversalType(
             type: 'string',
             wrappingCollections: [UniversalCollections.nullableList],
             name: 'list',
             isRequired: false,
           ),
-          UniversalType(
-            type: 'Another',
-            name: 'another',
-            isRequired: false,
-          ),
+          UniversalType(type: 'Another', name: 'another', isRequired: false),
           UniversalType(
             type: 'Another',
             wrappingCollections: [
@@ -1331,22 +1205,14 @@ class ClassName {
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
-          UniversalType(
-            type: 'integer',
-            name: 'intType',
-            isRequired: false,
-          ),
+          UniversalType(type: 'integer', name: 'intType', isRequired: false),
           UniversalType(
             type: 'string',
             wrappingCollections: [UniversalCollections.nullableList],
             name: 'list',
             isRequired: false,
           ),
-          UniversalType(
-            type: 'Another',
-            name: 'another',
-            isRequired: false,
-          ),
+          UniversalType(type: 'Another', name: 'another', isRequired: false),
           UniversalType(
             type: 'Another',
             wrappingCollections: [
@@ -1394,22 +1260,14 @@ class ClassName with _$ClassName {
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
-          UniversalType(
-            type: 'integer',
-            name: 'intType',
-            isRequired: false,
-          ),
+          UniversalType(type: 'integer', name: 'intType', isRequired: false),
           UniversalType(
             type: 'string',
             wrappingCollections: [UniversalCollections.nullableList],
             name: 'list',
             isRequired: false,
           ),
-          UniversalType(
-            type: 'Another',
-            name: 'another',
-            isRequired: false,
-          ),
+          UniversalType(type: 'Another', name: 'another', isRequired: false),
           UniversalType(
             type: 'Another',
             wrappingCollections: [
@@ -1456,11 +1314,7 @@ data class ClassName(
             name: 'intNotRequired',
             isRequired: false,
           ),
-          UniversalType(
-            type: 'integer',
-            name: 'intRequired',
-            isRequired: true,
-          ),
+          UniversalType(type: 'integer', name: 'intRequired', isRequired: true),
           UniversalType(
             type: 'Another',
             name: 'anotherNotRequired',
@@ -1517,11 +1371,7 @@ class ClassName {
             name: 'intNotRequired',
             isRequired: false,
           ),
-          UniversalType(
-            type: 'integer',
-            name: 'intRequired',
-            isRequired: true,
-          ),
+          UniversalType(type: 'integer', name: 'intRequired', isRequired: true),
           UniversalType(
             type: 'Another',
             name: 'anotherNotRequired',
@@ -1583,9 +1433,13 @@ class ClassName with _$ClassName {
           UniversalEnumClass(
             name: 'EnumNameString',
             type: 'string',
-            items: UniversalEnumItem.listFromNames(
-              {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR', 'пятый'},
-            ),
+            items: UniversalEnumItem.listFromNames({
+              'itemOne',
+              'ItemTwo',
+              'item_three',
+              'ITEM-FOUR',
+              'пятый',
+            }),
           ),
           UniversalEnumClass(
             name: 'KeywordsName',
@@ -1595,16 +1449,14 @@ class ClassName with _$ClassName {
           UniversalEnumClass(
             name: 'EnumNameStringWithLeadingNumbers',
             type: 'string',
-            items: UniversalEnumItem.listFromNames(
-              {
-                '1itemOne',
-                '2ItemTwo',
-                '3item_three',
-                '4ITEM-FOUR',
-                '5иллегалчарактер',
-                '6 item six',
-              },
-            ),
+            items: UniversalEnumItem.listFromNames({
+              '1itemOne',
+              '2ItemTwo',
+              '3item_three',
+              '4ITEM-FOUR',
+              '5иллегалчарактер',
+              '6 item six',
+            }),
           ),
         ];
 
@@ -1705,9 +1557,12 @@ enum EnumNameStringWithLeadingNumbers {
           UniversalEnumClass(
             name: 'EnumNameString',
             type: 'string',
-            items: UniversalEnumItem.listFromNames(
-              {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
-            ),
+            items: UniversalEnumItem.listFromNames({
+              'itemOne',
+              'ItemTwo',
+              'item_three',
+              'ITEM-FOUR',
+            }),
           ),
         ];
 
@@ -1781,9 +1636,12 @@ enum EnumNameString {
           UniversalEnumClass(
             name: 'EnumNameString',
             type: 'string',
-            items: UniversalEnumItem.listFromNames(
-              {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
-            ),
+            items: UniversalEnumItem.listFromNames({
+              'itemOne',
+              'ItemTwo',
+              'item_three',
+              'ITEM-FOUR',
+            }),
           ),
           UniversalEnumClass(
             name: 'KeywordsName',
@@ -1863,9 +1721,13 @@ enum KeywordsName {
           UniversalEnumClass(
             name: 'EnumNameString',
             type: 'string',
-            items: UniversalEnumItem.listFromNames(
-              {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR', 'Item five'},
-            ),
+            items: UniversalEnumItem.listFromNames({
+              'itemOne',
+              'ItemTwo',
+              'item_three',
+              'ITEM-FOUR',
+              'Item five',
+            }),
           ),
         ];
         const fillController = FillController(
@@ -1953,9 +1815,12 @@ enum EnumNameString {
         UniversalEnumClass(
           name: 'EnumNameString',
           type: 'string',
-          items: UniversalEnumItem.listFromNames(
-            {'itemOne', 'ItemTwo', 'item_three', 'ITEM-FOUR'},
-          ),
+          items: UniversalEnumItem.listFromNames({
+            'itemOne',
+            'ItemTwo',
+            'item_three',
+            'ITEM-FOUR',
+          }),
         ),
         UniversalEnumClass(
           name: 'KeywordsName',
@@ -2157,11 +2022,7 @@ enum class EnumName {
           name: 'Date',
           imports: {},
           parameters: [
-            UniversalType(
-              type: 'string',
-              format: 'date',
-              isRequired: true,
-            ),
+            UniversalType(type: 'string', format: 'date', isRequired: true),
           ],
           typeDef: true,
         ),
@@ -2180,12 +2041,7 @@ enum class EnumName {
         UniversalComponentClass(
           name: 'AnotherValue',
           imports: {'Another'},
-          parameters: [
-            UniversalType(
-              type: 'Another',
-              isRequired: true,
-            ),
-          ],
+          parameters: [UniversalType(type: 'Another', isRequired: true)],
           typeDef: true,
         ),
       ];
@@ -2218,11 +2074,7 @@ typedef AnotherValue = Another;
           name: 'Date',
           imports: {},
           parameters: [
-            UniversalType(
-              type: 'string',
-              format: 'date',
-              isRequired: true,
-            ),
+            UniversalType(type: 'string', format: 'date', isRequired: true),
           ],
           typeDef: true,
         ),
@@ -2241,12 +2093,7 @@ typedef AnotherValue = Another;
         UniversalComponentClass(
           name: 'AnotherValue',
           imports: {'Another'},
-          parameters: [
-            UniversalType(
-              type: 'Another',
-              isRequired: true,
-            ),
-          ],
+          parameters: [UniversalType(type: 'Another', isRequired: true)],
           typeDef: true,
         ),
       ];
@@ -2300,16 +2147,8 @@ typealias AnotherValue = Another;
             isRequired: false,
             nullable: true,
           ),
-          UniversalType(
-            type: 'string',
-            name: 'list3',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'string',
-            name: 'list4',
-            isRequired: false,
-          ),
+          UniversalType(type: 'string', name: 'list3', isRequired: true),
+          UniversalType(type: 'string', name: 'list4', isRequired: false),
           UniversalType(
             type: 'string',
             name: 'list5',
@@ -2374,16 +2213,8 @@ class ClassName {
             isRequired: false,
             nullable: true,
           ),
-          UniversalType(
-            type: 'string',
-            name: 'list3',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'string',
-            name: 'list4',
-            isRequired: false,
-          ),
+          UniversalType(type: 'string', name: 'list3', isRequired: true),
+          UniversalType(type: 'string', name: 'list4', isRequired: false),
           UniversalType(
             type: 'string',
             name: 'list5',
@@ -2445,16 +2276,8 @@ class ClassName with _$ClassName {
             isRequired: false,
             nullable: true,
           ),
-          UniversalType(
-            type: 'string',
-            name: 'list3',
-            isRequired: true,
-          ),
-          UniversalType(
-            type: 'string',
-            name: 'list4',
-            isRequired: false,
-          ),
+          UniversalType(type: 'string', name: 'list3', isRequired: true),
+          UniversalType(type: 'string', name: 'list4', isRequired: false),
           UniversalType(
             type: 'string',
             name: 'list5',

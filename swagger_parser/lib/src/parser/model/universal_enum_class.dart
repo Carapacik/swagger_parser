@@ -40,7 +40,8 @@ final class UniversalEnumClass extends UniversalDataClass {
       super.hashCode ^ type.hashCode ^ items.hashCode ^ defaultValue.hashCode;
 
   @override
-  String toString() => 'UniversalEnumClass(type: $type, '
+  String toString() =>
+      'UniversalEnumClass(type: $type, '
       'items: $items, '
       'defaultValue: $defaultValue)';
 }

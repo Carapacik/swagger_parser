@@ -9,9 +9,7 @@ part 'object0_dto.g.dart';
 
 @Freezed()
 class Object0Dto with _$Object0Dto {
-  const factory Object0Dto({
-    required DateTime test,
-  }) = _Object0Dto;
+  const factory Object0Dto({required DateTime test}) = _Object0Dto;
 
   factory Object0Dto.fromJson(Map<String, Object?> json) =>
       _$Object0DtoFromJson(json);

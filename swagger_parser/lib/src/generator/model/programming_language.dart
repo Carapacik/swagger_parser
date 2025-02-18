@@ -26,13 +26,16 @@ enum ProgrammingLanguage {
   const ProgrammingLanguage(this.fileExtension);
 
   /// Returns [ProgrammingLanguage] from string
-  factory ProgrammingLanguage.fromString(String value) =>
-      ProgrammingLanguage.values.firstWhere(
-        (e) => e.name == value,
-        orElse: () => throw ArgumentError(
-          "'$value' must be contained in ${ProgrammingLanguage.values.map((e) => e.name)}",
-        ),
-      );
+  factory ProgrammingLanguage.fromString(
+    String value,
+  ) => ProgrammingLanguage.values.firstWhere(
+    (e) => e.name == value,
+    orElse:
+        () =>
+            throw ArgumentError(
+              "'$value' must be contained in ${ProgrammingLanguage.values.map((e) => e.name)}",
+            ),
+  );
 
   /// Extension for generated files
   final String fileExtension;
@@ -65,18 +68,18 @@ enum ProgrammingLanguage {
           }
           return switch (jsonSerializer) {
             JsonSerializer.freezed => dartFreezedDtoTemplate(
-                dataClass,
-                markFileAsGenerated: markFilesAsGenerated,
-                generateValidator: generateValidator,
-              ),
+              dataClass,
+              markFileAsGenerated: markFilesAsGenerated,
+              generateValidator: generateValidator,
+            ),
             JsonSerializer.jsonSerializable => dartJsonSerializableDtoTemplate(
-                dataClass,
-                markFileAsGenerated: markFilesAsGenerated,
-              ),
+              dataClass,
+              markFileAsGenerated: markFilesAsGenerated,
+            ),
             JsonSerializer.dartMappable => dartDartMappableDtoTemplate(
-                dataClass,
-                markFileAsGenerated: markFilesAsGenerated,
-              )
+              dataClass,
+              markFileAsGenerated: markFilesAsGenerated,
+            ),
           };
         }
       case kotlin:
@@ -110,23 +113,22 @@ enum ProgrammingLanguage {
     bool extrasParameterByDefault = false,
     bool dioOptionsParameterByDefault = false,
     bool originalHttpResponse = false,
-  }) =>
-      switch (this) {
-        dart => dartRetrofitClientTemplate(
-            restClient: restClient,
-            name: name,
-            markFileAsGenerated: markFilesAsGenerated,
-            defaultContentType: defaultContentType,
-            extrasParameterByDefault: extrasParameterByDefault,
-            dioOptionsParameterByDefault: dioOptionsParameterByDefault,
-            originalHttpResponse: originalHttpResponse,
-          ),
-        kotlin => kotlinRetrofitClientTemplate(
-            restClient: restClient,
-            name: name,
-            markFileAsGenerated: markFilesAsGenerated,
-          ),
-      };
+  }) => switch (this) {
+    dart => dartRetrofitClientTemplate(
+      restClient: restClient,
+      name: name,
+      markFileAsGenerated: markFilesAsGenerated,
+      defaultContentType: defaultContentType,
+      extrasParameterByDefault: extrasParameterByDefault,
+      dioOptionsParameterByDefault: dioOptionsParameterByDefault,
+      originalHttpResponse: originalHttpResponse,
+    ),
+    kotlin => kotlinRetrofitClientTemplate(
+      restClient: restClient,
+      name: name,
+      markFileAsGenerated: markFilesAsGenerated,
+    ),
+  };
 
   /// Determines template for generating root client for clients
   String rootClientFileContent(
@@ -136,18 +138,17 @@ enum ProgrammingLanguage {
     required String postfix,
     required bool putClientsInFolder,
     required bool markFilesAsGenerated,
-  }) =>
-      switch (this) {
-        dart => dartRootClientTemplate(
-            openApiInfo: openApiInfo,
-            name: name,
-            clientsNames: clientsNames,
-            postfix: postfix,
-            putClientsInFolder: putClientsInFolder,
-            markFileAsGenerated: markFilesAsGenerated,
-          ),
-        kotlin => '',
-      };
+  }) => switch (this) {
+    dart => dartRootClientTemplate(
+      openApiInfo: openApiInfo,
+      name: name,
+      clientsNames: clientsNames,
+      postfix: postfix,
+      putClientsInFolder: putClientsInFolder,
+      markFileAsGenerated: markFilesAsGenerated,
+    ),
+    kotlin => '',
+  };
 
   /// Export file by language
   String exportFileContent({
@@ -155,14 +156,13 @@ enum ProgrammingLanguage {
     required List<GeneratedFile> restClients,
     required List<GeneratedFile> dataClasses,
     required GeneratedFile? rootClient,
-  }) =>
-      switch (this) {
-        dart => dartExportFileTemplate(
-            markFileAsGenerated: markFileAsGenerated,
-            restClients: restClients,
-            dataClasses: dataClasses,
-            rootClient: rootClient,
-          ),
-        kotlin => '',
-      };
+  }) => switch (this) {
+    dart => dartExportFileTemplate(
+      markFileAsGenerated: markFileAsGenerated,
+      restClients: restClients,
+      dataClasses: dataClasses,
+      rootClient: rootClient,
+    ),
+    kotlin => '',
+  };
 }

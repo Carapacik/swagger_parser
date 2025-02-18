@@ -1,3 +1,8 @@
+## 1.21.4
+- Add `x-enumNames`([#289](https://github.com/Carapacik/swagger_parser/pull/289))
+- Fixed errors with nullable in enums ([#216](https://github.com/Carapacik/swagger_parser/issues/216))
+- Fixed duplicate class generation when using discriminator ([#300](https://github.com/Carapacik/swagger_parser/issues/300))
+
 ## 1.21.3
 - Fixed errors with config([#293](https://github.com/Carapacik/swagger_parser/pull/293), [#296](https://github.com/Carapacik/swagger_parser/pull/296))
 

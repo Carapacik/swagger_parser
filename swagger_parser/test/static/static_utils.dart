@@ -1,40 +1,39 @@
 import 'dart:io';
+
 import 'package:path/path.dart' as p;
 
 // Create a test project and add all the necessary dependencies
 // to run swagger_parser and the generated clients
-Future<void> setupBaseProject({
-  required String projectPath,
-}) async {
+Future<void> setupBaseProject({required String projectPath}) async {
   // Create the test project
-  final createProjectResult =
-      await Process.run('dart', ['create', projectPath, '--no-pub', '--force']);
+  final createProjectResult = await Process.run('dart', [
+    'create',
+    projectPath,
+    '--no-pub',
+    '--force',
+  ]);
   assert(
     createProjectResult.exitCode == 0,
     'Failed to create project ${createProjectResult.stderr}',
   );
 
   // Add all dependencies to the pubspec.yaml
-  final addRemainingDependencies = await Process.run(
-    'dart',
-    [
-      'pub',
-      'add',
-      // Dependencies
-      'dart_mappable',
-      'dio',
-      'freezed_annotation',
-      'json_annotation',
-      'retrofit',
-      // Dev dependencies
-      'dev:build_runner',
-      'dev:dart_mappable_builder',
-      'dev:freezed',
-      'dev:json_serializable',
-      'dev:retrofit_generator',
-    ],
-    workingDirectory: projectPath,
-  );
+  final addRemainingDependencies = await Process.run('dart', [
+    'pub',
+    'add',
+    // Dependencies
+    'dart_mappable',
+    'dio',
+    'freezed_annotation',
+    'json_annotation',
+    'retrofit',
+    // Dev dependencies
+    'dev:build_runner',
+    'dev:dart_mappable_builder',
+    'dev:freezed',
+    'dev:json_serializable',
+    'dev:retrofit_generator',
+  ], workingDirectory: projectPath);
   assert(
     addRemainingDependencies.exitCode == 0,
     'Failed to add remaining dependencies ${addRemainingDependencies.stderr}',
@@ -52,14 +51,10 @@ global_options:
       - retrofit_generator''');
 
   // Run pub get
-  final runPubGetResult = await Process.run(
-    'dart',
-    [
-      'pub',
-      'get',
-    ],
-    workingDirectory: projectPath,
-  );
+  final runPubGetResult = await Process.run('dart', [
+    'pub',
+    'get',
+  ], workingDirectory: projectPath);
 
   assert(
     runPubGetResult.exitCode == 0,

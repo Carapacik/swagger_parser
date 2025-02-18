@@ -18,10 +18,8 @@ enum NewPetDtoActionDto {
 
   const NewPetDtoActionDto(this.json);
 
-  factory NewPetDtoActionDto.fromJson(String json) => values.firstWhere(
-        (e) => e.json == json,
-        orElse: () => $unknown,
-      );
+  factory NewPetDtoActionDto.fromJson(String json) =>
+      values.firstWhere((e) => e.json == json, orElse: () => $unknown);
 
   final String? json;
 }

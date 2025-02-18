@@ -10,11 +10,7 @@ import 'clients/pet_client.dart';
 ///
 /// This is a sample server Petstore server. For this sample, you can use the api key `special-key` to test the authorization filters.
 class RestClient {
-  RestClient(
-    Dio dio, {
-    String? baseUrl,
-  })  : _dio = dio,
-        _baseUrl = baseUrl;
+  RestClient(Dio dio, {String? baseUrl}) : _dio = dio, _baseUrl = baseUrl;
 
   final Dio _dio;
   final String? _baseUrl;

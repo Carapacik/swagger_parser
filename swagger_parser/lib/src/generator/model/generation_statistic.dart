@@ -33,11 +33,11 @@ class GenerationStatistic {
 
   /// Merge two [GenerationStatistic] into one
   GenerationStatistic merge(GenerationStatistic other) => GenerationStatistic(
-        totalFiles: totalFiles + other.totalFiles,
-        totalLines: totalLines + other.totalLines,
-        totalRestClients: totalRestClients + other.totalRestClients,
-        totalRequests: totalRequests + other.totalRequests,
-        totalDataClasses: totalDataClasses + other.totalDataClasses,
-        timeElapsed: timeElapsed + other.timeElapsed,
-      );
+    totalFiles: totalFiles + other.totalFiles,
+    totalLines: totalLines + other.totalLines,
+    totalRestClients: totalRestClients + other.totalRestClients,
+    totalRequests: totalRequests + other.totalRequests,
+    totalDataClasses: totalDataClasses + other.totalDataClasses,
+    timeElapsed: timeElapsed + other.timeElapsed,
+  );
 }

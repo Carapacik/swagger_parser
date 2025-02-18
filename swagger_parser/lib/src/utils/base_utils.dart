@@ -55,16 +55,17 @@ String? replaceNotEnglishLetter(String? text) {
 }
 
 /// Specially for File import
-String ioImport(UniversalComponentClass dataClass) => dataClass.parameters.any(
-      (p) => p.toSuitableType(ProgrammingLanguage.dart).startsWith('File'),
-    )
+String ioImport(UniversalComponentClass dataClass) =>
+    dataClass.parameters.any(
+          (p) => p.toSuitableType(ProgrammingLanguage.dart).startsWith('File'),
+        )
         ? "import 'dart:io';\n\n"
         : '';
 
 String formatNumber(int number) => number.toString().replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (match) => '${match[1]} ',
-    );
+  RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+  (match) => '${match[1]} ',
+);
 
 String generatedFileComment({
   required bool markFileAsGenerated,

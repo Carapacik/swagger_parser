@@ -17,13 +17,9 @@ abstract class ClientClient {
 
   /// [body] - Name not received and was auto-generated.
   @POST('/test1')
-  Future<dynamic> test({
-    @Body() required Object0 body,
-  });
+  Future<dynamic> test({@Body() required Object0 body});
 
   /// [body] - Name not received and was auto-generated.
   @GET('/test2')
-  Future<GetTest2Response> test({
-    @Body() Object1? body,
-  });
+  Future<GetTest2Response> test({@Body() Object1? body});
 }
