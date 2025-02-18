@@ -56,6 +56,7 @@ class OpenApiParser {
   static const _deprecatedConst = 'deprecated';
   static const _discriminatorConst = 'discriminator';
   static const _enumConst = 'enum';
+  static const _enumNamesConst = 'x-enumNames';
   static const _formatConst = 'format';
   static const _formUrlEncodedConst = 'application/x-www-form-urlencoded';
   static const _inConst = 'in';
@@ -800,9 +801,14 @@ class OpenApiParser {
       if (value.containsKey(_propertiesConst)) {
         localFindParametersAndImports(value);
       } else if (value.containsKey(_enumConst)) {
-        final items = protectEnumItemsNames(
-          (value[_enumConst] as List).map((e) => '$e'),
-        );
+        final Set<UniversalEnumItem> items;
+        final values = (value[_enumConst] as List).map((e) => '$e');
+        if (value.containsKey(_enumNamesConst)) {
+          final names = (value[_enumNamesConst] as List).map((e) => '$e');
+          items = protectEnumItemsNamesAndValues(names, values);
+        } else {
+          items = protectEnumItemsNames(values);
+        }
         final type = value[_typeConst].toString();
 
         dataClasses.add(
@@ -1047,9 +1053,14 @@ class OpenApiParser {
         newName = replacementRule.apply(newName)!;
       }
 
-      final items = protectEnumItemsNames(
-        (map[_enumConst] as List).map((e) => '$e'),
-      );
+      final Set<UniversalEnumItem> items;
+      final values = (map[_enumConst] as List).map((e) => '$e');
+      if (map.containsKey(_enumNamesConst)) {
+        final names = (map[_enumNamesConst] as List).map((e) => '$e');
+        items = protectEnumItemsNamesAndValues(names, values);
+      } else {
+        items = protectEnumItemsNames(values);
+      }
 
       final enumClass = _getUniqueEnumClass(
         name: newName,
