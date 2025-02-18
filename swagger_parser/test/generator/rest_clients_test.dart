@@ -7,8 +7,11 @@ import 'package:test/test.dart';
 void main() {
   group('Empty rest client', () {
     test('dart + retrofit', () async {
-      const restClient =
-          UniversalRestClient(name: 'Some', imports: {}, requests: []);
+      const restClient = UniversalRestClient(
+        name: 'Some',
+        imports: {},
+        requests: [],
+      );
       const fillController = FillController(
         config: GeneratorConfig(name: '', outputDirectory: ''),
       );
@@ -28,8 +31,11 @@ abstract class SomeClient {
     });
 
     test('kotlin + retrofit', () async {
-      const restClient =
-          UniversalRestClient(name: 'Some', imports: {}, requests: []);
+      const restClient = UniversalRestClient(
+        name: 'Some',
+        imports: {},
+        requests: [],
+      );
       const fillController = FillController(
         config: GeneratorConfig(
           name: '',
@@ -49,8 +55,11 @@ interface SomeClient {}
 
   group('Empty rest client with put clients in folder', () {
     test('dart + retrofit', () async {
-      const restClient =
-          UniversalRestClient(name: 'Some', imports: {}, requests: []);
+      const restClient = UniversalRestClient(
+        name: 'Some',
+        imports: {},
+        requests: [],
+      );
       const fillController = FillController(
         config: GeneratorConfig(
           name: '',
@@ -74,8 +83,11 @@ abstract class SomeClient {
     });
 
     test('kotlin + retrofit', () async {
-      const restClient =
-          UniversalRestClient(name: 'Some', imports: {}, requests: []);
+      const restClient = UniversalRestClient(
+        name: 'Some',
+        imports: {},
+        requests: [],
+      );
       const fillController = FillController(
         config: GeneratorConfig(
           name: '',
@@ -96,8 +108,11 @@ interface SomeClient {}
 
   group('Client postfix', () {
     test('dart + retrofit', () async {
-      const restClient =
-          UniversalRestClient(name: 'ClassName', imports: {}, requests: []);
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {},
+        requests: [],
+      );
       const fillController = FillController(
         config: GeneratorConfig(
           name: '',
@@ -121,8 +136,11 @@ abstract class ClassNameApi {
     });
 
     test('kotlin + retrofit', () async {
-      const restClient =
-          UniversalRestClient(name: 'Some', imports: {}, requests: []);
+      const restClient = UniversalRestClient(
+        name: 'Some',
+        imports: {},
+        requests: [],
+      );
       const fillController = FillController(
         config: GeneratorConfig(
           name: '',
@@ -143,8 +161,11 @@ interface SomeApi {}
 
   group('Empty client postfix', () {
     test('dart + retrofit', () async {
-      const restClient =
-          UniversalRestClient(name: 'Some', imports: {}, requests: []);
+      const restClient = UniversalRestClient(
+        name: 'Some',
+        imports: {},
+        requests: [],
+      );
       const fillController = FillController(
         config: GeneratorConfig(
           name: '',
@@ -168,8 +189,11 @@ abstract class Some {
     });
 
     test('kotlin + retrofit', () async {
-      const restClient =
-          UniversalRestClient(name: 'Some', imports: {}, requests: []);
+      const restClient = UniversalRestClient(
+        name: 'Some',
+        imports: {},
+        requests: [],
+      );
       const fillController = FillController(
         config: GeneratorConfig(
           name: '',
@@ -546,20 +570,14 @@ interface ClassNameClient {
             name: 'getStringRequest',
             requestType: HttpRequestType.get,
             route: '/string',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [],
           ),
           UniversalRequest(
             name: 'getBoolRequest',
             requestType: HttpRequestType.get,
             route: '/boolean',
-            returnType: UniversalType(
-              type: 'boolean',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'boolean', isRequired: true),
             parameters: [],
           ),
         ],
@@ -607,20 +625,14 @@ abstract class ClassNameClient {
             name: 'getStringRequest',
             requestType: HttpRequestType.get,
             route: '/string',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [],
           ),
           UniversalRequest(
             name: 'getBoolRequest',
             requestType: HttpRequestType.get,
             route: '/boolean',
-            returnType: UniversalType(
-              type: 'boolean',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'boolean', isRequired: true),
             parameters: [],
           ),
         ],
@@ -819,10 +831,7 @@ interface ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -869,10 +878,7 @@ abstract class ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -941,11 +947,7 @@ interface ClassNameClient {
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.path,
-                type: UniversalType(
-                  type: 'int',
-                  name: 'id',
-                  isRequired: true,
-                ),
+                type: UniversalType(type: 'int', name: 'id', isRequired: true),
                 name: 'id',
               ),
               UniversalRequestType(
@@ -1017,11 +1019,7 @@ abstract class ClassNameClient {
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.path,
-                type: UniversalType(
-                  type: 'int',
-                  name: 'id',
-                  isRequired: true,
-                ),
+                type: UniversalType(type: 'int', name: 'id', isRequired: true),
                 name: 'id',
               ),
               UniversalRequestType(
@@ -1126,10 +1124,7 @@ interface ClassNameClient {
             name: 'singleEntity',
             requestType: HttpRequestType.post,
             route: '/single',
-            returnType: UniversalType(
-              type: 'boolean',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'boolean', isRequired: true),
             contentType: 'multipart/form-data',
             parameters: [
               UniversalRequestType(
@@ -1247,10 +1242,7 @@ abstract class ClassNameClient {
             name: 'singleEntity',
             requestType: HttpRequestType.post,
             route: '/single',
-            returnType: UniversalType(
-              type: 'boolean',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'boolean', isRequired: true),
             contentType: 'multipart/form-data',
             parameters: [
               UniversalRequestType(
@@ -1322,11 +1314,7 @@ interface ClassNameClient {
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
-                type: UniversalType(
-                  type: 'Lol',
-                  name: 'lol',
-                  isRequired: true,
-                ),
+                type: UniversalType(type: 'Lol', name: 'lol', isRequired: true),
               ),
             ],
           ),
@@ -1382,11 +1370,7 @@ abstract class ClassNameClient {
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.body,
-                type: UniversalType(
-                  type: 'Lol',
-                  name: 'lol',
-                  isRequired: true,
-                ),
+                type: UniversalType(type: 'Lol', name: 'lol', isRequired: true),
               ),
             ],
           ),
@@ -1426,10 +1410,7 @@ interface ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/{id}',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1497,10 +1478,7 @@ abstract class ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/{id}',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1786,10 +1764,7 @@ interface ClassNameClient {
             name: 'getRequest2',
             requestType: HttpRequestType.get,
             route: '/request2',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1848,10 +1823,7 @@ abstract class ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/request',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -1973,10 +1945,7 @@ abstract class ClassNameClient {
             name: 'getRequest2',
             requestType: HttpRequestType.get,
             route: '/request2',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -2032,10 +2001,7 @@ interface ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/request',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -2218,11 +2184,7 @@ interface ClassNameClient {}
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.path,
-                type: UniversalType(
-                  type: 'int',
-                  name: 'id',
-                  isRequired: true,
-                ),
+                type: UniversalType(type: 'int', name: 'id', isRequired: true),
                 name: 'id',
               ),
               UniversalRequestType(
@@ -2299,11 +2261,7 @@ abstract class ClassNameClient {
               ),
               UniversalRequestType(
                 parameterType: HttpParameterType.path,
-                type: UniversalType(
-                  type: 'int',
-                  name: 'id',
-                  isRequired: true,
-                ),
+                type: UniversalType(type: 'int', name: 'id', isRequired: true),
                 name: 'id',
               ),
               UniversalRequestType(
@@ -2455,10 +2413,7 @@ interface ClassNameClient {
             name: 'getRequest2',
             requestType: HttpRequestType.get,
             route: '/request2',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -2516,10 +2471,7 @@ abstract class ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/request',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -2641,10 +2593,7 @@ abstract class ClassNameClient {
             name: 'getRequest2',
             requestType: HttpRequestType.get,
             route: '/request2',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,
@@ -2700,10 +2649,7 @@ interface ClassNameClient {
             name: 'getRequest',
             requestType: HttpRequestType.get,
             route: '/request',
-            returnType: UniversalType(
-              type: 'string',
-              isRequired: true,
-            ),
+            returnType: UniversalType(type: 'string', isRequired: true),
             parameters: [
               UniversalRequestType(
                 parameterType: HttpParameterType.query,

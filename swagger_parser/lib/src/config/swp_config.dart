@@ -112,23 +112,26 @@ class SWPConfig {
     }
 
     final rawName = yamlMap['name']?.toString();
-    final name = rawName == null || rawName.isEmpty
-        ? (schemaPath ?? schemaUrl ?? '').split('/').last.split('.').first
-        : rawName;
+    final name =
+        rawName == null || rawName.isEmpty
+            ? (schemaPath ?? schemaUrl ?? '').split('/').last.split('.').first
+            : rawName;
 
-    final defaultContentType = yamlMap['default_content_type'] as String? ??
+    final defaultContentType =
+        yamlMap['default_content_type'] as String? ??
         rootConfig?.defaultContentType;
     final extrasParameterByDefault =
         yamlMap['extras_parameter_by_default'] as bool? ??
-            rootConfig?.extrasParameterByDefault;
+        rootConfig?.extrasParameterByDefault;
     final dioOptionsParameterByDefault =
         yamlMap['dio_options_parameter_by_default'] as bool? ??
-            rootConfig?.dioOptionsParameterByDefault;
+        rootConfig?.dioOptionsParameterByDefault;
     final pathMethodName =
         yamlMap['path_method_name'] as bool? ?? rootConfig?.pathMethodName;
     final mergeClients =
         yamlMap['merge_clients'] as bool? ?? rootConfig?.mergeClients;
-    final enumsParentPrefix = yamlMap['enums_parent_prefix'] as bool? ??
+    final enumsParentPrefix =
+        yamlMap['enums_parent_prefix'] as bool? ??
         rootConfig?.enumsParentPrefix;
 
     final rawSkippedParameters = yamlMap['skipped_parameters'] as YamlList?;
@@ -148,9 +151,10 @@ class SWPConfig {
     }
 
     final rawLanguage = yamlMap['language']?.toString();
-    final language = rawLanguage == null
-        ? rootConfig?.language
-        : ProgrammingLanguage.fromString(rawLanguage);
+    final language =
+        rawLanguage == null
+            ? rootConfig?.language
+            : ProgrammingLanguage.fromString(rawLanguage);
 
     JsonSerializer? jsonSerializer;
     final rawJsonSerializer = yamlMap['json_serializer']?.toString();
@@ -168,15 +172,18 @@ class SWPConfig {
         yamlMap['client_postfix'] as String? ?? rootConfig?.clientPostfix;
     final exportFile =
         yamlMap['export_file'] as bool? ?? rootConfig?.exportFile;
-    final putClientsInFolder = yamlMap['put_clients_in_folder'] as bool? ??
+    final putClientsInFolder =
+        yamlMap['put_clients_in_folder'] as bool? ??
         rootConfig?.putClientsInFolder;
     final enumsToJson =
         yamlMap['enums_to_json'] as bool? ?? rootConfig?.enumsToJson;
     final unknownEnumValue =
         yamlMap['unknown_enum_value'] as bool? ?? rootConfig?.unknownEnumValue;
-    final markFilesAsGenerated = yamlMap['mark_files_as_generated'] as bool? ??
+    final markFilesAsGenerated =
+        yamlMap['mark_files_as_generated'] as bool? ??
         rootConfig?.markFilesAsGenerated;
-    final originalHttpResponse = yamlMap['original_http_response'] as bool? ??
+    final originalHttpResponse =
+        yamlMap['original_http_response'] as bool? ??
         rootConfig?.originalHttpResponse;
 
     final rawReplacementRules = yamlMap['replacement_rules'] as YamlList?;

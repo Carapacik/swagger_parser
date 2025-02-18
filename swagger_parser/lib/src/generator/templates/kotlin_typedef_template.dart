@@ -16,8 +16,6 @@ String kotlinTypeDefTemplate(
   if (type == null) {
     return '';
   }
-  return '${generatedFileComment(markFileAsGenerated: markFileAsGenerated, ignoreLints: false)}${descriptionComment(
-    dataClass.description,
-  )}'
+  return '${generatedFileComment(markFileAsGenerated: markFileAsGenerated, ignoreLints: false)}${descriptionComment(dataClass.description)}'
       'typealias $className = ${type.toSuitableType(ProgrammingLanguage.kotlin)};\n';
 }

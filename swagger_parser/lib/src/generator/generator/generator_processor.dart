@@ -22,8 +22,10 @@ class GenProcessor {
 
     const configProcessor = ConfigProcessor();
     final (fileContent, isJson) = await configProcessor.fileContent(config);
-    final parserConfig =
-        config.toParserConfig(fileContent: fileContent, isJson: isJson);
+    final parserConfig = config.toParserConfig(
+      fileContent: fileContent,
+      isJson: isJson,
+    );
 
     final parser = OpenApiParser(parserConfig);
 

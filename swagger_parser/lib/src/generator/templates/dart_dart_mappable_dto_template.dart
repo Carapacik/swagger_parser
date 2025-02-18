@@ -26,9 +26,7 @@ ${indentation(2)}const $className(${getParameters(dataClass)});
 
 ${getFields(dataClass)}
 
-${indentation(
-    2,
-  )}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
+${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
 }
 ''';
 }
@@ -50,8 +48,9 @@ String getFields(UniversalComponentClass dataClass) {
 }
 
 String _fieldsToString(List<UniversalType> parameters) {
-  final sortedByRequired =
-      List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)));
+  final sortedByRequired = List<UniversalType>.from(
+    parameters.sorted((a, b) => a.compareTo(b)),
+  );
   return sortedByRequired
       .mapIndexed(
         (i, e) =>
@@ -61,8 +60,9 @@ String _fieldsToString(List<UniversalType> parameters) {
 }
 
 String _parametersToString(List<UniversalType> parameters) {
-  final sortedByRequired =
-      List<UniversalType>.from(parameters.sorted((a, b) => a.compareTo(b)));
+  final sortedByRequired = List<UniversalType>.from(
+    parameters.sorted((a, b) => a.compareTo(b)),
+  );
   return sortedByRequired
       .mapIndexed(
         (i, e) =>
@@ -92,7 +92,4 @@ String _required(UniversalType t) =>
 
 /// return defaultValue if have
 String _defaultValue(UniversalType t) =>
-    '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(
-        t.defaultValue,
-        type: t.type,
-      )}';
+    '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}';

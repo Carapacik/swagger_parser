@@ -14,11 +14,13 @@ enum JsonSerializer {
 
   /// Returns [JsonSerializer] from string
   factory JsonSerializer.fromString(String value) => values.firstWhere(
-        (e) => e.packageName == value,
-        orElse: () => throw ArgumentError(
-          "'$value' must be contained in ${JsonSerializer.values.map((e) => e.packageName)}",
-        ),
-      );
+    (e) => e.packageName == value,
+    orElse:
+        () =>
+            throw ArgumentError(
+              "'$value' must be contained in ${JsonSerializer.values.map((e) => e.packageName)}",
+            ),
+  );
 
   /// Package name
   final String packageName;

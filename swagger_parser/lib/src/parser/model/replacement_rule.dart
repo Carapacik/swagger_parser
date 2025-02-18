@@ -6,10 +6,7 @@ import '../utils/case_utils.dart';
 @immutable
 final class ReplacementRule {
   /// Constructor for [ReplacementRule]
-  const ReplacementRule({
-    required this.pattern,
-    required this.replacement,
-  });
+  const ReplacementRule({required this.pattern, required this.replacement});
 
   /// Pattern to match
   final RegExp pattern;
@@ -18,11 +15,12 @@ final class ReplacementRule {
   final String replacement;
 
   /// Returns the replacement string in the correct case
-  String get replacementInCorrectCase => replacement.isNotEmpty
-      ? replacement[0] == replacement[0].toUpperCase()
-          ? replacement.toPascal
-          : replacement.toCamel
-      : replacement;
+  String get replacementInCorrectCase =>
+      replacement.isNotEmpty
+          ? replacement[0] == replacement[0].toUpperCase()
+              ? replacement.toPascal
+              : replacement.toCamel
+          : replacement;
 
   /// Applies the replacement rule to the given input string
   String? apply(String? input) =>

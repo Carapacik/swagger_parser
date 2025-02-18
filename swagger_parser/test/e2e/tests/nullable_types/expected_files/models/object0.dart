@@ -15,7 +15,7 @@ class Object0 with _$Object0 {
     @JsonKey(name: 'p2_null_all') required List<String?>? p2NullAll,
     @JsonKey(name: 'nested_collections')
     required List<List<Map<String, List<Map<String, int>?>>>?>
-        nestedCollections,
+    nestedCollections,
   }) = _Object0;
 
   factory Object0.fromJson(Map<String, Object?> json) =>

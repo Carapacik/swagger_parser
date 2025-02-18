@@ -4,15 +4,13 @@ import '../../parser/swagger_parser_core.dart';
 import '../base_utils.dart';
 
 void introMessage() {
-  print(
-    r'''
+  print(r'''
 
 ┃  ____ _ _ _ ____ ____ ____ ____ ____     ___  ____ ____ ____ ____ ____ 
 ┃  [__  | | | |__| | __ | __ |___ |__/     |__] |__| |__/ [__  |___ |__/ 
 ┃  ___] |_|_| |  | |__] |__] |___ |  \ ___ |    |  | |  \ ___] |___ |  \
 ┃
-''',
-  );
+''');
 }
 
 void generateMessage() {
@@ -82,11 +80,7 @@ void summaryStatisticsMessage({
   );
 }
 
-void schemaFailedMessage(
-  Object error,
-  StackTrace stack, {
-  String? name,
-}) {
+void schemaFailedMessage(Object error, StackTrace stack, {String? name}) {
   var title = name ?? '';
   if (title.length > 80) {
     title = '${title.substring(0, 80)}...';

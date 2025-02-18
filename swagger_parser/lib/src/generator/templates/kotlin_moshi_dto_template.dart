@@ -18,11 +18,13 @@ data class ${dataClass.name.toPascal}(${_parameters(dataClass.parameters)}${data
 ''';
 }
 
-String _parameters(List<UniversalType> parameters) => parameters
-    .map(
-      (e) => '\n${descriptionComment(e.description, tab: '    ')}'
-          '${e.jsonKey != null && e.name != e.jsonKey ? '    @Json("${protectJsonKey(e.jsonKey)}")\n' : ''}    '
-          'var ${e.name}: ${e.toSuitableType(ProgrammingLanguage.kotlin)}'
-          '${e.defaultValue != null ? ' = ${protectDefaultValue(e.defaultValue, type: e.type, dart: false)}' : ''},',
-    )
-    .join();
+String _parameters(List<UniversalType> parameters) =>
+    parameters
+        .map(
+          (e) =>
+              '\n${descriptionComment(e.description, tab: '    ')}'
+              '${e.jsonKey != null && e.name != e.jsonKey ? '    @Json("${protectJsonKey(e.jsonKey)}")\n' : ''}    '
+              'var ${e.name}: ${e.toSuitableType(ProgrammingLanguage.kotlin)}'
+              '${e.defaultValue != null ? ' = ${protectDefaultValue(e.defaultValue, type: e.type, dart: false)}' : ''},',
+        )
+        .join();

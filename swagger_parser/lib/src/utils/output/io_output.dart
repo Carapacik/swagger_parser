@@ -9,15 +9,13 @@ const _red = '\x1B[31m';
 const _reset = '\x1B[0m';
 
 void introMessage() {
-  stdout.writeln(
-    r'''
+  stdout.writeln(r'''
 
 ┃  ____ _ _ _ ____ ____ ____ ____ ____     ___  ____ ____ ____ ____ ____ 
 ┃  [__  | | | |__| | __ | __ |___ |__/     |__] |__| |__/ [__  |___ |__/ 
 ┃  ___] |_|_| |  | |__] |__] |___ |  \ ___ |    |  | |  \ ___] |___ |  \
 ┃
-''',
-  );
+''');
 }
 
 void generateMessage() {
@@ -87,11 +85,7 @@ void summaryStatisticsMessage({
   );
 }
 
-void schemaFailedMessage(
-  Object error,
-  StackTrace stack, {
-  String? name,
-}) {
+void schemaFailedMessage(Object error, StackTrace stack, {String? name}) {
   var title = name ?? '';
   if (title.length > 80) {
     title = '${title.substring(0, 80)}...';
