@@ -10,7 +10,10 @@ part 'category.g.dart';
 /// A category for a pet
 @Freezed()
 class Category with _$Category {
-  const factory Category({required int id, required String name}) = _Category;
+  const factory Category({
+    required int id,
+    required String name,
+  }) = _Category;
 
   factory Category.fromJson(Map<String, Object?> json) =>
       _$CategoryFromJson(json);

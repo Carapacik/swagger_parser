@@ -9,7 +9,10 @@ part 'p3.g.dart';
 
 @Freezed()
 class P3 with _$P3 {
-  const factory P3({required String p1, required List<String> p2}) = _P3;
+  const factory P3({
+    required String p1,
+    required List<String> p2,
+  }) = _P3;
 
   factory P3.fromJson(Map<String, Object?> json) => _$P3FromJson(json);
 }

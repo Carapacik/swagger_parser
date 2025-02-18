@@ -14,8 +14,10 @@ enum DogType {
 
   const DogType(this.json);
 
-  factory DogType.fromJson(String json) =>
-      values.firstWhere((e) => e.json == json, orElse: () => $unknown);
+  factory DogType.fromJson(String json) => values.firstWhere(
+        (e) => e.json == json,
+        orElse: () => $unknown,
+      );
 
   final String? json;
 }

@@ -19,13 +19,17 @@ abstract class PetClient {
   ///
   /// [body] - Pet object that needs to be added to the store.
   @POST('/pet')
-  Future<void> addPet({@Body() required Pet body});
+  Future<void> addPet({
+    @Body() required Pet body,
+  });
 
   /// Update an existing pet.
   ///
   /// [body] - Pet object that needs to be added to the store.
   @PUT('/pet')
-  Future<void> updatePet({@Body() required Pet body});
+  Future<void> updatePet({
+    @Body() required Pet body,
+  });
 
   /// Finds Pets by status.
   ///
@@ -44,7 +48,9 @@ abstract class PetClient {
   /// [tags] - Tags to filter by.
   @Deprecated('This method is marked as deprecated')
   @GET('/pet/findByTags')
-  Future<List<Pet>> findPetsByTags({@Query('tags') required List<String> tags});
+  Future<List<Pet>> findPetsByTags({
+    @Query('tags') required List<String> tags,
+  });
 
   /// Find pet by ID.
   ///
@@ -52,7 +58,9 @@ abstract class PetClient {
   ///
   /// [petId] - ID of pet to return.
   @GET('/pet/{petId}')
-  Future<Pet> getPetById({@Path('petId') required int petId});
+  Future<Pet> getPetById({
+    @Path('petId') required int petId,
+  });
 
   /// Updates a pet in the store with form data.
   ///

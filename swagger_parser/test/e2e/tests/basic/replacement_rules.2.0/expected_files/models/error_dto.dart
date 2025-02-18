@@ -8,7 +8,10 @@ part 'error_dto.g.dart';
 
 @JsonSerializable()
 class ErrorDto {
-  const ErrorDto({required this.code, required this.message});
+  const ErrorDto({
+    required this.code,
+    required this.message,
+  });
 
   factory ErrorDto.fromJson(Map<String, Object?> json) =>
       _$ErrorDtoFromJson(json);

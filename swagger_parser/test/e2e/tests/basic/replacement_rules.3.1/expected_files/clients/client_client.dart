@@ -48,5 +48,7 @@ abstract class ClientClient {
 
   /// [body] - Name not received and was auto-generated.
   @POST('/api/v1/')
-  Future<String> postApiV1({@Body() Object1Dto? body});
+  Future<String> postApiV1({
+    @Body() Object1Dto? body,
+  });
 }
