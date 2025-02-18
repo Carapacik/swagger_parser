@@ -140,13 +140,12 @@ String _validateMethod(String className, List<UniversalType> types) {
     return '';
   }
 
-  final funcBuffer =
-      StringBuffer()
-        ..write('extension ${className}ValidationX on $className {\n')
-        ..write('bool validate() {\n')
-        ..write(bodyBuffer)
-        ..write('  return true;\n}\n')
-        ..write('}\n');
+  final funcBuffer = StringBuffer()
+    ..write('extension ${className}ValidationX on $className {\n')
+    ..write('bool validate() {\n')
+    ..write(bodyBuffer)
+    ..write('  return true;\n}\n')
+    ..write('}\n');
 
   return funcBuffer.toString();
 }
@@ -161,10 +160,8 @@ String _factories(UniversalComponentClass dataClass, String className) {
   for (final discriminatorValue
       in dataClass.discriminator!.discriminatorValueToRefMapping.keys) {
     final factoryName = discriminatorValue.toCamel;
-    final discriminatorRef =
-        dataClass
-            .discriminator!
-            .discriminatorValueToRefMapping[discriminatorValue]!;
+    final discriminatorRef = dataClass
+        .discriminator!.discriminatorValueToRefMapping[discriminatorValue]!;
     final factoryParameters =
         dataClass.discriminator!.refProperties[discriminatorRef]!;
     final unionItemClassName = className + discriminatorValue.toPascal;

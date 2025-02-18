@@ -33,8 +33,7 @@ final class UniversalComponentClass extends UniversalDataClass {
 
     // The list of properties stored for each ref
     Map<String, List<UniversalType>> refProperties,
-  })?
-  discriminator;
+  })? discriminator;
 
   /// Whether or not this schema is a basic type
   /// "Date": {
@@ -62,8 +61,7 @@ final class UniversalComponentClass extends UniversalDataClass {
       typeDef.hashCode;
 
   @override
-  String toString() =>
-      'UniversalComponentClass(imports: $imports, '
+  String toString() => 'UniversalComponentClass(imports: $imports, '
       'parameters: $parameters, '
       'allOf: $allOf, '
       'typeDef: $typeDef)';

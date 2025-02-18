@@ -48,10 +48,9 @@ String _toClientRequest(
   required bool extrasParameterByDefault,
   required bool dioOptionsParameterByDefault,
 }) {
-  final responseType =
-      request.returnType == null
-          ? 'void'
-          : request.returnType!.toSuitableType(ProgrammingLanguage.dart);
+  final responseType = request.returnType == null
+      ? 'void'
+      : request.returnType!.toSuitableType(ProgrammingLanguage.dart);
   final sb = StringBuffer(
     '''
 
@@ -87,19 +86,16 @@ String _toClientRequest(
 
 String _convertImport(UniversalRestClient restClient) =>
     restClient.requests.any(
-          (r) => r.parameters.any((e) => e.parameterType.isPart),
-        )
+      (r) => r.parameters.any((e) => e.parameterType.isPart),
+    )
         ? "import 'dart:convert';\n"
         : '';
 
-String _fileImport(UniversalRestClient restClient) =>
-    restClient.requests.any(
-          (r) => r.parameters.any(
-            (e) => e.type
-                .toSuitableType(ProgrammingLanguage.dart)
-                .contains('File'),
-          ),
-        )
+String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
+      (r) => r.parameters.any(
+        (e) => e.type.toSuitableType(ProgrammingLanguage.dart).contains('File'),
+      ),
+    )
         ? "import 'dart:io';\n\n"
         : '';
 
@@ -149,10 +145,10 @@ String _hideHeaders(
   String defaultContentType,
 ) =>
     restClient.requests.any(
-          (r) =>
-              r.contentType != defaultContentType &&
-              !(r.isMultiPart || r.isFormUrlEncoded),
-        )
+      (r) =>
+          r.contentType != defaultContentType &&
+          !(r.isMultiPart || r.isFormUrlEncoded),
+    )
         ? ' hide Headers'
         : '';
 
@@ -161,9 +157,8 @@ String _required(UniversalType t) =>
     t.isRequired && t.defaultValue == null ? 'required ' : '';
 
 /// return defaultValue if have
-String _defaultValue(UniversalType t) =>
-    t.defaultValue != null
-        ? ' = '
-            '${t.wrappingCollections.isNotEmpty ? 'const ' : ''}'
-            '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toCamel)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}'
-        : '';
+String _defaultValue(UniversalType t) => t.defaultValue != null
+    ? ' = '
+        '${t.wrappingCollections.isNotEmpty ? 'const ' : ''}'
+        '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toCamel)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}'
+    : '';
