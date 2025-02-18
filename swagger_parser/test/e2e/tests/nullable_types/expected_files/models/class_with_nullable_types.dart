@@ -89,9 +89,8 @@ extension ClassWithNullableTypesValidationX on ClassWithNullableTypes {
       return false;
     }
     try {
-      if (!RegExp(
-        ClassWithNullableTypes.validStringPattern,
-      ).hasMatch(validString)) {
+      if (!RegExp(ClassWithNullableTypes.validStringPattern)
+          .hasMatch(validString)) {
         return false;
       }
     } catch (e) {

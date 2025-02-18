@@ -18,8 +18,10 @@ enum P2EnumDto {
 
   const P2EnumDto(this.json);
 
-  factory P2EnumDto.fromJson(String json) =>
-      values.firstWhere((e) => e.json == json, orElse: () => $unknown);
+  factory P2EnumDto.fromJson(String json) => values.firstWhere(
+        (e) => e.json == json,
+        orElse: () => $unknown,
+      );
 
   final String? json;
 }

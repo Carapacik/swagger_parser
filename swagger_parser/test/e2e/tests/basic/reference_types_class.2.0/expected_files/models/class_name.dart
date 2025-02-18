@@ -11,8 +11,10 @@ part 'class_name.g.dart';
 
 @Freezed()
 class ClassName with _$ClassName {
-  const factory ClassName({required int id, required AnotherClass another}) =
-      _ClassName;
+  const factory ClassName({
+    required int id,
+    required AnotherClass another,
+  }) = _ClassName;
 
   factory ClassName.fromJson(Map<String, Object?> json) =>
       _$ClassNameFromJson(json);
