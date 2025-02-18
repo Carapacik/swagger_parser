@@ -49,8 +49,10 @@ enum EnumClassDynamic {
 
   const EnumClassDynamic(this.json);
 
-  factory EnumClassDynamic.fromJson(dynamic json) =>
-      values.firstWhere((e) => e.json == json, orElse: () => $unknown);
+  factory EnumClassDynamic.fromJson(dynamic json) => values.firstWhere(
+        (e) => e.json == json,
+        orElse: () => $unknown,
+      );
 
   final dynamic json;
 }

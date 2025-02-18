@@ -14,5 +14,7 @@ abstract class AuthClient {
   factory AuthClient(Dio dio, {String? baseUrl}) = _AuthClient;
 
   @POST('/api/Auth/register')
-  Future<void> postApiAuthRegister({@Body() RegisterUserDto? body});
+  Future<void> postApiAuthRegister({
+    @Body() RegisterUserDto? body,
+  });
 }
