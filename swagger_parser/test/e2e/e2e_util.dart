@@ -45,19 +45,22 @@ Future<void> e2eTest(
   await Process.run('dart', ['format', testFolder]);
 
   // Getting a list of all files from expectedFolderPath
-  final expectedFiles = Directory(expectedFolderPath)
-      .listSync(recursive: true, followLinks: false)
-      .whereType<File>()
-      .toList();
+  final expectedFiles =
+      Directory(expectedFolderPath)
+          .listSync(recursive: true, followLinks: false)
+          .whereType<File>()
+          .toList();
 
-  final generatedFiles = Directory(generatedFolderPath)
-      .listSync(recursive: true, followLinks: false)
-      .whereType<File>()
-      .toList();
+  final generatedFiles =
+      Directory(generatedFolderPath)
+          .listSync(recursive: true, followLinks: false)
+          .whereType<File>()
+          .toList();
 
   for (final file in expectedFiles) {
-    final relativePath =
-        p.relative(file.path, from: expectedFolderPath).replaceAll(r'\', '/');
+    final relativePath = p
+        .relative(file.path, from: expectedFolderPath)
+        .replaceAll(r'\', '/');
 
     generatedFiles.firstWhere(
       (gFile) {
@@ -66,24 +69,25 @@ Future<void> e2eTest(
             .replaceAll(r'\', '/');
         return relPath == relativePath;
       },
-      orElse: () => throw Exception(
-        'File not found in generated content: $relativePath',
-      ),
+      orElse:
+          () =>
+              throw Exception(
+                'File not found in generated content: $relativePath',
+              ),
     );
   }
 
   for (final file in expectedFiles) {
-    final relativePath =
-        p.relative(file.path, from: expectedFolderPath).replaceAll(r'\', '/');
+    final relativePath = p
+        .relative(file.path, from: expectedFolderPath)
+        .replaceAll(r'\', '/');
 
-    final generatedFile = generatedFiles.firstWhere(
-      (gFile) {
-        final relPath = p
-            .relative(gFile.path, from: generatedFolderPath)
-            .replaceAll(r'\', '/');
-        return relPath == relativePath;
-      },
-    );
+    final generatedFile = generatedFiles.firstWhere((gFile) {
+      final relPath = p
+          .relative(gFile.path, from: generatedFolderPath)
+          .replaceAll(r'\', '/');
+      return relPath == relativePath;
+    });
 
     // Comparing the contents of the file
     expect(

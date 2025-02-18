@@ -29,23 +29,17 @@ abstract class ClientClient {
   ///
   /// [pet] - PetDto to add to the store.
   @POST('/pets')
-  Future<PetDto> addPet({
-    @Body() required NewPetDto pet,
-  });
+  Future<PetDto> addPet({@Body() required NewPetDto pet});
 
   /// Returns a user based on a single ID, if the user does not have access to the pet.
   ///
   /// [id] - ID of pet to fetch.
   @GET('/pets/{id}')
-  Future<PetDto> findPetById({
-    @Path('id') required int id,
-  });
+  Future<PetDto> findPetById({@Path('id') required int id});
 
   /// deletes a single pet based on the ID supplied.
   ///
   /// [id] - ID of pet to delete.
   @DELETE('/pets/{id}')
-  Future<void> deletePet({
-    @Path('id') required int id,
-  });
+  Future<void> deletePet({@Path('id') required int id});
 }

@@ -38,7 +38,8 @@ final class UniversalRequestType {
   int get hashCode => name.hashCode ^ type.hashCode ^ parameterType.hashCode;
 
   @override
-  String toString() => 'UniversalRequestType(name: $name, '
+  String toString() =>
+      'UniversalRequestType(name: $name, '
       'type: $type, '
       'parameterType: $parameterType)';
 }

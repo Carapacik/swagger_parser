@@ -11,12 +11,10 @@ String kotlinRetrofitClientTemplate({
   required String name,
   required bool markFileAsGenerated,
 }) {
-  final sb = StringBuffer(
-    '''
+  final sb = StringBuffer('''
 ${generatedFileComment(markFileAsGenerated: markFileAsGenerated, ignoreLints: false)}import retrofit2.http.*
 
-interface $name {''',
-  );
+interface $name {''');
   for (final request in restClient.requests) {
     sb.write(_toClientRequest(request));
   }
@@ -25,12 +23,10 @@ interface $name {''',
 }
 
 String _toClientRequest(UniversalRequest request) {
-  final sb = StringBuffer(
-    '''
+  final sb = StringBuffer('''
 
     ${descriptionComment(request.description, tabForFirstLine: false, tab: '    ', end: '    ')}${request.isDeprecated ? '@Deprecated("This method is marked as deprecated")\n    ' : ''}${request.isMultiPart ? '@MultiPart\n    ' : ''}${request.isFormUrlEncoded ? '@FormUrlEncoded\n    ' : ''}@${request.requestType.name.toUpperCase()}("${request.route}")
-    suspend fun ${request.name}(''',
-  );
+    suspend fun ${request.name}(''');
   if (request.parameters.isEmpty) {
     sb.write(')');
   } else {
@@ -62,7 +58,8 @@ String _toQueryParameter(UniversalRequestType parameter) =>
     '${_defaultValue(parameter.type)}';
 
 /// return defaultValue if have
-String _defaultValue(UniversalType t) => t.defaultValue != null
-    ? ' = '
-        '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toScreamingSnake)?.toScreamingSnake}' : protectDefaultValue(t.defaultValue, type: t.type, dart: false)}'
-    : '';
+String _defaultValue(UniversalType t) =>
+    t.defaultValue != null
+        ? ' = '
+            '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toScreamingSnake)?.toScreamingSnake}' : protectDefaultValue(t.defaultValue, type: t.type, dart: false)}'
+        : '';

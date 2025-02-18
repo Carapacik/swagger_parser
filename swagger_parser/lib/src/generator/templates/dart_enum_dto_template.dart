@@ -25,9 +25,8 @@ String dartEnumDtoTemplate(
     final className = enumClass.name.toPascal;
     final jsonParam = unknownEnumValue || enumsToJson;
 
-    final values = '${enumClass.items.mapIndexed(
-          (i, e) => _enumValue(i, enumClass.type, e, jsonParam: jsonParam),
-        ).join(',')}${unknownEnumValue ? ',' : ';'}';
+    final values =
+        '${enumClass.items.mapIndexed((i, e) => _enumValue(i, enumClass.type, e, jsonParam: jsonParam)).join(',')}${unknownEnumValue ? ',' : ';'}';
     final unknownEnumValueStr = unknownEnumValue ? _unkownEnumValue() : '';
     final constructorStr = jsonParam ? _constructor(className) : '';
     final fromJsonStr = unknownEnumValue ? _fromJson(className, enumClass) : '';
@@ -35,9 +34,7 @@ String dartEnumDtoTemplate(
     final toJsonStr = enumsToJson ? _toJson(enumClass, className) : '';
 
     return '''
-${generatedFileComment(
-      markFileAsGenerated: markFileAsGenerated,
-    )}${dartImportDtoTemplate(jsonSerializer)}
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${dartImportDtoTemplate(jsonSerializer)}
 
 ${descriptionComment(enumClass.description)}@JsonEnum()
 enum $className {
@@ -57,14 +54,10 @@ String _dartEnumDartMappableTemplate(
   final jsonParam = unknownEnumValue || enumsToJson;
 
   final values =
-      '${enumClass.items.mapIndexed((i, e) => _enumValueDartMappable(i, enumClass.type, e, jsonParam: jsonParam)).join(
-            ',\n',
-          )}${unknownEnumValue ? ',' : ';'}';
+      '${enumClass.items.mapIndexed((i, e) => _enumValueDartMappable(i, enumClass.type, e, jsonParam: jsonParam)).join(',\n')}${unknownEnumValue ? ',' : ';'}';
 
   return '''
-${generatedFileComment(
-    markFileAsGenerated: markFileAsGenerated,
-  )}${dartImportDtoTemplate(JsonSerializer.dartMappable)}
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${dartImportDtoTemplate(JsonSerializer.dartMappable)}
 
 part '${enumClass.name.toSnake}.mapper.dart';
 
@@ -119,8 +112,9 @@ String _enumValue(
       if (protectedJsonKey == 'null') {
         value = null;
       } else {
-        final isNumber =
-            RegExp(r'^-?\d+(\.\d+)?$').hasMatch(protectedJsonKey ?? '');
+        final isNumber = RegExp(
+          r'^-?\d+(\.\d+)?$',
+        ).hasMatch(protectedJsonKey ?? '');
         if (isNumber) {
           value = protectedJsonKey;
         } else {

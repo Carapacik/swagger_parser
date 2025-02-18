@@ -17,9 +17,10 @@ class OpenApiCorrector {
   Map<String, dynamic> correct() {
     var fileContent = config.fileContent;
 
-    final definitionFileContent = config.isJson
-        ? json.decode(fileContent) as Map<String, dynamic>
-        : (loadYaml(fileContent) as YamlMap).toMap();
+    final definitionFileContent =
+        config.isJson
+            ? json.decode(fileContent) as Map<String, dynamic>
+            : (loadYaml(fileContent) as YamlMap).toMap();
 
     // OpenAPI 3.0 and 3.1
     final components =

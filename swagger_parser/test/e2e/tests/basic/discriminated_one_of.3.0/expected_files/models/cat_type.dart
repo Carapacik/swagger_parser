@@ -14,10 +14,8 @@ enum CatType {
 
   const CatType(this.json);
 
-  factory CatType.fromJson(String json) => values.firstWhere(
-        (e) => e.json == json,
-        orElse: () => $unknown,
-      );
+  factory CatType.fromJson(String json) =>
+      values.firstWhere((e) => e.json == json, orElse: () => $unknown);
 
   final String? json;
 }

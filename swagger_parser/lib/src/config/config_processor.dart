@@ -66,10 +66,7 @@ class ConfigProcessor {
     }
 
     if (schemes != null) {
-      final rootConfig = SWPConfig.fromYaml(
-        yamlMap,
-        isRootConfig: true,
-      );
+      final rootConfig = SWPConfig.fromYaml(yamlMap, isRootConfig: true);
 
       for (final schema in schemes) {
         if (schema is! YamlMap) {
@@ -77,10 +74,7 @@ class ConfigProcessor {
             "Config parameter 'schemes' must be list of maps.",
           );
         }
-        final config = SWPConfig.fromYaml(
-          schema,
-          rootConfig: rootConfig,
-        );
+        final config = SWPConfig.fromYaml(schema, rootConfig: rootConfig);
         configs.add(config);
       }
     } else {
@@ -112,9 +106,7 @@ class ConfigProcessor {
     } else if (config.schemaUrl != null) {
       (fileContent, isJson) = await schemaFromUrlToFile(config);
     } else {
-      throw const ConfigException(
-        '`schema_path` or `schema_url` are required',
-      );
+      throw const ConfigException('`schema_path` or `schema_url` are required');
     }
     return (fileContent, isJson);
   }
@@ -131,8 +123,9 @@ class ConfigProcessor {
       };
       final schemaContent = await schemaFromUrl(config.schemaUrl!);
       if (isJson) {
-        final formattedJson = const JsonEncoder.withIndent('    ')
-            .convert(jsonDecode(schemaContent));
+        final formattedJson = const JsonEncoder.withIndent(
+          '    ',
+        ).convert(jsonDecode(schemaContent));
         writeSchemaToFile(
           formattedJson,
           p.basenameWithoutExtension(config.schemaUrl!) + fileExtension,

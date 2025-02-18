@@ -2,6 +2,7 @@
 library;
 
 import 'dart:io';
+
 import 'package:path/path.dart' as p;
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:test/test.dart';
@@ -21,10 +22,11 @@ import 'static_utils.dart';
 /// `dart test --run-skipped ".\test\static\static_test.dart"`
 void main() {
   // Get all the schema files
-  final schemaFiles = Directory(p.join('test', 'schemas'))
-      .listSync(recursive: true, followLinks: false)
-      .whereType<File>()
-      .toList();
+  final schemaFiles =
+      Directory(p.join('test', 'schemas'))
+          .listSync(recursive: true, followLinks: false)
+          .whereType<File>()
+          .toList();
 
   // Set the path to the temp test project
   final testProjectDir = Directory('test_project');
@@ -33,9 +35,7 @@ void main() {
     if (testProjectDir.existsSync()) {
       await testProjectDir.delete(recursive: true);
     }
-    await setupBaseProject(
-      projectPath: testProjectDir.path,
-    );
+    await setupBaseProject(projectPath: testProjectDir.path);
   });
 
   /// Test the generation of the clients for all the schemas
@@ -45,8 +45,12 @@ void main() {
         final schemaFileName = p.basenameWithoutExtension(schemaFile.path);
         final folderName =
             schemaFileName.replaceAll(RegExp('[^a-zA-Z]'), '').toLowerCase();
-        final clientOutputPath =
-            p.join(testProjectDir.path, 'lib', 'api', folderName);
+        final clientOutputPath = p.join(
+          testProjectDir.path,
+          'lib',
+          'api',
+          folderName,
+        );
         test('$schemaFileName ${jsonSerializer.name}', () async {
           await runSwaggerParserGeneration(
             schemaFile,
@@ -59,13 +63,9 @@ void main() {
   });
 
   /// Test the build and validation of the generated clients
-  test(
-    'build_and_validate_client',
-    () async {
-      await testBuildClient(testProjectDir.path);
-    },
-    timeout: const Timeout(Duration(minutes: 5)),
-  );
+  test('build_and_validate_client', () async {
+    await testBuildClient(testProjectDir.path);
+  }, timeout: const Timeout(Duration(minutes: 5)));
 }
 
 // This function will test the generation of the client for a given schema file
@@ -100,31 +100,21 @@ Future<void> runSwaggerParserGeneration(
 }
 
 // This function will test the build and validation of the generated clients
-Future<void> testBuildClient(
-  String testProjectPath,
-) async {
+Future<void> testBuildClient(String testProjectPath) async {
   // Run code generation
-  final buildResult = await Process.run(
-    'dart',
-    ['run', 'build_runner', 'build', '--delete-conflicting-outputs'],
-    workingDirectory: testProjectPath,
-  );
-  expect(
-    buildResult.exitCode,
-    0,
-    reason: formatProcessResult(buildResult),
-  );
+  final buildResult = await Process.run('dart', [
+    'run',
+    'build_runner',
+    'build',
+    '--delete-conflicting-outputs',
+  ], workingDirectory: testProjectPath);
+  expect(buildResult.exitCode, 0, reason: formatProcessResult(buildResult));
 
   // Run the analyzer
-  final analyzeResult = await Process.run(
-    'dart',
-    ['analyze', 'lib'],
-    workingDirectory: testProjectPath,
-  );
+  final analyzeResult = await Process.run('dart', [
+    'analyze',
+    'lib',
+  ], workingDirectory: testProjectPath);
 
-  expect(
-    analyzeResult.exitCode,
-    0,
-    reason: formatProcessResult(analyzeResult),
-  );
+  expect(analyzeResult.exitCode, 0, reason: formatProcessResult(analyzeResult));
 }

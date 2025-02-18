@@ -8,11 +8,7 @@ import 'clients/client_client.dart';
 
 /// API `v1.0.0`
 class RestClient {
-  RestClient(
-    Dio dio, {
-    String? baseUrl,
-  })  : _dio = dio,
-        _baseUrl = baseUrl;
+  RestClient(Dio dio, {String? baseUrl}) : _dio = dio, _baseUrl = baseUrl;
 
   final Dio _dio;
   final String? _baseUrl;
