@@ -15,12 +15,11 @@ final class ReplacementRule {
   final String replacement;
 
   /// Returns the replacement string in the correct case
-  String get replacementInCorrectCase =>
-      replacement.isNotEmpty
-          ? replacement[0] == replacement[0].toUpperCase()
-              ? replacement.toPascal
-              : replacement.toCamel
-          : replacement;
+  String get replacementInCorrectCase => replacement.isNotEmpty
+      ? replacement[0] == replacement[0].toUpperCase()
+          ? replacement.toPascal
+          : replacement.toCamel
+      : replacement;
 
   /// Applies the replacement rule to the given input string
   String? apply(String? input) =>
