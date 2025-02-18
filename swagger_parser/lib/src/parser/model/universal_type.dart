@@ -175,8 +175,7 @@ final class UniversalType {
       uniqueItems.hashCode;
 
   @override
-  String toString() =>
-      'UniversalType(type: $type, '
+  String toString() => 'UniversalType(type: $type, '
       'name: $name, '
       'format: $format, '
       'jsonKey: $jsonKey, '

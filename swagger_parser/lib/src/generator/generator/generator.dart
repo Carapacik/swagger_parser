@@ -57,20 +57,19 @@ class Generator {
     final restClientFiles =
         restClients.map(fillController.fillRestClientContent).toList();
 
-    final rootClientFile =
-        config.language == ProgrammingLanguage.dart &&
-                config.rootClient &&
-                restClients.isNotEmpty
-            ? fillController.fillRootClient(restClients)
-            : null;
+    final rootClientFile = config.language == ProgrammingLanguage.dart &&
+            config.rootClient &&
+            restClients.isNotEmpty
+        ? fillController.fillRootClient(restClients)
+        : null;
 
     final exportFile =
         config.language == ProgrammingLanguage.dart && config.exportFile
             ? fillController.fillExportFile(
-              restClients: restClientFiles,
-              dataClasses: dataClassesFiles,
-              rootClient: rootClientFile,
-            )
+                restClients: restClientFiles,
+                dataClasses: dataClassesFiles,
+                rootClient: rootClientFile,
+              )
             : null;
 
     final files = [

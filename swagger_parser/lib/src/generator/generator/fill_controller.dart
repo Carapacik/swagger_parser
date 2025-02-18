@@ -20,27 +20,25 @@ final class FillController {
 
   /// Return [GeneratedFile] generated from given [UniversalDataClass]
   GeneratedFile fillDtoContent(UniversalDataClass dataClass) => GeneratedFile(
-    name:
-        'models/'
-        '${config.language == ProgrammingLanguage.dart ? dataClass.name.toSnake : dataClass.name.toPascal}'
-        '.${config.language.fileExtension}',
-    content: config.language.dtoFileContent(
-      dataClass,
-      jsonSerializer: config.jsonSerializer,
-      enumsToJson: config.enumsToJson,
-      unknownEnumValue: config.unknownEnumValue,
-      markFilesAsGenerated: config.markFilesAsGenerated,
-      generateValidator: config.generateValidator,
-    ),
-  );
+        name: 'models/'
+            '${config.language == ProgrammingLanguage.dart ? dataClass.name.toSnake : dataClass.name.toPascal}'
+            '.${config.language.fileExtension}',
+        content: config.language.dtoFileContent(
+          dataClass,
+          jsonSerializer: config.jsonSerializer,
+          enumsToJson: config.enumsToJson,
+          unknownEnumValue: config.unknownEnumValue,
+          markFilesAsGenerated: config.markFilesAsGenerated,
+          generateValidator: config.generateValidator,
+        ),
+      );
 
   /// Return [GeneratedFile] generated from given [UniversalRestClient]
   GeneratedFile fillRestClientContent(UniversalRestClient restClient) {
     final postfix = config.clientPostfix ?? 'Client';
-    final fileName =
-        config.language == ProgrammingLanguage.dart
-            ? '${restClient.name}_$postfix'.toSnake
-            : restClient.name.toPascal + postfix.toPascal;
+    final fileName = config.language == ProgrammingLanguage.dart
+        ? '${restClient.name}_$postfix'.toSnake
+        : restClient.name.toPascal + postfix.toPascal;
     final folderName =
         config.putClientsInFolder ? 'clients' : restClient.name.toSnake;
 

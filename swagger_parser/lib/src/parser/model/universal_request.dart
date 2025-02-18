@@ -76,8 +76,7 @@ final class UniversalRequest {
       isFormUrlEncoded.hashCode;
 
   @override
-  String toString() =>
-      'UniversalRequest(name: $name, '
+  String toString() => 'UniversalRequest(name: $name, '
       'requestType: $requestType, '
       'route: $route, '
       'parameters: $parameters, '

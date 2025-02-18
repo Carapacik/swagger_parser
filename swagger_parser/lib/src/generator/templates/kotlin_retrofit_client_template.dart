@@ -58,8 +58,7 @@ String _toQueryParameter(UniversalRequestType parameter) =>
     '${_defaultValue(parameter.type)}';
 
 /// return defaultValue if have
-String _defaultValue(UniversalType t) =>
-    t.defaultValue != null
-        ? ' = '
-            '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toScreamingSnake)?.toScreamingSnake}' : protectDefaultValue(t.defaultValue, type: t.type, dart: false)}'
-        : '';
+String _defaultValue(UniversalType t) => t.defaultValue != null
+    ? ' = '
+        '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toScreamingSnake)?.toScreamingSnake}' : protectDefaultValue(t.defaultValue, type: t.type, dart: false)}'
+    : '';

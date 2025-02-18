@@ -52,9 +52,10 @@ ${_getters(clientsNames, postfix)}
 ''';
 }
 
-String _clientsImport(Set<String> imports, String postfix, {required bool putClientsInFolder}) =>
+String _clientsImport(Set<String> imports, String postfix,
+        {required bool putClientsInFolder}) =>
     '\n${imports.map((import) => "import '${putClientsInFolder ? 'clients' : import.toSnake}/"
-    "${'${import}_$postfix'.toSnake}.dart';").join('\n')}\n';
+        "${'${import}_$postfix'.toSnake}.dart';").join('\n')}\n';
 
 String _privateFields(Set<String> names, String postfix) => names
     .map((n) => '  ${n.toPascal + postfix.toPascal}? _${n.toCamel};')
@@ -62,8 +63,7 @@ String _privateFields(Set<String> names, String postfix) => names
 
 String _getters(Set<String> names, String postfix) => names
     .map(
-      (n) =>
-          '  ${n.toPascal + postfix.toPascal} get ${n.toCamel} => '
+      (n) => '  ${n.toPascal + postfix.toPascal} get ${n.toCamel} => '
           '_${n.toCamel} ??= ${n.toPascal + postfix.toPascal}(_dio, baseUrl: _baseUrl);',
     )
     .join('\n\n');

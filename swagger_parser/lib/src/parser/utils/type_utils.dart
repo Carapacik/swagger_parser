@@ -6,25 +6,25 @@ import 'dart_keywords.dart';
 extension StringTypeX on String {
   /// Convert string to dart type
   String toDartType([String? format]) => switch (this) {
-    'integer' => 'int',
-    'number' => switch (format) {
-      'float' || 'double' => 'double',
-      // This can happen
-      'string' => 'String',
-      _ => 'num',
-    },
-    'string' => switch (format) {
-      'binary' => 'File',
-      'date' || 'date-time' => 'DateTime',
-      _ => 'String',
-    },
-    'file' => 'File',
-    'boolean' => 'bool',
-    // https://github.com/trevorwang/retrofit.dart/issues/631
-    // https://github.com/Carapacik/swagger_parser/issues/110
-    'object' || 'null' => 'dynamic',
-    _ => startsWith('[') ? _parseTypeList(this) : this,
-  };
+        'integer' => 'int',
+        'number' => switch (format) {
+            'float' || 'double' => 'double',
+            // This can happen
+            'string' => 'String',
+            _ => 'num',
+          },
+        'string' => switch (format) {
+            'binary' => 'File',
+            'date' || 'date-time' => 'DateTime',
+            _ => 'String',
+          },
+        'file' => 'File',
+        'boolean' => 'bool',
+        // https://github.com/trevorwang/retrofit.dart/issues/631
+        // https://github.com/Carapacik/swagger_parser/issues/110
+        'object' || 'null' => 'dynamic',
+        _ => startsWith('[') ? _parseTypeList(this) : this,
+      };
 
   String _parseTypeList(String types) {
     final typesList = types.replaceAll(RegExp(r'[\[\] ]'), '').split(',');
@@ -36,23 +36,23 @@ extension StringTypeX on String {
 
   /// Convert string to kotlin type
   String toKotlinType([String? format]) => switch (this) {
-    'integer' => 'Int',
-    'number' => switch (format) {
-      'float' => 'Float',
-      // This can happen
-      'string' => 'String',
-      _ => 'Double',
-    },
-    'string' => switch (format) {
-      'binary' => 'MultipartBody.Part',
-      'date' || 'date-time' => 'Date',
-      _ => 'String',
-    },
-    'file' => 'MultipartBody.Part',
-    'boolean' => 'Boolean',
-    'object' => 'Any',
-    _ => this,
-  };
+        'integer' => 'Int',
+        'number' => switch (format) {
+            'float' => 'Float',
+            // This can happen
+            'string' => 'String',
+            _ => 'Double',
+          },
+        'string' => switch (format) {
+            'binary' => 'MultipartBody.Part',
+            'date' || 'date-time' => 'Date',
+            _ => 'String',
+          },
+        'file' => 'MultipartBody.Part',
+        'boolean' => 'Boolean',
+        'object' => 'Any',
+        _ => this,
+      };
 }
 
 const _valueConst = 'value';
@@ -159,13 +159,13 @@ Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names) {
               _enumNameRegExp.hasMatch(numberEnumItemName(name).toCamel) =>
         (numberEnumItemName(name), null),
       _ when !_enumNameRegExp.hasMatch(name) => (
-        uniqueEnumItemName(),
-        'Incorrect name has been replaced. Original name: `$name`.',
-      ),
+          uniqueEnumItemName(),
+          'Incorrect name has been replaced. Original name: `$name`.',
+        ),
       _ when dartEnumMemberKeywords.contains(name.toCamel) => (
-        '$_valueConst ${leadingDashToMinus(name)}',
-        'The name has been replaced because it contains a keyword. Original name: `$name`.',
-      ),
+          '$_valueConst ${leadingDashToMinus(name)}',
+          'The name has been replaced because it contains a keyword. Original name: `$name`.',
+        ),
       _ => (leadingDashToMinus(name), null),
     };
     items.add(
@@ -207,21 +207,20 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_-][a-zA-Z\d_-]*$');
   bool isMethod = false,
 }) {
   final (newName, error) = switch (name) {
-    null || '' =>
-      uniqueIfNull
-          ? (
+    null || '' => uniqueIfNull
+        ? (
             uniqueName(isEnum: isEnum),
             'Name not received and was auto-generated.',
           )
-          : (null, null),
+        : (null, null),
     _ when !_nameRegExp.hasMatch(name) => (
-      uniqueName(isEnum: isEnum),
-      'Incorrect name has been replaced. Original name: `$name`.',
-    ),
+        uniqueName(isEnum: isEnum),
+        'Incorrect name has been replaced. Original name: `$name`.',
+      ),
     _ when dartKeywords.contains(name.toCamel) => (
-      '$name ${isEnum ? _enumConst : _valueConst}',
-      'The name has been replaced because it contains a keyword. Original name: `$name`.',
-    ),
+        '$name ${isEnum ? _enumConst : _valueConst}',
+        'The name has been replaced because it contains a keyword. Original name: `$name`.',
+      ),
     _ => (name, null),
   };
 
