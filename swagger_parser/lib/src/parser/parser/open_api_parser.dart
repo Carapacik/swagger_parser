@@ -921,7 +921,7 @@ class OpenApiParser {
       // for each ref, we lookup the matching dataclass and add its properties to the discriminator mapping, its imports are added to the discriminatedOneOfClass's imports
       for (final ref in discriminator.discriminatorValueToRefMapping.values) {
         final refedClassIndex = dataClasses.indexWhere((dc) => dc.name == ref);
-        UniversalDataClass refedClass = dataClasses[refedClassIndex];
+        final refedClass = dataClasses[refedClassIndex];
         if (refedClass is! UniversalComponentClass) {
           continue;
         }
@@ -1202,16 +1202,17 @@ class OpenApiParser {
         // Create a sealed class to represent the discriminated union
         _objectClasses.add(
           UniversalComponentClass(
-              name: newName!.toPascal,
-              imports: SplayTreeSet<String>(),
-              parameters: [
-                UniversalType(
-                  type: 'String',
-                  name: discriminator?.propertyName,
-                  isRequired: true,
-                ),
-              ],
-              discriminator: discriminator),
+            name: newName!.toPascal,
+            imports: SplayTreeSet<String>(),
+            parameters: [
+              UniversalType(
+                type: 'String',
+                name: discriminator?.propertyName,
+                isRequired: true,
+              ),
+            ],
+            discriminator: discriminator,
+          ),
         );
 
         return (

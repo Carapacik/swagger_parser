@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 void main() {
   group('Empty data class', () {
     test('dart + json_serializable', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [],
@@ -31,7 +31,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [],
@@ -61,7 +61,7 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [],
