@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   title: sample spec
 host: fake.site.com
-tags: []
+tags: [ ]
 schemes:
   - https
 paths:
@@ -17,7 +17,7 @@ paths:
         - application/json
       produces:
         - application/json
-      parameters: []
+      parameters: [ ]
       responses:
         '200':
           description: successful operation
@@ -51,7 +51,7 @@ paths:
       responses:
         default:
           description: successful operation
-securityDefinitions: {}
+securityDefinitions: { }
 definitions:
   NumberHolder:
     description: A model to hold the three number types which should no longer have string suffixes

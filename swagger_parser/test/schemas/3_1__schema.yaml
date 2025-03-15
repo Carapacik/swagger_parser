@@ -46,7 +46,7 @@ components:
           additionalProperties: true
         free_form_object_3:
           type: object
-          additionalProperties: {}
+          additionalProperties: { }
         map1:
           type: object
           additionalProperties:

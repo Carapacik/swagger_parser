@@ -39,13 +39,13 @@ definitions:
             type: string
 
   CompositionOfSimpleComposition:
-      allOf:
-        - $ref: '#/definitions/SimpleComposition'
-        - $ref: '#/definitions/ModelThree'
-        - type: object
-          properties:
-            compositionOfSimpleCompositionProp:
-              type: string
+    allOf:
+      - $ref: '#/definitions/SimpleComposition'
+      - $ref: '#/definitions/ModelThree'
+      - type: object
+        properties:
+          compositionOfSimpleCompositionProp:
+            type: string
 
   SimpleParent:
     type: object
@@ -55,7 +55,7 @@ definitions:
         type: string
       simpleParentProp:
         type: string
-    required: [disc]
+    required: [ disc ]
 
   ChildOfSimpleParent:
     allOf:
@@ -85,15 +85,15 @@ definitions:
             type: string
           composedParentProp:
             type: string
-        required: [disc]
+        required: [ disc ]
 
   ChildOfComposedParent:
     allOf:
-    - $ref: '#/definitions/ComposedParent'
-    - type: object
-      properties:
-        childOfComposedParentProp:
-          type: string
+      - $ref: '#/definitions/ComposedParent'
+      - type: object
+        properties:
+          childOfComposedParentProp:
+            type: string
 
   ChildOfChildOfComposedParent:
     allOf:

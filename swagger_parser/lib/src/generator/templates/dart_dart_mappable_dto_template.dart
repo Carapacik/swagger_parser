@@ -26,7 +26,7 @@ ${descriptionComment(dataClass.description)}@MappableClass(${() {
     if (dataClass.discriminator != null) {
       return [
         "discriminatorKey: '${dataClass.discriminator!.propertyName}'",
-        "includeSubClasses: [${dataClass.discriminator!.discriminatorValueToRefMapping.values.join(', ')}]",
+        "includeSubClasses: [${dataClass.discriminator!.discriminatorValueToRefMapping.values.join(', ')}]"
       ].join(", ");
     }
     if (dataClass.discriminatorValue != null) {
@@ -44,8 +44,8 @@ ${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${clas
 ''';
 }
 
-String getDiscriminatorConvenienceMethods(UniversalComponentClass dataClass){
-  if (dataClass.discriminator == null){
+String getDiscriminatorConvenienceMethods(UniversalComponentClass dataClass) {
+  if (dataClass.discriminator == null) {
     return '';
   }
   return '''

@@ -2,7 +2,7 @@ swagger: '2.0'
 info:
   version: ''
   title: arrayRefBody
-  contact: {}
+  contact: { }
 host: www.example.com
 basePath: /
 schemes:
@@ -33,7 +33,7 @@ paths:
       responses:
         200:
           description: successful operation
-          headers: {}
+          headers: { }
 definitions:
   Input:
     title: Input

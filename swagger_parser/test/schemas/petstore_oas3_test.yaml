@@ -166,7 +166,7 @@ paths:
         '404':
           description: Pet not found
       security:
-        - api_key: []
+        - api_key: [ ]
     post:
       tags:
         - pet
@@ -285,7 +285,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - api_key: [ ]
   /store/order:
     post:
       tags:

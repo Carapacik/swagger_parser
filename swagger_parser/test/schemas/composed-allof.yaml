@@ -4,9 +4,9 @@ info:
   title: "Test API"
 basePath: "/xx2"
 consumes:
-- "application/json"
+  - "application/json"
 produces:
-- "application/json"
+  - "application/json"
 paths:
   /ping:
     post:

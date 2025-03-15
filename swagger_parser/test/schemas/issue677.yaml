@@ -4,7 +4,7 @@ info:
   description: API under test
   version: 1.0.7
 servers:
-- url: https://localhost:9999/root
+  - url: https://localhost:9999/root
 paths:
   /issue677:
     post:
@@ -18,4 +18,4 @@ paths:
       responses:
         201:
           description: OK
-components: {}
+components: { }

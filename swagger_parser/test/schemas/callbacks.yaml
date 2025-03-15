@@ -64,8 +64,8 @@ paths:
                   description: |
                     Your server should return this HTTP status code if no longer interested
                     in further updates
-          '{$request.query.callbackUrl}/test': {}
-        dummy: {}
+          '{$request.query.callbackUrl}/test': { }
+        dummy: { }
 
 components:
   schemas:

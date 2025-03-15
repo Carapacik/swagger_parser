@@ -26,8 +26,8 @@ paths:
 components:
   schemas:
     PetEnum:
-        type: string
-        description: An enum with complex-ish naming
-        enum:
+      type: string
+      description: An enum with complex-ish naming
+      enum:
         - myFirstValue
         - MY_SECOND_VALUE

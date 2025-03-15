@@ -42,7 +42,7 @@ paths:
         '405':
           description: Invalid input
       security:
-        - petstore_token: [base]
+        - petstore_token: [ base ]
     put:
       tags:
         - pet

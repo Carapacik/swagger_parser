@@ -8,8 +8,8 @@ info:
   version: 1.0.0
 servers:
   - url: /relative/url
-tags: []
-paths: {}
+tags: [ ]
+paths: { }
 components:
-  schemas: {}
-  securitySchemes: {}
+  schemas: { }
+  securitySchemes: { }

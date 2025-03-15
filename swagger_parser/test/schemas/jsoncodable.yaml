@@ -16,7 +16,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-              examples: {}
+              examples: { }
         '400':
           description: Missing Required Information
       description: Create a new user.
@@ -25,14 +25,14 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/Request'
-    parameters: []
+    parameters: [ ]
 components:
   schemas:
     User:
       title: User
       type: object
       description: ''
-      x-examples: {}
+      x-examples: { }
       properties:
         integerValue:
           type: integer

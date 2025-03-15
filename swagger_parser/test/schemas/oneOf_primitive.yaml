@@ -26,6 +26,6 @@ components:
           type: string
     Example:
       oneOf:
-      - $ref: '#/components/schemas/Child'
-      - type: integer
-        format: int32
+        - $ref: '#/components/schemas/Child'
+        - type: integer
+          format: int32

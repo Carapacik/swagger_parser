@@ -26,7 +26,7 @@ components:
             - VALUE
     PropertyOfDay:
       required:
-      - name
+        - name
       type: object
       properties:
         name:
@@ -41,36 +41,36 @@ components:
           type: object
           description: Days of week
           example:
-          - MONDAY
-          - TUESDAY
+            - MONDAY
+            - TUESDAY
           enum:
-          - MONDAY
-          - TUESDAY
-          - WEDNESDAY
-          - THURSDAY
-          - FRIDAY
-          - SATURDAY
-          - SUNDAY
-          - WEEKDAYS
-          - WEEKEND
-          - EVERYDAY
+            - MONDAY
+            - TUESDAY
+            - WEDNESDAY
+            - THURSDAY
+            - FRIDAY
+            - SATURDAY
+            - SUNDAY
+            - WEEKDAYS
+            - WEEKEND
+            - EVERYDAY
         monthOfYear:
           type: integer
           description: Month of year
           format: int32
           enum:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-          - 6
-          - 7
-          - 8
-          - 9
-          - 10
-          - 11
-          - 12
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+            - 9
+            - 10
+            - 11
+            - 12
         dayOfYear:
           type: integer
           description: Day of year
@@ -79,26 +79,26 @@ components:
           type: object
           description: Holiday types
           example:
-          - NOT_HOLIDAY
-          - LOCAL_HOLIDAY
+            - NOT_HOLIDAY
+            - LOCAL_HOLIDAY
           enum:
-          - NOT_HOLIDAY
-          - LOCAL_HOLIDAY
-          - NATIONAL_HOLIDAY
-          - ANY_HOLIDAY
-          - WORKING_DAY
-          - ANY_DAY
-          - NEW_YEARS_DAY
-          - PALM_SUNDAY
-          - MAUNDY_THURSDAY
-          - GOOD_FRIDAY
-          - EASTER_SUNDAY
-          - EASTER_MONDAY
-          - LABOUR_DAY
-          - CONSTITUTION_DAY
-          - ASCENSION_DAY
-          - WHIT_SUNDAY
-          - WHIT_MONDAY
-          - CHRISTMAS_DAY
-          - BOXING_DAY
+            - NOT_HOLIDAY
+            - LOCAL_HOLIDAY
+            - NATIONAL_HOLIDAY
+            - ANY_HOLIDAY
+            - WORKING_DAY
+            - ANY_DAY
+            - NEW_YEARS_DAY
+            - PALM_SUNDAY
+            - MAUNDY_THURSDAY
+            - GOOD_FRIDAY
+            - EASTER_SUNDAY
+            - EASTER_MONDAY
+            - LABOUR_DAY
+            - CONSTITUTION_DAY
+            - ASCENSION_DAY
+            - WHIT_SUNDAY
+            - WHIT_MONDAY
+            - CHRISTMAS_DAY
+            - BOXING_DAY
       description: The DayType describe during which the assignment applies

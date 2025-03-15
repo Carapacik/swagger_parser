@@ -34,7 +34,7 @@ components:
       properties:
         id:
           type: string
-      additionalProperties: {}
+      additionalProperties: { }
     ModelWithStringToStringMapping:
       type: object
       additionalProperties:

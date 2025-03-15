@@ -171,7 +171,7 @@ paths:
         "404":
           description: Pet not found
       security:
-        - api_key: []
+        - api_key: [ ]
     post:
       tags:
         - pet
@@ -290,7 +290,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - api_key: [ ]
   /store/order:
     post:
       tags:
@@ -550,7 +550,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Client"
       security:
-        - api_key_query: []
+        - api_key_query: [ ]
   /fake:
     patch:
       tags:
@@ -757,7 +757,7 @@ paths:
         "404":
           description: User not found
       security:
-        - http_basic_test: []
+        - http_basic_test: [ ]
     delete:
       tags:
         - fake
@@ -1546,10 +1546,10 @@ components:
               type: object
         anytype_1:
           type: object
-        anytype_2: {}
+        anytype_2: { }
         anytype_3:
           type: object
-          properties: {}
+          properties: { }
     AdditionalPropertiesString:
       type: object
       properties:
@@ -2075,7 +2075,7 @@ components:
           nullable: true
           items:
             type: string
-          default: ["foo", "bar"]
+          default: [ "foo", "bar" ]
     ResponseObjectWithDifferentFieldNames:
       type: object
       properties:

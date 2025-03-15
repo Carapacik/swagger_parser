@@ -11,7 +11,7 @@ paths:
           name: enum_class
           required: true
           schema:
-            type: 
+            type:
               - array
               - null
             items:
@@ -24,7 +24,7 @@ paths:
                   nullable: true
                   type: string
                 p2_null:
-                  type: 
+                  type:
                     - array
                     - null
                   items:
@@ -38,7 +38,7 @@ paths:
                 nested_collections:
                   type: array
                   items:
-                    type: 
+                    type:
                       - array
                       - null
                     items:
@@ -46,7 +46,7 @@ paths:
                       additionalProperties:
                         type: array
                         items:
-                          type: 
+                          type:
                             - object
                             - null
                           additionalProperties:
@@ -91,12 +91,12 @@ components:
           minLength: 0
           pattern: "^[a-zA-Z0-9]*$"
         valid_array:
-            type: array
-            items:
-                type: string
-            maxItems: 100
-            minItems: 0
-            uniqueItems: true
+          type: array
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+          uniqueItems: true
         p1:
           type: string
         p2:
@@ -104,7 +104,7 @@ components:
           items:
             type: string
         p2_null:
-          type: 
+          type:
             - array
             - null
           items:
@@ -114,15 +114,15 @@ components:
           items:
             type: array
             items:
-              type: 
+              type:
                 - string
                 - null
         p2_null_all:
-          type: 
+          type:
             - array
             - null
           items:
-            type: 
+            type:
               - string
               - null
         p3:
@@ -219,7 +219,7 @@ components:
                   - type: string
                   - type: null
             - type: null
-          
+
         p3_anyOf:
           anyOf:
             - type: object
@@ -253,7 +253,7 @@ components:
                   - type: string
                   - type: null
             - type: null
-          
+
         p3_oneOf:
           oneOf:
             - type: object
@@ -287,7 +287,7 @@ components:
                   - type: string
                   - type: null
             - type: null
-          
+
         p3_allOf:
           allOf:
             - type: object

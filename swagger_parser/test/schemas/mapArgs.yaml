@@ -11,7 +11,7 @@ paths:
       summary: Upsert instruments
       description: Upsert instruments
       operationId: UpsertInstruments
-      consumes: []
+      consumes: [ ]
       produces:
         - text/plain
         - application/json
@@ -352,7 +352,7 @@ securityDefinitions:
     type: oauth2
     description: OAuth2 Implicit Grant
 security:
-  - oauth2: []
+  - oauth2: [ ]
 tags:
   - name: Instruments
     description: Methods for interacting with instruments

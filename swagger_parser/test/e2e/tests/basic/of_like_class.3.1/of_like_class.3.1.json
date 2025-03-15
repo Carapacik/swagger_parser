@@ -5,7 +5,9 @@
     "schemas": {
       "OneOfElement": {
         "type": "object",
-        "required": ["nullableButRequiredClass"],
+        "required": [
+          "nullableButRequiredClass"
+        ],
         "properties": {
           "allClass": {
             "allOf": [

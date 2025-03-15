@@ -53,7 +53,7 @@ components:
           # type. When the type of the instance is not of the type targeted by
           # the keyword, the instance is considered to conform to the assertion.
           # See https://tools.ietf.org/html/draft-handrews-json-schema-02#section-7.6.1
-          type: [ string, 'null']
+          type: [ string, 'null' ]
           maxLength: 255
         address:
           # An object defined inline instead of by reference. codegen and language generators
@@ -81,7 +81,7 @@ components:
           # An array defined inline instead of by reference. codegen and language generators
           # behave differently when a property is defined inline versus by reference.
           # The value can be 'null'.
-          type: [array, 'null']
+          type: [ array, 'null' ]
           items:
             type: object
             properties:
@@ -102,40 +102,40 @@ components:
     Adult:
       description: A representation of an adult
       allOf:
-      - $ref: '#/components/schemas/Person'
-      - type: object
-        properties:
-          children:
-            # The value of this property may not be null.
-            # Some language generators are lenient by default (either intentionally or by accident)
-            # and would allow the 'null' value, but from a compliance perspective, the null value
-            # is not allowed.
-            type: array
-            items:
-              $ref: "#/components/schemas/Child"
-          nullableChildren:
-            # Use 'type array' syntax to indicate the value of the property may be the 'null' value or an array.
-            # Type arrays are supported in OAS 3.1 and above.
-            type: [array, 'null']
-            items:
-              $ref: "#/components/schemas/Child"
-          nullableChildrenVariant2:
-            # Use 'oneOf' syntax to indicate the value of the property may be the 'null' value or an array.
-            # The 'null' type is supported in OAS 3.1 and above.
-            oneOf:
-              - type: 'null'
-              - type: array
-                items:
-                  $ref: "#/components/schemas/Child"
+        - $ref: '#/components/schemas/Person'
+        - type: object
+          properties:
+            children:
+              # The value of this property may not be null.
+              # Some language generators are lenient by default (either intentionally or by accident)
+              # and would allow the 'null' value, but from a compliance perspective, the null value
+              # is not allowed.
+              type: array
+              items:
+                $ref: "#/components/schemas/Child"
+            nullableChildren:
+              # Use 'type array' syntax to indicate the value of the property may be the 'null' value or an array.
+              # Type arrays are supported in OAS 3.1 and above.
+              type: [ array, 'null' ]
+              items:
+                $ref: "#/components/schemas/Child"
+            nullableChildrenVariant2:
+              # Use 'oneOf' syntax to indicate the value of the property may be the 'null' value or an array.
+              # The 'null' type is supported in OAS 3.1 and above.
+              oneOf:
+                - type: 'null'
+                - type: array
+                  items:
+                    $ref: "#/components/schemas/Child"
     Child:
       description: A representation of a child
       allOf:
-      - type: object
-        properties:
-          age:
-            type: integer
-            format: int32
-      - $ref: '#/components/schemas/Person'
+        - type: object
+          properties:
+            age:
+              type: integer
+              format: int32
+        - $ref: '#/components/schemas/Person'
     Nullable.Address:
       description: A representation of an address whose value can be null.
       type: object

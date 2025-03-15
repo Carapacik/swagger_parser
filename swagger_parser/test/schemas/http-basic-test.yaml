@@ -34,7 +34,7 @@ paths:
         '405':
           description: Invalid input
       security:
-        - http_basic: []
+        - http_basic: [ ]
       requestBody:
         $ref: '#/components/requestBodies/Pet'
 

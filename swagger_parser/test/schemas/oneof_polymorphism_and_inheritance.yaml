@@ -179,7 +179,7 @@ components:
         - $ref: '#/components/schemas/Pizza'
     FruitType:
       type: string
-      enum: [APPLE, BANANA]
+      enum: [ APPLE, BANANA ]
     Fruit:
       type: object
       properties:

@@ -8,14 +8,14 @@ info:
   title: OpenAPI Petstore
   version: 1.0.0
 servers:
-- url: http://petstore.swagger.io/v2
+  - url: http://petstore.swagger.io/v2
 tags:
-- description: Everything about your Pets
-  name: pet
-- description: Access to Petstore orders
-  name: store
-- description: Operations about user
-  name: user
+  - description: Everything about your Pets
+    name: pet
+  - description: Access to Petstore orders
+    name: store
+  - description: Operations about user
+    name: user
 paths:
   /pet:
     post:
@@ -32,15 +32,15 @@ paths:
         required: true
       responses:
         "405":
-          content: {}
+          content: { }
           description: Invalid input
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
+        - petstore_auth:
+            - write:pets
+            - read:pets
       summary: Add a new pet to the store
       tags:
-      - pet
+        - pet
       x-codegen-request-body-name: body
       x-openapi-router-controller: openapi_server.controllers.pet_controller
     put:
@@ -57,21 +57,21 @@ paths:
         required: true
       responses:
         "400":
-          content: {}
+          content: { }
           description: Invalid ID supplied
         "404":
-          content: {}
+          content: { }
           description: Pet not found
         "405":
-          content: {}
+          content: { }
           description: Validation exception
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
+        - petstore_auth:
+            - write:pets
+            - read:pets
       summary: Update an existing pet
       tags:
-      - pet
+        - pet
       x-codegen-request-body-name: body
       x-openapi-router-controller: openapi_server.controllers.pet_controller
   /pet/findByStatus:
@@ -79,21 +79,21 @@ paths:
       description: Multiple status values can be provided with comma separated strings
       operationId: find_pets_by_status
       parameters:
-      - description: Status values that need to be considered for filter
-        explode: false
-        in: query
-        name: status
-        required: true
-        schema:
-          items:
-            default: available
-            enum:
-            - available
-            - pending
-            - sold
-            type: string
-          type: array
-        style: form
+        - description: Status values that need to be considered for filter
+          explode: false
+          in: query
+          name: status
+          required: true
+          schema:
+            items:
+              default: available
+              enum:
+                - available
+                - pending
+                - sold
+              type: string
+            type: array
+          style: form
       responses:
         "200":
           content:
@@ -109,15 +109,15 @@ paths:
                 type: array
           description: successful operation
         "400":
-          content: {}
+          content: { }
           description: Invalid status value
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
+        - petstore_auth:
+            - write:pets
+            - read:pets
       summary: Finds Pets by status
       tags:
-      - pet
+        - pet
       x-openapi-router-controller: openapi_server.controllers.pet_controller
   /pet/findByTags:
     get:
@@ -126,16 +126,16 @@ paths:
         \ tag1, tag2, tag3 for testing."
       operationId: find_pets_by_tags
       parameters:
-      - description: Tags to filter by
-        explode: false
-        in: query
-        name: tags
-        required: true
-        schema:
-          items:
-            type: string
-          type: array
-        style: form
+        - description: Tags to filter by
+          explode: false
+          in: query
+          name: tags
+          required: true
+          schema:
+            items:
+              type: string
+            type: array
+          style: form
       responses:
         "200":
           content:
@@ -151,54 +151,54 @@ paths:
                 type: array
           description: successful operation
         "400":
-          content: {}
+          content: { }
           description: Invalid tag value
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
+        - petstore_auth:
+            - write:pets
+            - read:pets
       summary: Finds Pets by tags
       tags:
-      - pet
+        - pet
       x-openapi-router-controller: openapi_server.controllers.pet_controller
   /pet/{petId}:
     delete:
       operationId: delete_pet
       parameters:
-      - in: header
-        name: api_key
-        schema:
-          type: string
-      - description: Pet id to delete
-        in: path
-        name: petId
-        required: true
-        schema:
-          format: int64
-          type: integer
+        - in: header
+          name: api_key
+          schema:
+            type: string
+        - description: Pet id to delete
+          in: path
+          name: petId
+          required: true
+          schema:
+            format: int64
+            type: integer
       responses:
         "400":
-          content: {}
+          content: { }
           description: Invalid pet value
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
+        - petstore_auth:
+            - write:pets
+            - read:pets
       summary: Deletes a pet
       tags:
-      - pet
+        - pet
       x-openapi-router-controller: openapi_server.controllers.pet_controller
     get:
       description: Returns a single pet
       operationId: get_pet_by_id
       parameters:
-      - description: ID of pet to return
-        in: path
-        name: petId
-        required: true
-        schema:
-          format: int64
-          type: integer
+        - description: ID of pet to return
+          in: path
+          name: petId
+          required: true
+          schema:
+            format: int64
+            type: integer
       responses:
         "200":
           content:
@@ -210,27 +210,27 @@ paths:
                 $ref: '#/components/schemas/Pet'
           description: successful operation
         "400":
-          content: {}
+          content: { }
           description: Invalid ID supplied
         "404":
-          content: {}
+          content: { }
           description: Pet not found
       security:
-      - api_key: []
+        - api_key: [ ]
       summary: Find pet by ID
       tags:
-      - pet
+        - pet
       x-openapi-router-controller: openapi_server.controllers.pet_controller
     post:
       operationId: update_pet_with_form
       parameters:
-      - description: ID of pet that needs to be updated
-        in: path
-        name: petId
-        required: true
-        schema:
-          format: int64
-          type: integer
+        - description: ID of pet that needs to be updated
+          in: path
+          name: petId
+          required: true
+          schema:
+            format: int64
+            type: integer
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -238,27 +238,27 @@ paths:
               $ref: '#/components/schemas/updatePetWithForm_request'
       responses:
         "405":
-          content: {}
+          content: { }
           description: Invalid input
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
+        - petstore_auth:
+            - write:pets
+            - read:pets
       summary: Updates a pet in the store with form data
       tags:
-      - pet
+        - pet
       x-openapi-router-controller: openapi_server.controllers.pet_controller
   /pet/{petId}/uploadImage:
     post:
       operationId: upload_file
       parameters:
-      - description: ID of pet to update
-        in: path
-        name: petId
-        required: true
-        schema:
-          format: int64
-          type: integer
+        - description: ID of pet to update
+          in: path
+          name: petId
+          required: true
+          schema:
+            format: int64
+            type: integer
       requestBody:
         content:
           multipart/form-data:
@@ -272,12 +272,12 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
           description: successful operation
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
+        - petstore_auth:
+            - write:pets
+            - read:pets
       summary: uploads an image
       tags:
-      - pet
+        - pet
       x-openapi-router-controller: openapi_server.controllers.pet_controller
   /store/inventory:
     get:
@@ -294,10 +294,10 @@ paths:
                 type: object
           description: successful operation
       security:
-      - api_key: []
+        - api_key: [ ]
       summary: Returns pet inventories by status
       tags:
-      - store
+        - store
       x-openapi-router-controller: openapi_server.controllers.store_controller
   /store/order:
     post:
@@ -320,11 +320,11 @@ paths:
                 $ref: '#/components/schemas/Order'
           description: successful operation
         "400":
-          content: {}
+          content: { }
           description: Invalid Order
       summary: Place an order for a pet
       tags:
-      - store
+        - store
       x-codegen-request-body-name: body
       x-openapi-router-controller: openapi_server.controllers.store_controller
   /store/order/{orderId}:
@@ -333,37 +333,37 @@ paths:
         above 1000 or nonintegers will generate API errors
       operationId: delete_order
       parameters:
-      - description: ID of the order that needs to be deleted
-        in: path
-        name: orderId
-        required: true
-        schema:
-          type: string
+        - description: ID of the order that needs to be deleted
+          in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
       responses:
         "400":
-          content: {}
+          content: { }
           description: Invalid ID supplied
         "404":
-          content: {}
+          content: { }
           description: Order not found
       summary: Delete purchase order by ID
       tags:
-      - store
+        - store
       x-openapi-router-controller: openapi_server.controllers.store_controller
     get:
       description: For valid response try integer IDs with value <= 5 or > 10. Other
         values will generate exceptions
       operationId: get_order_by_id
       parameters:
-      - description: ID of pet that needs to be fetched
-        in: path
-        name: orderId
-        required: true
-        schema:
-          format: int64
-          maximum: 5
-          minimum: 1
-          type: integer
+        - description: ID of pet that needs to be fetched
+          in: path
+          name: orderId
+          required: true
+          schema:
+            format: int64
+            maximum: 5
+            minimum: 1
+            type: integer
       responses:
         "200":
           content:
@@ -375,14 +375,14 @@ paths:
                 $ref: '#/components/schemas/Order'
           description: successful operation
         "400":
-          content: {}
+          content: { }
           description: Invalid ID supplied
         "404":
-          content: {}
+          content: { }
           description: Order not found
       summary: Find purchase order by ID
       tags:
-      - store
+        - store
       x-openapi-router-controller: openapi_server.controllers.store_controller
   /user:
     post:
@@ -397,11 +397,11 @@ paths:
         required: true
       responses:
         default:
-          content: {}
+          content: { }
           description: successful operation
       summary: Create user
       tags:
-      - user
+        - user
       x-codegen-request-body-name: body
       x-openapi-router-controller: openapi_server.controllers.user_controller
   /user/createWithArray:
@@ -418,11 +418,11 @@ paths:
         required: true
       responses:
         default:
-          content: {}
+          content: { }
           description: successful operation
       summary: Creates list of users with given input array
       tags:
-      - user
+        - user
       x-codegen-request-body-name: body
       x-openapi-router-controller: openapi_server.controllers.user_controller
   /user/createWithList:
@@ -439,29 +439,29 @@ paths:
         required: true
       responses:
         default:
-          content: {}
+          content: { }
           description: successful operation
       summary: Creates list of users with given input array
       tags:
-      - user
+        - user
       x-codegen-request-body-name: body
       x-openapi-router-controller: openapi_server.controllers.user_controller
   /user/login:
     get:
       operationId: login_user
       parameters:
-      - description: The user name for login
-        in: query
-        name: username
-        required: true
-        schema:
-          type: string
-      - description: The password for login in clear text
-        in: query
-        name: password
-        required: true
-        schema:
-          type: string
+        - description: The user name for login
+          in: query
+          name: username
+          required: true
+          schema:
+            type: string
+        - description: The password for login in clear text
+          in: query
+          name: password
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -484,54 +484,54 @@ paths:
                 format: date-time
                 type: string
         "400":
-          content: {}
+          content: { }
           description: Invalid username/password supplied
       summary: Logs user into the system
       tags:
-      - user
+        - user
       x-openapi-router-controller: openapi_server.controllers.user_controller
   /user/logout:
     get:
       operationId: logout_user
       responses:
         default:
-          content: {}
+          content: { }
           description: successful operation
       summary: Logs out current logged in user session
       tags:
-      - user
+        - user
       x-openapi-router-controller: openapi_server.controllers.user_controller
   /user/{username}:
     delete:
       description: This can only be done by the logged in user.
       operationId: delete_user
       parameters:
-      - description: The name that needs to be deleted
-        in: path
-        name: username
-        required: true
-        schema:
-          type: string
+        - description: The name that needs to be deleted
+          in: path
+          name: username
+          required: true
+          schema:
+            type: string
       responses:
         "400":
-          content: {}
+          content: { }
           description: Invalid username supplied
         "404":
-          content: {}
+          content: { }
           description: User not found
       summary: Delete user
       tags:
-      - user
+        - user
       x-openapi-router-controller: openapi_server.controllers.user_controller
     get:
       operationId: get_user_by_name
       parameters:
-      - description: The name that needs to be fetched. Use user1 for testing.
-        in: path
-        name: username
-        required: true
-        schema:
-          type: string
+        - description: The name that needs to be fetched. Use user1 for testing.
+          in: path
+          name: username
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           content:
@@ -543,25 +543,25 @@ paths:
                 $ref: '#/components/schemas/User'
           description: successful operation
         "400":
-          content: {}
+          content: { }
           description: Invalid username supplied
         "404":
-          content: {}
+          content: { }
           description: User not found
       summary: Get user by user name
       tags:
-      - user
+        - user
       x-openapi-router-controller: openapi_server.controllers.user_controller
     put:
       description: This can only be done by the logged in user.
       operationId: update_user
       parameters:
-      - description: name that need to be deleted
-        in: path
-        name: username
-        required: true
-        schema:
-          type: string
+        - description: name that need to be deleted
+          in: path
+          name: username
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           '*/*':
@@ -571,14 +571,14 @@ paths:
         required: true
       responses:
         "400":
-          content: {}
+          content: { }
           description: Invalid user supplied
         "404":
-          content: {}
+          content: { }
           description: User not found
       summary: Updated user
       tags:
-      - user
+        - user
       x-codegen-request-body-name: body
       x-openapi-router-controller: openapi_server.controllers.user_controller
 components:
@@ -612,9 +612,9 @@ components:
         status:
           description: Order Status
           enum:
-          - placed
-          - approved
-          - delivered
+            - placed
+            - approved
+            - delivered
           title: status
           type: string
         complete:
@@ -706,18 +706,18 @@ components:
       description: A pet for sale in the pet store
       example:
         photoUrls:
-        - photoUrls
-        - photoUrls
+          - photoUrls
+          - photoUrls
         name: doggie
         id: 0
         category:
           name: name
           id: 6
         tags:
-        - name: name
-          id: 1
-        - name: name
-          id: 1
+          - name: name
+            id: 1
+          - name: name
+            id: 1
         status: available
       properties:
         id:
@@ -749,14 +749,14 @@ components:
         status:
           description: pet status in the store
           enum:
-          - available
-          - pending
-          - sold
+            - available
+            - pending
+            - sold
           title: status
           type: string
       required:
-      - name
-      - photoUrls
+        - name
+        - photoUrls
       title: a Pet
       type: object
       xml:
@@ -782,11 +782,11 @@ components:
       type: object
     EnumModel:
       enum:
-      - available>
-      - pending<
-      - sold
-      - "1"
-      - "2"
+        - available>
+        - pending<
+        - sold
+        - "1"
+        - "2"
       type: string
     updatePetWithForm_request:
       properties:

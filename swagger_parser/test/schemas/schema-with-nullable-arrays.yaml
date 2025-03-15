@@ -9,7 +9,7 @@ paths:
       summary: ''
       description: ''
       operationId: ''
-      parameters: []
+      parameters: [ ]
       responses:
         '200':
           description: ''

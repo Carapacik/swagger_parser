@@ -30,4 +30,4 @@ components:
         child:
           nullable: true
           allOf:
-          - $ref: '#/components/schemas/Child'
+            - $ref: '#/components/schemas/Child'

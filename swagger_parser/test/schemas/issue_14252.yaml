@@ -1,7 +1,7 @@
 openapi: 3.0.2
 
 servers:
-- url: https://test.org
+  - url: https://test.org
 
 info:
   version: 1.0.0

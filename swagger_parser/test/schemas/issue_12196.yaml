@@ -17,4 +17,4 @@ tags:
     description: Access to Petstore orders
   - name: user
     description: Operations about user
-paths: {}
+paths: { }

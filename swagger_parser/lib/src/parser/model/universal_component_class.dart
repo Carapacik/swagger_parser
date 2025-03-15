@@ -1,18 +1,18 @@
 part of 'universal_data_class.dart';
 
 typedef Discriminator = ({
-// The name of the property that is used to discriminate the oneOf variants
+  // The name of the property that is used to discriminate the oneOf variants
   String propertyName,
 
-// The mapping of the property value to the ref
+  // The mapping of the property value to the ref
   Map<String, String> discriminatorValueToRefMapping,
 
-// The list of properties stored for each ref
+  // The list of properties stored for each ref
   Map<String, List<UniversalType>> refProperties,
 });
 
 typedef DiscriminatorValue = ({
-// The name of the property that is used to discriminate the oneOf variants
+  // The name of the property that is used to discriminate the oneOf variants
   String propertyValue,
   String parentClass,
 });
@@ -84,12 +84,12 @@ final class UniversalComponentClass extends UniversalDataClass {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is UniversalComponentClass &&
-              runtimeType == other.runtimeType &&
-              const DeepCollectionEquality().equals(imports, other.imports) &&
-              const DeepCollectionEquality().equals(parameters, other.parameters) &&
-              allOf == other.allOf &&
-              typeDef == other.typeDef;
+      other is UniversalComponentClass &&
+          runtimeType == other.runtimeType &&
+          const DeepCollectionEquality().equals(imports, other.imports) &&
+          const DeepCollectionEquality().equals(parameters, other.parameters) &&
+          allOf == other.allOf &&
+          typeDef == other.typeDef;
 
   @override
   int get hashCode =>

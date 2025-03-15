@@ -40,22 +40,22 @@ components:
     Adult:
       description: A representation of an adult
       allOf:
-      - $ref: '#/components/schemas/Person'
-      - type: object
-        properties:
-          children:
-            type: array
-            items:
-              $ref: "#/components/schemas/Child"
+        - $ref: '#/components/schemas/Person'
+        - type: object
+          properties:
+            children:
+              type: array
+              items:
+                $ref: "#/components/schemas/Child"
     Child:
       description: A representation of a child
       allOf:
-      - type: object
-        properties:
-          age:
-            type: integer
-            format: int32
-      - $ref: '#/components/schemas/Person'
+        - type: object
+          properties:
+            age:
+              type: integer
+              format: int32
+        - $ref: '#/components/schemas/Person'
     AnotherChild:
       description: another child class that does NOT extend/inherit AnotherPerson
       allOf:

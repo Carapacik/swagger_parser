@@ -25,7 +25,7 @@
                   "address": {
                     "description": "Sample Address",
                     "type": "object",
-                    "required":[
+                    "required": [
                       "street"
                     ],
                     "properties": {
