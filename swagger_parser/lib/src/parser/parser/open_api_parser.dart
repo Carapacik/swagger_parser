@@ -841,9 +841,7 @@ class OpenApiParser {
             description: value[_descriptionConst]?.toString(),
           ),
         );
-        if (!value.containsKey(_allOfConst)) {
-          return;
-        }
+        return;
       }
 
       if (value.containsKey(_allOfConst)) {
@@ -863,6 +861,7 @@ class OpenApiParser {
       final allOf =
           refs.isNotEmpty ? (refs: refs, properties: parameters) : null;
 
+      final discriminator = _parseDiscriminatorInfo(value);
       dataClasses.add(
         UniversalComponentClass(
           name: key,
@@ -870,6 +869,7 @@ class OpenApiParser {
           parameters: allOf != null ? [] : parameters,
           allOf: allOf,
           description: value[_descriptionConst]?.toString(),
+          discriminator: discriminator,
         ),
       );
     });
@@ -918,12 +918,28 @@ class OpenApiParser {
       final discriminator = discriminatedOneOfClass.discriminator!;
       // for each ref, we lookup the matching dataclass and add its properties to the discriminator mapping, its imports are added to the discriminatedOneOfClass's imports
       for (final ref in discriminator.discriminatorValueToRefMapping.values) {
-        final refedClass = dataClasses.firstWhere((dc) => dc.name == ref);
+        final refedClassIndex = dataClasses.indexWhere((dc) => dc.name == ref);
+        final refedClass = dataClasses[refedClassIndex];
         if (refedClass is! UniversalComponentClass) {
           continue;
         }
         discriminator.refProperties[ref] = refedClass.parameters;
         discriminatedOneOfClass.imports.addAll(refedClass.imports);
+        discriminatedOneOfClass.imports.add(refedClass.import);
+
+        dataClasses[refedClassIndex] = refedClass.copyWith(
+          imports: {
+            ...refedClass.imports,
+            discriminatedOneOfClass.import,
+          }.sortedBy((it) => it).toSet(),
+          discriminatorValue: (
+            propertyValue: discriminatedOneOfClass
+                .discriminator!.discriminatorValueToRefMapping.entries
+                .firstWhere((it) => it.value == ref)
+                .key,
+            parentClass: discriminatedOneOfClass.name,
+          ),
+        );
       }
     }
 
@@ -1170,9 +1186,7 @@ class OpenApiParser {
           (map[_discriminatorConst] as Map<String, dynamic>).containsKey(
             _mappingConst,
           )) {
-        final discriminator = map[_discriminatorConst] as Map<String, dynamic>;
-        final propertyName = discriminator[_propertyNameConst] as String;
-        final refMapping = discriminator[_mappingConst] as Map<String, dynamic>;
+        final discriminator = _parseDiscriminatorInfo(map);
 
         // Create a base union class for the discriminated types
         final baseClassName =
@@ -1183,13 +1197,6 @@ class OpenApiParser {
           description: map[_descriptionConst]?.toString(),
         );
 
-        // Cleanup the refMapping to contain only the class name
-        final cleanedRefMapping = <String, String>{};
-        for (final key in refMapping.keys) {
-          final refMap = <String, dynamic>{_refConst: refMapping[key]};
-          cleanedRefMapping[key] = _formatRef(refMap);
-        }
-
         // Create a sealed class to represent the discriminated union
         _objectClasses.add(
           UniversalComponentClass(
@@ -1198,16 +1205,11 @@ class OpenApiParser {
             parameters: [
               UniversalType(
                 type: 'String',
-                name: propertyName,
+                name: discriminator?.propertyName,
                 isRequired: true,
               ),
             ],
-            discriminator: (
-              propertyName: propertyName,
-              discriminatorValueToRefMapping: cleanedRefMapping,
-              // This property is populated by the parser after all the data classes are created
-              refProperties: <String, List<UniversalType>>{},
-            ),
+            discriminator: discriminator,
           ),
         );
 
@@ -1389,6 +1391,28 @@ class OpenApiParser {
         import: import,
       );
     }
+  }
+
+  Discriminator? _parseDiscriminatorInfo(Map<String, dynamic> map) {
+    if (!map.containsKey(_oneOfConst)) {
+      return null;
+    }
+    final discriminator = map[_discriminatorConst] as Map<String, dynamic>;
+    final propertyName = discriminator[_propertyNameConst] as String;
+    final refMapping = discriminator[_mappingConst] as Map<String, dynamic>;
+
+    // Cleanup the refMapping to contain only the class name
+    final cleanedRefMapping = <String, String>{};
+    for (final key in refMapping.keys) {
+      final refMap = <String, dynamic>{_refConst: refMapping[key]};
+      cleanedRefMapping[key] = _formatRef(refMap);
+    }
+    return (
+      propertyName: propertyName,
+      discriminatorValueToRefMapping: cleanedRefMapping,
+      // This property is populated by the parser after all the data classes are created
+      refProperties: <String, List<UniversalType>>{},
+    );
   }
 }
 
