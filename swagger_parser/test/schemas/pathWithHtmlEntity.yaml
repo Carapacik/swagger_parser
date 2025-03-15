@@ -1,19 +1,19 @@
---- 
+---
 swagger: "2.0"
 basePath: /
-info: 
+info:
   description: "Test for response code default"
   title: "path with html entity test"
   version: "1.0.0"
-paths: 
-  /foo=bar: 
-    get: 
-      produces: 
+paths:
+  /foo=bar:
+    get:
+      produces:
         - application/json
-      responses: 
-        200: 
+      responses:
+        200:
           description: "successful operation"
-        default: 
+        default:
           description: "Internal server error"
       summary: Test
 definitions:

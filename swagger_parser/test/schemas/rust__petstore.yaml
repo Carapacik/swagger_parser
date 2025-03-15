@@ -184,7 +184,7 @@ paths:
         '404':
           description: Pet not found
       security:
-        - api_key: []
+        - api_key: [ ]
     post:
       tags:
         - pet
@@ -301,7 +301,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - api_key: [ ]
   /store/order:
     post:
       tags:
@@ -392,7 +392,7 @@ paths:
         default:
           description: successful operation
       security:
-        - api_key: []
+        - api_key: [ ]
       requestBody:
         content:
           application/json:
@@ -411,7 +411,7 @@ paths:
         default:
           description: successful operation
       security:
-        - api_key: []
+        - api_key: [ ]
       requestBody:
         $ref: '#/components/requestBodies/UserArray'
   /user/createWithList:
@@ -425,7 +425,7 @@ paths:
         default:
           description: successful operation
       security:
-        - api_key: []
+        - api_key: [ ]
       requestBody:
         $ref: '#/components/requestBodies/UserArray'
   /user/login:
@@ -490,7 +490,7 @@ paths:
         default:
           description: successful operation
       security:
-        - api_key: []
+        - api_key: [ ]
   '/user/{username}':
     get:
       tags:
@@ -538,7 +538,7 @@ paths:
         '404':
           description: User not found
       security:
-        - api_key: []
+        - api_key: [ ]
       requestBody:
         content:
           application/json:
@@ -565,7 +565,7 @@ paths:
         '404':
           description: User not found
       security:
-        - api_key: []
+        - api_key: [ ]
   '/fake/user/{username}':
     get:
       tags:
@@ -580,15 +580,15 @@ paths:
           required: true
           schema:
             type: string
-        - name: dummy_required_nullable_param 
-          in: header 
+        - name: dummy_required_nullable_param
+          in: header
           description: To test nullable required parameters
           required: true
           schema:
             type: string
             nullable: true
         - name: UPPERCASE
-          in: header 
+          in: header
           description: To test parameter names in upper case
           schema:
             type: string
@@ -813,19 +813,19 @@ components:
           format: uuid
     ActionContainer:
       required:
-      - action
+        - action
       type: object
       properties:
         action:
           allOf:
-          - $ref: '#/components/schemas/Baz'
-          - nullable: false
+            - $ref: '#/components/schemas/Baz'
+            - nullable: false
     Baz:
       description: Test handling of empty variants
       enum:
-      - A
-      - B
-      - ""
+        - A
+        - B
+        - ""
       type: string
     TypeTesting:
       description: Test handling of different field data types
@@ -897,7 +897,7 @@ components:
           type: array
           items:
             type: string
-            enum: ["A", "B", "C"]
+            enum: [ "A", "B", "C" ]
     UniqueItemArrayTesting:
       description: Test handling of enum array with unique items
       type: object
@@ -910,7 +910,7 @@ components:
           uniqueItems: true
           items:
             type: string
-            enum: 
+            enum:
               - unique_item_1
               - unique_item_2
               - unique_item_3

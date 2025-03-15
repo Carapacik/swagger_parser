@@ -13,7 +13,7 @@ paths:
               schema:
                 type: array
                 items:
-                 $ref: '#/components/schemas/Payment'
+                  $ref: '#/components/schemas/Payment'
 components:
   schemas:
     DateTime:
@@ -24,7 +24,7 @@ components:
     AllOfDatetime:
       allOf:
         - $ref: '#/components/schemas/DateTime'
-      example: "2019-01-01 00:00:00" 
+      example: "2019-01-01 00:00:00"
     Payment:
       type: object
       properties:

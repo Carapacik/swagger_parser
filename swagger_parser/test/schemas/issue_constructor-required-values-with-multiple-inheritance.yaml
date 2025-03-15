@@ -4,7 +4,7 @@ info:
   version: 0.0.0
   title: Wrong Constructor
 
-paths: {}
+paths: { }
 
 components:
 

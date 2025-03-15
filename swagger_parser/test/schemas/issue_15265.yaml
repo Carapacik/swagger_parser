@@ -22,10 +22,10 @@ paths:
       operationId: paginatedWithParams
       x-spring-paginated: true
       parameters:
-      - in: query
-        name: param1
-        schema:
-          type: string
+        - in: query
+          name: param1
+          schema:
+            type: string
       responses:
         "200":
           description: OK
@@ -36,7 +36,7 @@ paths:
   /paginated:
     get:
       tags:
-      - consent-controller
+        - consent-controller
       operationId: paginated
       x-spring-paginated: true
       responses:

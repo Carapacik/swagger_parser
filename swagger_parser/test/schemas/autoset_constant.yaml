@@ -20,7 +20,7 @@ paths:
           schema:
             type: string
             enum:
-            - CONSTANT_VALUE
+              - CONSTANT_VALUE
         - name: name
           in: path
           required: true

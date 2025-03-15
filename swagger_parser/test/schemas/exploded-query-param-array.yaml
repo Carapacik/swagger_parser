@@ -10,17 +10,17 @@ paths:
     get:
       operationId: GetSomeValue
       parameters:
-      - in: query
-        name: QueryObject
-        explode: true
-        style: form
-        schema:
-          type: object
-          properties:
-            values:
+        - in: query
+          name: QueryObject
+          explode: true
+          style: form
+          schema:
+            type: object
+            properties:
+              values:
                 type: array
                 items:
-                    type: string
+                  type: string
       responses:
         '200':
           description: Some return value

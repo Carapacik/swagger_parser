@@ -3,13 +3,13 @@ info:
   title: OpenAPI Petstore
   description: "sample to vet integer handling"
   version: 1.0.0
-tags: []
+tags: [ ]
 paths:
   /request:
     get:
       operationId: wildcardSubTypeForContentType
       tags:
-      - users
+        - users
       requestBody:
         description: The attachment
         content:

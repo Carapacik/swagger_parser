@@ -12,4 +12,4 @@ components:
       type: array
       items:
         type: object
-paths: {}
+paths: { }

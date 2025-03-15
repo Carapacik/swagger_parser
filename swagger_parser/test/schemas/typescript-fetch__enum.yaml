@@ -67,11 +67,11 @@ paths:
           schema:
             nullable: true
             allOf:
-            - type: string
-              enum:
-                - one
-                - two
-                - three
+              - type: string
+                enum:
+                  - one
+                  - two
+                  - three
         - name: number-enum
           in: query
           schema:
@@ -85,11 +85,11 @@ paths:
           schema:
             nullable: true
             allOf:
-            - type: number
-              enum:
-                - 1
-                - 2
-                - 3
+              - type: number
+                enum:
+                  - 1
+                  - 2
+                  - 3
       responses:
         200:
           description: OK
@@ -121,11 +121,11 @@ paths:
                   nullable-number-enum:
                     nullable: true
                     allOf:
-                    - type: number
-                      enum:
-                        - 1
-                        - 2
-                        - 3
+                      - type: number
+                        enum:
+                          - 1
+                          - 2
+                          - 3
     post:
       operationId: fake-enum-request-post-inline
       responses:
@@ -159,11 +159,11 @@ paths:
                   nullable-number-enum:
                     nullable: true
                     allOf:
-                    - type: number
-                      enum:
-                        - 1
-                        - 2
-                        - 3
+                      - type: number
+                        enum:
+                          - 1
+                          - 2
+                          - 3
       requestBody:
         content:
           application/json:
@@ -193,11 +193,11 @@ paths:
                 nullable-number-enum:
                   nullable: true
                   allOf:
-                  - type: number
-                    enum:
-                      - 1
-                      - 2
-                      - 3
+                    - type: number
+                      enum:
+                        - 1
+                        - 2
+                        - 3
 components:
   schemas:
     StringEnum:

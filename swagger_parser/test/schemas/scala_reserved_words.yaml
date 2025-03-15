@@ -9,19 +9,19 @@ paths:
     post:
       operationId: postPing
       tags:
-      - ping
+        - ping
       requestBody:
         content:
           'application/json':
-             schema:
-               $ref: "#/components/schemas/SomeObj"
+            schema:
+              $ref: "#/components/schemas/SomeObj"
       responses:
         '200':
           description: OK
           content:
             'application/json':
-               schema:
-                 $ref: "#/components/schemas/SomeObj"
+              schema:
+                $ref: "#/components/schemas/SomeObj"
 components:
   schemas:
     SomeObj:
@@ -32,7 +32,7 @@ components:
           # using 'enum' & 'default' for '$_type' is a work-around until constants are supported
           # See https://github.com/OAI/OpenAPI-Specification/issues/1313
           enum:
-          - SomeObjIdentifier
+            - SomeObjIdentifier
           default: SomeObjIdentifier
         id:
           type: integer

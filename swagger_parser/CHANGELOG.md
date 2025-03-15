@@ -1,3 +1,6 @@
+## 1.22.0
+- Add supports oneOf polymorphic types with dart_mappable ([#290](https://github.com/Carapacik/swagger_parser/issues/290))
+
 ## 1.21.4
 - Add `x-enumNames`([#289](https://github.com/Carapacik/swagger_parser/pull/289))
 - Fixed errors with nullable in enums ([#216](https://github.com/Carapacik/swagger_parser/issues/216))

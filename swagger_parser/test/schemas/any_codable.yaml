@@ -3,7 +3,7 @@ info:
   version: 1.0.0
   title: Swagger Petstore
 paths:
-   /pets:
+  /pets:
     get:
       tags:
         - pets
@@ -11,10 +11,10 @@ paths:
         '200':
           description: Expected response to a valid request
           content:
-               application/json:
-                  schema:
-                     $ref: '#/components/schemas/Pet'
-   /pets/{petId}:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+  /pets/{petId}:
     get:
       summary: Info for a specific pet
       operationId: showPetById
@@ -40,6 +40,6 @@ components:
       type: object
       properties:
         testProperty:
-            type: string
+          type: string
       required:
         - testProperty

@@ -187,7 +187,7 @@ paths:
         '404':
           description: Pet not found
       security:
-        - api_key: []
+        - api_key: [ ]
     post:
       tags:
         - pet
@@ -304,7 +304,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - api_key: [ ]
   /store/order:
     post:
       tags:
@@ -395,7 +395,7 @@ paths:
         default:
           description: successful operation
       security:
-        - api_key: []
+        - api_key: [ ]
       requestBody:
         content:
           application/json:
@@ -414,7 +414,7 @@ paths:
         default:
           description: successful operation
       security:
-        - api_key: []
+        - api_key: [ ]
       requestBody:
         $ref: '#/components/requestBodies/UserArray'
   /user/createWithList:
@@ -428,7 +428,7 @@ paths:
         default:
           description: successful operation
       security:
-        - api_key: []
+        - api_key: [ ]
       requestBody:
         $ref: '#/components/requestBodies/UserArray'
   /user/login:
@@ -493,7 +493,7 @@ paths:
         default:
           description: successful operation
       security:
-        - api_key: []
+        - api_key: [ ]
   '/user/{username}':
     get:
       tags:
@@ -541,7 +541,7 @@ paths:
         '404':
           description: User not found
       security:
-        - api_key: []
+        - api_key: [ ]
       requestBody:
         content:
           application/json:
@@ -568,7 +568,7 @@ paths:
         '404':
           description: User not found
       security:
-        - api_key: []
+        - api_key: [ ]
   /fake/parameter-name-mapping:
     get:
       tags:
@@ -577,7 +577,7 @@ paths:
       operationId: getParameterNameMapping
       parameters:
         - name: _type
-          in: header 
+          in: header
           description: _type
           required: true
           schema:
@@ -590,7 +590,7 @@ paths:
           schema:
             type: string
         - name: type_
-          in: header 
+          in: header
           description: type_
           required: true
           schema:
@@ -775,8 +775,8 @@ components:
         message:
           type: string
     PropertyNameMapping:
-      properties: 
-        http_debug_operation: 
+      properties:
+        http_debug_operation:
           type: string
         _type:
           type: string

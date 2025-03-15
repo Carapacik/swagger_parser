@@ -110,7 +110,7 @@ definitions:
 paths:
   /customers:
     get:
-      consumes: []
+      consumes: [ ]
       operationId: queryCustomers
       tags:
         - Customer
@@ -132,7 +132,7 @@ paths:
             $ref: '#/definitions/ApiError'
   /contacts:
     get:
-      consumes: []
+      consumes: [ ]
       operationId: queryContacts
       tags:
         - Contact
@@ -154,7 +154,7 @@ paths:
             $ref: '#/definitions/ApiError'
   /parties:
     get:
-      consumes: []
+      consumes: [ ]
       responses:
         200:
           description: Success

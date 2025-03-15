@@ -7,7 +7,7 @@ paths:
   /spec2:
     get:
       tags:
-      - spec2
+        - spec2
       summary: dummy
       operationId: spec2Operation
       responses:

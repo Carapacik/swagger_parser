@@ -3,21 +3,21 @@ description: Web interface for swagger_parser
 publish_to: none
 version: 1.0.0+1
 environment:
-  sdk: '>=3.6.0 <4.0.0'
+  sdk: '>=3.7.0 <4.0.0'
 
 dependencies:
-  archive: ^4.0.2
-  file_picker: ^8.1.7
+  archive: ^4.0.4
+  file_picker: ^9.1.0
   flutter:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  swagger_parser: ^1.21.0
+  swagger_parser: ^1.22.0
   url_launcher: ^6.3.1
-  web:
+  web: ^1.1.1
 
 dev_dependencies:
-  carapacik_lints: ^1.10.0
+  carapacik_lints: ^1.11.1
 
 flutter:
   uses-material-design: true

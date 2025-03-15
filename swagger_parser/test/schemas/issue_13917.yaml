@@ -12,14 +12,14 @@ paths:
       description: Returns an organization
       operationId: GetOrganization
       parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          #minLength: 36
-          type: string
-          format: uuid
-        style: simple
+        - in: path
+          name: id
+          required: true
+          schema:
+            #minLength: 36
+            type: string
+            format: uuid
+          style: simple
       requestBody:
         content:
           application/json-patch+json:
@@ -37,16 +37,16 @@ components:
       type: array
       items:
         oneOf:
-        - $ref: '#/components/schemas/JSONPatchRequestAddReplaceTest'
-        - $ref: '#/components/schemas/JSONPatchRequestRemove'
-        - $ref: '#/components/schemas/JSONPatchRequestMoveCopy'
+          - $ref: '#/components/schemas/JSONPatchRequestAddReplaceTest'
+          - $ref: '#/components/schemas/JSONPatchRequestRemove'
+          - $ref: '#/components/schemas/JSONPatchRequestMoveCopy'
     JSONPatchRequestAddReplaceTest:
       type: object
       additionalProperties: false
       required:
-      - value
-      - op
-      - path
+        - value
+        - op
+        - path
       properties:
         path:
           description: A JSON Pointer path.
@@ -57,8 +57,8 @@ components:
       type: object
       additionalProperties: false
       required:
-      - op
-      - path
+        - op
+        - path
       properties:
         path:
           description: A JSON Pointer path.
@@ -67,14 +67,14 @@ components:
           description: The operation to perform.
           type: string
           enum:
-          - remove
+            - remove
     JSONPatchRequestMoveCopy:
       type: object
       additionalProperties: false
       required:
-      - from
-      - op
-      - path
+        - from
+        - op
+        - path
       properties:
         path:
           description: A JSON Pointer path.
@@ -83,5 +83,5 @@ components:
           description: The operation to perform.
           type: string
           enum:
-          - move
-          - copy
+            - move
+            - copy

@@ -4,14 +4,14 @@ info:
   description: sample spec for testing openapi functionality, built from json schema
     tests for draft6
   version: 0.0.1
-paths: {}
+paths: { }
 components:
   schemas:
     FooRequired:
       properties:
-        foo: {}
+        foo: { }
       required:
         - foo
     FooOptional:
       properties:
-        foo: {}
+        foo: { }

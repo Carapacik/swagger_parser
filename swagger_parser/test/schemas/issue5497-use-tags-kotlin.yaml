@@ -7,7 +7,7 @@ paths:
 
   /api/v1/test:
     get:
-      tags: [Test v1]
+      tags: [ Test v1 ]
       operationId: test1
       responses:
         200:
@@ -15,7 +15,7 @@ paths:
 
   /api/v2/test:
     get:
-      tags: [Test v2]
+      tags: [ Test v2 ]
       operationId: test2
       responses:
         200:

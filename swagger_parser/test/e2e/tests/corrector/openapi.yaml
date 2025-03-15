@@ -43,7 +43,7 @@ paths:
                   enum:
                     - teV1st1
                     - V1_test2
-                    - testV13 
+                    - testV13
               required:
                 - p1
                 - p3
@@ -51,12 +51,12 @@ paths:
                 - v1
                 - v3
       responses:
-          '200':
-            description: dummy
-            content:
-              text/plain:
-                schema:
-                  type: string
+        '200':
+          description: dummy
+          content:
+            text/plain:
+              schema:
+                type: string
     post:
       operationId: post_api_v1
       requestBody:
@@ -76,7 +76,7 @@ paths:
                   enum:
                     - teV1st1
                     - V1_test2
-                    - testV13 
+                    - testV13
               required:
                 - p1_class
       responses:
@@ -86,7 +86,7 @@ paths:
             text/plain:
               schema:
                 type: string
-          
+
 components:
   schemas:
     ClassName1:

@@ -182,7 +182,7 @@ paths:
         '404':
           description: Pet not found
       security:
-        - api_key: []
+        - api_key: [ ]
     post:
       tags:
         - pet
@@ -299,7 +299,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - api_key: [ ]
   /store/order:
     post:
       tags:
@@ -583,8 +583,8 @@ components:
       in: header
   schemas:
     MediaType:
-        type: string
-        enum: ['application/json', 'application/xml']
+      type: string
+      enum: [ 'application/json', 'application/xml' ]
     Order:
       title: Pet Order
       description: An order for a pets from the pet store

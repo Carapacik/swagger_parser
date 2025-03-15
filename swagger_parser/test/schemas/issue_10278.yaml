@@ -48,13 +48,13 @@ paths:
       responses:
         400:
           description: Invalid ID supplied
-          content: {}
+          content: { }
         404:
           description: Pet not found
-          content: {}
+          content: { }
         405:
           description: Validation exception
-          content: {}
+          content: { }
       security:
         - petstore_auth:
             - write:pets

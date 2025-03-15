@@ -3,13 +3,13 @@ info:
   title: OpenAPI Petstore
   description: "sample to get all user id as string list and string set"
   version: 1.0.0
-tags: []
+tags: [ ]
 paths:
   /users/id?type=set:
     get:
       operationId: getUserIdSet
       tags:
-      - users
+        - users
       responses:
         '200':
           description: response

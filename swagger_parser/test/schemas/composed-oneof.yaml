@@ -28,16 +28,16 @@ paths:
       operationId: createState
       requestBody:
         content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/ObjA'
-                  - $ref: '#/components/schemas/ObjB'
-                discriminator:
-                  propertyName: realtype
-                  mapping:
-                    a-type: '#/components/schemas/ObjA'
-                    b-type: '#/components/schemas/ObjB'
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ObjA'
+                - $ref: '#/components/schemas/ObjB'
+              discriminator:
+                propertyName: realtype
+                mapping:
+                  a-type: '#/components/schemas/ObjA'
+                  b-type: '#/components/schemas/ObjB'
         required: true
       responses:
         '201':

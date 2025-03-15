@@ -44,12 +44,12 @@ components:
         firstName:
           type: string
         duplicated_optional:
-           type: integer
+          type: integer
         duplicated_required:
-           type: integer
+          type: integer
         person_required:
-           type: string
-           format: date-time
+          type: string
+          format: date-time
     Human:
       required:
         - body
@@ -64,31 +64,31 @@ components:
     Adult:
       description: A representation of an adult
       allOf:
-      - $ref: '#/components/schemas/Person'
-      - $ref: '#/components/schemas/Human'
-      - type: object
-        required:
-          - duplicated_required
-          - child_required
-        properties:
-          duplicated_optional:
-             type: integer
-          duplicated_required:
-             type: integer
-          children:
-            type: array
-            items:
-              $ref: "#/components/schemas/Child"
-          adult_required:
-            type: boolean
+        - $ref: '#/components/schemas/Person'
+        - $ref: '#/components/schemas/Human'
+        - type: object
+          required:
+            - duplicated_required
+            - child_required
+          properties:
+            duplicated_optional:
+              type: integer
+            duplicated_required:
+              type: integer
+            children:
+              type: array
+              items:
+                $ref: "#/components/schemas/Child"
+            adult_required:
+              type: boolean
     Child:
       description: A representation of a child
       allOf:
-      - type: object
-        properties:
-          age:
-            type: integer
-            format: int32
-          firstName:
-            type: string
-      - $ref: '#/components/schemas/Person'
+        - type: object
+          properties:
+            age:
+              type: integer
+              format: int32
+            firstName:
+              type: string
+        - $ref: '#/components/schemas/Person'

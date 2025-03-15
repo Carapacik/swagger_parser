@@ -97,7 +97,7 @@ definitions:
     allOf:
       - $ref: '#/definitions/NewPet'
       - required:
-        - id
+          - id
         type: "object"
         properties:
           id:
@@ -107,18 +107,18 @@ definitions:
   NewPet:
     type: "object"
     required:
-      - name  
+      - name
     properties:
       name:
         type: string
       tag:
-        type: string   
+        type: string
       action:
         type: string
         enum:
           - one
           - other
-          - another 
+          - another
 
   Error:
     type: "object"

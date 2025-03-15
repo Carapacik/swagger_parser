@@ -87,7 +87,7 @@ data class ClassName()
 
   group('Imports', () {
     test('dart + json_serializable', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {
           'camelClass',
@@ -126,7 +126,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {
           'camelClass',
@@ -174,7 +174,7 @@ class ClassName with _$ClassName {
 
   group('Parameters', () {
     test('dart + json_serializable', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -267,7 +267,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -350,7 +350,7 @@ class ClassName with _$ClassName {
     });
 
     test('dart + dart_mappable', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -444,7 +444,7 @@ class ClassName with ClassNameMappable {
     });
 
     test('dart + dart_mappable with custom json key', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -486,7 +486,7 @@ class ClassName with ClassNameMappable {
     });
 
     test('kotlin + moshi', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -563,7 +563,7 @@ data class ClassName(
 
   group('Array type', () {
     test('dart + json_serializable', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -628,7 +628,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -692,7 +692,7 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -750,7 +750,7 @@ data class ClassName(
 
   group('JsonKey name', () {
     test('dart + json_serializable', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -815,7 +815,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -878,7 +878,7 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -937,7 +937,7 @@ data class ClassName(
 
   group('defaultValue', () {
     test('dart + json_serializable', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Haha'},
         parameters: [
@@ -1011,7 +1011,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Haha'},
         parameters: [
@@ -1087,7 +1087,7 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -1144,7 +1144,7 @@ data class ClassName(
 
   group('Required parameters', () {
     test('dart + json_serializable', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -1201,7 +1201,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -1256,7 +1256,7 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -1305,7 +1305,7 @@ data class ClassName(
 
   group('Put required parameters first', () {
     test('dart + json_serializable', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -1362,7 +1362,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
@@ -2018,7 +2018,7 @@ enum class EnumName {
   group('Typedef data class', () {
     test('dart', () async {
       final dataClasses = [
-        UniversalComponentClass(
+        const UniversalComponentClass(
           name: 'Date',
           imports: {},
           parameters: [
@@ -2026,7 +2026,7 @@ enum class EnumName {
           ],
           typeDef: true,
         ),
-        UniversalComponentClass(
+        const UniversalComponentClass(
           name: 'BooleanList',
           imports: {},
           parameters: [
@@ -2038,7 +2038,7 @@ enum class EnumName {
           ],
           typeDef: true,
         ),
-        UniversalComponentClass(
+        const UniversalComponentClass(
           name: 'AnotherValue',
           imports: {'Another'},
           parameters: [UniversalType(type: 'Another', isRequired: true)],
@@ -2070,7 +2070,7 @@ typedef AnotherValue = Another;
 
     test('kotlin', () async {
       final dataClasses = [
-        UniversalComponentClass(
+        const UniversalComponentClass(
           name: 'Date',
           imports: {},
           parameters: [
@@ -2078,7 +2078,7 @@ typedef AnotherValue = Another;
           ],
           typeDef: true,
         ),
-        UniversalComponentClass(
+        const UniversalComponentClass(
           name: 'BooleanList',
           imports: {},
           parameters: [
@@ -2090,7 +2090,7 @@ typedef AnotherValue = Another;
           ],
           typeDef: true,
         ),
-        UniversalComponentClass(
+        const UniversalComponentClass(
           name: 'AnotherValue',
           imports: {'Another'},
           parameters: [UniversalType(type: 'Another', isRequired: true)],
@@ -2125,7 +2125,7 @@ typealias AnotherValue = Another;
 
   group('nullable', () {
     test('dart + json_serializable', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -2191,7 +2191,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -2254,7 +2254,7 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         parameters: [
@@ -2313,7 +2313,7 @@ data class ClassName(
 
   group('description', () {
     test('dart + json_serializable', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         description: 'Test class',
@@ -2409,7 +2409,7 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         description: 'Test class',
@@ -2502,7 +2502,7 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi ', () async {
-      final dataClass = UniversalComponentClass(
+      const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
         description: 'Test class',

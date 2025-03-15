@@ -76,14 +76,12 @@ Future<void> e2eTest(
     final relativePath =
         p.relative(file.path, from: expectedFolderPath).replaceAll(r'\', '/');
 
-    final generatedFile = generatedFiles.firstWhere(
-      (gFile) {
-        final relPath = p
-            .relative(gFile.path, from: generatedFolderPath)
-            .replaceAll(r'\', '/');
-        return relPath == relativePath;
-      },
-    );
+    final generatedFile = generatedFiles.firstWhere((gFile) {
+      final relPath = p
+          .relative(gFile.path, from: generatedFolderPath)
+          .replaceAll(r'\', '/');
+      return relPath == relativePath;
+    });
 
     // Comparing the contents of the file
     expect(

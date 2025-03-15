@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   title: sample spec
 host: fake.site.com
-tags: []
+tags: [ ]
 schemes:
   - https
 paths:
@@ -15,13 +15,13 @@ paths:
         - application/json
       produces:
         - application/json
-      parameters: []
+      parameters: [ ]
       responses:
         '200':
           description: successful operation
           schema:
             $ref: '#/definitions/BaseObj'
-securityDefinitions: {}
+securityDefinitions: { }
 definitions:
   BaseObj:
     type: object
