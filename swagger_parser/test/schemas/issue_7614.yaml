@@ -16,7 +16,7 @@ paths:
         200:
           description: some result
       security:
-        - basic_auth: []
+        - basic_auth: [ ]
   /examples/basicauthwithoauth:
     get:
       tags:
@@ -27,7 +27,7 @@ paths:
         200:
           description: some result
       security:
-        - basic_auth: []
+        - basic_auth: [ ]
         - oauth_auth:
             - something:create
   /examples/onlyoauthauth:

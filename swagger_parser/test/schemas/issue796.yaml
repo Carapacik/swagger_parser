@@ -6,12 +6,12 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
 servers:
-- url: http://localhost:123/api
+  - url: http://localhost:123/api
 paths:
   /test:
     get:
       tags:
-      - test
+        - test
       responses:
         201:
           description: Successful response
@@ -20,7 +20,7 @@ components:
     MapTest1:
       type: object
       description: This type example 1
-      additionalProperties: {}
+      additionalProperties: { }
     MapTest2:
       type: object
       description: This type example 2

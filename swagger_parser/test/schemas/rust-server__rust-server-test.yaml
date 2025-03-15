@@ -23,15 +23,15 @@ paths:
   /html:
     post:
       summary: Test HTML handling
-      consumes: [text/html]
-      produces: [text/html]
+      consumes: [ text/html ]
+      produces: [ text/html ]
       operationId: htmlPost
       parameters:
-      - in: body
-        name: body
-        required: true
-        schema:
-          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: Success
@@ -135,7 +135,7 @@ definitions:
       sampleProperty:
         type: string
     allOf:
-    - $ref: '#/definitions/baseAllOf'
+      - $ref: '#/definitions/baseAllOf'
   baseAllOf:
     type: object
     properties:

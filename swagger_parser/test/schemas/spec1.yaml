@@ -7,7 +7,7 @@ paths:
   /spec1:
     get:
       tags:
-      - spec1
+        - spec1
       summary: dummy
       operationId: spec1Operation
       responses:
@@ -20,15 +20,15 @@ paths:
   /spec1/complex/{param1}/path:
     get:
       tags:
-      - spec1
+        - spec1
       summary: dummy
       operationId: spec1OperationComplex
       parameters:
-      - in: path
-        name: param1
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: param1
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           description: OK

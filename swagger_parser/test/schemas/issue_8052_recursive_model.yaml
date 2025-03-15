@@ -25,7 +25,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/GeoJsonGeometry'
-      parameters: []
+      parameters: [ ]
 components:
   schemas:
     GeoJsonGeometry:

@@ -194,7 +194,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
       security:
-        - api_key: []
+        - api_key: [ ]
     post:
       tags:
         - pet

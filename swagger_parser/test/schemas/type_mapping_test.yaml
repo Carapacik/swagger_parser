@@ -12,7 +12,7 @@ paths:
         - in: query
           name: parameter_type_mapping
           schema:
-            type: string 
+            type: string
             format: special
       responses:
         200:

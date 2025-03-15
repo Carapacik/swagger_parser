@@ -45,7 +45,7 @@ parameters:
 paths:
   /execute:
     post:
-      produces: []
+      produces: [ ]
       operationId: executeRealCommand
       parameters:
         - name: real_command

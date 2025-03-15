@@ -13,9 +13,9 @@ paths:
           description: OK
 components:
   securitySchemes:
-        bearerAuth:
-            scheme: bearer
-            bearerFormat: token
-            type: http
+    bearerAuth:
+      scheme: bearer
+      bearerFormat: token
+      type: http
 security:
-  - bearerAuth: []
+  - bearerAuth: [ ]

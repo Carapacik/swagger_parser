@@ -11,7 +11,7 @@ paths:
         - in: body
           name: body
           schema:
-              $ref: '#/definitions/OuterObject'
+            $ref: '#/definitions/OuterObject'
       responses:
         '200':
           description: dummy

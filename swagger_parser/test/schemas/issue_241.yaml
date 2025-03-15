@@ -6,21 +6,21 @@ info:
   contact:
     email: "my@mail.com"
 servers:
-- url: "http://localhost:9998/v1"
+  - url: "http://localhost:9998/v1"
 tags:
-- name: "users"
+  - name: "users"
 paths:
   /users/create/{username}:
     post:
       tags:
-      - "user"
+        - "user"
       operationId: "createUser"
       parameters:
-      - name: "username"
-        in: "path"
-        required: true
-        schema:
-          type: "string"
+        - name: "username"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
       responses:
         200:
           description: "The User just created"
@@ -36,8 +36,8 @@ components:
         - type: "object"
           description: "The User"
           required:
-          - "userid"
-          - "username"
+            - "userid"
+            - "username"
     UserDetail:
       type: "object"
       description: "Detail of a User"

@@ -7,7 +7,7 @@ info:
     Not really a *pseudo-random* number generator API.
     This API uses [Markdown](http://daringfireball.net/projects/markdown/syntax)
     in text:
-  
+    
     1. in this API description
     
     1. in operation summaries
@@ -31,7 +31,7 @@ securityDefinitions:
     in: header
     name: api_key
 security:
-  - apiKey: []
+  - apiKey: [ ]
 
 paths:
 
@@ -50,7 +50,7 @@ paths:
           type: string
       responses:
         '200':
-          description: Operation *succeeded* 
+          description: Operation *succeeded*
           schema:
             $ref: '#/definitions/RandomNumber'
         '404':

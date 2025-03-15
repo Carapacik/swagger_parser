@@ -1,25 +1,25 @@
 openapi: 3.0.1
 info:
-   title: fruity
-   version: 0.0.1
+  title: fruity
+  version: 0.0.1
 paths:
-   /:
-      get:
-         responses:
-            '200':
-               description: desc
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/FruitAllOfDisc'
+  /:
+    get:
+      responses:
+        '200':
+          description: desc
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FruitAllOfDisc'
 components:
-   schemas:
+  schemas:
     FruitType:
       properties:
         fruitType:
           type: string
       required:
-      - fruitType
+        - fruitType
     FruitInlineDisc:
       anyOf:
         - type: object
@@ -56,7 +56,7 @@ components:
                 fruitType:
                   type: string
               required:
-              - fruitType
+                - fruitType
         - type: object
           required:
             - length
@@ -69,7 +69,7 @@ components:
                 fruitType:
                   type: string
               required:
-              - fruitType
+                - fruitType
       discriminator:
         propertyName: fruitType
     FruitReqDisc:

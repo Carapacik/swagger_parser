@@ -23,12 +23,12 @@ components:
           type: array
           items:
             type: string
-            enum: ['BLACK', 'RED', 'ORANGE', 'YELLOW', 'BLUE', 'GREEN']
+            enum: [ 'BLACK', 'RED', 'ORANGE', 'YELLOW', 'BLUE', 'GREEN' ]
         reqColors:
           type: array
           items:
             type: string
-            enum: ['BLACK', 'RED', 'ORANGE', 'YELLOW', 'BLUE', 'GREEN']
+            enum: [ 'BLACK', 'RED', 'ORANGE', 'YELLOW', 'BLUE', 'GREEN' ]
       required:
         - reqColors
     NoEmbeddedEnumArray:
@@ -46,15 +46,15 @@ components:
             - reqColors
     Colors:
       type: string
-      enum: ['BLACK', 'RED', 'ORANGE', 'YELLOW', 'BLUE', 'GREEN']
+      enum: [ 'BLACK', 'RED', 'ORANGE', 'YELLOW', 'BLUE', 'GREEN' ]
     SimpleColorContainer:
       type: object
       properties:
         color:
           type: string
-          enum: ['BLACK', 'RED', 'ORANGE', 'YELLOW', 'BLUE', 'GREEN']
+          enum: [ 'BLACK', 'RED', 'ORANGE', 'YELLOW', 'BLUE', 'GREEN' ]
         reqColor:
           type: string
-          enum: ['BLACK', 'RED', 'ORANGE', 'YELLOW', 'BLUE', 'GREEN']
+          enum: [ 'BLACK', 'RED', 'ORANGE', 'YELLOW', 'BLUE', 'GREEN' ]
       required:
         - reqColor

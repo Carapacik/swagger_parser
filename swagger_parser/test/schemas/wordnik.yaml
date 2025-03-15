@@ -20,7 +20,7 @@ securityDefinitions:
     in: header
     name: api_key
 security:
-  - apiKey: []
+  - apiKey: [ ]
 paths:
   /words.json/randomWord:
     get:

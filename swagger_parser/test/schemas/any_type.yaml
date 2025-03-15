@@ -13,7 +13,7 @@ paths:
           description: OK
 components:
   schemas:
-    AnyValue: {}
+    AnyValue: { }
     AnyValueWithDesc:
       description: Can be any value - string, number, boolean, array or object.
     AnyValueNullable:
@@ -33,25 +33,25 @@ components:
       description: test any value inline
       type: object
       properties:
-        any_value: {}
+        any_value: { }
         any_value_with_desc:
           description: inline any value
         any_value_nullable:
           nullable: true
           description: inline any value nullable
         map_free_form_object:
-          additionalProperties: {}
+          additionalProperties: { }
         map_any_value_with_desc:
-          additionalProperties: 
+          additionalProperties:
             description: inline any value
         map_any_value_nullable:
           additionalProperties:
             nullable: true
             description: inline any value nullable
         array_any_value:
-          items: {}
+          items: { }
         array_any_value_with_desc:
-          items: 
+          items:
             description: inline any value
         array_any_value_nullable:
           items:

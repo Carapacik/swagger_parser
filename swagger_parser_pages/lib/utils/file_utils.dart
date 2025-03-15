@@ -23,10 +23,11 @@ void generateArchive(List<GeneratedFile> files) {
 
   final blobWeb = web.Blob(<JSUint8Array>[Uint8List.fromList(bytes).toJS].toJS);
   final url = web.URL.createObjectURL(blobWeb);
-  final anchor = web.document.createElement('a') as web.HTMLAnchorElement
-    ..href = url
-    ..style.display = 'none'
-    ..download = 'generated.zip';
+  final anchor =
+      web.document.createElement('a') as web.HTMLAnchorElement
+        ..href = url
+        ..style.display = 'none'
+        ..download = 'generated.zip';
   web.document.body!.children.add(anchor);
 
   // download

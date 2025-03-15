@@ -4,14 +4,14 @@ info:
   title: rust-server-test
   version: 2.3.4
 servers:
-- url: /
+  - url: /
 paths:
   /dummy:
     get:
       operationId: dummyGet
       responses:
         "200":
-          content: {}
+          content: { }
           description: Success
       summary: A dummy endpoint to make the spec valid.
     put:
@@ -24,7 +24,7 @@ paths:
         required: true
       responses:
         "200":
-          content: {}
+          content: { }
           description: Success
       x-codegen-request-body-name: nested_response
   /html:
@@ -79,7 +79,7 @@ paths:
         required: true
       responses:
         "204":
-          content: {}
+          content: { }
           description: OK
       summary: Send an arbitrary JSON blob
       x-codegen-request-body-name: value
@@ -96,7 +96,7 @@ paths:
         required: true
       responses:
         "204":
-          content: {}
+          content: { }
           description: OK
       x-codegen-request-body-name: value
   /get-structured-yaml:
@@ -133,7 +133,7 @@ components:
               password:
                 type: string
             required:
-            - id
+              - id
             type: object
       required: true
   schemas:
@@ -145,7 +145,7 @@ components:
       type: object
     allOfObject:
       allOf:
-      - $ref: '#/components/schemas/baseAllOf'
+        - $ref: '#/components/schemas/baseAllOf'
       example:
         sampleProperty: sampleProperty
       properties:
@@ -165,7 +165,7 @@ components:
           nullable: true
           type: string
       required:
-      - RequiredNullableThing
+        - RequiredNullableThing
       type: object
     ObjectOfObjects:
       description: An object of objects
@@ -187,7 +187,7 @@ components:
         password:
           type: string
       required:
-      - id
+        - id
       type: object
     ObjectOfObjects_inner:
       properties:
@@ -196,7 +196,7 @@ components:
         optional_thing:
           type: integer
       required:
-      - required_thing
+        - required_thing
       type: object
 x-original-swagger-version: "2.0"
 

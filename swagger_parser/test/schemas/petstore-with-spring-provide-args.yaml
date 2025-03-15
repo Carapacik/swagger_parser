@@ -80,7 +80,7 @@ paths:
       operationId: logoutUser
       produces:
         - application/json
-      parameters: []
+      parameters: [ ]
       responses:
         default:
           description: successful operation

@@ -26,7 +26,7 @@ components:
     BodyWithRequiredNullable:
       type: object
       required:
-      - arrayThatIsNull
+        - arrayThatIsNull
       properties:
         arrayThatIsNull:
           type: array

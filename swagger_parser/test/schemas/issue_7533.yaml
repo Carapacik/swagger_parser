@@ -10,8 +10,8 @@ servers:
   - url: /
   - url: http://trailingshlash.io:80/v1/
   - url: http://notrailingslash.io:80/v2
-tags: []
-paths: {}
+tags: [ ]
+paths: { }
 components:
-  schemas: {}
-  securitySchemes: {}
+  schemas: { }
+  securitySchemes: { }

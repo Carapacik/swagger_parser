@@ -3,31 +3,31 @@ info:
   title: Search API
   version: '1.0'
 servers:
-- url: http://localhost:8080/api/v1
+  - url: http://localhost:8080/api/v1
 tags:
-- name: "search"
+  - name: "search"
 paths:
   /default-list:
     get:
       tags:
-      - search
+        - search
       operationId: defaultList
       parameters:
-      - in: query
-        name: p
-        schema:
-          type: integer
-          default: 0
-          minimum: 0
-      - in: query
-        name: orderBy
-        schema:
-          type: array
-          default: ["updatedAt:DESC", "createdAt:DESC"]
-          items:
-            type: string
-            enum: [ "createdAt:ASC", "createdAt:DESC",
-                    "updatedAt:ASC", "updatedAt:DESC" ]
+        - in: query
+          name: p
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: orderBy
+          schema:
+            type: array
+            default: [ "updatedAt:DESC", "createdAt:DESC" ]
+            items:
+              type: string
+              enum: [ "createdAt:ASC", "createdAt:DESC",
+                      "updatedAt:ASC", "updatedAt:DESC" ]
       responses:
         204:
           description: "Custom response"

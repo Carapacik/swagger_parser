@@ -8,7 +8,7 @@ paths:
   /pingBoolean:
     get:
       operationId: pingGetBoolean
-      tags: [Ping]
+      tags: [ Ping ]
       responses:
         '200':
           description: OK
@@ -19,7 +19,7 @@ paths:
   /pingInteger:
     get:
       operationId: pingGetInteger
-      tags: [Ping]
+      tags: [ Ping ]
       responses:
         '200':
           description: OK

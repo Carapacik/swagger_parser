@@ -8,16 +8,16 @@ paths:
       summary: test
       operationId: test
       parameters:
-      - name: testHeader
-        in: header
-        description: 'Test header'
-        required: true
-        schema:
-          type: string
-          format: uuid
-        example: '523028ac-2e0e-41ab-b6f7-38c1efdbac45'
+        - name: testHeader
+          in: header
+          description: 'Test header'
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: '523028ac-2e0e-41ab-b6f7-38c1efdbac45'
       tags:
-      - test
+        - test
       responses:
         200:
           description: ok

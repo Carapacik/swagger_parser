@@ -10,7 +10,7 @@ paths:
     post:
       deprecated: false
       operationId: repro
-      parameters: []
+      parameters: [ ]
       responses:
         "200":
           content:
@@ -21,12 +21,12 @@ paths:
 components:
   schemas:
     Child:
-      additionalProperties: {}
+      additionalProperties: { }
       type: object
     Parent:
       additionalProperties: false
       properties:
         child:
           $ref: "#/components/schemas/Child"
-      required: []
+      required: [ ]
       type: object

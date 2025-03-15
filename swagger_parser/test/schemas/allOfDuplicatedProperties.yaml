@@ -23,9 +23,9 @@ components:
         foo:
           type: string
         duplicated_optional:
-           type: string
+          type: string
         duplicated_required:
-           type: string
+          type: string
     ModelB:
       required:
         - duplicated_required
@@ -33,9 +33,9 @@ components:
         bar:
           type: string
         duplicated_optional:
-           type: integer
+          type: integer
         duplicated_required:
-           type: integer
+          type: integer
     ModelC:
       allOf:
         - $ref: "#/components/schemas/ModelA"

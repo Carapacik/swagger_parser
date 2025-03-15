@@ -28,20 +28,20 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/related:  # message with binary body part(s)
+          multipart/related: # message with binary body part(s)
             schema:
               $ref: '#/components/schemas/multipart_related_request'
             encoding:
               object_field:
-                contentType:  application/json
+                contentType: application/json
               optional_binary_field:
-                contentType:  application/zip
+                contentType: application/zip
                 headers:
                   Content-Id:
                     schema:
                       type: string
               required_binary_field:
-                contentType:  image/png
+                contentType: image/png
                 headers:
                   Content-Id:
                     schema:

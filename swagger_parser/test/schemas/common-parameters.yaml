@@ -44,7 +44,7 @@ paths:
         '404':
           description: Pet not found
       security:
-        - api_key: []
+        - api_key: [ ]
     delete:
       tags:
         - pet
@@ -61,7 +61,7 @@ paths:
         '400':
           description: Invalid pet value
       security:
-        - api_key: []
+        - api_key: [ ]
     patch:
       tags:
         - pet
@@ -74,7 +74,7 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/Pet'
       security:
-        - api_key: []
+        - api_key: [ ]
 components:
   requestBodies:
     Pet:

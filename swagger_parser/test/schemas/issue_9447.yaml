@@ -8,7 +8,7 @@ info:
   version: 1.0.0
 servers:
   - url: http://petstore.swagger.io:80/v2
-tags: []
+tags: [ ]
 paths:
   /UnboundedInteger:
     post:
@@ -103,4 +103,4 @@ components:
         Int64:
           type: integer
           format: int64
-  securitySchemes: {}
+  securitySchemes: { }

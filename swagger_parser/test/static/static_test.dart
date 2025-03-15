@@ -22,11 +22,10 @@ import 'static_utils.dart';
 /// `dart test --run-skipped ".\test\static\static_test.dart"`
 void main() {
   // Get all the schema files
-  final schemaFiles =
-      Directory(p.join('test', 'schemas'))
-          .listSync(recursive: true, followLinks: false)
-          .whereType<File>()
-          .toList();
+  final schemaFiles = Directory(p.join('test', 'schemas'))
+      .listSync(recursive: true, followLinks: false)
+      .whereType<File>()
+      .toList();
 
   // Set the path to the temp test project
   final testProjectDir = Directory('test_project');
@@ -102,19 +101,25 @@ Future<void> runSwaggerParserGeneration(
 // This function will test the build and validation of the generated clients
 Future<void> testBuildClient(String testProjectPath) async {
   // Run code generation
-  final buildResult = await Process.run('dart', [
-    'run',
-    'build_runner',
-    'build',
-    '--delete-conflicting-outputs',
-  ], workingDirectory: testProjectPath);
+  final buildResult = await Process.run(
+      'dart',
+      [
+        'run',
+        'build_runner',
+        'build',
+        '--delete-conflicting-outputs',
+      ],
+      workingDirectory: testProjectPath);
   expect(buildResult.exitCode, 0, reason: formatProcessResult(buildResult));
 
   // Run the analyzer
-  final analyzeResult = await Process.run('dart', [
-    'analyze',
-    'lib',
-  ], workingDirectory: testProjectPath);
+  final analyzeResult = await Process.run(
+      'dart',
+      [
+        'analyze',
+        'lib',
+      ],
+      workingDirectory: testProjectPath);
 
   expect(analyzeResult.exitCode, 0, reason: formatProcessResult(analyzeResult));
 }

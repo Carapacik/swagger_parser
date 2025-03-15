@@ -25,7 +25,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/GeoJsonGeometry'
-      parameters: []
+      parameters: [ ]
   /geojson_geometry_collection:
     post:
       summary: Add a GeoJson GeometryCollection Object
@@ -45,7 +45,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/GeometryCollection'
-      parameters: []
+      parameters: [ ]
 components:
   schemas:
     GeoJsonGeometry:

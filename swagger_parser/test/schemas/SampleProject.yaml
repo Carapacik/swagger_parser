@@ -238,8 +238,8 @@ paths:
                 - email
                 - dateOfBirth
             examples:
-                basic:
-                    $ref: '#/components/examples/get-user-basic'
+              basic:
+                $ref: '#/components/examples/get-user-basic'
         description: Post the necessary fields for the API to create a new user.
       description: Create a new user.
       tags:

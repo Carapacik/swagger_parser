@@ -36,8 +36,8 @@ components:
     ChildWithProperties:
       type: object
       allOf:
-      - type: object
-        properties:
-          childProperty:
-            type: string
-      - $ref: '#/components/schemas/BaseClass'
+        - type: object
+          properties:
+            childProperty:
+              type: string
+        - $ref: '#/components/schemas/BaseClass'

@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Test
   version: 1.0.0-SNAPSHOT
-paths: {}
+paths: { }
 components:
   schemas:
     StringEnum:

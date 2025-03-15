@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   version: '1.0.0'
   title: 'Problem example with nested anyOf'
-paths: {}
+paths: { }
 components:
   schemas:
     NullOne:
@@ -10,7 +10,7 @@ components:
         - null
     SomeData:
       anyOf:
-      - anyOf:
-          - type: string
-          - type: integer
-      - $ref: '#/components/schemas/NullOne'
+        - anyOf:
+            - type: string
+            - type: integer
+        - $ref: '#/components/schemas/NullOne'

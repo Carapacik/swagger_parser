@@ -38,7 +38,7 @@ paths:
         '405':
           description: Invalid input
       security:
-        - http_auth: []
+        - http_auth: [ ]
       requestBody:
         $ref: '#/components/requestBodies/Pet'
     put:
@@ -183,7 +183,7 @@ paths:
         '404':
           description: Pet not found
       security:
-        - BearerToken: []
+        - BearerToken: [ ]
     post:
       tags:
         - pet
@@ -274,7 +274,7 @@ paths:
         '404':
           description: Pet not found
       security:
-        - api_key: []
+        - api_key: [ ]
   '/pet/{petId}?streaming':
     get:
       tags:
@@ -306,7 +306,7 @@ paths:
         '404':
           description: Pet not found
       security:
-        - api_key: []
+        - api_key: [ ]
   '/pet/{petId}/uploadImage':
     post:
       tags:
@@ -364,7 +364,7 @@ paths:
                   type: integer
                   format: int32
       security:
-        - api_key: []
+        - api_key: [ ]
   /store/order:
     post:
       tags:
@@ -455,7 +455,7 @@ paths:
         default:
           description: successful operation
       security:
-        - api_key: []
+        - api_key: [ ]
       requestBody:
         content:
           application/json:
@@ -474,7 +474,7 @@ paths:
         default:
           description: successful operation
       security:
-        - api_key: []
+        - api_key: [ ]
       requestBody:
         $ref: '#/components/requestBodies/UserArray'
   /user/createWithList:
@@ -488,7 +488,7 @@ paths:
         default:
           description: successful operation
       security:
-        - api_key: []
+        - api_key: [ ]
       requestBody:
         $ref: '#/components/requestBodies/UserArray'
   /user/login:
@@ -553,7 +553,7 @@ paths:
         default:
           description: successful operation
       security:
-        - api_key: []
+        - api_key: [ ]
   '/user/{username}':
     get:
       tags:
@@ -601,7 +601,7 @@ paths:
         '404':
           description: User not found
       security:
-        - api_key: []
+        - api_key: [ ]
       requestBody:
         content:
           application/json:
@@ -628,7 +628,7 @@ paths:
         '404':
           description: User not found
       security:
-        - api_key: []
+        - api_key: [ ]
   /fake/path_array/{path_array}/testing:
     get:
       tags:
@@ -638,7 +638,7 @@ paths:
       operationId: fake_path_array
       parameters:
         - name: path_array
-          in: path 
+          in: path
           description: dummy path parameter
           required: true
           schema:
@@ -674,13 +674,13 @@ paths:
       description: ''
       operationId: fake_data_file
       parameters:
-        - name: dummy 
+        - name: dummy
           in: header
           description: dummy required parameter
           required: true
           schema:
             type: string
-        - name: data_file 
+        - name: data_file
           in: header
           description: header data file
           required: false
@@ -704,8 +704,8 @@ paths:
       description: ''
       operationId: fake_set_query
       parameters:
-        - name: set_dummy 
-          in: query 
+        - name: set_dummy
+          in: query
           description: set query
           required: true
           schema:
@@ -714,7 +714,7 @@ paths:
             items:
               type: string
         - name: array_dummy
-          in: query 
+          in: query
           description: array query
           required: true
           schema:
@@ -745,7 +745,7 @@ paths:
         '405':
           description: Invalid input
       security:
-        - http_auth: []
+        - http_auth: [ ]
       requestBody:
         $ref: '#/components/requestBodies/OptionalPet'
 externalDocs:
@@ -770,7 +770,7 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/Pet'
-        multipart/related:  # message with binary body part
+        multipart/related: # message with binary body part
           schema:
             type: object
             properties: # Request parts
@@ -781,9 +781,9 @@ components:
                 format: binary
           encoding:
             jsonData:
-              contentType:  application/json
+              contentType: application/json
             binaryDataN2Information:
-              contentType:  application/vnd.3gpp.ngap
+              contentType: application/vnd.3gpp.ngap
               headers:
                 Content-Id:
                   schema:
@@ -798,7 +798,7 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/Pet'
-        multipart/related:  # message with binary body part
+        multipart/related: # message with binary body part
           schema:
             type: object
             properties: # Request parts
@@ -809,9 +809,9 @@ components:
                 format: binary
           encoding:
             jsonData:
-              contentType:  application/json
+              contentType: application/json
             binaryDataN2Information:
-              contentType:  application/vnd.3gpp.ngap
+              contentType: application/vnd.3gpp.ngap
               headers:
                 Content-Id:
                   schema:
@@ -820,11 +820,11 @@ components:
       required: false
   securitySchemes:
     http_auth:
-      type : http
-      scheme : basic
+      type: http
+      scheme: basic
     BearerToken:
-      type : http
-      scheme : bearer
+      type: http
+      scheme: bearer
     petstore_auth:
       type: oauth2
       flows:
@@ -1011,7 +1011,7 @@ components:
     Address:
       type: object
       additionalProperties:
-         type: integer
+        type: integer
     Animal:
       type: object
       discriminator:

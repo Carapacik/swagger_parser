@@ -31,7 +31,7 @@ paths:
         '200':
           description: OK.
       security:
-        - oAuthConfig: []
+        - oAuthConfig: [ ]
 components:
   schemas:
     FormParameters:
@@ -47,4 +47,4 @@ components:
       flows:
         implicit:
           authorizationUrl: ../backend/login/openid
-          scopes: {}
+          scopes: { }
