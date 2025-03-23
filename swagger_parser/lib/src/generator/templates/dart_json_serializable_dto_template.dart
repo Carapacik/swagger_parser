@@ -45,8 +45,19 @@ String _parametersInConstructor(List<UniversalType> parameters) {
       .join();
 }
 
-/// if jsonKey is different from the name
 String _jsonKey(UniversalType t) {
+  final buffer = StringBuffer();
+  
+  // If property is optional (but never `null`), add includeIfNull: false 
+  if (!t.isRequired && !t.nullable) {
+    if (t.jsonKey != null && t.name != t.jsonKey) {
+      buffer.write("  @JsonKey(name: '${protectJsonKey(t.jsonKey)}', includeIfNull: false)\n");
+    } else {
+      buffer.write("  @JsonKey(includeIfNull: false)\n");
+    }
+    return buffer.toString();
+  }
+  
   if (t.jsonKey == null || t.name == t.jsonKey) {
     return '';
   }

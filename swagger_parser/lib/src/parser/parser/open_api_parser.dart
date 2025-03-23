@@ -711,8 +711,9 @@ class OpenApiParser {
           additionalName: additionalName,
           isRequired: (_apiInfo.schemaVersion == OAS.v2 && !config.useXNullable)
               ? isRequired
-              : isRequired || !isNullable,
+              : isRequired,
         );
+        // isNotRequired = !isRequired && !isNullable;
 
         var validation = propertyValue;
         final anyOf = propertyValue[_anyOfConst];
