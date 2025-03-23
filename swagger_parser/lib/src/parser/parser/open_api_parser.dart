@@ -1167,7 +1167,7 @@ class OpenApiParser {
           jsonKey: originalName,
           defaultValue: protectDefaultValue(map[_defaultConst]),
           nullable:
-              map[_nullableConst].toString().toBool() ?? (root && !isRequired),
+              map[_nullableConst].toString().toBool() ?? false,
           isRequired: isRequired,
         ),
         import: type,
@@ -1387,7 +1387,7 @@ class OpenApiParser {
           enumType: enumType,
           isRequired: isRequired,
           nullable:
-              map[_nullableConst].toString().toBool() ?? (root && !isRequired),
+              map[_nullableConst].toString().toBool() ?? false,
         ),
         import: import,
       );
