@@ -47,6 +47,7 @@ enum ProgrammingLanguage {
     required bool unknownEnumValue,
     required bool markFilesAsGenerated,
     required bool generateValidator,
+    required bool useFreezed3,
   }) {
     switch (this) {
       case dart:
@@ -66,13 +67,11 @@ enum ProgrammingLanguage {
             );
           }
           return switch (jsonSerializer) {
-            JsonSerializer.freezed ||
-            JsonSerializer.freezed3 =>
-              dartFreezedDtoTemplate(
+            JsonSerializer.freezed => dartFreezedDtoTemplate(
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
                 generateValidator: generateValidator,
-                isV3: jsonSerializer == JsonSerializer.freezed3,
+                isV3: useFreezed3,
               ),
             JsonSerializer.jsonSerializable => dartJsonSerializableDtoTemplate(
                 dataClass,

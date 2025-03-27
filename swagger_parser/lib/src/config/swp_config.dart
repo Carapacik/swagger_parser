@@ -35,6 +35,7 @@ class SWPConfig {
     this.skippedParameters = const <String>[],
     this.generateValidator = false,
     this.useXNullable = false,
+    this.useFreezed3 = false,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -64,6 +65,7 @@ class SWPConfig {
     required this.skippedParameters,
     required this.generateValidator,
     required this.useXNullable,
+    required this.useFreezed3,
   });
 
   /// Creates a [SWPConfig] from [YamlMap].
@@ -156,10 +158,6 @@ class SWPConfig {
     final rawJsonSerializer = yamlMap['json_serializer']?.toString();
     if (rawJsonSerializer != null) {
       jsonSerializer = JsonSerializer.fromString(rawJsonSerializer);
-      if (jsonSerializer == JsonSerializer.freezed &&
-          yamlMap['use_freezed3'] == true) {
-        jsonSerializer = JsonSerializer.freezed3;
-      }
     } else if (rootConfig?.jsonSerializer != null) {
       jsonSerializer = rootConfig!.jsonSerializer;
     }
@@ -213,6 +211,9 @@ class SWPConfig {
     final useXNullable =
         yamlMap['use_x_nullable'] as bool? ?? rootConfig?.useXNullable;
 
+    final useFreezed3 =
+        yamlMap['use_freezed3'] as bool? ?? rootConfig?.useFreezed3;
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -244,6 +245,7 @@ class SWPConfig {
       replacementRules: replacementRules ?? dc.replacementRules,
       generateValidator: generateValidator ?? dc.generateValidator,
       useXNullable: useXNullable ?? dc.useXNullable,
+      useFreezed3: useFreezed3 ?? dc.useFreezed3,
     );
   }
 
@@ -353,6 +355,10 @@ class SWPConfig {
   /// Set `true` if Schema uses x-nullable to indicate nullable fields
   final bool useXNullable;
 
+  /// Set `true` to use Freezed 3.x code generation syntax.
+  /// Set `false` to maintain compatibility with Freezed 2.x
+  final bool useFreezed3;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -374,6 +380,7 @@ class SWPConfig {
       originalHttpResponse: originalHttpResponse,
       replacementRules: replacementRules,
       generateValidator: generateValidator,
+      useFreezed3: useFreezed3,
     );
   }
 

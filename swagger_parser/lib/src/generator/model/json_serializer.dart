@@ -5,7 +5,6 @@ enum JsonSerializer {
 
   /// https://pub.dev/packages/freezed
   freezed('freezed'),
-  freezed3('freezed'),
 
   /// https://pub.dev/packages/dart_mappable
   dartMappable('dart_mappable');

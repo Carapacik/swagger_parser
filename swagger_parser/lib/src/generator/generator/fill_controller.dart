@@ -30,6 +30,7 @@ final class FillController {
           unknownEnumValue: config.unknownEnumValue,
           markFilesAsGenerated: config.markFilesAsGenerated,
           generateValidator: config.generateValidator,
+          useFreezed3: config.useFreezed3,
         ),
       );
 

@@ -347,8 +347,9 @@ void main() {
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.freezed3,
+          jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          useFreezed3: true,
         ),
         schemaFileName: 'use_freezed3.3.0.json',
       );
