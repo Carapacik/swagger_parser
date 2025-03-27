@@ -156,6 +156,10 @@ class SWPConfig {
     final rawJsonSerializer = yamlMap['json_serializer']?.toString();
     if (rawJsonSerializer != null) {
       jsonSerializer = JsonSerializer.fromString(rawJsonSerializer);
+      if (jsonSerializer == JsonSerializer.freezed &&
+          yamlMap['use_freezed3'] == true) {
+        jsonSerializer = JsonSerializer.freezed3;
+      }
     } else if (rootConfig?.jsonSerializer != null) {
       jsonSerializer = rootConfig!.jsonSerializer;
     }

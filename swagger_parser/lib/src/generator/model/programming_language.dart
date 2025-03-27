@@ -66,10 +66,13 @@ enum ProgrammingLanguage {
             );
           }
           return switch (jsonSerializer) {
-            JsonSerializer.freezed => dartFreezedDtoTemplate(
+            JsonSerializer.freezed ||
+            JsonSerializer.freezed3 =>
+              dartFreezedDtoTemplate(
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
                 generateValidator: generateValidator,
+                isV3: jsonSerializer == JsonSerializer.freezed3,
               ),
             JsonSerializer.jsonSerializable => dartJsonSerializableDtoTemplate(
                 dataClass,

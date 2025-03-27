@@ -5,12 +5,13 @@ enum JsonSerializer {
 
   /// https://pub.dev/packages/freezed
   freezed('freezed'),
+  freezed3('freezed', 3),
 
   /// https://pub.dev/packages/dart_mappable
   dartMappable('dart_mappable');
 
   /// Constructor
-  const JsonSerializer(this.packageName);
+  const JsonSerializer(this.packageName, [this.packageMajorVersion]);
 
   /// Returns [JsonSerializer] from string
   factory JsonSerializer.fromString(String value) => values.firstWhere(
@@ -22,4 +23,7 @@ enum JsonSerializer {
 
   /// Package name
   final String packageName;
+
+  /// Major version of the package
+  final int? packageMajorVersion;
 }

@@ -2,7 +2,7 @@ import '../model/json_serializer.dart';
 
 String dartImportDtoTemplate(JsonSerializer jsonSerializer) {
   switch (jsonSerializer) {
-    case JsonSerializer.freezed:
+    case JsonSerializer.freezed || JsonSerializer.freezed3:
       return "import 'package:freezed_annotation/freezed_annotation.dart';";
     case JsonSerializer.jsonSerializable:
       return "import 'package:json_annotation/json_annotation.dart';";
