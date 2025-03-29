@@ -23269,7 +23269,7 @@ _.at=k
 _.cy=l
 _.db=m
 _.dx=n},
-Zc:function Zc(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o){var _=this
+Zc:function Zc(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p){var _=this
 _.c=a
 _.d=b
 _.e=c
@@ -23284,7 +23284,8 @@ _.as=k
 _.at=l
 _.ax=m
 _.ay=n
-_.CW=o},
+_.CW=o
+_.cx=p},
 GN:function GN(a,b){this.a=a
 this.b=b},
 Yp:function Yp(){},
@@ -78714,7 +78715,7 @@ s===$&&A.a()
 s=A.K(new A.n(s,p.gaA(),A.z(s).i("n<1,k>")).ah(0))
 p=s.a
 p===$&&A.a()
-p=new A.n(p,s.gaA(),A.z(p).i("n<1,k>")).ah(0)}return new A.en("models/"+p+"."+q.c,q.agX(a,r.y,!1,r.d,r.Q,r.z))},
+p=new A.n(p,s.gaA(),A.z(p).i("n<1,k>")).ah(0)}return new A.en("models/"+p+"."+q.c,q.agX(a,r.y,!1,r.d,r.Q,r.z,!1))},
 ahA(a){var s,r,q,p,o,n=this.b,m=n.e,l=n.c,k=a.a
 if(l===B.au)s=A.K(A.K(k+"_"+m).gc3()).gc3()
 else{r=A.K(k)
@@ -78777,7 +78778,7 @@ j=o.w
 i=o.at
 h=k.alb()
 g=k.ala()
-f=new A.GN(l,new A.Zc(m,o.f,o.r,j,o.x,!0,o.z,o.Q,o.as,i,!1,"application/json",!1,!1,!1))
+f=new A.GN(l,new A.Zc(m,o.f,o.r,j,o.x,!0,o.z,o.Q,o.as,i,!1,"application/json",!1,!1,!1,!1))
 o=A.z(g).i("n<1,en>")
 e=A.a_(new A.n(g,f.gahx(),o),!0,o.i("ae.E"))
 o=A.z(h).i("n<1,en>")
@@ -78799,7 +78800,7 @@ A.eM.prototype={
 G(){return"JsonSerializer."+this.b}}
 A.fg.prototype={
 G(){return"ProgrammingLanguage."+this.b},
-agX(a,b,c,d,a0,a1){var s,r,q,p,o,n,m,l,k,j,i,h=null,g=u.G,f=u.i,e=".fromJson(Map<String, Object?> json) => _$"
+agX(a,b,c,d,a0,a1,a2){var s,r,q,p,o,n,m,l,k,j,i,h=null,g=u.G,f=u.i,e=".fromJson(Map<String, Object?> json) => _$"
 switch(this.a){case 0:if(a instanceof A.ij)return A.aKz(a,b,d,a0,a1)
 else if(a instanceof A.ds){if(a.w)return A.aKD(a,a0)
 switch(d.a){case 1:s=a.a
@@ -78820,7 +78821,8 @@ m=A.eF(a.b,"","",!0)
 l=a.f
 k=l!=null
 l=k?"unionKey: '"+l.b+"'":""
-k=k?"sealed ":""
+if(k)k="sealed "
+else k=""
 j=A.aIs(a,p)
 s=r+q+"import 'package:freezed_annotation/freezed_annotation.dart';\n"+o+"\npart '"+n+".freezed.dart';\npart '"+s+".g.dart';\n\n"+m+"@Freezed("+l+")\n"+k+"class "+p+" with _$"+p+" {\n"+j+"\n  \n  factory "+p+e+p+"FromJson(json);\n}\n"
 break
