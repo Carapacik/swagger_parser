@@ -341,6 +341,20 @@ void main() {
       );
     });
 
+    test('use_freezed3.3.0', () async {
+      await e2eTest(
+        'basic/use_freezed3.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          useFreezed3: true,
+        ),
+        schemaFileName: 'use_freezed3.3.0.json',
+      );
+    });
+
     test('wrapping_collections.2.0', () async {
       await e2eTest(
         'basic/wrapping_collections.2.0',

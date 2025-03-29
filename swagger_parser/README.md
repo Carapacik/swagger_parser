@@ -141,6 +141,10 @@ swagger_parser:
   # Optional. Skip parameters with names.
   skipped_parameters:
     - 'X-Some-Token'
+
+  # Optional (dart & freezed only). Set 'true' to use Freezed 3.x code generation syntax.
+  # Set 'false' to maintain compatibility with Freezed 2.x.
+  use_freezed3: false
 ```
 
 For multiple schemes:

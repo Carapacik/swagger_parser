@@ -24,6 +24,7 @@ class GeneratorConfig {
     this.originalHttpResponse = false,
     this.replacementRules = const [],
     this.generateValidator = false,
+    this.useFreezed3 = false,
   });
 
   /// Optional. Set API name for folder and export file
@@ -109,4 +110,7 @@ class GeneratorConfig {
 
   /// Optional. Set `true` to generate validator function and prams for freezed.
   final bool generateValidator;
+
+  /// Optional. Set `true` to use freezed v3 if jsonSerializer is freezed.
+  final bool useFreezed3;
 }
