@@ -1,3 +1,6 @@
+## 1.22.1
+- Add supports for freezed 3
+
 ## 1.22.0
 - Add supports oneOf polymorphic types with dart_mappable ([#290](https://github.com/Carapacik/swagger_parser/issues/290))
 
