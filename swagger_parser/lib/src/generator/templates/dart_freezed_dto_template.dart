@@ -11,6 +11,7 @@ String dartFreezedDtoTemplate(
   UniversalComponentClass dataClass, {
   required bool markFileAsGenerated,
   bool generateValidator = false,
+  bool isV3 = false,
 }) {
   final className = dataClass.name.toPascal;
   return '''
@@ -20,7 +21,7 @@ part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';
 
 ${descriptionComment(dataClass.description)}@Freezed(${dataClass.discriminator != null ? "unionKey: '${dataClass.discriminator!.propertyName}'" : ''})
-${dataClass.discriminator != null ? 'sealed ' : ''}class $className with _\$$className {
+${dataClass.discriminator != null ? 'sealed ' : isV3 ? 'abstract ' : ''}class $className with _\$$className {
 ${_factories(dataClass, className)}
   \n  factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
 ${generateValidator ? dataClass.parameters.map(_validationString).nonNulls.join() : ''}}
