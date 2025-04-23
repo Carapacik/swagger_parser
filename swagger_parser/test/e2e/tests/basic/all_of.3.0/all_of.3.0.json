@@ -1,0 +1,146 @@
+{
+    "openapi":"3.0.0",
+    "info":{
+        "title":"API",
+        "description":"API description",
+        "version":"1.0"
+     },
+    "paths":{
+       "/users":{
+          "get":{
+             "operationId":"getUsers",
+             "parameters":[
+                {
+                   "name":"limit",
+                   "required":true,
+                   "in":"query",
+                   "description":"The number of items to return",
+                   "schema":{
+                      "minimum":1,
+                      "maximum":100,
+                      "example":10,
+                      "type":"number"
+                   }
+                },
+                {
+                   "name":"after",
+                   "required":false,
+                   "in":"query",
+                   "description":"The cursor to start the pagination from",
+                   "schema":{
+                      "example":"01AN4Z07BY",
+                      "type":"string"
+                   }
+                },
+                {
+                   "name":"before",
+                   "required":false,
+                   "in":"query",
+                   "description":"The cursor to end the pagination to",
+                   "schema":{
+                      "example":"01EF4Z07BW",
+                      "type":"string"
+                   }
+                }
+             ],
+             "responses":{
+                "200":{
+                   "description":"",
+                   "content":{
+                      "application/json":{
+                         "schema":{
+                            "allOf":[
+                               {
+                                  "$ref":"#/components/schemas/CursorPaginatedDto"
+                               },
+                               {
+                                  "properties":{
+                                     "data":{
+                                        "type":"array",
+                                        "items":{
+                                           "$ref":"#/components/schemas/UserDto"
+                                        }
+                                     }
+                                  },
+                                  "required":[
+                                     "data"
+                                  ]
+                               }
+                            ]
+                         }
+                      }
+                   }
+                }
+             },
+             "summary":"Get all users",
+             "tags":[
+                "users"
+             ]
+          }
+       }
+    },
+    "components":{
+       "schemas":{
+          "CursorPaginatedDto":{
+             "type":"object",
+             "properties":{
+                "nextCursor":{
+                   "type":"string",
+                   "nullable":true,
+                   "example":"01AN4Z07BY"
+                },
+                "previousCursor":{
+                   "type":"string",
+                   "nullable":true,
+                   "example":"01EF4Z07BW"
+                }
+             },
+             "required":[
+                "nextCursor",
+                "previousCursor"
+             ]
+          },
+          "UserDto":{
+             "type":"object",
+             "properties":{
+                "id":{
+                   "type":"string",
+                   "description":"The id of the user",
+                   "example":"123e4567-e89b-12d3-a456-426614174000"
+                },
+                "username":{
+                   "type":"string",
+                   "description":"The username of the user, can be null.",
+                   "nullable":true,
+                   "example":"john_doe"
+                }
+             },
+             "required":[
+                "id",
+                "username"
+             ]
+          },
+          "PaginatedUserDto":{
+            "allOf": [
+                {
+                    "$ref": "#/components/schemas/CursorPaginatedDto"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/UserDto"
+                            }
+                        }
+                    },
+                    "required": [
+                        "data"
+                    ]
+                }
+            ]
+          }
+       }
+    }
+ }

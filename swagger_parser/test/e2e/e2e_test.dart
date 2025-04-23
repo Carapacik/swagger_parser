@@ -147,6 +147,19 @@ void main() {
       );
     });
 
+    test('all_of.3.0', () async {
+      await e2eTest(
+        'basic/all_of.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'all_of.3.0.json',
+      );
+    });
+
     test('basic_requests.2.0', () async {
       await e2eTest(
         'basic/basic_requests.2.0',
