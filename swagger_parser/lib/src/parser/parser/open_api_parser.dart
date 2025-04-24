@@ -1113,7 +1113,7 @@ class OpenApiParser {
       UniversalType? ofType;
       final ofList = map[_allOfConst] ?? map[_anyOfConst] ?? map[_oneOfConst] ?? (map[_typeConst] as List<dynamic>).map((e) => <String, dynamic>{_typeConst: e.toString()}).toList();
       if (ofList is List<dynamic>) {
-        if (map.containsKey(_allOfConst)) {
+        if (map.containsKey(_allOfConst) && ofList.length > 1) {
           final refs = <String>[];
           final parameters = <UniversalType>[];
           final imports = SplayTreeSet<String>();
