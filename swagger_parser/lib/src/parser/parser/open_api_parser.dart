@@ -1259,17 +1259,21 @@ class OpenApiParser {
         // Find n-element anyOf/allOf
         else if (ofList.length > 1) {
           final nullItems = ofList
-              .where((item) =>
-                  item is Map<String, dynamic> &&
-                  (item[_typeConst]?.toString() == 'null' ||
-                      (item.containsKey(_nullableConst) &&
-                          (item[_nullableConst]?.toString().toBool() ??
-                              false))))
+              .where(
+                (item) =>
+                    item is Map<String, dynamic> &&
+                    (item[_typeConst]?.toString() == 'null' ||
+                        (item.containsKey(_nullableConst) &&
+                            (item[_nullableConst]?.toString().toBool() ??
+                                false))),
+              )
               .whereType<Map<String, dynamic>>()
               .toList();
           final otherItems = ofList
-              .where((item) =>
-                  item is Map<String, dynamic> && !nullItems.contains(item))
+              .where(
+                (item) =>
+                    item is Map<String, dynamic> && !nullItems.contains(item),
+              )
               .whereType<Map<String, dynamic>>()
               .toList();
 
