@@ -8,6 +8,7 @@ export 'clients/users_client.dart';
 export 'models/cursor_paginated_dto.dart';
 export 'models/user_dto.dart';
 export 'models/paginated_user_dto.dart';
+export 'models/nullable_user_dto.dart';
 export 'models/get_users_response.dart';
 // Root client
 export 'rest_client.dart';

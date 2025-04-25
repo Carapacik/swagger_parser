@@ -177,6 +177,21 @@
                   ]
                }
             ]
+         },
+         "NullableUserDto":{
+            "type":"object",
+            "properties":{
+               "data":{
+                  "allOf":[
+                     {
+                        "$ref":"#/components/schemas/UserDto"
+                     },
+                     {
+                        "nullable": true
+                     }
+                  ]
+               }
+            }
          }
       }
    }

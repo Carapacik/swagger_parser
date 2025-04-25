@@ -1261,7 +1261,10 @@ class OpenApiParser {
           final nullItems = ofList
               .where((item) =>
                   item is Map<String, dynamic> &&
-                  (item[_typeConst]?.toString() == 'null'))
+                  (item[_typeConst]?.toString() == 'null' ||
+                      (item.containsKey(_nullableConst) &&
+                          (item[_nullableConst]?.toString().toBool() ??
+                              false))))
               .whereType<Map<String, dynamic>>()
               .toList();
           final otherItems = ofList
