@@ -1175,55 +1175,6 @@ class OpenApiParser {
         map.containsKey(_anyOfConst) ||
         map.containsKey(_oneOfConst) ||
         map[_typeConst] is List) {
-      // Handle discriminated oneOf
-      if (map.containsKey(_oneOfConst) &&
-          map.containsKey(_discriminatorConst) &&
-          (map[_discriminatorConst] as Map<String, dynamic>).containsKey(
-            _propertyNameConst,
-          ) &&
-          (map[_discriminatorConst] as Map<String, dynamic>).containsKey(
-            _mappingConst,
-          )) {
-        final discriminator = _parseDiscriminatorInfo(map);
-
-        // Create a base union class for the discriminated types
-        final baseClassName =
-            '${additionalName ?? ''} ${name ?? ''} Union'.toPascal;
-        final (newName, description) = protectName(
-          baseClassName,
-          uniqueIfNull: true,
-          description: map[_descriptionConst]?.toString(),
-        );
-
-        // Create a sealed class to represent the discriminated union
-        _objectClasses.add(
-          UniversalComponentClass(
-            name: newName!.toPascal,
-            imports: SplayTreeSet<String>(),
-            parameters: [
-              UniversalType(
-                type: 'String',
-                name: discriminator?.propertyName,
-                isRequired: true,
-              ),
-            ],
-            discriminator: discriminator,
-          ),
-        );
-
-        return (
-          type: UniversalType(
-            type: newName.toPascal,
-            name: name?.toCamel,
-            description: description,
-            isRequired: isRequired,
-            nullable: map[_nullableConst].toString().toBool() ??
-                (root && !isRequired),
-          ),
-          import: newName.toPascal,
-        );
-      }
-
       String? ofImport;
       UniversalType? ofType;
       final ofList = map[_allOfConst] ??
@@ -1251,7 +1202,51 @@ class OpenApiParser {
       }
 
       if (ofList is List<dynamic>) {
-        if (ofList.length == 1) {
+        // Handle first the special case of oneOf with discriminator which should be handled as sealed class
+        if (map.containsKey(_oneOfConst) &&
+            map.containsKey(_discriminatorConst) &&
+            (map[_discriminatorConst] as Map<String, dynamic>).containsKey(
+              _propertyNameConst,
+            ) &&
+            (map[_discriminatorConst] as Map<String, dynamic>).containsKey(
+              _mappingConst,
+            )) {
+          final discriminator = _parseDiscriminatorInfo(map);
+
+          // Create a base union class for the discriminated types
+          final baseClassName =
+              '${additionalName ?? ''} ${name ?? ''} Union'.toPascal;
+          final (newName, description) = protectName(
+            baseClassName,
+            uniqueIfNull: true,
+            description: map[_descriptionConst]?.toString(),
+          );
+
+          // Create a sealed class to represent the discriminated union
+          _objectClasses.add(
+            UniversalComponentClass(
+              name: newName!.toPascal,
+              imports: SplayTreeSet<String>(),
+              parameters: [
+                UniversalType(
+                  type: 'String',
+                  name: discriminator?.propertyName,
+                  isRequired: true,
+                ),
+              ],
+              discriminator: discriminator,
+            ),
+          );
+
+          ofType = UniversalType(
+            type: newName.toPascal,
+            isRequired: isRequired,
+          );
+          ofImport = newName.toPascal;
+        }
+
+        // If there is only one item, we directly return the type inside the xOf
+        else if (ofList.length == 1) {
           final item = ofList[0];
           if (item is Map<String, dynamic>) {
             (import: ofImport, type: ofType) = _findType(
