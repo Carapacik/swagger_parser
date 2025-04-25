@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/get_users_response.dart';
+import '../models/user_dto.dart';
 
 part 'users_client.g.dart';
 
@@ -25,5 +26,13 @@ abstract class UsersClient {
     @Query('limit') required num limit,
     @Query('after') String? after,
     @Query('before') String? before,
+  });
+
+  /// Get a user by its id.
+  ///
+  /// [id] - The id of the user.
+  @GET('/users/{id}')
+  Future<UserDto?> getUserById({
+    @Path('id') required String id,
   });
 }
