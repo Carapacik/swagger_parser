@@ -51,7 +51,15 @@ paths:
                             - null
                           additionalProperties:
                             type: integer
-
+        - in: query
+          name: nullable_string_list
+          required: true
+          schema:
+            type: array
+            items:
+              type:
+                - string
+                - null
 
           description: "description"
       tags:

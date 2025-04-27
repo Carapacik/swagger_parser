@@ -19,7 +19,7 @@ abstract class ApiClient {
   /// [enumClassDynamic] - description.
   @GET('/api/v1/category/')
   Future<void> apiV1CategoryList({
-    @Query('enum_class') required List<EnumClass> enumClass,
+    @Query('enum_class') required List<EnumClass?> enumClass,
     @Query('enum_class_dynamic')
     required List<EnumClassDynamic> enumClassDynamic,
   });
