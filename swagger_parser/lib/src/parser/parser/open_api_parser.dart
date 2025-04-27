@@ -1092,6 +1092,9 @@ class OpenApiParser {
 
       _enumClasses.add(enumClass);
 
+      final type = map[_typeConst];
+      final nullable = type is List && type.contains(null);
+
       return (
         type: UniversalType(
           type: enumClass.name,
@@ -1102,6 +1105,7 @@ class OpenApiParser {
           defaultValue: protectDefaultValue(map[_defaultConst]),
           isRequired: isRequired,
           enumType: map[_typeConst]?.toString(),
+          nullable: nullable,
         ),
         import: enumClass.name,
       );
