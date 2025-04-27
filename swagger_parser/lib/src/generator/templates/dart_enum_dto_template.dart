@@ -76,6 +76,9 @@ String _jsonField(UniversalEnumClass enumClass) {
 }
 
 String _nullableSign(String dartType) {
+  if (dartType.endsWith('?')) {
+    return '';
+  }
   final isDynamic = dartType == 'dynamic';
   final nullableSign = isDynamic ? '' : '?';
   return nullableSign;
