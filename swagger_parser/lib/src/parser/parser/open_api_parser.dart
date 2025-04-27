@@ -1091,7 +1091,7 @@ class OpenApiParser {
       _enumClasses.add(enumClass);
 
       final type = map[_typeConst];
-      final nullable = type is List && type.contains(null);
+      final nullable = type is List && type.any((e) => e.toString() == 'null');
 
       return (
         type: UniversalType(

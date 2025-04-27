@@ -29,7 +29,8 @@ extension StringTypeX on String {
   String _parseTypeList(String types) {
     final typesList = types.replaceAll(RegExp(r'[\[\] ]'), '').split(',');
     if (typesList.length == 2 && typesList.contains('null')) {
-      return typesList.firstWhere((e) => e != 'null').toDartType();
+      final type = typesList.firstWhere((e) => e != 'null').toDartType();
+      return '$type?';
     }
     return 'dynamic';
   }
