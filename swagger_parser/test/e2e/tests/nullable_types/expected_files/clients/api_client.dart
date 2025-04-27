@@ -13,9 +13,10 @@ part 'api_client.g.dart';
 abstract class ApiClient {
   factory ApiClient(Dio dio, {String? baseUrl}) = _ApiClient;
 
-  /// [enumClass] - description
+  /// [nullableStringList] - description
   @GET('/api/v1/category/')
   Future<void> apiV1CategoryList({
     @Query('enum_class') required List<Object0>? enumClass,
+    @Query('nullable_string_list') required List<String?> nullableStringList,
   });
 }
