@@ -53,7 +53,7 @@ enum EnumClass {
 
   const EnumClass(this.json);
 
-  factory EnumClass.fromJson(String json) => values.firstWhere(
+  factory EnumClass.fromJson(String? json) => values.firstWhere(
         (e) => e.json == json,
         orElse: () => $unknown,
       );
