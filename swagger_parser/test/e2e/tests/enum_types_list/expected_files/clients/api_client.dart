@@ -7,6 +7,7 @@ import 'package:retrofit/retrofit.dart';
 
 import '../models/enum_class.dart';
 import '../models/enum_class_dynamic.dart';
+import '../models/nullable_enum_in_object.dart';
 
 part 'api_client.g.dart';
 
@@ -17,10 +18,14 @@ abstract class ApiClient {
   /// [enumClass] - description.
   ///
   /// [enumClassDynamic] - description.
+  ///
+  /// [nullableEnumInObject] - description.
   @GET('/api/v1/category/')
   Future<void> apiV1CategoryList({
     @Query('enum_class') required List<EnumClass?> enumClass,
     @Query('enum_class_dynamic')
     required List<EnumClassDynamic> enumClassDynamic,
+    @Query('nullable_enum_in_object')
+    required NullableEnumInObject nullableEnumInObject,
   });
 }

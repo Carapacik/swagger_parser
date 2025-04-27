@@ -60,6 +60,22 @@ paths:
                 - "5иллегалчарактер"
                 - "6 item six"
           description: "description"
+        - in: query
+          name: nullable_enum_in_object
+          required: true
+          schema:
+            type: object
+            properties:
+              fruits:
+                type:
+                  - string
+                  - "null"
+                enum:
+                  - apple
+                  - orange
+                  - null
+
+          description: "description"
       tags:
         - api
       responses:
