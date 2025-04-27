@@ -192,14 +192,12 @@ class OpenApiParser {
         imports.add(typeWithImport.import!);
       }
 
-      final type = typeWithImport.type;
-      return UniversalType(
-        type: type.type,
-        wrappingCollections:
-            // List<dynamic> is not supported by Retrofit, use dynamic instead
-            type.type == _objectConst ? const [] : type.wrappingCollections,
-        isRequired: typeWithImport.type.isRequired,
-      );
+      // List<dynamic> is not supported by Retrofit, use dynamic instead
+      if (typeWithImport.type.type == _objectConst) {
+        return typeWithImport.type.copyWith(wrappingCollections: const []);
+      }
+
+      return typeWithImport.type;
     }
 
     /// Parses query parameters (parameters and requestBody)
@@ -669,7 +667,7 @@ class OpenApiParser {
     return restClients;
   }
 
-  /// Used for find properties in map
+  /// Used to find properties in map
   (List<UniversalType>, Set<String>) _findParametersAndImports(
     Map<String, dynamic> map, {
     String? additionalName,
@@ -1177,55 +1175,6 @@ class OpenApiParser {
         map.containsKey(_anyOfConst) ||
         map.containsKey(_oneOfConst) ||
         map[_typeConst] is List) {
-      // Handle discriminated oneOf
-      if (map.containsKey(_oneOfConst) &&
-          map.containsKey(_discriminatorConst) &&
-          (map[_discriminatorConst] as Map<String, dynamic>).containsKey(
-            _propertyNameConst,
-          ) &&
-          (map[_discriminatorConst] as Map<String, dynamic>).containsKey(
-            _mappingConst,
-          )) {
-        final discriminator = _parseDiscriminatorInfo(map);
-
-        // Create a base union class for the discriminated types
-        final baseClassName =
-            '${additionalName ?? ''} ${name ?? ''} Union'.toPascal;
-        final (newName, description) = protectName(
-          baseClassName,
-          uniqueIfNull: true,
-          description: map[_descriptionConst]?.toString(),
-        );
-
-        // Create a sealed class to represent the discriminated union
-        _objectClasses.add(
-          UniversalComponentClass(
-            name: newName!.toPascal,
-            imports: SplayTreeSet<String>(),
-            parameters: [
-              UniversalType(
-                type: 'String',
-                name: discriminator?.propertyName,
-                isRequired: true,
-              ),
-            ],
-            discriminator: discriminator,
-          ),
-        );
-
-        return (
-          type: UniversalType(
-            type: newName.toPascal,
-            name: name?.toCamel,
-            description: description,
-            isRequired: isRequired,
-            nullable: map[_nullableConst].toString().toBool() ??
-                (root && !isRequired),
-          ),
-          import: newName.toPascal,
-        );
-      }
-
       String? ofImport;
       UniversalType? ofType;
       final ofList = map[_allOfConst] ??
@@ -1234,9 +1183,70 @@ class OpenApiParser {
           (map[_typeConst] as List<dynamic>)
               .map((e) => <String, dynamic>{_typeConst: e.toString()})
               .toList();
+
+      UniversalType makeNullable(UniversalType type) {
+        if (type.wrappingCollections.isEmpty) {
+          return type.copyWith(nullable: true);
+        } else {
+          final first = type.wrappingCollections.first;
+          final wrappingCollections = [...type.wrappingCollections]..first =
+                switch (first) {
+              UniversalCollections.list => UniversalCollections.nullableList,
+              UniversalCollections.map => UniversalCollections.nullableMap,
+              _ => first,
+            };
+          return type.copyWith(
+            wrappingCollections: wrappingCollections,
+          );
+        }
+      }
+
       if (ofList is List<dynamic>) {
-        // Find type in of one-element allOf, anyOf or oneOf
-        if (ofList.length == 1) {
+        // Handle first the special case of oneOf with discriminator which should be handled as sealed class
+        if (map.containsKey(_oneOfConst) &&
+            map.containsKey(_discriminatorConst) &&
+            (map[_discriminatorConst] as Map<String, dynamic>).containsKey(
+              _propertyNameConst,
+            ) &&
+            (map[_discriminatorConst] as Map<String, dynamic>).containsKey(
+              _mappingConst,
+            )) {
+          final discriminator = _parseDiscriminatorInfo(map);
+
+          // Create a base union class for the discriminated types
+          final baseClassName =
+              '${additionalName ?? ''} ${name ?? ''} Union'.toPascal;
+          final (newName, description) = protectName(
+            baseClassName,
+            uniqueIfNull: true,
+            description: map[_descriptionConst]?.toString(),
+          );
+
+          // Create a sealed class to represent the discriminated union
+          _objectClasses.add(
+            UniversalComponentClass(
+              name: newName!.toPascal,
+              imports: SplayTreeSet<String>(),
+              parameters: [
+                UniversalType(
+                  type: 'String',
+                  name: discriminator?.propertyName,
+                  isRequired: true,
+                ),
+              ],
+              discriminator: discriminator,
+            ),
+          );
+
+          ofType = UniversalType(
+            type: newName.toPascal,
+            isRequired: isRequired,
+          );
+          ofImport = newName.toPascal;
+        }
+
+        // If there is only one item, we directly return the type inside the xOf
+        else if (ofList.length == 1) {
           final item = ofList[0];
           if (item is Map<String, dynamic>) {
             (import: ofImport, type: ofType) = _findType(
@@ -1246,55 +1256,126 @@ class OpenApiParser {
             );
           }
         }
-        // Find nullable type in of two-element anyOf
-        else if (ofList.length == 2) {
-          final item1 = ofList[0];
-          final item2 = ofList[1];
-          if (item1 is Map<String, dynamic> && item2 is Map<String, dynamic>) {
-            final nullableItem = item1[_typeConst] == 'null'
-                ? item2
-                : item2[_typeConst] == 'null'
-                    ? item1
-                    : null;
+        // Find n-element anyOf/allOf
+        else if (ofList.length > 1) {
+          final nullItems = ofList
+              .where(
+                (item) =>
+                    item is Map<String, dynamic> &&
+                    (item[_typeConst]?.toString() == 'null' ||
+                        (item.containsKey(_nullableConst) &&
+                            (item[_nullableConst]?.toString().toBool() ??
+                                false))),
+              )
+              .whereType<Map<String, dynamic>>()
+              .toList();
+          final otherItems = ofList
+              .where(
+                (item) =>
+                    item is Map<String, dynamic> && !nullItems.contains(item),
+              )
+              .whereType<Map<String, dynamic>>()
+              .toList();
 
-            if (nullableItem != null) {
-              // Add to support this:
-              // anyOf:
-              //   - type: array
-              //   - type: null
-              // items:
-              //   type: string
-              final nMap = {...map}
-                ..remove(_anyOfConst)
-                ..remove(_allOfConst)
-                ..remove(_oneOfConst)
-                ..remove(_typeConst);
+          // If there is only one item in otherItems, it probably means the type is the same or
+          // the type is used as a nullable here
+          if (otherItems.length == 1) {
+            final optionalItem = otherItems[0];
+            // Add to support this:
+            // anyOf:
+            //   - type: array
+            //   - type: null
+            // items:
+            //   type: string
+            final nMap = {...map}
+              ..remove(_anyOfConst)
+              ..remove(_allOfConst)
+              ..remove(_oneOfConst)
+              ..remove(_typeConst);
 
-              nullableItem.addAll(nMap);
+            optionalItem.addAll(nMap);
 
-              final (:type, :import) = _findType(
-                nullableItem,
-                root: root,
-                isRequired: false,
-              );
-              ofImport = import;
-              if (type.wrappingCollections.isEmpty) {
-                ofType = type.copyWith(nullable: true);
-              } else {
-                final first = type.wrappingCollections.first;
-                final wrappingCollections = [...type.wrappingCollections]
-                  ..first = switch (first) {
-                    UniversalCollections.list =>
-                      UniversalCollections.nullableList,
-                    UniversalCollections.map =>
-                      UniversalCollections.nullableMap,
-                    _ => first,
-                  };
-                ofType = type.copyWith(
-                  wrappingCollections: wrappingCollections,
-                );
+            final (:type, :import) = _findType(
+              optionalItem,
+              root: root,
+              isRequired: false,
+            );
+            ofType = type;
+            ofImport = import;
+          }
+          // If there is more than one item, there is a union of types which dart might not natively support
+          else if (otherItems.length > 1) {
+            // It is possible that more cases have to be handled like
+            // types:
+            //   - null
+            //   - number
+            //   - string
+            // In theory this is not very type safe but it COULD be handled through a union type
+            // This is left as an indication for future contributors who may want to handle this case
+
+            // If we try to handle an allOf, the goal is to obtain a single type that is the union of all the types in otherItems
+            // At this point, we only explored a part of the schema so if the item is a ref, we won't be able to fully resolve the type
+            // What we should do is create a new type that is a composition of all the object types in otherItems
+            // Then we collect the refs and properties and store them in the UniversalComponentClass to be processed when we are done parsing the data classes.
+            if (map.containsKey(_allOfConst)) {
+              final refs = <String>[];
+              final parameters = <UniversalType>[];
+              final imports = SplayTreeSet<String>();
+
+              for (final item in otherItems) {
+                if (item.containsKey(_refConst)) {
+                  // Get referenced schema
+                  final ref = _formatRef(item);
+                  // Add to list of refs to be processed
+                  refs.add(ref);
+                  imports.add(ref);
+                } else if (item.containsKey(_propertiesConst)) {
+                  final (foundParameters, foundImports) =
+                      _findParametersAndImports(
+                    item,
+                    additionalName: name,
+                  );
+                  parameters.addAll(foundParameters);
+                  imports.addAll(foundImports);
+                }
               }
+
+              final baseClassName =
+                  '${additionalName ?? ''} ${name ?? ''}'.toPascal;
+              final (newName, description) = protectName(
+                baseClassName,
+                uniqueIfNull: true,
+                description: map[_descriptionConst]?.toString(),
+              );
+
+              // Create a class to represent the allOf composition
+              _objectClasses.add(
+                UniversalComponentClass(
+                  name: newName!.toPascal,
+                  imports: imports,
+                  // This is a workaround as the linter is rightfully complaining
+                  // because we give a litteral that should be a const but can't
+                  // because it is modified later when the data classes are created
+                  // This should be addressed in the future.
+                  // ignore: prefer_const_literals_to_create_immutables
+                  parameters: [],
+                  allOf: (refs: refs, properties: parameters),
+                  description: description,
+                ),
+              );
+
+              ofType = UniversalType(
+                type: newName.toPascal,
+                isRequired: isRequired,
+              );
+
+              ofImport = newName.toPascal;
             }
+          }
+
+          // If the ofList contains the "null" type, it is a nullable type
+          if (ofType != null && nullItems.isNotEmpty) {
+            ofType = makeNullable(ofType);
           }
         }
         ofType = ofType?.copyWith(name: name?.toPascal);
@@ -1330,9 +1411,9 @@ class OpenApiParser {
           enumType: enumType,
           isRequired: isRequired,
           wrappingCollections: ofType?.wrappingCollections ?? [],
-          nullable: ofType?.nullable ??
-              (map[_nullableConst].toString().toBool() ??
-                  (root && !isRequired)),
+          nullable: (ofType?.nullable ?? false) ||
+              (map[_nullableConst].toString().toBool() ?? false) ||
+              (root && !isRequired),
         ),
         import: import,
       );
