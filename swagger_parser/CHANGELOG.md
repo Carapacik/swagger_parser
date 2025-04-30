@@ -1,3 +1,6 @@
+## 1.23.1
+- Update dart_mappable template
+
 ## 1.23.0
 - Support for allOf composition and xOf ([#239](https://github.com/Carapacik/swagger_parser/issues/239))
 - Nullable fixes ([#251](https://github.com/Carapacik/swagger_parser/issues/251))
