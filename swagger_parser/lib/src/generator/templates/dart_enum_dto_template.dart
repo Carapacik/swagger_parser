@@ -53,17 +53,32 @@ String _dartEnumDartMappableTemplate(
   final className = enumClass.name.toPascal;
   final jsonParam = unknownEnumValue || enumsToJson;
 
-  final values =
-      '${enumClass.items.mapIndexed((i, e) => _enumValueDartMappable(i, enumClass.type, e, jsonParam: jsonParam)).join(',\n')}${unknownEnumValue ? ',' : ';'}';
+  final values = [
+    ...enumClass.items,
+    if (unknownEnumValue)
+      const UniversalEnumItem(name: 'unknown', jsonKey: 'unknown'),
+  ]
+      .mapIndexed(
+        (i, e) =>
+            _enumValueDartMappable(i, enumClass.type, e, jsonParam: jsonParam),
+      )
+      .join(',\n');
+
+  final annotationParameters = [
+    if (unknownEnumValue) "defaultValue: 'unknown'",
+  ].join(', ');
+
+  final toJson = enumsToJson ? 'dynamic toJson() => toValue();' : '';
 
   return '''
 ${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${dartImportDtoTemplate(JsonSerializer.dartMappable)}
 
 part '${enumClass.name.toSnake}.mapper.dart';
 
-${descriptionComment(enumClass.description)}@MappableEnum()
+${descriptionComment(enumClass.description)}@MappableEnum($annotationParameters)
 enum $className {
-$values
+$values;
+$toJson
 }
 ''';
 }
