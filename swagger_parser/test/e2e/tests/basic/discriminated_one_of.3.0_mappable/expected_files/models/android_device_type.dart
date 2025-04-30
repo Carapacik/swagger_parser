@@ -6,8 +6,11 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 part 'android_device_type.mapper.dart';
 
-@MappableEnum()
+@MappableEnum(defaultValue: 'unknown')
 enum AndroidDeviceType {
   @MappableValue('android')
   android,
+
+  @MappableValue('unknown')
+  unknown;
 }

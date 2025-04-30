@@ -26,7 +26,7 @@ ${descriptionComment(dataClass.description)}@MappableClass(${() {
     if (dataClass.discriminator != null) {
       return [
         "discriminatorKey: '${dataClass.discriminator!.propertyName}'",
-        "includeSubClasses: [${dataClass.discriminator!.discriminatorValueToRefMapping.values.join(', ')}]"
+        "includeSubClasses: [${dataClass.discriminator!.discriminatorValueToRefMapping.values.join(', ')}]",
       ].join(", ");
     }
     if (dataClass.discriminatorValue != null) {
