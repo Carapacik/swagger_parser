@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:swagger_parser/src/config/config_processor.dart';
 import 'package:swagger_parser/src/generator/model/generation_statistic.dart';
 import 'package:swagger_parser/src/utils/output/output_utils.dart';
