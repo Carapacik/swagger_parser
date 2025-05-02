@@ -46,6 +46,7 @@ Future<void> main(List<String> arguments) async {
       successSchemasCount: successSchemasCount,
       schemesCount: configs.length,
     );
+    exit(0);
   } on Exception catch (e) {
     exitWithError('Failed to generate files.\n$e');
   }
