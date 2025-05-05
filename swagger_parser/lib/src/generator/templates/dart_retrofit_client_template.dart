@@ -120,7 +120,8 @@ String _toParameter(UniversalRequestType parameter) {
     'value_',
   );
 
-  return "    @${parameter.parameterType.type}(${parameter.name != null && !parameter.parameterType.isBody ? "${parameter.parameterType.isPart ? 'name: ' : ''}'${parameter.name}'" : ''}) "
+  return '    @${parameter.parameterType.type}'
+      "(${parameter.name != null && !parameter.parameterType.isBody ? "${parameter.parameterType.isPart ? 'name: ' : ''}${_startWith$(parameter.name!) ? 'r' : ''}'${parameter.name}'" : ''}) "
       '${_required(parameter.type)}'
       '$parameterType '
       '$keywordArguments${_defaultValue(parameter.type)},';
@@ -162,3 +163,5 @@ String _defaultValue(UniversalType t) => t.defaultValue != null
         '${t.wrappingCollections.isNotEmpty ? 'const ' : ''}'
         '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toCamel)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}'
     : '';
+
+bool _startWith$(String name) => name.isNotEmpty && name.startsWith(r'$');

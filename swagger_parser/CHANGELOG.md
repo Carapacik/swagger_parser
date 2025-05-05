@@ -1,3 +1,6 @@
+## 1.23.2
+- Fixed error with client parameters with `$`([#262](https://github.com/Carapacik/swagger_parser/issues/262))
+
 ## 1.23.1
 - Update dart_mappable template
 
