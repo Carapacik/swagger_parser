@@ -214,6 +214,20 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_-][a-zA-Z\d_-]*$');
             'Name not received and was auto-generated.',
           )
         : (null, null),
+    // https://github.com/Carapacik/swagger_parser/issues/262
+    _
+        when name.startsWith(r'$') &&
+            name
+                    .split('')
+                    .where(
+                      (e) => e == r'$',
+                    )
+                    .length ==
+                1 =>
+      (
+        name.substring(1),
+        'Incorrect name has been replaced. Original name: `$name`.',
+      ),
     _ when !_nameRegExp.hasMatch(name) => (
         uniqueName(isEnum: isEnum),
         'Incorrect name has been replaced. Original name: `$name`.',
@@ -237,6 +251,4 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_-][a-zA-Z\d_-]*$');
 }
 
 /// Protect JsonKeys from incorrect symbols, keywords, etc.
-String? protectJsonKey(String? name) {
-  return name?.replaceAll(r'$', r'\$');
-}
+String? protectJsonKey(String? name) => name?.replaceAll(r'$', r'\$');
