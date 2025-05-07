@@ -22,14 +22,13 @@ class OpenApiCorrector {
         : (loadYaml(fileContent) as YamlMap).toMap();
 
     // OpenAPI 3.0 and 3.1
-    final components =
-        definitionFileContent['components'] as Map<String, dynamic>?;
+    final components = definitionFileContent['components'] as Map<String, dynamic>?;
     final schemes = components?['schemas'] as Map<String, dynamic>?;
     // OpenAPI 2.0
-    final definitions =
-        definitionFileContent['definitions'] as Map<String, dynamic>?;
+    final definitions = definitionFileContent['definitions'] as Map<String, dynamic>?;
 
     final models = schemes ?? definitions;
+    final correctModelMap = <String, String>{};
 
     if (models != null) {
       // Apply replacement rules to all class names and format to PascalCase
@@ -43,25 +42,54 @@ class OpenApiCorrector {
         correctType = correctType.toPascal;
 
         if (correctType != type) {
+          String escape(String input) => input.replaceAllMapped(
+                RegExp(r'[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]'),
+                (m) =>
+                    // Add a backslash before each special character
+                    '\\${m[0]}',
+              );
+
           // Escape all special characters for regular expressions
-          final escapedType = type.replaceAllMapped(
-            RegExp(r'[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]'),
-            (m) =>
-                // Add a backslash before each special character
-                '\\${m[0]}',
-          );
+          final urlEncodedType = escape(Uri.encodeComponent(type));
+          final escapedType = escape(type);
 
           fileContent = fileContent.replaceAllMapped(
-            RegExp('[ "\'/]$escapedType[ "\':]'),
-            (match) => match[0]!.replaceAll(type, correctType),
+            RegExp('["\']#/(definitions|components/schemas)/($escapedType|$urlEncodedType)["\']'),
+            (match) => match[0]!.replaceFirst(match[2]!, correctType, match[1]!.length + 4),
           );
+
+          correctModelMap[type] = correctType;
         }
       }
     }
 
-    return config.isJson
+    final updatedSchemaMap = config.isJson
         ? json.decode(fileContent) as Map<String, dynamic>
         : (loadYaml(fileContent) as YamlMap).toMap();
+
+    if (correctModelMap.isNotEmpty) {
+      // OpenAPI 3.0 and 3.1
+      final components = updatedSchemaMap['components'] as Map<String, dynamic>?;
+      final schemes = components?['schemas'] as Map<String, dynamic>?;
+      // OpenAPI 2.0
+      final definitions = updatedSchemaMap['definitions'] as Map<String, dynamic>?;
+      final models = schemes ?? definitions;
+
+      final updatedModels = models?.map((key, value) {
+        final updatedKey = correctModelMap[key] ?? key;
+        return MapEntry(updatedKey, value);
+      });
+
+      if (updatedModels != null) {
+        if (components != null) {
+          components['schemas'] = updatedModels;
+        } else {
+          updatedSchemaMap['definitions'] = updatedModels;
+        }
+      }
+    }
+
+    return updatedSchemaMap;
   }
 }
 
