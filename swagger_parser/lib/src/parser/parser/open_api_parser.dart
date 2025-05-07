@@ -709,8 +709,9 @@ class OpenApiParser {
           additionalName: additionalName,
           isRequired: (_apiInfo.schemaVersion == OAS.v2 && !config.useXNullable)
               ? isRequired
-              : isRequired || !isNullable,
+              : isRequired,
         );
+        // isNotRequired = !isRequired && !isNullable;
 
         var validation = propertyValue;
         final anyOf = propertyValue[_anyOfConst];
@@ -1168,7 +1169,7 @@ class OpenApiParser {
           jsonKey: originalName,
           defaultValue: protectDefaultValue(map[_defaultConst]),
           nullable:
-              map[_nullableConst].toString().toBool() ?? (root && !isRequired),
+              map[_nullableConst].toString().toBool() ?? false,
           isRequired: isRequired,
         ),
         import: type,
@@ -1471,7 +1472,7 @@ class OpenApiParser {
           enumType: enumType,
           isRequired: isRequired,
           nullable:
-              map[_nullableConst].toString().toBool() ?? (root && !isRequired),
+              map[_nullableConst].toString().toBool() ?? false,
         ),
         import: import,
       );

@@ -237,6 +237,20 @@ String _parametersToString(List<UniversalType> parameters) {
 
 String _jsonKey(UniversalType t) {
   final sb = StringBuffer();
+  
+  // If property is optional (but never `null`), add includeIfNull: false
+  if (!t.isRequired && !t.nullable) {
+    if (t.jsonKey != null && t.name != t.jsonKey) {
+      sb.write("    @JsonKey(name: '${protectJsonKey(t.jsonKey)}', includeIfNull: false)\n");
+    } else {
+      sb.write("    @JsonKey(includeIfNull: false)\n");
+    }
+    if (t.defaultValue != null) {
+      sb.write('    @Default(${_defaultValue(t)})\n');
+    }
+    return sb.toString();
+  }
+  
   if ((t.jsonKey == null || t.name == t.jsonKey) && t.defaultValue == null) {
     return '';
   }
