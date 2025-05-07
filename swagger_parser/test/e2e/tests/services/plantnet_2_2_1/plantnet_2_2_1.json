@@ -1,0 +1,1539 @@
+{
+  "basePath": "/",
+  "host": "my-api.plantnet.org",
+  "info": {
+    "title": "My Pl@ntNet API",
+    "version": "2.2.1",
+    "description": "API Service for developers"
+  },
+  "schemes": [
+    "https"
+  ],
+  "swagger": "2.0",
+  "tags": [],
+  "paths": {
+    "/v2/_status": {
+      "get": {
+        "summary": "Check API health",
+        "operationId": "getV2_status",
+        "description": "Returns current health status of My Pl@ntNet API and inrastructure",
+        "tags": [
+          "my-api"
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Model1"
+            },
+            "description": "Success, all systems are up and running"
+          },
+          "500": {
+            "description": "Internal Server Error, at least one component of the infrastructure is down"
+          }
+        }
+      }
+    },
+    "/v2/languages": {
+      "get": {
+        "summary": "Languages service",
+        "operationId": "getV2Languages",
+        "description": "Get the list of available languages (ISO 639-1)",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Your private API key",
+            "name": "api-key",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "tags": [
+          "my-api"
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Languages list"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/v2/projects": {
+      "get": {
+        "summary": "Projects service",
+        "operationId": "getV2Projects",
+        "description": "Get the list of projects that can be used for identification",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "i18n (default: en)",
+            "default": "en",
+            "enum": [
+              "en",
+              "fr",
+              "es",
+              "pt",
+              "de",
+              "it",
+              "ar",
+              "cs",
+              "nl",
+              "sk",
+              "zh",
+              "ru",
+              "tr",
+              "pl",
+              "uk",
+              "he",
+              "el",
+              "fi",
+              "id",
+              "ms",
+              "ca",
+              "ja",
+              "hu",
+              "hr",
+              "da",
+              "ro",
+              "bg",
+              "nb",
+              "sl",
+              "sv",
+              "et",
+              "eu",
+              "ur",
+              "ml",
+              "cy",
+              "ku",
+              "gl",
+              "eo",
+              "sat",
+              "zh-tw",
+              "pt-br",
+              "hi",
+              "de-at",
+              "sr",
+              "zh-hant",
+              "bn",
+              "fa",
+              "be",
+              "oc",
+              "lt",
+              "en-au",
+              "br"
+            ],
+            "name": "lang",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "number",
+            "description": "Latitude (WGS 84 decimal degrees): filter and sort projects according to geolocation",
+            "minimum": -90,
+            "maximum": 90,
+            "name": "lat",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "number",
+            "description": "Longitude (WGS 84 decimal degrees): filter and sort projects according to geolocation",
+            "minimum": -180,
+            "maximum": 180,
+            "name": "lon",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Projects type",
+            "default": "kt",
+            "enum": [
+              "kt",
+              "legacy"
+            ],
+            "name": "type",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Your private API key",
+            "name": "api-key",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "tags": [
+          "my-api"
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Projects list"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Projects Not Found"
+          },
+          "414": {
+            "description": "URI Too Long"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/v2/species": {
+      "get": {
+        "summary": "Species service",
+        "operationId": "getV2Species",
+        "description": "Get the list of species that can be identified",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "i18n (default: en)",
+            "default": "en",
+            "enum": [
+              "en",
+              "fr",
+              "es",
+              "pt",
+              "de",
+              "it",
+              "ar",
+              "cs",
+              "nl",
+              "sk",
+              "zh",
+              "ru",
+              "tr",
+              "pl",
+              "uk",
+              "he",
+              "el",
+              "fi",
+              "id",
+              "ms",
+              "ca",
+              "ja",
+              "hu",
+              "hr",
+              "da",
+              "ro",
+              "bg",
+              "nb",
+              "sl",
+              "sv",
+              "et",
+              "eu",
+              "ur",
+              "ml",
+              "cy",
+              "ku",
+              "gl",
+              "eo",
+              "sat",
+              "zh-tw",
+              "pt-br",
+              "hi",
+              "de-at",
+              "sr",
+              "zh-hant",
+              "bn",
+              "fa",
+              "be",
+              "oc",
+              "lt",
+              "en-au",
+              "br"
+            ],
+            "name": "lang",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Projects type",
+            "default": "kt",
+            "enum": [
+              "kt",
+              "legacy"
+            ],
+            "name": "type",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "integer",
+            "description": "Number of results per page. Must be used along with \"page\". Set to null to disable pagination",
+            "default": null,
+            "minimum": 1,
+            "name": "pageSize",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "integer",
+            "description": "Page number starting at 1. Must be used along with \"pageSize\". Set to null to disable pagination",
+            "default": null,
+            "minimum": 1,
+            "name": "page",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Return only species starting with given prefix",
+            "default": null,
+            "name": "prefix",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Your private API key",
+            "name": "api-key",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "tags": [
+          "my-api"
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Species list"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Species Not Found"
+          },
+          "414": {
+            "description": "URI Too Long"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/v2/subscription": {
+      "get": {
+        "summary": "Check subscription status and details",
+        "operationId": "getV2Subscription",
+        "description": "Returns status, details and statistics for your account",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Your private API key",
+            "name": "api-key",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "tags": [
+          "my-api"
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Model3"
+            },
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/v2/identify/{project}": {
+      "get": {
+        "summary": "Identification service",
+        "operationId": "getV2IdentifyProject",
+        "description": "This service allows plant identification (one request => one plant)",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Referential in which to search the plant (use one of the available projects or \"all\" to get the results of the most relevant project)",
+            "default": "all",
+            "name": "project",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "array",
+            "description": "Images URLs (all images must respresent the same plant) [max: 5 images]",
+            "minItems": 1,
+            "maxItems": 5,
+            "x-constraint": {
+              "single": true
+            },
+            "items": {
+              "type": "string",
+              "x-format": {
+                "uri": {
+                  "scheme": [
+                    "http",
+                    "https"
+                  ]
+                }
+              }
+            },
+            "collectionFormat": "multi",
+            "name": "images",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "array",
+            "description": "Organs associated to images (must contains one of: leaf, flower, fruit, bark, auto. Could contains: habit, other) [max 5 organs and organs.length must be equal to images.length]",
+            "minItems": 1,
+            "maxItems": 5,
+            "x-constraint": {
+              "single": true
+            },
+            "items": {
+              "type": "string",
+              "enum": [
+                "leaf",
+                "flower",
+                "fruit",
+                "bark",
+                "auto"
+              ]
+            },
+            "collectionFormat": "multi",
+            "name": "organs",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "boolean",
+            "description": "If true, for each probable species, the most similar images will be returned",
+            "default": false,
+            "name": "include-related-images",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "boolean",
+            "description": "Disables \"no result\" in case of reject class match",
+            "default": false,
+            "name": "no-reject",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "integer",
+            "description": "Max. number of species in identification results − a higher number increases response time",
+            "default": 10,
+            "minimum": 1,
+            "name": "nb-results",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "i18n (default: en)",
+            "default": "en",
+            "enum": [
+              "en",
+              "fr",
+              "es",
+              "pt",
+              "de",
+              "it",
+              "ar",
+              "cs",
+              "nl",
+              "sk",
+              "zh",
+              "ru",
+              "tr",
+              "pl",
+              "uk",
+              "he",
+              "el",
+              "fi",
+              "id",
+              "ms",
+              "ca",
+              "ja",
+              "hu",
+              "hr",
+              "da",
+              "ro",
+              "bg",
+              "nb",
+              "sl",
+              "sv",
+              "et",
+              "eu",
+              "ur",
+              "ml",
+              "cy",
+              "ku",
+              "gl",
+              "eo",
+              "sat",
+              "zh-tw",
+              "pt-br",
+              "hi",
+              "de-at",
+              "sr",
+              "zh-hant",
+              "bn",
+              "fa",
+              "be",
+              "oc",
+              "lt",
+              "en-au",
+              "br"
+            ],
+            "name": "lang",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Model type: use \"kt\" for new POWO / WGSRPD based floras and identification engine (2023+), \"legacy\" for legacy floras and identification engine (2022)",
+            "enum": [
+              "kt",
+              "legacy"
+            ],
+            "name": "type",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Your private API key",
+            "name": "api-key",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Authenix access token − Authenix is an alternative way of authenticating. Use api-key unless you know what this is.",
+            "name": "authenix-access-token",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "tags": [
+          "my-api"
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Identification%20result"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Species Not Found"
+          },
+          "414": {
+            "description": "URI Too Long"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Identification service",
+        "operationId": "postV2IdentifyProject",
+        "description": "This service allows plant identification (one request => one plant)<br>Mime: image/jpeg or image/png<br>Max POST size: 52428800 bytes",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Referential in which to search the plant (use one of the available projects or \"all\" to get the results of the most relevant project)",
+            "default": "all",
+            "name": "project",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "boolean",
+            "description": "If true, for each probable species, the most similar images will be returned",
+            "default": false,
+            "name": "include-related-images",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "boolean",
+            "description": "Disables \"no result\" in case of reject class match",
+            "default": false,
+            "name": "no-reject",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "integer",
+            "description": "Max. number of species in identification results − a higher number increases response time",
+            "default": 10,
+            "minimum": 1,
+            "name": "nb-results",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "i18n (default: en)",
+            "default": "en",
+            "enum": [
+              "en",
+              "fr",
+              "es",
+              "pt",
+              "de",
+              "it",
+              "ar",
+              "cs",
+              "nl",
+              "sk",
+              "zh",
+              "ru",
+              "tr",
+              "pl",
+              "uk",
+              "he",
+              "el",
+              "fi",
+              "id",
+              "ms",
+              "ca",
+              "ja",
+              "hu",
+              "hr",
+              "da",
+              "ro",
+              "bg",
+              "nb",
+              "sl",
+              "sv",
+              "et",
+              "eu",
+              "ur",
+              "ml",
+              "cy",
+              "ku",
+              "gl",
+              "eo",
+              "sat",
+              "zh-tw",
+              "pt-br",
+              "hi",
+              "de-at",
+              "sr",
+              "zh-hant",
+              "bn",
+              "fa",
+              "be",
+              "oc",
+              "lt",
+              "en-au",
+              "br"
+            ],
+            "name": "lang",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Model type: use \"kt\" for new POWO / WGSRPD based floras and identification engine (2023+), \"legacy\" for legacy floras and identification engine (2022)",
+            "enum": [
+              "kt",
+              "legacy"
+            ],
+            "name": "type",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Your private API key",
+            "name": "api-key",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Authenix access token − Authenix is an alternative way of authenticating. Use api-key unless you know what this is.",
+            "name": "authenix-access-token",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "array",
+            "description": "Images (all images must respresent the same plant) [max: 5 images]",
+            "minItems": 1,
+            "x-constraint": {
+              "single": true
+            },
+            "items": {
+              "type": "file",
+              "x-meta": {
+                "swaggerType": "file"
+              }
+            },
+            "collectionFormat": "multi",
+            "name": "images",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "type": "array",
+            "description": "Organs associated to images (must contains one of: leaf, flower, fruit, bark, auto. Could contains: habit, other) [max 5 organs and organs.length must be equal to images.length]",
+            "minItems": 1,
+            "x-constraint": {
+              "single": true
+            },
+            "items": {
+              "type": "string",
+              "enum": [
+                "leaf",
+                "flower",
+                "fruit",
+                "bark",
+                "auto"
+              ]
+            },
+            "collectionFormat": "multi",
+            "name": "organs",
+            "in": "formData",
+            "required": false
+          }
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "tags": [
+          "my-api"
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Identification%20result"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Species Not Found"
+          },
+          "413": {
+            "description": "Payload Too Large"
+          },
+          "414": {
+            "description": "URI Too Long"
+          },
+          "415": {
+            "description": "Unsupported Media Type"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/v2/quota/daily": {
+      "get": {
+        "summary": "Check quota consumption",
+        "operationId": "getV2QuotaDaily",
+        "description": "Returns number of requests and remaining quota for your account, for the given day",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Day in the format YYYY-MM-DD",
+            "default": "2025-05-03",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "name": "day",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Your private API key",
+            "name": "api-key",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "tags": [
+          "my-api"
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Model6"
+            },
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/v2/quota/history": {
+      "get": {
+        "summary": "Check quota consumption history",
+        "operationId": "getV2QuotaHistory",
+        "description": "Returns number of requests by day for your account, for the given year",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Year in the format YYYY",
+            "default": "2025",
+            "pattern": "^[0-9]{4}$",
+            "name": "year",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Your private API key",
+            "name": "api-key",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "tags": [
+          "my-api"
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Model8"
+            },
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/v2/projects/{project}/species": {
+      "get": {
+        "summary": "Species by project service",
+        "operationId": "getV2ProjectsProjectSpecies",
+        "description": "Get the list of species that can be identified in a given project",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Project to extract available species from",
+            "default": "k-southwestern-europe",
+            "name": "project",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "i18n (default: en)",
+            "default": "en",
+            "enum": [
+              "en",
+              "fr",
+              "es",
+              "pt",
+              "de",
+              "it",
+              "ar",
+              "cs",
+              "nl",
+              "sk",
+              "zh",
+              "ru",
+              "tr",
+              "pl",
+              "uk",
+              "he",
+              "el",
+              "fi",
+              "id",
+              "ms",
+              "ca",
+              "ja",
+              "hu",
+              "hr",
+              "da",
+              "ro",
+              "bg",
+              "nb",
+              "sl",
+              "sv",
+              "et",
+              "eu",
+              "ur",
+              "ml",
+              "cy",
+              "ku",
+              "gl",
+              "eo",
+              "sat",
+              "zh-tw",
+              "pt-br",
+              "hi",
+              "de-at",
+              "sr",
+              "zh-hant",
+              "bn",
+              "fa",
+              "be",
+              "oc",
+              "lt",
+              "en-au",
+              "br"
+            ],
+            "name": "lang",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "integer",
+            "description": "Number of results per page. Must be used along with \"page\". Set to null to disable pagination",
+            "default": null,
+            "minimum": 1,
+            "name": "pageSize",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "integer",
+            "description": "Page number starting at 1. Must be used along with \"pageSize\". Set to null to disable pagination",
+            "default": null,
+            "minimum": 1,
+            "name": "page",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Return only species starting with given prefix",
+            "default": null,
+            "name": "prefix",
+            "in": "query",
+            "required": false
+          },
+          {
+            "type": "string",
+            "description": "Your private API key",
+            "name": "api-key",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "tags": [
+          "my-api"
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Species list"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Species Not Found"
+          },
+          "414": {
+            "description": "URI Too Long"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok"
+      ]
+    },
+    "Model1": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/status"
+        }
+      }
+    },
+    "Languages list": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "Project": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "speciesCount": {
+          "type": "number"
+        }
+      }
+    },
+    "Projects list": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Project"
+      }
+    },
+    "commonNames": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "Species": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "scientificNameWithoutAuthor": {
+          "type": "string"
+        },
+        "scientificNameAuthorship": {
+          "type": "string"
+        },
+        "gbifId": {
+          "type": "number"
+        },
+        "powoId": {
+          "type": "string"
+        },
+        "iucnCategory": {
+          "type": "string"
+        },
+        "commonNames": {
+          "$ref": "#/definitions/commonNames"
+        }
+      }
+    },
+    "Species list": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Species"
+      }
+    },
+    "name": {
+      "type": "object",
+      "properties": {
+        "first": {
+          "type": "string"
+        },
+        "last": {
+          "type": "string"
+        }
+      }
+    },
+    "account": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/definitions/name"
+        },
+        "created": {
+          "type": "string"
+        }
+      }
+    },
+    "contract": {
+      "type": "object",
+      "properties": {
+        "plan": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "firstSignatureDate": {
+          "type": "string"
+        },
+        "latestSignatureDate": {
+          "type": "string"
+        },
+        "nextSignatureDate": {
+          "type": "string"
+        },
+        "indicativeYearlyQuota": {
+          "type": "number"
+        },
+        "currency": {
+          "type": "string"
+        }
+      }
+    },
+    "count": {
+      "type": "object",
+      "properties": {
+        "identify": {
+          "type": "number"
+        }
+      }
+    },
+    "aboveQuota": {
+      "type": "object",
+      "properties": {
+        "identify": {
+          "type": "number"
+        }
+      }
+    },
+    "Model2": {
+      "type": "object",
+      "properties": {
+        "period": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "endDate": {
+          "type": "string"
+        },
+        "count": {
+          "$ref": "#/definitions/count"
+        },
+        "aboveQuota": {
+          "$ref": "#/definitions/aboveQuota"
+        }
+      }
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Model2"
+      }
+    },
+    "billing": {
+      "type": "object",
+      "properties": {
+        "nextDueDate": {
+          "type": "string"
+        },
+        "estimatedAmount": {
+          "type": "number"
+        }
+      }
+    },
+    "ips": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "security": {
+      "type": "object",
+      "properties": {
+        "exposeKey": {
+          "type": "boolean"
+        },
+        "ips": {
+          "$ref": "#/definitions/ips"
+        },
+        "domains": {
+          "$ref": "#/definitions/domains"
+        }
+      }
+    },
+    "Model3": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "$ref": "#/definitions/account"
+        },
+        "contract": {
+          "$ref": "#/definitions/contract"
+        },
+        "history": {
+          "$ref": "#/definitions/history"
+        },
+        "billing": {
+          "$ref": "#/definitions/billing"
+        },
+        "security": {
+          "$ref": "#/definitions/security"
+        }
+      }
+    },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "organs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "query": {
+      "type": "object",
+      "properties": {
+        "project": {
+          "type": "string"
+        },
+        "images": {
+          "$ref": "#/definitions/images"
+        },
+        "organs": {
+          "$ref": "#/definitions/organs"
+        },
+        "includeRelatedImages": {
+          "type": "boolean"
+        },
+        "noReject": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "Genus": {
+      "type": "object",
+      "properties": {
+        "scientificNameWithoutAuthor": {
+          "type": "string"
+        },
+        "scientificNameAuthorship": {
+          "type": "string"
+        },
+        "scientificName": {
+          "type": "string"
+        }
+      }
+    },
+    "Family": {
+      "type": "object",
+      "properties": {
+        "scientificNameWithoutAuthor": {
+          "type": "string"
+        },
+        "scientificNameAuthorship": {
+          "type": "string"
+        },
+        "scientificName": {
+          "type": "string"
+        }
+      }
+    },
+    "Model4": {
+      "type": "object",
+      "properties": {
+        "scientificNameWithoutAuthor": {
+          "type": "string"
+        },
+        "scientificNameAuthorship": {
+          "type": "string"
+        },
+        "scientificName": {
+          "type": "string"
+        },
+        "genus": {
+          "$ref": "#/definitions/Genus"
+        },
+        "family": {
+          "$ref": "#/definitions/Family"
+        },
+        "commonNames": {
+          "$ref": "#/definitions/commonNames"
+        }
+      }
+    },
+    "date": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "type": "number"
+        },
+        "string": {
+          "type": "string"
+        }
+      }
+    },
+    "url": {
+      "type": "object",
+      "properties": {
+        "o": {
+          "type": "string"
+        },
+        "m": {
+          "type": "string"
+        },
+        "s": {
+          "type": "string"
+        }
+      }
+    },
+    "Image": {
+      "type": "object",
+      "properties": {
+        "organ": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "license": {
+          "type": "string"
+        },
+        "date": {
+          "$ref": "#/definitions/date"
+        },
+        "citation": {
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/definitions/url"
+        }
+      }
+    },
+    "Images": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Image"
+      }
+    },
+    "gbif": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "powo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "iucn": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "category"
+      ]
+    },
+    "Result": {
+      "type": "object",
+      "properties": {
+        "score": {
+          "type": "number"
+        },
+        "species": {
+          "$ref": "#/definitions/Model4"
+        },
+        "images": {
+          "$ref": "#/definitions/Images"
+        },
+        "gbif": {
+          "$ref": "#/definitions/gbif"
+        },
+        "powo": {
+          "$ref": "#/definitions/powo"
+        },
+        "iucn": {
+          "$ref": "#/definitions/iucn"
+        }
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Result"
+      }
+    },
+    "Model5": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "string"
+        },
+        "filename": {
+          "type": "string"
+        },
+        "organ": {
+          "type": "string"
+        },
+        "score": {
+          "type": "number"
+        }
+      }
+    },
+    "predictedOrgans": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Model5"
+      }
+    },
+    "Identification result": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "$ref": "#/definitions/query"
+        },
+        "language": {
+          "type": "string"
+        },
+        "preferedReferential": {
+          "type": "string"
+        },
+        "switchToProject": {
+          "type": "string"
+        },
+        "bestMatch": {
+          "type": "string"
+        },
+        "results": {
+          "$ref": "#/definitions/results"
+        },
+        "remainingIdentificationRequests": {
+          "type": "number"
+        },
+        "version": {
+          "type": "string"
+        },
+        "predictedOrgans": {
+          "$ref": "#/definitions/predictedOrgans"
+        }
+      }
+    },
+    "remaining": {
+      "type": "object",
+      "properties": {
+        "identify": {
+          "type": "number"
+        }
+      }
+    },
+    "Model6": {
+      "type": "object",
+      "properties": {
+        "day": {
+          "type": "string"
+        },
+        "count": {
+          "$ref": "#/definitions/count"
+        },
+        "remaining": {
+          "$ref": "#/definitions/remaining"
+        }
+      }
+    },
+    "Model7": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Model6"
+      }
+    },
+    "Model8": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Model6"
+      }
+    }
+  }
+}
