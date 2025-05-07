@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import '../../config/config_processor.dart';
 import '../../config/swp_config.dart';
 import '../../parser/swagger_parser_core.dart';
@@ -33,6 +35,32 @@ class GenProcessor {
     final info = parser.openApiInfo;
     final restClients = parser.parseRestClients();
     final dataClasses = parser.parseDataClasses();
+
+    void resolveTypedefImports(Set<String> imports) {
+      final originalImports = imports.toList();
+      for (final typeName in originalImports) {
+        final importedType = dataClasses.firstWhereOrNull((element) => element.name == typeName);
+        if (importedType != null &&
+            importedType is UniversalComponentClass &&
+            importedType.typeDef &&
+            importedType.imports.isNotEmpty) {
+          imports.addAll(importedType.imports);
+        }
+      }
+    }
+
+    // Correct imports of typedefs in data classes
+    for (final dataClass in dataClasses) {
+      if (dataClass is UniversalComponentClass) {
+        resolveTypedefImports(dataClass.imports);
+      }
+    }
+
+    // Correct imports of typedefs in rest clients
+    for (final restClient in restClients) {
+      resolveTypedefImports(restClient.imports);
+    }
+
     final generator = Generator(
       generatorConfig,
       info: info,
