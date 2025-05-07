@@ -153,7 +153,7 @@ For multiple schemes:
 swagger_parser:
   # <...> Set default parameters for all schemes.
   output_directory: lib/api
-  squash_clients: true
+  merge_clients: true
 
   # Optional. You can pass a list of schemes. 
   # Each schema inherits the parameters described in swagger_parser,
