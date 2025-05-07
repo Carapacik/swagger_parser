@@ -394,5 +394,18 @@ void main() {
         schemaFileName: 'wrapping_collections.3.0.json',
       );
     });
+
+    test('plantnet_2_2_1', () async {
+      await e2eTest(
+        'services/plantnet_2_2_1',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'plantnet_2_2_1.json',
+      );
+    });
   });
 }

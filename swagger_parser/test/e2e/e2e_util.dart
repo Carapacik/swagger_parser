@@ -48,11 +48,13 @@ Future<void> e2eTest(
   final expectedFiles = Directory(expectedFolderPath)
       .listSync(recursive: true, followLinks: false)
       .whereType<File>()
+      .where((file) => !p.basename(file.path).startsWith('.'))
       .toList();
 
   final generatedFiles = Directory(generatedFolderPath)
       .listSync(recursive: true, followLinks: false)
       .whereType<File>()
+      .where((file) => !p.basename(file.path).startsWith('.'))
       .toList();
 
   for (final file in expectedFiles) {
