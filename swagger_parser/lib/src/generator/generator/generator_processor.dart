@@ -39,7 +39,8 @@ class GenProcessor {
     void resolveTypedefImports(Set<String> imports) {
       final originalImports = imports.toList();
       for (final typeName in originalImports) {
-        final importedType = dataClasses.firstWhereOrNull((element) => element.name == typeName);
+        final importedType =
+            dataClasses.firstWhereOrNull((element) => element.name == typeName);
         if (importedType != null &&
             importedType is UniversalComponentClass &&
             importedType.typeDef &&

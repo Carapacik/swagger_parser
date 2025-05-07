@@ -22,10 +22,12 @@ class OpenApiCorrector {
         : (loadYaml(fileContent) as YamlMap).toMap();
 
     // OpenAPI 3.0 and 3.1
-    final components = definitionFileContent['components'] as Map<String, dynamic>?;
+    final components =
+        definitionFileContent['components'] as Map<String, dynamic>?;
     final schemes = components?['schemas'] as Map<String, dynamic>?;
     // OpenAPI 2.0
-    final definitions = definitionFileContent['definitions'] as Map<String, dynamic>?;
+    final definitions =
+        definitionFileContent['definitions'] as Map<String, dynamic>?;
 
     final models = schemes ?? definitions;
     final correctModelMap = <String, String>{};
@@ -54,8 +56,10 @@ class OpenApiCorrector {
           final escapedType = escape(type);
 
           fileContent = fileContent.replaceAllMapped(
-            RegExp('["\']#/(definitions|components/schemas)/($escapedType|$urlEncodedType)["\']'),
-            (match) => match[0]!.replaceFirst(match[2]!, correctType, match[1]!.length + 4),
+            RegExp(
+                '["\']#/(definitions|components/schemas)/($escapedType|$urlEncodedType)["\']'),
+            (match) => match[0]!
+                .replaceFirst(match[2]!, correctType, match[1]!.length + 4),
           );
 
           correctModelMap[type] = correctType;
@@ -69,10 +73,12 @@ class OpenApiCorrector {
 
     if (correctModelMap.isNotEmpty) {
       // OpenAPI 3.0 and 3.1
-      final components = updatedSchemaMap['components'] as Map<String, dynamic>?;
+      final components =
+          updatedSchemaMap['components'] as Map<String, dynamic>?;
       final schemes = components?['schemas'] as Map<String, dynamic>?;
       // OpenAPI 2.0
-      final definitions = updatedSchemaMap['definitions'] as Map<String, dynamic>?;
+      final definitions =
+          updatedSchemaMap['definitions'] as Map<String, dynamic>?;
       final models = schemes ?? definitions;
 
       final updatedModels = models?.map((key, value) {
