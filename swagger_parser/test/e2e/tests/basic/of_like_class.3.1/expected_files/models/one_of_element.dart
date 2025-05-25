@@ -19,6 +19,8 @@ class OneOfElement with _$OneOfElement {
     required EnumClass? nullableButRequiredClass,
     @Default([]) List<EnumClass>? nullableType,
     EnumClass? nullableClass,
+    List<int>? nullableListNonNullItems,
+    List<int?>? nullableListNullableItems,
     @Default(EnumClass.value1) EnumClass anyClass,
     @Default([]) List<EnumClass> oneType,
   }) = _OneOfElement;
