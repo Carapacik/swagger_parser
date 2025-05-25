@@ -17,6 +17,8 @@ class OneOfElement with _$OneOfElement {
     required int allType,
     required DateTime anyType,
     required EnumClass? nullableButRequiredClass,
+    required List<int>? requiredNullableListNonNullItems,
+    required List<int?>? requiredNullableListNullableItems,
     @Default([]) List<EnumClass>? nullableType,
     EnumClass? nullableClass,
     List<int>? nullableListNonNullItems,
