@@ -5,7 +5,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../models/object0.dart';
+import '../models/enum_class.dart';
 
 part 'api_client.g.dart';
 
@@ -16,7 +16,7 @@ abstract class ApiClient {
   /// [nullableStringList] - description
   @GET('/api/v1/category/')
   Future<void> apiV1CategoryList({
-    @Query('enum_class') required List<Object0>? enumClass,
+    @Query('enum_class') required List<EnumClass>? enumClass,
     @Query('nullable_string_list') required List<String?> nullableStringList,
   });
 }

@@ -6,12 +6,12 @@
 export 'clients/api_client.dart';
 // Data classes
 export 'models/class_with_nullable_types.dart';
-export 'models/object0.dart';
+export 'models/enum_class.dart';
 export 'models/p3.dart';
 export 'models/p3n.dart';
-export 'models/object1.dart';
-export 'models/object2.dart';
-export 'models/object3.dart';
-export 'models/object4.dart';
+export 'models/p3_list.dart';
+export 'models/p3_any_of.dart';
+export 'models/p3_one_of.dart';
+export 'models/p3_all_of.dart';
 // Root client
 export 'rest_client.dart';

@@ -86,8 +86,6 @@ Future<void> runSwaggerParserGeneration(
   try {
     final processor = GenProcessor(config);
     await processor.generateFiles();
-
-    // ignore: avoid_catches_without_on_clauses
   } catch (e, s) {
     if (throwOnFailure) {
       rethrow;

@@ -1148,14 +1148,14 @@ data class ClassName(
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
-          UniversalType(type: 'integer', name: 'intType', isRequired: false),
+          UniversalType(type: 'integer', name: 'intType', isRequired: false, nullable: true),
           UniversalType(
             type: 'string',
             wrappingCollections: [UniversalCollections.nullableList],
             name: 'list',
             isRequired: false,
           ),
-          UniversalType(type: 'Another', name: 'another', isRequired: false),
+          UniversalType(type: 'Another', name: 'another', isRequired: false, nullable: true),
           UniversalType(
             type: 'Another',
             wrappingCollections: [
@@ -1205,14 +1205,14 @@ class ClassName {
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
-          UniversalType(type: 'integer', name: 'intType', isRequired: false),
+          UniversalType(type: 'integer', name: 'intType', isRequired: false, nullable: true),
           UniversalType(
             type: 'string',
             wrappingCollections: [UniversalCollections.nullableList],
             name: 'list',
             isRequired: false,
           ),
-          UniversalType(type: 'Another', name: 'another', isRequired: false),
+          UniversalType(type: 'Another', name: 'another', isRequired: false, nullable: true),
           UniversalType(
             type: 'Another',
             wrappingCollections: [
@@ -1260,14 +1260,14 @@ class ClassName with _$ClassName {
         name: 'ClassName',
         imports: {'Another'},
         parameters: [
-          UniversalType(type: 'integer', name: 'intType', isRequired: false),
+          UniversalType(type: 'integer', name: 'intType', isRequired: false, nullable: true),
           UniversalType(
             type: 'string',
             wrappingCollections: [UniversalCollections.nullableList],
             name: 'list',
             isRequired: false,
           ),
-          UniversalType(type: 'Another', name: 'another', isRequired: false),
+          UniversalType(type: 'Another', name: 'another', isRequired: false, nullable: true),
           UniversalType(
             type: 'Another',
             wrappingCollections: [
@@ -1313,12 +1313,14 @@ data class ClassName(
             type: 'integer',
             name: 'intNotRequired',
             isRequired: false,
+            nullable: true,
           ),
           UniversalType(type: 'integer', name: 'intRequired', isRequired: true),
           UniversalType(
             type: 'Another',
             name: 'anotherNotRequired',
             isRequired: false,
+            nullable: true,
           ),
           UniversalType(
             type: 'Another',
@@ -1370,12 +1372,14 @@ class ClassName {
             type: 'integer',
             name: 'intNotRequired',
             isRequired: false,
+            nullable: true,
           ),
           UniversalType(type: 'integer', name: 'intRequired', isRequired: true),
           UniversalType(
             type: 'Another',
             name: 'anotherNotRequired',
             isRequired: false,
+            nullable: true,
           ),
           UniversalType(
             type: 'Another',
@@ -2135,7 +2139,7 @@ typealias AnotherValue = Another;
               UniversalCollections.nullableList,
               UniversalCollections.list,
               UniversalCollections.list,
-              UniversalCollections.list,
+              UniversalCollections.listNullableItem,
             ],
             name: 'list1',
             isRequired: false,
@@ -2148,7 +2152,7 @@ typealias AnotherValue = Another;
             nullable: true,
           ),
           UniversalType(type: 'string', name: 'list3', isRequired: true),
-          UniversalType(type: 'string', name: 'list4', isRequired: false),
+          UniversalType(type: 'string', name: 'list4', isRequired: false, nullable: true),
           UniversalType(
             type: 'string',
             name: 'list5',
@@ -2201,7 +2205,7 @@ class ClassName {
               UniversalCollections.nullableList,
               UniversalCollections.list,
               UniversalCollections.list,
-              UniversalCollections.list,
+              UniversalCollections.listNullableItem,
             ],
             name: 'list1',
             isRequired: false,
@@ -2214,7 +2218,7 @@ class ClassName {
             nullable: true,
           ),
           UniversalType(type: 'string', name: 'list3', isRequired: true),
-          UniversalType(type: 'string', name: 'list4', isRequired: false),
+          UniversalType(type: 'string', name: 'list4', isRequired: false, nullable: true),
           UniversalType(
             type: 'string',
             name: 'list5',
@@ -2264,7 +2268,7 @@ class ClassName with _$ClassName {
               UniversalCollections.nullableList,
               UniversalCollections.list,
               UniversalCollections.list,
-              UniversalCollections.list,
+              UniversalCollections.listNullableItem,
             ],
             name: 'list1',
             isRequired: false,
@@ -2277,7 +2281,7 @@ class ClassName with _$ClassName {
             nullable: true,
           ),
           UniversalType(type: 'string', name: 'list3', isRequired: true),
-          UniversalType(type: 'string', name: 'list4', isRequired: false),
+          UniversalType(type: 'string', name: 'list4', isRequired: false, nullable: true),
           UniversalType(
             type: 'string',
             name: 'list5',

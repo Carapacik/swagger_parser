@@ -4,16 +4,16 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'object1.freezed.dart';
-part 'object1.g.dart';
+part 'p3_one_of.freezed.dart';
+part 'p3_one_of.g.dart';
 
 @Freezed()
-class Object1 with _$Object1 {
-  const factory Object1({
+class P3OneOf with _$P3OneOf {
+  const factory P3OneOf({
     required String? p1,
     required List<String?>? p2,
-  }) = _Object1;
+  }) = _P3OneOf;
 
-  factory Object1.fromJson(Map<String, Object?> json) =>
-      _$Object1FromJson(json);
+  factory P3OneOf.fromJson(Map<String, Object?> json) =>
+      _$P3OneOfFromJson(json);
 }

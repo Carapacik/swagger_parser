@@ -32,7 +32,7 @@ abstract class UsersClient {
   ///
   /// [id] - The id of the user.
   @GET('/users/{id}')
-  Future<UserDto?> getUserById({
+  Future<UserDto> getUserById({
     @Path('id') required String id,
   });
 }
