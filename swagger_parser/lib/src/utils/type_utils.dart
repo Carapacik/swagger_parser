@@ -53,8 +53,10 @@ extension UniversalTypeX on UniversalType {
     // Append closing brackets and nullability suffix for the collections themselves.
     // Iterates in reverse to close generics from innermost to outermost.
     for (final collection in wrappingCollections.reversed) {
-      sb..write('>') // Closing generic bracket
-      ..write(collection.collectionSuffixQuestionMark); // '?' for the collection itself
+      sb
+        ..write('>') // Closing generic bracket
+        ..write(collection
+            .collectionSuffixQuestionMark); // '?' for the collection itself
     }
 
     return sb.toString();
