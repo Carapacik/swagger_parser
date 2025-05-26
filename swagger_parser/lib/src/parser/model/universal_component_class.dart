@@ -1,19 +1,21 @@
 part of 'universal_data_class.dart';
 
 typedef Discriminator = ({
-  // The name of the property that is used to discriminate the oneOf variants
+  /// The name of the property that is used to discriminate the oneOf variants
   String propertyName,
 
-  // The mapping of the property value to the ref
+  /// The mapping of the property value to the ref
   Map<String, String> discriminatorValueToRefMapping,
 
-  // The list of properties stored for each ref
+  /// The list of properties stored for each ref
   Map<String, List<UniversalType>> refProperties,
 });
 
 typedef DiscriminatorValue = ({
-  // The name of the property that is used to discriminate the oneOf variants
+  /// The name of the property that is used to discriminate the oneOf variants
   String propertyValue,
+
+  /// -
   String parentClass,
 });
 

@@ -46,6 +46,7 @@ final class UniversalEnumClass extends UniversalDataClass {
 }
 
 /// Universal template for enum item
+@immutable
 class UniversalEnumItem {
   /// Constructor for [UniversalEnumItem]
   const UniversalEnumItem({
