@@ -1370,7 +1370,7 @@ class OpenApiParser {
             //   type: string
             // Here, `map` is the `anyOf` schema. `optionalItem` is the array schema.
             // We need to preserve context like `items` if it's outside `anyOf` but part of the same definition.
-            final nMap = {...map}
+            map
               ..remove(_anyOfConst)
               ..remove(_allOfConst)
               ..remove(_oneOfConst)
@@ -1390,7 +1390,7 @@ class OpenApiParser {
               // Pass root along
               // If nullItems is present, this type is effectively not required at this level of anyOf,
               // as 'null' is an alternative. The overall 'isRequired' for the property still applies.
-              isRequired: nullItems.isNotEmpty ? false : isRequired,
+              isRequired: nullItems.isEmpty && isRequired,
               name: name,
               additionalName: additionalName,
             );
