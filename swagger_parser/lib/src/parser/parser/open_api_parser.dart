@@ -1370,19 +1370,7 @@ class OpenApiParser {
             //   type: string
             // Here, `map` is the `anyOf` schema. `optionalItem` is the array schema.
             // We need to preserve context like `items` if it's outside `anyOf` but part of the same definition.
-            final nMap = {...map}
-              ..remove(_anyOfConst)
-              ..remove(_allOfConst)
-              ..remove(_oneOfConst)
-              ..remove(_typeConst) // Remove type: [type, "null"] if present
 
-              // Merge context from `map` (e.g., `items` for an array) into `optionalItem`
-              // only if `optionalItem` doesn't already define them.
-              ..forEach((key, value) {
-                if (!optionalItem.containsKey(key)) {
-                  optionalItem[key] = value;
-                }
-              });
 
             final (:type, :import) = _findType(
               optionalItem,
@@ -1390,7 +1378,7 @@ class OpenApiParser {
               // Pass root along
               // If nullItems is present, this type is effectively not required at this level of anyOf,
               // as 'null' is an alternative. The overall 'isRequired' for the property still applies.
-              isRequired: nullItems.isNotEmpty ? false : isRequired,
+              isRequired: nullItems.isEmpty && isRequired,
               name: name,
               additionalName: additionalName,
             );
