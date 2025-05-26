@@ -26,6 +26,7 @@ class ClassName with _$ClassName {
     required dynamic object1,
     required List<String> array1,
     required List<List<List<String>>> array2,
+    @Default([]) List<String> arrayWithDefault,
   }) = _ClassName;
 
   factory ClassName.fromJson(Map<String, Object?> json) =>

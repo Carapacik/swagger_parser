@@ -1,35 +1,64 @@
+// ignore_for_file: unintended_html_in_doc_comment
+
 /// Defines collections wrapping type
 enum UniversalCollections {
-  /// Map collection
-  map,
-
-  /// List collection
+  /// List collection: List<T>
   list,
 
-  /// Nullable Map collection
+  /// List collection with nullable items: List<T?>
+  listNullableItem,
+
+  /// Nullable List collection: List<T>?
+  nullableList,
+
+  /// Nullable List collection with nullable items: List<T?>?
+  nullableListNullableItem,
+
+  /// Map collection: Map<String, T>
+  map,
+
+  /// Map collection with nullable values: Map<String, T?>
+  mapNullableValue,
+
+  /// Nullable Map collection: Map<String, T>?
   nullableMap,
 
-  /// Nullable List collection
-  nullableList;
+  /// Nullable Map collection with nullable values: Map<String, T?>?
+  nullableMapNullableValue;
 
-  /// Creates a [UniversalCollections]
-  const UniversalCollections();
-
-  /// Returns String representation of collection
-  String get collectionsString => switch (this) {
+  /// Returns String representation of collection prefix, e.g., "List<" or "Map<String, ".
+  String get collectionPrefix => switch (this) {
         UniversalCollections.list ||
-        UniversalCollections.nullableList =>
+        UniversalCollections.listNullableItem ||
+        UniversalCollections.nullableList ||
+        UniversalCollections.nullableListNullableItem =>
           'List<',
         UniversalCollections.map ||
-        UniversalCollections.nullableMap =>
+        UniversalCollections.mapNullableValue ||
+        UniversalCollections.nullableMap ||
+        UniversalCollections.nullableMapNullableValue =>
           'Map<String, ',
       };
 
-  /// Returns question mark for collection
-  String get questionMark => switch (this) {
+  /// Returns question mark for the collection itself if it's nullable, otherwise empty string.
+  /// E.g., for List<T>?, this returns "?".
+  String get collectionSuffixQuestionMark => switch (this) {
         UniversalCollections.nullableList ||
-        UniversalCollections.nullableMap =>
+        UniversalCollections.nullableListNullableItem ||
+        UniversalCollections.nullableMap ||
+        UniversalCollections.nullableMapNullableValue =>
           '?',
-        UniversalCollections.list || UniversalCollections.map => '',
+        _ => '',
+      };
+
+  /// Indicates if the items (for lists) or values (for maps) within the collection are nullable.
+  /// E.g., for List<T?>, this returns true.
+  bool get itemIsNullable => switch (this) {
+        UniversalCollections.listNullableItem ||
+        UniversalCollections.nullableListNullableItem ||
+        UniversalCollections.mapNullableValue ||
+        UniversalCollections.nullableMapNullableValue =>
+          true,
+        _ => false,
       };
 }

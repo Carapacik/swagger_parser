@@ -65,6 +65,13 @@
                 }
               }
             }
+          },
+          "arrayWithDefault": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "default": []
           }
         }
       }
