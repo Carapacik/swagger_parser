@@ -973,13 +973,16 @@ class OpenApiParser {
   }) {
     // Array
     if (map.containsKey(_typeConst) && map[_typeConst] == _arrayConst) {
-      final arrayItems = map[_itemsConst] as Map<String, dynamic>;
-      final (:type, :import) = _findType(
-        arrayItems,
-        name: name,
+      final arrayItemsSchema = map[_itemsConst] as Map<String, dynamic>;
+      // Determine item details by recursively calling _findType for the item schema.
+      // `root` is false for items, meaning item's nullability is driven by its own schema's `nullable` field.
+      final (type: itemDetails, import: itemImport) = _findType(
+        arrayItemsSchema,
+        name: name, // Or a modified name specific to items if needed
         additionalName: additionalName,
         root: false,
-        isRequired: isRequired,
+        isRequired:
+            true, // This doesn't affect itemDetails.nullable due to root:false
       );
 
       final (newName, description) = protectName(
@@ -987,41 +990,65 @@ class OpenApiParser {
         description: map[_descriptionConst]?.toString(),
       );
 
-      final nullable =
+      // Nullability of the array itself.
+      final isCollectionItselfNullable =
           map[_nullableConst].toString().toBool() ?? (root && !isRequired);
+
+      // Nullability of the items within the array.
+      final areItemsNullable = itemDetails.nullable;
+
+      UniversalCollections collectionType;
+      if (isCollectionItselfNullable) {
+        if (areItemsNullable) {
+          collectionType = UniversalCollections.nullableListNullableItem;
+        } else {
+          collectionType = UniversalCollections.nullableList;
+        }
+      } else {
+        if (areItemsNullable) {
+          collectionType = UniversalCollections.listNullableItem;
+        } else {
+          collectionType = UniversalCollections.list;
+        }
+      }
 
       return (
         type: UniversalType(
-          type: type.type,
+          type: itemDetails.type,
+          // Base type is the item's type
           name: newName?.toCamel,
           description: description,
-          format: type.format,
+          format: itemDetails.format,
           jsonKey: name,
-          defaultValue: protectDefaultValue(type.defaultValue, isArray: true),
-          isRequired: type.isRequired,
-          nullable: type.nullable,
+          defaultValue: protectDefaultValue(map[_defaultConst], isArray: true),
+          // Default for the array
+          isRequired: isRequired,
+          // isRequired for the array property
+          nullable: isCollectionItselfNullable,
+          // Nullability of the array itself
           wrappingCollections: [
-            if (nullable)
-              UniversalCollections.nullableList
-            else
-              UniversalCollections.list,
-            ...type.wrappingCollections,
+            collectionType,
+            ...itemDetails.wrappingCollections,
+            // If items are themselves collections
           ],
         ),
-        import: import,
+        import: itemImport,
       );
     }
     // Map
     else if (map.containsKey(_additionalPropertiesConst) &&
         map[_typeConst].toString() == _objectConst &&
         (map[_additionalPropertiesConst] is Map<String, dynamic>)) {
-      final mapItem = map[_additionalPropertiesConst] as Map<String, dynamic>;
-      final (:type, :import) = _findType(
-        mapItem,
-        name: name,
-        additionalName: name,
+      final mapValueSchema =
+          map[_additionalPropertiesConst] as Map<String, dynamic>;
+      // Determine value details by recursively calling _findType for the value schema.
+      final (type: valueDetails, import: valueImport) = _findType(
+        mapValueSchema,
+        name: name, // Or a modified name specific to values
+        additionalName: name, // Or additionalName
         root: false,
-        isRequired: isRequired,
+        isRequired:
+            true, // This doesn't affect valueDetails.nullable due to root:false
       );
 
       final (newName, description) = protectName(
@@ -1029,27 +1056,49 @@ class OpenApiParser {
         description: map[_descriptionConst]?.toString(),
       );
 
-      final nullable =
+      // Nullability of the map itself.
+      final isMapItselfNullable =
           map[_nullableConst].toString().toBool() ?? (root && !isRequired);
+
+      // Nullability of the values within the map.
+      final areValuesNullable = valueDetails.nullable;
+
+      UniversalCollections collectionType;
+      if (isMapItselfNullable) {
+        if (areValuesNullable) {
+          collectionType = UniversalCollections.nullableMapNullableValue;
+        } else {
+          collectionType = UniversalCollections.nullableMap;
+        }
+      } else {
+        if (areValuesNullable) {
+          collectionType = UniversalCollections.mapNullableValue;
+        } else {
+          collectionType = UniversalCollections.map;
+        }
+      }
+
       return (
         type: UniversalType(
-          type: type.type,
+          type: valueDetails.type,
+          // Base type is the value's type
           name: newName?.toCamel,
           description: description,
-          format: type.format,
+          format: valueDetails.format,
           jsonKey: name,
-          defaultValue: protectDefaultValue(type.defaultValue, isArray: true),
-          isRequired: type.isRequired,
-          nullable: type.nullable,
+          defaultValue: protectDefaultValue(map[_defaultConst], isArray: true),
+          // Default for the map
+          isRequired: isRequired,
+          // isRequired for the map property
+          nullable: isMapItselfNullable,
+          // Nullability of the map itself
           wrappingCollections: [
-            if (nullable)
-              UniversalCollections.nullableMap
-            else
-              UniversalCollections.map,
-            ...type.wrappingCollections,
+            collectionType,
+            ...valueDetails.wrappingCollections,
+            // If values are themselves collections
           ],
         ),
-        import: import,
+        import: valueImport,
       );
     }
     // Enum
@@ -1091,7 +1140,14 @@ class OpenApiParser {
       _enumClasses.add(enumClass);
 
       final type = map[_typeConst];
-      final nullable = type is List && type.any((e) => e.toString() == 'null');
+      // Determine nullability for enums, considering if "null" is a type or if nullable is true
+      var isEnumNullable = map[_nullableConst].toString().toBool() ?? false;
+      if (!isEnumNullable && type is List) {
+        isEnumNullable = type.any((e) => e.toString() == 'null');
+      }
+      if (!isEnumNullable && root && !isRequired) {
+        isEnumNullable = true;
+      }
 
       return (
         type: UniversalType(
@@ -1102,8 +1158,10 @@ class OpenApiParser {
           jsonKey: name,
           defaultValue: protectDefaultValue(map[_defaultConst]),
           isRequired: isRequired,
-          enumType: map[_typeConst]?.toString(),
-          nullable: nullable,
+          enumType: map[_typeConst]?.toString().split(',').firstWhere(
+              (t) => t != 'null',
+              orElse: () => map[_typeConst].toString()),
+          nullable: isEnumNullable,
         ),
         import: enumClass.name,
       );
@@ -1189,19 +1247,35 @@ class OpenApiParser {
               .toList();
 
       UniversalType makeNullable(UniversalType type) {
-        if (type.wrappingCollections.isEmpty) {
-          return type.copyWith(nullable: true);
+        // If the type itself is a collection, make its outermost collection nullable.
+        // Otherwise, mark the type as nullable.
+        if (type.wrappingCollections.isNotEmpty) {
+          final firstCollection = type.wrappingCollections.first;
+          UniversalCollections newFirstCollection;
+          switch (firstCollection) {
+            case UniversalCollections.list:
+              newFirstCollection = UniversalCollections.nullableList;
+            case UniversalCollections.listNullableItem:
+              newFirstCollection =
+                  UniversalCollections.nullableListNullableItem;
+            case UniversalCollections.map:
+              newFirstCollection = UniversalCollections.nullableMap;
+            case UniversalCollections.mapNullableValue:
+              newFirstCollection =
+                  UniversalCollections.nullableMapNullableValue;
+            // If already nullable, no change
+            case UniversalCollections.nullableList:
+            case UniversalCollections.nullableListNullableItem:
+            case UniversalCollections.nullableMap:
+            case UniversalCollections.nullableMapNullableValue:
+              newFirstCollection = firstCollection;
+          }
+          return type.copyWith(wrappingCollections: [
+            newFirstCollection,
+            ...type.wrappingCollections.skip(1)
+          ]);
         } else {
-          final first = type.wrappingCollections.first;
-          final wrappingCollections = [...type.wrappingCollections]..first =
-                switch (first) {
-              UniversalCollections.list => UniversalCollections.nullableList,
-              UniversalCollections.map => UniversalCollections.nullableMap,
-              _ => first,
-            };
-          return type.copyWith(
-            wrappingCollections: wrappingCollections,
-          );
+          return type.copyWith(nullable: true);
         }
       }
 
@@ -1245,6 +1319,7 @@ class OpenApiParser {
           ofType = UniversalType(
             type: newName.toPascal,
             isRequired: isRequired,
+            // Nullability for ofType will be determined later by nullItems check
           );
           ofImport = newName.toPascal;
         }
@@ -1255,12 +1330,14 @@ class OpenApiParser {
           if (item is Map<String, dynamic>) {
             (import: ofImport, type: ofType) = _findType(
               item,
-              root: false,
-              isRequired: false,
+              root: root, // Pass root along
+              isRequired: isRequired, // Pass isRequired along
+              name: name,
+              additionalName: additionalName,
             );
           }
         }
-        // Find n-element anyOf/allOf
+        // Find n-element anyOf/allOf/oneOf (without discriminator) or type: [type, "null"]
         else if (ofList.length > 1) {
           final nullItems = ofList
               .where(
@@ -1291,18 +1368,19 @@ class OpenApiParser {
             //   - type: null
             // items:
             //   type: string
-            final nMap = {...map}
-              ..remove(_anyOfConst)
-              ..remove(_allOfConst)
-              ..remove(_oneOfConst)
-              ..remove(_typeConst);
+            // Here, `map` is the `anyOf` schema. `optionalItem` is the array schema.
+            // We need to preserve context like `items` if it's outside `anyOf` but part of the same definition.
 
-            optionalItem.addAll(nMap);
 
             final (:type, :import) = _findType(
               optionalItem,
               root: root,
-              isRequired: false,
+              // Pass root along
+              // If nullItems is present, this type is effectively not required at this level of anyOf,
+              // as 'null' is an alternative. The overall 'isRequired' for the property still applies.
+              isRequired: nullItems.isEmpty && isRequired,
+              name: name,
+              additionalName: additionalName,
             );
             ofType = type;
             ofImport = import;
@@ -1316,6 +1394,8 @@ class OpenApiParser {
             //   - string
             // In theory this is not very type safe but it COULD be handled through a union type
             // This is left as an indication for future contributors who may want to handle this case
+            // For now, default to dynamic or object type if multiple non-null types are present.
+            // However, if it's an allOf, we try to compose.
 
             // If we try to handle an allOf, the goal is to obtain a single type that is the union of all the types in otherItems
             // At this point, we only explored a part of the schema so if the item is a ref, we won't be able to fully resolve the type
@@ -1342,84 +1422,132 @@ class OpenApiParser {
                   parameters.addAll(foundParameters);
                   imports.addAll(foundImports);
                 }
+                // If an item in allOf is a basic type, it's harder to merge directly here.
+                // This logic primarily supports merging multiple $ref or inline objects with properties.
               }
 
-              final baseClassName =
-                  '${additionalName ?? ''} ${name ?? ''}'.toPascal;
-              final (newName, description) = protectName(
-                baseClassName,
-                uniqueIfNull: true,
-                description: map[_descriptionConst]?.toString(),
-              );
+              if (refs.isNotEmpty || parameters.isNotEmpty) {
+                final baseClassName =
+                    '${additionalName ?? ''} ${name ?? ''}'.toPascal;
+                final (newName, description) = protectName(
+                  baseClassName,
+                  uniqueIfNull: true,
+                  description: map[_descriptionConst]?.toString(),
+                );
 
-              // Create a class to represent the allOf composition
-              _objectClasses.add(
-                UniversalComponentClass(
-                  name: newName!.toPascal,
-                  imports: imports,
-                  // This is a workaround as the linter is rightfully complaining
-                  // because we give a litteral that should be a const but can't
-                  // because it is modified later when the data classes are created
-                  // This should be addressed in the future.
-                  // ignore: prefer_const_literals_to_create_immutables
-                  parameters: [],
-                  allOf: (refs: refs, properties: parameters),
-                  description: description,
-                ),
-              );
+                // Create a class to represent the allOf composition
+                _objectClasses.add(
+                  UniversalComponentClass(
+                    name: newName!.toPascal,
+                    imports: imports,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    parameters: [],
+                    // Parameters will be filled later
+                    allOf: (refs: refs, properties: parameters),
+                    description: description,
+                  ),
+                );
 
-              ofType = UniversalType(
-                type: newName.toPascal,
-                isRequired: isRequired,
-              );
-
-              ofImport = newName.toPascal;
+                ofType = UniversalType(
+                  type: newName.toPascal,
+                  isRequired: isRequired, // Will be adjusted by nullItems check
+                );
+                ofImport = newName.toPascal;
+              } else {
+                // Fallback if allOf doesn't result in a clear composite object (e.g. allOf: [string, integer])
+                ofType =
+                    UniversalType(type: _objectConst, isRequired: isRequired);
+              }
+            } else {
+              // For anyOf or oneOf with multiple non-null types, or type: [type1, type2, "null"]
+              // Default to dynamic or object.
+              ofType =
+                  UniversalType(type: _objectConst, isRequired: isRequired);
             }
           }
 
-          // If the ofList contains the "null" type, it is a nullable type
-          if (ofType != null && nullItems.isNotEmpty) {
+          // If the ofList contains the "null" type (or map has nullable:true), it is a nullable type
+          if (ofType != null &&
+              (nullItems.isNotEmpty ||
+                  map[_nullableConst].toString().toBool() == true)) {
             ofType = makeNullable(ofType);
           }
         }
-        ofType = ofType?.copyWith(name: name?.toPascal);
+        // If ofType is still null after processing (e.g. anyOf: [null]), treat as dynamic/object and nullable
+        if (ofType == null &&
+            ofList.isNotEmpty &&
+            ofList.every((item) =>
+                item is Map<String, dynamic> &&
+                item[_typeConst]?.toString() == 'null')) {
+          ofType = UniversalType(
+              type: _objectConst, isRequired: isRequired, nullable: true);
+        } else {
+          ofType ??= UniversalType(
+            type: _objectConst,
+            isRequired: isRequired,
+            nullable: map[_nullableConst].toString().toBool() ??
+                (root && !isRequired),
+          );
+        }
+
+        // Ensure name is applied to the ofType if it was determined
+        if (name != null) {
+          final (protectedName, protectedDescription) = protectName(
+            name,
+            description:
+                ofType.description ?? map[_descriptionConst]?.toString(),
+          );
+          final enumType = map.containsKey(_defaultConst) && ofImport != null
+              ? ofType.type
+              : null;
+
+          ofType = ofType.copyWith(
+            name: protectedName?.toCamel,
+            enumType: enumType,
+            description: protectedDescription,
+            jsonKey: name, // Preserve original name for jsonKey
+          );
+        }
       }
 
-      final type = ofType?.type ?? _objectConst;
+      final finalType = ofType?.type ?? _objectConst;
+      final finalImport = ofImport;
+      final finalFormat = ofType?.format;
+      final isArray = (ofType?.wrappingCollections.length ?? 0) > 0;
+      final finalDefaultValue = protectDefaultValue(
+        map[_defaultConst]?.toString() ?? ofType?.defaultValue,
+        isEnum: ofType?.enumType != null,
+        isArray: isArray,
+      );
+      final finalEnumType = ofType?.enumType;
+      final finalWrappingCollections = ofType?.wrappingCollections ?? [];
+      // Nullability determined by ofType processing (which includes makeNullable)
+      // or fallback to map's nullable or root/isRequired logic.
+      final finalNullable = ofType?.nullable ??
+          map[_nullableConst].toString().toBool() ??
+          (root && !isRequired);
 
-      final import = ofImport;
-      final defaultValue = map[_defaultConst]?.toString();
-
-      final enumType = defaultValue != null &&
-              import != null &&
-              (ofType == null || ofType.wrappingCollections.isEmpty)
-          ? type
-          : null;
-      final (newName, description) = protectName(
-        name,
-        description: map[_descriptionConst]?.toString(),
+      final (newNameForReturn, descriptionForReturn) = protectName(
+        name, // Use original name for top-level naming
+        description: ofType?.description ?? map[_descriptionConst]?.toString(),
       );
 
       return (
         type: UniversalType(
-          type: type,
-          name: newName?.toCamel,
-          description: description,
-          format: ofType?.format,
+          type: finalType,
+          name: newNameForReturn?.toCamel ?? ofType?.name,
+          description: descriptionForReturn ?? ofType?.description,
+          format: finalFormat,
           jsonKey: name,
-          defaultValue: protectDefaultValue(
-            defaultValue,
-            isEnum: enumType != null,
-            isArray: (ofType?.wrappingCollections.length ?? 0) > 0,
-          ),
-          enumType: enumType,
+          // Original name for JSON key
+          defaultValue: finalDefaultValue,
+          enumType: isArray ? null : finalEnumType,
           isRequired: isRequired,
-          wrappingCollections: ofType?.wrappingCollections ?? [],
-          nullable: (ofType?.nullable ?? false) ||
-              (map[_nullableConst].toString().toBool() ?? false) ||
-              (root && !isRequired),
+          // isRequired for the property itself
+          wrappingCollections: finalWrappingCollections,
+          nullable: finalNullable,
         ),
-        import: import,
+        import: finalImport,
       );
     }
     // Type or ref
