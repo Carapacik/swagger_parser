@@ -973,7 +973,8 @@ class OpenApiParser {
   }) {
     // Array
     if (map.containsKey(_typeConst) && map[_typeConst] == _arrayConst) {
-      final arrayItemsSchema = map[_itemsConst] as Map<String, dynamic>;
+      final arrayItemsSchema =
+          (map[_itemsConst] as Map<String, dynamic>?) ?? {};
       // Determine item details by recursively calling _findType for the item schema.
       // `root` is false for items, meaning item's nullability is driven by its own schema's `nullable` field.
       final (type: itemDetails, import: itemImport) = _findType(
