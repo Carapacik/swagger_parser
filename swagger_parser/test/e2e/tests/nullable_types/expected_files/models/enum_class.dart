@@ -4,20 +4,20 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'object0.freezed.dart';
-part 'object0.g.dart';
+part 'enum_class.freezed.dart';
+part 'enum_class.g.dart';
 
 @Freezed()
-class Object0 with _$Object0 {
-  const factory Object0({
+class EnumClass with _$EnumClass {
+  const factory EnumClass({
     required String? p1,
     @JsonKey(name: 'p2_null') required List<String>? p2Null,
     @JsonKey(name: 'p2_null_all') required List<String?>? p2NullAll,
     @JsonKey(name: 'nested_collections')
     required List<List<Map<String, List<Map<String, int>?>>>?>
         nestedCollections,
-  }) = _Object0;
+  }) = _EnumClass;
 
-  factory Object0.fromJson(Map<String, Object?> json) =>
-      _$Object0FromJson(json);
+  factory EnumClass.fromJson(Map<String, Object?> json) =>
+      _$EnumClassFromJson(json);
 }
