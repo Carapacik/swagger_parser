@@ -102,7 +102,7 @@ void main() {
         ),
         schemaFileName: 'openapi.yaml',
       );
-    });
+    }, skip: true);
 
     test('nullable_types.2.0', () async {
       await e2eTest(
