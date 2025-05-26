@@ -1,3 +1,7 @@
+## 1.24.0
+- Fix detection of nullable list with non null items vs nullable list with nullable items([#323](https://github.com/Carapacik/swagger_parser/issues/323))
+- Bump Dart SDK to 3.6
+
 ## 1.23.2
 - Fixed error with client parameters with `$`([#262](https://github.com/Carapacik/swagger_parser/issues/262))
 

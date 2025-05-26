@@ -1371,7 +1371,6 @@ class OpenApiParser {
             // Here, `map` is the `anyOf` schema. `optionalItem` is the array schema.
             // We need to preserve context like `items` if it's outside `anyOf` but part of the same definition.
 
-
             final (:type, :import) = _findType(
               optionalItem,
               root: root,
@@ -1469,7 +1468,7 @@ class OpenApiParser {
           // If the ofList contains the "null" type (or map has nullable:true), it is a nullable type
           if (ofType != null &&
               (nullItems.isNotEmpty ||
-                  map[_nullableConst].toString().toBool() == true)) {
+                  (map[_nullableConst].toString().toBool() ?? false))) {
             ofType = makeNullable(ofType);
           }
         }
