@@ -7,4 +7,3 @@ linter:
     always_use_package_imports: false
     avoid_equals_and_hash_code_on_mutable_classes: false
     prefer_relative_imports: true
-    use_if_null_to_convert_nulls_to_bools: false
