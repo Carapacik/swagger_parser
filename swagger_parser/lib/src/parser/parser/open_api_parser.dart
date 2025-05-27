@@ -668,11 +668,11 @@ class OpenApiParser {
   }
 
   /// Used to find properties in map
-  (List<UniversalType>, Set<String>) _findParametersAndImports(
+  (Set<UniversalType>, Set<String>) _findParametersAndImports(
     Map<String, dynamic> map, {
     String? additionalName,
   }) {
-    final parameters = <UniversalType>[];
+    final parameters = <UniversalType>{};
     final imports = <String>{};
 
     var requiredParameters = <String>[];
@@ -781,8 +781,8 @@ class OpenApiParser {
 
       value as Map<String, dynamic>;
 
-      final refs = <String>[];
-      final parameters = <UniversalType>[];
+      final refs = <String>{};
+      final parameters = <UniversalType>{};
       final imports = SplayTreeSet<String>();
 
       /// Used for find properties in map
@@ -864,7 +864,7 @@ class OpenApiParser {
         UniversalComponentClass(
           name: key,
           imports: imports,
-          parameters: allOf != null ? [] : parameters,
+          parameters: allOf != null ? {} : parameters,
           allOf: allOf,
           description: value[_descriptionConst]?.toString(),
           discriminator: discriminator,
@@ -1306,13 +1306,13 @@ class OpenApiParser {
             UniversalComponentClass(
               name: newName!.toPascal,
               imports: SplayTreeSet<String>(),
-              parameters: [
+              parameters: {
                 UniversalType(
                   type: 'String',
                   name: discriminator?.propertyName,
                   isRequired: true,
                 ),
-              ],
+              },
               discriminator: discriminator,
             ),
           );
@@ -1402,8 +1402,8 @@ class OpenApiParser {
             // What we should do is create a new type that is a composition of all the object types in otherItems
             // Then we collect the refs and properties and store them in the UniversalComponentClass to be processed when we are done parsing the data classes.
             if (map.containsKey(_allOfConst)) {
-              final refs = <String>[];
-              final parameters = <UniversalType>[];
+              final refs = <String>{};
+              final parameters = <UniversalType>{};
               final imports = SplayTreeSet<String>();
 
               for (final item in otherItems) {
@@ -1441,7 +1441,7 @@ class OpenApiParser {
                     name: newName!.toPascal,
                     imports: imports,
                     // ignore: prefer_const_literals_to_create_immutables
-                    parameters: [],
+                    parameters: {},
                     // Parameters will be filled later
                     allOf: (refs: refs, properties: parameters),
                     description: description,
@@ -1624,7 +1624,7 @@ class OpenApiParser {
       propertyName: propertyName,
       discriminatorValueToRefMapping: cleanedRefMapping,
       // This property is populated by the parser after all the data classes are created
-      refProperties: <String, List<UniversalType>>{},
+      refProperties: <String, Set<UniversalType>>{},
     );
   }
 }

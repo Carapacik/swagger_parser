@@ -60,10 +60,16 @@
                                        "items":{
                                           "$ref":"#/components/schemas/UserDto"
                                        }
+                                    },
+                                    "nextCursor":{
+                                       "type":"string",
+                                       "nullable":true,
+                                       "example":"01AN4Z07BY"
                                     }
                                  },
                                  "required":[
-                                    "data"
+                                    "data",
+                                    "nextCursor"
                                  ]
                               }
                            ]

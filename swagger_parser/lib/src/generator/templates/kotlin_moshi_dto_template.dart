@@ -18,7 +18,7 @@ data class ${dataClass.name.toPascal}(${_parameters(dataClass.parameters)}${data
 ''';
 }
 
-String _parameters(List<UniversalType> parameters) => parameters
+String _parameters(Set<UniversalType> parameters) => parameters
     .map(
       (e) => '\n${descriptionComment(e.description, tab: '    ')}'
           '${e.jsonKey != null && e.name != e.jsonKey ? '    @Json("${protectJsonKey(e.jsonKey)}")\n' : ''}    '
