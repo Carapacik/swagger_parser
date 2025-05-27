@@ -1,3 +1,6 @@
+## 1.24.1
+- Remove duplicate parameters in dataclass([#322](https://github.com/Carapacik/swagger_parser/issues/322))
+
 ## 1.24.0
 - Fix detection of nullable list with non null items vs nullable list with nullable items([#323](https://github.com/Carapacik/swagger_parser/issues/323))
 - Bump Dart SDK to 3.6
