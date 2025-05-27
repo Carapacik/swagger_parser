@@ -7,7 +7,7 @@ void main() {
       const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
-        parameters: [],
+        parameters: {},
       );
       const fillController = FillController(
         config: GeneratorConfig(name: '', outputDirectory: ''),
@@ -34,7 +34,7 @@ class ClassName {
       const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
-        parameters: [],
+        parameters: {},
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -64,7 +64,7 @@ class ClassName with _$ClassName {
       const dataClass = UniversalComponentClass(
         name: 'ClassName',
         imports: {},
-        parameters: [],
+        parameters: {},
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -96,7 +96,7 @@ data class ClassName()
           'PascalClass',
           'Space class',
         },
-        parameters: [],
+        parameters: {},
       );
       const fillController = FillController(
         config: GeneratorConfig(name: '', outputDirectory: ''),
@@ -135,7 +135,7 @@ class ClassName {
           'PascalClass',
           'Space class',
         },
-        parameters: [],
+        parameters: {},
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -174,48 +174,48 @@ class ClassName with _$ClassName {
 
   group('Parameters', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
-        parameters: [
-          UniversalType(type: 'integer', name: 'intType', isRequired: true),
-          UniversalType(type: 'number', name: 'numberType', isRequired: true),
-          UniversalType(
+        imports: const {},
+        parameters: {
+          const UniversalType(type: 'integer', name: 'intType', isRequired: true),
+          const UniversalType(type: 'number', name: 'numberType', isRequired: true),
+          const UniversalType(
             type: 'number',
             format: 'double',
             name: 'doubleNumberType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'number',
             format: 'float',
             name: 'floatNumberType',
             isRequired: true,
           ),
-          UniversalType(type: 'string', name: 'stringType', isRequired: true),
-          UniversalType(
+          const UniversalType(type: 'string', name: 'stringType', isRequired: true),
+          const UniversalType(
             type: 'string',
             format: 'binary',
             name: 'binaryStringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             format: 'date',
             name: 'dateStringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             format: 'date-time',
             name: 'dateTimeStringType',
             isRequired: true,
           ),
-          UniversalType(type: 'file', name: 'fileType', isRequired: true),
-          UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
-          UniversalType(type: 'object', name: 'objectType', isRequired: true),
-          UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
-        ],
+          const UniversalType(type: 'file', name: 'fileType', isRequired: true),
+          const UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
+          const UniversalType(type: 'object', name: 'objectType', isRequired: true),
+          const UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(name: '', outputDirectory: ''),
@@ -267,48 +267,48 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
-        parameters: [
-          UniversalType(type: 'integer', name: 'intType', isRequired: true),
-          UniversalType(type: 'number', name: 'numberType', isRequired: true),
-          UniversalType(
+        imports: const {},
+        parameters: {
+          const UniversalType(type: 'integer', name: 'intType', isRequired: true),
+          const UniversalType(type: 'number', name: 'numberType', isRequired: true),
+          const UniversalType(
             type: 'number',
             format: 'double',
             name: 'doubleNumberType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'number',
             format: 'float',
             name: 'floatNumberType',
             isRequired: true,
           ),
-          UniversalType(type: 'string', name: 'stringType', isRequired: true),
-          UniversalType(
+          const UniversalType(type: 'string', name: 'stringType', isRequired: true),
+          const UniversalType(
             type: 'string',
             format: 'binary',
             name: 'binaryStringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             format: 'date',
             name: 'dateStringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             format: 'date-time',
             name: 'dateTimeStringType',
             isRequired: true,
           ),
-          UniversalType(type: 'file', name: 'fileType', isRequired: true),
-          UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
-          UniversalType(type: 'object', name: 'objectType', isRequired: true),
-          UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
-        ],
+          const UniversalType(type: 'file', name: 'fileType', isRequired: true),
+          const UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
+          const UniversalType(type: 'object', name: 'objectType', isRequired: true),
+          const UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -350,48 +350,48 @@ class ClassName with _$ClassName {
     });
 
     test('dart + dart_mappable', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
-        parameters: [
-          UniversalType(type: 'integer', name: 'intType', isRequired: true),
-          UniversalType(type: 'number', name: 'numberType', isRequired: true),
-          UniversalType(
+        imports: const {},
+        parameters: {
+          const UniversalType(type: 'integer', name: 'intType', isRequired: true),
+          const UniversalType(type: 'number', name: 'numberType', isRequired: true),
+          const UniversalType(
             type: 'number',
             format: 'double',
             name: 'doubleNumberType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'number',
             format: 'float',
             name: 'floatNumberType',
             isRequired: true,
           ),
-          UniversalType(type: 'string', name: 'stringType', isRequired: true),
-          UniversalType(
+          const UniversalType(type: 'string', name: 'stringType', isRequired: true),
+          const UniversalType(
             type: 'string',
             format: 'binary',
             name: 'binaryStringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             format: 'date',
             name: 'dateStringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             format: 'date-time',
             name: 'dateTimeStringType',
             isRequired: true,
           ),
-          UniversalType(type: 'file', name: 'fileType', isRequired: true),
-          UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
-          UniversalType(type: 'object', name: 'objectType', isRequired: true),
-          UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
-        ],
+          const UniversalType(type: 'file', name: 'fileType', isRequired: true),
+          const UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
+          const UniversalType(type: 'object', name: 'objectType', isRequired: true),
+          const UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -444,17 +444,17 @@ class ClassName with ClassNameMappable {
     });
 
     test('dart + dart_mappable with custom json key', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
-        parameters: [
-          UniversalType(
+        imports: const {},
+        parameters: {
+          const UniversalType(
             type: 'string',
             name: 'imageUrl',
             jsonKey: 'imageURL',
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -486,48 +486,54 @@ class ClassName with ClassNameMappable {
     });
 
     test('kotlin + moshi', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
-        parameters: [
-          UniversalType(type: 'integer', name: 'intType', isRequired: true),
-          UniversalType(type: 'number', name: 'numberType', isRequired: true),
-          UniversalType(
+        imports: const {},
+        parameters: {
+          const UniversalType(
+              type: 'integer', name: 'intType', isRequired: true),
+          const UniversalType(
+              type: 'number', name: 'numberType', isRequired: true),
+          const UniversalType(
             type: 'number',
             format: 'double',
             name: 'doubleNumberType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'number',
             format: 'float',
             name: 'floatNumberType',
             isRequired: true,
           ),
-          UniversalType(type: 'string', name: 'stringType', isRequired: true),
-          UniversalType(
+          const UniversalType(
+              type: 'string', name: 'stringType', isRequired: true),
+          const UniversalType(
             type: 'string',
             format: 'binary',
             name: 'binaryStringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             format: 'date',
             name: 'dateStringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             format: 'date-time',
             name: 'dateTimeStringType',
             isRequired: true,
           ),
-          UniversalType(type: 'file', name: 'fileType', isRequired: true),
-          UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
-          UniversalType(type: 'object', name: 'objectType', isRequired: true),
-          UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
-        ],
+          const UniversalType(type: 'file', name: 'fileType', isRequired: true),
+          const UniversalType(
+              type: 'boolean', name: 'boolType', isRequired: true),
+          const UniversalType(
+              type: 'object', name: 'objectType', isRequired: true),
+          const UniversalType(
+              type: 'Another', name: 'anotherType', isRequired: true),
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -563,17 +569,17 @@ data class ClassName(
 
   group('Array type', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {'Another'},
-        parameters: [
-          UniversalType(
+        imports: const {'Another'},
+        parameters: {
+          const UniversalType(
             type: 'integer',
             name: 'list0',
             wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'list1',
             wrappingCollections: [
@@ -582,7 +588,7 @@ data class ClassName(
             ],
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'Another',
             name: 'list5',
             wrappingCollections: [
@@ -594,7 +600,7 @@ data class ClassName(
             ],
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(name: '', outputDirectory: ''),
@@ -628,17 +634,17 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {'Another'},
-        parameters: [
-          UniversalType(
+        imports: const {'Another'},
+        parameters: {
+          const UniversalType(
             type: 'integer',
             name: 'list0',
             wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'list1',
             wrappingCollections: [
@@ -647,7 +653,7 @@ class ClassName {
             ],
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'Another',
             name: 'list5',
             wrappingCollections: [
@@ -659,7 +665,7 @@ class ClassName {
             ],
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -692,17 +698,17 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {'Another'},
-        parameters: [
-          UniversalType(
+        imports: const {'Another'},
+        parameters: {
+          const UniversalType(
             type: 'integer',
             name: 'list0',
             wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'list1',
             wrappingCollections: [
@@ -711,7 +717,7 @@ class ClassName with _$ClassName {
             ],
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'Another',
             name: 'list5',
             wrappingCollections: [
@@ -723,7 +729,7 @@ class ClassName with _$ClassName {
             ],
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -750,35 +756,35 @@ data class ClassName(
 
   group('JsonKey name', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
-        parameters: [
-          UniversalType(
+        imports: const {},
+        parameters: {
+          const UniversalType(
             type: 'integer',
             name: 'intType',
             jsonKey: 'int_type',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'stringType',
             jsonKey: 'stringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'boolean',
             name: 'boolType',
             jsonKey: 'bool-type',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'Another',
             name: 'anotherType',
             jsonKey: 'another',
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(name: '', outputDirectory: ''),
@@ -815,35 +821,35 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
-        parameters: [
-          UniversalType(
+        imports: const {},
+        parameters: {
+          const UniversalType(
             type: 'integer',
             name: 'intType',
             jsonKey: 'int_type',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'stringType',
             jsonKey: 'stringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'boolean',
             name: 'boolType',
             jsonKey: 'bool-type',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'Another',
             name: 'anotherType',
             jsonKey: 'another',
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -878,35 +884,35 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
-        parameters: [
-          UniversalType(
+        imports: const {},
+        parameters: {
+          const UniversalType(
             type: 'integer',
             name: 'intType',
             jsonKey: 'int_type',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'stringType',
             jsonKey: 'stringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'boolean',
             name: 'boolType',
             jsonKey: 'bool-type',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'Another',
             name: 'anotherType',
             jsonKey: 'another',
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -937,43 +943,43 @@ data class ClassName(
 
   group('defaultValue', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {'Haha'},
-        parameters: [
-          UniversalType(
+        imports: const {'Haha'},
+        parameters: {
+          const UniversalType(
             type: 'integer',
             name: 'intType',
             defaultValue: '1',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'stringType',
             defaultValue: 'str',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'boolean',
             name: 'boolType',
             defaultValue: 'false',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'number',
             name: 'nullableType',
             defaultValue: '-1.1',
             nullable: true,
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'Haha',
             name: 'enumType',
             defaultValue: 'HEHE',
             enumType: 'string',
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(name: '', outputDirectory: ''),
@@ -1011,43 +1017,43 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {'Haha'},
-        parameters: [
-          UniversalType(
+        imports: const {'Haha'},
+        parameters: {
+          const UniversalType(
             type: 'integer',
             name: 'intType',
             defaultValue: '1',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'stringType',
             defaultValue: 'str',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'boolean',
             name: 'boolType',
             defaultValue: 'false',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'number',
             name: 'nullableType',
             defaultValue: '-1.1',
             nullable: true,
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'Haha',
             name: 'enumType',
             defaultValue: 'HEHE',
             enumType: 'string',
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -1087,36 +1093,36 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
-        parameters: [
-          UniversalType(
+        imports: const {},
+        parameters: {
+          const UniversalType(
             type: 'integer',
             name: 'intType',
             defaultValue: '1',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'stringType',
             defaultValue: 'str',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'boolean',
             name: 'boolType',
             defaultValue: 'false',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'number',
             name: 'nullableType',
             defaultValue: '-1.1',
             nullable: true,
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -1144,27 +1150,27 @@ data class ClassName(
 
   group('Required parameters', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {'Another'},
-        parameters: [
-          UniversalType(
+        imports: const {'Another'},
+        parameters: {
+          const UniversalType(
               type: 'integer',
               name: 'intType',
               isRequired: false,
               nullable: true),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             wrappingCollections: [UniversalCollections.nullableList],
             name: 'list',
             isRequired: false,
           ),
-          UniversalType(
+          const UniversalType(
               type: 'Another',
               name: 'another',
               isRequired: false,
               nullable: true),
-          UniversalType(
+          const UniversalType(
             type: 'Another',
             wrappingCollections: [
               UniversalCollections.list,
@@ -1173,7 +1179,7 @@ data class ClassName(
             name: 'anotherList',
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(name: '', outputDirectory: ''),
@@ -1209,27 +1215,27 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {'Another'},
-        parameters: [
-          UniversalType(
+        imports: const {'Another'},
+        parameters: {
+          const UniversalType(
               type: 'integer',
               name: 'intType',
               isRequired: false,
               nullable: true),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             wrappingCollections: [UniversalCollections.nullableList],
             name: 'list',
             isRequired: false,
           ),
-          UniversalType(
+          const UniversalType(
               type: 'Another',
               name: 'another',
               isRequired: false,
               nullable: true),
-          UniversalType(
+          const UniversalType(
             type: 'Another',
             wrappingCollections: [
               UniversalCollections.list,
@@ -1238,7 +1244,7 @@ class ClassName {
             name: 'anotherList',
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -1272,27 +1278,27 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {'Another'},
-        parameters: [
-          UniversalType(
+        imports: const {'Another'},
+        parameters: {
+          const UniversalType(
               type: 'integer',
               name: 'intType',
               isRequired: false,
               nullable: true),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             wrappingCollections: [UniversalCollections.nullableList],
             name: 'list',
             isRequired: false,
           ),
-          UniversalType(
+          const UniversalType(
               type: 'Another',
               name: 'another',
               isRequired: false,
               nullable: true),
-          UniversalType(
+          const UniversalType(
             type: 'Another',
             wrappingCollections: [
               UniversalCollections.list,
@@ -1301,7 +1307,7 @@ class ClassName with _$ClassName {
             name: 'anotherList',
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -1329,30 +1335,30 @@ data class ClassName(
 
   group('Put required parameters first', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {'Another'},
-        parameters: [
-          UniversalType(
+        imports: const {'Another'},
+        parameters: {
+          const UniversalType(
             type: 'integer',
             name: 'intNotRequired',
             isRequired: false,
             nullable: true,
           ),
-          UniversalType(type: 'integer', name: 'intRequired', isRequired: true),
-          UniversalType(
+          const UniversalType(type: 'integer', name: 'intRequired', isRequired: true),
+          const UniversalType(
             type: 'Another',
             name: 'anotherNotRequired',
             isRequired: false,
             nullable: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'Another',
             name: 'list',
             wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(name: '', outputDirectory: ''),
@@ -1388,30 +1394,30 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {'Another'},
-        parameters: [
-          UniversalType(
+        imports: const {'Another'},
+        parameters: {
+          const UniversalType(
             type: 'integer',
             name: 'intNotRequired',
             isRequired: false,
             nullable: true,
           ),
-          UniversalType(type: 'integer', name: 'intRequired', isRequired: true),
-          UniversalType(
+          const UniversalType(type: 'integer', name: 'intRequired', isRequired: true),
+          const UniversalType(
             type: 'Another',
             name: 'anotherNotRequired',
             isRequired: false,
             nullable: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'Another',
             name: 'list',
             wrappingCollections: [UniversalCollections.list],
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -2046,30 +2052,30 @@ enum class EnumName {
   group('Typedef data class', () {
     test('dart', () async {
       final dataClasses = [
-        const UniversalComponentClass(
+         UniversalComponentClass(
           name: 'Date',
-          imports: {},
-          parameters: [
-            UniversalType(type: 'string', format: 'date', isRequired: true),
-          ],
+          imports: const {},
+          parameters: {
+            const UniversalType(type: 'string', format: 'date', isRequired: true),
+          },
           typeDef: true,
         ),
-        const UniversalComponentClass(
+        UniversalComponentClass(
           name: 'BooleanList',
-          imports: {},
-          parameters: [
-            UniversalType(
+          imports: const {},
+          parameters: {
+            const UniversalType(
               type: 'boolean',
               wrappingCollections: [UniversalCollections.list],
               isRequired: true,
             ),
-          ],
+          },
           typeDef: true,
         ),
-        const UniversalComponentClass(
+        UniversalComponentClass(
           name: 'AnotherValue',
-          imports: {'Another'},
-          parameters: [UniversalType(type: 'Another', isRequired: true)],
+          imports: const {'Another'},
+          parameters: {const UniversalType(type: 'Another', isRequired: true)},
           typeDef: true,
         ),
       ];
@@ -2098,30 +2104,30 @@ typedef AnotherValue = Another;
 
     test('kotlin', () async {
       final dataClasses = [
-        const UniversalComponentClass(
+        UniversalComponentClass(
           name: 'Date',
-          imports: {},
-          parameters: [
-            UniversalType(type: 'string', format: 'date', isRequired: true),
-          ],
+          imports: const {},
+          parameters: {
+            const UniversalType(type: 'string', format: 'date', isRequired: true),
+          },
           typeDef: true,
         ),
-        const UniversalComponentClass(
+        UniversalComponentClass(
           name: 'BooleanList',
-          imports: {},
-          parameters: [
-            UniversalType(
+          imports: const {},
+          parameters: {
+            const UniversalType(
               type: 'boolean',
               wrappingCollections: [UniversalCollections.list],
               isRequired: true,
             ),
-          ],
+          },
           typeDef: true,
         ),
-        const UniversalComponentClass(
+        UniversalComponentClass(
           name: 'AnotherValue',
-          imports: {'Another'},
-          parameters: [UniversalType(type: 'Another', isRequired: true)],
+          imports: const {'Another'},
+          parameters: {const UniversalType(type: 'Another', isRequired: true)},
           typeDef: true,
         ),
       ];
@@ -2153,11 +2159,11 @@ typealias AnotherValue = Another;
 
   group('nullable', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
-        parameters: [
-          UniversalType(
+        imports: const {},
+        parameters: {
+          const UniversalType(
             type: 'string',
             wrappingCollections: [
               UniversalCollections.nullableList,
@@ -2169,22 +2175,22 @@ typealias AnotherValue = Another;
             isRequired: false,
             nullable: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'list2',
             isRequired: false,
             nullable: true,
           ),
-          UniversalType(type: 'string', name: 'list3', isRequired: true),
-          UniversalType(
+          const UniversalType(type: 'string', name: 'list3', isRequired: true),
+          const UniversalType(
               type: 'string', name: 'list4', isRequired: false, nullable: true),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'list5',
             isRequired: true,
             nullable: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(name: '', outputDirectory: ''),
@@ -2220,11 +2226,11 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
-        parameters: [
-          UniversalType(
+        imports: const {},
+        parameters: {
+          const UniversalType(
             type: 'string',
             wrappingCollections: [
               UniversalCollections.nullableList,
@@ -2236,22 +2242,22 @@ class ClassName {
             isRequired: false,
             nullable: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'list2',
             isRequired: false,
             nullable: true,
           ),
-          UniversalType(type: 'string', name: 'list3', isRequired: true),
-          UniversalType(
+          const UniversalType(type: 'string', name: 'list3', isRequired: true),
+          const UniversalType(
               type: 'string', name: 'list4', isRequired: false, nullable: true),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'list5',
             isRequired: true,
             nullable: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -2284,11 +2290,11 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
-        parameters: [
-          UniversalType(
+        imports: const {},
+        parameters: {
+          const UniversalType(
             type: 'string',
             wrappingCollections: [
               UniversalCollections.nullableList,
@@ -2300,22 +2306,22 @@ class ClassName with _$ClassName {
             isRequired: false,
             nullable: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'list2',
             isRequired: false,
             nullable: true,
           ),
-          UniversalType(type: 'string', name: 'list3', isRequired: true),
-          UniversalType(
+          const UniversalType(type: 'string', name: 'list3', isRequired: true),
+          const UniversalType(
               type: 'string', name: 'list4', isRequired: false, nullable: true),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             name: 'list5',
             isRequired: true,
             nullable: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -2344,52 +2350,52 @@ data class ClassName(
 
   group('description', () {
     test('dart + json_serializable', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
+        imports: const {},
         description: 'Test class',
-        parameters: [
-          UniversalType(
+        parameters: {
+          const UniversalType(
             type: 'string',
             description: 'Some string',
             name: 'stringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             description: 'Default value',
             name: 'defaultType',
             defaultValue: 'str',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             description: 'JsonKey here',
             name: 'jsonKeyValue',
             jsonKey: 'json_key_value',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             description: 'Mega mind',
             name: 'megaMind',
             jsonKey: 'mega_MIND',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'object',
             description: '',
             name: 'emptyDescription',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             description: 'List of data\nThis data is a list',
             wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(name: '', outputDirectory: ''),
@@ -2440,52 +2446,52 @@ class ClassName {
     });
 
     test('dart + freezed', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
+        imports: const {},
         description: 'Test class',
-        parameters: [
-          UniversalType(
+        parameters: {
+          const UniversalType(
             type: 'string',
             description: 'Some string',
             name: 'stringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             description: 'Default value',
             name: 'defaultType',
             defaultValue: 'str',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             description: 'JsonKey here',
             name: 'jsonKeyValue',
             jsonKey: 'json_key_value',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             description: 'Mega mind',
             name: 'megaMind',
             jsonKey: 'mega_MIND',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'object',
             description: '',
             name: 'emptyDescription',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             description: 'List of data\nThis data is a list',
             wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(
@@ -2533,52 +2539,52 @@ class ClassName with _$ClassName {
     });
 
     test('kotlin + moshi ', () async {
-      const dataClass = UniversalComponentClass(
+      final dataClass = UniversalComponentClass(
         name: 'ClassName',
-        imports: {},
+        imports: const {},
         description: 'Test class',
-        parameters: [
-          UniversalType(
+        parameters: {
+          const UniversalType(
             type: 'string',
             description: 'Some string',
             name: 'stringType',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             description: 'Default value',
             name: 'defaultType',
             defaultValue: 'str',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             description: 'JsonKey here',
             name: 'jsonKeyValue',
             jsonKey: 'json_key_value',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             description: 'Mega mind',
             name: 'megaMind',
             jsonKey: 'mega_MIND',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'object',
             description: '',
             name: 'emptyDescription',
             isRequired: true,
           ),
-          UniversalType(
+          const UniversalType(
             type: 'string',
             description: 'List of data',
             wrappingCollections: [UniversalCollections.list],
             name: 'list',
             isRequired: true,
           ),
-        ],
+        },
       );
       const fillController = FillController(
         config: GeneratorConfig(

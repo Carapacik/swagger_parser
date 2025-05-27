@@ -94,7 +94,7 @@ String getFields(UniversalComponentClass dataClass) {
 }
 
 String _fieldsToString(List<UniversalType> parameters) {
-  final sortedByRequired = List<UniversalType>.from(
+  final sortedByRequired = Set<UniversalType>.from(
     parameters.sorted((a, b) => a.compareTo(b)),
   );
   return sortedByRequired
@@ -106,7 +106,7 @@ String _fieldsToString(List<UniversalType> parameters) {
 }
 
 String _parametersToString(List<UniversalType> parameters) {
-  final sortedByRequired = List<UniversalType>.from(
+  final sortedByRequired = Set<UniversalType>.from(
     parameters.sorted((a, b) => a.compareTo(b)),
   );
   return sortedByRequired

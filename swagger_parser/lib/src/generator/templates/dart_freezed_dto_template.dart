@@ -28,7 +28,7 @@ ${generateValidator ? dataClass.parameters.map(_validationString).nonNulls.join(
 ${generateValidator ? _validateMethod(className, dataClass.parameters) : ''}''';
 }
 
-String _validateMethod(String className, List<UniversalType> types) {
+String _validateMethod(String className, Set<UniversalType> types) {
   final bodyBuffer = StringBuffer();
 
   for (final type in types) {
@@ -221,8 +221,8 @@ String? _validationString(UniversalType type) {
   return sb.isEmpty ? null : sb.toString();
 }
 
-String _parametersToString(List<UniversalType> parameters) {
-  final sortedByRequired = List<UniversalType>.from(
+String _parametersToString(Set<UniversalType> parameters) {
+  final sortedByRequired = Set<UniversalType>.from(
     parameters.sorted((a, b) => a.compareTo(b)),
   );
   return sortedByRequired

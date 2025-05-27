@@ -28,7 +28,7 @@ class $className {
 ''';
 }
 
-String _parametersInClass(List<UniversalType> parameters) => parameters
+String _parametersInClass(Set<UniversalType> parameters) => parameters
     .mapIndexed(
       (i, e) =>
           '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '  ')}'
@@ -36,8 +36,8 @@ String _parametersInClass(List<UniversalType> parameters) => parameters
     )
     .join();
 
-String _parametersInConstructor(List<UniversalType> parameters) {
-  final sortedByRequired = List<UniversalType>.from(
+String _parametersInConstructor(Set<UniversalType> parameters) {
+  final sortedByRequired = Set<UniversalType>.from(
     parameters.sorted((a, b) => a.compareTo(b)),
   );
   return sortedByRequired
