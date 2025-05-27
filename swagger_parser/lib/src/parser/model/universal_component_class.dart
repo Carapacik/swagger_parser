@@ -8,7 +8,7 @@ typedef Discriminator = ({
   Map<String, String> discriminatorValueToRefMapping,
 
   /// The list of properties stored for each ref
-  Map<String, List<UniversalType>> refProperties,
+  Map<String, Set<UniversalType>> refProperties,
 });
 
 typedef DiscriminatorValue = ({
@@ -41,10 +41,10 @@ final class UniversalComponentClass extends UniversalDataClass {
   String get import => name.toPascal;
 
   /// List of class fields
-  final List<UniversalType> parameters;
+  final Set<UniversalType> parameters;
 
   /// Temp field for containing info about `allOf` for future processing
-  final ({List<String> refs, List<UniversalType> properties})? allOf;
+  final ({Set<String> refs, Set<UniversalType> properties})? allOf;
 
   /// When using a discriminated oneOf, this contains the information about the property name, the mapping of the ref to the property name, and the properties of each of the oneOf variants
   final Discriminator? discriminator;
@@ -64,8 +64,8 @@ final class UniversalComponentClass extends UniversalDataClass {
   UniversalComponentClass copyWith({
     String? name,
     Set<String>? imports,
-    List<UniversalType>? parameters,
-    ({List<String> refs, List<UniversalType> properties})? allOf,
+    Set<UniversalType>? parameters,
+    ({Set<String> refs, Set<UniversalType> properties})? allOf,
     bool? typeDef,
     Discriminator? discriminator,
     DiscriminatorValue? discriminatorValue,
