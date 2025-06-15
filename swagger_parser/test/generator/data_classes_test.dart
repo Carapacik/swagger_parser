@@ -2094,6 +2094,7 @@ typedef BooleanList = List<bool>;
 ''';
       const expectedContent2 = '''
 import 'another.dart';
+export 'another.dart';
 
 typedef AnotherValue = Another;
 ''';
