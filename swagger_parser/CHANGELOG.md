@@ -1,3 +1,7 @@
+## 1.24.2
+- Fixes `typedef` transparency which results in import errors when generating `json_serializable` classes
+  read more details here https://github.com/google/json_serializable.dart/issues/1124
+
 ## 1.24.1
 - Remove duplicate parameters in dataclass([#322](https://github.com/Carapacik/swagger_parser/issues/322))
 
