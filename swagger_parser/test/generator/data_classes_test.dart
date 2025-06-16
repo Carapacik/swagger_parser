@@ -178,8 +178,10 @@ class ClassName with _$ClassName {
         name: 'ClassName',
         imports: const {},
         parameters: {
-          const UniversalType(type: 'integer', name: 'intType', isRequired: true),
-          const UniversalType(type: 'number', name: 'numberType', isRequired: true),
+          const UniversalType(
+              type: 'integer', name: 'intType', isRequired: true),
+          const UniversalType(
+              type: 'number', name: 'numberType', isRequired: true),
           const UniversalType(
             type: 'number',
             format: 'double',
@@ -192,7 +194,8 @@ class ClassName with _$ClassName {
             name: 'floatNumberType',
             isRequired: true,
           ),
-          const UniversalType(type: 'string', name: 'stringType', isRequired: true),
+          const UniversalType(
+              type: 'string', name: 'stringType', isRequired: true),
           const UniversalType(
             type: 'string',
             format: 'binary',
@@ -212,9 +215,12 @@ class ClassName with _$ClassName {
             isRequired: true,
           ),
           const UniversalType(type: 'file', name: 'fileType', isRequired: true),
-          const UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
-          const UniversalType(type: 'object', name: 'objectType', isRequired: true),
-          const UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
+          const UniversalType(
+              type: 'boolean', name: 'boolType', isRequired: true),
+          const UniversalType(
+              type: 'object', name: 'objectType', isRequired: true),
+          const UniversalType(
+              type: 'Another', name: 'anotherType', isRequired: true),
         },
       );
       const fillController = FillController(
@@ -271,8 +277,10 @@ class ClassName {
         name: 'ClassName',
         imports: const {},
         parameters: {
-          const UniversalType(type: 'integer', name: 'intType', isRequired: true),
-          const UniversalType(type: 'number', name: 'numberType', isRequired: true),
+          const UniversalType(
+              type: 'integer', name: 'intType', isRequired: true),
+          const UniversalType(
+              type: 'number', name: 'numberType', isRequired: true),
           const UniversalType(
             type: 'number',
             format: 'double',
@@ -285,7 +293,8 @@ class ClassName {
             name: 'floatNumberType',
             isRequired: true,
           ),
-          const UniversalType(type: 'string', name: 'stringType', isRequired: true),
+          const UniversalType(
+              type: 'string', name: 'stringType', isRequired: true),
           const UniversalType(
             type: 'string',
             format: 'binary',
@@ -305,9 +314,12 @@ class ClassName {
             isRequired: true,
           ),
           const UniversalType(type: 'file', name: 'fileType', isRequired: true),
-          const UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
-          const UniversalType(type: 'object', name: 'objectType', isRequired: true),
-          const UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
+          const UniversalType(
+              type: 'boolean', name: 'boolType', isRequired: true),
+          const UniversalType(
+              type: 'object', name: 'objectType', isRequired: true),
+          const UniversalType(
+              type: 'Another', name: 'anotherType', isRequired: true),
         },
       );
       const fillController = FillController(
@@ -354,8 +366,10 @@ class ClassName with _$ClassName {
         name: 'ClassName',
         imports: const {},
         parameters: {
-          const UniversalType(type: 'integer', name: 'intType', isRequired: true),
-          const UniversalType(type: 'number', name: 'numberType', isRequired: true),
+          const UniversalType(
+              type: 'integer', name: 'intType', isRequired: true),
+          const UniversalType(
+              type: 'number', name: 'numberType', isRequired: true),
           const UniversalType(
             type: 'number',
             format: 'double',
@@ -368,7 +382,8 @@ class ClassName with _$ClassName {
             name: 'floatNumberType',
             isRequired: true,
           ),
-          const UniversalType(type: 'string', name: 'stringType', isRequired: true),
+          const UniversalType(
+              type: 'string', name: 'stringType', isRequired: true),
           const UniversalType(
             type: 'string',
             format: 'binary',
@@ -388,9 +403,12 @@ class ClassName with _$ClassName {
             isRequired: true,
           ),
           const UniversalType(type: 'file', name: 'fileType', isRequired: true),
-          const UniversalType(type: 'boolean', name: 'boolType', isRequired: true),
-          const UniversalType(type: 'object', name: 'objectType', isRequired: true),
-          const UniversalType(type: 'Another', name: 'anotherType', isRequired: true),
+          const UniversalType(
+              type: 'boolean', name: 'boolType', isRequired: true),
+          const UniversalType(
+              type: 'object', name: 'objectType', isRequired: true),
+          const UniversalType(
+              type: 'Another', name: 'anotherType', isRequired: true),
         },
       );
       const fillController = FillController(
@@ -1345,7 +1363,8 @@ data class ClassName(
             isRequired: false,
             nullable: true,
           ),
-          const UniversalType(type: 'integer', name: 'intRequired', isRequired: true),
+          const UniversalType(
+              type: 'integer', name: 'intRequired', isRequired: true),
           const UniversalType(
             type: 'Another',
             name: 'anotherNotRequired',
@@ -1404,7 +1423,8 @@ class ClassName {
             isRequired: false,
             nullable: true,
           ),
-          const UniversalType(type: 'integer', name: 'intRequired', isRequired: true),
+          const UniversalType(
+              type: 'integer', name: 'intRequired', isRequired: true),
           const UniversalType(
             type: 'Another',
             name: 'anotherNotRequired',
@@ -2052,11 +2072,12 @@ enum class EnumName {
   group('Typedef data class', () {
     test('dart', () async {
       final dataClasses = [
-         UniversalComponentClass(
+        UniversalComponentClass(
           name: 'Date',
           imports: const {},
           parameters: {
-            const UniversalType(type: 'string', format: 'date', isRequired: true),
+            const UniversalType(
+                type: 'string', format: 'date', isRequired: true),
           },
           typeDef: true,
         ),
@@ -2109,7 +2130,8 @@ typedef AnotherValue = Another;
           name: 'Date',
           imports: const {},
           parameters: {
-            const UniversalType(type: 'string', format: 'date', isRequired: true),
+            const UniversalType(
+                type: 'string', format: 'date', isRequired: true),
           },
           typeDef: true,
         ),
