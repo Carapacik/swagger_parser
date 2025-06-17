@@ -62,7 +62,7 @@
                                        }
                                     },
                                     "nextCursor":{
-                                       "type":"string",
+                                       "type":"number",
                                        "nullable":true,
                                        "example":"01AN4Z07BY"
                                     }

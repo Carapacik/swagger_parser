@@ -1,3 +1,7 @@
+## 1.24.3
+- Fixes `allOf` case when a mix of `ref` and `properties` could unintentionally result in naming overlap
+  now we are deduplicating properties by name
+
 ## 1.24.2
 - Fixes `typedef` transparency which results in import errors when generating `json_serializable` classes
   read more details here https://github.com/google/json_serializable.dart/issues/1124
