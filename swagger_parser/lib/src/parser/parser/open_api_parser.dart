@@ -887,22 +887,46 @@ class OpenApiParser {
       }
       final refs = allOfClass.allOf!.refs;
       final foundClasses = dataClasses.where((e) => refs.contains(e.name));
+      // allOf could be stack of different refs and properties
+      // there is some chance that combined props will overlap by name
+      // using this map to deduplicate properties by name
+      final parameters = <String, UniversalType>{};
+
       for (final element in foundClasses) {
         if (element is UniversalComponentClass) {
-          allOfClass.parameters.addAll(element.parameters);
+          for (final e in element.parameters) {
+            final name = e.name;
+            if (name == null) {
+              // if property name is null we can't reliably deduplicate it
+              allOfClass.parameters.add(e);
+            } else {
+              parameters[name] = e;
+            }
+          }
+
           allOfClass.imports.addAll(element.imports);
         } else if (element is UniversalEnumClass) {
-          allOfClass.parameters.add(
-            UniversalType(
-              type: element.name,
-              name: element.name.toCamel,
-              isRequired: false,
-            ),
+          parameters[element.name.toCamel] = UniversalType(
+            type: element.name,
+            name: element.name.toCamel,
+            isRequired: false,
           );
+
           allOfClass.imports.add(element.name);
         }
       }
-      allOfClass.parameters.addAll(allOfClass.allOf!.properties);
+
+      for (final e in allOfClass.allOf!.properties) {
+        final name = e.name;
+        if (name == null) {
+          // if property name is null we can't reliably deduplicate it
+          allOfClass.parameters.add(e);
+        } else {
+          parameters[name] = e;
+        }
+      }
+
+      allOfClass.parameters.addAll(parameters.values);
     }
 
     // check for discriminated oneOf
