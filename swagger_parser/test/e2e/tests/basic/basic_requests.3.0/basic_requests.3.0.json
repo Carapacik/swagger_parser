@@ -120,7 +120,12 @@
               "password": {
                 "type": "string"
               }
-            }
+            },
+            "required": [
+              "email",
+              "name",
+              "password"
+            ]
           }
         ]
       },
@@ -138,7 +143,12 @@
               "phone": {
                 "type": "string"
               }
-            }
+            },
+            "required": [
+              "email",
+              "name",
+              "phone"
+            ]
           }
         ]
       }
