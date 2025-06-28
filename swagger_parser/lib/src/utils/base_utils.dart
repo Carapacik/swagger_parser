@@ -83,5 +83,5 @@ const _generatedCodeComment = '''
 ''';
 
 const _ignoreLintsComment = '''
-// ignore_for_file: type=lint, unused_import
+// ignore_for_file: type=lint, unused_import, invalid_annotation_target, unnecessary_import
 ''';
