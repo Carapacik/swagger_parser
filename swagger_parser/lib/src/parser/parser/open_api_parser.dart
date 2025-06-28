@@ -1045,7 +1045,11 @@ class OpenApiParser {
 
       // Nullability of the array itself.
       final isCollectionItselfNullable =
-          map[_nullableConst].toString().toBool() ?? (root && !isRequired);
+          switch (map[_nullableConst].toString().toBool()) {
+        null => !isRequired,
+        true => true,
+        false => !isRequired,
+      };
 
       // Nullability of the items within the array.
       final areItemsNullable = itemDetails.nullable;
@@ -1281,8 +1285,11 @@ class OpenApiParser {
               : null,
           jsonKey: originalName,
           defaultValue: protectDefaultValue(map[_defaultConst]),
-          nullable:
-              map[_nullableConst].toString().toBool() ?? (root && !isRequired),
+          nullable: switch (map[_nullableConst].toString().toBool()) {
+            null => !isRequired,
+            true => true,
+            false => !isRequired,
+          },
           isRequired: isRequired,
           deprecated: map[_deprecatedConst].toString().toBool() ?? false,
         ),
@@ -1656,8 +1663,11 @@ class OpenApiParser {
           ),
           enumType: enumType,
           isRequired: isRequired,
-          nullable:
-              map[_nullableConst].toString().toBool() ?? (root && !isRequired),
+          nullable: switch (map[_nullableConst].toString().toBool()) {
+            null => !isRequired,
+            true => true,
+            false => !isRequired,
+          },
           deprecated: map[_deprecatedConst].toString().toBool() ?? false,
         ),
         import: import,
