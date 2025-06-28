@@ -10,9 +10,9 @@ part 'draft_item.g.dart';
 @Freezed()
 class DraftItem with _$DraftItem {
   const factory DraftItem({
-    String? id,
-    String? content,
-    bool? isDraft,
+    @JsonKey(includeIfNull: false) String? id,
+    @JsonKey(includeIfNull: false) String? content,
+    @JsonKey(includeIfNull: false) bool? isDraft,
   }) = _DraftItem;
 
   factory DraftItem.fromJson(Map<String, Object?> json) =>

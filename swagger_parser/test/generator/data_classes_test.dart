@@ -1025,6 +1025,7 @@ class ClassName {
   final int intType;
   final String stringType;
   final bool boolType;
+  @JsonKey(includeIfNull: true)
   final num? nullableType;
   final Haha enumType;
 
@@ -1098,6 +1099,7 @@ class ClassName with _$ClassName {
     String stringType,
     @Default(false)
     bool boolType,
+    @JsonKey(includeIfNull: true)
     @Default(-1.1)
     num? nullableType,
     @Default(Haha.hehe)
@@ -1221,8 +1223,10 @@ class ClassName {
   
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
+  @JsonKey(includeIfNull: false)
   final int? intType;
   final List<String>? list;
+  @JsonKey(includeIfNull: false)
   final Another? another;
   final List<List<Another>> anotherList;
 
@@ -1284,8 +1288,10 @@ part 'class_name.g.dart';
 class ClassName with _$ClassName {
   const factory ClassName({
     required List<List<Another>> anotherList,
+    @JsonKey(includeIfNull: false)
     int? intType,
     List<String>? list,
+    @JsonKey(includeIfNull: false)
     Another? another,
   }) = _ClassName;
   
@@ -1401,8 +1407,10 @@ class ClassName {
   
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
+  @JsonKey(includeIfNull: false)
   final int? intNotRequired;
   final int intRequired;
+  @JsonKey(includeIfNull: false)
   final Another? anotherNotRequired;
   final List<Another> list;
 
@@ -1460,7 +1468,9 @@ class ClassName with _$ClassName {
   const factory ClassName({
     required int intRequired,
     required List<Another> list,
+    @JsonKey(includeIfNull: false)
     int? intNotRequired,
+    @JsonKey(includeIfNull: false)
     Another? anotherNotRequired,
   }) = _ClassName;
   
@@ -2262,10 +2272,14 @@ class ClassName {
   
   factory ClassName.fromJson(Map<String, Object?> json) => _$ClassNameFromJson(json);
   
+  @JsonKey(includeIfNull: false)
   final List<List<List<List<String?>>>>? list1;
+  @JsonKey(includeIfNull: false)
   final String? list2;
   final String list3;
+  @JsonKey(includeIfNull: false)
   final String? list4;
+  @JsonKey(includeIfNull: true)
   final String? list5;
 
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
@@ -2326,9 +2340,13 @@ part 'class_name.g.dart';
 class ClassName with _$ClassName {
   const factory ClassName({
     required String list3,
+    @JsonKey(includeIfNull: true)
     required String? list5,
+    @JsonKey(includeIfNull: false)
     List<List<List<List<String?>>>>? list1,
+    @JsonKey(includeIfNull: false)
     String? list2,
+    @JsonKey(includeIfNull: false)
     String? list4,
   }) = _ClassName;
   
