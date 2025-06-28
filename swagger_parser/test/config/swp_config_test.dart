@@ -39,6 +39,7 @@ void main() {
         expect(config.excludeTags, isEmpty);
         expect(config.includeTags, isEmpty);
         expect(config.fallbackClient, 'fallback');
+        expect(config.includeIfNull, isFalse);
       });
 
       test('should create config with all parameters specified', () {
@@ -78,6 +79,7 @@ void main() {
           excludeTags: ['internal', 'deprecated'],
           includeTags: ['public', 'stable'],
           fallbackClient: 'common',
+          includeIfNull: true,
         );
 
         expect(config.outputDirectory, equals('lib/generated'));
@@ -112,6 +114,7 @@ void main() {
         expect(config.excludeTags, equals(['internal', 'deprecated']));
         expect(config.includeTags, equals(['public', 'stable']));
         expect(config.fallbackClient, equals('common'));
+        expect(config.includeIfNull, isTrue);
       });
     });
 
@@ -162,6 +165,7 @@ void main() {
             'skipped_parameters': ['id', 'timestamp'],
             'exclude_tags': ['internal', 'deprecated'],
             'include_tags': ['public', 'stable'],
+            'include_if_null': true,
             'replacement_rules': [
               {'pattern': 'Test', 'replacement': 'Mock'},
               {'pattern': 'Dto', 'replacement': 'Model'},
@@ -201,6 +205,7 @@ void main() {
           expect(config.skippedParameters, equals(['id', 'timestamp']));
           expect(config.excludeTags, equals(['internal', 'deprecated']));
           expect(config.includeTags, equals(['public', 'stable']));
+          expect(config.includeIfNull, isTrue);
           expect(config.replacementRules, hasLength(2));
           expect(config.replacementRules[0].pattern.pattern, equals('Test'));
           expect(config.replacementRules[0].replacement, equals('Mock'));
@@ -754,6 +759,75 @@ void main() {
       // The exact behavior depends on ProgrammingLanguage.fromString implementation
       expect(() => SWPConfig.fromYaml(yamlMap),
           isNot(throwsA(isA<ConfigException>())));
+    });
+  });
+
+  group('Include If Null Configuration', () {
+    test('should default includeIfNull to false', () {
+      const config = SWPConfig(outputDirectory: 'lib/api');
+      expect(config.includeIfNull, isFalse);
+    });
+
+    test('should parse includeIfNull from YAML when set to true', () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'include_if_null': true,
+      });
+
+      final config = SWPConfig.fromYaml(yamlMap);
+      expect(config.includeIfNull, isTrue);
+    });
+
+    test('should parse includeIfNull from YAML when set to false', () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'include_if_null': false,
+      });
+
+      final config = SWPConfig.fromYaml(yamlMap);
+      expect(config.includeIfNull, isFalse);
+    });
+
+    test('should inherit includeIfNull from root config', () {
+      const rootConfig = SWPConfig(
+        outputDirectory: 'lib/shared',
+        includeIfNull: true,
+      );
+
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/user.yaml',
+        'name': 'user_api',
+      });
+
+      final config = SWPConfig.fromYaml(yamlMap, rootConfig: rootConfig);
+      expect(config.includeIfNull, isTrue);
+    });
+
+    test('should override root config includeIfNull with local value', () {
+      const rootConfig = SWPConfig(
+        outputDirectory: 'lib/shared',
+        includeIfNull: true,
+      );
+
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/user.yaml',
+        'include_if_null': false,
+      });
+
+      final config = SWPConfig.fromYaml(yamlMap, rootConfig: rootConfig);
+      expect(config.includeIfNull, isFalse);
+    });
+
+    test('should pass includeIfNull to GeneratorConfig', () {
+      const swpConfig = SWPConfig(
+        outputDirectory: 'lib/api',
+        includeIfNull: true,
+      );
+
+      final generatorConfig = swpConfig.toGeneratorConfig();
+      expect(generatorConfig.includeIfNull, isTrue);
     });
   });
 }

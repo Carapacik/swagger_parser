@@ -10,8 +10,8 @@ part 'long_tag_response.g.dart';
 @Freezed()
 class LongTagResponse with _$LongTagResponse {
   const factory LongTagResponse({
-    String? data,
-    DateTime? timestamp,
+    @JsonKey(includeIfNull: false) String? data,
+    @JsonKey(includeIfNull: false) DateTime? timestamp,
   }) = _LongTagResponse;
 
   factory LongTagResponse.fromJson(Map<String, Object?> json) =>

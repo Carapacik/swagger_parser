@@ -10,7 +10,7 @@ part 'get_api_v1_no_tags_endpoint_response.g.dart';
 @Freezed()
 class GetApiV1NoTagsEndpointResponse with _$GetApiV1NoTagsEndpointResponse {
   const factory GetApiV1NoTagsEndpointResponse({
-    String? noTagsField,
+    @JsonKey(includeIfNull: false) String? noTagsField,
   }) = _GetApiV1NoTagsEndpointResponse;
 
   factory GetApiV1NoTagsEndpointResponse.fromJson(Map<String, Object?> json) =>

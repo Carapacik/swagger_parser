@@ -13,8 +13,8 @@ part 'get_users_response.g.dart';
 @Freezed()
 class GetUsersResponse with _$GetUsersResponse {
   const factory GetUsersResponse({
-    required num? nextCursor,
-    required String? previousCursor,
+    @JsonKey(includeIfNull: true) required num? nextCursor,
+    @JsonKey(includeIfNull: true) required String? previousCursor,
     required List<UserDto> data,
   }) = _GetUsersResponse;
 

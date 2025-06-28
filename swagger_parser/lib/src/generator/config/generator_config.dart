@@ -29,6 +29,7 @@ class GeneratorConfig {
     this.fallbackUnion,
     this.dartMappableConvenientWhen = true,
     this.mergeOutputs = false,
+    this.includeIfNull = false,
   });
 
   /// Optional. Set API name for folder and export file or merged output file
@@ -137,4 +138,9 @@ class GeneratorConfig {
   /// This is useful when using swagger_parser together with build_runner, which needs to map
   /// input files to output files 1-to-1.
   final bool mergeOutputs;
+
+  /// DART ONLY
+  /// Optional. Set `true` to generate includeIfNull annotations for nullable fields.
+  /// If set to `false`, includeIfNull annotations will not be generated.
+  final bool includeIfNull;
 }

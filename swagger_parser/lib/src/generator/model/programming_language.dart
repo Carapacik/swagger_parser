@@ -50,6 +50,7 @@ enum ProgrammingLanguage {
     required bool useFreezed3,
     required bool useMultipartFile,
     required bool dartMappableConvenientWhen,
+    required bool includeIfNull,
     String? fallbackUnion,
   }) {
     switch (this) {
@@ -73,12 +74,14 @@ enum ProgrammingLanguage {
                 generateValidator: generateValidator,
                 isV3: useFreezed3,
                 useMultipartFile: useMultipartFile,
+                includeIfNull: includeIfNull,
                 fallbackUnion: fallbackUnion,
               ),
             JsonSerializer.jsonSerializable => dartJsonSerializableDtoTemplate(
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
                 useMultipartFile: useMultipartFile,
+                includeIfNull: includeIfNull,
                 fallbackUnion: fallbackUnion,
               ),
             JsonSerializer.dartMappable => dartDartMappableDtoTemplate(

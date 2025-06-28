@@ -47,7 +47,7 @@ extension UniversalTypeX on UniversalType {
     } else {
       // If it's not a collection, the type's nullability is determined by
       // UniversalType.nullable and whether it has a default value.
-      if (nullable) {
+      if (nullable || referencedNullable) {
         addQuestionMarkToBaseTypeName = true;
       }
     }
