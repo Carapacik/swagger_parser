@@ -13,4 +13,8 @@ enum DogType {
 
   @MappableValue('unknown')
   unknown;
+
+  /// Returns all defined enum values excluding the unknown value.
+  static List<DogType> get $valuesDefined =>
+      values.where((value) => value != DogType.unknown).toList();
 }

@@ -20,4 +20,8 @@ enum HumanType {
       );
 
   final String? json;
+
+  /// Returns all defined enum values excluding the $unknown value.
+  static List<HumanType> get $valuesDefined =>
+      values.where((value) => value != $unknown).toList();
 }

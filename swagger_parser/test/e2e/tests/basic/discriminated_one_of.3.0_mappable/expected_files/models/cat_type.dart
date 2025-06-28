@@ -13,4 +13,8 @@ enum CatType {
 
   @MappableValue('unknown')
   unknown;
+
+  /// Returns all defined enum values excluding the unknown value.
+  static List<CatType> get $valuesDefined =>
+      values.where((value) => value != CatType.unknown).toList();
 }

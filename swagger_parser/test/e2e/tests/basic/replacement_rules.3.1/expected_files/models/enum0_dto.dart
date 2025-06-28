@@ -25,4 +25,8 @@ enum Enum0Dto {
       );
 
   final String? json;
+
+  /// Returns all defined enum values excluding the $unknown value.
+  static List<Enum0Dto> get $valuesDefined =>
+      values.where((value) => value != $unknown).toList();
 }

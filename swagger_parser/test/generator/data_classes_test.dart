@@ -1821,6 +1821,8 @@ enum EnumName {
   final int? json;
 
   int? toJson() => json;
+  /// Returns all defined enum values excluding the $unknown value.
+  static List<EnumName> get $valuesDefined => values.where((value) => value != $unknown).toList();
 }
 ''';
 
@@ -1852,6 +1854,8 @@ enum EnumNameString {
   final String? json;
 
   String? toJson() => json;
+  /// Returns all defined enum values excluding the $unknown value.
+  static List<EnumNameString> get $valuesDefined => values.where((value) => value != $unknown).toList();
 }
 ''';
         expect(files[0].content, expectedContent0);
@@ -1984,6 +1988,8 @@ enum EnumName {
       );
 
   final int? json;
+  /// Returns all defined enum values excluding the $unknown value.
+  static List<EnumName> get $valuesDefined => values.where((value) => value != $unknown).toList();
 }
 ''';
 
@@ -2029,6 +2035,8 @@ enum EnumName {
       );
 
   final int? json;
+  /// Returns all defined enum values excluding the $unknown value.
+  static List<EnumName> get $valuesDefined => values.where((value) => value != $unknown).toList();
 }
 ''';
 

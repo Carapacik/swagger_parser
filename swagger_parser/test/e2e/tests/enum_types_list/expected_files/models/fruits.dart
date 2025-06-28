@@ -26,4 +26,8 @@ enum Fruits {
       );
 
   final String? json;
+
+  /// Returns all defined enum values excluding the $unknown value.
+  static List<Fruits> get $valuesDefined =>
+      values.where((value) => value != $unknown).toList();
 }

@@ -25,4 +25,8 @@ enum PetStatus {
       );
 
   final String? json;
+
+  /// Returns all defined enum values excluding the $unknown value.
+  static List<PetStatus> get $valuesDefined =>
+      values.where((value) => value != $unknown).toList();
 }
