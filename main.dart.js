@@ -23611,7 +23611,7 @@ amb:function amb(){},
 amc:function amc(){},
 amI:function amI(){},
 amJ:function amJ(){},
-aLJ(a,b,c,d,e){var s,r,q,p,o,n,m,l,k,j,i
+aLJ(a,b,c,d,e){var s,r,q,p,o,n,m,l,k,j,i,h
 if(c===B.ha)return A.aJj(a,b,d,e)
 else{s=A.I(a.a)
 r=s.a
@@ -23630,27 +23630,29 @@ if(p){l=A.KV(a.d,null)
 k="\n  final "+l+A.axm(l)+" json;"}else k=""
 if(b){l=A.KV(a.d,null)
 j="\n\n  "+l+A.axm(l)+" toJson() => json;"}else j=""
-if(d)i=u.G
-else i=""
-return i+A.aqY(c)+"\n\n"+A.eO(a.b,"","",!0)+"@JsonEnum()\nenum "+q+" {\n"+(s+r)+o+n+m+k+j+"\n}\n"}},
-aJj(a,b,c,d){var s,r,q,p,o,n=a.a,m=A.I(n),l=m.a
+i=e?"\n  /// Returns all defined enum values excluding the $unknown value.\n  static List<"+q+"> get $valuesDefined => values.where((value) => value != $unknown).toList();":""
+if(d)h=u.G
+else h=""
+return h+A.aqY(c)+"\n\n"+A.eO(a.b,"","",!0)+"@JsonEnum()\nenum "+q+" {\n"+(s+r)+o+n+m+k+j+i+"\n}\n"}},
+aJj(a,b,c,d){var s,r,q,p,o,n,m=a.a,l=A.I(m),k=l.a
+k===$&&A.a()
+k=A.I(new A.l(k,l.gao(),A.y(k).i("l<1,k>")).af(0))
+l=k.a
 l===$&&A.a()
-l=A.I(new A.l(l,m.gao(),A.y(l).i("l<1,k>")).af(0))
-m=l.a
-m===$&&A.a()
-s=new A.l(m,l.gao(),A.y(m).i("l<1,k>")).af(0)
+s=new A.l(l,k.gao(),A.y(l).i("l<1,k>")).af(0)
 r=d||b
-m=t.xU
-l=A.X(a.e,m)
-if(d)l.push(B.Va)
-q=A.atO(l,new A.am5(a,r),m,t.N).aP(0,",\n")
-m=A.b([],t.s)
-if(d)m.push("defaultValue: 'unknown'")
-p=B.b.aP(m,", ")
+l=t.xU
+k=A.X(a.e,l)
+if(d)k.push(B.Va)
+q=A.atO(k,new A.am5(a,r),l,t.N).aP(0,",\n")
+l=A.b([],t.s)
+if(d)l.push("defaultValue: 'unknown'")
+p=B.b.aP(l,", ")
 o=b?"dynamic toJson() => toValue();":""
-if(c)m=u.G
-else m=""
-return m+A.aqY(B.ha)+"\n\npart '"+A.I(A.I(n).gbO()).gbO()+".mapper.dart';\n\n"+A.eO(a.b,"","",!0)+"@MappableEnum("+p+")\nenum "+s+" {\n"+q+";\n"+o+"\n}\n"},
+n=d?"\n  /// Returns all defined enum values excluding the unknown value.\n  static List<"+s+"> get $valuesDefined => values.where((value) => value != "+s+".unknown).toList();":""
+if(c)l=u.G
+else l=""
+return l+A.aqY(B.ha)+"\n\npart '"+A.I(A.I(m).gbO()).gbO()+".mapper.dart';\n\n"+A.eO(a.b,"","",!0)+"@MappableEnum("+p+")\nenum "+s+" {\n"+q+";\n"+o+n+"\n}\n"},
 axm(a){if(B.c.hU(a,"?"))return""
 return a==="dynamic"?"":"?"},
 an7:function an7(a,b){this.a=a
@@ -25464,7 +25466,7 @@ $S:2}
 A.alW.prototype={
 $1(a){var s=A.e8().b
 s=s==null?null:s.canvasKitBaseUrl
-return(s==null?"https://www.gstatic.com/flutter-canvaskit/8cd19e509d6bece8ccd74aef027c4ca947363095/":s)+a},
+return(s==null?"https://www.gstatic.com/flutter-canvaskit/dd93de6fb1776398bf586cbd477deade1391c7e4/":s)+a},
 $S:21}
 A.Vu.prototype={
 f1(a,b){var s,r=this.a
