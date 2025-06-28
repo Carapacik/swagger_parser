@@ -1,0 +1,83 @@
+openapi: 3.1.0
+info:
+  title: API
+  version: 1.0.0
+paths:
+  /pets:
+    get:
+      operationId: findPets
+      responses:
+        "200":
+          description: List of Pets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+
+components:
+  schemas:
+    Pet:
+      type: object
+      required:
+        - nullableDateTime
+        - nullableDateTimeRef
+      properties:
+        schedule:
+          $ref: '#/components/schemas/ApiSchedule'
+        nullableDateTime:
+          type: string
+          nullable: true
+          format: date-time
+          description: value in UTC, formatted in ISO String
+        nullableDateTimeRef:
+          $ref: '#/components/schemas/ApiNullableDateTime'
+
+    ApiNullableDateTime:
+      type: string
+      deprecated: true
+      nullable: true
+      format: date-time
+      description: value in UTC, formatted in ISO String
+
+    ApiSchedule:
+      nullable: true
+      type: object
+      required:
+        - SUN
+        - MON
+        - TUE
+        - WED
+        - THU
+        - FRI
+        - SAT
+      properties:
+        SUN:
+          $ref: '#/components/schemas/ApiScheduleDetail'
+        MON:
+          $ref: '#/components/schemas/ApiScheduleDetail'
+        TUE:
+          $ref: '#/components/schemas/ApiScheduleDetail'
+        WED:
+          $ref: '#/components/schemas/ApiScheduleDetail'
+        THU:
+          $ref: '#/components/schemas/ApiScheduleDetail'
+        FRI:
+          $ref: '#/components/schemas/ApiScheduleDetail'
+        SAT:
+          $ref: '#/components/schemas/ApiScheduleDetail'
+
+    ApiScheduleDetail:
+      type: object
+      nullable: true
+      required:
+        - endTime
+        - startTime
+      properties:
+        startTime:
+          type: string
+          pattern: ^(0[0-9]|1[0-9]|2[0-3]):(00|30)$
+        endTime:
+          type: string
+          pattern: ^(0[0-9]|1[0-9]|2[0-3]):(00|30)$

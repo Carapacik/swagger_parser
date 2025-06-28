@@ -17,12 +17,12 @@ class Pet with _$Pet {
   const factory Pet({
     required String name,
     required List<String> photoUrls,
-    int? id,
-    Category? category,
-    List<Tag>? tags,
+    @JsonKey(includeIfNull: false) int? id,
+    @JsonKey(includeIfNull: false) Category? category,
+    @JsonKey(includeIfNull: false) List<Tag>? tags,
 
     /// pet status in the store
-    PetStatus? status,
+    @JsonKey(includeIfNull: false) PetStatus? status,
   }) = _Pet;
 
   factory Pet.fromJson(Map<String, Object?> json) => _$PetFromJson(json);
