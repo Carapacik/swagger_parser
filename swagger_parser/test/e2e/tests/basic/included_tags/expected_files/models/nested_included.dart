@@ -10,7 +10,7 @@ part 'nested_included.g.dart';
 @Freezed()
 class NestedIncluded with _$NestedIncluded {
   const factory NestedIncluded({
-    String? innerField,
+    @JsonKey(includeIfNull: false) String? innerField,
   }) = _NestedIncluded;
 
   factory NestedIncluded.fromJson(Map<String, Object?> json) =>

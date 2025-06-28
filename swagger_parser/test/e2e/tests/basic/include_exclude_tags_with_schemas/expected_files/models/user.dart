@@ -13,10 +13,10 @@ part 'user.g.dart';
 @Freezed()
 class User with _$User {
   const factory User({
-    int? id,
-    String? email,
-    UserRole? role,
-    UserProfile? profile,
+    @JsonKey(includeIfNull: false) int? id,
+    @JsonKey(includeIfNull: false) String? email,
+    @JsonKey(includeIfNull: false) UserRole? role,
+    @JsonKey(includeIfNull: false) UserProfile? profile,
   }) = _User;
 
   factory User.fromJson(Map<String, Object?> json) => _$UserFromJson(json);
