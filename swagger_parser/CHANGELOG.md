@@ -1,3 +1,7 @@
+## 1.24.4
+- added generation of getter $valuesDefined to automatically filter out unknown values
+  useful when we would like to list only values that we are aware about 
+
 ## 1.24.3
 - Fixes `allOf` case when a mix of `ref` and `properties` could unintentionally result in naming overlap
   now we are deduplicating properties by name

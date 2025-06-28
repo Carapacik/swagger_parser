@@ -32,13 +32,14 @@ String dartEnumDtoTemplate(
     final fromJsonStr = unknownEnumValue ? _fromJson(className, enumClass) : '';
     final jsonFieldStr = jsonParam ? _jsonField(enumClass) : '';
     final toJsonStr = enumsToJson ? _toJson(enumClass, className) : '';
+    final valuesDefinedStr = unknownEnumValue ? _valuesDefined(className) : '';
 
     return '''
 ${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${dartImportDtoTemplate(jsonSerializer)}
 
 ${descriptionComment(enumClass.description)}@JsonEnum()
 enum $className {
-$values$unknownEnumValueStr$constructorStr$fromJsonStr$jsonFieldStr$toJsonStr
+$values$unknownEnumValueStr$constructorStr$fromJsonStr$jsonFieldStr$toJsonStr$valuesDefinedStr
 }
 ''';
   }
@@ -69,6 +70,8 @@ String _dartEnumDartMappableTemplate(
   ].join(', ');
 
   final toJson = enumsToJson ? 'dynamic toJson() => toValue();' : '';
+  final valuesDefinedDartMappable =
+      unknownEnumValue ? _valuesDefinedDartMappable(className) : '';
 
   return '''
 ${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${dartImportDtoTemplate(JsonSerializer.dartMappable)}
@@ -78,7 +81,7 @@ part '${enumClass.name.toSnake}.mapper.dart';
 ${descriptionComment(enumClass.description)}@MappableEnum($annotationParameters)
 enum $className {
 $values;
-$toJson
+$toJson$valuesDefinedDartMappable
 }
 ''';
 }
@@ -164,3 +167,13 @@ String _toJson(UniversalEnumClass enumClass, String className) {
   final dartType = enumClass.type.toDartType();
   return '\n\n  $dartType${_nullableSign(dartType)} toJson() => json;';
 }
+
+String _valuesDefined(String className) => '''
+
+  /// Returns all defined enum values excluding the \$unknown value.
+  static List<$className> get \$valuesDefined => values.where((value) => value != \$unknown).toList();''';
+
+String _valuesDefinedDartMappable(String className) => '''
+
+  /// Returns all defined enum values excluding the unknown value.
+  static List<$className> get \$valuesDefined => values.where((value) => value != $className.unknown).toList();''';

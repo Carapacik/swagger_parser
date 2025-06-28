@@ -13,4 +13,8 @@ enum AndroidDeviceType {
 
   @MappableValue('unknown')
   unknown;
+
+  /// Returns all defined enum values excluding the unknown value.
+  static List<AndroidDeviceType> get $valuesDefined =>
+      values.where((value) => value != AndroidDeviceType.unknown).toList();
 }
