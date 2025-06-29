@@ -64,7 +64,23 @@
             }
           }
         }
-      }
+      },
+      "required": [
+        "integer1",
+        "float1",
+        "double1",
+        "string1",
+        "number1",
+        "string2",
+        "string3",
+        "string4",
+        "string5",
+        "file1",
+        "bool1",
+        "object1",
+        "array1",
+        "array2"
+      ]
     }
   }
 }

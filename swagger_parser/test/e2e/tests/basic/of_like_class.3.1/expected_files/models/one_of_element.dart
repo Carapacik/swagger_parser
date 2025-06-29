@@ -12,19 +12,19 @@ part 'one_of_element.g.dart';
 @Freezed()
 class OneOfElement with _$OneOfElement {
   const factory OneOfElement({
-    required EnumClass allClass,
-    required EnumClass oneClass,
-    required int allType,
-    required DateTime anyType,
     required EnumClass? nullableButRequiredClass,
     required List<int>? requiredNullableListNonNullItems,
     required List<int?>? requiredNullableListNullableItems,
+    @Default(EnumClass.value1) EnumClass anyClass,
+    @Default([]) List<EnumClass> oneType,
     @Default([]) List<EnumClass>? nullableType,
+    EnumClass? allClass,
+    EnumClass? oneClass,
+    int? allType,
+    DateTime? anyType,
     EnumClass? nullableClass,
     List<int>? nullableListNonNullItems,
     List<int?>? nullableListNullableItems,
-    @Default(EnumClass.value1) EnumClass anyClass,
-    @Default([]) List<EnumClass> oneType,
   }) = _OneOfElement;
 
   factory OneOfElement.fromJson(Map<String, Object?> json) =>

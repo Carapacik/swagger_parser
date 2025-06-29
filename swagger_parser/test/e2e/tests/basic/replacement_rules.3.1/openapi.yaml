@@ -38,6 +38,8 @@ paths:
                     test:
                       type: string
                       format: date-time
+                  required:
+                    - test
                 p2_enum:
                   type: string
                   enum:
@@ -71,6 +73,8 @@ paths:
                     test:
                       type: string
                       format: date-time
+                  required:
+                    - test
                 p2_enum:
                   type: string
                   enum:

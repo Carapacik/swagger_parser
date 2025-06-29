@@ -15,10 +15,10 @@ part 'pet.g.dart';
 @Freezed()
 class Pet with _$Pet {
   const factory Pet({
-    required Category category,
     required String name,
     required List<String> photoUrls,
     int? id,
+    Category? category,
     List<Tag>? tags,
 
     /// pet status in the store

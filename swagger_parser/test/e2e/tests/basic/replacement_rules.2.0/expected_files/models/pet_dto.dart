@@ -12,16 +12,16 @@ part 'pet_dto.g.dart';
 class PetDto {
   const PetDto({
     required this.name,
-    required this.tag,
-    required this.action,
     required this.id,
+    this.tag,
+    this.action,
   });
 
   factory PetDto.fromJson(Map<String, Object?> json) => _$PetDtoFromJson(json);
 
   final String name;
-  final String tag;
-  final NewPetDtoActionDto action;
+  final String? tag;
+  final NewPetDtoActionDto? action;
   final int id;
 
   Map<String, Object?> toJson() => _$PetDtoToJson(this);

@@ -128,7 +128,12 @@
           "type": "string"
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "email",
+        "name",
+        "password"
+      ]
     },
     "UserInfoDto": {
       "type": "object",
@@ -143,7 +148,12 @@
           "type": "string"
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "email",
+        "name",
+        "phone"
+      ]
     }
   }
 }

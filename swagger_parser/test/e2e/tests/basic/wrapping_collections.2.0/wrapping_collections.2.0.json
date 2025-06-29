@@ -22,7 +22,12 @@
           }
         }
       },
-      "additionalProperties": {}
+      "additionalProperties": {},
+      "required": [
+        "type",
+        "instance",
+        "errors"
+      ]
     },
     "DataClass2": {
       "type": "object",
@@ -49,7 +54,11 @@
           }
         }
       },
-      "additionalProperties": {}
+      "additionalProperties": {},
+      "required": [
+        "title",
+        "errors"
+      ]
     }
   }
 }

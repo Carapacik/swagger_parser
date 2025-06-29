@@ -34,7 +34,10 @@
               }
             }
           }
-        }
+        },
+        "required": [
+          "members"
+        ]
       },
       "Cat": {
         "type": "object",

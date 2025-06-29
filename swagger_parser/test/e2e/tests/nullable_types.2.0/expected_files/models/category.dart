@@ -11,8 +11,8 @@ part 'category.g.dart';
 @Freezed()
 class Category with _$Category {
   const factory Category({
-    required int id,
-    required String name,
+    int? id,
+    String? name,
   }) = _Category;
 
   factory Category.fromJson(Map<String, Object?> json) =>

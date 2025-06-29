@@ -12,7 +12,7 @@ class Object0 with _$Object0 {
   const factory Object0({
     required List<dynamic> list,
     required String? name,
-    required String lastname,
+    String? lastname,
   }) = _Object0;
 
   factory Object0.fromJson(Map<String, Object?> json) =>
