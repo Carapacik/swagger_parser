@@ -10,7 +10,11 @@
         "another": {
           "$ref": "#/definitions/AnotherClass"
         }
-      }
+      },
+      "required": [
+        "id",
+        "another"
+      ]
     },
     "AnotherClass": {
       "type": "object",
@@ -21,7 +25,11 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
     }
   }
 }

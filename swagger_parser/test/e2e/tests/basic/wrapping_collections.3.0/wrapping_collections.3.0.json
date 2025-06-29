@@ -25,7 +25,10 @@
             }
           }
         },
-        "additionalProperties": {}
+        "additionalProperties": {},
+        "required": [
+          "errors"
+        ]
       },
       "DataClass2": {
         "type": "object",
@@ -53,7 +56,10 @@
             }
           }
         },
-        "additionalProperties": {}
+        "additionalProperties": {},
+        "required": [
+          "errors"
+        ]
       }
     }
   }

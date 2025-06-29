@@ -117,6 +117,19 @@ void main() {
         schemaFileName: 'swagger.yaml',
       );
     });
+
+    test('no_required_params', () async {
+      await e2eTest(
+        'no_required_params',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
   });
 
   group('basic', () {
