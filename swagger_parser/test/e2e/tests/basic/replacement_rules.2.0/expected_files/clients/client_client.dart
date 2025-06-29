@@ -27,7 +27,7 @@ abstract class ClientClient {
 
   /// Creates a new pet in the store.  Duplicates are allowed.
   ///
-  /// [pet] - PetDto to add to the store.
+  /// [pet] - Pet to add to the store.
   @POST('/pets')
   Future<PetDto> addPet({
     @Body() required NewPetDto pet,
