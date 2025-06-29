@@ -27,19 +27,24 @@ String dartEnumDtoTemplate(
 
     final values =
         '${enumClass.items.mapIndexed((i, e) => _enumValue(i, enumClass.type, e, jsonParam: jsonParam)).join(',')}${unknownEnumValue ? ',' : ';'}';
-    final unknownEnumValueStr = unknownEnumValue ? _unkownEnumValue() : '';
-    final constructorStr = jsonParam ? _constructor(className) : '';
-    final fromJsonStr = unknownEnumValue ? _fromJson(className, enumClass) : '';
-    final jsonFieldStr = jsonParam ? _jsonField(enumClass) : '';
-    final toJsonStr = enumsToJson ? _toJson(enumClass, className) : '';
-    final valuesDefinedStr = unknownEnumValue ? _valuesDefined(className) : '';
+
+    final enumBodyParts = [
+      values,
+      if (unknownEnumValue) _unkownEnumValue(),
+      if (jsonParam) _constructor(className),
+      if (unknownEnumValue) _fromJson(className, enumClass),
+      if (jsonParam) _jsonField(enumClass),
+      if (enumsToJson) _toJson(enumClass, className),
+      if (jsonParam) _toString(),
+      if (unknownEnumValue) _valuesDefined(className),
+    ];
 
     return '''
 ${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${dartImportDtoTemplate(jsonSerializer)}
 
 ${descriptionComment(enumClass.description)}@JsonEnum()
 enum $className {
-$values$unknownEnumValueStr$constructorStr$fromJsonStr$jsonFieldStr$toJsonStr$valuesDefinedStr
+${enumBodyParts.join()}
 }
 ''';
   }
@@ -69,9 +74,12 @@ String _dartEnumDartMappableTemplate(
     if (unknownEnumValue) "defaultValue: 'unknown'",
   ].join(', ');
 
-  final toJson = enumsToJson ? 'dynamic toJson() => toValue();' : '';
-  final valuesDefinedDartMappable =
-      unknownEnumValue ? _valuesDefinedDartMappable(className) : '';
+  final enumBodyParts = [
+    '$values;',
+    if (enumsToJson) 'dynamic toJson() => toValue();',
+    _toStringDartMappable(),
+    if (unknownEnumValue) _valuesDefinedDartMappable(className),
+  ];
 
   return '''
 ${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${dartImportDtoTemplate(JsonSerializer.dartMappable)}
@@ -80,8 +88,7 @@ part '${enumClass.name.toSnake}.mapper.dart';
 
 ${descriptionComment(enumClass.description)}@MappableEnum($annotationParameters)
 enum $className {
-$values;
-$toJson$valuesDefinedDartMappable
+${enumBodyParts.join()}
 }
 ''';
 }
@@ -167,6 +174,12 @@ String _toJson(UniversalEnumClass enumClass, String className) {
   final dartType = enumClass.type.toDartType();
   return '\n\n  $dartType${_nullableSign(dartType)} toJson() => json;';
 }
+
+String _toString() =>
+    '\n\n  @override\n  String toString() => json ?? super.toString();';
+
+String _toStringDartMappable() =>
+    '\n\n  @override\n  String toString() => toValue() ?? super.toString();';
 
 String _valuesDefined(String className) => '''
 
