@@ -14,6 +14,9 @@ enum HumanType {
   @MappableValue('unknown')
   unknown;
 
+  @override
+  String toString() => toValue() ?? super.toString();
+
   /// Returns all defined enum values excluding the unknown value.
   static List<HumanType> get $valuesDefined =>
       values.where((value) => value != HumanType.unknown).toList();
