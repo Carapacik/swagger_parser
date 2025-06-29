@@ -14,7 +14,11 @@
               "another": {
                 "$ref": "#/components/schemas/AnotherClass"
               }
-            }
+            },
+            "required": [
+              "id",
+              "another"
+            ]
           }
         ]
       },
@@ -29,7 +33,11 @@
               "name": {
                 "type": "string"
               }
-            }
+            },
+            "required": [
+              "id",
+              "name"
+            ]
           }
         ]
       }

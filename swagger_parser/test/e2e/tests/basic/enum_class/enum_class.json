@@ -21,7 +21,10 @@
             },
             "collectionFormat": "multi"
           }
-        }
+        },
+        "required": [
+          "status"
+        ]
       }
     }
   }

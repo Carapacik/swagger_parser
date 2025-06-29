@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ''
+  version: 0.0.0 (v1)
+paths:
+  /api/v1/category/:
+    get:
+      operationId: api_v1_category_list
+      parameters:
+        - in: query
+          name: option
+          schema:
+            $ref: '#/components/schemas/Option'
+      tags:
+        - api
+      responses:
+        '204':
+          description: ''
+components:
+  schemas:
+    Option:
+      type: object
+      properties:
+        required_id:
+          type: integer
+        required_name:
+          type: string
+        required_nullable_id:
+          type: integer
+          nullable: true
+        required_nullable_name:
+          type: string
+          nullable: true 
+        optional_id:
+          type: integer
+        optional_name:
+          type: string
+      required:
+        - required_id
+        - required_name
+        - required_nullable_id
+        - required_nullable_name
