@@ -1649,6 +1649,9 @@ enum EnumName {
   final int? json;
 
   int? toJson() => json;
+
+  @override
+  String toString() => json ?? super.toString();
 }
 ''';
 
@@ -1671,6 +1674,9 @@ enum EnumNameString {
   final String? json;
 
   String? toJson() => json;
+
+  @override
+  String toString() => json ?? super.toString();
 }
 ''';
 
@@ -1821,6 +1827,9 @@ enum EnumName {
   final int? json;
 
   int? toJson() => json;
+
+  @override
+  String toString() => json ?? super.toString();
   /// Returns all defined enum values excluding the $unknown value.
   static List<EnumName> get $valuesDefined => values.where((value) => value != $unknown).toList();
 }
@@ -1854,6 +1863,9 @@ enum EnumNameString {
   final String? json;
 
   String? toJson() => json;
+
+  @override
+  String toString() => json ?? super.toString();
   /// Returns all defined enum values excluding the $unknown value.
   static List<EnumNameString> get $valuesDefined => values.where((value) => value != $unknown).toList();
 }
@@ -1988,6 +2000,9 @@ enum EnumName {
       );
 
   final int? json;
+
+  @override
+  String toString() => json ?? super.toString();
   /// Returns all defined enum values excluding the $unknown value.
   static List<EnumName> get $valuesDefined => values.where((value) => value != $unknown).toList();
 }
@@ -2035,6 +2050,9 @@ enum EnumName {
       );
 
   final int? json;
+
+  @override
+  String toString() => json ?? super.toString();
   /// Returns all defined enum values excluding the $unknown value.
   static List<EnumName> get $valuesDefined => values.where((value) => value != $unknown).toList();
 }

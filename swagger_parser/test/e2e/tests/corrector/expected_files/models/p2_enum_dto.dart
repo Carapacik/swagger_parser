@@ -25,6 +25,9 @@ enum P2EnumDto {
 
   final String? json;
 
+  @override
+  String toString() => json ?? super.toString();
+
   /// Returns all defined enum values excluding the $unknown value.
   static List<P2EnumDto> get $valuesDefined =>
       values.where((value) => value != $unknown).toList();

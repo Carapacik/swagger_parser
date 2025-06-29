@@ -14,6 +14,9 @@ enum AndroidDeviceType {
   @MappableValue('unknown')
   unknown;
 
+  @override
+  String toString() => toValue() ?? super.toString();
+
   /// Returns all defined enum values excluding the unknown value.
   static List<AndroidDeviceType> get $valuesDefined =>
       values.where((value) => value != AndroidDeviceType.unknown).toList();
