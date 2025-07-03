@@ -25,6 +25,7 @@ class GeneratorConfig {
     this.replacementRules = const [],
     this.generateValidator = false,
     this.useFreezed3 = false,
+    this.useMultipartFile = false,
   });
 
   /// Optional. Set API name for folder and export file
@@ -113,4 +114,9 @@ class GeneratorConfig {
 
   /// Optional. Set `true` to use freezed v3 if jsonSerializer is freezed.
   final bool useFreezed3;
+
+  /// DART ONLY
+  /// Optional. Set `true` to use MultipartFile instead of File as argument type
+  /// for file parameters.
+  final bool useMultipartFile;
 }

@@ -145,6 +145,10 @@ swagger_parser:
   # Optional (dart & freezed only). Set 'true' to use Freezed 3.x code generation syntax.
   # Set 'false' to maintain compatibility with Freezed 2.x.
   use_freezed3: false
+
+  # DART ONLY
+  # Optional. Set `true` to use MultipartFile instead of File as argument type for file parameters.
+  use_multipart_file: false
 ```
 
 For multiple schemes:

@@ -17,5 +17,5 @@ String kotlinTypeDefTemplate(
     return '';
   }
   return '${generatedFileComment(markFileAsGenerated: markFileAsGenerated, ignoreLints: false)}${descriptionComment(dataClass.description)}'
-      'typealias $className = ${type.toSuitableType(ProgrammingLanguage.kotlin)};\n';
+      'typealias $className = ${type.toSuitableType(ProgrammingLanguage.kotlin, useMultipartFile: false)};\n';
 }
