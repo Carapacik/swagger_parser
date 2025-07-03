@@ -48,6 +48,7 @@ enum ProgrammingLanguage {
     required bool markFilesAsGenerated,
     required bool generateValidator,
     required bool useFreezed3,
+    required bool useMultipartFile,
   }) {
     switch (this) {
       case dart:
@@ -64,6 +65,7 @@ enum ProgrammingLanguage {
             return dartTypeDefTemplate(
               dataClass,
               markFileAsGenerated: markFilesAsGenerated,
+              useMultipartFile: useMultipartFile,
             );
           }
           return switch (jsonSerializer) {
@@ -72,14 +74,17 @@ enum ProgrammingLanguage {
                 markFileAsGenerated: markFilesAsGenerated,
                 generateValidator: generateValidator,
                 isV3: useFreezed3,
+                useMultipartFile: useMultipartFile,
               ),
             JsonSerializer.jsonSerializable => dartJsonSerializableDtoTemplate(
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
+                useMultipartFile: useMultipartFile,
               ),
             JsonSerializer.dartMappable => dartDartMappableDtoTemplate(
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
+                useMultipartFile: useMultipartFile,
               ),
           };
         }
@@ -111,6 +116,7 @@ enum ProgrammingLanguage {
     String name, {
     required bool markFilesAsGenerated,
     required String defaultContentType,
+    required bool useMultipartFile,
     bool extrasParameterByDefault = false,
     bool dioOptionsParameterByDefault = false,
     bool originalHttpResponse = false,
@@ -124,6 +130,7 @@ enum ProgrammingLanguage {
             extrasParameterByDefault: extrasParameterByDefault,
             dioOptionsParameterByDefault: dioOptionsParameterByDefault,
             originalHttpResponse: originalHttpResponse,
+            useMultipartFile: useMultipartFile,
           ),
         kotlin => kotlinRetrofitClientTemplate(
             restClient: restClient,

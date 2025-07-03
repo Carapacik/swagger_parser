@@ -5,7 +5,8 @@ import 'dart_keywords.dart';
 /// Extension for utils
 extension StringTypeX on String {
   /// Convert string to dart type
-  String toDartType([String? format]) => switch (this) {
+  String toDartType({String? format, bool useMultipartFile = false}) =>
+      switch (this) {
         'integer' => 'int',
         'number' => switch (format) {
             'float' || 'double' => 'double',
@@ -14,11 +15,11 @@ extension StringTypeX on String {
             _ => 'num',
           },
         'string' => switch (format) {
-            'binary' => 'File',
+            'binary' => useMultipartFile ? 'List<MultipartFile>' : 'File',
             'date' || 'date-time' => 'DateTime',
             _ => 'String',
           },
-        'file' => 'File',
+        'file' => useMultipartFile ? 'List<MultipartFile>' : 'File',
         'boolean' => 'bool',
         // https://github.com/trevorwang/retrofit.dart/issues/631
         // https://github.com/Carapacik/swagger_parser/issues/110
