@@ -23749,67 +23749,72 @@ s=s+A.aJh(g)+A.aJH(g)+"import 'package:dio/dio.dart'"+A.aJW(g,a)+";\nimport 'pac
 for(r=g.c,q=r.length,p=0;p<r.length;r.length===q||(0,A.C)(r),++p)s+=A.aKS(r[p],a,!1,!1,!1)
 s+="}\n"
 return s.charCodeAt(0)==0?s:s},
-aKS(a,b,a0,a1,a2){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d=a.e,c=d==null?"void":A.ix(d,B.ap)
-d=A.eO(a.b,"  ","  ",!1)
-s=a.w?"@Deprecated('This method is marked as deprecated')\n  ":""
-r=A.aJg(a,b)
-d="\n  "+d+s+r+"@"+a.c.b.toUpperCase()+"('"+a.d+"')\n  Future<"+c+"> "+a.a+"("
-s=a.f
-r=s.length
-if(r!==0)d+="{\n"
-r=t.qb
-q=A.fk(A.HV(s,new A.amU(),r),!0,r)
-for(r=q.length,p=t.N,o=0;o<r;++o,d=m){n=q[o]
-m=n.b
-l=A.ix(m,B.ap)
-k=n.c
-j=k===B.dj
-if(j)i=l==="Object"||l==="Object?"
-else i=!1
-if(i)l="dynamic"
-i=m.b
-i.toString
-h=new A.cv(A.a0(p))
-i=h.dm(i)
-h.a!==$&&A.ax()
-h.a=i
-i=new A.cv(A.a0(p))
-h=i.dm(h.gaD())
-i.a!==$&&A.ax()
-i.a=h
-i=i.gaD()
-g=A.ays(i,"value","value_",0)
-i=n.a
-if(i!=null&&!j){j=k===B.h9||k===B.jW?"name: ":""
-j=j+(i.length!==0&&B.c.aN(i,"$")?"r":"")+"'"+i+"'"}else j=""
-i=m.r&&m.f==null?"required ":""
-h=m.f
-if(h!=null){f=m.x.length!==0?"const ":""
-e=m.a
-if(m.w!=null){m=new A.cv(A.a0(p))
-h=m.dm(h)
-m.a!==$&&A.ax()
-m.a=h
-h=new A.cv(A.a0(p))
-m=h.dm(m.gaD())
-h.a!==$&&A.ax()
-h.a=m
-h=h.gaD()
-m=A.eo(h,!0,!1,!0,null)
-if(m==null)m=null
-else{h=new A.cv(A.a0(p))
-m=h.dm(m)
-h.a!==$&&A.ax()
-h.a=m
-m=new A.cv(A.a0(p))
-h=m.dm(h.gaD())
-m.a!==$&&A.ax()
-m.a=h
-m=m.gaD()}m=e+"."+A.j(m)}else m=A.eo(h,!0,!1,!1,e)
-m=" = "+f+A.j(m)}else m=""
-m=d+("    @"+k.c+"("+j+") "+i+l+" "+g+m+",\n")}s=s.length
-d=s!==0?d+"  });\n":d+");\n"
-return d.charCodeAt(0)==0?d:d},
+aKS(a2,a3,a4,a5,a6){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b=null,a=a2.e,a0=a==null,a1=a0?"void":A.ix(a,B.ap)
+if((a0?b:a.d)!=="binary")if((a0?b:a.a)==="string"){a=(a0?b:a.d)==="binary"
+s=a}else s=!1
+else s=!0
+if(s)r="HttpResponse<List<int>>"
+else r=a1
+q=s?"\n  @DioResponseType(ResponseType.bytes)":""
+a=A.eO(a2.b,"  ","  ",!1)
+a0=a2.w?"@Deprecated('This method is marked as deprecated')\n  ":""
+a0="\n  "+a+a0+A.aJg(a2,a3)+"@"+a2.c.b.toUpperCase()+"('"+a2.d+"')"+q+"\n  Future<"+r+"> "+a2.a+"("
+a=a2.f
+p=a.length
+if(p!==0)a0+="{\n"
+p=t.qb
+o=A.fk(A.HV(a,new A.amU(),p),!0,p)
+for(p=o.length,n=t.N,m=0;m<p;++m,a0=k){l=o[m]
+k=l.b
+j=A.ix(k,B.ap)
+i=l.c
+h=i===B.dj
+if(h)g=j==="Object"||j==="Object?"
+else g=!1
+if(g)j="dynamic"
+g=k.b
+g.toString
+f=new A.cv(A.a0(n))
+g=f.dm(g)
+f.a!==$&&A.ax()
+f.a=g
+g=new A.cv(A.a0(n))
+f=g.dm(f.gaD())
+g.a!==$&&A.ax()
+g.a=f
+g=g.gaD()
+e=A.ays(g,"value","value_",0)
+g=l.a
+if(g!=null&&!h){h=i===B.h9||i===B.jW?"name: ":""
+h=h+(g.length!==0&&B.c.aN(g,"$")?"r":"")+"'"+g+"'"}else h=""
+g=k.r&&k.f==null?"required ":""
+f=k.f
+if(f!=null){d=k.x.length!==0?"const ":""
+c=k.a
+if(k.w!=null){k=new A.cv(A.a0(n))
+f=k.dm(f)
+k.a!==$&&A.ax()
+k.a=f
+f=new A.cv(A.a0(n))
+k=f.dm(k.gaD())
+f.a!==$&&A.ax()
+f.a=k
+f=f.gaD()
+k=A.eo(f,!0,!1,!0,b)
+if(k==null)k=b
+else{f=new A.cv(A.a0(n))
+k=f.dm(k)
+f.a!==$&&A.ax()
+f.a=k
+k=new A.cv(A.a0(n))
+f=k.dm(f.gaD())
+k.a!==$&&A.ax()
+k.a=f
+k=k.gaD()}k=c+"."+A.j(k)}else k=A.eo(f,!0,!1,!1,c)
+k=" = "+d+A.j(k)}else k=""
+k=a0+("    @"+i.c+"("+h+") "+g+j+" "+e+k+",\n")}a=a.length
+a=a!==0?a0+"  });\n":a0+");\n"
+return a.charCodeAt(0)==0?a:a},
 aJh(a){return B.b.dM(a.c,new A.am2())?"import 'dart:convert';\n":""},
 aJH(a){return B.b.dM(a.c,new A.ame())?"import 'dart:io';\n\n":""},
 aJg(a,b){var s=a.r
