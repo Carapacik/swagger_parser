@@ -51,11 +51,26 @@ String _toClientRequest(
   final responseType = request.returnType == null
       ? 'void'
       : request.returnType!.toSuitableType(ProgrammingLanguage.dart);
+
+  // Check if this is a binary response (file download)
+  final isBinaryResponse = request.returnType?.format == 'binary' ||
+      (request.returnType?.type == 'string' &&
+          request.returnType?.format == 'binary');
+
+  // For binary responses, we need to use HttpResponse<List<int>> and add @DioResponseType
+  final finalResponseType = isBinaryResponse
+      ? 'HttpResponse<List<int>>'
+      : (originalHttpResponse ? 'HttpResponse<$responseType>' : responseType);
+
+  // Add @DioResponseType(ResponseType.bytes) for binary responses - after @GET
+  final dioResponseTypeAnnotation =
+      isBinaryResponse ? '\n  @DioResponseType(ResponseType.bytes)' : '';
+
   final sb = StringBuffer(
     '''
 
-  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}@${request.requestType.name.toUpperCase()}('${request.route}')
-  Future<${originalHttpResponse ? 'HttpResponse<$responseType>' : responseType}> ${request.name}(''',
+  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}@${request.requestType.name.toUpperCase()}('${request.route}')${dioResponseTypeAnnotation}
+  Future<$finalResponseType> ${request.name}(''',
   );
   if (request.parameters.isNotEmpty ||
       extrasParameterByDefault ||

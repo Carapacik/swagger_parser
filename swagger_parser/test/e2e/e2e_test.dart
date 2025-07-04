@@ -306,6 +306,19 @@ void main() {
       );
     });
 
+    test('file_download', () async {
+      await e2eTest(
+        'basic/file_download',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('reference_types_class.2.0', () async {
       await e2eTest(
         'basic/reference_types_class.2.0',

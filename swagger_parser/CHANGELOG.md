@@ -1,3 +1,6 @@
+## 1.24.6
+- proper handling of binary responses aka file downloads, picked up from https://github.com/trevorwang/retrofit.dart/issues/503
+
 ## 1.24.5
 - enum `toString()` override implementation to provide a json value for third party consumers like retrofit
 
