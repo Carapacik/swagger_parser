@@ -47,14 +47,14 @@ String _toClientRequest(UniversalRequest request) {
   }
 
   sb.write(
-    ': ${request.returnType!.toSuitableType(ProgrammingLanguage.kotlin)}\n',
+    ': ${request.returnType!.toSuitableType(ProgrammingLanguage.kotlin, useMultipartFile: false)}\n',
   );
   return sb.toString();
 }
 
 String _toQueryParameter(UniversalRequestType parameter) =>
     '        @${parameter.parameterType.type}${parameter.name != null && !parameter.parameterType.isBody ? '("${parameter.name}")' : ''} '
-    '${parameter.type.name!.toCamel}: ${parameter.type.toSuitableType(ProgrammingLanguage.kotlin)}'
+    '${parameter.type.name!.toCamel}: ${parameter.type.toSuitableType(ProgrammingLanguage.kotlin, useMultipartFile: false)}'
     '${_defaultValue(parameter.type)}';
 
 /// return defaultValue if have

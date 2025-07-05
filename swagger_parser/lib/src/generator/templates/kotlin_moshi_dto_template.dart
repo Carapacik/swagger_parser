@@ -22,7 +22,7 @@ String _parameters(Set<UniversalType> parameters) => parameters
     .map(
       (e) => '\n${descriptionComment(e.description, tab: '    ')}'
           '${e.jsonKey != null && e.name != e.jsonKey ? '    @Json("${protectJsonKey(e.jsonKey)}")\n' : ''}    '
-          'var ${e.name}: ${e.toSuitableType(ProgrammingLanguage.kotlin)}'
+          'var ${e.name}: ${e.toSuitableType(ProgrammingLanguage.kotlin, useMultipartFile: false)}'
           '${e.defaultValue != null ? ' = ${protectDefaultValue(e.defaultValue, type: e.type, dart: false)}' : ''},',
     )
     .join();
