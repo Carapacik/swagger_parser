@@ -10,19 +10,20 @@ import '../model/programming_language.dart';
 String dartFreezedDtoTemplate(
   UniversalComponentClass dataClass, {
   required bool markFileAsGenerated,
+  required bool useMultipartFile,
   bool generateValidator = false,
   bool isV3 = false,
 }) {
   final className = dataClass.name.toPascal;
   return '''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${ioImport(dataClass)}import 'package:freezed_annotation/freezed_annotation.dart';
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:freezed_annotation/freezed_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';
 
 ${descriptionComment(dataClass.description)}@Freezed(${dataClass.discriminator != null ? "unionKey: '${dataClass.discriminator!.propertyName}'" : ''})
 ${dataClass.discriminator != null ? 'sealed ' : isV3 ? 'abstract ' : ''}class $className with _\$$className {
-${_factories(dataClass, className)}
+${_factories(dataClass, className, useMultipartFile)}
   \n  factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
 ${generateValidator ? dataClass.parameters.map(_validationString).nonNulls.join() : ''}}
 ${generateValidator ? _validateMethod(className, dataClass.parameters) : ''}''';
@@ -151,10 +152,11 @@ String _validateMethod(String className, Set<UniversalType> types) {
   return funcBuffer.toString();
 }
 
-String _factories(UniversalComponentClass dataClass, String className) {
+String _factories(UniversalComponentClass dataClass, String className,
+    bool useMultipartFile) {
   if (dataClass.discriminator == null) {
     return '''
-  const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;''';
+  const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters, useMultipartFile)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;''';
   }
 
   final factories = <String>[];
@@ -169,7 +171,7 @@ String _factories(UniversalComponentClass dataClass, String className) {
 
     factories.add('''
   @FreezedUnionValue('$discriminatorValue')
-  const factory $className.$factoryName(${factoryParameters.isNotEmpty ? '{' : ''}${_parametersToString(factoryParameters)}${factoryParameters.isNotEmpty ? '\n  }' : ''}) = $unionItemClassName;
+  const factory $className.$factoryName(${factoryParameters.isNotEmpty ? '{' : ''}${_parametersToString(factoryParameters, useMultipartFile)}${factoryParameters.isNotEmpty ? '\n  }' : ''}) = $unionItemClassName;
 ''');
   }
 
@@ -221,7 +223,8 @@ String? _validationString(UniversalType type) {
   return sb.isEmpty ? null : sb.toString();
 }
 
-String _parametersToString(Set<UniversalType> parameters) {
+String _parametersToString(
+    Set<UniversalType> parameters, bool useMultipartFile) {
   final sortedByRequired = Set<UniversalType>.from(
     parameters.sorted((a, b) => a.compareTo(b)),
   );
@@ -230,7 +233,7 @@ String _parametersToString(Set<UniversalType> parameters) {
         (i, e) =>
             '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '    ')}'
             '${_jsonKey(e)}    ${_required(e)}'
-            '${e.toSuitableType(ProgrammingLanguage.dart)} ${e.name},',
+            '${e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${e.name},',
       )
       .join();
 }

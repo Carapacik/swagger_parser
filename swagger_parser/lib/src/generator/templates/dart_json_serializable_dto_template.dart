@@ -10,10 +10,11 @@ import '../model/programming_language.dart';
 String dartJsonSerializableDtoTemplate(
   UniversalComponentClass dataClass, {
   required bool markFileAsGenerated,
+  required bool useMultipartFile,
 }) {
   final className = dataClass.name.toPascal;
   return '''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${ioImport(dataClass)}import 'package:json_annotation/json_annotation.dart';
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.g.dart';
 
@@ -22,19 +23,21 @@ class $className {
   const $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersInConstructor(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''});
   
   factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
-  ${_parametersInClass(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n' : ''}
+  ${_parametersInClass(dataClass.parameters, useMultipartFile)}${dataClass.parameters.isNotEmpty ? '\n' : ''}
   Map<String, Object?> toJson() => _\$${className}ToJson(this);
 }
 ''';
 }
 
-String _parametersInClass(Set<UniversalType> parameters) => parameters
-    .mapIndexed(
-      (i, e) =>
-          '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '  ')}'
-          '${_jsonKey(e)}  final ${e.toSuitableType(ProgrammingLanguage.dart)} ${e.name};',
-    )
-    .join();
+String _parametersInClass(
+        Set<UniversalType> parameters, bool useMultipartFile) =>
+    parameters
+        .mapIndexed(
+          (i, e) =>
+              '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '  ')}'
+              '${_jsonKey(e)}  final ${e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${e.name};',
+        )
+        .join();
 
 String _parametersInConstructor(Set<UniversalType> parameters) {
   final sortedByRequired = Set<UniversalType>.from(

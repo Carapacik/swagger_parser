@@ -11,6 +11,7 @@ import 'dart_import_dto_template.dart';
 String dartDartMappableDtoTemplate(
   UniversalComponentClass dataClass, {
   required bool markFileAsGenerated,
+  required bool useMultipartFile,
 }) {
   final className = dataClass.name.toPascal;
 
@@ -37,7 +38,7 @@ ${descriptionComment(dataClass.description)}@MappableClass(${() {
 class $className ${parent != null ? "extends $parent " : ""}with ${className}Mappable {
 
 ${indentation(2)}const $className(${getParameters(dataClass)});
-${getFields(dataClass)}
+${getFields(dataClass, useMultipartFile: useMultipartFile)}
 ${getDiscriminatorConvenienceMethods(dataClass)}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
 }
@@ -80,27 +81,28 @@ String getParameters(UniversalComponentClass dataClass) {
   }
 }
 
-String getFields(UniversalComponentClass dataClass) {
+String getFields(UniversalComponentClass dataClass,
+    {required bool useMultipartFile}) {
   // if this class has discriminated values, don't populate the discriminator field
   // in the parent class
   final parameters = dataClass.parameters
       .where((it) => it.name != dataClass.discriminator?.propertyName)
       .toList();
   if (parameters.isNotEmpty) {
-    return '${_fieldsToString(parameters)}\n';
+    return '${_fieldsToString(parameters, useMultipartFile)}\n';
   } else {
     return '';
   }
 }
 
-String _fieldsToString(List<UniversalType> parameters) {
+String _fieldsToString(List<UniversalType> parameters, bool useMultipartFile) {
   final sortedByRequired = Set<UniversalType>.from(
     parameters.sorted((a, b) => a.compareTo(b)),
   );
   return sortedByRequired
       .mapIndexed(
         (i, e) =>
-            '${_jsonKey(e)}${indentation(2)}final ${e.toSuitableType(ProgrammingLanguage.dart)} ${e.name};',
+            '${_jsonKey(e)}${indentation(2)}final ${e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${e.name};',
       )
       .join('\n');
 }
