@@ -36,6 +36,7 @@ class SWPConfig {
     this.generateValidator = false,
     this.useXNullable = false,
     this.useFreezed3 = false,
+    this.useMultipartFile = false,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -66,6 +67,7 @@ class SWPConfig {
     required this.generateValidator,
     required this.useXNullable,
     required this.useFreezed3,
+    required this.useMultipartFile,
   });
 
   /// Creates a [SWPConfig] from [YamlMap].
@@ -214,6 +216,9 @@ class SWPConfig {
     final useFreezed3 =
         yamlMap['use_freezed3'] as bool? ?? rootConfig?.useFreezed3;
 
+    final useMultipartFile =
+        yamlMap['use_multipart_file'] as bool? ?? rootConfig?.useMultipartFile;
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -246,6 +251,7 @@ class SWPConfig {
       generateValidator: generateValidator ?? dc.generateValidator,
       useXNullable: useXNullable ?? dc.useXNullable,
       useFreezed3: useFreezed3 ?? dc.useFreezed3,
+      useMultipartFile: useMultipartFile ?? dc.useMultipartFile,
     );
   }
 
@@ -359,6 +365,11 @@ class SWPConfig {
   /// Set `false` to maintain compatibility with Freezed 2.x
   final bool useFreezed3;
 
+  /// DART ONLY
+  /// Optional. Set `true` to use MultipartFile instead of File as argument type
+  /// for file parameters.
+  final bool useMultipartFile;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -381,6 +392,7 @@ class SWPConfig {
       replacementRules: replacementRules,
       generateValidator: generateValidator,
       useFreezed3: useFreezed3,
+      useMultipartFile: useMultipartFile,
     );
   }
 

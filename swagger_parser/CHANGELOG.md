@@ -1,3 +1,6 @@
+## 1.25.0
+- Allow using `MultipartFile` instead of `File` in multipart requests, to support usage on web.
+
 ## 1.24.6
 - proper handling of binary responses aka file downloads, picked up from https://github.com/trevorwang/retrofit.dart/issues/503
 

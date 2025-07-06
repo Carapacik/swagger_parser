@@ -31,6 +31,7 @@ final class FillController {
           markFilesAsGenerated: config.markFilesAsGenerated,
           generateValidator: config.generateValidator,
           useFreezed3: config.useFreezed3,
+          useMultipartFile: config.useMultipartFile,
         ),
       );
 
@@ -53,6 +54,7 @@ final class FillController {
         extrasParameterByDefault: config.extrasParameterByDefault,
         dioOptionsParameterByDefault: config.dioOptionsParameterByDefault,
         originalHttpResponse: config.originalHttpResponse,
+        useMultipartFile: config.useMultipartFile,
       ),
     );
   }

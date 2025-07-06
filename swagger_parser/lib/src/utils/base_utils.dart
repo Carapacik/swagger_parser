@@ -1,4 +1,3 @@
-import '../generator/model/programming_language.dart';
 import '../parser/swagger_parser_core.dart';
 import '../parser/utils/case_utils.dart';
 import 'type_utils.dart';
@@ -55,9 +54,11 @@ String? replaceNotEnglishLetter(String? text) {
 }
 
 /// Specially for File import
-String ioImport(UniversalComponentClass dataClass) => dataClass.parameters.any(
-      (p) => p.toSuitableType(ProgrammingLanguage.dart).startsWith('File'),
-    )
+String ioImport(
+  Set<UniversalType> parameters, {
+  required bool useMultipartFile,
+}) =>
+    parameters.any((p) => p.needsIoImport(useMultipartFile: useMultipartFile))
         ? "import 'dart:io';\n\n"
         : '';
 

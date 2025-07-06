@@ -28,7 +28,6 @@ class GenProcessor {
     );
 
     final parser = OpenApiParser(parserConfig);
-
     final generatorConfig = config.toGeneratorConfig();
     final info = parser.openApiInfo;
     final restClients = parser.parseRestClients();

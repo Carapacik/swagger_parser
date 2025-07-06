@@ -1,10 +1,19 @@
 import '../generator/model/programming_language.dart';
 import '../parser/swagger_parser_core.dart';
 
+final _fileTypeRegExp = RegExp(r'\bFile\b');
+
 /// Converts [UniversalType] to type from specified language
 extension UniversalTypeX on UniversalType {
+  bool needsIoImport({required bool useMultipartFile}) =>
+      _fileTypeRegExp.hasMatch(toSuitableType(ProgrammingLanguage.dart,
+          useMultipartFile: useMultipartFile));
+
   /// Converts [UniversalType] to concrete type of certain [ProgrammingLanguage]
-  String toSuitableType(ProgrammingLanguage lang) {
+  String toSuitableType(
+    ProgrammingLanguage lang, {
+    required bool useMultipartFile,
+  }) {
     final sb = StringBuffer();
 
     // Append all collection prefixes, e.g., "List<"
@@ -19,7 +28,8 @@ extension UniversalTypeX on UniversalType {
     String baseTypeName;
     switch (lang) {
       case ProgrammingLanguage.dart:
-        baseTypeName = type.toDartType(format);
+        baseTypeName =
+            type.toDartType(format: format, useMultipartFile: useMultipartFile);
       case ProgrammingLanguage.kotlin:
         baseTypeName = type.toKotlinType(format);
     }

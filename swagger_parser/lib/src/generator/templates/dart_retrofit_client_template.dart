@@ -12,12 +12,16 @@ String dartRetrofitClientTemplate({
   required String name,
   required bool markFileAsGenerated,
   required String defaultContentType,
+  required bool useMultipartFile,
   bool extrasParameterByDefault = false,
   bool dioOptionsParameterByDefault = false,
   bool originalHttpResponse = false,
 }) {
+  final parameterTypes = restClient.requests
+      .expand((r) => r.parameters.map((p) => p.type))
+      .toSet();
   final sb = StringBuffer('''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_convertImport(restClient)}${_fileImport(restClient)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
+${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
 part '${name.toSnake}.g.dart';
@@ -28,13 +32,11 @@ abstract class $name {
 ''');
   for (final request in restClient.requests) {
     sb.write(
-      _toClientRequest(
-        request,
-        defaultContentType,
-        originalHttpResponse: originalHttpResponse,
-        extrasParameterByDefault: extrasParameterByDefault,
-        dioOptionsParameterByDefault: dioOptionsParameterByDefault,
-      ),
+      _toClientRequest(request, defaultContentType,
+          originalHttpResponse: originalHttpResponse,
+          extrasParameterByDefault: extrasParameterByDefault,
+          dioOptionsParameterByDefault: dioOptionsParameterByDefault,
+          useMultipartFile: useMultipartFile),
     );
   }
   sb.write('}\n');
@@ -47,10 +49,14 @@ String _toClientRequest(
   required bool originalHttpResponse,
   required bool extrasParameterByDefault,
   required bool dioOptionsParameterByDefault,
+  required bool useMultipartFile,
 }) {
   final responseType = request.returnType == null
       ? 'void'
-      : request.returnType!.toSuitableType(ProgrammingLanguage.dart);
+      : request.returnType!.toSuitableType(
+          ProgrammingLanguage.dart,
+          useMultipartFile: useMultipartFile,
+        );
 
   // Check if this is a binary response (file download)
   final isBinaryResponse = request.returnType?.format == 'binary' ||
@@ -69,7 +75,7 @@ String _toClientRequest(
   final sb = StringBuffer(
     '''
 
-  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}@${request.requestType.name.toUpperCase()}('${request.route}')${dioResponseTypeAnnotation}
+  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}@${request.requestType.name.toUpperCase()}('${request.route}')$dioResponseTypeAnnotation
   Future<$finalResponseType> ${request.name}(''',
   );
   if (request.parameters.isNotEmpty ||
@@ -81,7 +87,7 @@ String _toClientRequest(
     request.parameters.sorted((a, b) => a.type.compareTo(b.type)),
   );
   for (final parameter in sortedByRequired) {
-    sb.write('${_toParameter(parameter)}\n');
+    sb.write('${_toParameter(parameter, useMultipartFile)}\n');
   }
   if (extrasParameterByDefault) {
     sb.write(_addExtraParameter());
@@ -106,21 +112,16 @@ String _convertImport(UniversalRestClient restClient) =>
         ? "import 'dart:convert';\n"
         : '';
 
-String _fileImport(UniversalRestClient restClient) => restClient.requests.any(
-      (r) => r.parameters.any(
-        (e) => e.type.toSuitableType(ProgrammingLanguage.dart).contains('File'),
-      ),
-    )
-        ? "import 'dart:io';\n\n"
-        : '';
-
 String _addExtraParameter() => '    @Extras() Map<String, dynamic>? extras,\n';
 
 String _addDioOptionsParameter() =>
     '    @DioOptions() RequestOptions? options,\n';
 
-String _toParameter(UniversalRequestType parameter) {
-  var parameterType = parameter.type.toSuitableType(ProgrammingLanguage.dart);
+String _toParameter(UniversalRequestType parameter, bool useMultipartFile) {
+  var parameterType = parameter.type.toSuitableType(
+    ProgrammingLanguage.dart,
+    useMultipartFile: useMultipartFile,
+  );
   // https://github.com/trevorwang/retrofit.dart/issues/631
   // https://github.com/Carapacik/swagger_parser/issues/110
   if (parameter.parameterType.isBody &&

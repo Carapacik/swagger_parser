@@ -1179,6 +1179,124 @@ abstract class ClassNameClient {
       expect(filledContent.content, expectedContents);
     });
 
+    test('dart + retrofit with useMultipartFile = true', () async {
+      const restClient = UniversalRestClient(
+        name: 'ClassName',
+        imports: {'AnotherFile'},
+        requests: [
+          UniversalRequest(
+            name: 'sendMultiPart',
+            requestType: HttpRequestType.post,
+            route: '/send',
+            returnType: null,
+            contentType: 'multipart/form-data',
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.header,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'token',
+                  isRequired: true,
+                ),
+                name: 'Authorization',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.part,
+                type: UniversalType(
+                  type: 'string',
+                  name: 'alex',
+                  isRequired: false,
+                  nullable: true,
+                ),
+                name: 'name',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.part,
+                type: UniversalType(
+                  type: 'string',
+                  format: 'binary',
+                  name: 'file',
+                  isRequired: true,
+                ),
+                name: 'file',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.part,
+                type: UniversalType(
+                  type: 'file',
+                  name: 'secondFile',
+                  isRequired: true,
+                ),
+                name: 'file2',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.part,
+                type: UniversalType(
+                  type: 'boolean',
+                  name: 'parsed',
+                  isRequired: true,
+                ),
+                name: 'parsed-if',
+              ),
+            ],
+          ),
+          UniversalRequest(
+            name: 'singleEntity',
+            requestType: HttpRequestType.post,
+            route: '/single',
+            returnType: UniversalType(type: 'boolean', isRequired: true),
+            contentType: 'multipart/form-data',
+            parameters: [
+              UniversalRequestType(
+                parameterType: HttpParameterType.body,
+                type: UniversalType(
+                  type: 'AnotherFile',
+                  name: 'file',
+                  isRequired: true,
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+      const fillController = FillController(
+        config: GeneratorConfig(
+            name: '', outputDirectory: '', useMultipartFile: true),
+      );
+      final filledContent = fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+import '../models/another_file.dart';
+
+part 'class_name_client.g.dart';
+
+@RestApi()
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
+
+  @MultiPart()
+  @POST('/send')
+  Future<void> sendMultiPart({
+    @Header('Authorization') required String token,
+    @Part(name: 'file') required List<MultipartFile> file,
+    @Part(name: 'file2') required List<MultipartFile> secondFile,
+    @Part(name: 'parsed-if') required bool parsed,
+    @Part(name: 'name') String? alex,
+  });
+
+  @MultiPart()
+  @POST('/single')
+  Future<bool> singleEntity({
+    @Body() required AnotherFile file,
+  });
+}
+''';
+      expect(filledContent.content, expectedContents);
+    });
+
     test('kotlin + retrofit', () async {
       const restClient = UniversalRestClient(
         name: 'ClassName',
