@@ -49,6 +49,7 @@ enum ProgrammingLanguage {
     required bool generateValidator,
     required bool useFreezed3,
     required bool useMultipartFile,
+    String? fallbackUnion,
   }) {
     switch (this) {
       case dart:
@@ -75,6 +76,7 @@ enum ProgrammingLanguage {
                 generateValidator: generateValidator,
                 isV3: useFreezed3,
                 useMultipartFile: useMultipartFile,
+                fallbackUnion: fallbackUnion,
               ),
             JsonSerializer.jsonSerializable => dartJsonSerializableDtoTemplate(
                 dataClass,

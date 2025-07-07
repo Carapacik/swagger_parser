@@ -37,6 +37,7 @@ class SWPConfig {
     this.useXNullable = false,
     this.useFreezed3 = false,
     this.useMultipartFile = false,
+    this.fallbackUnion,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -68,6 +69,7 @@ class SWPConfig {
     required this.useXNullable,
     required this.useFreezed3,
     required this.useMultipartFile,
+    this.fallbackUnion,
   });
 
   /// Creates a [SWPConfig] from [YamlMap].
@@ -219,6 +221,9 @@ class SWPConfig {
     final useMultipartFile =
         yamlMap['use_multipart_file'] as bool? ?? rootConfig?.useMultipartFile;
 
+    final fallbackUnion =
+        yamlMap['fallback_union'] as String? ?? rootConfig?.fallbackUnion;
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -252,6 +257,7 @@ class SWPConfig {
       useXNullable: useXNullable ?? dc.useXNullable,
       useFreezed3: useFreezed3 ?? dc.useFreezed3,
       useMultipartFile: useMultipartFile ?? dc.useMultipartFile,
+      fallbackUnion: fallbackUnion,
     );
   }
 
@@ -370,6 +376,10 @@ class SWPConfig {
   /// for file parameters.
   final bool useMultipartFile;
 
+  /// DART ONLY
+  /// Optional. Set fallback consctructor name to use fallbackUnion parameter when using Freezed annotation.
+  final String? fallbackUnion;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -393,6 +403,7 @@ class SWPConfig {
       generateValidator: generateValidator,
       useFreezed3: useFreezed3,
       useMultipartFile: useMultipartFile,
+      fallbackUnion: fallbackUnion,
     );
   }
 

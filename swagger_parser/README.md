@@ -146,6 +146,13 @@ swagger_parser:
   # Set 'false' to maintain compatibility with Freezed 2.x.
   use_freezed3: false
 
+  # Optional (dart & freezed only). Set string value to use fallbackUnion parameter when using Freezed annotation.
+  # When set to a string value, adds fallbackUnion: <value> to the @Freezed annotation.
+  # When not set (null) or empty, the @Freezed annotation has no fallbackUnion parameter.
+  # Examples: "unknown"
+  # Default: "" (no fallbackUnion parameter)
+  fallback_union: ""
+
   # DART ONLY
   # Optional. Set `true` to use MultipartFile instead of File as argument type for file parameters.
   use_multipart_file: false

@@ -240,6 +240,20 @@ void main() {
       );
     });
 
+    test('fallback_union', () async {
+      await e2eTest(
+        'basic/fallback_union',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          fallbackUnion: 'unknown',
+        ),
+        schemaFileName: 'fallback_union.json',
+      );
+    });
+
     test('discriminated_one_of.3.0_mappable', () async {
       await e2eTest(
         'basic/discriminated_one_of.3.0_mappable',
