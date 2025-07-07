@@ -25,7 +25,7 @@ part '${dataClass.name.toSnake}.g.dart';
 ${descriptionComment(dataClass.description)}@Freezed(${[
     if (dataClass.discriminator != null)
       "unionKey: '${dataClass.discriminator!.propertyName}'",
-    if (dataClass.discriminator != null && fallbackUnion != null)
+    if (dataClass.discriminator != null && fallbackUnion != null && fallbackUnion.isNotEmpty)
       "fallbackUnion: '$fallbackUnion'",
   ].join(', ')})
 ${dataClass.discriminator != null ? 'sealed ' : isV3 ? 'abstract ' : ''}class $className with _\$$className {
@@ -181,7 +181,7 @@ String _factories(UniversalComponentClass dataClass, String className,
 ''');
   }
 
-  if (fallbackUnion != null) {
+  if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
     final unionItemClassName = className + fallbackUnion.toPascal;
     factories.add('''
   const factory $className.$fallbackUnion() = $unionItemClassName;
