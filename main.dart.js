@@ -23651,7 +23651,6 @@ if(d)m.push("defaultValue: 'unknown'")
 p=B.b.aO(m,", ")
 n=A.b([q+";"],n)
 if(b)n.push("dynamic toJson() => toValue();")
-n.push("\n\n  @override\n  String toString() => toValue() ?? super.toString();")
 if(d)n.push("\n  /// Returns all defined enum values excluding the unknown value.\n  static List<"+s+"> get $valuesDefined => values.where((value) => value != "+s+".unknown).toList();")
 if(c)m=u.G
 else m=""
