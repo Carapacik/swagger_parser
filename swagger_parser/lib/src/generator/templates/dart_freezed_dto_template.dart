@@ -25,7 +25,9 @@ part '${dataClass.name.toSnake}.g.dart';
 ${descriptionComment(dataClass.description)}@Freezed(${[
     if (dataClass.discriminator != null)
       "unionKey: '${dataClass.discriminator!.propertyName}'",
-    if (dataClass.discriminator != null && fallbackUnion != null && fallbackUnion.isNotEmpty)
+    if (dataClass.discriminator != null &&
+        fallbackUnion != null &&
+        fallbackUnion.isNotEmpty)
       "fallbackUnion: '$fallbackUnion'",
   ].join(', ')})
 ${dataClass.discriminator != null ? 'sealed ' : isV3 ? 'abstract ' : ''}class $className with _\$$className {
