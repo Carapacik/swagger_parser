@@ -77,7 +77,6 @@ String _dartEnumDartMappableTemplate(
   final enumBodyParts = [
     '$values;',
     if (enumsToJson) 'dynamic toJson() => toValue();',
-    _toStringDartMappable(),
     if (unknownEnumValue) _valuesDefinedDartMappable(className),
   ];
 
@@ -177,9 +176,6 @@ String _toJson(UniversalEnumClass enumClass, String className) {
 
 String _toString() =>
     '\n\n  @override\n  String toString() => json ?? super.toString();';
-
-String _toStringDartMappable() =>
-    '\n\n  @override\n  String toString() => toValue() ?? super.toString();';
 
 String _valuesDefined(String className) => '''
 
