@@ -1,3 +1,6 @@
+## 1.25.1
+- Fix broken dart_mappable enum
+
 ## 1.25.0
 - Allow using `MultipartFile` instead of `File` in multipart requests, to support usage on web.
 

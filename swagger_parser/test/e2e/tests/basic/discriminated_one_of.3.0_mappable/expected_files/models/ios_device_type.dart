@@ -14,9 +14,6 @@ enum IosDeviceType {
   @MappableValue('unknown')
   unknown;
 
-  @override
-  String toString() => toValue() ?? super.toString();
-
   /// Returns all defined enum values excluding the unknown value.
   static List<IosDeviceType> get $valuesDefined =>
       values.where((value) => value != IosDeviceType.unknown).toList();
