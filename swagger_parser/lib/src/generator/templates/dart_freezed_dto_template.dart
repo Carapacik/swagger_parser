@@ -13,6 +13,7 @@ String dartFreezedDtoTemplate(
   required bool useMultipartFile,
   bool generateValidator = false,
   bool isV3 = false,
+  String? fallbackUnion,
 }) {
   final className = dataClass.name.toPascal;
   return '''
@@ -21,9 +22,14 @@ ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';
 
-${descriptionComment(dataClass.description)}@Freezed(${dataClass.discriminator != null ? "unionKey: '${dataClass.discriminator!.propertyName}'" : ''})
+${descriptionComment(dataClass.description)}@Freezed(${[
+    if (dataClass.discriminator != null)
+      "unionKey: '${dataClass.discriminator!.propertyName}'",
+    if (dataClass.discriminator != null && fallbackUnion != null)
+      "fallbackUnion: '$fallbackUnion'",
+  ].join(', ')})
 ${dataClass.discriminator != null ? 'sealed ' : isV3 ? 'abstract ' : ''}class $className with _\$$className {
-${_factories(dataClass, className, useMultipartFile)}
+${_factories(dataClass, className, useMultipartFile, fallbackUnion)}
   \n  factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
 ${generateValidator ? dataClass.parameters.map(_validationString).nonNulls.join() : ''}}
 ${generateValidator ? _validateMethod(className, dataClass.parameters) : ''}''';
@@ -153,7 +159,7 @@ String _validateMethod(String className, Set<UniversalType> types) {
 }
 
 String _factories(UniversalComponentClass dataClass, String className,
-    bool useMultipartFile) {
+    bool useMultipartFile, String? fallbackUnion) {
   if (dataClass.discriminator == null) {
     return '''
   const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters, useMultipartFile)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;''';
@@ -172,6 +178,13 @@ String _factories(UniversalComponentClass dataClass, String className,
     factories.add('''
   @FreezedUnionValue('$discriminatorValue')
   const factory $className.$factoryName(${factoryParameters.isNotEmpty ? '{' : ''}${_parametersToString(factoryParameters, useMultipartFile)}${factoryParameters.isNotEmpty ? '\n  }' : ''}) = $unionItemClassName;
+''');
+  }
+
+  if (fallbackUnion != null) {
+    final unionItemClassName = className + fallbackUnion.toPascal;
+    factories.add('''
+  const factory $className.$fallbackUnion() = $unionItemClassName;
 ''');
   }
 
