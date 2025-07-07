@@ -26,6 +26,7 @@ class GeneratorConfig {
     this.generateValidator = false,
     this.useFreezed3 = false,
     this.useMultipartFile = false,
+    this.fallbackUnion,
   });
 
   /// Optional. Set API name for folder and export file
@@ -119,4 +120,8 @@ class GeneratorConfig {
   /// Optional. Set `true` to use MultipartFile instead of File as argument type
   /// for file parameters.
   final bool useMultipartFile;
+
+  /// DART ONLY
+  /// Optional. Set fallback consctructor name to use fallbackUnion parameter when using Freezed annotation.
+  final String? fallbackUnion;
 }
