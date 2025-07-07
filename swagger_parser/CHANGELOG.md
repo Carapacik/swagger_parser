@@ -1,3 +1,6 @@
+## 1.26.0
+- Add support for Freezed fallbackUnion parameter
+
 ## 1.25.1
 - Fix broken dart_mappable enum
 
