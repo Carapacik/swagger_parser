@@ -255,12 +255,23 @@ String _parametersToString(
 
 String _jsonKey(UniversalType t) {
   final sb = StringBuffer();
-  if ((t.jsonKey == null || t.name == t.jsonKey) && t.defaultValue == null) {
-    return '';
+  final jsonKeyParams = <String, String?>{};
+
+  if (t.isRequired && t.nullable) {
+    jsonKeyParams['includeIfNull'] = 'true';
+  } else if (!t.isRequired && t.nullable) {
+    jsonKeyParams['includeIfNull'] = 'false';
   }
+
   if (t.jsonKey != null && t.name != t.jsonKey) {
-    sb.write("    @JsonKey(name: '${protectJsonKey(t.jsonKey)}')\n");
+    jsonKeyParams['name'] = "'${protectJsonKey(t.jsonKey)}'";
   }
+
+  if (jsonKeyParams.isNotEmpty) {
+    sb.write(
+        "    @JsonKey(${jsonKeyParams.entries.map((e) => '${e.key}: ${e.value}').join(',')})\n");
+  }
+
   if (t.defaultValue != null) {
     sb.write('    @Default(${_defaultValue(t)})\n');
   }
