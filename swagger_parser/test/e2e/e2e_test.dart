@@ -261,6 +261,7 @@ void main() {
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.dartMappable,
+          enumsToJson: true,
           putClientsInFolder: true,
         ),
         schemaFileName: 'discriminated_one_of.3.0.json',
