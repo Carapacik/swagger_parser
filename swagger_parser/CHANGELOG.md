@@ -1,3 +1,7 @@
+## 1.26.1
+- dart_mappable toString override 
+- dart_mappable toJson return string
+
 ## 1.26.0
 - Add support for Freezed fallbackUnion parameter
 
