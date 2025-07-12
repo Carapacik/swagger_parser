@@ -170,16 +170,6 @@ String _hideHeaders(
         : '';
 
 /// return required if isRequired
-String _required(UniversalType t) =>
-    t.isRequired ? 'required ' : '';
-
-/// return defaultValue if have
-/// leaving this commented if someone will need it in the future
-/// probably could be useful for default values for models
-// String _defaultValue(UniversalType t) => t.defaultValue != null
-//     ? ' = '
-//         '${t.wrappingCollections.isNotEmpty ? 'const ' : ''}'
-//         '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toCamel)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}'
-//     : '';
+String _required(UniversalType t) => t.isRequired ? 'required ' : '';
 
 bool _startWith$(String name) => name.isNotEmpty && name.startsWith(r'$');
