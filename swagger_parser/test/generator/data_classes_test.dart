@@ -1025,7 +1025,7 @@ class ClassName {
   final int intType;
   final String stringType;
   final bool boolType;
-  final num nullableType;
+  final num? nullableType;
   final Haha enumType;
 
   Map<String, Object?> toJson() => _$ClassNameToJson(this);
@@ -1099,7 +1099,7 @@ class ClassName with _$ClassName {
     @Default(false)
     bool boolType,
     @Default(-1.1)
-    num nullableType,
+    num? nullableType,
     @Default(Haha.hehe)
     Haha enumType,
   }) = _ClassName;
@@ -1159,7 +1159,7 @@ data class ClassName(
     var intType: Int = 1,
     var stringType: String = "str",
     var boolType: Boolean = false,
-    var nullableType: Double = -1.1,
+    var nullableType: Double? = -1.1,
 )
 ''';
       expect(filledContent.content, expectedContents);

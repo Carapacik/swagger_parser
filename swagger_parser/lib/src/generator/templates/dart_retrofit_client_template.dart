@@ -140,7 +140,7 @@ String _toParameter(UniversalRequestType parameter, bool useMultipartFile) {
       "(${parameter.name != null && !parameter.parameterType.isBody ? "${parameter.parameterType.isPart ? 'name: ' : ''}${_startWith$(parameter.name!) ? 'r' : ''}'${parameter.name}'" : ''}) "
       '${_required(parameter.type)}'
       '$parameterType '
-      '$keywordArguments,';
+      '$keywordArguments${_defaultValue(parameter.type)},';
 }
 
 String _contentTypeHeader(UniversalRequest request, String defaultContentType) {
@@ -171,5 +171,12 @@ String _hideHeaders(
 
 /// return required if isRequired
 String _required(UniversalType t) => t.isRequired ? 'required ' : '';
+
+/// return defaultValue if have and not required
+String _defaultValue(UniversalType t) => !t.isRequired && t.defaultValue != null
+    ? ' = '
+        '${t.wrappingCollections.isNotEmpty ? 'const ' : ''}'
+        '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toCamel)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}'
+    : '';
 
 bool _startWith$(String name) => name.isNotEmpty && name.startsWith(r'$');

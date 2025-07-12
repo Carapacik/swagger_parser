@@ -28,6 +28,7 @@ abstract class ApiClient {
     required List<EnumClassDynamic> enumClassDynamic,
     @Query('nullable_enum_in_object')
     required NullableEnumInObject nullableEnumInObject,
-    @Query('credentialTypes') List<CredentialTypes>? credentialTypes,
+    @Query('credentialTypes')
+    List<CredentialTypes>? credentialTypes = const [apple],
   });
 }
