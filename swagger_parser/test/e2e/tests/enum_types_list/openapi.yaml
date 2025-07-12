@@ -74,6 +74,18 @@ paths:
                   - apple
                   - orange
                   - null
+        - name: credentialTypes
+          in: query
+          required: false
+          allowReserved: true
+          schema:
+            type: array
+            default: [ apple ]
+            minItems: 1
+            items:
+              enum:
+                - apple
+                - orange
 
           description: "description"
       tags:
