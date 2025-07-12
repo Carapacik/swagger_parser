@@ -1747,11 +1747,11 @@ abstract class ClassNameClient {
 
   @POST('/send')
   Future<void> sendMessage({
-    @Header('Authorization') String token = 'message123',
-    @Query('age') double age = 17,
-    @Query('adult') bool adult = false,
-    @Query('unit') Unit unit = Unit.celsius,
-    @Query('soma') Soma soma = Soma.value1,
+    @Header('Authorization') required String token,
+    @Query('age') required double age,
+    @Query('adult') required bool adult,
+    @Query('unit') required Unit unit,
+    @Query('soma') required Soma soma,
   });
 }
 ''';
