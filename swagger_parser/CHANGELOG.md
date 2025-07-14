@@ -1,3 +1,6 @@
+## 1.26.2
+- align default value handling for parameters according to OpenAPi Spec https://swagger.io/docs/specification/v3_0/describing-parameters/#default-parameter-values 
+
 ## 1.26.1
 - dart_mappable toString override 
 - dart_mappable toJson return string
