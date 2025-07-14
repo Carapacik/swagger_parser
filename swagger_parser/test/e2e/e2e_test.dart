@@ -295,6 +295,19 @@ void main() {
       );
     });
 
+    test('query_parameters', () async {
+      await e2eTest(
+        'basic/query_parameters',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('enum_class', () async {
       await e2eTest(
         'basic/enum_class',
