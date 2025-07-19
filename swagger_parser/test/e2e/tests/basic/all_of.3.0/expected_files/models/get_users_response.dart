@@ -1,6 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: type=lint, unused_import
+// ignore_for_file: type=lint, unused_import, invalid_annotation_target, unnecessary_import
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -13,8 +13,8 @@ part 'get_users_response.g.dart';
 @Freezed()
 class GetUsersResponse with _$GetUsersResponse {
   const factory GetUsersResponse({
-    required num? nextCursor,
-    required String? previousCursor,
+    @JsonKey(includeIfNull: true) required num? nextCursor,
+    @JsonKey(includeIfNull: true) required String? previousCursor,
     required List<UserDto> data,
   }) = _GetUsersResponse;
 
