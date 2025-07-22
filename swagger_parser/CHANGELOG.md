@@ -1,3 +1,7 @@
+## 1.26.3
+- Fix for the bug when untagged endpoints and tagged as `Client` will override each other which
+  results in `Client` tagged overwritten during file creation
+
 ## 1.26.2
 - align default value handling for parameters according to OpenAPi Spec https://swagger.io/docs/specification/v3_0/describing-parameters/#default-parameter-values 
 

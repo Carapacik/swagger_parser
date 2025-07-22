@@ -408,6 +408,19 @@ void main() {
       );
     });
 
+    test('tags', () async {
+      await e2eTest(
+        'basic/tags',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('use_freezed3.3.0', () async {
       await e2eTest(
         'basic/use_freezed3.3.0',

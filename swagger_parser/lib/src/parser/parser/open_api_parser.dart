@@ -646,7 +646,7 @@ class OpenApiParser {
         );
         final currentTag = _getTag(requestPath);
         final sameTagIndex = restClients.indexWhere(
-          (e) => e.name == currentTag,
+          (e) => e.name.toLowerCase() == currentTag.toLowerCase(),
         );
         if (sameTagIndex == -1) {
           restClients.add(
