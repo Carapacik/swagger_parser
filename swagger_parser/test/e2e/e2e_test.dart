@@ -421,6 +421,49 @@ void main() {
       );
     });
 
+    test('excluded_tags', () async {
+      await e2eTest(
+        'basic/excluded_tags',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          excludedTags: ['exclude'],
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('included_tags', () async {
+      await e2eTest(
+        'basic/included_tags',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          includedTags: ['include'],
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('included_and_excluded_tags', () async {
+      await e2eTest(
+        'basic/included_and_excluded_tags',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          includedTags: ['include'],
+          excludedTags: ['exclude'],
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('use_freezed3.3.0', () async {
       await e2eTest(
         'basic/use_freezed3.3.0',

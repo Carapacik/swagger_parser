@@ -38,6 +38,8 @@ class SWPConfig {
     this.useFreezed3 = false,
     this.useMultipartFile = false,
     this.fallbackUnion,
+    this.excludedTags = const <String>[],
+    this.includedTags = const <String>[],
   });
 
   /// Internal constructor of [SWPConfig]
@@ -69,6 +71,8 @@ class SWPConfig {
     required this.useXNullable,
     required this.useFreezed3,
     required this.useMultipartFile,
+    required this.excludedTags,
+    required this.includedTags,
     this.fallbackUnion,
   });
 
@@ -224,6 +228,38 @@ class SWPConfig {
     final fallbackUnion =
         yamlMap['fallback_union'] as String? ?? rootConfig?.fallbackUnion;
 
+    final excludedTagsYaml = yamlMap['excluded_tags'] as YamlList?;
+    List<String>? excludedTags;
+    if (excludedTagsYaml != null) {
+      excludedTags = [];
+      for (final t in excludedTagsYaml) {
+        if (t is! String) {
+          throw const ConfigException(
+            "Config parameter 'excluded_tags' values must be List of String.",
+          );
+        }
+        excludedTags.add(t);
+      }
+    } else if (rootConfig?.excludedTags != null) {
+      excludedTags = List.from(rootConfig!.excludedTags);
+    }
+
+    final includedTagsYaml = yamlMap['included_tags'] as YamlList?;
+    List<String>? includedTags;
+    if (includedTagsYaml != null) {
+      includedTags = [];
+      for (final t in includedTagsYaml) {
+        if (t is! String) {
+          throw const ConfigException(
+            "Config parameter 'included_tags' values must be List of String.",
+          );
+        }
+        includedTags.add(t);
+      }
+    } else if (rootConfig?.includedTags != null) {
+      includedTags = List.from(rootConfig!.includedTags);
+    }
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -258,6 +294,8 @@ class SWPConfig {
       useFreezed3: useFreezed3 ?? dc.useFreezed3,
       useMultipartFile: useMultipartFile ?? dc.useMultipartFile,
       fallbackUnion: fallbackUnion,
+      excludedTags: excludedTags ?? dc.excludedTags,
+      includedTags: includedTags ?? dc.includedTags,
     );
   }
 
@@ -380,6 +418,19 @@ class SWPConfig {
   /// Optional. Set fallback consctructor name to use fallbackUnion parameter when using Freezed annotation.
   final String? fallbackUnion;
 
+  /// DART ONLY
+  /// Optional. Set excluded tags.
+  ///
+  /// Endpoints with these tags will not be included in the generated clients.
+  final List<String> excludedTags;
+
+  /// DART ONLY
+  /// Optional. Set included tags.
+  ///
+  /// If set, only endpoints with these tags will be included in the generated clients.
+  /// **NOTE: This will override the [excludedTags] if set.**
+  final List<String> includedTags;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -423,6 +474,8 @@ class SWPConfig {
       skippedParameters: skippedParameters,
       replacementRules: replacementRules,
       useXNullable: useXNullable,
+      excludedTags: excludedTags,
+      includedTags: includedTags,
     );
   }
 }

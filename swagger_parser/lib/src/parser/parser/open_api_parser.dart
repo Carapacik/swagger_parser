@@ -569,6 +569,12 @@ class OpenApiParser {
       }
 
       pathValue.forEach((key, requestPath) {
+        // check if this requestPath has any tags that
+        // define wether the requestPath should be included
+        if (!_includeTag(requestPath as Map<String, dynamic>)) {
+          return;
+        }
+
         // `servers` contains List<dynamic>
         if (key == _serversConst ||
             key == _parametersConst ||
@@ -576,8 +582,8 @@ class OpenApiParser {
           return;
         }
 
-        final requestPathResponses = (requestPath
-            as Map<String, dynamic>)[_responsesConst] as Map<String, dynamic>;
+        final requestPathResponses =
+            requestPath[_responsesConst] as Map<String, dynamic>;
         final additionalName = '$key${path}Response'.toPascal;
         final returnType = _apiInfo.schemaVersion == OAS.v2
             ? returnTypeV2(requestPathResponses, additionalName)
@@ -975,6 +981,33 @@ class OpenApiParser {
     }
 
     return dataClasses;
+  }
+
+  /// Check if any tag of a given endpoint is included or excluded
+  ///
+  /// It will return true if the [ParserConfig.includedTags] is not empty
+  /// and the any tag of this endpoint is included, afterwards
+  /// it will check if the [ParserConfig.excludedTags] is not empty
+  /// and the any tag of this endpoint is excluded.
+  ///
+  /// If the tag is neither included nor excluded or if there is no tag at all,
+  /// it will return true.
+  bool _includeTag(Map<String, dynamic> map) {
+    if (!map.containsKey(_tagsConst)) {
+      return true;
+    }
+
+    final tags = (map[_tagsConst] as List<dynamic>).map((e) => e as String);
+
+    if (config.includedTags.isNotEmpty) {
+      return config.includedTags.any(tags.contains);
+    }
+
+    if (config.excludedTags.isNotEmpty) {
+      return !config.excludedTags.any(tags.contains);
+    }
+
+    return true;
   }
 
   /// Get tag for name
