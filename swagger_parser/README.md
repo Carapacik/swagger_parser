@@ -35,7 +35,7 @@ dependencies:
   # dio: ^5.8.0+1
   # freezed_annotation: ^3.1.0 # for freezed
   # json_annotation: ^4.9.0
-  # retrofit: ^4.6.0
+  # retrofit: ^4.7.0
 
 dev_dependencies:
   # build_runner: ^2.5.4
@@ -43,7 +43,7 @@ dev_dependencies:
   # dart_mappable_builder: ^4.5.0 # for dart_mappable
   # freezed: ^3.1.0 # for freezed
   # json_serializable: ^6.9.5
-  # retrofit_generator: ^9.7.0
+  # retrofit_generator: ^10.0.1
   swagger_parser:
 ```
 
