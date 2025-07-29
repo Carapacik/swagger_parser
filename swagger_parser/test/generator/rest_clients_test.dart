@@ -1232,6 +1232,15 @@ abstract class ClassNameClient {
               UniversalRequestType(
                 parameterType: HttpParameterType.part,
                 type: UniversalType(
+                    type: 'file',
+                    name: 'aListOfFiles',
+                    isRequired: true,
+                    wrappingCollections: [UniversalCollections.list]),
+                name: 'file2',
+              ),
+              UniversalRequestType(
+                parameterType: HttpParameterType.part,
+                type: UniversalType(
                   type: 'boolean',
                   name: 'parsed',
                   isRequired: true,
@@ -1281,8 +1290,9 @@ abstract class ClassNameClient {
   @POST('/send')
   Future<void> sendMultiPart({
     @Header('Authorization') required String token,
-    @Part(name: 'file') required List<MultipartFile> file,
-    @Part(name: 'file2') required List<MultipartFile> secondFile,
+    @Part(name: 'file') required MultipartFile file,
+    @Part(name: 'file2') required MultipartFile secondFile,
+    @Part(name: 'file2') required List<MultipartFile> aListOfFiles,
     @Part(name: 'parsed-if') required bool parsed,
     @Part(name: 'name') String? alex,
   });
