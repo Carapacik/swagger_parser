@@ -14,6 +14,8 @@ class ParserConfig {
     this.skippedParameters = const <String>[],
     this.replacementRules = const [],
     this.useXNullable = false,
+    this.excludeTags = const <String>[],
+    this.includeTags = const <String>[],
   });
 
   /// Specification file content as [String]
@@ -54,4 +56,15 @@ class ParserConfig {
   /// Does the Schema use x-nullable to indicate nullable fields
   /// Only used for OpenApi v2
   final bool useXNullable;
+
+  /// Optional. Set excluded tags.
+  ///
+  /// Endpoints with these tags will not be included in the generated clients.
+  final List<String> excludeTags;
+
+  /// Optional. Set included tags.
+  ///
+  /// If set, only endpoints with these tags will be included in the generated clients.
+  /// **NOTE: This will override the [excludeTags] if set.**
+  final List<String> includeTags;
 }
