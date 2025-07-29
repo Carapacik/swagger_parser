@@ -1,3 +1,6 @@
+# 1.26.4
+ - Allow the use of single MultipartFile arguments in multipart requests (requires retrofit_generator 10.0.1 or later)
+
 ## 1.26.3
 - Fix for the bug when untagged endpoints and tagged as `Client` will override each other which
   results in `Client` tagged overwritten during file creation
