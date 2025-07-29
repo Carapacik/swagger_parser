@@ -160,18 +160,18 @@ swagger_parser:
   use_multipart_file: false
 
   # DART ONLY
-  # Optional. Set excluded tags.
+  # Optional. Set tags to be excluded on endpoint generation.
   #
   # Endpoints with these tags will not be included in the generated clients.
-  excluded_tags:
+  exclude_tags:
     - "sellPet"
 
   # DART ONLY
-  # Optional. Set included tags.
+  # Optional. Set tags to be included on endpoint generation.
   #
   # If set, only endpoints with these tags will be included in the generated clients.
-  # **NOTE: This will override the [excluded_tags] if set.**
-  included_tags:
+  # **NOTE: This will override the [exclude_tags] if set.**
+  include_tags:
     - "buyPet"
 ```
 

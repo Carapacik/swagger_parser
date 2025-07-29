@@ -985,9 +985,9 @@ class OpenApiParser {
 
   /// Check if any tag of a given endpoint is included or excluded
   ///
-  /// It will return true if the [ParserConfig.includedTags] is not empty
+  /// It will return true if the [ParserConfig.includeTags] is not empty
   /// and the any tag of this endpoint is included, afterwards
-  /// it will check if the [ParserConfig.excludedTags] is not empty
+  /// it will check if the [ParserConfig.excludeTags] is not empty
   /// and the any tag of this endpoint is excluded.
   ///
   /// If the tag is neither included nor excluded or if there is no tag at all,
@@ -999,12 +999,12 @@ class OpenApiParser {
 
     final tags = (map[_tagsConst] as List<dynamic>).map((e) => e as String);
 
-    if (config.includedTags.isNotEmpty) {
-      return config.includedTags.any(tags.contains);
+    if (config.includeTags.isNotEmpty) {
+      return config.includeTags.any(tags.contains);
     }
 
-    if (config.excludedTags.isNotEmpty) {
-      return !config.excludedTags.any(tags.contains);
+    if (config.excludeTags.isNotEmpty) {
+      return !config.excludeTags.any(tags.contains);
     }
 
     return true;

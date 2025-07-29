@@ -14,8 +14,8 @@ class ParserConfig {
     this.skippedParameters = const <String>[],
     this.replacementRules = const [],
     this.useXNullable = false,
-    this.excludedTags = const <String>[],
-    this.includedTags = const <String>[],
+    this.excludeTags = const <String>[],
+    this.includeTags = const <String>[],
   });
 
   /// Specification file content as [String]
@@ -60,11 +60,11 @@ class ParserConfig {
   /// Optional. Set excluded tags.
   ///
   /// Endpoints with these tags will not be included in the generated clients.
-  final List<String> excludedTags;
+  final List<String> excludeTags;
 
   /// Optional. Set included tags.
   ///
   /// If set, only endpoints with these tags will be included in the generated clients.
-  /// **NOTE: This will override the [excludedTags] if set.**
-  final List<String> includedTags;
+  /// **NOTE: This will override the [excludeTags] if set.**
+  final List<String> includeTags;
 }

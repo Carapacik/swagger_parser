@@ -429,7 +429,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          excludedTags: ['exclude'],
+          excludeTags: ['exclude'],
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -443,7 +443,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          includedTags: ['include'],
+          includeTags: ['include'],
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -457,8 +457,8 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          includedTags: ['include'],
-          excludedTags: ['exclude'],
+          includeTags: ['include'],
+          excludeTags: ['exclude'],
         ),
         schemaFileName: 'openapi.yaml',
       );
