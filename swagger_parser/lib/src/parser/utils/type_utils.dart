@@ -15,11 +15,11 @@ extension StringTypeX on String {
             _ => 'num',
           },
         'string' => switch (format) {
-            'binary' => useMultipartFile ? 'List<MultipartFile>' : 'File',
+            'binary' => useMultipartFile ? 'MultipartFile' : 'File',
             'date' || 'date-time' => 'DateTime',
             _ => 'String',
           },
-        'file' => useMultipartFile ? 'List<MultipartFile>' : 'File',
+        'file' => useMultipartFile ? 'MultipartFile' : 'File',
         'boolean' => 'bool',
         // https://github.com/trevorwang/retrofit.dart/issues/631
         // https://github.com/Carapacik/swagger_parser/issues/110
