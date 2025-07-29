@@ -173,6 +173,16 @@ swagger_parser:
   # **NOTE: This will override the [exclude_tags] if set.**
   include_tags:
     - "buyPet"
+
+  # DART ONLY
+  # Optional. Set fallback client name for endpoints without tags.
+  #
+  # In general the first tag of an endpoint defines in which client the
+  # endpoint will be included. If no tag is specified, the fallback client
+  # name will be used.
+
+  # defaults to 'default' which results in a client named `DefaultClient`.
+  fallback_client: "default"
 ```
 
 For multiple schemes:

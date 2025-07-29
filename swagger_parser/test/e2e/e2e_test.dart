@@ -421,6 +421,20 @@ void main() {
       );
     });
 
+    test('empty_tags', () async {
+      await e2eTest(
+        'basic/empty_tags',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          fallbackClient: 'test',
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('excluded_tags', () async {
       await e2eTest(
         'basic/excluded_tags',

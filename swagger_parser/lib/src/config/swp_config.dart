@@ -40,40 +40,7 @@ class SWPConfig {
     this.fallbackUnion,
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
-  });
-
-  /// Internal constructor of [SWPConfig]
-  const SWPConfig._({
-    required this.outputDirectory,
-    required this.schemaPath,
-    required this.schemaUrl,
-    required this.name,
-    required this.language,
-    required this.jsonSerializer,
-    required this.rootClient,
-    required this.rootClientName,
-    required this.clientPostfix,
-    required this.exportFile,
-    required this.putClientsInFolder,
-    required this.enumsToJson,
-    required this.unknownEnumValue,
-    required this.markFilesAsGenerated,
-    required this.originalHttpResponse,
-    required this.replacementRules,
-    required this.defaultContentType,
-    required this.extrasParameterByDefault,
-    required this.dioOptionsParameterByDefault,
-    required this.pathMethodName,
-    required this.mergeClients,
-    required this.enumsParentPrefix,
-    required this.skippedParameters,
-    required this.generateValidator,
-    required this.useXNullable,
-    required this.useFreezed3,
-    required this.useMultipartFile,
-    required this.excludeTags,
-    required this.includeTags,
-    this.fallbackUnion,
+    this.fallbackClient = 'default',
   });
 
   /// Creates a [SWPConfig] from [YamlMap].
@@ -260,6 +227,9 @@ class SWPConfig {
       includedTags = List.from(rootConfig!.includeTags);
     }
 
+    final fallbackClient =
+        yamlMap['fallback_client'] as String? ?? rootConfig?.fallbackClient;
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -296,8 +266,44 @@ class SWPConfig {
       fallbackUnion: fallbackUnion,
       excludeTags: excludedTags ?? dc.excludeTags,
       includeTags: includedTags ?? dc.includeTags,
+      fallbackClient: fallbackClient ?? dc.fallbackClient,
     );
   }
+
+  /// Internal constructor of [SWPConfig]
+  const SWPConfig._({
+    required this.outputDirectory,
+    required this.schemaPath,
+    required this.schemaUrl,
+    required this.name,
+    required this.language,
+    required this.jsonSerializer,
+    required this.rootClient,
+    required this.rootClientName,
+    required this.clientPostfix,
+    required this.exportFile,
+    required this.putClientsInFolder,
+    required this.enumsToJson,
+    required this.unknownEnumValue,
+    required this.markFilesAsGenerated,
+    required this.originalHttpResponse,
+    required this.replacementRules,
+    required this.defaultContentType,
+    required this.extrasParameterByDefault,
+    required this.dioOptionsParameterByDefault,
+    required this.pathMethodName,
+    required this.mergeClients,
+    required this.enumsParentPrefix,
+    required this.skippedParameters,
+    required this.generateValidator,
+    required this.useXNullable,
+    required this.useFreezed3,
+    required this.useMultipartFile,
+    required this.excludeTags,
+    required this.includeTags,
+    required this.fallbackClient,
+    this.fallbackUnion,
+  });
 
   /// Sets the path directory of the OpenApi schema.
   final String? schemaPath;
@@ -431,6 +437,12 @@ class SWPConfig {
   /// **NOTE: This will override the [excludeTags] if set.**
   final List<String> includeTags;
 
+  /// DART ONLY
+  /// Optional. Fallback client name for endpoints without tags.
+  ///
+  /// defaults to 'default' which results in a client named `DefaultClient`.
+  final String fallbackClient;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -476,6 +488,7 @@ class SWPConfig {
       useXNullable: useXNullable,
       excludeTags: excludeTags,
       includeTags: includeTags,
+      fallbackClient: fallbackClient,
     );
   }
 }

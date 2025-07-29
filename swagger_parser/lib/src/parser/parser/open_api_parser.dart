@@ -27,29 +27,18 @@ class OpenApiParser {
     _apiInfo = _parseOpenApiInfo();
   }
 
-  /// [ParserConfig] that [OpenApiParser] use
-  final ParserConfig config;
-
-  /// `info` section in specification
-  late final OpenApiInfo _apiInfo;
-
-  /// Specification content
-  late final Map<String, dynamic> _definitionFileContent;
-
-  final _objectClasses = <UniversalComponentClass>[];
-  final _enumClasses = <UniversalEnumClass>{};
-  final _usedNamesCount = <String, int>{};
-  final _skipDataClasses = <String>[];
-  final _objectNamesCount = <String, int>{};
-
   static const _additionalPropertiesConst = 'additionalProperties';
+
   static const _allOfConst = 'allOf';
+
   static const _anyOfConst = 'anyOf';
+
   static const _arrayConst = 'array';
   static const _bodyConst = 'body';
   static const _componentsConst = 'components';
   static const _consumesConst = 'consumes';
   static const _contentConst = 'content';
+
   static const _defaultConst = 'default';
   static const _definitionsConst = 'definitions';
   static const _descriptionConst = 'description';
@@ -90,69 +79,237 @@ class OpenApiParser {
   static const _versionConst = 'version';
   static const _xNullableConst = 'x-nullable';
 
-  UniversalEnumClass _getUniqueEnumClass({
-    required final String name,
-    required final Set<UniversalEnumItem> items,
-    required final String type,
-    required final String? defaultValue,
-    required final String? description,
-  }) {
-    // Search _enumClasses for an enum with the same name and values
-    final enumClass = _enumClasses.firstWhereOrNull(
-      (e) =>
-          e.originalName == name &&
-          const DeepCollectionEquality().equals(e.items, items),
-    );
+  /// [ParserConfig] that [OpenApiParser] use
+  final ParserConfig config;
 
-    if (enumClass != null) {
-      return enumClass;
-    }
+  /// `info` section in specification
+  late final OpenApiInfo _apiInfo;
 
-    String uniqueName;
-    if (_usedNamesCount.containsKey(name)) {
-      _usedNamesCount[name] = _usedNamesCount[name]! + 1;
-      uniqueName = '$name${_usedNamesCount[name]}';
-    } else {
-      _usedNamesCount[name] = 1;
-      uniqueName = name;
-    }
-
-    return UniversalEnumClass(
-      originalName: name,
-      name: uniqueName.toPascal,
-      type: type,
-      items: items,
-      defaultValue: defaultValue,
-      description: description,
-    );
-  }
-
-  /// Parse OpenApi parameters into [OpenApiInfo]
-  OpenApiInfo _parseOpenApiInfo() {
-    final schemaVersion = switch (_definitionFileContent) {
-      {_openApiConst: final Object? v} when v.toString().startsWith('3.1') =>
-        OAS.v3_1,
-      {_openApiConst: final Object? v} when v.toString().startsWith('3.0') =>
-        OAS.v3,
-      {_swaggerConst: final Object? v} when v.toString().startsWith('2.0') =>
-        OAS.v2,
-      _ => throw const OpenApiParserException('Unknown version of OpenAPI.'),
-    };
-    final info = switch (_definitionFileContent) {
-      {_infoConst: final Map<String, Object?> v} => v,
-      _ => null,
-    };
-    return OpenApiInfo(
-      schemaVersion: schemaVersion,
-      apiVersion: info?[_versionConst]?.toString(),
-      title: info?[_titleConst]?.toString(),
-      summary: info?[_summaryConst]?.toString(),
-      description: info?[_descriptionConst]?.toString(),
-    );
-  }
+  /// Specification content
+  late final Map<String, dynamic> _definitionFileContent;
+  final _objectClasses = <UniversalComponentClass>[];
+  final _enumClasses = <UniversalEnumClass>{};
+  final _usedNamesCount = <String, int>{};
+  final _skipDataClasses = <String>[];
+  final _objectNamesCount = <String, int>{};
 
   /// Get saved [OpenApiInfo] from [OpenApiParser]
   OpenApiInfo get openApiInfo => _apiInfo;
+
+  /// Parses data classes from `components` of definition file
+  /// and return list of  [UniversalDataClass]
+  List<UniversalDataClass> parseDataClasses() {
+    final dataClasses = <UniversalDataClass>[];
+    late final Map<String, dynamic> entities;
+    if (_apiInfo.schemaVersion == OAS.v3_1 ||
+        _apiInfo.schemaVersion == OAS.v3) {
+      if (!_definitionFileContent.containsKey(_componentsConst) ||
+          !(_definitionFileContent[_componentsConst] as Map<String, dynamic>)
+              .containsKey(_schemasConst)) {
+        return [...dataClasses, ..._objectClasses, ..._enumClasses];
+      }
+      entities = (_definitionFileContent[_componentsConst]
+          as Map<String, dynamic>)[_schemasConst] as Map<String, dynamic>;
+    } else if (_apiInfo.schemaVersion == OAS.v2) {
+      if (!_definitionFileContent.containsKey(_definitionsConst)) {
+        return [...dataClasses, ..._objectClasses, ..._enumClasses];
+      }
+      entities =
+          _definitionFileContent[_definitionsConst] as Map<String, dynamic>;
+    }
+    entities.forEach((key, value) {
+      if (_skipDataClasses.contains(key)) {
+        return;
+      }
+
+      value as Map<String, dynamic>;
+
+      final refs = <String>{};
+      final parameters = <UniversalType>{};
+      final imports = SplayTreeSet<String>();
+
+      /// Used for find properties in map
+      void localFindParametersAndImports(Map<String, dynamic> map) {
+        final (findParameters, findImports) = _findParametersAndImports(
+          map,
+          additionalName: key,
+        );
+        parameters.addAll(findParameters);
+        imports.addAll(findImports);
+      }
+
+      if (value.containsKey(_propertiesConst)) {
+        localFindParametersAndImports(value);
+      } else if (value.containsKey(_enumConst)) {
+        final Set<UniversalEnumItem> items;
+        final values = (value[_enumConst] as List).map((e) => '$e');
+        if (value.containsKey(_enumNamesConst)) {
+          final names = (value[_enumNamesConst] as List).map((e) => '$e');
+          items = protectEnumItemsNamesAndValues(names, values);
+        } else {
+          items = protectEnumItemsNames(values);
+        }
+        final type = value[_typeConst].toString();
+
+        dataClasses.add(
+          _getUniqueEnumClass(
+            name: key,
+            items: items,
+            type: type,
+            defaultValue: value[_defaultConst]?.toString(),
+            description: value[_descriptionConst]?.toString(),
+          ),
+        );
+        return;
+      } else if (value.containsKey(_typeConst) ||
+          value.containsKey(_refConst)) {
+        final typeWithImport = _findType(
+          value,
+          name: key,
+          // typeDef is always non-nullable
+          isRequired: true,
+        );
+        parameters.add(typeWithImport.type);
+        if (typeWithImport.import != null) {
+          imports.add(typeWithImport.import!);
+        }
+        dataClasses.add(
+          UniversalComponentClass(
+            name: key,
+            imports: imports,
+            parameters: parameters,
+            typeDef: true,
+            description: value[_descriptionConst]?.toString(),
+          ),
+        );
+        return;
+      }
+
+      if (value.containsKey(_allOfConst)) {
+        for (final map in value[_allOfConst] as List<dynamic>) {
+          if ((map as Map<String, dynamic>).containsKey(_refConst)) {
+            final ref = _formatRef(map);
+
+            refs.add(ref);
+            continue;
+          }
+          if (map.containsKey(_propertiesConst)) {
+            localFindParametersAndImports(map);
+          }
+        }
+      }
+
+      final allOf =
+          refs.isNotEmpty ? (refs: refs, properties: parameters) : null;
+
+      final discriminator = _parseDiscriminatorInfo(value);
+      dataClasses.add(
+        UniversalComponentClass(
+          name: key,
+          imports: imports,
+          parameters: allOf != null ? {} : parameters,
+          allOf: allOf,
+          description: value[_descriptionConst]?.toString(),
+          discriminator: discriminator,
+        ),
+      );
+    });
+
+    dataClasses.addAll(_objectClasses);
+    _objectClasses.clear();
+    dataClasses.addAll(_enumClasses);
+    _enumClasses.clear();
+
+    // check for `allOf`
+    final allOfClasses = dataClasses.where(
+      (dc) => dc is UniversalComponentClass && dc.allOf != null,
+    );
+    for (final allOfClass in allOfClasses) {
+      if (allOfClass is! UniversalComponentClass) {
+        continue;
+      }
+      final refs = allOfClass.allOf!.refs;
+      final foundClasses = dataClasses.where((e) => refs.contains(e.name));
+      // allOf could be stack of different refs and properties
+      // there is some chance that combined props will overlap by name
+      // using this map to deduplicate properties by name
+      final parameters = <String, UniversalType>{};
+
+      for (final element in foundClasses) {
+        if (element is UniversalComponentClass) {
+          for (final e in element.parameters) {
+            final name = e.name;
+            if (name == null) {
+              // if property name is null we can't reliably deduplicate it
+              allOfClass.parameters.add(e);
+            } else {
+              parameters[name] = e;
+            }
+          }
+
+          allOfClass.imports.addAll(element.imports);
+        } else if (element is UniversalEnumClass) {
+          parameters[element.name.toCamel] = UniversalType(
+            type: element.name,
+            name: element.name.toCamel,
+            isRequired: false,
+          );
+
+          allOfClass.imports.add(element.name);
+        }
+      }
+
+      for (final e in allOfClass.allOf!.properties) {
+        final name = e.name;
+        if (name == null) {
+          // if property name is null we can't reliably deduplicate it
+          allOfClass.parameters.add(e);
+        } else {
+          parameters[name] = e;
+        }
+      }
+
+      allOfClass.parameters.addAll(parameters.values);
+    }
+
+    // check for discriminated oneOf
+    final discriminatedOneOfClasses = dataClasses.where(
+      (dc) => dc is UniversalComponentClass && dc.discriminator != null,
+    );
+    for (final discriminatedOneOfClass in discriminatedOneOfClasses) {
+      if (discriminatedOneOfClass is! UniversalComponentClass) {
+        continue;
+      }
+      final discriminator = discriminatedOneOfClass.discriminator!;
+      // for each ref, we lookup the matching dataclass and add its properties to the discriminator mapping, its imports are added to the discriminatedOneOfClass's imports
+      for (final ref in discriminator.discriminatorValueToRefMapping.values) {
+        final refedClassIndex = dataClasses.indexWhere((dc) => dc.name == ref);
+        final refedClass = dataClasses[refedClassIndex];
+        if (refedClass is! UniversalComponentClass) {
+          continue;
+        }
+        discriminator.refProperties[ref] = refedClass.parameters;
+        discriminatedOneOfClass.imports.addAll(refedClass.imports);
+        discriminatedOneOfClass.imports.add(refedClass.import);
+
+        dataClasses[refedClassIndex] = refedClass.copyWith(
+          imports: {
+            ...refedClass.imports,
+            discriminatedOneOfClass.import,
+          }.sortedBy((it) => it).toSet(),
+          discriminatorValue: (
+            propertyValue: discriminatedOneOfClass
+                .discriminator!.discriminatorValueToRefMapping.entries
+                .firstWhere((it) => it.value == ref)
+                .key,
+            parentClass: discriminatedOneOfClass.name,
+          ),
+        );
+      }
+    }
+
+    return dataClasses;
+  }
 
   /// Parses rest clients from `paths` section of definition file
   /// and return list of [UniversalRestClient]
@@ -650,7 +807,7 @@ class OpenApiParser {
           isDeprecated:
               requestPath[_deprecatedConst].toString().toBool() ?? false,
         );
-        final currentTag = _getTag(requestPath);
+        final currentTag = _getTag(requestPath) ?? config.fallbackClient;
         final sameTagIndex = restClients.indexWhere(
           (e) => e.name.toLowerCase() == currentTag.toLowerCase(),
         );
@@ -767,267 +924,6 @@ class OpenApiParser {
 
     return (parameters, imports);
   }
-
-  /// Parses data classes from `components` of definition file
-  /// and return list of  [UniversalDataClass]
-  List<UniversalDataClass> parseDataClasses() {
-    final dataClasses = <UniversalDataClass>[];
-    late final Map<String, dynamic> entities;
-    if (_apiInfo.schemaVersion == OAS.v3_1 ||
-        _apiInfo.schemaVersion == OAS.v3) {
-      if (!_definitionFileContent.containsKey(_componentsConst) ||
-          !(_definitionFileContent[_componentsConst] as Map<String, dynamic>)
-              .containsKey(_schemasConst)) {
-        return [...dataClasses, ..._objectClasses, ..._enumClasses];
-      }
-      entities = (_definitionFileContent[_componentsConst]
-          as Map<String, dynamic>)[_schemasConst] as Map<String, dynamic>;
-    } else if (_apiInfo.schemaVersion == OAS.v2) {
-      if (!_definitionFileContent.containsKey(_definitionsConst)) {
-        return [...dataClasses, ..._objectClasses, ..._enumClasses];
-      }
-      entities =
-          _definitionFileContent[_definitionsConst] as Map<String, dynamic>;
-    }
-    entities.forEach((key, value) {
-      if (_skipDataClasses.contains(key)) {
-        return;
-      }
-
-      value as Map<String, dynamic>;
-
-      final refs = <String>{};
-      final parameters = <UniversalType>{};
-      final imports = SplayTreeSet<String>();
-
-      /// Used for find properties in map
-      void localFindParametersAndImports(Map<String, dynamic> map) {
-        final (findParameters, findImports) = _findParametersAndImports(
-          map,
-          additionalName: key,
-        );
-        parameters.addAll(findParameters);
-        imports.addAll(findImports);
-      }
-
-      if (value.containsKey(_propertiesConst)) {
-        localFindParametersAndImports(value);
-      } else if (value.containsKey(_enumConst)) {
-        final Set<UniversalEnumItem> items;
-        final values = (value[_enumConst] as List).map((e) => '$e');
-        if (value.containsKey(_enumNamesConst)) {
-          final names = (value[_enumNamesConst] as List).map((e) => '$e');
-          items = protectEnumItemsNamesAndValues(names, values);
-        } else {
-          items = protectEnumItemsNames(values);
-        }
-        final type = value[_typeConst].toString();
-
-        dataClasses.add(
-          _getUniqueEnumClass(
-            name: key,
-            items: items,
-            type: type,
-            defaultValue: value[_defaultConst]?.toString(),
-            description: value[_descriptionConst]?.toString(),
-          ),
-        );
-        return;
-      } else if (value.containsKey(_typeConst) ||
-          value.containsKey(_refConst)) {
-        final typeWithImport = _findType(
-          value,
-          name: key,
-          // typeDef is always non-nullable
-          isRequired: true,
-        );
-        parameters.add(typeWithImport.type);
-        if (typeWithImport.import != null) {
-          imports.add(typeWithImport.import!);
-        }
-        dataClasses.add(
-          UniversalComponentClass(
-            name: key,
-            imports: imports,
-            parameters: parameters,
-            typeDef: true,
-            description: value[_descriptionConst]?.toString(),
-          ),
-        );
-        return;
-      }
-
-      if (value.containsKey(_allOfConst)) {
-        for (final map in value[_allOfConst] as List<dynamic>) {
-          if ((map as Map<String, dynamic>).containsKey(_refConst)) {
-            final ref = _formatRef(map);
-
-            refs.add(ref);
-            continue;
-          }
-          if (map.containsKey(_propertiesConst)) {
-            localFindParametersAndImports(map);
-          }
-        }
-      }
-
-      final allOf =
-          refs.isNotEmpty ? (refs: refs, properties: parameters) : null;
-
-      final discriminator = _parseDiscriminatorInfo(value);
-      dataClasses.add(
-        UniversalComponentClass(
-          name: key,
-          imports: imports,
-          parameters: allOf != null ? {} : parameters,
-          allOf: allOf,
-          description: value[_descriptionConst]?.toString(),
-          discriminator: discriminator,
-        ),
-      );
-    });
-
-    dataClasses.addAll(_objectClasses);
-    _objectClasses.clear();
-    dataClasses.addAll(_enumClasses);
-    _enumClasses.clear();
-
-    // check for `allOf`
-    final allOfClasses = dataClasses.where(
-      (dc) => dc is UniversalComponentClass && dc.allOf != null,
-    );
-    for (final allOfClass in allOfClasses) {
-      if (allOfClass is! UniversalComponentClass) {
-        continue;
-      }
-      final refs = allOfClass.allOf!.refs;
-      final foundClasses = dataClasses.where((e) => refs.contains(e.name));
-      // allOf could be stack of different refs and properties
-      // there is some chance that combined props will overlap by name
-      // using this map to deduplicate properties by name
-      final parameters = <String, UniversalType>{};
-
-      for (final element in foundClasses) {
-        if (element is UniversalComponentClass) {
-          for (final e in element.parameters) {
-            final name = e.name;
-            if (name == null) {
-              // if property name is null we can't reliably deduplicate it
-              allOfClass.parameters.add(e);
-            } else {
-              parameters[name] = e;
-            }
-          }
-
-          allOfClass.imports.addAll(element.imports);
-        } else if (element is UniversalEnumClass) {
-          parameters[element.name.toCamel] = UniversalType(
-            type: element.name,
-            name: element.name.toCamel,
-            isRequired: false,
-          );
-
-          allOfClass.imports.add(element.name);
-        }
-      }
-
-      for (final e in allOfClass.allOf!.properties) {
-        final name = e.name;
-        if (name == null) {
-          // if property name is null we can't reliably deduplicate it
-          allOfClass.parameters.add(e);
-        } else {
-          parameters[name] = e;
-        }
-      }
-
-      allOfClass.parameters.addAll(parameters.values);
-    }
-
-    // check for discriminated oneOf
-    final discriminatedOneOfClasses = dataClasses.where(
-      (dc) => dc is UniversalComponentClass && dc.discriminator != null,
-    );
-    for (final discriminatedOneOfClass in discriminatedOneOfClasses) {
-      if (discriminatedOneOfClass is! UniversalComponentClass) {
-        continue;
-      }
-      final discriminator = discriminatedOneOfClass.discriminator!;
-      // for each ref, we lookup the matching dataclass and add its properties to the discriminator mapping, its imports are added to the discriminatedOneOfClass's imports
-      for (final ref in discriminator.discriminatorValueToRefMapping.values) {
-        final refedClassIndex = dataClasses.indexWhere((dc) => dc.name == ref);
-        final refedClass = dataClasses[refedClassIndex];
-        if (refedClass is! UniversalComponentClass) {
-          continue;
-        }
-        discriminator.refProperties[ref] = refedClass.parameters;
-        discriminatedOneOfClass.imports.addAll(refedClass.imports);
-        discriminatedOneOfClass.imports.add(refedClass.import);
-
-        dataClasses[refedClassIndex] = refedClass.copyWith(
-          imports: {
-            ...refedClass.imports,
-            discriminatedOneOfClass.import,
-          }.sortedBy((it) => it).toSet(),
-          discriminatorValue: (
-            propertyValue: discriminatedOneOfClass
-                .discriminator!.discriminatorValueToRefMapping.entries
-                .firstWhere((it) => it.value == ref)
-                .key,
-            parentClass: discriminatedOneOfClass.name,
-          ),
-        );
-      }
-    }
-
-    return dataClasses;
-  }
-
-  /// Check if any tag of a given endpoint is included or excluded
-  ///
-  /// It will return true if the [ParserConfig.includeTags] is not empty
-  /// and the any tag of this endpoint is included, afterwards
-  /// it will check if the [ParserConfig.excludeTags] is not empty
-  /// and the any tag of this endpoint is excluded.
-  ///
-  /// If the tag is neither included nor excluded or if there is no tag at all,
-  /// it will return true.
-  bool _includeTag(Map<String, dynamic> map) {
-    if (!map.containsKey(_tagsConst)) {
-      return true;
-    }
-
-    final tags = (map[_tagsConst] as List<dynamic>).map((e) => e as String);
-
-    if (config.includeTags.isNotEmpty) {
-      return config.includeTags.any(tags.contains);
-    }
-
-    if (config.excludeTags.isNotEmpty) {
-      return !config.excludeTags.any(tags.contains);
-    }
-
-    return true;
-  }
-
-  /// Get tag for name
-  String _getTag(Map<String, dynamic> map) =>
-      config.mergeClients && config.name != null
-          ? config.name!
-          : map.containsKey(_tagsConst)
-              ? (map[_tagsConst] as List<dynamic>).first.toString().replaceAll(
-                    RegExp(r'[^\w\s]+'),
-                    '',
-                  )
-              : 'client';
-
-  /// Format `$ref` type
-  String _formatRef(Map<String, dynamic> map, {bool useSchema = false}) =>
-      p.basename(
-        useSchema
-            ? (map[_schemaConst] as Map<String, dynamic>)[_refConst].toString()
-            : map[_refConst].toString(),
-      );
 
   /// Find type of map
   ({UniversalType type, String? import}) _findType(
@@ -1672,6 +1568,92 @@ class OpenApiParser {
     }
   }
 
+  /// Format `$ref` type
+  String _formatRef(Map<String, dynamic> map, {bool useSchema = false}) =>
+      p.basename(
+        useSchema
+            ? (map[_schemaConst] as Map<String, dynamic>)[_refConst].toString()
+            : map[_refConst].toString(),
+      );
+
+  /// Get tag for name
+  String? _getTag(Map<String, dynamic> map) =>
+      config.mergeClients && config.name != null
+          ? config.name!
+          : map.containsKey(_tagsConst)
+              ? (map[_tagsConst] as List<dynamic>)
+                  .firstOrNull
+                  ?.toString()
+                  .replaceAll(
+                    RegExp(r'[^\w\s]+'),
+                    '',
+                  )
+              : 'client';
+
+  UniversalEnumClass _getUniqueEnumClass({
+    required final String name,
+    required final Set<UniversalEnumItem> items,
+    required final String type,
+    required final String? defaultValue,
+    required final String? description,
+  }) {
+    // Search _enumClasses for an enum with the same name and values
+    final enumClass = _enumClasses.firstWhereOrNull(
+      (e) =>
+          e.originalName == name &&
+          const DeepCollectionEquality().equals(e.items, items),
+    );
+
+    if (enumClass != null) {
+      return enumClass;
+    }
+
+    String uniqueName;
+    if (_usedNamesCount.containsKey(name)) {
+      _usedNamesCount[name] = _usedNamesCount[name]! + 1;
+      uniqueName = '$name${_usedNamesCount[name]}';
+    } else {
+      _usedNamesCount[name] = 1;
+      uniqueName = name;
+    }
+
+    return UniversalEnumClass(
+      originalName: name,
+      name: uniqueName.toPascal,
+      type: type,
+      items: items,
+      defaultValue: defaultValue,
+      description: description,
+    );
+  }
+
+  /// Check if any tag of a given endpoint is included or excluded
+  ///
+  /// It will return true if the [ParserConfig.includeTags] is not empty
+  /// and the any tag of this endpoint is included, afterwards
+  /// it will check if the [ParserConfig.excludeTags] is not empty
+  /// and the any tag of this endpoint is excluded.
+  ///
+  /// If the tag is neither included nor excluded or if there is no tag at all,
+  /// it will return true.
+  bool _includeTag(Map<String, dynamic> map) {
+    if (!map.containsKey(_tagsConst)) {
+      return true;
+    }
+
+    final tags = (map[_tagsConst] as List<dynamic>).map((e) => e as String);
+
+    if (config.includeTags.isNotEmpty) {
+      return config.includeTags.any(tags.contains);
+    }
+
+    if (config.excludeTags.isNotEmpty) {
+      return !config.excludeTags.any(tags.contains);
+    }
+
+    return true;
+  }
+
   Discriminator? _parseDiscriminatorInfo(Map<String, dynamic> map) {
     if (!map.containsKey(_oneOfConst)) {
       return null;
@@ -1691,6 +1673,30 @@ class OpenApiParser {
       discriminatorValueToRefMapping: cleanedRefMapping,
       // This property is populated by the parser after all the data classes are created
       refProperties: <String, Set<UniversalType>>{},
+    );
+  }
+
+  /// Parse OpenApi parameters into [OpenApiInfo]
+  OpenApiInfo _parseOpenApiInfo() {
+    final schemaVersion = switch (_definitionFileContent) {
+      {_openApiConst: final Object? v} when v.toString().startsWith('3.1') =>
+        OAS.v3_1,
+      {_openApiConst: final Object? v} when v.toString().startsWith('3.0') =>
+        OAS.v3,
+      {_swaggerConst: final Object? v} when v.toString().startsWith('2.0') =>
+        OAS.v2,
+      _ => throw const OpenApiParserException('Unknown version of OpenAPI.'),
+    };
+    final info = switch (_definitionFileContent) {
+      {_infoConst: final Map<String, Object?> v} => v,
+      _ => null,
+    };
+    return OpenApiInfo(
+      schemaVersion: schemaVersion,
+      apiVersion: info?[_versionConst]?.toString(),
+      title: info?[_titleConst]?.toString(),
+      summary: info?[_summaryConst]?.toString(),
+      description: info?[_descriptionConst]?.toString(),
     );
   }
 }
