@@ -260,9 +260,6 @@ class SWPConfig {
       includedTags = List.from(rootConfig!.includeTags);
     }
 
-    print('excludedTags: $excludedTags');
-    print('includedTags: $includedTags');
-
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
