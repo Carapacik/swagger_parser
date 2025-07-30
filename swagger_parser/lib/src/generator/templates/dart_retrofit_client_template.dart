@@ -10,7 +10,6 @@ import '../model/programming_language.dart';
 String dartRetrofitClientTemplate({
   required UniversalRestClient restClient,
   required String name,
-  required bool markFileAsGenerated,
   required String defaultContentType,
   required bool useMultipartFile,
   bool extrasParameterByDefault = false,
@@ -21,7 +20,7 @@ String dartRetrofitClientTemplate({
       .expand((r) => r.parameters.map((p) => p.type))
       .toSet();
   final sb = StringBuffer('''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
+${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
 part '${name.toSnake}.g.dart';

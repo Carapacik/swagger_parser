@@ -9,7 +9,6 @@ import '../model/programming_language.dart';
 /// Provides template for generating dart DTO using freezed
 String dartFreezedDtoTemplate(
   UniversalComponentClass dataClass, {
-  required bool markFileAsGenerated,
   required bool useMultipartFile,
   bool generateValidator = false,
   bool isV3 = false,
@@ -17,7 +16,7 @@ String dartFreezedDtoTemplate(
 }) {
   final className = dataClass.name.toPascal;
   return '''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:freezed_annotation/freezed_annotation.dart';
+${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:freezed_annotation/freezed_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';

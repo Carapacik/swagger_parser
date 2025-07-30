@@ -63,16 +63,12 @@ enum ProgrammingLanguage {
           );
         } else if (dataClass is UniversalComponentClass) {
           if (dataClass.typeDef) {
-            return dartTypeDefTemplate(
-              dataClass,
-              markFileAsGenerated: markFilesAsGenerated,
-              useMultipartFile: useMultipartFile,
-            );
+            return dartTypeDefTemplate(dataClass,
+                useMultipartFile: useMultipartFile);
           }
           return switch (jsonSerializer) {
             JsonSerializer.freezed => dartFreezedDtoTemplate(
                 dataClass,
-                markFileAsGenerated: markFilesAsGenerated,
                 generateValidator: generateValidator,
                 isV3: useFreezed3,
                 useMultipartFile: useMultipartFile,
@@ -92,21 +88,12 @@ enum ProgrammingLanguage {
         }
       case kotlin:
         if (dataClass is UniversalEnumClass) {
-          return kotlinEnumDtoTemplate(
-            dataClass,
-            markFileAsGenerated: markFilesAsGenerated,
-          );
+          return kotlinEnumDtoTemplate(dataClass);
         } else if (dataClass is UniversalComponentClass) {
           if (dataClass.typeDef) {
-            return kotlinTypeDefTemplate(
-              dataClass,
-              markFileAsGenerated: markFilesAsGenerated,
-            );
+            return kotlinTypeDefTemplate(dataClass);
           }
-          return kotlinMoshiDtoTemplate(
-            dataClass,
-            markFileAsGenerated: markFilesAsGenerated,
-          );
+          return kotlinMoshiDtoTemplate(dataClass);
         }
     }
     throw ArgumentError('Unknown type exception');
@@ -127,18 +114,14 @@ enum ProgrammingLanguage {
         dart => dartRetrofitClientTemplate(
             restClient: restClient,
             name: name,
-            markFileAsGenerated: markFilesAsGenerated,
             defaultContentType: defaultContentType,
             extrasParameterByDefault: extrasParameterByDefault,
             dioOptionsParameterByDefault: dioOptionsParameterByDefault,
             originalHttpResponse: originalHttpResponse,
             useMultipartFile: useMultipartFile,
           ),
-        kotlin => kotlinRetrofitClientTemplate(
-            restClient: restClient,
-            name: name,
-            markFileAsGenerated: markFilesAsGenerated,
-          ),
+        kotlin =>
+          kotlinRetrofitClientTemplate(restClient: restClient, name: name),
       };
 
   /// Determines template for generating root client for clients
@@ -164,14 +147,12 @@ enum ProgrammingLanguage {
 
   /// Export file by language
   String exportFileContent({
-    required bool markFileAsGenerated,
     required List<GeneratedFile> restClients,
     required List<GeneratedFile> dataClasses,
     required GeneratedFile? rootClient,
   }) =>
       switch (this) {
         dart => dartExportFileTemplate(
-            markFileAsGenerated: markFileAsGenerated,
             restClients: restClients,
             dataClasses: dataClasses,
             rootClient: rootClient,

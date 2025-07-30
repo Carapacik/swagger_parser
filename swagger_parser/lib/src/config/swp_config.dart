@@ -41,6 +41,7 @@ class SWPConfig {
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
     this.fallbackClient = 'default',
+    this.mergeOutputs = false,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -75,6 +76,7 @@ class SWPConfig {
     required this.excludeTags,
     required this.includeTags,
     required this.fallbackClient,
+    required this.mergeOutputs,
     this.fallbackUnion,
   });
 
@@ -84,11 +86,9 @@ class SWPConfig {
     bool isRootConfig = false,
     SWPConfig? rootConfig,
   }) {
-    final schemaPath =
-        yamlMap['schema_path']?.toString() ?? rootConfig?.schemaPath;
+    final schemaPath = yamlMap['schema_path']?.toString() ?? rootConfig?.schemaPath;
 
-    final schemaUrl =
-        yamlMap['schema_url']?.toString() ?? rootConfig?.schemaUrl;
+    final schemaUrl = yamlMap['schema_url']?.toString() ?? rootConfig?.schemaUrl;
     if (schemaUrl != null) {
       final uri = Uri.tryParse(schemaUrl);
       if (uri == null) {
@@ -104,8 +104,7 @@ class SWPConfig {
       );
     }
 
-    var outputDirectory =
-        yamlMap['output_directory']?.toString() ?? rootConfig?.outputDirectory;
+    var outputDirectory = yamlMap['output_directory']?.toString() ?? rootConfig?.outputDirectory;
     if (isRootConfig && outputDirectory == null) {
       outputDirectory = '';
     }
@@ -124,24 +123,17 @@ class SWPConfig {
     }
 
     final rawName = yamlMap['name']?.toString();
-    final name = rawName == null || rawName.isEmpty
-        ? (schemaPath ?? schemaUrl ?? '').split('/').last.split('.').first
-        : rawName;
+    final name =
+        rawName == null || rawName.isEmpty ? (schemaPath ?? schemaUrl ?? '').split('/').last.split('.').first : rawName;
 
-    final defaultContentType = yamlMap['default_content_type'] as String? ??
-        rootConfig?.defaultContentType;
+    final defaultContentType = yamlMap['default_content_type'] as String? ?? rootConfig?.defaultContentType;
     final extrasParameterByDefault =
-        yamlMap['extras_parameter_by_default'] as bool? ??
-            rootConfig?.extrasParameterByDefault;
+        yamlMap['extras_parameter_by_default'] as bool? ?? rootConfig?.extrasParameterByDefault;
     final dioOptionsParameterByDefault =
-        yamlMap['dio_options_parameter_by_default'] as bool? ??
-            rootConfig?.dioOptionsParameterByDefault;
-    final pathMethodName =
-        yamlMap['path_method_name'] as bool? ?? rootConfig?.pathMethodName;
-    final mergeClients =
-        yamlMap['merge_clients'] as bool? ?? rootConfig?.mergeClients;
-    final enumsParentPrefix = yamlMap['enums_parent_prefix'] as bool? ??
-        rootConfig?.enumsParentPrefix;
+        yamlMap['dio_options_parameter_by_default'] as bool? ?? rootConfig?.dioOptionsParameterByDefault;
+    final pathMethodName = yamlMap['path_method_name'] as bool? ?? rootConfig?.pathMethodName;
+    final mergeClients = yamlMap['merge_clients'] as bool? ?? rootConfig?.mergeClients;
+    final enumsParentPrefix = yamlMap['enums_parent_prefix'] as bool? ?? rootConfig?.enumsParentPrefix;
 
     final rawSkippedParameters = yamlMap['skipped_parameters'] as YamlList?;
     List<String>? skippedParameters;
@@ -160,9 +152,7 @@ class SWPConfig {
     }
 
     final rawLanguage = yamlMap['language']?.toString();
-    final language = rawLanguage == null
-        ? rootConfig?.language
-        : ProgrammingLanguage.fromString(rawLanguage);
+    final language = rawLanguage == null ? rootConfig?.language : ProgrammingLanguage.fromString(rawLanguage);
 
     JsonSerializer? jsonSerializer;
     final rawJsonSerializer = yamlMap['json_serializer']?.toString();
@@ -172,33 +162,22 @@ class SWPConfig {
       jsonSerializer = rootConfig!.jsonSerializer;
     }
 
-    final rootClient =
-        yamlMap['root_client'] as bool? ?? rootConfig?.rootClient;
-    final rootClientName =
-        yamlMap['root_client_name'] as String? ?? rootConfig?.rootClientName;
-    final clientPostfix =
-        yamlMap['client_postfix'] as String? ?? rootConfig?.clientPostfix;
-    final exportFile =
-        yamlMap['export_file'] as bool? ?? rootConfig?.exportFile;
-    final putClientsInFolder = yamlMap['put_clients_in_folder'] as bool? ??
-        rootConfig?.putClientsInFolder;
-    final enumsToJson =
-        yamlMap['enums_to_json'] as bool? ?? rootConfig?.enumsToJson;
-    final unknownEnumValue =
-        yamlMap['unknown_enum_value'] as bool? ?? rootConfig?.unknownEnumValue;
-    final markFilesAsGenerated = yamlMap['mark_files_as_generated'] as bool? ??
-        rootConfig?.markFilesAsGenerated;
-    final originalHttpResponse = yamlMap['original_http_response'] as bool? ??
-        rootConfig?.originalHttpResponse;
+    final rootClient = yamlMap['root_client'] as bool? ?? rootConfig?.rootClient;
+    final rootClientName = yamlMap['root_client_name'] as String? ?? rootConfig?.rootClientName;
+    final clientPostfix = yamlMap['client_postfix'] as String? ?? rootConfig?.clientPostfix;
+    final exportFile = yamlMap['export_file'] as bool? ?? rootConfig?.exportFile;
+    final putClientsInFolder = yamlMap['put_clients_in_folder'] as bool? ?? rootConfig?.putClientsInFolder;
+    final enumsToJson = yamlMap['enums_to_json'] as bool? ?? rootConfig?.enumsToJson;
+    final unknownEnumValue = yamlMap['unknown_enum_value'] as bool? ?? rootConfig?.unknownEnumValue;
+    final markFilesAsGenerated = yamlMap['mark_files_as_generated'] as bool? ?? rootConfig?.markFilesAsGenerated;
+    final originalHttpResponse = yamlMap['original_http_response'] as bool? ?? rootConfig?.originalHttpResponse;
 
     final rawReplacementRules = yamlMap['replacement_rules'] as YamlList?;
     List<ReplacementRule>? replacementRules;
     if (rawReplacementRules != null) {
       replacementRules = [];
       for (final r in rawReplacementRules) {
-        if (r is! YamlMap ||
-            r['pattern'] is! String ||
-            r['replacement'] is! String) {
+        if (r is! YamlMap || r['pattern'] is! String || r['replacement'] is! String) {
           throw const ConfigException(
             "Config parameter 'replacement_rules' values must be maps of strings "
             "and contain 'pattern' and 'replacement'.",
@@ -215,20 +194,15 @@ class SWPConfig {
       replacementRules = List.from(rootConfig!.replacementRules);
     }
 
-    final generateValidator =
-        yamlMap['generate_validator'] as bool? ?? rootConfig?.generateValidator;
+    final generateValidator = yamlMap['generate_validator'] as bool? ?? rootConfig?.generateValidator;
 
-    final useXNullable =
-        yamlMap['use_x_nullable'] as bool? ?? rootConfig?.useXNullable;
+    final useXNullable = yamlMap['use_x_nullable'] as bool? ?? rootConfig?.useXNullable;
 
-    final useFreezed3 =
-        yamlMap['use_freezed3'] as bool? ?? rootConfig?.useFreezed3;
+    final useFreezed3 = yamlMap['use_freezed3'] as bool? ?? rootConfig?.useFreezed3;
 
-    final useMultipartFile =
-        yamlMap['use_multipart_file'] as bool? ?? rootConfig?.useMultipartFile;
+    final useMultipartFile = yamlMap['use_multipart_file'] as bool? ?? rootConfig?.useMultipartFile;
 
-    final fallbackUnion =
-        yamlMap['fallback_union'] as String? ?? rootConfig?.fallbackUnion;
+    final fallbackUnion = yamlMap['fallback_union'] as String? ?? rootConfig?.fallbackUnion;
 
     final excludedTagsYaml = yamlMap['exclude_tags'] as YamlList?;
     List<String>? excludedTags;
@@ -262,8 +236,9 @@ class SWPConfig {
       includedTags = List.from(rootConfig!.includeTags);
     }
 
-    final fallbackClient =
-        yamlMap['fallback_client'] as String? ?? rootConfig?.fallbackClient;
+    final fallbackClient = yamlMap['fallback_client'] as String? ?? rootConfig?.fallbackClient;
+
+    final mergeOutputs = yamlMap['merge_outputs'] as bool? ?? rootConfig?.mergeOutputs;
 
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
@@ -275,10 +250,8 @@ class SWPConfig {
       name: name,
       pathMethodName: pathMethodName ?? dc.pathMethodName,
       defaultContentType: defaultContentType ?? dc.defaultContentType,
-      extrasParameterByDefault:
-          extrasParameterByDefault ?? dc.extrasParameterByDefault,
-      dioOptionsParameterByDefault:
-          dioOptionsParameterByDefault ?? dc.dioOptionsParameterByDefault,
+      extrasParameterByDefault: extrasParameterByDefault ?? dc.extrasParameterByDefault,
+      dioOptionsParameterByDefault: dioOptionsParameterByDefault ?? dc.dioOptionsParameterByDefault,
       mergeClients: mergeClients ?? dc.mergeClients,
       enumsParentPrefix: enumsParentPrefix ?? dc.enumsParentPrefix,
       skippedParameters: skippedParameters ?? dc.skippedParameters,
@@ -302,6 +275,7 @@ class SWPConfig {
       excludeTags: excludedTags ?? dc.excludeTags,
       includeTags: includedTags ?? dc.includeTags,
       fallbackClient: fallbackClient ?? dc.fallbackClient,
+      mergeOutputs: mergeOutputs ?? dc.mergeOutputs,
     );
   }
 
@@ -443,6 +417,12 @@ class SWPConfig {
   /// defaults to 'default' which results in a client named `DefaultClient`.
   final String fallbackClient;
 
+  /// Optional. Set to true to merge all generated code into a single file.
+  ///
+  /// This is useful when using swagger_parser together with build_runner, which needs to map
+  /// input files to output files 1-to-1.
+  final bool mergeOutputs;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -467,6 +447,7 @@ class SWPConfig {
       useFreezed3: useFreezed3,
       useMultipartFile: useMultipartFile,
       fallbackUnion: fallbackUnion,
+      mergeOutputs: mergeOutputs,
     );
   }
 

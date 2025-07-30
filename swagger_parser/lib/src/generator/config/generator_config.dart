@@ -27,9 +27,10 @@ class GeneratorConfig {
     this.useFreezed3 = false,
     this.useMultipartFile = false,
     this.fallbackUnion,
+    this.mergeOutputs = false,
   });
 
-  /// Optional. Set API name for folder and export file
+  /// Optional. Set API name for folder and export file or merged output file
   /// If not specified, the file name is used.
   final String name;
 
@@ -122,6 +123,12 @@ class GeneratorConfig {
   final bool useMultipartFile;
 
   /// DART ONLY
-  /// Optional. Set fallback consctructor name to use fallbackUnion parameter when using Freezed annotation.
+  /// Optional. Set fallback constructor name to use fallbackUnion parameter when using Freezed annotation.
   final String? fallbackUnion;
+
+  /// Optional. Set to true to merge all generated code into a single file.
+  ///
+  /// This is useful when using swagger_parser together with build_runner, which needs to map
+  /// input files to output files 1-to-1.
+  final bool mergeOutputs;
 }
