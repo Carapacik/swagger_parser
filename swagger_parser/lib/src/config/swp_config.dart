@@ -43,6 +43,41 @@ class SWPConfig {
     this.fallbackClient = 'default',
   });
 
+  /// Internal constructor of [SWPConfig]
+  const SWPConfig._({
+    required this.outputDirectory,
+    required this.schemaPath,
+    required this.schemaUrl,
+    required this.name,
+    required this.language,
+    required this.jsonSerializer,
+    required this.rootClient,
+    required this.rootClientName,
+    required this.clientPostfix,
+    required this.exportFile,
+    required this.putClientsInFolder,
+    required this.enumsToJson,
+    required this.unknownEnumValue,
+    required this.markFilesAsGenerated,
+    required this.originalHttpResponse,
+    required this.replacementRules,
+    required this.defaultContentType,
+    required this.extrasParameterByDefault,
+    required this.dioOptionsParameterByDefault,
+    required this.pathMethodName,
+    required this.mergeClients,
+    required this.enumsParentPrefix,
+    required this.skippedParameters,
+    required this.generateValidator,
+    required this.useXNullable,
+    required this.useFreezed3,
+    required this.useMultipartFile,
+    required this.excludeTags,
+    required this.includeTags,
+    required this.fallbackClient,
+    this.fallbackUnion,
+  });
+
   /// Creates a [SWPConfig] from [YamlMap].
   factory SWPConfig.fromYaml(
     YamlMap yamlMap, {
@@ -269,41 +304,6 @@ class SWPConfig {
       fallbackClient: fallbackClient ?? dc.fallbackClient,
     );
   }
-
-  /// Internal constructor of [SWPConfig]
-  const SWPConfig._({
-    required this.outputDirectory,
-    required this.schemaPath,
-    required this.schemaUrl,
-    required this.name,
-    required this.language,
-    required this.jsonSerializer,
-    required this.rootClient,
-    required this.rootClientName,
-    required this.clientPostfix,
-    required this.exportFile,
-    required this.putClientsInFolder,
-    required this.enumsToJson,
-    required this.unknownEnumValue,
-    required this.markFilesAsGenerated,
-    required this.originalHttpResponse,
-    required this.replacementRules,
-    required this.defaultContentType,
-    required this.extrasParameterByDefault,
-    required this.dioOptionsParameterByDefault,
-    required this.pathMethodName,
-    required this.mergeClients,
-    required this.enumsParentPrefix,
-    required this.skippedParameters,
-    required this.generateValidator,
-    required this.useXNullable,
-    required this.useFreezed3,
-    required this.useMultipartFile,
-    required this.excludeTags,
-    required this.includeTags,
-    required this.fallbackClient,
-    this.fallbackUnion,
-  });
 
   /// Sets the path directory of the OpenApi schema.
   final String? schemaPath;
