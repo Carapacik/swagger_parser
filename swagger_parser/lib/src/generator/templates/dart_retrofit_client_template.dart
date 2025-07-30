@@ -136,7 +136,11 @@ String _toParameter(UniversalRequestType parameter, bool useMultipartFile) {
     'value_',
   );
 
-  return '    @${parameter.parameterType.type}'
+  final deprecatedAnnotation = parameter.deprecated
+      ? "    @Deprecated('This is marked as deprecated')\n"
+      : '';
+
+  return '$deprecatedAnnotation    @${parameter.parameterType.type}'
       "(${parameter.name != null && !parameter.parameterType.isBody ? "${parameter.parameterType.isPart ? 'name: ' : ''}${_startWith$(parameter.name!) ? 'r' : ''}'${parameter.name}'" : ''}) "
       '${_required(parameter.type)}'
       '$parameterType '
