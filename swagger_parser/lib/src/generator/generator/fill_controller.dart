@@ -1,5 +1,6 @@
 import '../../parser/model/normalized_identifier.dart';
 import '../../parser/swagger_parser_core.dart';
+import '../../utils/base_utils.dart';
 import '../config/generator_config.dart';
 import '../model/generated_file.dart';
 import '../model/programming_language.dart';
@@ -97,8 +98,77 @@ final class FillController {
         restClients: restClients,
         dataClasses: dataClasses,
         rootClient: rootClient,
-        markFileAsGenerated: config.markFilesAsGenerated,
       ),
     );
+  }
+
+  GeneratedFile fillMergedOutputs(List<GeneratedFile> outputs) {
+    final dartImports = <String>{};
+    final packageImports = <String>{};
+    final lines = <String>[];
+    for (final output in outputs) {
+      for (final line in output.content.split('\n')) {
+        if (line == '') {
+          if (lines.isNotEmpty && lines.last != '') {
+            lines.add('');
+          }
+        } else if (line.startsWith('import')) {
+          if (config.language == ProgrammingLanguage.kotlin) {
+            // Keep all imports in Kotlin
+            packageImports.add(line);
+          } else {
+            // Separate Dart and package imports in Dart and ignore local imports
+            if (line.startsWith("import 'package:")) {
+              packageImports.add(line);
+            } else if (line.startsWith("import 'dart:")) {
+              dartImports.add(line);
+            }
+          }
+        } else if (config.language == ProgrammingLanguage.dart &&
+            line.startsWith('part ')) {
+          // ignore part lines in Dart
+        } else {
+          lines.add(line);
+        }
+      }
+    }
+    final buffer =
+        StringBuffer(generatedFileComment(language: config.language));
+
+    if (dartImports.isNotEmpty) {
+      for (final import in dartImports.toList()..sort()) {
+        buffer.writeln(import);
+      }
+      buffer.writeln();
+    }
+
+    if (packageImports.isNotEmpty) {
+      for (final import in packageImports.toList()..sort()) {
+        buffer.writeln(import);
+      }
+      buffer.writeln();
+    }
+
+    buffer
+      ..writeln(
+          "part '${config.name}.freezed.${config.language.fileExtension}';")
+      ..writeln("part '${config.name}.g.${config.language.fileExtension}';")
+      ..writeln();
+
+    for (final line in lines) {
+      buffer.writeln(line);
+    }
+    return GeneratedFile(
+      name: '${config.name}.${config.language.fileExtension}',
+      content: buffer.toString(),
+    );
+  }
+
+  List<GeneratedFile> addGeneratedFileComments(List<GeneratedFile> files) {
+    final comment = generatedFileComment(language: config.language);
+    return files
+        .map((file) =>
+            GeneratedFile(name: file.name, content: '$comment${file.content}'))
+        .toList();
   }
 }

@@ -777,5 +777,20 @@ void main() {
         schemaFileName: 'openapi.yaml',
       );
     });
+
+    test('merged_outputs', () async {
+      await e2eTest(
+        'basic/merged_outputs',
+        (outputDirectory, schemaPath) => SWPConfig(
+          name: 'merged_outputs',
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          useXNullable: true,
+          mergeOutputs: true,
+        ),
+        schemaFileName: 'merged_outputs.json',
+      );
+    });
   });
 }
