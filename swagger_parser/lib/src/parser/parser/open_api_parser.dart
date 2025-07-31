@@ -984,11 +984,14 @@ class OpenApiParser {
   }
 
   /// Get tag for name
-  String _getTag(Map<String, dynamic> map) =>
+  String? _getTag(Map<String, dynamic> map) =>
       config.mergeClients && config.name != null
           ? config.name!
           : map.containsKey(_tagsConst)
-              ? (map[_tagsConst] as List<dynamic>).first.toString().replaceAll(
+              ? (map[_tagsConst] as List<dynamic>)
+                  .firstOrNull
+                  ?.toString()
+                  .replaceAll(
                     RegExp(r'[^\w\s]+'),
                     '',
                   )
