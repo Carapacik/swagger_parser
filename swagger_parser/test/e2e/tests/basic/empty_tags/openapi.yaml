@@ -1,0 +1,20 @@
+openapi: 3.1.0
+info:
+  title: ""
+  version: 0.0.0 (v1)
+paths:
+  /api/v1/tagged-as-client/:
+    get:
+      operationId: api_v1_category_list
+      tags:
+        - client
+      responses:
+        "204":
+          description: ""
+  /api/v1/no-tags/:
+    get:
+      operationId: api_v1_category_list
+      tags: []
+      responses:
+        "204":
+          description: ""

@@ -1,10 +1,12 @@
 # Swagger Parser
+
 [![pub version](https://img.shields.io/pub/v/swagger_parser?logo=dart)](https://pub.dev/packages/swagger_parser)
 [![pub likes](https://img.shields.io/pub/likes/swagger_parser?logo=dart)](https://pub.dev/packages/swagger_parser)
 [![dart style](https://img.shields.io/badge/style-carapacik__lints%20-brightgreen?logo=dart)](https://pub.dev/packages/carapacik_lints)
 [![Star on Github](https://img.shields.io/github/stars/Carapacik/swagger_parser?logo=github)](https://github.com/Carapacik/swagger_parser)
 [![Last commit on Github](https://img.shields.io/github/last-commit/Carapacik/swagger_parser?logo=github)](https://github.com/Carapacik/swagger_parser)
 [![Tests](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Carapacik/swagger_parser/actions/workflows/tests.yml)
+
 ## Dart package that generates REST clients and data classes from OpenApi definition files or links
 
 ## Features
@@ -114,14 +116,14 @@ swagger_parser:
   # Set 'false' to use operationId
   path_method_name: false
 
-  # Optional (dart only). Set 'true' to include toJson() in enums. 
+  # Optional (dart only). Set 'true' to include toJson() in enums.
   # If set to false, serialization will use .name instead.
   enums_to_json: false
 
   # Optional. Set 'true' to set enum prefix from parent component.
   enums_parent_prefix: true
 
-  # Optional (dart only). Set 'true' to maintain backwards compatibility 
+  # Optional (dart only). Set 'true' to maintain backwards compatibility
   # when adding new values on the backend.
   unknown_enum_value: true
 
@@ -140,7 +142,7 @@ swagger_parser:
 
   # Optional. Skip parameters with names.
   skipped_parameters:
-    - 'X-Some-Token'
+    - "X-Some-Token"
 
   # Optional (dart & freezed only). Set 'true' to use Freezed 3.x code generation syntax.
   # Set 'false' to maintain compatibility with Freezed 2.x.
@@ -156,6 +158,31 @@ swagger_parser:
   # DART ONLY
   # Optional. Set `true` to use MultipartFile instead of File as argument type for file parameters.
   use_multipart_file: false
+
+  # DART ONLY
+  # Optional. Set tags to be excluded on endpoint generation.
+  #
+  # Endpoints with these tags will not be included in the generated clients.
+  exclude_tags:
+    - "sellPet"
+
+  # DART ONLY
+  # Optional. Set tags to be included on endpoint generation.
+  #
+  # If set, only endpoints with these tags will be included in the generated clients.
+  # **NOTE: This will override the [exclude_tags] if set.**
+  include_tags:
+    - "buyPet"
+
+  # DART ONLY
+  # Optional. Set fallback client name for endpoints without tags.
+  #
+  # In general the first tag of an endpoint defines in which client the
+  # endpoint will be included. If no tag is specified, the fallback client
+  # name will be used.
+
+  # defaults to 'default' which results in a client named `DefaultClient`.
+  fallback_client: "default"
 ```
 
 For multiple schemes:
@@ -166,7 +193,7 @@ swagger_parser:
   output_directory: lib/api
   merge_clients: true
 
-  # Optional. You can pass a list of schemes. 
+  # Optional. You can pass a list of schemes.
   # Each schema inherits the parameters described in swagger_parser,
   # any parameter for any schema can be set manually.
   # Cannot be used at the same time as schema_path.
@@ -196,13 +223,15 @@ swagger_parser:
       language: kotlin
 ```
 
-
 ### Run the generator
+
 To generate code, run the `swagger_parser` program inside directory where your `pubspec.yaml` file is located:
+
 ```shell
 dart run swagger_parser
 ```
-If you name your configuration file something other than `swagger_parser.yaml` or `pubspec.yaml` 
+
+If you name your configuration file something other than `swagger_parser.yaml` or `pubspec.yaml`
 you will need to specify the name of the YAML file as an argument.
 
 ```shell
@@ -210,7 +239,9 @@ dart run swagger_parser -f <path to your config file>
 ```
 
 ### (Only for freezed) Generate files using [build_runner](https://pub.dev/packages/build_runner) for retrofit, json_serializable and freezed
+
 #### For `freezed` with `retrofit` use build.yaml file with this content:
+
 ```yaml
 global_options:
   freezed:
@@ -220,7 +251,9 @@ global_options:
     runs_before:
       - retrofit_generator
 ```
+
 To run the code generation with build_runner, execute the following command:
+
 ```shell
 dart run build_runner build -d
 ```

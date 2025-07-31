@@ -1,4 +1,8 @@
-# 1.26.4
+## 1.27.0
+ - Allow to filter the generation of endpoints in a client by tags
+ - Allow to define a fallback client for endpoints that do not have a tag - fixes [[#271](https://github.com/Carapacik/swagger_parser/issues/271)] 
+
+## 1.26.4
  - Allow the use of single MultipartFile arguments in multipart requests (requires retrofit_generator 10.0.1 or later)
 
 ## 1.26.3
