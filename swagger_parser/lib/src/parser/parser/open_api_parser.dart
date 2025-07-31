@@ -569,6 +569,12 @@ class OpenApiParser {
       }
 
       pathValue.forEach((key, requestPath) {
+        // check if this requestPath has any tags that
+        // define wether the requestPath should be included
+        if (!_includeTag(requestPath as Map<String, dynamic>)) {
+          return;
+        }
+
         // `servers` contains List<dynamic>
         if (key == _serversConst ||
             key == _parametersConst ||
@@ -576,8 +582,8 @@ class OpenApiParser {
           return;
         }
 
-        final requestPathResponses = (requestPath
-            as Map<String, dynamic>)[_responsesConst] as Map<String, dynamic>;
+        final requestPathResponses =
+            requestPath[_responsesConst] as Map<String, dynamic>;
         final additionalName = '$key${path}Response'.toPascal;
         final returnType = _apiInfo.schemaVersion == OAS.v2
             ? returnTypeV2(requestPathResponses, additionalName)
@@ -644,7 +650,7 @@ class OpenApiParser {
           isDeprecated:
               requestPath[_deprecatedConst].toString().toBool() ?? false,
         );
-        final currentTag = _getTag(requestPath);
+        final currentTag = _getTag(requestPath) ?? config.fallbackClient;
         final sameTagIndex = restClients.indexWhere(
           (e) => e.name.toLowerCase() == currentTag.toLowerCase(),
         );
@@ -978,11 +984,14 @@ class OpenApiParser {
   }
 
   /// Get tag for name
-  String _getTag(Map<String, dynamic> map) =>
+  String? _getTag(Map<String, dynamic> map) =>
       config.mergeClients && config.name != null
           ? config.name!
           : map.containsKey(_tagsConst)
-              ? (map[_tagsConst] as List<dynamic>).first.toString().replaceAll(
+              ? (map[_tagsConst] as List<dynamic>)
+                  .firstOrNull
+                  ?.toString()
+                  .replaceAll(
                     RegExp(r'[^\w\s]+'),
                     '',
                   )
@@ -1637,6 +1646,33 @@ class OpenApiParser {
         import: import,
       );
     }
+  }
+
+  /// Check if any tag of a given endpoint is included or excluded
+  ///
+  /// It will return true if the [ParserConfig.includeTags] is not empty
+  /// and the any tag of this endpoint is included, afterwards
+  /// it will check if the [ParserConfig.excludeTags] is not empty
+  /// and the any tag of this endpoint is excluded.
+  ///
+  /// If the tag is neither included nor excluded or if there is no tag at all,
+  /// it will return true.
+  bool _includeTag(Map<String, dynamic> map) {
+    if (!map.containsKey(_tagsConst)) {
+      return true;
+    }
+
+    final tags = (map[_tagsConst] as List<dynamic>).map((e) => e as String);
+
+    if (config.includeTags.isNotEmpty) {
+      return config.includeTags.any(tags.contains);
+    }
+
+    if (config.excludeTags.isNotEmpty) {
+      return !config.excludeTags.any(tags.contains);
+    }
+
+    return true;
   }
 
   Discriminator? _parseDiscriminatorInfo(Map<String, dynamic> map) {
