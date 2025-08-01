@@ -38,11 +38,11 @@ dependencies:
   # retrofit: ^4.7.0
 
 dev_dependencies:
-  # build_runner: ^2.5.4
+  # build_runner: ^2.6.0
   # carapacik_lints: ^1.12.0
   # dart_mappable_builder: ^4.5.0 # for dart_mappable
-  # freezed: ^3.1.0 # for freezed
-  # json_serializable: ^6.9.5
+  # freezed: ^3.2.0 # for freezed
+  # json_serializable: ^6.10.0
   # retrofit_generator: ^10.0.1
   swagger_parser:
 ```
