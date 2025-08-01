@@ -255,8 +255,13 @@ String _parametersToString(
 
 String _jsonKey(UniversalType t) {
   final sb = StringBuffer();
-  if ((t.jsonKey == null || t.name == t.jsonKey) && t.defaultValue == null) {
+  if ((t.jsonKey == null || t.name == t.jsonKey) &&
+      t.defaultValue == null &&
+      !t.deprecated) {
     return '';
+  }
+  if (t.deprecated) {
+    sb.write("    @Deprecated('This is marked as deprecated')\n");
   }
   if (t.jsonKey != null && t.name != t.jsonKey) {
     sb.write("    @JsonKey(name: '${protectJsonKey(t.jsonKey)}')\n");
