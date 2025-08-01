@@ -26,6 +26,7 @@ final class UniversalType {
     this.maxLength,
     this.pattern,
     this.uniqueItems,
+    this.deprecated = false,
   });
 
   /// Object type
@@ -73,6 +74,9 @@ final class UniversalType {
   final String? pattern;
   final bool? uniqueItems;
 
+  /// Whether or not this field is deprecated
+  final bool deprecated;
+
   /// Copy of [UniversalType] with new values
   UniversalType copyWith({
     String? type,
@@ -93,6 +97,7 @@ final class UniversalType {
     int? maxLength,
     String? pattern,
     bool? uniqueItems,
+    bool? deprecated,
   }) {
     return UniversalType(
       type: type ?? this.type,
@@ -113,6 +118,7 @@ final class UniversalType {
       maxLength: maxLength ?? this.maxLength,
       pattern: pattern ?? this.pattern,
       uniqueItems: uniqueItems ?? this.uniqueItems,
+      deprecated: deprecated ?? this.deprecated,
     );
   }
 
@@ -129,29 +135,29 @@ final class UniversalType {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
       other is UniversalType &&
-          runtimeType == other.runtimeType &&
-          type == other.type &&
-          name == other.name &&
-          format == other.format &&
-          jsonKey == other.jsonKey &&
-          defaultValue == other.defaultValue &&
-          isRequired == other.isRequired &&
-          enumType == other.enumType &&
-          const DeepCollectionEquality().equals(
-            wrappingCollections,
-            other.wrappingCollections,
-          ) &&
-          nullable == other.nullable &&
-          min == other.min &&
-          max == other.max &&
-          minItems == other.minItems &&
-          maxItems == other.maxItems &&
-          minLength == other.minLength &&
-          maxLength == other.maxLength &&
-          pattern == other.pattern &&
-          uniqueItems == other.uniqueItems;
+      runtimeType == other.runtimeType &&
+      type == other.type &&
+      name == other.name &&
+      format == other.format &&
+      jsonKey == other.jsonKey &&
+      defaultValue == other.defaultValue &&
+      isRequired == other.isRequired &&
+      enumType == other.enumType &&
+      const DeepCollectionEquality().equals(
+        wrappingCollections,
+        other.wrappingCollections,
+      ) &&
+      nullable == other.nullable &&
+      min == other.min &&
+      max == other.max &&
+      minItems == other.minItems &&
+      maxItems == other.maxItems &&
+      minLength == other.minLength &&
+      maxLength == other.maxLength &&
+      pattern == other.pattern &&
+      uniqueItems == other.uniqueItems &&
+      deprecated == other.deprecated;
 
   @override
   int get hashCode =>
@@ -172,7 +178,8 @@ final class UniversalType {
       minLength.hashCode ^
       maxLength.hashCode ^
       pattern.hashCode ^
-      uniqueItems.hashCode;
+      uniqueItems.hashCode ^
+      deprecated.hashCode;
 
   @override
   String toString() => 'UniversalType(type: $type, '
@@ -191,5 +198,6 @@ final class UniversalType {
       'minLength: $minLength, '
       'maxLength: $maxLength, '
       'pattern: $pattern, '
-      'uniqueItems: $uniqueItems)';
+      'uniqueItems: $uniqueItems, '
+      'deprecated: $deprecated)';
 }
