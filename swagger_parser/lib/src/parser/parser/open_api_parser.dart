@@ -659,7 +659,8 @@ class OpenApiParser {
         );
         // we are converting the tag to the snake case
         // later tag is used to determine the file name
-        final currentTag = (_getTag(requestPath) ?? config.fallbackClient).toSnake;
+        final currentTag =
+            (_getTag(requestPath) ?? config.fallbackClient).toSnake;
         final sameTagIndex = restClients.indexWhere(
           (e) => e.name == currentTag,
         );
