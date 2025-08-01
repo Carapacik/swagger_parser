@@ -10,7 +10,7 @@ Future<void> main(List<String> arguments) async {
     const configProcessor = ConfigProcessor();
 
     // Read CLI input
-    final argResults = configProcessor.readCliInput(arguments);
+    final argResults = parseConfigCliArguments(arguments);
 
     // Read YAML config
     final yamlMap = configProcessor.readConfigFromFile(arguments, argResults);

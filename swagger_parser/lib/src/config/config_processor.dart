@@ -1,12 +1,10 @@
 import 'dart:convert' show JsonEncoder, jsonDecode;
-import 'dart:io' show exit;
 
 import 'package:args/args.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 import '../utils/file/io_file.dart';
-import '../utils/output/io_output.dart';
 import 'config_exception.dart';
 import 'swp_config.dart';
 
@@ -14,64 +12,6 @@ import 'swp_config.dart';
 class ConfigProcessor {
   /// Creates a [ConfigProcessor].
   const ConfigProcessor();
-
-  static const List<(String flag, String help, String? abbr)> cliArgs = [
-    (
-      'file',
-      'Path to the configuration file (swagger_parser.yaml)',
-      'f',
-    ),
-    (
-      'schema_path',
-      'Path to the OpenAPI/Swagger schema file',
-      null,
-    ),
-    (
-      'schema_url',
-      'URL to the OpenAPI/Swagger schema',
-      null,
-    ),
-    (
-      'output_directory',
-      'Directory where generated files will be saved',
-      null,
-    ),
-    (
-      'json_serializer',
-      'JSON serializer to use (e.g., json_annotation, dart_mappable)',
-      null,
-    ),
-  ];
-
-  /// Parses the provided [arguments] and returns the [ArgResults]
-  /// depending on the defined [cliArgs].
-  ///
-  /// will show help message if `help` flag is provided.
-  ArgResults readCliInput(List<String> arguments) {
-    final parser = ArgParser()
-      // Add help flag
-      ..addFlag(
-        'help',
-        abbr: 'h',
-        help: 'Show this help message',
-        negatable: false,
-      );
-
-    // Add options with descriptions
-    for (final arg in cliArgs) {
-      parser.addOption(arg.$1, help: arg.$2, abbr: arg.$3);
-    }
-
-    final argResults = parser.parse(arguments);
-
-    // Check if help was requested
-    if (argResults['help'] == true) {
-      printHelpMessage(parser);
-      exit(0);
-    }
-
-    return argResults;
-  }
 
   /// Process arguments and read config from file
   YamlMap readConfigFromFile(List<String> arguments, ArgResults? argResults) {
