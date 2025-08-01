@@ -18,6 +18,7 @@ void main() {
         schemaFileName: 'openapi.yaml',
       );
     });
+
     test('enum_types_list', () async {
       await e2eTest(
         'enum_types_list',

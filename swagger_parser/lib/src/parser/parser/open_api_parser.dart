@@ -657,9 +657,11 @@ class OpenApiParser {
           isDeprecated:
               requestPath[_deprecatedConst].toString().toBool() ?? false,
         );
-        final currentTag = _getTag(requestPath) ?? config.fallbackClient;
+        // we are converting the tag to the snake case
+        // later tag is used to determine the file name
+        final currentTag = (_getTag(requestPath) ?? config.fallbackClient).toSnake;
         final sameTagIndex = restClients.indexWhere(
-          (e) => e.name.toLowerCase() == currentTag.toLowerCase(),
+          (e) => e.name == currentTag,
         );
         if (sameTagIndex == -1) {
           restClients.add(
