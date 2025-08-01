@@ -492,6 +492,20 @@ void main() {
       );
     });
 
+    test('deprecated', () async {
+      await e2eTest(
+        'basic/deprecated',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          useFreezed3: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('wrapping_collections.2.0', () async {
       await e2eTest(
         'basic/wrapping_collections.2.0',
