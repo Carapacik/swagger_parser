@@ -31,7 +31,7 @@ ArgResults parseConfigCliArguments(List<String> arguments) {
 const List<(String flag, String help, String? abbr)> configCliArgs = [
   (
     'file',
-    'Path to the configuration file (swagger_parser.yaml)',
+    'Path to the configuration file - default: swagger_parser.yaml',
     'f',
   ),
   (
