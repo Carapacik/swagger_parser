@@ -544,7 +544,7 @@ void main() {
         'root_client': true,
       });
 
-      final argResults = parseConfigCliArguments([
+      final argResults = parseConfigGeneratorArguments([
         '--schema_path',
         'foo/bar.yaml',
         '--output_directory',

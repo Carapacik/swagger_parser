@@ -2,7 +2,8 @@
 /// [swagger_parser](https://pub.dev/packages/swagger_parser)
 library;
 
-export 'src/config/config_cli_arguments.dart' show parseConfigCliArguments;
+export 'src/config/config_generator_arguments.dart'
+    show parseConfigGeneratorArguments;
 export 'src/config/config_exception.dart';
 export 'src/config/swp_config.dart';
 export 'src/generator/config/generator_config.dart';
