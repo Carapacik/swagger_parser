@@ -11,14 +11,12 @@ import 'swp_config.dart';
 /// This class is used to process the config
 class ConfigProcessor {
   /// Creates a [ConfigProcessor].
-
   const ConfigProcessor();
 
   /// Process arguments and read config from file
-  YamlMap readConfigFromFile(List<String> arguments) {
-    final parser = ArgParser()..addOption('file', abbr: 'f');
+  YamlMap readConfigFromFile(List<String> arguments, ArgResults? argResults) {
     final configFile = getConfigFile(
-      filePath: parser.parse(arguments)['file']?.toString(),
+      filePath: argResults?['file']?.toString(),
     );
     if (configFile == null) {
       throw const ConfigException('Can not find yaml config file.');
@@ -45,11 +43,13 @@ class ConfigProcessor {
   }
 
   /// Parse [YamlMap] to List of [SWPConfig]
-  List<SWPConfig> parseConfig(YamlMap yamlMap) {
+  List<SWPConfig> parseConfig(YamlMap yamlMap, [ArgResults? argResults]) {
     final configs = <SWPConfig>[];
 
-    final schemaPath = yamlMap['schema_path'] as String?;
-    final schemaUrl = yamlMap['schema_url'] as String?;
+    final schemaPath = argResults?['schema_path']?.toString() ??
+        yamlMap['schema_path'] as String?;
+    final schemaUrl = argResults?['schema_url']?.toString() ??
+        yamlMap['schema_url'] as String?;
     final schemes = yamlMap['schemes'] as YamlList?;
 
     if (schemes == null && schemaUrl == null && schemaPath == null) {
@@ -66,7 +66,8 @@ class ConfigProcessor {
     }
 
     if (schemes != null) {
-      final rootConfig = SWPConfig.fromYaml(yamlMap, isRootConfig: true);
+      final rootConfig = SWPConfig.fromYamlWithOverrides(yamlMap, argResults,
+          isRootConfig: true);
 
       for (final schema in schemes) {
         if (schema is! YamlMap) {
@@ -74,11 +75,12 @@ class ConfigProcessor {
             "Config parameter 'schemes' must be list of maps.",
           );
         }
-        final config = SWPConfig.fromYaml(schema, rootConfig: rootConfig);
+        final config = SWPConfig.fromYamlWithOverrides(schema, argResults,
+            rootConfig: rootConfig);
         configs.add(config);
       }
     } else {
-      final config = SWPConfig.fromYaml(yamlMap);
+      final config = SWPConfig.fromYamlWithOverrides(yamlMap, argResults);
       configs.add(config);
     }
 

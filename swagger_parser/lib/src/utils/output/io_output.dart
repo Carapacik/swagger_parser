@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:args/args.dart';
+
 import '../../generator/model/generation_statistic.dart';
 import '../../parser/swagger_parser_core.dart';
 import '../base_utils.dart';
@@ -16,6 +18,14 @@ void introMessage() {
 ┃  ___] |_|_| |  | |__] |__] |___ |  \ ___ |    |  | |  \ ___] |___ |  \
 ┃
 ''');
+}
+
+void printHelpMessage(ArgParser parser) {
+  stdout
+    ..writeln('Usage: dart run swagger_parser [options]')
+    ..writeln(' ')
+    ..writeln('Options:')
+    ..writeln(parser.usage);
 }
 
 void generateMessage() {
