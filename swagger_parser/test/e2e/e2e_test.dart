@@ -18,6 +18,7 @@ void main() {
         schemaFileName: 'openapi.yaml',
       );
     });
+
     test('enum_types_list', () async {
       await e2eTest(
         'enum_types_list',
@@ -489,6 +490,20 @@ void main() {
           useFreezed3: true,
         ),
         schemaFileName: 'use_freezed3.3.0.json',
+      );
+    });
+
+    test('deprecated', () async {
+      await e2eTest(
+        'basic/deprecated',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          useFreezed3: true,
+        ),
+        schemaFileName: 'openapi.yaml',
       );
     });
 

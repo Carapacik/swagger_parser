@@ -5,10 +5,8 @@
 import 'package:dio/dio.dart';
 
 import 'clients/client_client.dart';
-import 'clients/client2_client.dart';
-import 'clients/parcel_pending_client.dart';
 
-///  `v0.0.0 (v1)`
+/// API `v1.0.0`
 class RestClient {
   RestClient(
     Dio dio, {
@@ -19,17 +17,9 @@ class RestClient {
   final Dio _dio;
   final String? _baseUrl;
 
-  static String get version => '0.0.0 (v1)';
+  static String get version => '1.0.0';
 
   ClientClient? _client;
-  Client2Client? _client2;
-  ParcelPendingClient? _parcelPending;
 
   ClientClient get client => _client ??= ClientClient(_dio, baseUrl: _baseUrl);
-
-  Client2Client get client2 =>
-      _client2 ??= Client2Client(_dio, baseUrl: _baseUrl);
-
-  ParcelPendingClient get parcelPending =>
-      _parcelPending ??= ParcelPendingClient(_dio, baseUrl: _baseUrl);
 }

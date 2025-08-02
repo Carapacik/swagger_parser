@@ -11,6 +11,7 @@ final class UniversalRequestType {
     required this.type,
     this.description,
     this.name,
+    this.deprecated = false,
   });
 
   /// Request parameter key
@@ -25,6 +26,9 @@ final class UniversalRequestType {
   /// Request parameter description
   final String? description;
 
+  /// Whether or not this parameter is deprecated
+  final bool deprecated;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -32,15 +36,21 @@ final class UniversalRequestType {
           runtimeType == other.runtimeType &&
           name == other.name &&
           type == other.type &&
-          parameterType == other.parameterType;
+          parameterType == other.parameterType &&
+          deprecated == other.deprecated;
 
   @override
-  int get hashCode => name.hashCode ^ type.hashCode ^ parameterType.hashCode;
+  int get hashCode =>
+      name.hashCode ^
+      type.hashCode ^
+      parameterType.hashCode ^
+      deprecated.hashCode;
 
   @override
   String toString() => 'UniversalRequestType(name: $name, '
       'type: $type, '
-      'parameterType: $parameterType)';
+      'parameterType: $parameterType, '
+      'deprecated: $deprecated)';
 }
 
 /// Type of parameter in rest client
