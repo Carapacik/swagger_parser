@@ -299,7 +299,7 @@ dart run swagger_parser -name <name/to/your/api>
 ```
 If you want to pass in the JSON serializer dynamically upon running ``swagger_parser`` use the ``-json_serializer`` argument.
 ```shell
-dart run swagger_parser -json_serializer <json_serializer/to/your/api>
+dart run swagger_parser -json_serializer dart_mappable
 ```
 
 
