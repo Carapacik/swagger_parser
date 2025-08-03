@@ -183,6 +183,15 @@ swagger_parser:
 
   # defaults to 'default' which results in a client named `DefaultClient`.
   fallback_client: "default"
+
+  # DART ONLY
+  # Optional. Set 'true' to generate only schemas that are actually referenced by endpoints.
+  #
+  # This helps reduce generated code size by excluding unused schema definitions.
+  # The generator will track schemas used in request/response bodies and resolve
+  # all transitive dependencies.
+  # Default: false
+  filter_unused_schemas: false
 ```
 
 For multiple schemes:
