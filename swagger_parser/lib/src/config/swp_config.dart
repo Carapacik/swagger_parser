@@ -41,6 +41,7 @@ class SWPConfig {
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
     this.fallbackClient = 'default',
+    this.filterUnusedSchemas = false,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -75,6 +76,7 @@ class SWPConfig {
     required this.excludeTags,
     required this.includeTags,
     required this.fallbackClient,
+    required this.filterUnusedSchemas,
     this.fallbackUnion,
   });
 
@@ -265,6 +267,9 @@ class SWPConfig {
     final fallbackClient =
         yamlMap['fallback_client'] as String? ?? rootConfig?.fallbackClient;
 
+    final filterUnusedSchemas = yamlMap['filter_unused_schemas'] as bool? ??
+        rootConfig?.filterUnusedSchemas;
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -302,6 +307,7 @@ class SWPConfig {
       excludeTags: excludedTags ?? dc.excludeTags,
       includeTags: includedTags ?? dc.includeTags,
       fallbackClient: fallbackClient ?? dc.fallbackClient,
+      filterUnusedSchemas: filterUnusedSchemas ?? dc.filterUnusedSchemas,
     );
   }
 
@@ -443,6 +449,13 @@ class SWPConfig {
   /// defaults to 'default' which results in a client named `DefaultClient`.
   final String fallbackClient;
 
+  /// DART ONLY
+  /// Optional. Set `true` to filter out unused schemas when using include/exclude tags.
+  ///
+  /// When enabled, only schemas referenced by the included endpoints will be generated.
+  /// defaults to `false` to maintain backward compatibility.
+  final bool filterUnusedSchemas;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -489,6 +502,7 @@ class SWPConfig {
       excludeTags: excludeTags,
       includeTags: includeTags,
       fallbackClient: fallbackClient,
+      filterUnusedSchemas: filterUnusedSchemas,
     );
   }
 }

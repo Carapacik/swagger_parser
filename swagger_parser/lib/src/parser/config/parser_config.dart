@@ -17,6 +17,7 @@ class ParserConfig {
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
     this.fallbackClient = 'default',
+    this.filterUnusedSchemas = false,
   });
 
   /// Specification file content as [String]
@@ -74,4 +75,11 @@ class ParserConfig {
   ///
   /// defaults to 'default' which results in a client named `DefaultClient`.
   final String fallbackClient;
+
+  /// DART ONLY
+  /// Optional. Set `true` to filter out unused schemas when using include/exclude tags.
+  ///
+  /// When enabled, only schemas referenced by the included endpoints will be generated.
+  /// defaults to `false` to maintain backward compatibility.
+  final bool filterUnusedSchemas;
 }

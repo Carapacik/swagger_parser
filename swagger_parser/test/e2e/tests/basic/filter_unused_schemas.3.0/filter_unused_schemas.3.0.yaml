@@ -1,0 +1,41 @@
+openapi: 3.0.3
+info:
+  title: Pet Store API
+  version: 1.0.0
+paths:
+  /pets:
+    get:
+      tags:
+        - pets
+      responses:
+        200:
+          description: List of pets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          $ref: '#/components/schemas/Category'  # Reference to another schema
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    UnusedSchema:
+      type: object
+      properties:
+        data:
+          type: string

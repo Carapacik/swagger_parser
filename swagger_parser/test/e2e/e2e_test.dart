@@ -479,6 +479,62 @@ void main() {
       );
     });
 
+    test('filter_unused_schemas.2.0 - disabled', () async {
+      await e2eTest(
+        'basic/filter_unused_schemas.2.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          // filter_unused_schemas is disabled by default
+        ),
+        schemaFileName: 'filter_unused_schemas.2.0.yaml',
+      );
+    });
+
+    test('filter_unused_schemas.2.0 - enabled', () async {
+      await e2eTest(
+        'basic/filter_unused_schemas.2.0_enabled',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          filterUnusedSchemas: true,
+        ),
+        schemaFileName: 'filter_unused_schemas.2.0.yaml',
+      );
+    });
+
+    test('filter_unused_schemas.3.0 - disabled', () async {
+      await e2eTest(
+        'basic/filter_unused_schemas.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          // filter_unused_schemas is disabled by default
+        ),
+        schemaFileName: 'filter_unused_schemas.3.0.yaml',
+      );
+    });
+
+    test('filter_unused_schemas.3.0 - enabled', () async {
+      await e2eTest(
+        'basic/filter_unused_schemas.3.0_enabled',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          filterUnusedSchemas: true,
+        ),
+        schemaFileName: 'filter_unused_schemas.3.0.yaml',
+      );
+    });
+
     test('use_freezed3.3.0', () async {
       await e2eTest(
         'basic/use_freezed3.3.0',

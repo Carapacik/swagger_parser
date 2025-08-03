@@ -1,0 +1,38 @@
+swagger: '2.0'
+info:
+  title: Pet Store API
+  version: 1.0.0
+paths:
+  /pets:
+    get:
+      tags:
+        - pets
+      responses:
+        200:
+          description: List of pets
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Pet'
+definitions:
+  Pet:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      category:
+        $ref: '#/definitions/Category'  # Reference to another schema
+  Category:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+  UnusedSchema:
+    type: object
+    properties:
+      data:
+        type: string
