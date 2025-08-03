@@ -231,12 +231,71 @@ To generate code, run the `swagger_parser` program inside directory where your `
 dart run swagger_parser
 ```
 
+### Generator arguments
+
+There are some configuration parameters that you can pass as an argument to the generator. These arguments will override configuration parameters set in your configuration file.
+
+#### Help argument
+```shell
+-help
+```
+If you want to see the help message upon running ``swagger_parser`` use the ``-help`` argument.
+```shell
+dart run swagger_parser -help
+```
+
+#### File argument
+**``-f`` or ``--file``**
+
 If you name your configuration file something other than `swagger_parser.yaml` or `pubspec.yaml`
 you will need to specify the name of the YAML file as an argument.
 
 ```shell
-dart run swagger_parser -f <path to your config file>
+dart run swagger parser -f <path to your config file>
 ```
+
+#### Output directory argument
+**``-output_directory``**
+
+If you want to pass in the output directory dynamically upon running ``swagger_parser`` use the ``-output_directory`` argument.
+```shell
+dart run swagger_parser -output_directory <path to your output directory>
+```
+
+**NOTE: The following arguments will be ignored if multiple schemes are defined in your configuration file.**
+
+#### Schema path argument (Only for single scheme)
+**``-schema_path``**
+
+If you want to pass in the schema path dynamically upon running ``swagger_parser`` use the ``-schema_path`` argument.
+```shell
+dart run swagger_parser -schema_path <path to your schema file>
+```
+
+#### Schema URL argument (Only for single scheme)
+**``-schema_url``**
+
+If you want to pass in the schema URL dynamically upon running ``swagger_parser`` use the ``-schema_url`` argument.
+```shell
+dart run swagger_parser -schema_url <url to your schema file>
+```
+
+#### Name argument
+**``-name``**
+
+If you want to pass in the name dynamically upon running ``swagger_parser`` use the ``-name`` argument.
+```shell
+dart run swagger_parser -name <your name>
+```
+
+#### JSON serializer argument
+**``-json_serializer``**
+
+If you want to pass in the JSON serializer dynamically upon running ``swagger_parser`` use the ``-json_serializer`` argument.
+```shell
+dart run swagger_parser -json_serializer <dart_mappable | freezed | json_serializable>
+```
+
 
 ### (Only for freezed) Generate files using [build_runner](https://pub.dev/packages/build_runner) for retrofit, json_serializable and freezed
 

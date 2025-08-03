@@ -1,3 +1,4 @@
+import 'package:args/args.dart';
 import 'package:yaml/yaml.dart';
 
 import '../generator/config/generator_config.dart';
@@ -302,6 +303,33 @@ class SWPConfig {
       excludeTags: excludedTags ?? dc.excludeTags,
       includeTags: includedTags ?? dc.includeTags,
       fallbackClient: fallbackClient ?? dc.fallbackClient,
+    );
+  }
+
+  /// Creates a [SWPConfig] from [YamlMap] with CLI [argResults] overrides.
+  factory SWPConfig.fromYamlWithOverrides(
+    YamlMap yamlMap,
+    ArgResults? argResults, {
+    bool isRootConfig = false,
+    SWPConfig? rootConfig,
+  }) {
+    // Apply CLI overrides to YAML map
+    final mergedConfig = Map<String, dynamic>.from(yamlMap);
+
+    if (argResults != null) {
+      for (final option in argResults.options) {
+        mergedConfig[option] = argResults[option];
+      }
+    }
+
+    // Create YAML map from merged config
+    final mergedYamlMap = YamlMap.wrap(mergedConfig);
+
+    // Use existing fromYaml method with merged configuration
+    return SWPConfig.fromYaml(
+      mergedYamlMap,
+      isRootConfig: isRootConfig,
+      rootConfig: rootConfig,
     );
   }
 
