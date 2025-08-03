@@ -7,10 +7,16 @@ import 'package:swagger_parser/swagger_parser.dart';
 Future<void> main(List<String> arguments) async {
   introMessage();
   try {
-    /// Run generate from YAML config
     const configProcessor = ConfigProcessor();
-    final yamlMap = configProcessor.readConfigFromFile(arguments);
-    final configs = configProcessor.parseConfig(yamlMap);
+
+    // Read CLI input
+    final argResults = parseConfigGeneratorArguments(arguments);
+
+    // Read YAML config
+    final yamlMap = configProcessor.readConfigFromFile(arguments, argResults);
+
+    // Parse config
+    final configs = configProcessor.parseConfig(yamlMap, argResults);
 
     GenerationStatistic? totalStatistic;
     var successSchemasCount = 0;
