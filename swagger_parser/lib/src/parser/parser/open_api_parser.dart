@@ -41,6 +41,8 @@ class OpenApiParser {
   final _usedNamesCount = <String, int>{};
   final _skipDataClasses = <String>[];
   final _objectNamesCount = <String, int>{};
+  final _usedSchemas = <String>{};
+  final _schemaDependencies = <String, Set<String>>{};
 
   static const _additionalPropertiesConst = 'additionalProperties';
   static const _allOfConst = 'allOf';
@@ -182,8 +184,13 @@ class OpenApiParser {
           (contentTypeValue[_schemaConst] as Map<String, dynamic>).isEmpty) {
         return null;
       }
+      final schemaMap = contentTypeValue[_schemaConst] as Map<String, dynamic>;
+
+      // Track schema references for filtering
+      _extractSchemaRefs(schemaMap, null);
+
       final typeWithImport = _findType(
-        contentTypeValue[_schemaConst] as Map<String, dynamic>,
+        schemaMap,
         additionalName: additionalName,
         // Return type is most often required in any case
         isRequired: true,
@@ -346,6 +353,11 @@ class OpenApiParser {
           )) {
             final isRequired =
                 requestBody[_requiredConst]?.toString().toBool() ?? false;
+
+            // Track schema references for filtering
+            _extractSchemaRefs(
+                contentType[_schemaConst] as Map<String, dynamic>, null);
+
             final typeWithImport = _findType(
               contentType[_schemaConst] as Map<String, dynamic>,
               isRequired: isRequired,
@@ -409,6 +421,11 @@ class OpenApiParser {
         } else {
           final isRequired =
               requestBody[_requiredConst]?.toString().toBool() ?? false;
+
+          // Track schema references for filtering
+          _extractSchemaRefs(
+              contentType[_schemaConst] as Map<String, dynamic>, null);
+
           final typeWithImport = _findType(
             contentType[_schemaConst] as Map<String, dynamic>,
             isRequired: isRequired,
@@ -450,8 +467,13 @@ class OpenApiParser {
         return null;
       }
 
+      final schemaMap = code2xx[_schemaConst] as Map<String, dynamic>? ?? {};
+
+      // Track schema references for filtering
+      _extractSchemaRefs(schemaMap, null);
+
       final typeWithImport = _findType(
-        code2xx[_schemaConst] as Map<String, dynamic>? ?? {},
+        schemaMap,
         additionalName: additionalName,
         // Return type is most often required in any case
         isRequired: true,
@@ -779,7 +801,7 @@ class OpenApiParser {
   }
 
   /// Parses data classes from `components` of definition file
-  /// and return list of  [UniversalDataClass]
+  /// and return list of [UniversalDataClass]
   List<UniversalDataClass> parseDataClasses() {
     final dataClasses = <UniversalDataClass>[];
     late final Map<String, dynamic> entities;
@@ -805,6 +827,9 @@ class OpenApiParser {
       }
 
       value as Map<String, dynamic>;
+
+      // Track schema dependencies for filtering
+      _extractSchemaRefs(value, key);
 
       final refs = <String>{};
       final parameters = <UniversalType>{};
@@ -990,7 +1015,23 @@ class OpenApiParser {
       }
     }
 
+    if (config.filterUnusedSchemas) {
+      return _filterUsedClasses(dataClasses);
+    }
+
     return dataClasses;
+  }
+
+  /// Filter out unused schemas
+  List<UniversalDataClass> _filterUsedClasses(
+      List<UniversalDataClass> dataClasses) {
+    final allUsedSchemas = _resolveAllDependencies();
+
+    final filteredDataClasses = dataClasses.where((dataClass) {
+      return allUsedSchemas.contains(dataClass.name);
+    }).toList();
+
+    return filteredDataClasses;
   }
 
   /// Get tag for name
@@ -1014,6 +1055,97 @@ class OpenApiParser {
             ? (map[_schemaConst] as Map<String, dynamic>)[_refConst].toString()
             : map[_refConst].toString(),
       );
+
+  /// Extract schema references from a map
+  void _extractSchemaRefs(Map<String, dynamic> map, String? parentSchema) {
+    if (map.containsKey(_refConst)) {
+      final refName = _formatRef(map);
+      _usedSchemas.add(refName);
+      if (parentSchema != null) {
+        _schemaDependencies.putIfAbsent(parentSchema, () => {}).add(refName);
+      }
+    }
+
+    if (map.containsKey(_schemaConst) && map[_schemaConst] is Map) {
+      _extractSchemaRefs(
+        map[_schemaConst] as Map<String, dynamic>,
+        parentSchema,
+      );
+    }
+
+    if (map.containsKey(_itemsConst) && map[_itemsConst] is Map) {
+      _extractSchemaRefs(
+          map[_itemsConst] as Map<String, dynamic>, parentSchema);
+    }
+
+    if (map.containsKey(_additionalPropertiesConst) &&
+        map[_additionalPropertiesConst] is Map) {
+      _extractSchemaRefs(
+          map[_additionalPropertiesConst] as Map<String, dynamic>,
+          parentSchema);
+    }
+
+    if (map.containsKey(_propertiesConst) && map[_propertiesConst] is Map) {
+      (map[_propertiesConst] as Map<String, dynamic>).forEach((key, value) {
+        if (value is Map<String, dynamic>) {
+          _extractSchemaRefs(value, parentSchema);
+        }
+      });
+    }
+
+    if (map.containsKey(_allOfConst) && map[_allOfConst] is List) {
+      for (final item in map[_allOfConst] as List) {
+        if (item is Map<String, dynamic>) {
+          _extractSchemaRefs(item, parentSchema);
+        }
+      }
+    }
+
+    if (map.containsKey(_oneOfConst) && map[_oneOfConst] is List) {
+      for (final item in map[_oneOfConst] as List) {
+        if (item is Map<String, dynamic>) {
+          _extractSchemaRefs(item, parentSchema);
+        }
+      }
+    }
+
+    if (map.containsKey(_anyOfConst) && map[_anyOfConst] is List) {
+      for (final item in map[_anyOfConst] as List) {
+        if (item is Map<String, dynamic>) {
+          _extractSchemaRefs(item, parentSchema);
+        }
+      }
+    }
+  }
+
+  /// Resolve all transitive dependencies for used schemas
+  Set<String> _resolveAllDependencies() {
+    final allUsedSchemas = <String>{..._usedSchemas};
+    final visited = <String>{};
+    final toVisit = <String>[..._usedSchemas];
+
+    // Breadth-first search to find all dependencies
+    while (toVisit.isNotEmpty) {
+      final current = toVisit.removeAt(0);
+
+      if (visited.contains(current)) {
+        // Handle circular references
+        continue;
+      }
+
+      visited.add(current);
+
+      final dependencies = _schemaDependencies[current] ?? {};
+      for (final dep in dependencies) {
+        allUsedSchemas.add(dep);
+        if (!visited.contains(dep)) {
+          toVisit.add(dep);
+        }
+      }
+    }
+
+    return allUsedSchemas;
+  }
 
   /// Find type of map
   ({UniversalType type, String? import}) _findType(
