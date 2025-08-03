@@ -77,9 +77,8 @@ class ParserConfig {
   final String fallbackClient;
 
   /// DART ONLY
-  /// Optional. Set `true` to filter out unused schemas when using include/exclude tags.
+  /// Optional. Set `true` to generate only schemas that are actually referenced by endpoints.
   ///
-  /// When enabled, only schemas referenced by the included endpoints will be generated.
-  /// defaults to `false` to maintain backward compatibility.
+  /// Defaults to `false` to maintain backward compatibility.
   final bool filterUnusedSchemas;
 }
