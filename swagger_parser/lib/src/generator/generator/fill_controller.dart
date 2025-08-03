@@ -56,6 +56,7 @@ final class FillController {
         dioOptionsParameterByDefault: config.dioOptionsParameterByDefault,
         originalHttpResponse: config.originalHttpResponse,
         useMultipartFile: config.useMultipartFile,
+        fileName: fileName,
       ),
     );
   }
@@ -65,6 +66,11 @@ final class FillController {
     final rootClientName = config.rootClientName ?? 'RestClient';
     final postfix = config.clientPostfix ?? 'Client';
     final clientsNames = clients.map((c) => c.name.toPascal).toSet();
+    // Create a map from Pascal names to original snake names
+    final clientsNameMap = <String, String>{};
+    for (final client in clients) {
+      clientsNameMap[client.name.toPascal] = client.name;
+    }
 
     return GeneratedFile(
       name: '${rootClientName.toSnake}.${config.language.fileExtension}',
@@ -75,6 +81,7 @@ final class FillController {
         postfix: postfix.toPascal,
         putClientsInFolder: config.putClientsInFolder,
         markFilesAsGenerated: config.markFilesAsGenerated,
+        clientsNameMap: clientsNameMap,
       ),
     );
   }

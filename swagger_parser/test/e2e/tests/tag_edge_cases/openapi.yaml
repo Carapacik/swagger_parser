@@ -1,0 +1,96 @@
+openapi: 3.0.3
+info:
+  title: Tag Edge Cases Test API
+  description: Test API to verify various tag naming edge cases
+  version: 1.0.0
+
+servers:
+  - url: https://api.example.com
+
+tags:
+  - name: Items - 2a3 - Version 4b5
+    description: Multiple alphanumeric sequences in one tag
+  - name: Items -- Draft
+    description: Multiple consecutive hyphens
+  - name: Very Long Tag Name With Numbers 123 And More Text
+    description: Very long tags with numbers
+
+paths:
+  /items/multi-version:
+    get:
+      tags:
+        - Items - 2a3 - Version 4b5
+      summary: Get items with multiple version markers
+      operationId: getMultiVersionItems
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+
+
+  /items/draft:
+    get:
+      tags:
+        - Items -- Draft
+      summary: Get draft items
+      operationId: getDraftItems
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DraftItem'
+
+  /very/long/path:
+    get:
+      tags:
+        - Very Long Tag Name With Numbers 123 And More Text
+      summary: Operation with very long tag
+      operationId: getLongTagData
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LongTagResponse'
+
+components:
+  schemas:
+    Item:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        version:
+          type: string
+
+
+    DraftItem:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          type: string
+        isDraft:
+          type: boolean
+
+    LongTagResponse:
+      type: object
+      properties:
+        data:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
