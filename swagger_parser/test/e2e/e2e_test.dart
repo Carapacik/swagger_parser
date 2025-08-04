@@ -536,7 +536,6 @@ void main() {
       );
     });
 
-
     test('use_freezed3.3.0', () async {
       await e2eTest(
         'basic/use_freezed3.3.0',

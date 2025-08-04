@@ -265,7 +265,6 @@ class SWPConfig {
     final fallbackClient =
         yamlMap['fallback_client'] as String? ?? rootConfig?.fallbackClient;
 
-
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -443,7 +442,6 @@ class SWPConfig {
   ///
   /// defaults to 'default' which results in a client named `DefaultClient`.
   final String fallbackClient;
-
 
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {

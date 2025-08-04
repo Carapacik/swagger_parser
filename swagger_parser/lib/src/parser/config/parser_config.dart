@@ -74,5 +74,4 @@ class ParserConfig {
   ///
   /// defaults to 'default' which results in a client named `DefaultClient`.
   final String fallbackClient;
-
 }
