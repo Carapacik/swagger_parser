@@ -54,7 +54,7 @@ ${_getters(clientsNames, postfix)}
 }
 
 String _clientsImport(Set<String> imports, String postfix,
-        {required bool putClientsInFolder, Map<String, String>? clientsNameMap}) {
+    {required bool putClientsInFolder, Map<String, String>? clientsNameMap}) {
   return '\n${imports.map((import) {
     final snakeName = clientsNameMap?[import] ?? import.toSnake;
     return "import '${putClientsInFolder ? 'clients' : snakeName}/"
