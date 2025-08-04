@@ -479,61 +479,63 @@ void main() {
       );
     });
 
-    test('filter_unused_schemas.2.0 - disabled', () async {
+    test('included_tags_with_schemas', () async {
       await e2eTest(
-        'basic/filter_unused_schemas.2.0',
+        'basic/included_tags_with_schemas',
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          // filter_unused_schemas is disabled by default
+          includeTags: ['include'],
         ),
-        schemaFileName: 'filter_unused_schemas.2.0.yaml',
+        schemaFileName: 'openapi.yaml',
       );
     });
 
-    test('filter_unused_schemas.2.0 - enabled', () async {
+    test('excluded_tags_with_schemas', () async {
       await e2eTest(
-        'basic/filter_unused_schemas.2.0_enabled',
+        'basic/excluded_tags_with_schemas',
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          filterUnusedSchemas: true,
+          excludeTags: ['exclude'],
         ),
-        schemaFileName: 'filter_unused_schemas.2.0.yaml',
+        schemaFileName: 'openapi.yaml',
       );
     });
 
-    test('filter_unused_schemas.3.0 - disabled', () async {
+    test('circular_deps_with_tags', () async {
       await e2eTest(
-        'basic/filter_unused_schemas.3.0',
+        'basic/circular_deps_with_tags',
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          // filter_unused_schemas is disabled by default
+          includeTags: ['include'],
         ),
-        schemaFileName: 'filter_unused_schemas.3.0.yaml',
+        schemaFileName: 'openapi.yaml',
       );
     });
 
-    test('filter_unused_schemas.3.0 - enabled', () async {
+    test('include_exclude_tags_with_schemas', () async {
       await e2eTest(
-        'basic/filter_unused_schemas.3.0_enabled',
+        'basic/include_exclude_tags_with_schemas',
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
-          filterUnusedSchemas: true,
+          includeTags: ['include'],
+          excludeTags: ['exclude'],
         ),
-        schemaFileName: 'filter_unused_schemas.3.0.yaml',
+        schemaFileName: 'openapi.yaml',
       );
     });
+
 
     test('use_freezed3.3.0', () async {
       await e2eTest(

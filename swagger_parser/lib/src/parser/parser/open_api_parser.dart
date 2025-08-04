@@ -829,7 +829,7 @@ class OpenApiParser {
       value as Map<String, dynamic>;
 
       // Track schema dependencies for filtering
-      _extractSchemaRefs(value, key);
+      _extractSchemaDependencies(value, key);
 
       final refs = <String>{};
       final parameters = <UniversalType>{};
@@ -1015,7 +1015,7 @@ class OpenApiParser {
       }
     }
 
-    if (config.filterUnusedSchemas) {
+    if (config.includeTags.isNotEmpty || config.excludeTags.isNotEmpty) {
       return _filterUsedClasses(dataClasses);
     }
 
@@ -1056,66 +1056,70 @@ class OpenApiParser {
             : map[_refConst].toString(),
       );
 
-  /// Extract schema references from a map
-  void _extractSchemaRefs(Map<String, dynamic> map, String? parentSchema) {
+  /// Traverse schema structure and call visitor for each $ref found
+  void _traverseSchemaRefs(
+    Map<String, dynamic> map,
+    String? parentSchema,
+    void Function(String refName, String? parent) onRefFound,
+  ) {
+    // Check for direct $ref
     if (map.containsKey(_refConst)) {
       final refName = _formatRef(map);
+      onRefFound(refName, parentSchema);
+    }
+
+    // Define schema locations to check
+    final schemaLocations = [
+      (_schemaConst, map[_schemaConst]),
+      (_itemsConst, map[_itemsConst]),
+      (_additionalPropertiesConst, map[_additionalPropertiesConst]),
+    ];
+
+    // Process single schema locations
+    for (final (_, value) in schemaLocations) {
+      if (value is Map<String, dynamic>) {
+        _traverseSchemaRefs(value, parentSchema, onRefFound);
+      }
+    }
+
+    // Process properties object
+    if (map[_propertiesConst] is Map<String, dynamic>) {
+      final properties = map[_propertiesConst] as Map<String, dynamic>;
+      for (final propValue in properties.values) {
+        if (propValue is Map<String, dynamic>) {
+          _traverseSchemaRefs(propValue, parentSchema, onRefFound);
+        }
+      }
+    }
+
+    // Process composition arrays (allOf, oneOf, anyOf)
+    final compositionKeys = [_allOfConst, _oneOfConst, _anyOfConst];
+    for (final key in compositionKeys) {
+      if (map[key] is List) {
+        for (final item in map[key] as List) {
+          if (item is Map<String, dynamic>) {
+            _traverseSchemaRefs(item, parentSchema, onRefFound);
+          }
+        }
+      }
+    }
+  }
+
+  /// Extract schema dependencies without marking them as used
+  void _extractSchemaDependencies(
+      Map<String, dynamic> map, String? parentSchema) {
+    _traverseSchemaRefs(map, parentSchema, (refName, parent) {
+      if (parent != null) {
+        _schemaDependencies.putIfAbsent(parent, () => {}).add(refName);
+      }
+    });
+  }
+
+  /// Extract schema references and mark them as used
+  void _extractSchemaRefs(Map<String, dynamic> map, String? parentSchema) {
+    _traverseSchemaRefs(map, parentSchema, (refName, parent) {
       _usedSchemas.add(refName);
-      if (parentSchema != null) {
-        _schemaDependencies.putIfAbsent(parentSchema, () => {}).add(refName);
-      }
-    }
-
-    if (map.containsKey(_schemaConst) && map[_schemaConst] is Map) {
-      _extractSchemaRefs(
-        map[_schemaConst] as Map<String, dynamic>,
-        parentSchema,
-      );
-    }
-
-    if (map.containsKey(_itemsConst) && map[_itemsConst] is Map) {
-      _extractSchemaRefs(
-          map[_itemsConst] as Map<String, dynamic>, parentSchema);
-    }
-
-    if (map.containsKey(_additionalPropertiesConst) &&
-        map[_additionalPropertiesConst] is Map) {
-      _extractSchemaRefs(
-          map[_additionalPropertiesConst] as Map<String, dynamic>,
-          parentSchema);
-    }
-
-    if (map.containsKey(_propertiesConst) && map[_propertiesConst] is Map) {
-      (map[_propertiesConst] as Map<String, dynamic>).forEach((key, value) {
-        if (value is Map<String, dynamic>) {
-          _extractSchemaRefs(value, parentSchema);
-        }
-      });
-    }
-
-    if (map.containsKey(_allOfConst) && map[_allOfConst] is List) {
-      for (final item in map[_allOfConst] as List) {
-        if (item is Map<String, dynamic>) {
-          _extractSchemaRefs(item, parentSchema);
-        }
-      }
-    }
-
-    if (map.containsKey(_oneOfConst) && map[_oneOfConst] is List) {
-      for (final item in map[_oneOfConst] as List) {
-        if (item is Map<String, dynamic>) {
-          _extractSchemaRefs(item, parentSchema);
-        }
-      }
-    }
-
-    if (map.containsKey(_anyOfConst) && map[_anyOfConst] is List) {
-      for (final item in map[_anyOfConst] as List) {
-        if (item is Map<String, dynamic>) {
-          _extractSchemaRefs(item, parentSchema);
-        }
-      }
-    }
+    });
   }
 
   /// Resolve all transitive dependencies for used schemas
