@@ -53,14 +53,14 @@ swagger_parser:
   # Set 'false' to use operationId
   path_method_name: false
 
-  # Optional (dart only). Set 'true' to include toJson() in enums. 
+  # Optional (dart only). Set 'true' to include toJson() in enums.
   # If set to false, serialization will use .name instead.
   enums_to_json: false
 
   # Optional. Set 'true' to set enum prefix from parent component.
   enums_parent_prefix: true
 
-  # Optional (dart only). Set 'true' to maintain backwards compatibility 
+  # Optional (dart only). Set 'true' to maintain backwards compatibility
   # when adding new values on the backend.
   unknown_enum_value: true
 
