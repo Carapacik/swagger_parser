@@ -20,21 +20,16 @@ class InformationBox extends StatelessWidget {
                 baseline: TextBaseline.alphabetic,
                 child: Link(
                   uri: Uri.parse('https://pub.dev/packages/swagger_parser'),
-                  builder:
-                      (context, followLink) => MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: GestureDetector(
-                          onTap: followLink,
-                          child: const Text(
-                            'swagger_parser',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Color(0xFFD0BCFF),
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
+                  builder: (context, followLink) => MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: followLink,
+                      child: const Text(
+                        'swagger_parser',
+                        style: TextStyle(fontSize: 18, color: Color(0xFFD0BCFF), decoration: TextDecoration.underline),
                       ),
+                    ),
+                  ),
                 ),
               ),
               const TextSpan(
@@ -70,8 +65,7 @@ class InformationBox extends StatelessWidget {
             children: [
               TextSpan(
                 style: const TextStyle(fontSize: 18),
-                text:
-                    'Paste your JSON file into text box and configure given parameters: \n',
+                text: 'Paste your JSON file into text box and configure given parameters: \n',
                 children: [
                   const WidgetSpan(
                     alignment: PlaceholderAlignment.aboveBaseline,
@@ -94,8 +88,7 @@ class InformationBox extends StatelessWidget {
                     child: SizedBox(height: 24),
                   ),
                   const TextSpan(
-                    text:
-                        '- Language parameter for generated files. Currently support languages are: dart, kotlin.\n',
+                    text: '- Language parameter for generated files. Currently support languages are: dart, kotlin.\n',
                     style: TextStyle(fontSize: 18),
                   ),
                   const TextSpan(
@@ -109,8 +102,7 @@ class InformationBox extends StatelessWidget {
                     child: SizedBox(height: 24),
                   ),
                   TextSpan(
-                    text:
-                        '- Freezed. Available only for dart. Makes generated DTOs compatible with ',
+                    text: '- Freezed. Available only for dart. Makes generated DTOs compatible with ',
                     style: const TextStyle(fontSize: 18),
                     children: [
                       WidgetSpan(
@@ -118,28 +110,26 @@ class InformationBox extends StatelessWidget {
                         baseline: TextBaseline.alphabetic,
                         child: Link(
                           uri: Uri.parse('https://pub.dev/packages/freezed'),
-                          builder:
-                              (context, followLink) => MouseRegion(
-                                cursor: SystemMouseCursors.click,
-                                child: GestureDetector(
-                                  onTap: followLink,
-                                  child: const Text(
-                                    'freezed',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Color(0xFFD0BCFF),
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
+                          builder: (context, followLink) => MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onTap: followLink,
+                              child: const Text(
+                                'freezed',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Color(0xFFD0BCFF),
+                                  decoration: TextDecoration.underline,
                                 ),
                               ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
                   const TextSpan(
-                    text:
-                        '\nPress generate and enjoy your Data classes and Rest clients packed into zip archive.',
+                    text: '\nPress generate and enjoy your Data classes and Rest clients packed into zip archive.',
                     style: TextStyle(fontSize: 18),
                   ),
                 ],
