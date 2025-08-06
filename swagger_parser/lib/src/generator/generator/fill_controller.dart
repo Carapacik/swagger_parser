@@ -66,11 +66,10 @@ final class FillController {
     final rootClientName = config.rootClientName ?? 'RestClient';
     final postfix = config.clientPostfix ?? 'Client';
     final clientsNames = clients.map((c) => c.name.toPascal).toSet();
-    // Create a map from Pascal names to original snake names
-    final clientsNameMap = <String, String>{};
-    for (final client in clients) {
-      clientsNameMap[client.name.toPascal] = client.name;
-    }
+    // Create a map from Pascal names to snake names
+    final clientsNameMap = <String, String>{
+      for (final client in clients) client.name.toPascal: client.name.toSnake
+    };
 
     return GeneratedFile(
       name: '${rootClientName.toSnake}.${config.language.fileExtension}',

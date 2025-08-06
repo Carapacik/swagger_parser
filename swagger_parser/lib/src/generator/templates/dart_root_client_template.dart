@@ -58,7 +58,7 @@ String _clientsImport(Set<String> imports, String postfix,
   return '\n${imports.map((import) {
     final snakeName = clientsNameMap?[import] ?? import.toSnake;
     return "import '${putClientsInFolder ? 'clients' : snakeName}/"
-        "${snakeName}_${postfix.toLowerCase()}.dart';";
+        "${snakeName}_${postfix.toSnake}.dart';";
   }).join('\n')}\n';
 }
 
