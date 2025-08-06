@@ -16,6 +16,7 @@ String dartRetrofitClientTemplate({
   bool extrasParameterByDefault = false,
   bool dioOptionsParameterByDefault = false,
   bool originalHttpResponse = false,
+  String? fileName,
 }) {
   final parameterTypes = restClient.requests
       .expand((r) => r.parameters.map((p) => p.type))
@@ -24,7 +25,7 @@ String dartRetrofitClientTemplate({
 ${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
-part '${name.toSnake}.g.dart';
+part '${fileName ?? name.toSnake}.g.dart';
 
 @RestApi()
 abstract class $name {

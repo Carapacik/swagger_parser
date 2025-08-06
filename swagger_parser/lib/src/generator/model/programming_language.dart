@@ -122,6 +122,7 @@ enum ProgrammingLanguage {
     bool extrasParameterByDefault = false,
     bool dioOptionsParameterByDefault = false,
     bool originalHttpResponse = false,
+    String? fileName,
   }) =>
       switch (this) {
         dart => dartRetrofitClientTemplate(
@@ -133,6 +134,7 @@ enum ProgrammingLanguage {
             dioOptionsParameterByDefault: dioOptionsParameterByDefault,
             originalHttpResponse: originalHttpResponse,
             useMultipartFile: useMultipartFile,
+            fileName: fileName,
           ),
         kotlin => kotlinRetrofitClientTemplate(
             restClient: restClient,
@@ -149,6 +151,7 @@ enum ProgrammingLanguage {
     required String postfix,
     required bool putClientsInFolder,
     required bool markFilesAsGenerated,
+    Map<String, String>? clientsNameMap,
   }) =>
       switch (this) {
         dart => dartRootClientTemplate(
@@ -158,6 +161,7 @@ enum ProgrammingLanguage {
             postfix: postfix,
             putClientsInFolder: putClientsInFolder,
             markFileAsGenerated: markFilesAsGenerated,
+            clientsNameMap: clientsNameMap,
           ),
         kotlin => '',
       };
