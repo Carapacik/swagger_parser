@@ -15,19 +15,14 @@ void generateArchive(List<GeneratedFile> files) {
     archive.addFile(ArchiveFile(file.name, contentBytes.length, contentBytes));
   }
   final outputStream = OutputMemoryStream();
-  final bytes = encoder.encode(
-    archive,
-    level: DeflateLevel.bestCompression,
-    output: outputStream,
-  );
+  final bytes = encoder.encode(archive, level: DeflateLevel.bestCompression, output: outputStream);
 
   final blobWeb = web.Blob(<JSUint8Array>[Uint8List.fromList(bytes).toJS].toJS);
   final url = web.URL.createObjectURL(blobWeb);
-  final anchor =
-      web.document.createElement('a') as web.HTMLAnchorElement
-        ..href = url
-        ..style.display = 'none'
-        ..download = 'generated.zip';
+  final anchor = web.document.createElement('a') as web.HTMLAnchorElement
+    ..href = url
+    ..style.display = 'none'
+    ..download = 'generated.zip';
   web.document.body!.children.add(anchor);
 
   // download

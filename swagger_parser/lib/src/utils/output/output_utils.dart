@@ -1,1 +1,1 @@
-export 'io_output.dart' if (dart.library.html) 'web_output.dart';
+export 'io_output.dart' if (dart.library.js_interop) 'web_output.dart';

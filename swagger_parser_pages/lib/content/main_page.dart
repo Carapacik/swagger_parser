@@ -17,10 +17,7 @@ class MainPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 16),
-                Text(
-                  'Swagger parser',
-                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800),
-                ),
+                Text('Swagger parser', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800)),
                 SizedBox(height: 8),
                 Text(
                   'Paste your OpenApi JSON or YAML file content in the textarea below, '
