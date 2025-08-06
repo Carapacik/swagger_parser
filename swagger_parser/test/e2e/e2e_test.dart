@@ -533,5 +533,32 @@ void main() {
         schemaFileName: 'wrapping_collections.3.0.json',
       );
     });
+
+    // https://github.com/Carapacik/swagger_parser/issues/353
+    test('tag_with_alphanumeric', () async {
+      await e2eTest(
+        'tag_with_alphanumeric',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.json',
+      );
+    });
+
+    test('tag_edge_cases', () async {
+      await e2eTest(
+        'tag_edge_cases',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
   });
 }
