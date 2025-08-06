@@ -1,3 +1,7 @@
+## 1.28.0
+- Fix documentation
+- Fix ensure consistent file naming for tags with alphanumeric suffixes
+
 ## 1.27.0
  - Allow to filter the generation of endpoints in a client by tags
  - Allow to define a fallback client for endpoints that do not have a tag - fixes [[#271](https://github.com/Carapacik/swagger_parser/issues/271)] 

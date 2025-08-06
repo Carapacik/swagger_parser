@@ -9,10 +9,7 @@ class App extends StatelessWidget {
     title: 'Swagger Parser',
     restorationScopeId: 'swagger parser',
     debugShowCheckedModeBanner: false,
-    theme: ThemeData(
-      colorSchemeSeed: const Color(0xFFD0BCFF),
-      brightness: Brightness.dark,
-    ),
+    theme: ThemeData(colorSchemeSeed: const Color(0xFFD0BCFF), brightness: Brightness.dark),
     themeMode: ThemeMode.dark,
     home: const MainPage(),
   );
