@@ -533,5 +533,20 @@ void main() {
         schemaFileName: 'wrapping_collections.3.0.json',
       );
     });
+
+    test('merged_outputs', () async {
+      await e2eTest(
+        'basic/merged_outputs',
+        (outputDirectory, schemaPath) => SWPConfig(
+          name: 'merged_outputs',
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          useXNullable: true,
+          mergeOutputs: true,
+        ),
+        schemaFileName: 'merged_outputs.json',
+      );
+    });
   });
 }
