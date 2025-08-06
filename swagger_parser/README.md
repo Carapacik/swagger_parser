@@ -255,45 +255,45 @@ dart run swagger parser -f <path to your config file>
 ```
 
 #### Output directory argument
-**``-output_directory``**
+**``--output_directory``**
 
 If you want to pass in the output directory dynamically upon running ``swagger_parser`` use the ``-output_directory`` argument.
 ```shell
-dart run swagger_parser -output_directory <path to your output directory>
+dart run swagger_parser --output_directory <path to your output directory>
 ```
 
 **NOTE: The following arguments will be ignored if multiple schemes are defined in your configuration file.**
 
 #### Schema path argument (Only for single scheme)
-**``-schema_path``**
+**``--schema_path``**
 
 If you want to pass in the schema path dynamically upon running ``swagger_parser`` use the ``-schema_path`` argument.
 ```shell
-dart run swagger_parser -schema_path <path to your schema file>
+dart run swagger_parser --schema_path <path to your schema file>
 ```
 
 #### Schema URL argument (Only for single scheme)
-**``-schema_url``**
+**``--schema_url``**
 
 If you want to pass in the schema URL dynamically upon running ``swagger_parser`` use the ``-schema_url`` argument.
 ```shell
-dart run swagger_parser -schema_url <url to your schema file>
+dart run swagger_parser --schema_url <url to your schema file>
 ```
 
 #### Name argument
-**``-name``**
+**``--name``**
 
 If you want to pass in the name dynamically upon running ``swagger_parser`` use the ``-name`` argument.
 ```shell
-dart run swagger_parser -name <your name>
+dart run swagger_parser --name <your name>
 ```
 
 #### JSON serializer argument
-**``-json_serializer``**
+**``--json_serializer``**
 
 If you want to pass in the JSON serializer dynamically upon running ``swagger_parser`` use the ``-json_serializer`` argument.
 ```shell
-dart run swagger_parser -json_serializer <dart_mappable | freezed | json_serializable>
+dart run swagger_parser --json_serializer <dart_mappable | freezed | json_serializable>
 ```
 
 
