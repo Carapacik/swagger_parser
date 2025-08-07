@@ -1,6 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: type=lint, unused_import
+// ignore_for_file: type=lint, unused_import, invalid_annotation_target, unnecessary_import
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -12,8 +12,8 @@ part 'paginated_user_dto.g.dart';
 @Freezed()
 class PaginatedUserDto with _$PaginatedUserDto {
   const factory PaginatedUserDto({
-    required String? nextCursor,
-    required String? previousCursor,
+    @JsonKey(includeIfNull: true) required String? nextCursor,
+    @JsonKey(includeIfNull: true) required String? previousCursor,
     required List<UserDto> data,
   }) = _PaginatedUserDto;
 

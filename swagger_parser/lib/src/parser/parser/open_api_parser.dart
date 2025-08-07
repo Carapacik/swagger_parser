@@ -1008,12 +1008,13 @@ class OpenApiParser {
               : 'client';
 
   /// Format `$ref` type
-  String _formatRef(Map<String, dynamic> map, {bool useSchema = false}) =>
-      p.basename(
-        useSchema
-            ? (map[_schemaConst] as Map<String, dynamic>)[_refConst].toString()
-            : map[_refConst].toString(),
-      );
+  String _formatRef(Map<String, dynamic> map, {bool useSchema = false}) {
+    return p.basename(
+      useSchema
+          ? (map[_schemaConst] as Map<String, dynamic>)[_refConst].toString()
+          : map[_refConst].toString(),
+    );
+  }
 
   /// Find type of map
   ({UniversalType type, String? import}) _findType(
@@ -1045,7 +1046,11 @@ class OpenApiParser {
 
       // Nullability of the array itself.
       final isCollectionItselfNullable =
-          map[_nullableConst].toString().toBool() ?? (root && !isRequired);
+          switch (map[_nullableConst].toString().toBool()) {
+        null => !isRequired,
+        true => true,
+        false => !isRequired,
+      };
 
       // Nullability of the items within the array.
       final areItemsNullable = itemDetails.nullable;
@@ -1281,8 +1286,11 @@ class OpenApiParser {
               : null,
           jsonKey: originalName,
           defaultValue: protectDefaultValue(map[_defaultConst]),
-          nullable:
-              map[_nullableConst].toString().toBool() ?? (root && !isRequired),
+          nullable: switch (map[_nullableConst].toString().toBool()) {
+            null => !isRequired,
+            true => true,
+            false => !isRequired,
+          },
           isRequired: isRequired,
           deprecated: map[_deprecatedConst].toString().toBool() ?? false,
         ),
@@ -1643,6 +1651,27 @@ class OpenApiParser {
 
       final enumType = defaultValue != null && import != null ? type : null;
 
+      // For $ref types, check the referenced schema for nullable property
+      var referencedNullable = false;
+      var deprecated = map[_deprecatedConst].toString().toBool() ?? false;
+      if (map.containsKey(_refConst)) {
+        final refName = _formatRef(map);
+        if (_definitionFileContent.containsKey(_componentsConst)) {
+          final components =
+              _definitionFileContent[_componentsConst] as Map<String, dynamic>;
+          if (components.containsKey(_schemasConst)) {
+            final schemas = components[_schemasConst] as Map<String, dynamic>;
+            if (schemas.containsKey(refName)) {
+              final referencedSchema = schemas[refName] as Map<String, dynamic>;
+              referencedNullable =
+                  referencedSchema[_nullableConst].toString().toBool() ?? false;
+              deprecated =
+                  referencedSchema[_deprecatedConst].toString().toBool() ?? false;
+            }
+          }
+        }
+      }
+
       return (
         type: UniversalType(
           type: type,
@@ -1656,9 +1685,13 @@ class OpenApiParser {
           ),
           enumType: enumType,
           isRequired: isRequired,
-          nullable:
-              map[_nullableConst].toString().toBool() ?? (root && !isRequired),
-          deprecated: map[_deprecatedConst].toString().toBool() ?? false,
+          nullable: switch (map[_nullableConst].toString().toBool()) {
+            null => !isRequired,
+            true => true,
+            false => !isRequired,
+          },
+          deprecated: deprecated,
+          referencedNullable: referencedNullable,
         ),
         import: import,
       );

@@ -1,6 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: type=lint, unused_import
+// ignore_for_file: type=lint, unused_import, invalid_annotation_target, unnecessary_import
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -12,8 +12,8 @@ class ApiParcelPendingBuildingSettingsRequest
     with _$ApiParcelPendingBuildingSettingsRequest {
   const factory ApiParcelPendingBuildingSettingsRequest({
     required bool isDellaManaged,
-    String? externalPropertyId,
-    String? externalBuildingName,
+    @JsonKey(includeIfNull: false) String? externalPropertyId,
+    @JsonKey(includeIfNull: false) String? externalBuildingName,
   }) = _ApiParcelPendingBuildingSettingsRequest;
 
   factory ApiParcelPendingBuildingSettingsRequest.fromJson(
