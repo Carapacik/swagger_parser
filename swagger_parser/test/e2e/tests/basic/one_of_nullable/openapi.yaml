@@ -1,0 +1,27 @@
+openapi: 3.0.3
+info:
+  title: OneOf nullable form
+  version: 1.0.0
+paths:
+  /petOrNull:
+    get:
+      operationId: getPetOrNull
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetOrNull'
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        name:
+          type: string
+    PetOrNull:
+      oneOf:
+        - $ref: '#/components/schemas/Pet'
+        - type: 'null'
+      description: OneOf union representing nullable Pet

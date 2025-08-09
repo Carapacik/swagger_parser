@@ -1,0 +1,27 @@
+openapi: 3.0.3
+info:
+  title: Map values nullable union
+  version: 1.0.0
+paths:
+  /data:
+    get:
+      operationId: getData
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataResponse'
+components:
+  schemas:
+    DataResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            anyOf:
+              - type: string
+              - type: 'null'
+      required: []

@@ -1,0 +1,25 @@
+openapi: 3.0.3
+info:
+  title: OneOf with empty schema or string
+  version: 1.0.0
+paths:
+  /models:
+    get:
+      operationId: getModels
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+components:
+  schemas:
+    Model:
+      type: object
+      properties:
+        validFrom:
+          oneOf:
+            - {}
+            - type: string
+      required: []

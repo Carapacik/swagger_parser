@@ -560,5 +560,187 @@ void main() {
         schemaFileName: 'openapi.yaml',
       );
     });
+
+    test('one_of_without_discriminator', () async {
+      await e2eTest(
+        'basic/one_of_without_discriminator',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('any_of_without_discriminator', () async {
+      await e2eTest(
+        'basic/any_of_without_discriminator',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('one_of_nullable', () async {
+      await e2eTest(
+        'basic/one_of_nullable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('all_of_composition', () async {
+      await e2eTest(
+        'basic/all_of_composition',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('one_of_empty_or_string', () async {
+      await e2eTest(
+        'basic/one_of_empty_or_string',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('inline_union_without_discriminator', () async {
+      await e2eTest(
+        'basic/inline_union_without_discriminator',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('inline_any_of_without_discriminator', () async {
+      await e2eTest(
+        'basic/inline_any_of_without_discriminator',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('inline_union_array', () async {
+      await e2eTest(
+        'basic/inline_union_array',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('inline_union_map', () async {
+      await e2eTest(
+        'basic/inline_union_map',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('inline_response_union', () async {
+      await e2eTest(
+        'basic/inline_response_union',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('primitive_union_without_null', () async {
+      await e2eTest(
+        'basic/primitive_union_without_null',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('primitive_union_nullable', () async {
+      await e2eTest(
+        'basic/primitive_union_nullable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('array_items_nullable_union', () async {
+      await e2eTest(
+        'basic/array_items_nullable_union',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('map_values_nullable_union', () async {
+      await e2eTest(
+        'basic/map_values_nullable_union',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
   });
 }

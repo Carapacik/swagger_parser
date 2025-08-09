@@ -1,0 +1,32 @@
+openapi: 3.0.3
+info:
+  title: AnyOf without discriminator
+  version: 1.0.0
+paths:
+  /maybePet:
+    get:
+      operationId: getMaybePet
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaybePet'
+components:
+  schemas:
+    Cat:
+      type: object
+      properties:
+        meows:
+          type: boolean
+    Dog:
+      type: object
+      properties:
+        barks:
+          type: boolean
+    MaybePet:
+      anyOf:
+        - $ref: '#/components/schemas/Cat'
+        - $ref: '#/components/schemas/Dog'
+      description: AnyOf union without discriminator

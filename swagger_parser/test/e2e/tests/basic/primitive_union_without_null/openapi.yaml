@@ -1,0 +1,25 @@
+openapi: 3.0.3
+info:
+  title: Primitive union without null
+  version: 1.0.0
+paths:
+  /value:
+    get:
+      operationId: getValue
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Value'
+components:
+  schemas:
+    Value:
+      type: object
+      properties:
+        data:
+          oneOf:
+            - type: string
+            - type: integer
+      required: []

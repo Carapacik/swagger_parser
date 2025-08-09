@@ -1,0 +1,28 @@
+openapi: 3.0.3
+info:
+  title: Inline union inside array
+  version: 1.0.0
+paths:
+  /inline-array:
+    get:
+      operationId: getInlineArray
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      oneOf:
+                        - type: object
+                          properties:
+                            a:
+                              type: integer
+                        - type: object
+                          properties:
+                            b:
+                              type: string

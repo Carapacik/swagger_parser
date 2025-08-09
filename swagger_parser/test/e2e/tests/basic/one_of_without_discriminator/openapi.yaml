@@ -1,0 +1,43 @@
+openapi: 3.0.3
+info:
+  title: OneOf without discriminator
+  version: 1.0.0
+paths:
+  /pets:
+    get:
+      operationId: getPets
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrokenUnion'
+    post:
+      operationId: createPet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrokenUnion'
+      responses:
+        '204':
+          description: No Content
+components:
+  schemas:
+    Cat:
+      type: object
+      properties:
+        meows:
+          type: boolean
+    Dog:
+      type: object
+      properties:
+        barks:
+          type: boolean
+    BrokenUnion:
+      oneOf:
+        - $ref: '#/components/schemas/Cat'
+        - $ref: '#/components/schemas/Dog'
+      description: OneOf union without discriminator

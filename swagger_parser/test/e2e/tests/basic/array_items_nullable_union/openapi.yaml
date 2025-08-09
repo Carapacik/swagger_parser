@@ -1,0 +1,27 @@
+openapi: 3.0.3
+info:
+  title: Array items nullable union
+  version: 1.0.0
+paths:
+  /items:
+    get:
+      operationId: getItems
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResponse'
+components:
+  schemas:
+    ItemsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            anyOf:
+              - type: string
+              - type: 'null'
+      required: []

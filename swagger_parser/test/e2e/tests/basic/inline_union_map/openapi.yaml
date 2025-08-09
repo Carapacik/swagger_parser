@@ -1,0 +1,28 @@
+openapi: 3.0.3
+info:
+  title: Inline union inside map
+  version: 1.0.0
+paths:
+  /inline-map:
+    get:
+      operationId: getInlineMap
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    additionalProperties:
+                      anyOf:
+                        - type: object
+                          properties:
+                            a:
+                              type: integer
+                        - type: object
+                          properties:
+                            b:
+                              type: string

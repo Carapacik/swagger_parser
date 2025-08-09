@@ -1,0 +1,31 @@
+openapi: 3.0.3
+info:
+  title: AllOf composition without discriminator
+  version: 1.0.0
+paths:
+  /cats:
+    get:
+      operationId: getCats
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatLike'
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+    CatLike:
+      allOf:
+        - $ref: '#/components/schemas/Pet'
+        - type: object
+          properties:
+            whiskers:
+              type: boolean
+      description: Cat-like pet composed via allOf

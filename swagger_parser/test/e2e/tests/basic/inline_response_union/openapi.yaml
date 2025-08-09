@@ -1,0 +1,23 @@
+openapi: 3.0.3
+info:
+  title: Inline union as top-level response
+  version: 1.0.0
+paths:
+  /inline-response:
+    get:
+      operationId: getInlineResponse
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      a:
+                        type: integer
+                  - type: object
+                    properties:
+                      b:
+                        type: string

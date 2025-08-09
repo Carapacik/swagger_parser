@@ -1,0 +1,25 @@
+openapi: 3.0.3
+info:
+  title: Primitive union nullable
+  version: 1.0.0
+paths:
+  /value:
+    get:
+      operationId: getValue
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Value'
+components:
+  schemas:
+    Value:
+      type: object
+      properties:
+        data:
+          anyOf:
+            - type: string
+            - type: 'null'
+      required: []

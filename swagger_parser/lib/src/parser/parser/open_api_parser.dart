@@ -865,6 +865,35 @@ class OpenApiParser {
           ),
         );
         return;
+      } else if ((value.containsKey(_oneOfConst) ||
+              value.containsKey(_anyOfConst)) &&
+          // Do not alias discriminated unions; they should generate concrete base classes
+          (value[_discriminatorConst] is! Map<String, dynamic> ||
+              !(value[_discriminatorConst] as Map<String, dynamic>)
+                  .containsKey(_propertyNameConst))) {
+        // Handle non-discriminated oneOf/anyOf at components level that collapse to a single underlying type
+        final typeWithImport = _findType(
+          value,
+          name: key,
+          // component typedef is non-nullable by default; nullability is encoded in the type
+          isRequired: true,
+        );
+
+        // Always alias non-discriminated unions via typedef for better ergonomics
+        parameters.add(typeWithImport.type);
+        if (typeWithImport.import != null) {
+          imports.add(typeWithImport.import!);
+        }
+        dataClasses.add(
+          UniversalComponentClass(
+            name: key,
+            imports: imports,
+            parameters: parameters,
+            typeDef: true,
+            description: value[_descriptionConst]?.toString(),
+          ),
+        );
+        return;
       }
 
       if (value.containsKey(_allOfConst)) {
@@ -1696,15 +1725,29 @@ class OpenApiParser {
     if (!map.containsKey(_oneOfConst)) {
       return null;
     }
+    // If there is no discriminator or it's not a map, treat as non-discriminated union
+    if (map[_discriminatorConst] is! Map<String, dynamic>) {
+      return null;
+    }
     final discriminator = map[_discriminatorConst] as Map<String, dynamic>;
+    // If propertyName is missing or not a string, treat as non-discriminated union
+    if (discriminator[_propertyNameConst] is! String) {
+      return null;
+    }
     final propertyName = discriminator[_propertyNameConst] as String;
-    final refMapping = discriminator[_mappingConst] as Map<String, dynamic>;
+    // Mapping is optional per spec; only parse when valid
+    final refMapping = discriminator[_mappingConst] is Map<String, dynamic>
+        ? discriminator[_mappingConst] as Map<String, dynamic>
+        : <String, dynamic>{};
 
     // Cleanup the refMapping to contain only the class name
     final cleanedRefMapping = <String, String>{};
     for (final key in refMapping.keys) {
-      final refMap = <String, dynamic>{_refConst: refMapping[key]};
-      cleanedRefMapping[key] = _formatRef(refMap);
+      final refValue = refMapping[key];
+      if (refValue is String && refValue.isNotEmpty) {
+        final refMap = <String, dynamic>{_refConst: refValue};
+        cleanedRefMapping[key] = _formatRef(refMap);
+      }
     }
     return (
       propertyName: propertyName,

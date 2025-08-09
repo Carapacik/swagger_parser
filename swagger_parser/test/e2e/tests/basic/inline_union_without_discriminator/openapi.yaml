@@ -1,0 +1,30 @@
+openapi: 3.0.3
+info:
+  title: Inline non-discriminated union
+  version: 1.0.0
+paths:
+  /inline:
+    get:
+      operationId: getInline
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payload:
+                    oneOf:
+                      - type: object
+                        properties:
+                          type:
+                            type: string
+                          a:
+                            type: integer
+                      - type: object
+                        properties:
+                          type:
+                            type: string
+                          b:
+                            type: string
