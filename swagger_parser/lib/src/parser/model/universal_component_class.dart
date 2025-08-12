@@ -31,6 +31,7 @@ final class UniversalComponentClass extends UniversalDataClass {
     this.typeDef = false,
     this.discriminator,
     this.discriminatorValue,
+    this.undiscriminatedUnionVariants,
     super.description,
   });
 
@@ -52,6 +53,12 @@ final class UniversalComponentClass extends UniversalDataClass {
   /// When using a discriminated oneOf, where this class is one of the discriminated values, this field contains the information about the parent
   final DiscriminatorValue? discriminatorValue;
 
+  /// When using an undiscriminated oneOf/anyOf, this contains a mapping of
+  /// variant key (usually referenced component name or synthesized inline name)
+  /// to the set of properties that the variant exposes. Generators can use
+  /// this to create sealed unions with factories and defer deserialization.
+  final Map<String, Set<UniversalType>>? undiscriminatedUnionVariants;
+
   /// Whether or not this schema is a basic type
   /// "Date": {
   ///   "type": "string",
@@ -69,6 +76,7 @@ final class UniversalComponentClass extends UniversalDataClass {
     bool? typeDef,
     Discriminator? discriminator,
     DiscriminatorValue? discriminatorValue,
+    Map<String, Set<UniversalType>>? undiscriminatedUnionVariants,
     String? description,
   }) {
     return UniversalComponentClass(
@@ -79,6 +87,8 @@ final class UniversalComponentClass extends UniversalDataClass {
       typeDef: typeDef ?? this.typeDef,
       discriminator: discriminator ?? this.discriminator,
       discriminatorValue: discriminatorValue ?? this.discriminatorValue,
+      undiscriminatedUnionVariants:
+          undiscriminatedUnionVariants ?? this.undiscriminatedUnionVariants,
       description: description ?? super.description,
     );
   }
@@ -91,18 +101,22 @@ final class UniversalComponentClass extends UniversalDataClass {
           const DeepCollectionEquality().equals(imports, other.imports) &&
           const DeepCollectionEquality().equals(parameters, other.parameters) &&
           allOf == other.allOf &&
-          typeDef == other.typeDef;
+          typeDef == other.typeDef &&
+          const DeepCollectionEquality().equals(
+              undiscriminatedUnionVariants, other.undiscriminatedUnionVariants);
 
   @override
   int get hashCode =>
       imports.hashCode ^
       parameters.hashCode ^
       allOf.hashCode ^
-      typeDef.hashCode;
+      typeDef.hashCode ^
+      undiscriminatedUnionVariants.hashCode;
 
   @override
   String toString() => 'UniversalComponentClass(imports: $imports, '
       'parameters: $parameters, '
       'allOf: $allOf, '
+      'undiscriminatedUnionVariants: $undiscriminatedUnionVariants, '
       'typeDef: $typeDef)';
 }
