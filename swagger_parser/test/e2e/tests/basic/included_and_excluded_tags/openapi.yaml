@@ -2,6 +2,22 @@ openapi: 3.1.0
 info:
   title: ""
   version: 0.0.0 (v1)
+# Define reusable schema components
+components:
+  schemas:
+    # This anchor is defined here but will be used in included endpoint
+    AuditInfo: &auditAnchor
+      type: object
+      properties:
+        lastModified:
+          type: string
+          format: date-time
+          description: Last modified timestamp from anchor
+        modifiedBy:
+          type: string
+          description: User who modified from anchor
+      required:
+        - lastModified
 paths:
   /api/v1/tagged-as-exclude-but-included-should-be-included/:
     get:
@@ -10,15 +26,77 @@ paths:
         - client
         - include
         - exclude
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                includedField:
+                  type: string
+                  description: This field should be included (include tag wins)
+                includedNested:
+                  type: object
+                  properties:
+                    includedInner:
+                      type: string
+                # Reference the anchor defined in excluded-only schema
+                auditData: *auditAnchor
+              required:
+                - includedField
       responses:
-        "204":
-          description: ""
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  includedResponse:
+                    type: string
+                  includedData:
+                    type: object
+                    properties:
+                      dataField:
+                        type: string
+                      priority:
+                        type: integer
+                required:
+                  - includedResponse
   /api/v1/tagged-as-exclude-but-not-included-should-be-excluded/:
     get:
-      operationId: api_v1_category_list
+      operationId: api_v1_category_list_excluded
       tags:
         - client
         - exclude
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                excludedField:
+                  type: string
+                  description: This field should NOT be included
+                excludedNested:
+                  type: object
+                  properties:
+                    shouldNotAppear:
+                      type: string
       responses:
-        "204":
-          description: ""
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  excludedResponse:
+                    type: string
+                  excludedData:
+                    type: object
+                    properties:
+                      notIncluded:
+                        type: string

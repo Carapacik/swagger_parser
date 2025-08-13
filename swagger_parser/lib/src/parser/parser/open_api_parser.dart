@@ -1405,6 +1405,11 @@ class OpenApiParser {
             parameters: parameters,
           ),
         );
+        _usedSchemas.add(type);
+        // Track dependencies of inline schemas
+        if (imports.isNotEmpty) {
+          _schemaDependencies[type] = imports.toSet();
+        }
       }
 
       return (
@@ -1494,9 +1499,10 @@ class OpenApiParser {
           );
 
           // Create a sealed class to represent the discriminated union
+          final sealedClassName = newName!.toPascal;
           _objectClasses.add(
             UniversalComponentClass(
-              name: newName!.toPascal,
+              name: sealedClassName,
               imports: SplayTreeSet<String>(),
               parameters: {
                 UniversalType(
@@ -1508,6 +1514,7 @@ class OpenApiParser {
               discriminator: discriminator,
             ),
           );
+          _usedSchemas.add(sealedClassName);
 
           ofType = UniversalType(
             type: newName.toPascal,
@@ -1628,9 +1635,10 @@ class OpenApiParser {
                 );
 
                 // Create a class to represent the allOf composition
+                final allOfClassName = newName!.toPascal;
                 _objectClasses.add(
                   UniversalComponentClass(
-                    name: newName!.toPascal,
+                    name: allOfClassName,
                     imports: imports,
                     // ignore: prefer_const_literals_to_create_immutables
                     parameters: {},
@@ -1639,6 +1647,7 @@ class OpenApiParser {
                     description: description,
                   ),
                 );
+                _usedSchemas.add(allOfClassName);
 
                 ofType = UniversalType(
                   type: newName.toPascal,
