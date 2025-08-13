@@ -17,6 +17,48 @@ components:
           type: string
           pattern: "^\\d+\\.\\d+\\.\\d+$"
           description: Semantic version from anchor
+    # This anchor is never referenced and should be filtered out
+    UnusedExcludedSchema: &unusedSchemaAnchor
+      type: object
+      properties:
+        unusedField1:
+          type: string
+          description: This should never be generated
+        unusedField2:
+          type: number
+          description: This should also never be generated
+    # Anchor only used in excluded schemas - should not generate model
+    ExcludedSharedData: &excludedSharedDataAnchor
+      type: object
+      properties:
+        excludedSharedField:
+          type: string
+          description: This anchor is only referenced in excluded schemas
+        excludedSharedNumber:
+          type: integer
+          maximum: 100
+    # First schema referencing excludedSharedDataAnchor (excluded by tag)
+    ExcludedSchema1:
+      type: object
+      properties:
+        schema1Field:
+          type: string
+        # First cross-schema reference to excludedSharedDataAnchor
+        sharedData: *excludedSharedDataAnchor
+        otherField:
+          type: boolean
+    # Second schema referencing excludedSharedDataAnchor (excluded by tag)
+    ExcludedSchema2:
+      type: object
+      properties:
+        schema2Field:
+          type: number
+        # Second cross-schema reference to excludedSharedDataAnchor
+        commonData: *excludedSharedDataAnchor
+        anotherField:
+          type: array
+          items:
+            type: string
 paths:
   /api/v1/tagged-as-client-should-be-excluded/:
     get:
@@ -39,6 +81,29 @@ paths:
                   properties:
                     shouldNotAppear:
                       type: string
+                # Unreferenced anchor in excluded path - should not generate model
+                unusedInExcludedPath: &unusedPathAnchor
+                  type: object
+                  properties:
+                    neverUsedField:
+                      type: string
+                      description: This anchor is not referenced anywhere
+                    anotherUnusedField:
+                      type: boolean
+                # Anchor defined in excluded context - should not generate model
+                excludedAnchor: &excludedOnlyAnchor
+                  type: object
+                  properties:
+                    excludedAnchorField1:
+                      type: string
+                      description: This anchor is only used in excluded contexts
+                    excludedAnchorField2:
+                      type: integer
+                      minimum: 0
+                # First reference to excludedOnlyAnchor (in excluded context)
+                excludedRef1: *excludedOnlyAnchor
+                # Second reference to excludedOnlyAnchor (in excluded context)
+                excludedRef2: *excludedOnlyAnchor
       responses:
         "200":
           description: Success response
@@ -54,6 +119,14 @@ paths:
                     properties:
                       notIncluded:
                         type: string
+                  # Third reference to excludedOnlyAnchor (in excluded response)
+                  excludedResponseRef: *excludedOnlyAnchor
+                  # Reference to ExcludedSchema1 (in excluded response)
+                  excludedSchema1Ref:
+                    $ref: '#/components/schemas/ExcludedSchema1'
+                  # Reference to ExcludedSchema2 (in excluded response)
+                  excludedSchema2Ref:
+                    $ref: '#/components/schemas/ExcludedSchema2'
   /api/v1/not-tagged-should-be-included/:
     get:
       operationId: api_v1_category_list

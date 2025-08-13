@@ -18,6 +18,49 @@ components:
           description: User who modified from anchor
       required:
         - lastModified
+    # Unreferenced anchor in components - should not generate model
+    UnreferencedComponent: &unreferencedComponentAnchor
+      type: object
+      properties:
+        neverUsedComponent:
+          type: string
+          description: This component is never referenced
+        unusedNumber:
+          type: integer
+          minimum: 0
+    # Anchor only used in excluded schemas - should not generate model
+    ExcludedCrossSchemaAnchor: &excludedCrossAnchor
+      type: object
+      properties:
+        crossSchemaField:
+          type: string
+          description: This anchor is only used in excluded schemas
+        crossSchemaBoolean:
+          type: boolean
+          default: true
+    # First excluded schema with cross-reference
+    ExcludedComponentA:
+      type: object
+      properties:
+        componentAField:
+          type: string
+        # First cross-schema reference to excludedCrossAnchor
+        sharedCrossData: *excludedCrossAnchor
+        anotherFieldA:
+          type: integer
+    # Second excluded schema with cross-reference
+    ExcludedComponentB:
+      type: object
+      properties:
+        componentBField:
+          type: array
+          items:
+            type: string
+        # Second cross-schema reference to excludedCrossAnchor
+        embeddedCrossData: *excludedCrossAnchor
+        anotherFieldB:
+          type: number
+          format: float
 paths:
   /api/v1/tagged-as-exclude-but-included-should-be-included/:
     get:
@@ -85,6 +128,31 @@ paths:
                   properties:
                     shouldNotAppear:
                       type: string
+                # Unreferenced anchor in excluded path - should not generate model
+                unusedExcludedAnchor: &excludedUnusedAnchor
+                  type: object
+                  properties:
+                    unusedExcludedField:
+                      type: string
+                      description: This is in an excluded path and never referenced
+                    anotherUnusedField:
+                      type: array
+                      items:
+                        type: string
+                # Anchor only used in excluded contexts - should not generate model
+                onlyExcludedAnchor: &onlyInExcludedContexts
+                  type: object
+                  properties:
+                    excludedOnlyField:
+                      type: string
+                      description: Anchor used only in excluded tags
+                    excludedOnlyNumber:
+                      type: number
+                      format: double
+                # First reference to onlyInExcludedContexts (excluded context)
+                excludedContextRef1: *onlyInExcludedContexts
+                # Second reference to onlyInExcludedContexts (excluded context)
+                excludedContextRef2: *onlyInExcludedContexts
       responses:
         "200":
           description: Success response
@@ -100,3 +168,11 @@ paths:
                     properties:
                       notIncluded:
                         type: string
+                  # Third reference to onlyInExcludedContexts (in excluded response)
+                  excludedResponseAnchorRef: *onlyInExcludedContexts
+                  # Reference to ExcludedComponentA (in excluded response)
+                  excludedComponentARef:
+                    $ref: '#/components/schemas/ExcludedComponentA'
+                  # Reference to ExcludedComponentB (in excluded response)
+                  excludedComponentBRef:
+                    $ref: '#/components/schemas/ExcludedComponentB'

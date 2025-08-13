@@ -15,7 +15,9 @@ import '../model/universal_request.dart';
 import '../model/universal_request_type.dart';
 import '../model/universal_rest_client.dart';
 import '../model/universal_type.dart';
+import '../utils/anchor_registry.dart';
 import '../utils/case_utils.dart';
+import '../utils/context_stack.dart';
 import '../utils/http_utils.dart';
 import '../utils/type_utils.dart';
 
@@ -43,6 +45,8 @@ class OpenApiParser {
   final _objectNamesCount = <String, int>{};
   final _usedSchemas = <String>{};
   final _schemaDependencies = <String, Set<String>>{};
+  final _anchorRegistry = AnchorRegistry();
+  final _contextStack = ContextStack();
 
   static const _additionalPropertiesConst = 'additionalProperties';
   static const _allOfConst = 'allOf';
@@ -598,108 +602,114 @@ class OpenApiParser {
       }
 
       pathValue.forEach((key, requestPath) {
-        // check if this requestPath has any tags that
-        // define wether the requestPath should be included
-        if (!_includeTag(requestPath as Map<String, dynamic>)) {
-          return;
-        }
-
-        // `servers` contains List<dynamic>
-        if (key == _serversConst ||
-            key == _parametersConst ||
-            key.startsWith('x-')) {
-          return;
-        }
-
-        final requestPathResponses =
-            requestPath[_responsesConst] as Map<String, dynamic>;
-        final additionalName = '$key${path}Response'.toPascal;
-        final returnType = _apiInfo.schemaVersion == OAS.v2
-            ? returnTypeV2(requestPathResponses, additionalName)
-            : returnTypeV3(requestPathResponses, additionalName);
-        final parameters = _apiInfo.schemaVersion == OAS.v2
-            ? parametersV2(requestPath)
-            : parametersV3(requestPath);
-
-        // Add global parameters that have not been overridden by local parameters
-        // defined at the request level.
-        parameters.addAll(
-          globalParameters.where(
-            (e) =>
-                parameters.every((p) => p.name != e.name && p.type != e.type),
-          ),
-        );
-
-        // Build full description
-        final summary = requestPath[_summaryConst]?.toString().trim();
-        var description = requestPath[_descriptionConst]?.toString().trim();
-        description = switch ((summary, description)) {
-          (null, null) || ('', '') => null,
-          (_, null) || (_, '') => summary,
-          (null, _) || ('', _) => description,
-          (_, _) => '$summary\n\n$description',
-        };
-        final parametersDescription = parameters
-            .where((e) => e.description != null)
-            .map((e) => '[${e.name?.toCamel ?? 'body'}] - ${e.description}')
-            .join('\n\n')
-            .trim();
-        description = switch ((description, parametersDescription)) {
-          (null, '') || ('', '') => null,
-          (_, '') => description,
-          (null, _) || ('', _) => parametersDescription,
-          (_, _) => '$description\n\n$parametersDescription',
-        };
-        // End build full description
-
-        String requestName;
-
-        if (config.pathMethodName) {
-          requestName = (key + path).toCamel;
-        } else {
-          final operationIdName =
-              requestPath[_operationIdConst]?.toString().toCamel;
-          final (_, nameDescription) = protectName(operationIdName);
-          if (nameDescription != null) {
-            description = '$description\n\n$nameDescription';
-            requestName = (key + path).toCamel;
-          } else {
-            requestName = operationIdName ?? (key + path).toCamel;
+        // Process this path/method within its context
+        _contextStack.withContext('path:$path:$key', () {
+          // check if this requestPath has any tags that
+          // define wether the requestPath should be included
+          final isIncluded = _includeTag(requestPath as Map<String, dynamic>);
+          if (!isIncluded) {
+            return;
           }
-        }
 
-        final request = UniversalRequest(
-          name: requestName,
-          description: description,
-          requestType: HttpRequestType.fromString(key)!,
-          route: path,
-          contentType: resultContentType,
-          returnType: returnType,
-          parameters: parameters,
-          isDeprecated:
-              requestPath[_deprecatedConst].toString().toBool() ?? false,
-        );
-        // we are converting the tag to the snake case
-        // later tag is used to determine the file name
-        final currentTag =
-            (_getTag(requestPath) ?? config.fallbackClient).toSnake;
-        final sameTagIndex = restClients.indexWhere(
-          (e) => e.name == currentTag,
-        );
-        if (sameTagIndex == -1) {
-          restClients.add(
-            UniversalRestClient(
-              name: currentTag,
-              requests: [request],
-              imports: SplayTreeSet<String>.of(imports),
+          _anchorRegistry.markContextAsIncluded(_contextStack.current!);
+
+          // `servers` contains List<dynamic>
+          if (key == _serversConst ||
+              key == _parametersConst ||
+              key.startsWith('x-')) {
+            return;
+          }
+
+          final requestPathResponses =
+              requestPath[_responsesConst] as Map<String, dynamic>;
+          final additionalName = '$key${path}Response'.toPascal;
+          final returnType = _apiInfo.schemaVersion == OAS.v2
+              ? returnTypeV2(requestPathResponses, additionalName)
+              : returnTypeV3(requestPathResponses, additionalName);
+          final parameters = _apiInfo.schemaVersion == OAS.v2
+              ? parametersV2(requestPath)
+              : parametersV3(requestPath);
+
+          // Add global parameters that have not been overridden by local parameters
+          // defined at the request level.
+          parameters.addAll(
+            globalParameters.where(
+              (e) =>
+                  parameters.every((p) => p.name != e.name && p.type != e.type),
             ),
           );
-        } else {
-          restClients[sameTagIndex].requests.add(request);
-          restClients[sameTagIndex].imports.addAll(imports);
-        }
-        resultContentType = config.defaultContentType;
-        imports.clear();
+
+          // Build full description
+          final summary = requestPath[_summaryConst]?.toString().trim();
+          var description = requestPath[_descriptionConst]?.toString().trim();
+          description = switch ((summary, description)) {
+            (null, null) || ('', '') => null,
+            (_, null) || (_, '') => summary,
+            (null, _) || ('', _) => description,
+            (_, _) => '$summary\n\n$description',
+          };
+          final parametersDescription = parameters
+              .where((e) => e.description != null)
+              .map((e) => '[${e.name?.toCamel ?? 'body'}] - ${e.description}')
+              .join('\n\n')
+              .trim();
+          description = switch ((description, parametersDescription)) {
+            (null, '') || ('', '') => null,
+            (_, '') => description,
+            (null, _) || ('', _) => parametersDescription,
+            (_, _) => '$description\n\n$parametersDescription',
+          };
+          // End build full description
+
+          String requestName;
+
+          if (config.pathMethodName) {
+            requestName = (key + path).toCamel;
+          } else {
+            final operationIdName =
+                requestPath[_operationIdConst]?.toString().toCamel;
+            final (_, nameDescription) = protectName(operationIdName);
+            if (nameDescription != null) {
+              description = '$description\n\n$nameDescription';
+              requestName = (key + path).toCamel;
+            } else {
+              requestName = operationIdName ?? (key + path).toCamel;
+            }
+          }
+
+          final request = UniversalRequest(
+            name: requestName,
+            description: description,
+            requestType: HttpRequestType.fromString(key)!,
+            route: path,
+            contentType: resultContentType,
+            returnType: returnType,
+            parameters: parameters,
+            isDeprecated:
+                requestPath[_deprecatedConst].toString().toBool() ?? false,
+          );
+          // we are converting the tag to the snake case
+          // later tag is used to determine the file name
+          final currentTag =
+              (_getTag(requestPath) ?? config.fallbackClient).toSnake;
+          final sameTagIndex = restClients.indexWhere(
+            (e) => e.name == currentTag,
+          );
+          if (sameTagIndex == -1) {
+            restClients.add(
+              UniversalRestClient(
+                name: currentTag,
+                requests: [request],
+                imports: SplayTreeSet<String>.of(imports),
+              ),
+            );
+          } else {
+            restClients[sameTagIndex].requests.add(request);
+            restClients[sameTagIndex].imports.addAll(imports);
+          }
+          resultContentType = config.defaultContentType;
+          imports.clear();
+        });
       });
     });
     return restClients;
@@ -822,104 +832,106 @@ class OpenApiParser {
           _definitionFileContent[_definitionsConst] as Map<String, dynamic>;
     }
     entities.forEach((key, value) {
-      if (_skipDataClasses.contains(key)) {
-        return;
-      }
-
-      value as Map<String, dynamic>;
-
-      // Track schema dependencies for filtering
-      _extractSchemaDependencies(value, key);
-
-      final refs = <String>{};
-      final parameters = <UniversalType>{};
-      final imports = SplayTreeSet<String>();
-
-      /// Used for find properties in map
-      void localFindParametersAndImports(Map<String, dynamic> map) {
-        final (findParameters, findImports) = _findParametersAndImports(
-          map,
-          additionalName: key,
-        );
-        parameters.addAll(findParameters);
-        imports.addAll(findImports);
-      }
-
-      if (value.containsKey(_propertiesConst)) {
-        localFindParametersAndImports(value);
-      } else if (value.containsKey(_enumConst)) {
-        final Set<UniversalEnumItem> items;
-        final values = (value[_enumConst] as List).map((e) => '$e');
-        if (value.containsKey(_enumNamesConst)) {
-          final names = (value[_enumNamesConst] as List).map((e) => '$e');
-          items = protectEnumItemsNamesAndValues(names, values);
-        } else {
-          items = protectEnumItemsNames(values);
+      _contextStack.withContext('schema:$key', () {
+        if (_skipDataClasses.contains(key)) {
+          return;
         }
-        final type = value[_typeConst].toString();
 
-        dataClasses.add(
-          _getUniqueEnumClass(
+        value as Map<String, dynamic>;
+
+        // Track schema dependencies for filtering
+        _extractSchemaDependencies(value, key);
+
+        final refs = <String>{};
+        final parameters = <UniversalType>{};
+        final imports = SplayTreeSet<String>();
+
+        /// Used for find properties in map
+        void localFindParametersAndImports(Map<String, dynamic> map) {
+          final (findParameters, findImports) = _findParametersAndImports(
+            map,
+            additionalName: key,
+          );
+          parameters.addAll(findParameters);
+          imports.addAll(findImports);
+        }
+
+        if (value.containsKey(_propertiesConst)) {
+          localFindParametersAndImports(value);
+        } else if (value.containsKey(_enumConst)) {
+          final Set<UniversalEnumItem> items;
+          final values = (value[_enumConst] as List).map((e) => '$e');
+          if (value.containsKey(_enumNamesConst)) {
+            final names = (value[_enumNamesConst] as List).map((e) => '$e');
+            items = protectEnumItemsNamesAndValues(names, values);
+          } else {
+            items = protectEnumItemsNames(values);
+          }
+          final type = value[_typeConst].toString();
+
+          dataClasses.add(
+            _getUniqueEnumClass(
+              name: key,
+              items: items,
+              type: type,
+              defaultValue: value[_defaultConst]?.toString(),
+              description: value[_descriptionConst]?.toString(),
+            ),
+          );
+          return;
+        } else if (value.containsKey(_typeConst) ||
+            value.containsKey(_refConst)) {
+          final typeWithImport = _findType(
+            value,
             name: key,
-            items: items,
-            type: type,
-            defaultValue: value[_defaultConst]?.toString(),
-            description: value[_descriptionConst]?.toString(),
-          ),
-        );
-        return;
-      } else if (value.containsKey(_typeConst) ||
-          value.containsKey(_refConst)) {
-        final typeWithImport = _findType(
-          value,
-          name: key,
-          // typeDef is always non-nullable
-          isRequired: true,
-        );
-        parameters.add(typeWithImport.type);
-        if (typeWithImport.import != null) {
-          imports.add(typeWithImport.import!);
+            // typeDef is always non-nullable
+            isRequired: true,
+          );
+          parameters.add(typeWithImport.type);
+          if (typeWithImport.import != null) {
+            imports.add(typeWithImport.import!);
+          }
+          dataClasses.add(
+            UniversalComponentClass(
+              name: key,
+              imports: imports,
+              parameters: parameters,
+              typeDef: true,
+              description: value[_descriptionConst]?.toString(),
+            ),
+          );
+          return;
         }
+
+        if (value.containsKey(_allOfConst)) {
+          for (final map in value[_allOfConst] as List<dynamic>) {
+            if ((map as Map<String, dynamic>).containsKey(_refConst)) {
+              final ref = _formatRef(map);
+
+              refs.add(ref);
+              continue;
+            }
+            if (map.containsKey(_propertiesConst)) {
+              localFindParametersAndImports(map);
+            }
+          }
+        }
+
+        final allOf =
+            refs.isNotEmpty ? (refs: refs, properties: parameters) : null;
+
+        final discriminator = _parseDiscriminatorInfo(value);
         dataClasses.add(
           UniversalComponentClass(
             name: key,
             imports: imports,
-            parameters: parameters,
-            typeDef: true,
+            parameters: allOf != null ? {} : parameters,
+            allOf: allOf,
             description: value[_descriptionConst]?.toString(),
+            discriminator: discriminator,
           ),
         );
-        return;
-      }
-
-      if (value.containsKey(_allOfConst)) {
-        for (final map in value[_allOfConst] as List<dynamic>) {
-          if ((map as Map<String, dynamic>).containsKey(_refConst)) {
-            final ref = _formatRef(map);
-
-            refs.add(ref);
-            continue;
-          }
-          if (map.containsKey(_propertiesConst)) {
-            localFindParametersAndImports(map);
-          }
-        }
-      }
-
-      final allOf =
-          refs.isNotEmpty ? (refs: refs, properties: parameters) : null;
-
-      final discriminator = _parseDiscriminatorInfo(value);
-      dataClasses.add(
-        UniversalComponentClass(
-          name: key,
-          imports: imports,
-          parameters: allOf != null ? {} : parameters,
-          allOf: allOf,
-          description: value[_descriptionConst]?.toString(),
-          discriminator: discriminator,
-        ),
-      );
+      });
     });
 
     dataClasses.addAll(_objectClasses);
@@ -1025,7 +1037,17 @@ class OpenApiParser {
   /// Filter out unused schemas
   List<UniversalDataClass> _filterUsedClasses(
       List<UniversalDataClass> dataClasses) {
-    final allUsedSchemas = _resolveAllDependencies();
+    // Get schemas that are directly used (referenced from included endpoints)
+    final directlyUsedSchemas = _resolveAllDependencies();
+
+    // Get all schemas that should be included (including inline schemas)
+    final allUsedSchemas =
+        _anchorRegistry.resolveAllIncludedSchemas(directlyUsedSchemas);
+
+    // Also include inline schemas that passed the filter
+    final includedInlineSchemas =
+        _anchorRegistry.resolveIncludedInlineSchemas();
+    allUsedSchemas.addAll(includedInlineSchemas);
 
     final filteredDataClasses = dataClasses.where((dataClass) {
       return allUsedSchemas.contains(dataClass.name);
@@ -1119,6 +1141,10 @@ class OpenApiParser {
   void _extractSchemaRefs(Map<String, dynamic> map, String? parentSchema) {
     _traverseSchemaRefs(map, parentSchema, (refName, parent) {
       _usedSchemas.add(refName);
+      // Also track in the anchor registry if we have a context
+      if (_contextStack.current case final context?) {
+        _anchorRegistry.registerSchemaReference(refName, context);
+      }
     });
   }
 
@@ -1405,10 +1431,19 @@ class OpenApiParser {
             parameters: parameters,
           ),
         );
-        _usedSchemas.add(type);
+        // Register inline schema in the anchor registry
+        if (_contextStack.current case final context?) {
+          _anchorRegistry.registerInlineSchema(type, context);
+        }
         // Track dependencies of inline schemas
         if (imports.isNotEmpty) {
           _schemaDependencies[type] = imports.toSet();
+          // Register references from this inline schema
+          if (_contextStack.current case final context?) {
+            for (final imp in imports) {
+              _anchorRegistry.registerInlineSchemaReference(imp, context);
+            }
+          }
         }
       }
 
@@ -1514,7 +1549,10 @@ class OpenApiParser {
               discriminator: discriminator,
             ),
           );
-          _usedSchemas.add(sealedClassName);
+          // Register inline schema in the anchor registry
+          if (_contextStack.current case final context?) {
+            _anchorRegistry.registerInlineSchema(sealedClassName, context);
+          }
 
           ofType = UniversalType(
             type: newName.toPascal,
@@ -1647,7 +1685,10 @@ class OpenApiParser {
                     description: description,
                   ),
                 );
-                _usedSchemas.add(allOfClassName);
+                // Register inline schema in the anchor registry
+                if (_contextStack.current case final context?) {
+                  _anchorRegistry.registerInlineSchema(allOfClassName, context);
+                }
 
                 ofType = UniversalType(
                   type: newName.toPascal,
