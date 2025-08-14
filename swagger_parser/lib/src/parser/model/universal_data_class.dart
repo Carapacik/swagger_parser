@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
-import '../utils/case_utils.dart';
 import '../utils/type_utils.dart';
+import 'normalized_identifier.dart';
 import 'universal_type.dart';
 
 part 'universal_component_class.dart';

@@ -8,6 +8,7 @@ import 'package:yaml/yaml.dart';
 import '../config/parser_config.dart';
 import '../corrector/open_api_corrector.dart';
 import '../exception/open_api_parser_exception.dart';
+import '../model/normalized_identifier.dart';
 import '../model/open_api_info.dart';
 import '../model/universal_collections.dart';
 import '../model/universal_data_class.dart';
@@ -15,7 +16,6 @@ import '../model/universal_request.dart';
 import '../model/universal_request_type.dart';
 import '../model/universal_rest_client.dart';
 import '../model/universal_type.dart';
-import '../utils/case_utils.dart';
 import '../utils/http_utils.dart';
 import '../utils/type_utils.dart';
 
