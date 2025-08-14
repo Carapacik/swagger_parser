@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import '../utils/case_utils.dart';
+import 'normalized_identifier.dart';
 
 /// Used to store regex patterns for replacing names during generation
 @immutable
