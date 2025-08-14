@@ -132,7 +132,7 @@ String _toParameter(UniversalRequestType parameter, bool useMultipartFile) {
 
   // https://github.com/trevorwang/retrofit.dart/issues/661
   // The Word `value` cant be used a a keyword argument
-  final keywordArguments = parameter.type.name!.toCamel.replaceFirst(
+  final keywordArguments = parameter.type.name!.replaceFirst(
     'value',
     'value_',
   );

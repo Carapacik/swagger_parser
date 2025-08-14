@@ -394,7 +394,7 @@ class OpenApiParser {
                 description: currentType.description,
                 type: UniversalType(
                   type: currentType.type,
-                  name: propName,
+                  name: propName.toCamel,
                   description: currentType.description,
                   format: currentType.format,
                   defaultValue: currentType.defaultValue,
@@ -998,13 +998,7 @@ class OpenApiParser {
       config.mergeClients && config.name != null
           ? config.name!
           : map.containsKey(_tagsConst)
-              ? (map[_tagsConst] as List<dynamic>)
-                  .firstOrNull
-                  ?.toString()
-                  .replaceAll(
-                    RegExp(r'[^\w\s]+'),
-                    '',
-                  )
+              ? (map[_tagsConst] as List<dynamic>).firstOrNull?.toString()
               : 'client';
 
   /// Format `$ref` type
