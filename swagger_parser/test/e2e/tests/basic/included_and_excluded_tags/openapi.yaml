@@ -183,3 +183,31 @@ paths:
                   # Reference to ExcludedComponentB (in excluded response)
                   excludedComponentBRef:
                     $ref: '#/components/schemas/ExcludedComponentB'
+  /api/v1/no-tags-endpoint:
+    get:
+      operationId: api_v1_no_tags
+      # No tags - should be filtered out when includeTags is set
+      responses:
+        "200":
+          description: No tags response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  noTagsData:
+                    type: string
+  /api/v1/empty-tags-endpoint:
+    get:
+      operationId: api_v1_empty_tags  
+      tags: []  # Empty tags - should be filtered out when includeTags is set
+      responses:
+        "200":
+          description: Empty tags response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emptyTagsData:
+                    type: string

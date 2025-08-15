@@ -606,8 +606,7 @@ class OpenApiParser {
         _contextStack.withContext('path:$path:$key', () {
           // check if this requestPath has any tags that
           // define wether the requestPath should be included
-          final isIncluded = _includeTag(requestPath as Map<String, dynamic>);
-          if (!isIncluded) {
+          if (!_isPathIncluded(requestPath as Map<String, dynamic>)) {
             return;
           }
 
@@ -1068,7 +1067,7 @@ class OpenApiParser {
                     RegExp(r'[^\w\s]+'),
                     '',
                   )
-              : 'client';
+              : null;
 
   /// Format `$ref` type
   String _formatRef(Map<String, dynamic> map, {bool useSchema = false}) =>
@@ -1856,30 +1855,28 @@ class OpenApiParser {
     }
   }
 
-  /// Check if any tag of a given endpoint is included or excluded
+  /// Check if a path is included or excluded based on its tags and
+  /// [ParserConfig.includeTags] and [ParserConfig.excludeTags].
   ///
-  /// It will return true if the [ParserConfig.includeTags] is not empty
-  /// and the any tag of this endpoint is included, afterwards
-  /// it will check if the [ParserConfig.excludeTags] is not empty
-  /// and the any tag of this endpoint is excluded.
+  /// If [ParserConfig.includeTags] is not empty,
+  /// [ParserConfig.excludeTags] will be ignored.
   ///
-  /// If the tag is neither included nor excluded or if there is no tag at all,
-  /// it will return true.
-  bool _includeTag(Map<String, dynamic> map) {
-    if (!map.containsKey(_tagsConst)) {
-      return true;
-    }
-
-    final tags = (map[_tagsConst] as List<dynamic>).map((e) => e as String);
+  /// If both are empty, the path will always be included.
+  bool _isPathIncluded(Map<String, dynamic> requestPath) {
+    final tags = switch (requestPath[_tagsConst]) {
+      final List<dynamic> tags => tags.map((tag) => tag as String).toList(),
+      _ => <String>[],
+    };
 
     if (config.includeTags.isNotEmpty) {
       return config.includeTags.any(tags.contains);
     }
 
     if (config.excludeTags.isNotEmpty) {
-      return !config.excludeTags.any(tags.contains);
+      return config.excludeTags.none(tags.contains);
     }
 
+    // If neither includeTags nor excludeTags is specified, include everything
     return true;
   }
 

@@ -4,8 +4,11 @@
 
 // Clients
 export 'clients/pets_client.dart';
+export 'clients/default_client.dart';
 // Data classes
 export 'models/pet.dart';
 export 'models/category.dart';
+export 'models/get_api_v1_no_tags_response.dart';
+export 'models/get_api_v1_empty_tags_response.dart';
 // Root client
 export 'rest_client.dart';

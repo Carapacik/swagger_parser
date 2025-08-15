@@ -47,6 +47,34 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+  /api/v1/no-tags:
+    get:
+      operationId: getNoTags
+      # No tags - should be included when excludeTags is set
+      responses:
+        '200':
+          description: No tags endpoint
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+  /api/v1/empty-tags:
+    get:
+      operationId: getEmptyTags
+      tags: []  # Empty tags - should be included when excludeTags is set
+      responses:
+        '200':
+          description: Empty tags endpoint
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  value:
+                    type: string
 components:
   schemas:
     Pet:
