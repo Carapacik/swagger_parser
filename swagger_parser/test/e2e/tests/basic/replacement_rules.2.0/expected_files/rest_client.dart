@@ -4,7 +4,7 @@
 
 import 'package:dio/dio.dart';
 
-import 'clients/client_client.dart';
+import 'clients/default_client.dart';
 
 /// Swagger Petstore `v1.0.0`
 class RestClient {
@@ -19,7 +19,7 @@ class RestClient {
 
   static String get version => '1.0.0';
 
-  ClientClient? _client;
+  DefaultClient? _default;
 
-  ClientClient get client => _client ??= ClientClient(_dio, baseUrl: _baseUrl);
+  DefaultClient get default => _default ??= DefaultClient(_dio, baseUrl: _baseUrl);
 }

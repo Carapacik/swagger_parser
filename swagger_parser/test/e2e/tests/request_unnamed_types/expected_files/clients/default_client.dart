@@ -9,11 +9,11 @@ import '../models/get_test2_response.dart';
 import '../models/object0.dart';
 import '../models/object1.dart';
 
-part 'client_client.g.dart';
+part 'default_client.g.dart';
 
 @RestApi()
-abstract class ClientClient {
-  factory ClientClient(Dio dio, {String? baseUrl}) = _ClientClient;
+abstract class DefaultClient {
+  factory DefaultClient(Dio dio, {String? baseUrl}) = _DefaultClient;
 
   /// [body] - Name not received and was auto-generated.
   @POST('/test1')

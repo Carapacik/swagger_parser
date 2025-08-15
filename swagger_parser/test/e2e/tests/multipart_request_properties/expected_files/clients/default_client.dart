@@ -11,11 +11,11 @@ import 'package:retrofit/retrofit.dart';
 import '../models/object0.dart';
 import '../models/object1.dart';
 
-part 'client_client.g.dart';
+part 'default_client.g.dart';
 
 @RestApi()
-abstract class ClientClient {
-  factory ClientClient(Dio dio, {String? baseUrl}) = _ClientClient;
+abstract class DefaultClient {
+  factory DefaultClient(Dio dio, {String? baseUrl}) = _DefaultClient;
 
   /// Test.
   ///

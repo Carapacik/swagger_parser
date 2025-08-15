@@ -1,0 +1,171 @@
+openapi: 3.1.0
+info:
+  title: API with Include and Exclude Tags
+  version: 1.0.0
+paths:
+  /api/v1/pets:
+    get:
+      operationId: getPets
+      tags:
+        - pets
+        - include
+        - exclude  # This endpoint has both include AND exclude tags
+      responses:
+        '200':
+          description: List of pets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+  /api/v1/orders:
+    get:
+      operationId: getOrders
+      tags:
+        - orders
+        - exclude  # Only has exclude tag
+      responses:
+        '200':
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+  /api/v1/users:
+    get:
+      operationId: getUsers
+      tags:
+        - users
+        - include  # Only has include tag
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /api/v1/products:
+    get:
+      operationId: getProducts
+      tags:
+        - products  # Has neither include nor exclude tags
+      responses:
+        '200':
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /api/v1/no-tags:
+    get:
+      operationId: getNoTags
+      # No tags - should be filtered out when includeTags is set
+      responses:
+        '200':
+          description: No tags endpoint
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+  /api/v1/empty-tags:
+    get:
+      operationId: getEmptyTags
+      tags: []  # Empty tags - should be filtered out when includeTags is set
+      responses:
+        '200':
+          description: Empty tags endpoint
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  value:
+                    type: string
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          $ref: '#/components/schemas/Category'
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+        product:
+          type: string
+        customer:
+          $ref: '#/components/schemas/Customer'
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        role:
+          type: string
+          enum:
+            - ADMIN
+            - USER
+            - MODERATOR
+            - GUEST
+        profile:
+          $ref: '#/components/schemas/UserProfile'
+    UserProfile:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        vendor:
+          $ref: '#/components/schemas/Vendor'
+    Vendor:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    UnusedSchema:
+      type: object
+      properties:
+        data:
+          type: string

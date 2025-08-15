@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint, unused_import
 
 // Clients
-export 'clients/client_client.dart';
+export 'clients/default_client.dart';
 // Data classes
 export 'models/example.dart';
 export 'models/object0.dart';
