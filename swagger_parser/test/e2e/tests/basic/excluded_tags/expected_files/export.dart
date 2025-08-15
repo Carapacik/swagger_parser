@@ -10,5 +10,6 @@ export 'models/get_api_v1_not_tagged_should_be_included_response.dart';
 export 'models/nested_included.dart';
 export 'models/metadata.dart';
 export 'models/object0.dart';
+export 'models/status.dart';
 // Root client
 export 'rest_client.dart';

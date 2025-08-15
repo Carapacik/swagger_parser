@@ -41,6 +41,12 @@ components:
           type: integer
         name:
           type: string
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - SUSPENDED
         posts:
           type: array
           items:

@@ -104,6 +104,13 @@ components:
           type: integer
         email:
           type: string
+        role:
+          type: string
+          enum:
+            - ADMIN
+            - USER
+            - MODERATOR
+            - GUEST
         profile:
           $ref: '#/components/schemas/UserProfile'
     UserProfile:

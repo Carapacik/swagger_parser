@@ -41,6 +41,13 @@ components:
           type: integer
         name:
           type: string
+        availability:
+          type: string
+          enum:
+            - IN_STOCK
+            - OUT_OF_STOCK
+            - RESERVED
+            - SOLD
         category:
           $ref: '#/components/schemas/Category'
     Category:

@@ -4,6 +4,8 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'category.dart';
+
 part 'included_data.freezed.dart';
 part 'included_data.g.dart';
 
@@ -11,6 +13,7 @@ part 'included_data.g.dart';
 class IncludedData with _$IncludedData {
   const factory IncludedData({
     String? dataField,
+    Category? category,
     int? count,
   }) = _IncludedData;
 

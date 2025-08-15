@@ -56,6 +56,12 @@ components:
           type: integer
         name:
           type: string
+        status:
+          type: string
+          enum:
+            - AVAILABLE
+            - ADOPTED
+            - PENDING
         category:
           $ref: '#/components/schemas/Category'
     Category:

@@ -103,6 +103,13 @@ paths:
                     properties:
                       dataField:
                         type: string
+                      level:
+                        type: string
+                        enum:
+                          - LOW
+                          - MEDIUM
+                          - HIGH
+                          - CRITICAL
                       priority:
                         type: integer
                 required:

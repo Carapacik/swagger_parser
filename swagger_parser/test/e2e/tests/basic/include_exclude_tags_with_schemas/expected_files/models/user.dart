@@ -5,6 +5,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'user_profile.dart';
+import 'user_role.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';
@@ -14,6 +15,7 @@ class User with _$User {
   const factory User({
     int? id,
     String? email,
+    UserRole? role,
     UserProfile? profile,
   }) = _User;
 

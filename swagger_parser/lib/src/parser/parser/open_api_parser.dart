@@ -1356,6 +1356,11 @@ class OpenApiParser {
 
       _enumClasses.add(enumClass);
 
+      // Register inline enum in the anchor registry
+      if (_contextStack.current case final context?) {
+        _anchorRegistry.registerInlineSchema(enumClass.name, context);
+      }
+
       final type = map[_typeConst];
       // Determine nullability for enums, considering if "null" is a type or if nullable is true
       var isEnumNullable = map[_nullableConst].toString().toBool() ?? false;

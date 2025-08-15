@@ -5,6 +5,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'category.dart';
+import 'pet_availability.dart';
 
 part 'pet.freezed.dart';
 part 'pet.g.dart';
@@ -14,6 +15,7 @@ class Pet with _$Pet {
   const factory Pet({
     int? id,
     String? name,
+    PetAvailability? availability,
     Category? category,
   }) = _Pet;
 
