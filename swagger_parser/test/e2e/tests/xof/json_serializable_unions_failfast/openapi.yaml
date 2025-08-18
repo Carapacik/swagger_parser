@@ -1,0 +1,34 @@
+openapi: 3.0.3
+info:
+  title: json_serializable unions failfast
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    Pet:
+      oneOf:
+        - $ref: '#/components/schemas/Cat'
+        - $ref: '#/components/schemas/Dog'
+      discriminator:
+        propertyName: type
+        mapping:
+          cat: Cat
+          dog: Dog
+    Cat:
+      type: object
+      required: [type, meows]
+      properties:
+        type:
+          type: string
+          enum: [cat]
+        meows:
+          type: boolean
+    Dog:
+      type: object
+      required: [type, barks]
+      properties:
+        type:
+          type: string
+          enum: [dog]
+        barks:
+          type: boolean

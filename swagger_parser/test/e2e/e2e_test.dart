@@ -618,4 +618,71 @@ void main() {
       );
     });
   });
+
+  group('xof', () {
+    test('discriminated_any_of_complete_mapping', () async {
+      await e2eTest(
+        'xof/discriminated_any_of_complete_mapping',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('non_discriminated_one_of_deferred', () async {
+      await e2eTest(
+        'xof/non_discriminated_one_of_deferred',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('non_discriminated_any_of_deferred', () async {
+      await e2eTest(
+        'xof/non_discriminated_any_of_deferred',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('union_inline_and_refs_any_of_deferred', () async {
+      await e2eTest(
+        'xof/union_inline_and_refs_any_of_deferred',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('union_inline_and_refs_one_of_deferred', () async {
+      await e2eTest(
+        'xof/union_inline_and_refs_one_of_deferred',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+  });
 }
