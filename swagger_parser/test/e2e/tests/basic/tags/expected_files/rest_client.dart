@@ -4,7 +4,7 @@
 
 import 'package:dio/dio.dart';
 
-import 'clients/default_client.dart';
+import 'clients/fallback_client.dart';
 import 'clients/client2_client.dart';
 import 'clients/parcel_pending_client.dart';
 
@@ -21,13 +21,16 @@ class RestClient {
 
   static String get version => '0.0.0 (v1)';
 
-  DefaultClient? _default;
+  FallbackClient? _fallback;
   Client2Client? _client2;
   ParcelPendingClient? _parcelPending;
 
-  DefaultClient get default => _default ??= DefaultClient(_dio, baseUrl: _baseUrl);
+  FallbackClient get fallback =>
+      _fallback ??= FallbackClient(_dio, baseUrl: _baseUrl);
 
-  Client2Client get client2 => _client2 ??= Client2Client(_dio, baseUrl: _baseUrl);
+  Client2Client get client2 =>
+      _client2 ??= Client2Client(_dio, baseUrl: _baseUrl);
 
-  ParcelPendingClient get parcelPending => _parcelPending ??= ParcelPendingClient(_dio, baseUrl: _baseUrl);
+  ParcelPendingClient get parcelPending =>
+      _parcelPending ??= ParcelPendingClient(_dio, baseUrl: _baseUrl);
 }
