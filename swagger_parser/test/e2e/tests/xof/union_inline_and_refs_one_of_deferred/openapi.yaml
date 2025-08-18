@@ -1,0 +1,44 @@
+openapi: 3.1.0
+info:
+  title: Family API (oneOf with mixed refs and inline variants)
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    Family:
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Cat'
+              - type: object
+                properties:
+                  chirpVolume:
+                    type: integer
+                    description: Loudness of the bird chirp.
+                required: [chirpVolume]
+              - $ref: '#/components/schemas/Dog'
+              - type: object
+                properties:
+                  job:
+                    type: string
+                    description: The job of the human.
+                required: [job]
+      required:
+        - members
+    Cat:
+      type: object
+      properties:
+        mewCount:
+          type: integer
+          description: Number of times the cat meows.
+      required: [mewCount]
+    Dog:
+      type: object
+      properties:
+        barkSound:
+          type: string
+          description: The sound of the dog's bark.
+      required: [barkSound]
