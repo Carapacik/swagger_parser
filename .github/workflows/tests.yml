@@ -19,7 +19,7 @@ jobs:
         sdk:
           - stable
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v5.0.0
       - uses: dart-lang/setup-dart@v1.7.1
         with:
           sdk: "${{ matrix.sdk }}"
