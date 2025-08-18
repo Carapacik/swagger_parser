@@ -4,7 +4,7 @@
 
 import 'package:dio/dio.dart';
 
-import 'clients/client_client.dart';
+import 'clients/default_client.dart';
 
 class RestClient {
   RestClient(
@@ -18,7 +18,7 @@ class RestClient {
 
   static String get version => '';
 
-  ClientClient? _client;
+  DefaultClient? _default;
 
-  ClientClient get client => _client ??= ClientClient(_dio, baseUrl: _baseUrl);
+  DefaultClient get default => _default ??= DefaultClient(_dio, baseUrl: _baseUrl);
 }

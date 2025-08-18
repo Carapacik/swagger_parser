@@ -20,11 +20,11 @@ import '../models/object1_dto.dart';
 import '../models/private_att_data3_dto.dart';
 import '../models/private_class_name4_dto.dart';
 
-part 'client_client.g.dart';
+part 'default_client.g.dart';
 
 @RestApi()
-abstract class ClientClient {
-  factory ClientClient(Dio dio, {String? baseUrl}) = _ClientClient;
+abstract class DefaultClient {
+  factory DefaultClient(Dio dio, {String? baseUrl}) = _DefaultClient;
 
   /// [p1Class] - Name not received and was auto-generated.
   ///
