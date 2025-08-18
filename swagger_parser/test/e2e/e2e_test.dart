@@ -479,6 +479,63 @@ void main() {
       );
     });
 
+    test('included_tags_with_schemas', () async {
+      await e2eTest(
+        'basic/included_tags_with_schemas',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          includeTags: ['include'],
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('excluded_tags_with_schemas', () async {
+      await e2eTest(
+        'basic/excluded_tags_with_schemas',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          excludeTags: ['exclude'],
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('circular_deps_with_tags', () async {
+      await e2eTest(
+        'basic/circular_deps_with_tags',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          includeTags: ['include'],
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('include_exclude_tags_with_schemas', () async {
+      await e2eTest(
+        'basic/include_exclude_tags_with_schemas',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          includeTags: ['include'],
+          excludeTags: ['exclude'],
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('use_freezed3.3.0', () async {
       await e2eTest(
         'basic/use_freezed3.3.0',

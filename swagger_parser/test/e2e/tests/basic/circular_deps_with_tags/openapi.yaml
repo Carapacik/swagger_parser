@@ -1,0 +1,114 @@
+openapi: 3.1.0
+info:
+  title: API with Circular Schema Dependencies
+  version: 1.0.0
+paths:
+  /api/v1/users:
+    get:
+      operationId: getUsers
+      tags:
+        - users
+        - include
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /api/v1/posts:
+    get:
+      operationId: getPosts
+      tags:
+        - posts
+      responses:
+        '200':
+          description: List of posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+  /api/v1/no-tags:
+    get:
+      operationId: getNoTags
+      # No tags field at all - should be filtered out when includeTags is set
+      responses:
+        '200':
+          description: Response without tags
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /api/v1/empty-tags:
+    get:
+      operationId: getEmptyTags
+      tags: []  # Empty tags array - should be filtered out when includeTags is set
+      responses:
+        '200':
+          description: Response with empty tags
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - SUSPENDED
+        posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'  # User references Post
+        friends:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'  # User references itself
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          $ref: '#/components/schemas/User'  # Post references User (circular)
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+        text:
+          type: string
+        author:
+          $ref: '#/components/schemas/User'  # Comment also references User
+        post:
+          $ref: '#/components/schemas/Post'  # Comment references Post
+    UnusedSchema:
+      type: object
+      properties:
+        data:
+          type: string
