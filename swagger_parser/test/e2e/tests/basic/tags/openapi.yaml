@@ -13,7 +13,7 @@ paths:
     get:
       operationId: api_v1_category_list
       tags:
-        - Client
+        - Default
       responses:
         '204':
           description: ''
