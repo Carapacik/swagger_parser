@@ -7,11 +7,11 @@ import 'package:retrofit/retrofit.dart';
 
 import '../models/pet.dart';
 
-part 'client_client.g.dart';
+part 'default_client.g.dart';
 
 @RestApi()
-abstract class ClientClient {
-  factory ClientClient(Dio dio, {String? baseUrl}) = _ClientClient;
+abstract class DefaultClient {
+  factory DefaultClient(Dio dio, {String? baseUrl}) = _DefaultClient;
 
   @GET('/pets')
   Future<List<Pet>> findPets({
