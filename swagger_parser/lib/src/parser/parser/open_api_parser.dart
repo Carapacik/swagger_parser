@@ -902,6 +902,20 @@ class OpenApiParser {
           return;
         }
 
+        // Top-level undiscriminated oneOf/anyOf component handling
+        // If the schema defines a oneOf/anyOf without a discriminator, and all
+        // variants are refs or inline objects, synthesize a union component.
+        if (_getUndiscriminatedUnionValues(value)
+            case final List<dynamic> unionValues) {
+          final description = value[_descriptionConst]?.toString();
+          final union =
+              _createUnionComponentClass(unionValues, key, description);
+          if (union != null) {
+            dataClasses.add(union);
+            return;
+          }
+        }
+
         if (value.containsKey(_allOfConst)) {
           for (final map in value[_allOfConst] as List<dynamic>) {
             if ((map as Map<String, dynamic>).containsKey(_refConst)) {
@@ -1511,8 +1525,8 @@ class OpenApiParser {
       }
 
       if (ofList is List<dynamic>) {
-        // Handle first the special case of oneOf with discriminator which should be handled as sealed class
-        if (map.containsKey(_oneOfConst) &&
+        // Handle first the special case of oneOf/anyOf with discriminator which should be handled as sealed class
+        if ((map.containsKey(_oneOfConst) || map.containsKey(_anyOfConst)) &&
             map.containsKey(_discriminatorConst) &&
             (map[_discriminatorConst] as Map<String, dynamic>).containsKey(
               _propertyNameConst,
@@ -1699,10 +1713,51 @@ class OpenApiParser {
                     UniversalType(type: _objectConst, isRequired: isRequired);
               }
             } else {
-              // For anyOf or oneOf with multiple non-null types, or type: [type1, type2, "null"]
-              // Default to dynamic or object.
-              ofType =
-                  UniversalType(type: _objectConst, isRequired: isRequired);
+              // For anyOf or oneOf without a discriminator,
+              // we only handle the case when all variants are refs or inline object schemas.
+              final areAllRefsOrObjects =
+                  _getAreAllRefsOrInlineObjects(otherItems);
+
+              final isUnion =
+                  map.containsKey(_oneOfConst) || map.containsKey(_anyOfConst);
+
+              if (areAllRefsOrObjects && isUnion) {
+                final baseClassName =
+                    '${additionalName ?? ''} ${name ?? ''} Union'.toPascal;
+                final (newName, description) = protectName(
+                  baseClassName,
+                  uniqueIfNull: true,
+                  description: map[_descriptionConst]?.toString(),
+                );
+
+                final unionName = newName!.toPascal;
+                final (imports, variantRefToProps) = _getImportsAndProps(
+                  otherItems,
+                  unionName,
+                );
+
+                // Create a union component class marker without discriminator; generators will treat it as a union
+                _objectClasses.add(
+                  UniversalComponentClass(
+                    name: unionName,
+                    imports: imports,
+                    // Parameters here are unused by union factories
+                    parameters: const {},
+                    description: description,
+                    undiscriminatedUnionVariants: variantRefToProps,
+                  ),
+                );
+
+                ofType = UniversalType(
+                  type: unionName,
+                  isRequired: isRequired,
+                );
+                ofImport = unionName;
+              } else {
+                // Fallback if we cannot synthesize a proper union
+                ofType =
+                    UniversalType(type: _objectConst, isRequired: isRequired);
+              }
             }
           }
 
@@ -1849,6 +1904,25 @@ class OpenApiParser {
     }
   }
 
+  bool _getAreAllRefsOrInlineObjects(List<Map<String, dynamic>> otherItems) {
+    // Avoid strict pattern matching on YAML-backed maps because values may be
+    // YamlScalar/other runtime types. Use defensive .toString() comparisons.
+    return otherItems.every((item) {
+      final hasRef = item.containsKey(_refConst);
+      final properties = item[_propertiesConst];
+      final hasProps =
+          properties is Map<String, dynamic> && properties.isNotEmpty;
+      final hasExplicitObjectType =
+          item[_typeConst]?.toString() == _objectConst;
+
+      // Accept either a $ref, an inline object with explicit type: object,
+      // or an inline object with properties and no explicit type.
+      return hasRef ||
+          (hasExplicitObjectType && hasProps) ||
+          (hasProps && !item.containsKey(_typeConst));
+    });
+  }
+
   /// Check if a path is included or excluded based on its tags and
   /// [ParserConfig.includeTags] and [ParserConfig.excludeTags].
   ///
@@ -1875,19 +1949,40 @@ class OpenApiParser {
   }
 
   Discriminator? _parseDiscriminatorInfo(Map<String, dynamic> map) {
-    if (!map.containsKey(_oneOfConst)) {
+    // Only consider discriminator information when adjacent to oneOf or anyOf
+    if (!map.containsKey(_oneOfConst) && !map.containsKey(_anyOfConst)) {
       return null;
     }
-    final discriminator = map[_discriminatorConst] as Map<String, dynamic>;
-    final propertyName = discriminator[_propertyNameConst] as String;
-    final refMapping = discriminator[_mappingConst] as Map<String, dynamic>;
+
+    // Must have a discriminator object
+    if (!map.containsKey(_discriminatorConst)) {
+      return null;
+    }
+    final discriminatorRaw = map[_discriminatorConst];
+    if (discriminatorRaw is! Map<String, dynamic>) {
+      return null;
+    }
+
+    // Discriminator must have both propertyName and mapping
+    if (!discriminatorRaw.containsKey(_propertyNameConst) ||
+        !discriminatorRaw.containsKey(_mappingConst)) {
+      return null;
+    }
+
+    final propertyName = discriminatorRaw[_propertyNameConst] as String;
+    final refMappingRaw = discriminatorRaw[_mappingConst];
+    if (refMappingRaw is! Map) {
+      return null;
+    }
 
     // Cleanup the refMapping to contain only the class name
     final cleanedRefMapping = <String, String>{};
-    for (final key in refMapping.keys) {
-      final refMap = <String, dynamic>{_refConst: refMapping[key]};
+    for (final entry in refMappingRaw.entries) {
+      final key = entry.key.toString();
+      final refMap = <String, dynamic>{_refConst: entry.value};
       cleanedRefMapping[key] = _formatRef(refMap);
     }
+
     return (
       propertyName: propertyName,
       discriminatorValueToRefMapping: cleanedRefMapping,
@@ -1895,6 +1990,101 @@ class OpenApiParser {
       refProperties: <String, Set<UniversalType>>{},
     );
   }
+
+  (
+    SplayTreeSet<String> imports,
+    Map<String, Set<UniversalType>> variantRefToProps
+  ) _getImportsAndProps(
+    List<Map<String, dynamic>> otherItems,
+    String unionName,
+  ) {
+    // Gather properties for each variant to be exposed on union constructors
+    // and collect imports for referenced schemas.
+    final imports = SplayTreeSet<String>();
+    final variantRefToProps = <String, Set<UniversalType>>{};
+
+    for (final item in otherItems) {
+      if (item.containsKey(_refConst)) {
+        final refName = _formatRef(item).toPascal;
+
+        // Locate the referenced component to get its properties if available.
+        if (_definitionFileContent
+            case {
+              _componentsConst: {
+                _schemasConst: final Map<String, dynamic> schemas,
+              }
+            } when schemas[refName] is Map<String, dynamic>) {
+          final schemaMap = schemas[refName] as Map<String, dynamic>;
+          final (props, propImports) = _findParametersAndImports(
+            schemaMap,
+            additionalName: refName,
+          );
+          variantRefToProps[refName] = props;
+          imports.addAll(propImports);
+        }
+      } else {
+        // Inline object variant; synthesize a stable variant key based on index only
+        // so factories are named `variant<idx>` and classes `${unionName}Variant<idx>`.
+        final idx = otherItems.indexOf(item) + 1;
+        final variantKey = 'variant$idx';
+        final (props, propImports) = _findParametersAndImports(
+          item,
+          additionalName: '${unionName}Variant$idx',
+        );
+        imports.addAll(propImports);
+        variantRefToProps[variantKey] = props;
+      }
+    }
+
+    return (imports, variantRefToProps);
+  }
+
+  /// Returns the union values if the schema is an undiscriminated union, otherwise null.
+  List<dynamic>? _getUndiscriminatedUnionValues(Map<String, dynamic> value) {
+    final ofList = value[_oneOfConst] ?? value[_anyOfConst];
+    if (ofList is! List) {
+      return null;
+    }
+    if (value[_discriminatorConst] is Map<String, dynamic>) {
+      return null;
+    }
+    return ofList;
+  }
+
+  UniversalComponentClass? _createUnionComponentClass(
+      List<dynamic> values, String schemaName, String? unionDescription) {
+    final unionVariants = filterNullTypes(values);
+    if (!_getAreAllRefsOrInlineObjects(unionVariants)) {
+      return null;
+    }
+
+    final baseClassName = '$schemaName Union'.toPascal;
+    final (newName, description) = protectName(
+      baseClassName,
+      uniqueIfNull: true,
+      description: unionDescription,
+    );
+    final unionName = newName!.toPascal;
+    final (foundImports, variantRefToProps) = _getImportsAndProps(
+      unionVariants,
+      unionName,
+    );
+
+    return UniversalComponentClass(
+      name: unionName,
+      imports: foundImports,
+      parameters: const {},
+      description: description,
+      undiscriminatedUnionVariants: variantRefToProps,
+    );
+  }
+
+  List<Map<String, dynamic>> filterNullTypes(List<dynamic> values) => values
+      .whereType<Map<String, dynamic>>()
+      .where((item) =>
+          // filter out explicit null variants if present
+          item[_typeConst]?.toString() != 'null')
+      .toList();
 }
 
 /// Extension used for [YamlMap]
