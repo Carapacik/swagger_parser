@@ -181,8 +181,8 @@ swagger_parser:
   # endpoint will be included. If no tag is specified, the fallback client
   # name will be used.
 
-  # defaults to 'default' which results in a client named `DefaultClient`.
-  fallback_client: "default"
+  # defaults to 'fallback' which results in a client named `FallbackClient`.
+  fallback_client: "fallback"
 ```
 
 For multiple schemes:

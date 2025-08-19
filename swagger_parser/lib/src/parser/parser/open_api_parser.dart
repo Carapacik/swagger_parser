@@ -8,6 +8,7 @@ import 'package:yaml/yaml.dart';
 import '../config/parser_config.dart';
 import '../corrector/open_api_corrector.dart';
 import '../exception/open_api_parser_exception.dart';
+import '../model/normalized_identifier.dart';
 import '../model/open_api_info.dart';
 import '../model/universal_collections.dart';
 import '../model/universal_data_class.dart';
@@ -16,7 +17,6 @@ import '../model/universal_request_type.dart';
 import '../model/universal_rest_client.dart';
 import '../model/universal_type.dart';
 import '../utils/anchor_registry.dart';
-import '../utils/case_utils.dart';
 import '../utils/context_stack.dart';
 import '../utils/http_utils.dart';
 import '../utils/type_utils.dart';
@@ -410,7 +410,7 @@ class OpenApiParser {
                 description: currentType.description,
                 type: UniversalType(
                   type: currentType.type,
-                  name: propName,
+                  name: propName.toCamel,
                   description: currentType.description,
                   format: currentType.format,
                   defaultValue: currentType.defaultValue,
@@ -1074,13 +1074,7 @@ class OpenApiParser {
       config.mergeClients && config.name != null
           ? config.name!
           : map.containsKey(_tagsConst)
-              ? (map[_tagsConst] as List<dynamic>)
-                  .firstOrNull
-                  ?.toString()
-                  .replaceAll(
-                    RegExp(r'[^\w\s]+'),
-                    '',
-                  )
+              ? (map[_tagsConst] as List<dynamic>).firstOrNull?.toString()
               : null;
 
   /// Format `$ref` type

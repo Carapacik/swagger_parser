@@ -4,7 +4,7 @@
 
 // Clients
 export 'clients/pets_client.dart';
-export 'clients/default_client.dart';
+export 'clients/fallback_client.dart';
 // Data classes
 export 'models/pet.dart';
 export 'models/category.dart';

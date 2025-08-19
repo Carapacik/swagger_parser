@@ -13,7 +13,7 @@ paths:
     get:
       operationId: api_v1_category_list
       tags:
-        - Default
+        - Fallback
       responses:
         '204':
           description: ''
