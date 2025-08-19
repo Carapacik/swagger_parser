@@ -5,11 +5,11 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'default_client.g.dart';
+part 'fallback_client.g.dart';
 
 @RestApi()
-abstract class DefaultClient {
-  factory DefaultClient(Dio dio, {String? baseUrl}) = _DefaultClient;
+abstract class FallbackClient {
+  factory FallbackClient(Dio dio, {String? baseUrl}) = _FallbackClient;
 
   @GET('/api/v1/untagged-should-go-to-default-client/')
   Future<void> apiV1CategoryList();

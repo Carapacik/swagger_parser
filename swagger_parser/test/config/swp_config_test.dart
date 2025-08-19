@@ -38,7 +38,7 @@ void main() {
         expect(config.fallbackUnion, isNull);
         expect(config.excludeTags, isEmpty);
         expect(config.includeTags, isEmpty);
-        expect(config.fallbackClient, equals('default'));
+        expect(config.fallbackClient, 'fallback');
       });
 
       test('should create config with all parameters specified', () {

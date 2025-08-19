@@ -1,0 +1,282 @@
+openapi: 3.0.0
+info:
+  title: Casing Test API
+  version: 1.0.0
+servers:
+  - url: https://api.example.com
+paths:
+  /users/{USER_ID_123}:
+    get:
+      tags:
+        - TEST_API
+      operationId: GET_USER_BY_ID_123
+      parameters:
+        - name: USER_ID_123
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: IS_NOT_ON_BLOCKLIST
+          in: query
+          required: true
+          schema:
+            type: boolean
+        - name: HTTP_METHOD
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: API_KEY
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/COMPLEX_CASING_MODEL'
+  
+  /api/v2/HTTP2_PROTOCOL:
+    post:
+      tags:
+        - TEST_API
+      operationId: POST_HTTP2_PROTOCOL
+      parameters:
+        - name: OAUTH2_TOKEN
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: XML_DATA
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: HTML5_PARSER
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/COMPLEX_CASING_MODEL'
+  
+  /api/V1_API_ENDPOINT:
+    put:
+      tags:
+        - TEST_API
+      operationId: UPDATE_V1_API_ENDPOINT
+      parameters:
+        - name: XML2JSON_CONVERTER
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: API_2_V3_ENDPOINT
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: SQL_DB_CONNECTION
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/COMPLEX_CASING_MODEL'
+  
+  /api/HTTPS_CONNECTION:
+    delete:
+      tags:
+        - TEST_API
+      operationId: DELETE_HTTPS_CONNECTION
+      parameters:
+        - name: XML_HTTP_REQUEST
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: JWT_AUTH_TOKEN
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: JSON_API_RESPONSE
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+  
+  /api/UUID_V4_GENERATOR:
+    get:
+      tags:
+        - TEST_API
+      operationId: GET_UUID_V4_GENERATOR
+      parameters:
+        - name: A_B_C
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: X_Y_Z
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: IO_OPERATION
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: UI_COMPONENT
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: ID_FIELD
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/COMPLEX_CASING_MODEL'
+  
+  /api/OAUTH2_JWT_TOKEN:
+    post:
+      tags:
+        - TEST_API
+      operationId: POST_OAUTH2_JWT_TOKEN
+      parameters:
+        - name: CSS_HTML5_RENDERER
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: API_V2_HTTPS_ENDPOINT
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: XML2JSON_V3_PARSER
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/COMPLEX_CASING_MODEL'
+
+components:
+  schemas:
+    COMPLEX_CASING_MODEL:
+      type: object
+      required:
+        - IS_NOT_ON_BLOCKLIST
+        - HTTP_METHOD
+        - XML_DATA
+        - API_KEY
+        - SQL_DB_CONNECTION
+        - HTML_PARSER
+        - USER_ID_123
+        - HTTP2_PROTOCOL
+        - OAUTH2_TOKEN
+        - V1_API_ENDPOINT
+        - HTML5_PARSER
+        - XML2JSON_CONVERTER
+        - API_2_V3_ENDPOINT
+        - HTTPS_CONNECTION
+        - XML_HTTP_REQUEST
+        - SQL_DB_CONNECTION_2
+        - JSON_API_RESPONSE
+        - JWT_AUTH_TOKEN
+        - A_B_C
+        - X_Y_Z
+        - IO_OPERATION
+        - UI_COMPONENT
+        - ID_FIELD
+        - UUID_V4_GENERATOR
+        - CSS_HTML5_RENDERER
+        - API_V2_HTTPS_ENDPOINT
+        - OAUTH2_JWT_TOKEN
+        - XML2JSON_V3_PARSER
+      properties:
+        IS_NOT_ON_BLOCKLIST:
+          type: string
+        HTTP_METHOD:
+          type: string
+        XML_DATA:
+          type: string
+        API_KEY:
+          type: string
+        SQL_DB_CONNECTION:
+          type: string
+        HTML_PARSER:
+          type: string
+        USER_ID_123:
+          type: string
+        HTTP2_PROTOCOL:
+          type: string
+        OAUTH2_TOKEN:
+          type: string
+        V1_API_ENDPOINT:
+          type: string
+        HTML5_PARSER:
+          type: string
+        XML2JSON_CONVERTER:
+          type: string
+        API_2_V3_ENDPOINT:
+          type: string
+        HTTPS_CONNECTION:
+          type: string
+        XML_HTTP_REQUEST:
+          type: string
+        SQL_DB_CONNECTION_2:
+          type: string
+        JSON_API_RESPONSE:
+          type: string
+        JWT_AUTH_TOKEN:
+          type: string
+        A_B_C:
+          type: string
+        X_Y_Z:
+          type: string
+        IO_OPERATION:
+          type: string
+        UI_COMPONENT:
+          type: string
+        ID_FIELD:
+          type: string
+        UUID_V4_GENERATOR:
+          type: string
+        CSS_HTML5_RENDERER:
+          type: string
+        API_V2_HTTPS_ENDPOINT:
+          type: string
+        OAUTH2_JWT_TOKEN:
+          type: string
+        XML2JSON_V3_PARSER:
+          type: string

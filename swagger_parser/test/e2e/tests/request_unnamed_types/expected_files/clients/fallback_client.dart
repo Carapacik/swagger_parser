@@ -9,11 +9,11 @@ import '../models/get_test2_response.dart';
 import '../models/object0.dart';
 import '../models/object1.dart';
 
-part 'default_client.g.dart';
+part 'fallback_client.g.dart';
 
 @RestApi()
-abstract class DefaultClient {
-  factory DefaultClient(Dio dio, {String? baseUrl}) = _DefaultClient;
+abstract class FallbackClient {
+  factory FallbackClient(Dio dio, {String? baseUrl}) = _FallbackClient;
 
   /// [body] - Name not received and was auto-generated.
   @POST('/test1')
