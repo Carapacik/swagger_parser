@@ -1,14 +1,13 @@
-## 2.0.0
+## 1.29.0
+### Features
+- Add support for non-discriminated unions (`oneOf`/`anyOf` without a discriminator)
+- Filter out unused schemas when using `include_tags` or `exclude_tags`
 
-### Breaking Changes
+### Fixes
 - Fix the client name for untagged paths to properly fall back to the configured `fallback_client` instead of `client`
 - Fix the `fallback_client` configuration to default to `fallback` instead of `default` to avoid conflicts with the Dart `default` keyword in the generated code
 - Fix OpenAPI spec parsing to correctly preserve casing for `SCREAMING_SNAKE_CASE`
 - Fix filtering so paths without tags are filtered out when `include_tags` is specified
-- Filter out unused schemas when using `include_tags` or `exclude_tags`
-
-### Features
-- Add support for non-discriminated unions (`oneOf`/`anyOf` without a discriminator)
 
 ## 1.28.0
 - Fix documentation
