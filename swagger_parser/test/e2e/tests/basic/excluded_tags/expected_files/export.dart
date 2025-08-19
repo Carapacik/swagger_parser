@@ -4,7 +4,7 @@
 
 // Clients
 export 'clients/client_client.dart';
-export 'clients/default_client.dart';
+export 'clients/fallback_client.dart';
 // Data classes
 export 'models/included_data.dart';
 export 'models/get_api_v1_not_tagged_should_be_included_response.dart';

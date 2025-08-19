@@ -1,0 +1,282 @@
+openapi: 3.0.0
+info:
+  title: Casing Test API
+  version: 1.0.0
+servers:
+  - url: https://api.example.com
+paths:
+  /users/{User-Id-123}:
+    get:
+      tags:
+        - Test-Api
+      operationId: Get-User-By-Id-123
+      parameters:
+        - name: User-Id-123
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: Is-Not-On-Blocklist
+          in: query
+          required: true
+          schema:
+            type: boolean
+        - name: Http-Method
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Api-Key
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complex-Casing-Model'
+
+  /api/v2/Http2-Protocol:
+    post:
+      tags:
+        - Test-Api
+      operationId: Post-Http2-Protocol
+      parameters:
+        - name: Oauth2-Token
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Xml-Data
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Html5-Parser
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complex-Casing-Model'
+
+  /api/V1-Api-Endpoint:
+    put:
+      tags:
+        - Test-Api
+      operationId: Update-V1-Api-Endpoint
+      parameters:
+        - name: Xml2json-Converter
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Api-2-V3-Endpoint
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Sql-Db-Connection
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complex-Casing-Model'
+
+  /api/Https-Connection:
+    delete:
+      tags:
+        - Test-Api
+      operationId: Delete-Https-Connection
+      parameters:
+        - name: Xml-Http-Request
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Jwt-Auth-Token
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Json-Api-Response
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No Content
+
+  /api/Uuid-V4-Generator:
+    get:
+      tags:
+        - Test-Api
+      operationId: Get-Uuid-V4-Generator
+      parameters:
+        - name: A-B-C
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: X-Y-Z
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Io-Operation
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Ui-Component
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Id-Field
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complex-Casing-Model'
+
+  /api/Oauth2-Jwt-Token:
+    post:
+      tags:
+        - Test-Api
+      operationId: Post-Oauth2-Jwt-Token
+      parameters:
+        - name: Css-Html5-Renderer
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Api-V2-Https-Endpoint
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Xml2json-V3-Parser
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complex-Casing-Model'
+
+components:
+  schemas:
+    Complex-Casing-Model:
+      type: object
+      required:
+        - Is-Not-On-Blocklist
+        - Http-Method
+        - Xml-Data
+        - Api-Key
+        - Sql-Db-Connection
+        - Html-Parser
+        - User-Id-123
+        - Http2-Protocol
+        - Oauth2-Token
+        - V1-Api-Endpoint
+        - Html5-Parser
+        - Xml2json-Converter
+        - Api-2-V3-Endpoint
+        - Https-Connection
+        - Xml-Http-Request
+        - Sql-Db-Connection-2
+        - Json-Api-Response
+        - Jwt-Auth-Token
+        - A-B-C
+        - X-Y-Z
+        - Io-Operation
+        - Ui-Component
+        - Id-Field
+        - Uuid-V4-Generator
+        - Css-Html5-Renderer
+        - Api-V2-Https-Endpoint
+        - Oauth2-Jwt-Token
+        - Xml2json-V3-Parser
+      properties:
+        Is-Not-On-Blocklist:
+          type: string
+        Http-Method:
+          type: string
+        Xml-Data:
+          type: string
+        Api-Key:
+          type: string
+        Sql-Db-Connection:
+          type: string
+        Html-Parser:
+          type: string
+        User-Id-123:
+          type: string
+        Http2-Protocol:
+          type: string
+        Oauth2-Token:
+          type: string
+        V1-Api-Endpoint:
+          type: string
+        Html5-Parser:
+          type: string
+        Xml2json-Converter:
+          type: string
+        Api-2-V3-Endpoint:
+          type: string
+        Https-Connection:
+          type: string
+        Xml-Http-Request:
+          type: string
+        Sql-Db-Connection-2:
+          type: string
+        Json-Api-Response:
+          type: string
+        Jwt-Auth-Token:
+          type: string
+        A-B-C:
+          type: string
+        X-Y-Z:
+          type: string
+        Io-Operation:
+          type: string
+        Ui-Component:
+          type: string
+        Id-Field:
+          type: string
+        Uuid-V4-Generator:
+          type: string
+        Css-Html5-Renderer:
+          type: string
+        Api-V2-Https-Endpoint:
+          type: string
+        Oauth2-Jwt-Token:
+          type: string
+        Xml2json-V3-Parser:
+          type: string

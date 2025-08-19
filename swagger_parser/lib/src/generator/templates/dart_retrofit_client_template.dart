@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 
+import '../../parser/model/normalized_identifier.dart';
 import '../../parser/swagger_parser_core.dart';
-import '../../parser/utils/case_utils.dart';
 import '../../utils/base_utils.dart';
 import '../../utils/type_utils.dart';
 import '../model/programming_language.dart';
@@ -132,7 +132,7 @@ String _toParameter(UniversalRequestType parameter, bool useMultipartFile) {
 
   // https://github.com/trevorwang/retrofit.dart/issues/661
   // The Word `value` cant be used a a keyword argument
-  final keywordArguments = parameter.type.name!.toCamel.replaceFirst(
+  final keywordArguments = parameter.type.name!.replaceFirst(
     'value',
     'value_',
   );

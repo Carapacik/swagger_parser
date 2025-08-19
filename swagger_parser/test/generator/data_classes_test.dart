@@ -1586,7 +1586,7 @@ enum EnumNameStringWithLeadingNumbers {
   @JsonValue('3item_three')
   value3itemThree,
   @JsonValue('4ITEM-FOUR')
-  value4ItemFour,
+  value4itemFour,
   /// Incorrect name has been replaced. Original name: `5иллегалчарактер`.
   @JsonValue('5иллегалчарактер')
   undefined0,

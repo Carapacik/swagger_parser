@@ -5,7 +5,7 @@
 import 'package:dio/dio.dart';
 
 import 'clients/pets_client.dart';
-import 'clients/default_client.dart';
+import 'clients/fallback_client.dart';
 
 /// Pet Store API with Excluded Tags `v1.0.0`
 class RestClient {
@@ -21,9 +21,10 @@ class RestClient {
   static String get version => '1.0.0';
 
   PetsClient? _pets;
-  DefaultClient? _default;
+  FallbackClient? _fallback;
 
   PetsClient get pets => _pets ??= PetsClient(_dio, baseUrl: _baseUrl);
 
-  DefaultClient get default => _default ??= DefaultClient(_dio, baseUrl: _baseUrl);
+  FallbackClient get fallback =>
+      _fallback ??= FallbackClient(_dio, baseUrl: _baseUrl);
 }

@@ -16,7 +16,7 @@ class ParserConfig {
     this.useXNullable = false,
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
-    this.fallbackClient = 'default',
+    this.fallbackClient = 'fallback',
   });
 
   /// Specification file content as [String]
@@ -72,6 +72,6 @@ class ParserConfig {
   /// DART ONLY
   /// Optional. Fallback client name for endpoints without tags.
   ///
-  /// defaults to 'default' which results in a client named `DefaultClient`.
+  /// defaults to 'fallback' which results in a client named `FallbackClient`.
   final String fallbackClient;
 }

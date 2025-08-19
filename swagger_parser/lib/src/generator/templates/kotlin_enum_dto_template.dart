@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 
+import '../../parser/model/normalized_identifier.dart';
 import '../../parser/swagger_parser_core.dart';
-import '../../parser/utils/case_utils.dart';
 import '../../utils/base_utils.dart';
 
 /// Provides template for generating kotlin enum DTO

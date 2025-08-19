@@ -7,11 +7,11 @@ import 'package:retrofit/retrofit.dart';
 
 import '../models/pet.dart';
 
-part 'default_client.g.dart';
+part 'fallback_client.g.dart';
 
 @RestApi()
-abstract class DefaultClient {
-  factory DefaultClient(Dio dio, {String? baseUrl}) = _DefaultClient;
+abstract class FallbackClient {
+  factory FallbackClient(Dio dio, {String? baseUrl}) = _FallbackClient;
 
   @GET('/pets')
   Future<List<Pet>> findPets({

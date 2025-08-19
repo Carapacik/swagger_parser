@@ -8,11 +8,11 @@ import 'package:retrofit/retrofit.dart';
 import '../models/new_pet_dto.dart';
 import '../models/pet_dto.dart';
 
-part 'default_client.g.dart';
+part 'fallback_client.g.dart';
 
 @RestApi()
-abstract class DefaultClient {
-  factory DefaultClient(Dio dio, {String? baseUrl}) = _DefaultClient;
+abstract class FallbackClient {
+  factory FallbackClient(Dio dio, {String? baseUrl}) = _FallbackClient;
 
   /// Returns all pets from the system that the user has access to.
   ///

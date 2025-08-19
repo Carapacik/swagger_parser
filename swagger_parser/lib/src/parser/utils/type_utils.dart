@@ -1,5 +1,5 @@
+import '../model/normalized_identifier.dart';
 import '../model/universal_data_class.dart';
-import 'case_utils.dart';
 import 'dart_keywords.dart';
 
 /// Extension for utils

@@ -5,7 +5,7 @@
 import 'package:dio/dio.dart';
 
 import 'clients/client_client.dart';
-import 'clients/default_client.dart';
+import 'clients/fallback_client.dart';
 
 ///  `v0.0.0 (v1)`
 class RestClient {
@@ -21,9 +21,10 @@ class RestClient {
   static String get version => '0.0.0 (v1)';
 
   ClientClient? _client;
-  DefaultClient? _default;
+  FallbackClient? _fallback;
 
   ClientClient get client => _client ??= ClientClient(_dio, baseUrl: _baseUrl);
 
-  DefaultClient get default => _default ??= DefaultClient(_dio, baseUrl: _baseUrl);
+  FallbackClient get fallback =>
+      _fallback ??= FallbackClient(_dio, baseUrl: _baseUrl);
 }

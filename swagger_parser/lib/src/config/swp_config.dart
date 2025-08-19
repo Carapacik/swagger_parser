@@ -41,7 +41,7 @@ class SWPConfig {
     this.fallbackUnion,
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
-    this.fallbackClient = 'default',
+    this.fallbackClient = 'fallback',
   });
 
   /// Internal constructor of [SWPConfig]
@@ -468,7 +468,7 @@ class SWPConfig {
   /// DART ONLY
   /// Optional. Fallback client name for endpoints without tags.
   ///
-  /// defaults to 'default' which results in a client named `DefaultClient`.
+  /// defaults to 'fallback' which results in a client named `FallbackClient`.
   final String fallbackClient;
 
   /// Convert [SWPConfig] to [GeneratorConfig]
