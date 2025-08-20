@@ -42,6 +42,7 @@ class SWPConfig {
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
     this.fallbackClient = 'fallback',
+    this.mergeOutputs = false,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -76,6 +77,7 @@ class SWPConfig {
     required this.excludeTags,
     required this.includeTags,
     required this.fallbackClient,
+    required this.mergeOutputs,
     this.fallbackUnion,
   });
 
@@ -266,6 +268,9 @@ class SWPConfig {
     final fallbackClient =
         yamlMap['fallback_client'] as String? ?? rootConfig?.fallbackClient;
 
+    final mergeOutputs =
+        yamlMap['merge_outputs'] as bool? ?? rootConfig?.mergeOutputs;
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -303,6 +308,7 @@ class SWPConfig {
       excludeTags: excludedTags ?? dc.excludeTags,
       includeTags: includedTags ?? dc.includeTags,
       fallbackClient: fallbackClient ?? dc.fallbackClient,
+      mergeOutputs: mergeOutputs ?? dc.mergeOutputs,
     );
   }
 
@@ -471,6 +477,12 @@ class SWPConfig {
   /// defaults to 'fallback' which results in a client named `FallbackClient`.
   final String fallbackClient;
 
+  /// Optional. Set to true to merge all generated code into a single file.
+  ///
+  /// This is useful when using swagger_parser together with build_runner, which needs to map
+  /// input files to output files 1-to-1.
+  final bool mergeOutputs;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -495,6 +507,7 @@ class SWPConfig {
       useFreezed3: useFreezed3,
       useMultipartFile: useMultipartFile,
       fallbackUnion: fallbackUnion,
+      mergeOutputs: mergeOutputs,
     );
   }
 

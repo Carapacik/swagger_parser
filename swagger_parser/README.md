@@ -183,6 +183,12 @@ swagger_parser:
 
   # defaults to 'fallback' which results in a client named `FallbackClient`.
   fallback_client: "fallback"
+
+  # Optional. Set to true to merge all generated code into a single file.
+  #
+  # This is useful when using swagger_parser together with build_runner, which needs to map
+  # input files to output files 1-to-1.
+  merge_outputs: false
 ```
 
 For multiple schemes:

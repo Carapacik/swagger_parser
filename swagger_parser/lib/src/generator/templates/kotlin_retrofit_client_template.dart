@@ -9,10 +9,9 @@ import '../model/programming_language.dart';
 String kotlinRetrofitClientTemplate({
   required UniversalRestClient restClient,
   required String name,
-  required bool markFileAsGenerated,
 }) {
   final sb = StringBuffer('''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated, ignoreLints: false)}import retrofit2.http.*
+import retrofit2.http.*
 
 interface $name {''');
   for (final request in restClient.requests) {
