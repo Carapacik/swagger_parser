@@ -63,14 +63,15 @@ class Generator {
         ? fillController.fillRootClient(restClients)
         : null;
 
-    final exportFile =
-        config.language == ProgrammingLanguage.dart && config.exportFile
-            ? fillController.fillExportFile(
-                restClients: restClientFiles,
-                dataClasses: dataClassesFiles,
-                rootClient: rootClientFile,
-              )
-            : null;
+    final exportFile = config.language == ProgrammingLanguage.dart &&
+            config.exportFile &&
+            !config.mergeOutputs
+        ? fillController.fillExportFile(
+            restClients: restClientFiles,
+            dataClasses: dataClassesFiles,
+            rootClient: rootClientFile,
+          )
+        : null;
 
     final files = [
       ...restClientFiles,
@@ -79,7 +80,11 @@ class Generator {
       if (exportFile != null) exportFile,
     ];
 
-    return files;
+    if (config.mergeOutputs) {
+      return [fillController.fillMergedOutputs(files)];
+    }
+
+    return fillController.addGeneratedFileComments(files);
   }
 
   /// Main function used to create files

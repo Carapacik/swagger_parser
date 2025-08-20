@@ -32,7 +32,7 @@ String dartRootClientTemplate({
       '${title ?? ''}${version != null ? ' `v$version`' : ''}${fullDescription != null ? '\n\n$fullDescription' : ''}';
 
   return '''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 ${_clientsImport(clientsNames, postfix, putClientsInFolder: putClientsInFolder, clientsNameMap: clientsNameMap)}
 ${descriptionComment(comment)}class $className {
   $className(

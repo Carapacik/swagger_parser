@@ -18,7 +18,6 @@ String dartDartMappableDtoTemplate(
   final parent = dataClass.discriminatorValue?.parentClass;
 
   return '''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated)}
 ${dartImportDtoTemplate(JsonSerializer.dartMappable)}
 ${dartImports(imports: dataClass.imports)}
 part '${dataClass.name.toSnake}.mapper.dart';

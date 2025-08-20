@@ -5,12 +5,9 @@ import '../../parser/swagger_parser_core.dart';
 import '../../utils/base_utils.dart';
 
 /// Provides template for generating kotlin enum DTO
-String kotlinEnumDtoTemplate(
-  UniversalEnumClass dataClass, {
-  required bool markFileAsGenerated,
-}) {
+String kotlinEnumDtoTemplate(UniversalEnumClass dataClass) {
   return '''
-${generatedFileComment(markFileAsGenerated: markFileAsGenerated, ignoreLints: false)}import com.squareup.moshi.Json
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)

@@ -1,3 +1,7 @@
+## 1.30.0
+### Features
+- Add support for merging all generated code into single output file using the `merge_outputs` option
+
 ## 1.29.0
 ### Features
 - Add support for non-discriminated unions (`oneOf`/`anyOf` without a discriminator)
