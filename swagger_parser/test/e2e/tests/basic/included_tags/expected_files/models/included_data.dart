@@ -12,9 +12,9 @@ part 'included_data.g.dart';
 @Freezed()
 class IncludedData with _$IncludedData {
   const factory IncludedData({
-    String? dataField,
-    Category? category,
-    int? count,
+    @JsonKey(includeIfNull: false) String? dataField,
+    @JsonKey(includeIfNull: false) Category? category,
+    @JsonKey(includeIfNull: false) int? count,
   }) = _IncludedData;
 
   factory IncludedData.fromJson(Map<String, Object?> json) =>

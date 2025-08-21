@@ -11,7 +11,7 @@ part 'get_parcel_pending_webhook_buildings_building_id_response.g.dart';
 class GetParcelPendingWebhookBuildingsBuildingIdResponse
     with _$GetParcelPendingWebhookBuildingsBuildingIdResponse {
   const factory GetParcelPendingWebhookBuildingsBuildingIdResponse({
-    @JsonKey(name: 'webhookURL') String? webhookUrl,
+    @JsonKey(includeIfNull: false, name: 'webhookURL') String? webhookUrl,
   }) = _GetParcelPendingWebhookBuildingsBuildingIdResponse;
 
   factory GetParcelPendingWebhookBuildingsBuildingIdResponse.fromJson(

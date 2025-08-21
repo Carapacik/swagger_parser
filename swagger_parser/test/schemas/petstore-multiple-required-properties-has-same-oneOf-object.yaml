@@ -42,8 +42,8 @@ components:
 
     pet:
       oneOf:
-        - $ref: '#/components/schemas/dog'
         - $ref: '#/components/schemas/cat'
+        - $ref: '#/components/schemas/dog'
       discriminator:
         propertyName: attr
         mapping:
