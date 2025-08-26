@@ -10,7 +10,7 @@ part 'get_api_v1_empty_tags_response.g.dart';
 @Freezed()
 class GetApiV1EmptyTagsResponse with _$GetApiV1EmptyTagsResponse {
   const factory GetApiV1EmptyTagsResponse({
-    String? value,
+    @JsonKey(includeIfNull: false) String? value,
   }) = _GetApiV1EmptyTagsResponse;
 
   factory GetApiV1EmptyTagsResponse.fromJson(Map<String, Object?> json) =>

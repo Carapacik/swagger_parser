@@ -23,6 +23,9 @@ paths:
                   properties:
                     street:
                       type: string
+                    deleted:
+                      type: boolean
+                      nullable: false
 
               required:
                 - images

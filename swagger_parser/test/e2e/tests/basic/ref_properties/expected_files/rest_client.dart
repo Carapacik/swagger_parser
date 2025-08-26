@@ -4,9 +4,9 @@
 
 import 'package:dio/dio.dart';
 
-import 'clients/api_client.dart';
+import 'clients/fallback_client.dart';
 
-///  `v0.0.0 (v1)`
+/// API `v1.0.0`
 class RestClient {
   RestClient(
     Dio dio, {
@@ -17,9 +17,10 @@ class RestClient {
   final Dio _dio;
   final String? _baseUrl;
 
-  static String get version => '0.0.0 (v1)';
+  static String get version => '1.0.0';
 
-  ApiClient? _api;
+  FallbackClient? _fallback;
 
-  ApiClient get api => _api ??= ApiClient(_dio, baseUrl: _baseUrl);
+  FallbackClient get fallback =>
+      _fallback ??= FallbackClient(_dio, baseUrl: _baseUrl);
 }
