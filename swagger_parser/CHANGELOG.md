@@ -2,7 +2,7 @@
 - Add complete unions(`oneOf`/`anyOf`) support for `dart_mappable` serializer
   - **WARNING**: Undiscriminated unions use O(n) try-catch deserialization where n is the number of variants
   - **RECOMMENDED**: Add discriminator properties to your OpenAPI specification for O(1) performance
-  - Add support unions fallback for failed decoding fallback
+  - Add support unions fallback for failed decoding
 - Add `dart_mappable_convenient_when` option for `when<T>, maybeWhen<T>` method with dart_mappable
 - Add `@Deprecated()` annotation to `when<T>, maybeWhen<T>` method with dart_mappable. Use dart pattern matching
 - Fix create duplicated `unknown` property enum with dart_mappable and `unknown_enum_value: true`
