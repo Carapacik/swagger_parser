@@ -1,0 +1,46 @@
+openapi: 3.1.0
+info:
+  title: Family API (oneOf, non-discriminated)
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    # Top-level oneOf without discriminator to mirror anyOf case and reproduce the same path
+    CatDogHuman:
+      oneOf:
+        - $ref: '#/components/schemas/Cat'
+        - $ref: '#/components/schemas/Dog'
+        - $ref: '#/components/schemas/Human'
+    Family:
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Cat'
+              - $ref: '#/components/schemas/Dog'
+              - $ref: '#/components/schemas/Human'
+      required:
+        - members
+    Cat:
+      type: object
+      properties:
+        mewCount:
+          type: integer
+          description: Number of times the cat meows.
+      required: [mewCount]
+    Dog:
+      type: object
+      properties:
+        barkSound:
+          type: string
+          description: The sound of the dog's bark.
+      required: [barkSound]
+    Human:
+      type: object
+      properties:
+        job:
+          type: string
+          description: The job of the human.
+      required: [job]

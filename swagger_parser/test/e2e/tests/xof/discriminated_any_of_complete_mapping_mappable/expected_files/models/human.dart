@@ -4,13 +4,12 @@
 
 import 'package:dart_mappable/dart_mappable.dart';
 
-import 'family_members_union.dart';
 import 'human_type.dart';
 
 part 'human.mapper.dart';
 
-@MappableClass(discriminatorValue: 'Human')
-class Human extends FamilyMembersUnion with HumanMappable {
+@MappableClass()
+class Human with HumanMappable {
   const Human({
     required this.type,
     required this.job,

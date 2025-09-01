@@ -39,6 +39,7 @@ class SWPConfig {
     this.useFreezed3 = false,
     this.useMultipartFile = false,
     this.fallbackUnion,
+    this.dartMappableConvenientWhen = true,
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
     this.fallbackClient = 'fallback',
@@ -78,6 +79,7 @@ class SWPConfig {
     required this.includeTags,
     required this.fallbackClient,
     required this.mergeOutputs,
+    required this.dartMappableConvenientWhen,
     this.fallbackUnion,
   });
 
@@ -233,6 +235,10 @@ class SWPConfig {
     final fallbackUnion =
         yamlMap['fallback_union'] as String? ?? rootConfig?.fallbackUnion;
 
+    final dartMappableConvenientWhen =
+        yamlMap['dart_mappable_convenient_when'] as bool? ?? 
+        rootConfig?.dartMappableConvenientWhen ?? true;
+
     final excludedTagsYaml = yamlMap['exclude_tags'] as YamlList?;
     List<String>? excludedTags;
     if (excludedTagsYaml != null) {
@@ -309,6 +315,7 @@ class SWPConfig {
       includeTags: includedTags ?? dc.includeTags,
       fallbackClient: fallbackClient ?? dc.fallbackClient,
       mergeOutputs: mergeOutputs ?? dc.mergeOutputs,
+      dartMappableConvenientWhen: dartMappableConvenientWhen,
     );
   }
 
@@ -459,6 +466,11 @@ class SWPConfig {
   final String? fallbackUnion;
 
   /// DART ONLY
+  /// Optional. Set 'true' to generate when/maybeWhen convenience methods for dart_mappable unions.
+  /// Set 'false' to use only native Dart pattern matching.
+  final bool dartMappableConvenientWhen;
+
+  /// DART ONLY
   /// Optional. Set excluded tags.
   ///
   /// Endpoints with these tags will not be included in the generated clients.
@@ -507,6 +519,7 @@ class SWPConfig {
       useFreezed3: useFreezed3,
       useMultipartFile: useMultipartFile,
       fallbackUnion: fallbackUnion,
+      dartMappableConvenientWhen: dartMappableConvenientWhen,
       mergeOutputs: mergeOutputs,
     );
   }

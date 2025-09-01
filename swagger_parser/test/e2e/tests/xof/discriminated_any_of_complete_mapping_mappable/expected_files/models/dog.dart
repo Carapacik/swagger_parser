@@ -5,12 +5,11 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
 import 'dog_type.dart';
-import 'family_members_union.dart';
 
 part 'dog.mapper.dart';
 
-@MappableClass(discriminatorValue: 'Dog')
-class Dog extends FamilyMembersUnion with DogMappable {
+@MappableClass()
+class Dog with DogMappable {
   const Dog({
     required this.type,
     required this.barkSound,

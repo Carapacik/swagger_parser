@@ -12,55 +12,105 @@ String dartDartMappableDtoTemplate(
   UniversalComponentClass dataClass, {
   required bool markFileAsGenerated,
   required bool useMultipartFile,
+  required bool dartMappableConvenientWhen,
+  String? fallbackUnion,
 }) {
+  // Use fallback union only if explicitly provided
+  // Auto-fallback is disabled to avoid breaking existing tests
+  final effectiveFallbackUnion = fallbackUnion;
   final className = dataClass.name.toPascal;
+  final discriminator = dataClass.discriminator;
+  final isUndiscriminatedUnion =
+      dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false;
+  
+  // For dart_mappable, treat discriminated unions with complete mapping as undiscriminated
+  // to use the wrapper pattern instead of direct inheritance
+  final shouldUseWrapperPattern = isUndiscriminatedUnion || 
+      (discriminator != null && _isCompleteDiscriminatorMapping(discriminator));
+  
+  final isUnion = discriminator != null || isUndiscriminatedUnion;
+  
+  // For discriminated union variants that should become standalone classes for wrapper pattern
+  // We detect this by checking if this is a discriminator variant (has discriminatorValue)
+  // and if the discriminator value matches the class name (indicating complete mapping)
+  final isDiscriminatorVariant = dataClass.discriminatorValue != null;
+  final hasCompleteMapping = isDiscriminatorVariant && 
+                            dataClass.discriminatorValue!.propertyValue == dataClass.name.toPascal;
+                                  
+  final parent = (isDiscriminatorVariant && hasCompleteMapping) ? null : dataClass.discriminatorValue?.parentClass;
 
-  final parent = dataClass.discriminatorValue?.parentClass;
+  // Check if this is a simple data class that could be used in unions
+  final isSimpleDataClass = !isUnion && 
+                            parent == null && 
+                            dataClass.parameters.isNotEmpty &&
+                            dataClass.discriminatorValue == null;
+
+  // Generate additional classes for undiscriminated unions or discriminated unions with complete mapping
+  final additionalClasses = shouldUseWrapperPattern
+    ? _generateWrapperClasses(dataClass, className, useMultipartFile, effectiveFallbackUnion)
+    : '';
 
   return '''
 ${dartImportDtoTemplate(JsonSerializer.dartMappable)}
-${dartImports(imports: dataClass.imports)}
+${dartImports(imports: _getAllImports(dataClass))}
 part '${dataClass.name.toSnake}.mapper.dart';
 
-${descriptionComment(dataClass.description)}@MappableClass(${() {
-    if (dataClass.discriminator != null) {
-      return [
-        "discriminatorKey: '${dataClass.discriminator!.propertyName}'",
-        "includeSubClasses: [${dataClass.discriminator!.discriminatorValueToRefMapping.values.join(', ')}]",
-      ].join(", ");
-    }
-    if (dataClass.discriminatorValue != null) {
-      return "discriminatorValue: '${dataClass.discriminatorValue!.propertyValue}'";
-    }
-    return "";
-  }()})
-class $className ${parent != null ? "extends $parent " : ""}with ${className}Mappable {
-
-${indentation(2)}const $className(${getParameters(dataClass)});
-${getFields(dataClass, useMultipartFile: useMultipartFile)}
-${getDiscriminatorConvenienceMethods(dataClass)}
-${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
-}
-''';
+${descriptionComment(dataClass.description)}@MappableClass(${_getMappableClassAnnotation(dataClass, className, effectiveFallbackUnion)})
+${_classModifier(isUnion: isUnion)}class $className ${parent != null ? "extends $parent " : ""}with ${className}Mappable {
+${_generateClassBody(dataClass, className, useMultipartFile, isUnion, dartMappableConvenientWhen, isSimpleDataClass, effectiveFallbackUnion)}
 }
 
-String getDiscriminatorConvenienceMethods(UniversalComponentClass dataClass) {
+$additionalClasses''';
+}
+
+String getDiscriminatorConvenienceMethods(UniversalComponentClass dataClass, [String? fallbackUnion]) {
   if (dataClass.discriminator == null) {
     return '';
   }
+
+  final discriminatorEntries = dataClass.discriminator!.discriminatorValueToRefMapping.entries;
+  
+  // Build when/maybeWhen method parameters
+  final whenParams = discriminatorEntries.map(
+    (e) => 'required T Function(${e.value} ${e.key.toCamel}) ${e.key.toCamel},',
+  ).toList();
+  
+  final maybeWhenParams = discriminatorEntries.map(
+    (e) => 'T Function(${e.value} ${e.key.toCamel})? ${e.key.toCamel},',
+  ).toList();
+  
+  final switchCases = discriminatorEntries.map(
+    (e) => '${e.value} _ => ${e.key.toCamel}?.call(this as ${e.value}),',
+  ).toList();
+
+  final maybeWhenArgs = discriminatorEntries.map(
+    (e) => '${e.key.toCamel}: ${e.key.toCamel},',
+  ).toList();
+
+  // Add fallback union if provided
+  if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
+    final fallbackClassName = dataClass.name.toPascal + fallbackUnion.toPascal;
+    whenParams.add('required T Function($fallbackClassName $fallbackUnion) $fallbackUnion,');
+    maybeWhenParams.add('T Function($fallbackClassName $fallbackUnion)? $fallbackUnion,');
+    switchCases.add('$fallbackClassName _ => $fallbackUnion?.call(this as $fallbackClassName),');
+    maybeWhenArgs.add('$fallbackUnion: $fallbackUnion,');
+  }
+
   return '''
+  @Deprecated('Use Dart pattern matching with sealed class')
   T when<T>({
-  ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => 'required T Function(${e.value} ${e.key.toCamel}) ${e.key.toCamel},').join('\n')}
+  ${whenParams.join('\n  ')}
   }) {
     return maybeWhen(
-    ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => '${e.key.toCamel}: ${e.key.toCamel},').join('\n')}
+    ${maybeWhenArgs.join('\n    ')}
     )!;
   }
+  @Deprecated('Use Dart pattern matching with sealed class')
   T? maybeWhen<T>({
-  ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => 'T Function(${e.value} ${e.key.toCamel})? ${e.key.toCamel},').join('\n')}
+  ${maybeWhenParams.join('\n  ')}
   }) {
     return switch (this) {
-    ${dataClass.discriminator!.discriminatorValueToRefMapping.entries.map((e) => '${e.value} _ => ${e.key.toCamel}?.call(this as ${e.value}),').join('\n')}
+    ${switchCases.join('\n    ')}
       _ => throw Exception("Unhandled type: \${this.runtimeType}"),
     };
   }
@@ -80,8 +130,11 @@ String getParameters(UniversalComponentClass dataClass) {
   }
 }
 
-String getFields(UniversalComponentClass dataClass,
-    {required bool useMultipartFile}) {
+String getFields(
+  UniversalComponentClass dataClass, {
+  required bool useMultipartFile,
+  bool isSimpleDataClass = false,
+}) {
   // if this class has discriminated values, don't populate the discriminator field
   // in the parent class
   final parameters = dataClass.parameters
@@ -94,14 +147,16 @@ String getFields(UniversalComponentClass dataClass,
   }
 }
 
-String _fieldsToString(List<UniversalType> parameters, bool useMultipartFile) {
+String _fieldsToString(
+  List<UniversalType> parameters,
+  bool useMultipartFile,
+) {
   final sortedByRequired = Set<UniversalType>.from(
     parameters.sorted((a, b) => a.compareTo(b)),
   );
   return sortedByRequired
       .mapIndexed(
-        (i, e) =>
-            '${_jsonKey(e)}${indentation(2)}final ${e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${e.name};',
+        (i, e) => '${_jsonKey(e)}${indentation(2)}final ${e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${e.name};',
       )
       .join('\n');
 }
@@ -140,3 +195,383 @@ String _required(UniversalType t) =>
 /// return defaultValue if have
 String _defaultValue(UniversalType t) =>
     '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}';
+
+String _classModifier({required bool isUnion}) {
+  return isUnion ? 'sealed ' : '';
+}
+
+String _generateClassBody(UniversalComponentClass dataClass, String className, bool useMultipartFile, bool isUnion, bool dartMappableConvenientWhen, bool isSimpleDataClass, [String? fallbackUnion]) {
+  if (!isUnion) {
+    // Regular class generation
+    return '''
+${indentation(2)}const $className(${getParameters(dataClass)});
+${getFields(dataClass, useMultipartFile: useMultipartFile, isSimpleDataClass: isSimpleDataClass)}
+${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, fallbackUnion) : ''}
+${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
+''';
+  }
+
+  // Union class generation
+  if (dataClass.undiscriminatedUnionVariants case final variants? when variants.isNotEmpty) {
+    return _generateUndiscriminatedUnionBody(className, variants, useMultipartFile, dartMappableConvenientWhen, fallbackUnion);
+  }
+  
+  // Discriminated unions with complete mapping use wrapper pattern
+  if (dataClass.discriminator != null && _isCompleteDiscriminatorMapping(dataClass.discriminator!)) {
+    final variantMap = <String, Set<UniversalType>>{};
+    for (final entry in dataClass.discriminator!.discriminatorValueToRefMapping.entries) {
+      final variantName = entry.value;
+      variantMap[variantName] = {UniversalType(type: variantName, name: variantName.toCamel, isRequired: true)};
+    }
+    return _generateUndiscriminatedUnionBody(className, variantMap, useMultipartFile, dartMappableConvenientWhen, fallbackUnion);
+  }
+  
+  // Discriminated union - already handled by existing discriminator convenience methods
+  return '''
+${indentation(2)}const $className();
+
+${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, fallbackUnion) : ''}
+${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
+''';
+}
+
+String _generateUndiscriminatedUnionBody(String className, Map<String, Set<UniversalType>> variants, bool useMultipartFile, bool dartMappableConvenientWhen, [String? fallbackUnion]) {
+  return '''
+${indentation(2)}const $className();
+${dartMappableConvenientWhen ? '\n${_generateUndiscriminatedUnionConvenienceMethods(className, variants, fallbackUnion)}' : ''}
+${indentation(2)}static $className fromJson(Map<String, dynamic> json) {
+${indentation(4)}return _${className}Helper._tryDeserialize(json);
+${indentation(2)}}
+''';
+}
+
+String _generateUndiscriminatedUnionClasses(String className, Map<String, Set<UniversalType>> variants, bool useMultipartFile, [String? fallbackUnion]) {
+  return '''
+${_generatePrivateHelper(className, variants, fallbackUnion)}
+
+${_generateVariantWrappers(className, variants, useMultipartFile, fallbackUnion)}''';
+}
+
+String _generateUndiscriminatedUnionConvenienceMethods(String className, Map<String, Set<UniversalType>> variants, [String? fallbackUnion]) {
+  final whenCases = variants.entries.map(
+    (e) => '${indentation(4)}required T Function($className${e.key.toPascal} ${e.key.toCamel}) ${e.key.toCamel},',
+  ).toList();
+  
+  final maybeWhenCases = variants.entries.map(
+    (e) => '${indentation(4)}T Function($className${e.key.toPascal} ${e.key.toCamel})? ${e.key.toCamel},',
+  ).toList();
+  
+  final switchCases = variants.entries.map(
+    (e) => '${indentation(6)}$className${e.key.toPascal} _ => ${e.key.toCamel}?.call(this as $className${e.key.toPascal}),',
+  ).toList();
+
+  final maybeWhenArgs = variants.entries.map(
+    (e) => '${indentation(6)}${e.key.toCamel}: ${e.key.toCamel},',
+  ).toList();
+
+  // Add fallback case if provided
+  if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
+    whenCases.add('${indentation(4)}required T Function($className${fallbackUnion.toPascal} ${fallbackUnion.toCamel}) ${fallbackUnion.toCamel},');
+    maybeWhenCases.add('${indentation(4)}T Function($className${fallbackUnion.toPascal} ${fallbackUnion.toCamel})? ${fallbackUnion.toCamel},');
+    switchCases.add('${indentation(6)}$className${fallbackUnion.toPascal} _ => ${fallbackUnion.toCamel}?.call(this as $className${fallbackUnion.toPascal}),');
+    maybeWhenArgs.add('${indentation(6)}${fallbackUnion.toCamel}: ${fallbackUnion.toCamel},');
+  }
+
+  return '''
+${indentation(2)}@Deprecated('Use Dart pattern matching with sealed class')
+${indentation(2)}T when<T>({
+${whenCases.join('\n')}
+${indentation(2)}}) {
+${indentation(4)}return maybeWhen(
+${maybeWhenArgs.join('\n')}
+${indentation(4)})!;
+${indentation(2)}}
+
+${indentation(2)}@Deprecated('Use Dart pattern matching with sealed class')
+${indentation(2)}T? maybeWhen<T>({
+${maybeWhenCases.join('\n')}
+${indentation(2)}}) {
+${indentation(4)}return switch (this) {
+${switchCases.join('\n')}
+${indentation(6)}_ => throw Exception("Unhandled type: \${this.runtimeType}"),
+${indentation(4)}};
+${indentation(2)}}
+''';
+}
+
+String _generatePrivateHelper(String className, Map<String, Set<UniversalType>> variants, [String? fallbackUnion]) {
+  final tryBlocks = variants.keys.map(
+    (variantName) => '''
+${indentation(4)}try {
+${indentation(6)}return $className${variantName.toPascal}Mapper.ensureInitialized().decodeMap<$className${variantName.toPascal}>(json);
+${indentation(4)}} catch (_) {}''',
+  ).join('\n');
+
+  final fallbackBlock = (fallbackUnion != null && fallbackUnion.isNotEmpty) 
+    ? '''
+${indentation(4)}// Try fallback variant before throwing exception
+${indentation(4)}try {
+${indentation(6)}return $className${fallbackUnion.toPascal}Mapper.ensureInitialized().decodeMap<$className${fallbackUnion.toPascal}>(json);
+${indentation(4)}} catch (_) {}''' 
+    : '';
+
+  return '''
+class _${className}Helper {
+${indentation(2)}static $className _tryDeserialize(Map<String, dynamic> json) {
+$tryBlocks
+$fallbackBlock
+
+${indentation(4)}throw FormatException('Could not determine the correct type for $className from: \$json');
+${indentation(2)}}
+}''';
+}
+
+String _generateDiscriminatorHelper(String className, Discriminator discriminator, [String? fallbackUnion]) {
+  final discriminatorKey = discriminator.propertyName;
+  final discriminatorMappings = discriminator.discriminatorValueToRefMapping;
+  
+  // Generate if-else chain for discriminator values
+  final ifElseChain = discriminatorMappings.entries.map((entry) {
+    final discriminatorValue = entry.key;
+    final variantName = entry.value;
+    return '''
+${indentation(4)}if (json['$discriminatorKey'] == '$discriminatorValue') {
+${indentation(6)}return $className${variantName.toPascal}Mapper.ensureInitialized()
+${indentation(10)}.decodeMap<$className${variantName.toPascal}>(json);
+${indentation(4)}}''';
+  }).join(' else ');
+  
+  final fallbackBlock = (fallbackUnion != null && fallbackUnion.isNotEmpty) 
+    ? '''
+${indentation(6)}// Return fallback wrapper for unknown discriminator values
+${indentation(6)}return $className${fallbackUnion.toPascal}Mapper.ensureInitialized()
+${indentation(10)}.decodeMap<$className${fallbackUnion.toPascal}>(json);''' 
+    : '''
+${indentation(6)}throw FormatException('Unknown discriminator value "\${json['$discriminatorKey']}" for $className');''';
+
+  return '''
+class _${className}Helper {
+${indentation(2)}static $className _tryDeserialize(Map<String, dynamic> json) {
+$ifElseChain else {
+$fallbackBlock
+${indentation(2)}}
+${indentation(2)}}
+}''';
+}
+
+String _generateVariantWrappers(String className, Map<String, Set<UniversalType>> variants, bool useMultipartFile, [String? fallbackUnion]) {
+  final regularWrappers = variants.entries.map((entry) {
+    final variantName = entry.key;
+    final properties = entry.value;
+    final wrapperClassName = '$className${variantName.toPascal}';
+    final originalClassName = variantName.toPascal;
+    
+    // Generate property getters that delegate to the wrapped instance
+    final propertyGetters = properties.map((prop) => 
+      '${indentation(2)}@override\n${indentation(2)}${prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} get ${prop.name} => _${variantName.toCamel}.${prop.name};',
+    ).join('\n');
+    
+    return '''
+@MappableClass()
+class $wrapperClassName extends $className with ${wrapperClassName}Mappable implements $originalClassName {
+${indentation(2)}final $originalClassName _${variantName.toCamel};
+
+${indentation(2)}const $wrapperClassName(this._${variantName.toCamel});
+
+$propertyGetters
+
+${indentation(2)}static $wrapperClassName fromJson(Map<String, dynamic> json) =>
+${indentation(6)}$wrapperClassName(${originalClassName}Mapper.ensureInitialized().decodeMap<$originalClassName>(json));
+}
+''';
+  }).join('\n');
+
+  // Generate fallback wrapper if fallbackUnion is provided
+  final fallbackWrapper = (fallbackUnion != null && fallbackUnion.isNotEmpty) 
+    ? '''
+@MappableClass()
+class $className${fallbackUnion.toPascal} extends $className with $className${fallbackUnion.toPascal}Mappable {
+${indentation(2)}final Map<String, dynamic> _json;
+
+${indentation(2)}const $className${fallbackUnion.toPascal}(this._json);
+
+${indentation(2)}/// Access raw JSON data for unknown union variant
+${indentation(2)}Map<String, dynamic> get json => _json;
+
+${indentation(2)}static $className${fallbackUnion.toPascal} fromJson(Map<String, dynamic> json) =>
+${indentation(6)}$className${fallbackUnion.toPascal}(json);
+}
+''' 
+    : '';
+
+  return regularWrappers + fallbackWrapper;
+}
+
+String _getMappableClassAnnotation(UniversalComponentClass dataClass, String className, String? fallbackUnion) {
+  // For discriminated unions with complete mapping, use wrapper pattern
+  if (dataClass.discriminator != null && _isCompleteDiscriminatorMapping(dataClass.discriminator!)) {
+    final subClasses = dataClass.discriminator!.discriminatorValueToRefMapping.values
+        .map((variantName) => '$className${variantName.toPascal}')
+        .toList();
+    if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
+      subClasses.add('$className${fallbackUnion.toPascal}');
+    }
+    final formattedSubClasses = subClasses.map((sc) => '${indentation(2)}$sc').join(',\n');
+    return [
+      "discriminatorKey: '${dataClass.discriminator!.propertyName}'",
+      'includeSubClasses: [\n$formattedSubClasses\n]',
+    ].join(', ');
+  }
+  
+  // Original discriminated union logic (for incomplete mappings)
+  if (dataClass.discriminator != null) {
+    final subClasses = dataClass.discriminator!.discriminatorValueToRefMapping.values.toList();
+    if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
+      subClasses.add('$className${fallbackUnion.toPascal}');
+    }
+    return [
+      "discriminatorKey: '${dataClass.discriminator!.propertyName}'",
+      'includeSubClasses: [${subClasses.join(', ')}]',
+    ].join(', ');
+  }
+  // For discriminated union variants that use wrapper pattern, don't include discriminatorValue
+  if (dataClass.discriminatorValue != null) {
+    // Check if this is a complete mapping case (discriminator value matches class name)
+    final isCompleteMapping = dataClass.discriminatorValue!.propertyValue == className;
+    if (!isCompleteMapping) {
+      return "discriminatorValue: '${dataClass.discriminatorValue!.propertyValue}'";
+    }
+  }
+  // Check for undiscriminated unions
+  if (dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false) {
+    final subClasses = dataClass.undiscriminatedUnionVariants!.keys
+        .map((variantName) => '$className${variantName.toPascal}')
+        .toList();
+    if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
+      subClasses.add('$className${fallbackUnion.toPascal}');
+    }
+    return 'includeSubClasses: [${subClasses.join(', ')}]';
+  }
+  return '';
+}
+
+Set<String> _getAllImports(UniversalComponentClass dataClass) {
+  final imports = Set<String>.from(dataClass.imports);
+  
+  // For undiscriminated unions, add imports for referenced variant classes
+  if (dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false) {
+    imports.addAll(dataClass.undiscriminatedUnionVariants!.keys);
+  }
+  
+  // For discriminated unions with complete mapping, also add imports
+  if (dataClass.discriminator != null && _isCompleteDiscriminatorMapping(dataClass.discriminator!)) {
+    imports.addAll(dataClass.discriminator!.discriminatorValueToRefMapping.values);
+  }
+  
+  // Filter out circular imports: if this is a simple model class (not a union),
+  // exclude any imports that would reference union classes that contain this model
+  final isUnion = dataClass.discriminator != null || 
+                  (dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false);
+  
+  if (!isUnion) {
+    // Remove imports that would create circular dependencies
+    // Only remove union imports that aren't actually used by this class
+    
+    // Get all the types used by this class parameters
+    final usedTypes = dataClass.parameters.map((p) => p.type).toSet();
+    
+    imports.removeWhere((import) {
+      final isUnionImport = import.toLowerCase().contains('union');
+      final isUsedByClass = usedTypes.contains(import) || 
+                           usedTypes.any((type) => type.contains(import));
+      
+      // Remove union imports that aren't used by this class
+      return isUnionImport && !isUsedByClass;
+    });
+  }
+  
+  return imports;
+}
+
+bool _isCompleteDiscriminatorMapping(Discriminator discriminator) {
+  // A discriminator mapping is considered "complete" if it has explicit mappings
+  // for all variants (as opposed to implicit mappings)
+  return discriminator.discriminatorValueToRefMapping.isNotEmpty;
+}
+
+String _generateWrapperClasses(UniversalComponentClass dataClass, String className, bool useMultipartFile, String? fallbackUnion) {
+  // Handle undiscriminated unions
+  if (dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false) {
+    return _generateUndiscriminatedUnionClasses(className, dataClass.undiscriminatedUnionVariants!, useMultipartFile, fallbackUnion);
+  }
+  
+  // Handle discriminated unions with complete mapping using wrapper pattern
+  if (dataClass.discriminator != null && _isCompleteDiscriminatorMapping(dataClass.discriminator!)) {
+    return _generateDiscriminatedWrapperClasses(dataClass, className, useMultipartFile, fallbackUnion);
+  }
+  
+  return '';
+}
+
+String _generateDiscriminatedWrapperClasses(UniversalComponentClass dataClass, String className, bool useMultipartFile, String? fallbackUnion) {
+  final discriminator = dataClass.discriminator!;
+  final wrappers = <String>[];
+  
+  // Generate wrapper classes for each discriminator variant
+  for (final entry in discriminator.discriminatorValueToRefMapping.entries) {
+    final discriminatorValue = entry.key; // e.g., "Cat"
+    final variantName = entry.value; // e.g., "Cat"
+    final wrapperClassName = '$className${variantName.toPascal}'; // e.g., "FamilyMembersUnionCat"
+    
+    // Get the variant class properties from the discriminator's refProperties
+    final variantProperties = discriminator.refProperties[variantName] ?? <UniversalType>[];
+    
+    // Include all properties (including discriminator property)
+    final filteredProperties = variantProperties;
+    
+    // Generate property getters that delegate to the wrapped instance
+    final propertyGetters = filteredProperties.map((prop) => 
+      '${indentation(2)}@override\n${indentation(2)}${prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} get ${prop.name} => _${variantName.toCamel}.${prop.name};',
+    ).join('\n');
+    
+    wrappers.add('''
+@MappableClass(discriminatorValue: '$discriminatorValue')
+class $wrapperClassName extends $className with ${wrapperClassName}Mappable implements $variantName {
+  final $variantName _${variantName.toCamel};
+
+  const $wrapperClassName(this._${variantName.toCamel});
+
+$propertyGetters
+
+${indentation(2)}static $wrapperClassName fromJson(Map<String, dynamic> json) =>
+${indentation(6)}$wrapperClassName(${variantName}Mapper.ensureInitialized().decodeMap<$variantName>(json));
+}''');
+  }
+  
+  // Add fallback wrapper if specified
+  if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
+    wrappers.add('''
+@MappableClass(discriminatorValue: MappableClass.useAsDefault)
+class $className${fallbackUnion.toPascal} extends $className with $className${fallbackUnion.toPascal}Mappable {
+${indentation(2)}final Map<String, dynamic> _json;
+
+${indentation(2)}const $className${fallbackUnion.toPascal}(this._json);
+
+${indentation(2)}/// Access raw JSON data for unknown union variant
+${indentation(2)}Map<String, dynamic> get json => _json;
+
+${indentation(2)}static $className${fallbackUnion.toPascal} fromJson(Map<String, dynamic> json) =>
+${indentation(6)}$className${fallbackUnion.toPascal}(json);
+}''');
+  }
+  
+  // Generate discriminator helper class for proper deserialization
+  final helper = _generateDiscriminatorHelper(className, discriminator, fallbackUnion);
+  
+  return '''
+$helper
+
+${wrappers.join('\n')}''';
+}
+
+

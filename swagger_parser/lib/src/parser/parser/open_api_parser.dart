@@ -2052,7 +2052,7 @@ class OpenApiParser {
   }
 
   UniversalComponentClass? _createUnionComponentClass(
-      List<dynamic> values, String schemaName, String? unionDescription) {
+      List<dynamic> values, String schemaName, String? unionDescription,) {
     final unionVariants = filterNullTypes(values);
     if (!_getAreAllRefsOrInlineObjects(unionVariants)) {
       return null;
@@ -2083,7 +2083,7 @@ class OpenApiParser {
       .whereType<Map<String, dynamic>>()
       .where((item) =>
           // filter out explicit null variants if present
-          item[_typeConst]?.toString() != 'null')
+          item[_typeConst]?.toString() != 'null',)
       .toList();
 }
 

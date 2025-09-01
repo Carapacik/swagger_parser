@@ -1,0 +1,55 @@
+openapi: 3.1.0
+info:
+  title: Family API (anyOf, discriminated)
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    Family:
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/Cat'
+              - $ref: '#/components/schemas/Dog'
+              - $ref: '#/components/schemas/Human'
+            discriminator:
+              propertyName: type
+              mapping:
+                Cat: '#/components/schemas/Cat'
+                Dog: '#/components/schemas/Dog'
+                Human: '#/components/schemas/Human'
+      required:
+        - members
+    Cat:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [Cat]
+        mewCount:
+          type: integer
+          description: Number of times the cat meows.
+      required: [type, mewCount]
+    Dog:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [Dog]
+        barkSound:
+          type: string
+          description: The sound of the dog's bark.
+      required: [type, barkSound]
+    Human:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [Human]
+        job:
+          type: string
+          description: The job of the human.
+      required: [type, job]

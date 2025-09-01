@@ -33,6 +33,7 @@ final class FillController {
           generateValidator: config.generateValidator,
           useFreezed3: config.useFreezed3,
           useMultipartFile: config.useMultipartFile,
+          dartMappableConvenientWhen: config.dartMappableConvenientWhen,
           fallbackUnion: config.fallbackUnion,
         ),
       );
