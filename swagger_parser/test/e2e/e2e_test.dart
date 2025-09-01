@@ -878,5 +878,31 @@ void main() {
         schemaFileName: 'merged_outputs.json',
       );
     });
+
+    test('discriminated_one_of_json_serializable', () async {
+      await e2eTest(
+        'xof/discriminated_one_of_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.jsonSerializable,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'discriminated_one_of.3.0.json',
+      );
+    });
+
+    test('non_discriminated_one_of_json_serializable', () async {
+      await e2eTest(
+        'xof/non_discriminated_one_of_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.jsonSerializable,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'non_discriminated_one_of.3.0.json',
+      );
+    });
   });
 }

@@ -1,11 +1,12 @@
 ## 1.31.0
+- Add simple unions(`oneOf`/`anyOf`) support for `json_serializeble` serializer
 - Add complete unions(`oneOf`/`anyOf`) support for `dart_mappable` serializer
   - **WARNING**: Undiscriminated unions use O(n) try-catch deserialization where n is the number of variants
   - **RECOMMENDED**: Add discriminator properties to your OpenAPI specification for O(1) performance
-  - Add support unions fallback for failed decoding
+  - Add support for union fallback for failed decoding
 - Add `dart_mappable_convenient_when` option for `when<T>, maybeWhen<T>` method with dart_mappable
 - Add `@Deprecated()` annotation to `when<T>, maybeWhen<T>` method with dart_mappable. Use dart pattern matching
-- Fix create duplicated `unknown` property enum with dart_mappable and `unknown_enum_value: true`
+- Fix creating duplicated `unknown` property enum with dart_mappable and `unknown_enum_value: true`
 
 ## 1.30.0
 - Add support for merging all generated code into single output file using the `merge_outputs` option
