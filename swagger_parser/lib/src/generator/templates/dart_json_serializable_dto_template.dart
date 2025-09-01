@@ -13,6 +13,15 @@ String dartJsonSerializableDtoTemplate(
   required bool useMultipartFile,
 }) {
   final className = dataClass.name.toPascal;
+  
+  // Check if this is a union type
+  final isUnion = dataClass.discriminator != null || 
+                  (dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false);
+  
+  if (isUnion) {
+    return _generateUnionTemplate(dataClass, className);
+  }
+  
   return '''
 ${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: dataClass.imports)}
@@ -29,8 +38,48 @@ class $className {
 ''';
 }
 
+String _generateUnionTemplate(UniversalComponentClass dataClass, String className) {
+  // Generate list of possible variants for documentation
+  final variants = <String>[];
+  
+  if (dataClass.discriminator != null) {
+    variants.addAll(dataClass.discriminator!.discriminatorValueToRefMapping.values);
+  }
+  
+  if (dataClass.undiscriminatedUnionVariants != null) {
+    variants.addAll(dataClass.undiscriminatedUnionVariants!.keys);
+  }
+  
+  final variantsList = variants.isNotEmpty 
+    ? variants.join(', ')
+    : 'multiple possible types';
+  
+  final discriminatorComment = dataClass.discriminator != null 
+    ? "\n  /// Check the '${dataClass.discriminator!.propertyName}' field to determine which variant."
+    : '\n  /// Use try-catch or manual inspection to determine the actual type.';
+  
+  return '''
+import 'package:json_annotation/json_annotation.dart';
+${dartImports(imports: dataClass.imports)}
+part '${dataClass.name.toSnake}.g.dart';
+
+${descriptionComment(dataClass.description)}@JsonSerializable()
+class $className {
+  const $className(this.data);
+  
+  /// Raw JSON data for union type.
+  /// This can be one of: $variantsList$discriminatorComment
+  final Map<String, dynamic> data;
+  
+  factory $className.fromJson(Map<String, dynamic> json) => $className(json);
+  
+  Map<String, dynamic> toJson() => data;
+}
+''';
+}
+
 String _parametersInClass(
-        Set<UniversalType> parameters, bool useMultipartFile) =>
+        Set<UniversalType> parameters, bool useMultipartFile,) =>
     parameters
         .mapIndexed(
           (i, e) =>
