@@ -34,6 +34,9 @@ class _Family2MembersUnionHelper {
     try {
       return Family2MembersUnionHuman.fromJson(json);
     } catch (_) {}
+    try {
+      return Family2MembersUnionUnknown.fromJson(json);
+    } catch (_) {}
 
     throw FormatException(
         'Could not determine the correct type for Family2MembersUnion from: $json');
@@ -95,4 +98,20 @@ class Family2MembersUnionHuman extends Family2MembersUnion implements Human {
 
   @override
   Map<String, dynamic> toJson() => _$Family2MembersUnionHumanToJson(this);
+}
+
+@JsonSerializable(createFactory: false)
+class Family2MembersUnionUnknown extends Family2MembersUnion {
+  final Map<String, dynamic> _json;
+
+  const Family2MembersUnionUnknown(this._json);
+
+  /// Access raw JSON data for unknown union variant
+  Map<String, dynamic> get json => _json;
+
+  factory Family2MembersUnionUnknown.fromJson(Map<String, dynamic> json) =>
+      Family2MembersUnionUnknown(json);
+
+  @override
+  Map<String, dynamic> toJson() => _json;
 }

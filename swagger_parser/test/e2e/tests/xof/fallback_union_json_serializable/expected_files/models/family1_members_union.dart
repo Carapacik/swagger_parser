@@ -94,7 +94,7 @@ class Family1MembersUnionHuman extends Family1MembersUnion implements Human {
   Map<String, dynamic> toJson() => _$Family1MembersUnionHumanToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(createFactory: false)
 class Family1MembersUnionUnknown extends Family1MembersUnion {
   final Map<String, dynamic> _json;
 

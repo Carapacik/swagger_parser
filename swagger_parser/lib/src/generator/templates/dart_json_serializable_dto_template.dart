@@ -51,7 +51,7 @@ String _generateUnionTemplate(UniversalComponentClass dataClass,
   // Handle undiscriminated unions
   if (dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false) {
     return _generateUndiscriminatedUnionTemplate(
-        dataClass, className, useMultipartFile);
+        dataClass, className, useMultipartFile, fallbackUnion);
   }
 
   // Fallback to simple map wrapper for unknown union types
@@ -98,8 +98,9 @@ $wrappers
 ''';
 }
 
-String _generateUndiscriminatedUnionTemplate(UniversalComponentClass dataClass,
-    String className, bool useMultipartFile) {
+String _generateUndiscriminatedUnionTemplate(
+    UniversalComponentClass dataClass, String className, bool useMultipartFile,
+    [String? fallbackUnion]) {
   final variants = dataClass.undiscriminatedUnionVariants!;
 
   // Generate sealed base class
@@ -115,11 +116,12 @@ sealed class $className {
 }''';
 
   // Generate try-catch helper
-  final helper = _generateUndiscriminatedHelper(className, variants);
+  final helper =
+      _generateUndiscriminatedHelper(className, variants, fallbackUnion);
 
   // Generate wrapper classes
   final wrappers = _generateUndiscriminatedWrapperClasses(
-      className, variants, useMultipartFile);
+      className, variants, useMultipartFile, fallbackUnion);
 
   return '''
 import 'package:json_annotation/json_annotation.dart';
@@ -210,7 +212,8 @@ $ifElseChain else {
 }
 
 String _generateUndiscriminatedHelper(
-    String className, Map<String, Set<UniversalType>> variants) {
+    String className, Map<String, Set<UniversalType>> variants,
+    [String? fallbackUnion]) {
   // Generate try-catch blocks
   final tryBlocks = variants.keys.map((variantName) {
     final wrapperClassName = '$className${variantName.toPascal}';
@@ -219,10 +222,18 @@ String _generateUndiscriminatedHelper(
     } catch (_) {}''';
   }).join('\n');
 
+  final fallbackTry = (fallbackUnion != null && fallbackUnion.isNotEmpty)
+      ? '''
+    try {
+      return ${className}${fallbackUnion.toPascal}.fromJson(json);
+    } catch (_) {}'''
+      : '';
+
   return '''
 class _${className}Helper {
   static $className _tryDeserialize(Map<String, dynamic> json) {
 $tryBlocks
+$fallbackTry
 
     throw FormatException('Could not determine the correct type for $className from: \$json');
   }
@@ -273,8 +284,9 @@ $constructorParams
 }
 
 String _generateUndiscriminatedWrapperClasses(String className,
-    Map<String, Set<UniversalType>> variants, bool useMultipartFile) {
-  return variants.entries.map((entry) {
+    Map<String, Set<UniversalType>> variants, bool useMultipartFile,
+    [String? fallbackUnion]) {
+  final wrappers = variants.entries.map((entry) {
     final variantName = entry.key;
     final properties = entry.value;
     final wrapperClassName = '$className${variantName.toPascal}';
@@ -309,6 +321,9 @@ $constructorParams
   Map<String, dynamic> toJson() => _\$${wrapperClassName}ToJson(this);
 }''';
   }).join('\n');
+
+  final fallbackWrapper = _generateFallbackWrapper(className, fallbackUnion);
+  return wrappers + fallbackWrapper;
 }
 
 String _generateFallbackWrapper(String className, String? fallbackUnion) {
@@ -320,7 +335,7 @@ String _generateFallbackWrapper(String className, String? fallbackUnion) {
 
   return '''
 
-@JsonSerializable()
+@JsonSerializable(createFactory: false)
 class $fallbackClassName extends $className {
   final Map<String, dynamic> _json;
   
