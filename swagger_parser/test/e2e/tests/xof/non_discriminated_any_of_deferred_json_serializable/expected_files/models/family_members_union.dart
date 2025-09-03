@@ -4,6 +4,10 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
+import 'cat.dart';
+import 'dog.dart';
+import 'human.dart';
+
 part 'family_members_union.g.dart';
 
 @JsonSerializable(createFactory: false)

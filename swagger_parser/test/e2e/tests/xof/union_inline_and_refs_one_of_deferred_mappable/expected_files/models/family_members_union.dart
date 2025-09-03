@@ -5,9 +5,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
 import 'cat.dart';
-import 'variant2.dart';
 import 'dog.dart';
-import 'variant4.dart';
 
 part 'family_members_union.mapper.dart';
 
@@ -63,8 +61,7 @@ class FamilyMembersUnionCat extends FamilyMembersUnion
 
 @MappableClass()
 class FamilyMembersUnionVariant2 extends FamilyMembersUnion
-    with FamilyMembersUnionVariant2Mappable
-    implements Variant2 {
+    with FamilyMembersUnionVariant2Mappable {
   @override
   final int chirpVolume;
 
@@ -87,8 +84,7 @@ class FamilyMembersUnionDog extends FamilyMembersUnion
 
 @MappableClass()
 class FamilyMembersUnionVariant4 extends FamilyMembersUnion
-    with FamilyMembersUnionVariant4Mappable
-    implements Variant4 {
+    with FamilyMembersUnionVariant4Mappable {
   @override
   final String job;
 

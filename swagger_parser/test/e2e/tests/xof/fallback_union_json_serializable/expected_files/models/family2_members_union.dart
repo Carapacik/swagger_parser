@@ -7,6 +7,9 @@ import 'package:json_annotation/json_annotation.dart';
 import 'cat_type.dart';
 import 'dog_type.dart';
 import 'human_type.dart';
+import 'cat.dart';
+import 'dog.dart';
+import 'human.dart';
 
 part 'family2_members_union.g.dart';
 

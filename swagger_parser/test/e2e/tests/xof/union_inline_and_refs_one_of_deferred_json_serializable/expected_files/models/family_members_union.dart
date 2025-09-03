@@ -4,6 +4,9 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
+import 'cat.dart';
+import 'dog.dart';
+
 part 'family_members_union.g.dart';
 
 @JsonSerializable(createFactory: false)
@@ -54,8 +57,7 @@ class FamilyMembersUnionCat extends FamilyMembersUnion implements Cat {
 }
 
 @JsonSerializable()
-class FamilyMembersUnionVariant2 extends FamilyMembersUnion
-    implements variant2 {
+class FamilyMembersUnionVariant2 extends FamilyMembersUnion {
   @override
   final int chirpVolume;
 
@@ -87,8 +89,7 @@ class FamilyMembersUnionDog extends FamilyMembersUnion implements Dog {
 }
 
 @JsonSerializable()
-class FamilyMembersUnionVariant4 extends FamilyMembersUnion
-    implements variant4 {
+class FamilyMembersUnionVariant4 extends FamilyMembersUnion {
   @override
   final String job;
 
