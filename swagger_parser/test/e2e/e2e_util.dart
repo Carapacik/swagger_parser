@@ -47,6 +47,10 @@ Future<void> e2eTest(
   // Getting a list of all files from expectedFolderPath
   final expectedFiles = Directory(expectedFolderPath)
       .listSync(recursive: true, followLinks: false)
+      .where((e) {
+        // excluding generated files from third party generators
+        return !e.path.endsWith('.g.dart') && !e.path.endsWith('.freezed.dart');
+      })
       .whereType<File>()
       .toList();
 

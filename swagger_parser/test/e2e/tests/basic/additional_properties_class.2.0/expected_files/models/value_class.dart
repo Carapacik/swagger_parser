@@ -8,7 +8,7 @@ part 'value_class.freezed.dart';
 part 'value_class.g.dart';
 
 @Freezed()
-class ValueClass with _$ValueClass {
+abstract class ValueClass with _$ValueClass {
   const factory ValueClass({
     /// A test property
     required String testProp,

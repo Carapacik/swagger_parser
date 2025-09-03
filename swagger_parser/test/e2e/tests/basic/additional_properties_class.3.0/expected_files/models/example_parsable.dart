@@ -10,7 +10,7 @@ part 'example_parsable.freezed.dart';
 part 'example_parsable.g.dart';
 
 @Freezed()
-class ExampleParsable with _$ExampleParsable {
+abstract class ExampleParsable with _$ExampleParsable {
   const factory ExampleParsable({
     /// data
     required Map<String, Example> data,

@@ -8,7 +8,7 @@ part 'example.freezed.dart';
 part 'example.g.dart';
 
 @Freezed()
-class Example with _$Example {
+abstract class Example with _$Example {
   const factory Example({
     /// data
     required Map<String, dynamic> data,
