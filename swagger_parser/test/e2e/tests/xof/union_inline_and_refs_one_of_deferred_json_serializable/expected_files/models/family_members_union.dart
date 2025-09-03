@@ -14,13 +14,13 @@ sealed class FamilyMembersUnion {
   const FamilyMembersUnion();
 
   factory FamilyMembersUnion.fromJson(Map<String, dynamic> json) =>
-      _FamilyMembersUnionHelper._tryDeserialize(json);
+      FamilyMembersUnionUnionDeserializer.tryDeserialize(json);
 
   Map<String, dynamic> toJson();
 }
 
-class _FamilyMembersUnionHelper {
-  static FamilyMembersUnion _tryDeserialize(Map<String, dynamic> json) {
+extension FamilyMembersUnionUnionDeserializer on FamilyMembersUnion {
+  static FamilyMembersUnion tryDeserialize(Map<String, dynamic> json) {
     try {
       return FamilyMembersUnionCat.fromJson(json);
     } catch (_) {}

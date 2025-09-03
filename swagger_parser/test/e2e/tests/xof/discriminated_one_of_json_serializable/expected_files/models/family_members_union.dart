@@ -18,23 +18,32 @@ sealed class FamilyMembersUnion {
   const FamilyMembersUnion();
 
   factory FamilyMembersUnion.fromJson(Map<String, dynamic> json) =>
-      _FamilyMembersUnionHelper._tryDeserialize(json);
+      FamilyMembersUnionUnionDeserializer.tryDeserialize(json);
 
   Map<String, dynamic> toJson();
 }
 
-class _FamilyMembersUnionHelper {
-  static FamilyMembersUnion _tryDeserialize(Map<String, dynamic> json) {
-    if (json['type'] == 'Cat') {
-      return FamilyMembersUnionCat.fromJson(json);
-    } else if (json['type'] == 'Dog') {
-      return FamilyMembersUnionDog.fromJson(json);
-    } else if (json['type'] == 'Human') {
-      return FamilyMembersUnionHuman.fromJson(json);
-    } else {
-      throw FormatException(
-          'Unknown discriminator value "${json['type']}" for FamilyMembersUnion');
-    }
+extension FamilyMembersUnionUnionDeserializer on FamilyMembersUnion {
+  static FamilyMembersUnion tryDeserialize(
+    Map<String, dynamic> json, {
+    String key = 'type',
+    Map<Type, Object?>? mapping,
+  }) {
+    final mappingFallback = const <Type, Object?>{
+      FamilyMembersUnionCat: 'Cat',
+      FamilyMembersUnionDog: 'Dog',
+      FamilyMembersUnionHuman: 'Human',
+    };
+    final value = json[key];
+    final effective = mapping ?? mappingFallback;
+    return switch (value) {
+      effective[FamilyMembersUnionCat] => FamilyMembersUnionCat.fromJson(json),
+      effective[FamilyMembersUnionDog] => FamilyMembersUnionDog.fromJson(json),
+      effective[FamilyMembersUnionHuman] =>
+        FamilyMembersUnionHuman.fromJson(json),
+      _ => throw FormatException(
+          'Unknown discriminator value "${json[key]}" for FamilyMembersUnion'),
+    };
   }
 }
 

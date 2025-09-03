@@ -18,13 +18,13 @@ sealed class Family2MembersUnion {
   const Family2MembersUnion();
 
   factory Family2MembersUnion.fromJson(Map<String, dynamic> json) =>
-      _Family2MembersUnionHelper._tryDeserialize(json);
+      Family2MembersUnionUnionDeserializer.tryDeserialize(json);
 
   Map<String, dynamic> toJson();
 }
 
-class _Family2MembersUnionHelper {
-  static Family2MembersUnion _tryDeserialize(Map<String, dynamic> json) {
+extension Family2MembersUnionUnionDeserializer on Family2MembersUnion {
+  static Family2MembersUnion tryDeserialize(Map<String, dynamic> json) {
     try {
       return Family2MembersUnionCat.fromJson(json);
     } catch (_) {}

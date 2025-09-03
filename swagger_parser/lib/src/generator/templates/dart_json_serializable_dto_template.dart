@@ -58,11 +58,13 @@ String _generateUnionTemplate(UniversalComponentClass dataClass,
   return _generateSimpleMapWrapper(dataClass, className);
 }
 
-String _generateDiscriminatedUnionTemplate(UniversalComponentClass dataClass,
-    String className, bool useMultipartFile, String? fallbackUnion) {
+String _generateDiscriminatedUnionTemplate(
+  UniversalComponentClass dataClass,
+  String className,
+  bool useMultipartFile,
+  String? fallbackUnion,
+) {
   final discriminator = dataClass.discriminator!;
-  final discriminatorKey = discriminator.propertyName;
-  final variants = discriminator.discriminatorValueToRefMapping;
 
   // Generate sealed base class
   final baseClass = '''
@@ -71,18 +73,18 @@ sealed class $className {
   const $className();
   
   factory $className.fromJson(Map<String, dynamic> json) =>
-      _${className}Helper._tryDeserialize(json);
+      ${className}UnionDeserializer.tryDeserialize(json);
   
   Map<String, dynamic> toJson();
 }''';
 
-  // Generate discriminator helper
-  final helper =
-      _generateDiscriminatorHelper(className, discriminator, fallbackUnion);
-
-  // Generate wrapper classes
+  // Generate wrapper classes first (they are referenced by the extension)
   final wrappers = _generateDiscriminatedWrapperClasses(
       className, discriminator, useMultipartFile, fallbackUnion);
+
+  // Generate public extension-based deserializer
+  final deserializerExtension =
+      _generateDiscriminatorExtension(className, discriminator, fallbackUnion);
 
   return '''
 import 'package:json_annotation/json_annotation.dart';
@@ -92,7 +94,7 @@ part '${dataClass.name.toSnake}.g.dart';
 
 ${descriptionComment(dataClass.description)}$baseClass
 
-$helper
+$deserializerExtension
 
 $wrappers
 ''';
@@ -110,18 +112,18 @@ sealed class $className {
   const $className();
   
   factory $className.fromJson(Map<String, dynamic> json) =>
-      _${className}Helper._tryDeserialize(json);
+      ${className}UnionDeserializer.tryDeserialize(json);
   
   Map<String, dynamic> toJson();
 }''';
 
-  // Generate try-catch helper
-  final helper =
-      _generateUndiscriminatedHelper(className, variants, fallbackUnion);
-
-  // Generate wrapper classes
+  // Generate wrapper classes first (they are referenced by the extension)
   final wrappers = _generateUndiscriminatedWrapperClasses(
       className, variants, useMultipartFile, fallbackUnion);
+
+  // Generate extension-based tryDeserialize helper for external usage
+  final helperExtension =
+      _generateUndiscriminatedExtension(className, variants, fallbackUnion);
 
   return '''
 import 'package:json_annotation/json_annotation.dart';
@@ -131,7 +133,7 @@ part '${dataClass.name.toSnake}.g.dart';
 
 ${descriptionComment(dataClass.description)}$baseClass
 
-$helper
+$helperExtension
 
 $wrappers
 ''';
@@ -178,60 +180,75 @@ class $className {
 ''';
 }
 
-String _generateDiscriminatorHelper(
+String _generateDiscriminatorExtension(
     String className, Discriminator discriminator, String? fallbackUnion) {
   final discriminatorKey = discriminator.propertyName;
   final variants = discriminator.discriminatorValueToRefMapping;
 
-  // Generate if-else chain
-  final conditions = variants.entries.map((entry) {
+  // Build default mapping literal: { WrapperType: 'DiscriminatorValue', ... }
+  final mappingEntries = variants.entries.map((entry) {
+    final variantName = entry.value;
     final discriminatorValue = entry.key;
+    final wrapperClassName = '$className${variantName.toPascal}';
+    return '      $wrapperClassName: \'$discriminatorValue\',';
+  }).join('\n');
+
+  // Build switch cases using mapping
+  final switchCases = variants.entries.map((entry) {
     final variantName = entry.value;
     final wrapperClassName = '$className${variantName.toPascal}';
+    return '''      effective[$wrapperClassName] => $wrapperClassName.fromJson(json),''';
+  }).join('\n');
 
-    return '''    if (json['$discriminatorKey'] == '$discriminatorValue') {
-      return $wrapperClassName.fromJson(json);
-    }''';
-  }).toList();
-
-  final ifElseChain = conditions.join(' else ');
-
-  // Generate fallback handling
-  final fallbackHandling = fallbackUnion != null && fallbackUnion.isNotEmpty
-      ? 'return $className${fallbackUnion.toPascal}.fromJson(json);'
-      : 'throw FormatException(\'Unknown discriminator value "\${json[\'$discriminatorKey\']}" for $className\');';
+  final fallbackCase = (fallbackUnion != null && fallbackUnion.isNotEmpty)
+      ? '      _ => $className${fallbackUnion.toPascal}.fromJson(json),'
+      : "      _ => throw FormatException('Unknown discriminator value \"\${json[key]}\" for $className'),";
 
   return '''
-class _${className}Helper {
-  static $className _tryDeserialize(Map<String, dynamic> json) {
-$ifElseChain else {
-      $fallbackHandling
-    }
+extension ${className}UnionDeserializer on $className {
+  static $className tryDeserialize(
+    Map<String, dynamic> json, {
+    String key = '$discriminatorKey',
+    Map<Type, Object?>? mapping,
+  }) {
+    final mappingFallback = const <Type, Object?>{
+$mappingEntries
+    };
+    final value = json[key];
+    final effective = mapping ?? mappingFallback;
+    return switch (value) {
+$switchCases
+$fallbackCase
+    };
   }
 }''';
 }
 
-String _generateUndiscriminatedHelper(
+String _generateUndiscriminatedExtension(
     String className, Map<String, Set<UniversalType>> variants,
     [String? fallbackUnion]) {
-  // Generate try-catch blocks
+  // For undiscriminated, we have no fixed key; allow override (default to '')
+  // and simply try each wrapper via switch with pattern on a user-provided key
+  // If key is empty, just try-catch sequentially but keep API consistent.
+
+  // Build sequential try-catch body (Dart switch cannot elegantly express try order)
   final tryBlocks = variants.keys.map((variantName) {
     final wrapperClassName = '$className${variantName.toPascal}';
-    return '''    try {
-      return $wrapperClassName.fromJson(json);
-    } catch (_) {}''';
+    return '''${' ' * 4}try {
+${' ' * 6}return $wrapperClassName.fromJson(json);
+${' ' * 4}} catch (_) {}''';
   }).join('\n');
 
   final fallbackTry = (fallbackUnion != null && fallbackUnion.isNotEmpty)
       ? '''
-    try {
-      return ${className}${fallbackUnion.toPascal}.fromJson(json);
-    } catch (_) {}'''
+${' ' * 4}try {
+${' ' * 6}return ${className}${fallbackUnion.toPascal}.fromJson(json);
+${' ' * 4}} catch (_) {}'''
       : '';
 
   return '''
-class _${className}Helper {
-  static $className _tryDeserialize(Map<String, dynamic> json) {
+extension ${className}UnionDeserializer on $className {
+  static $className tryDeserialize(Map<String, dynamic> json) {
 $tryBlocks
 $fallbackTry
 
@@ -244,7 +261,6 @@ String _generateDiscriminatedWrapperClasses(String className,
     Discriminator discriminator, bool useMultipartFile, String? fallbackUnion) {
   final wrappers =
       discriminator.discriminatorValueToRefMapping.entries.map((entry) {
-    final discriminatorValue = entry.key;
     final variantName = entry.value;
     final wrapperClassName = '$className${variantName.toPascal}';
     final properties =
@@ -283,9 +299,12 @@ $constructorParams
   return wrappers + fallbackWrapper;
 }
 
-String _generateUndiscriminatedWrapperClasses(String className,
-    Map<String, Set<UniversalType>> variants, bool useMultipartFile,
-    [String? fallbackUnion]) {
+String _generateUndiscriminatedWrapperClasses(
+  String className,
+  Map<String, Set<UniversalType>> variants,
+  bool useMultipartFile, [
+  String? fallbackUnion,
+]) {
   final wrappers = variants.entries.map((entry) {
     final variantName = entry.key;
     final properties = entry.value;

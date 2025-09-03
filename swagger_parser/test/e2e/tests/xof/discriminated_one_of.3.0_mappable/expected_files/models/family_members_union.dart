@@ -22,25 +22,36 @@ sealed class FamilyMembersUnion with FamilyMembersUnionMappable {
   const FamilyMembersUnion();
 
   static FamilyMembersUnion fromJson(Map<String, dynamic> json) {
-    return _FamilyMembersUnionHelper._tryDeserialize(json);
+    return FamilyMembersUnionUnionDeserializer.tryDeserialize(json);
   }
 }
 
-class _FamilyMembersUnionHelper {
-  static FamilyMembersUnion _tryDeserialize(Map<String, dynamic> json) {
-    if (json['type'] == 'Cat') {
-      return FamilyMembersUnionCatMapper.ensureInitialized()
-          .decodeMap<FamilyMembersUnionCat>(json);
-    } else if (json['type'] == 'Dog') {
-      return FamilyMembersUnionDogMapper.ensureInitialized()
-          .decodeMap<FamilyMembersUnionDog>(json);
-    } else if (json['type'] == 'Human') {
-      return FamilyMembersUnionHumanMapper.ensureInitialized()
-          .decodeMap<FamilyMembersUnionHuman>(json);
-    } else {
-      throw FormatException(
-          'Unknown discriminator value "${json['type']}" for FamilyMembersUnion');
-    }
+extension FamilyMembersUnionUnionDeserializer on FamilyMembersUnion {
+  static FamilyMembersUnion tryDeserialize(
+    Map<String, dynamic> json, {
+    String key = 'type',
+    Map<Type, Object?>? mapping,
+  }) {
+    final mappingFallback = const <Type, Object?>{
+      FamilyMembersUnionCat: 'Cat',
+      FamilyMembersUnionDog: 'Dog',
+      FamilyMembersUnionHuman: 'Human',
+    };
+    final value = json[key];
+    final effective = mapping ?? mappingFallback;
+    return switch (value) {
+      effective[FamilyMembersUnionCat] =>
+        FamilyMembersUnionCatMapper.ensureInitialized()
+            .decodeMap<FamilyMembersUnionCat>(json),
+      effective[FamilyMembersUnionDog] =>
+        FamilyMembersUnionDogMapper.ensureInitialized()
+            .decodeMap<FamilyMembersUnionDog>(json),
+      effective[FamilyMembersUnionHuman] =>
+        FamilyMembersUnionHumanMapper.ensureInitialized()
+            .decodeMap<FamilyMembersUnionHuman>(json),
+      _ => throw FormatException(
+          'Unknown discriminator value "${json[key]}" for FamilyMembersUnion'),
+    };
   }
 }
 

@@ -19,12 +19,12 @@ sealed class FamilyMembersUnion with FamilyMembersUnionMappable {
   const FamilyMembersUnion();
 
   static FamilyMembersUnion fromJson(Map<String, dynamic> json) {
-    return _FamilyMembersUnionHelper._tryDeserialize(json);
+    return FamilyMembersUnionUnionDeserializer.tryDeserialize(json);
   }
 }
 
-class _FamilyMembersUnionHelper {
-  static FamilyMembersUnion _tryDeserialize(Map<String, dynamic> json) {
+extension FamilyMembersUnionUnionDeserializer on FamilyMembersUnion {
+  static FamilyMembersUnion tryDeserialize(Map<String, dynamic> json) {
     try {
       return FamilyMembersUnionCatMapper.ensureInitialized()
           .decodeMap<FamilyMembersUnionCat>(json);

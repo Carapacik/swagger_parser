@@ -18,22 +18,32 @@ sealed class MobileDevice with MobileDeviceMappable {
   const MobileDevice();
 
   static MobileDevice fromJson(Map<String, dynamic> json) {
-    return _MobileDeviceHelper._tryDeserialize(json);
+    return MobileDeviceUnionDeserializer.tryDeserialize(json);
   }
 }
 
-class _MobileDeviceHelper {
-  static MobileDevice _tryDeserialize(Map<String, dynamic> json) {
-    if (json['type'] == 'ios') {
-      return MobileDeviceIosDeviceMapper.ensureInitialized()
-          .decodeMap<MobileDeviceIosDevice>(json);
-    } else if (json['type'] == 'android') {
-      return MobileDeviceAndroidDeviceMapper.ensureInitialized()
-          .decodeMap<MobileDeviceAndroidDevice>(json);
-    } else {
-      throw FormatException(
-          'Unknown discriminator value "${json['type']}" for MobileDevice');
-    }
+extension MobileDeviceUnionDeserializer on MobileDevice {
+  static MobileDevice tryDeserialize(
+    Map<String, dynamic> json, {
+    String key = 'type',
+    Map<Type, Object?>? mapping,
+  }) {
+    final mappingFallback = const <Type, Object?>{
+      MobileDeviceIosDevice: 'ios',
+      MobileDeviceAndroidDevice: 'android',
+    };
+    final value = json[key];
+    final effective = mapping ?? mappingFallback;
+    return switch (value) {
+      effective[MobileDeviceIosDevice] =>
+        MobileDeviceIosDeviceMapper.ensureInitialized()
+            .decodeMap<MobileDeviceIosDevice>(json),
+      effective[MobileDeviceAndroidDevice] =>
+        MobileDeviceAndroidDeviceMapper.ensureInitialized()
+            .decodeMap<MobileDeviceAndroidDevice>(json),
+      _ => throw FormatException(
+          'Unknown discriminator value "${json[key]}" for MobileDevice'),
+    };
   }
 }
 

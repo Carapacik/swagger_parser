@@ -23,26 +23,36 @@ sealed class Family1MembersUnion with Family1MembersUnionMappable {
   const Family1MembersUnion();
 
   static Family1MembersUnion fromJson(Map<String, dynamic> json) {
-    return _Family1MembersUnionHelper._tryDeserialize(json);
+    return Family1MembersUnionUnionDeserializer.tryDeserialize(json);
   }
 }
 
-class _Family1MembersUnionHelper {
-  static Family1MembersUnion _tryDeserialize(Map<String, dynamic> json) {
-    if (json['type'] == 'Cat') {
-      return Family1MembersUnionCatMapper.ensureInitialized()
-          .decodeMap<Family1MembersUnionCat>(json);
-    } else if (json['type'] == 'Dog') {
-      return Family1MembersUnionDogMapper.ensureInitialized()
-          .decodeMap<Family1MembersUnionDog>(json);
-    } else if (json['type'] == 'Human') {
-      return Family1MembersUnionHumanMapper.ensureInitialized()
-          .decodeMap<Family1MembersUnionHuman>(json);
-    } else {
-      // Return fallback wrapper for unknown discriminator values
-      return Family1MembersUnionUnknownMapper.ensureInitialized()
-          .decodeMap<Family1MembersUnionUnknown>(json);
-    }
+extension Family1MembersUnionUnionDeserializer on Family1MembersUnion {
+  static Family1MembersUnion tryDeserialize(
+    Map<String, dynamic> json, {
+    String key = 'type',
+    Map<Type, Object?>? mapping,
+  }) {
+    final mappingFallback = const <Type, Object?>{
+      Family1MembersUnionCat: 'Cat',
+      Family1MembersUnionDog: 'Dog',
+      Family1MembersUnionHuman: 'Human',
+    };
+    final value = json[key];
+    final effective = mapping ?? mappingFallback;
+    return switch (value) {
+      effective[Family1MembersUnionCat] =>
+        Family1MembersUnionCatMapper.ensureInitialized()
+            .decodeMap<Family1MembersUnionCat>(json),
+      effective[Family1MembersUnionDog] =>
+        Family1MembersUnionDogMapper.ensureInitialized()
+            .decodeMap<Family1MembersUnionDog>(json),
+      effective[Family1MembersUnionHuman] =>
+        Family1MembersUnionHumanMapper.ensureInitialized()
+            .decodeMap<Family1MembersUnionHuman>(json),
+      _ => Family1MembersUnionUnknownMapper.ensureInitialized()
+          .decodeMap<Family1MembersUnionUnknown>(json),
+    };
   }
 }
 

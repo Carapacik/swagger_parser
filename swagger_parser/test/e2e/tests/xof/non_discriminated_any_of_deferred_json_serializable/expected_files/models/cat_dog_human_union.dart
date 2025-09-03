@@ -15,13 +15,13 @@ sealed class CatDogHumanUnion {
   const CatDogHumanUnion();
 
   factory CatDogHumanUnion.fromJson(Map<String, dynamic> json) =>
-      _CatDogHumanUnionHelper._tryDeserialize(json);
+      CatDogHumanUnionUnionDeserializer.tryDeserialize(json);
 
   Map<String, dynamic> toJson();
 }
 
-class _CatDogHumanUnionHelper {
-  static CatDogHumanUnion _tryDeserialize(Map<String, dynamic> json) {
+extension CatDogHumanUnionUnionDeserializer on CatDogHumanUnion {
+  static CatDogHumanUnion tryDeserialize(Map<String, dynamic> json) {
     try {
       return CatDogHumanUnionCat.fromJson(json);
     } catch (_) {}

@@ -244,19 +244,17 @@ ${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${clas
   }
 
   // Discriminated unions with complete mapping use wrapper pattern
+  // and the public extension-based deserializer
   if (dataClass.discriminator != null &&
       _isCompleteDiscriminatorMapping(dataClass.discriminator!)) {
-    final variantMap = <String, Set<UniversalType>>{};
-    for (final entry
-        in dataClass.discriminator!.discriminatorValueToRefMapping.entries) {
-      final variantName = entry.value;
-      variantMap[variantName] = {
-        UniversalType(
-            type: variantName, name: variantName.toCamel, isRequired: true)
-      };
-    }
-    return _generateUndiscriminatedUnionBody(className, variantMap,
-        useMultipartFile, dartMappableConvenientWhen, fallbackUnion);
+    return '''
+${indentation(2)}const $className();
+
+${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, fallbackUnion) : ''}
+${indentation(2)}static $className fromJson(Map<String, dynamic> json) {
+${indentation(4)}return ${className}UnionDeserializer.tryDeserialize(json);
+${indentation(2)}}
+''';
   }
 
   // Discriminated union - already handled by existing discriminator convenience methods
@@ -278,7 +276,7 @@ String _generateUndiscriminatedUnionBody(
 ${indentation(2)}const $className();
 ${dartMappableConvenientWhen ? '\n${_generateUndiscriminatedUnionConvenienceMethods(className, variants, fallbackUnion)}' : ''}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) {
-${indentation(4)}return _${className}Helper._tryDeserialize(json);
+${indentation(4)}return ${className}UnionDeserializer.tryDeserialize(json);
 ${indentation(2)}}
 ''';
 }
@@ -287,7 +285,7 @@ String _generateUndiscriminatedUnionClasses(String className,
     Map<String, Set<UniversalType>> variants, bool useMultipartFile,
     [String? fallbackUnion]) {
   return '''
-${_generatePrivateHelper(className, variants, fallbackUnion)}
+${_generateUndiscriminatedMappableExtension(className, variants, fallbackUnion)}
 
 ${_generateVariantWrappers(className, variants, useMultipartFile, fallbackUnion)}''';
 }
@@ -387,37 +385,78 @@ ${indentation(2)}}
 }''';
 }
 
+String _generateUndiscriminatedMappableExtension(
+    String className, Map<String, Set<UniversalType>> variants,
+    [String? fallbackUnion]) {
+  final tryBlocks = variants.keys
+      .map(
+        (variantName) => '''
+${indentation(4)}try {
+${indentation(6)}return $className${variantName.toPascal}Mapper.ensureInitialized().decodeMap<$className${variantName.toPascal}>(json);
+${indentation(4)}} catch (_) {}''',
+      )
+      .join('\n');
+
+  final fallbackBlock = (fallbackUnion != null && fallbackUnion.isNotEmpty)
+      ? '''
+${indentation(4)}// Try fallback variant before throwing exception
+${indentation(4)}try {
+${indentation(6)}return $className${fallbackUnion.toPascal}Mapper.ensureInitialized().decodeMap<$className${fallbackUnion.toPascal}>(json);
+${indentation(4)}} catch (_) {}'''
+      : '';
+
+  return '''
+extension ${className}UnionDeserializer on $className {
+${indentation(2)}static $className tryDeserialize(Map<String, dynamic> json) {
+$tryBlocks
+$fallbackBlock
+
+${indentation(4)}throw FormatException('Could not determine the correct type for $className from: \$json');
+${indentation(2)}}
+}''';
+}
+
 String _generateDiscriminatorHelper(
     String className, Discriminator discriminator,
     [String? fallbackUnion]) {
   final discriminatorKey = discriminator.propertyName;
   final discriminatorMappings = discriminator.discriminatorValueToRefMapping;
 
-  // Generate if-else chain for discriminator values
-  final ifElseChain = discriminatorMappings.entries.map((entry) {
-    final discriminatorValue = entry.key;
+  // Build default mapping literal: { WrapperType: 'DiscriminatorValue', ... }
+  final mappingEntries = discriminatorMappings.entries.map((entry) {
     final variantName = entry.value;
-    return '''
-${indentation(4)}if (json['$discriminatorKey'] == '$discriminatorValue') {
-${indentation(6)}return $className${variantName.toPascal}Mapper.ensureInitialized()
-${indentation(10)}.decodeMap<$className${variantName.toPascal}>(json);
-${indentation(4)}}''';
-  }).join(' else ');
+    final discriminatorValue = entry.key;
+    final wrapperClassName = '$className${variantName.toPascal}';
+    return '${indentation(6)}$wrapperClassName: \'$discriminatorValue\',';
+  }).join('\n');
 
-  final fallbackBlock = (fallbackUnion != null && fallbackUnion.isNotEmpty)
-      ? '''
-${indentation(6)}// Return fallback wrapper for unknown discriminator values
-${indentation(6)}return $className${fallbackUnion.toPascal}Mapper.ensureInitialized()
-${indentation(10)}.decodeMap<$className${fallbackUnion.toPascal}>(json);'''
-      : '''
-${indentation(6)}throw FormatException('Unknown discriminator value "\${json['$discriminatorKey']}" for $className');''';
+  // Build switch cases
+  final switchCases = discriminatorMappings.entries.map((entry) {
+    final variantName = entry.value;
+    final wrapperClassName = '$className${variantName.toPascal}';
+    return '''${indentation(6)}effective[$wrapperClassName] => ${wrapperClassName}Mapper.ensureInitialized().decodeMap<$wrapperClassName>(json),''';
+  }).join('\n');
+
+  final fallbackCase = (fallbackUnion != null && fallbackUnion.isNotEmpty)
+      ? '${indentation(6)}_ => $className${fallbackUnion.toPascal}Mapper.ensureInitialized().decodeMap<${className}${fallbackUnion.toPascal}>(json),'
+      : "${indentation(6)}_ => throw FormatException('Unknown discriminator value \"\${json[key]}\" for $className'),";
 
   return '''
-class _${className}Helper {
-${indentation(2)}static $className _tryDeserialize(Map<String, dynamic> json) {
-$ifElseChain else {
-$fallbackBlock
-${indentation(2)}}
+extension ${className}UnionDeserializer on $className {
+${indentation(2)}static $className tryDeserialize(
+${indentation(2)}  Map<String, dynamic> json, {
+${indentation(2)}  String key = '$discriminatorKey',
+${indentation(2)}  Map<Type, Object?>? mapping,
+${indentation(2)}}) {
+${indentation(4)}final mappingFallback = const <Type, Object?>{
+$mappingEntries
+${indentation(4)}};
+${indentation(4)}final value = json[key];
+${indentation(4)}final effective = mapping ?? mappingFallback;
+${indentation(4)}return switch (value) {
+$switchCases
+$fallbackCase
+${indentation(4)}};
 ${indentation(2)}}
 }''';
 }
@@ -605,8 +644,9 @@ String _generateWrapperClasses(UniversalComponentClass dataClass,
   // Handle discriminated unions with complete mapping using wrapper pattern
   if (dataClass.discriminator != null &&
       _isCompleteDiscriminatorMapping(dataClass.discriminator!)) {
-    return _generateDiscriminatedWrapperClasses(
+    final wrappers = _generateDiscriminatedWrapperClasses(
         dataClass, className, useMultipartFile, fallbackUnion);
+    return wrappers;
   }
 
   return '';

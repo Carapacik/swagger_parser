@@ -18,22 +18,33 @@ sealed class Family1MembersUnion {
   const Family1MembersUnion();
 
   factory Family1MembersUnion.fromJson(Map<String, dynamic> json) =>
-      _Family1MembersUnionHelper._tryDeserialize(json);
+      Family1MembersUnionUnionDeserializer.tryDeserialize(json);
 
   Map<String, dynamic> toJson();
 }
 
-class _Family1MembersUnionHelper {
-  static Family1MembersUnion _tryDeserialize(Map<String, dynamic> json) {
-    if (json['type'] == 'Cat') {
-      return Family1MembersUnionCat.fromJson(json);
-    } else if (json['type'] == 'Dog') {
-      return Family1MembersUnionDog.fromJson(json);
-    } else if (json['type'] == 'Human') {
-      return Family1MembersUnionHuman.fromJson(json);
-    } else {
-      return Family1MembersUnionUnknown.fromJson(json);
-    }
+extension Family1MembersUnionUnionDeserializer on Family1MembersUnion {
+  static Family1MembersUnion tryDeserialize(
+    Map<String, dynamic> json, {
+    String key = 'type',
+    Map<Type, Object?>? mapping,
+  }) {
+    final mappingFallback = const <Type, Object?>{
+      Family1MembersUnionCat: 'Cat',
+      Family1MembersUnionDog: 'Dog',
+      Family1MembersUnionHuman: 'Human',
+    };
+    final value = json[key];
+    final effective = mapping ?? mappingFallback;
+    return switch (value) {
+      effective[Family1MembersUnionCat] =>
+        Family1MembersUnionCat.fromJson(json),
+      effective[Family1MembersUnionDog] =>
+        Family1MembersUnionDog.fromJson(json),
+      effective[Family1MembersUnionHuman] =>
+        Family1MembersUnionHuman.fromJson(json),
+      _ => Family1MembersUnionUnknown.fromJson(json),
+    };
   }
 }
 

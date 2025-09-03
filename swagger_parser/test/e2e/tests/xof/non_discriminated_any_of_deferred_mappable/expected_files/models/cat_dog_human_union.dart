@@ -19,12 +19,12 @@ sealed class CatDogHumanUnion with CatDogHumanUnionMappable {
   const CatDogHumanUnion();
 
   static CatDogHumanUnion fromJson(Map<String, dynamic> json) {
-    return _CatDogHumanUnionHelper._tryDeserialize(json);
+    return CatDogHumanUnionUnionDeserializer.tryDeserialize(json);
   }
 }
 
-class _CatDogHumanUnionHelper {
-  static CatDogHumanUnion _tryDeserialize(Map<String, dynamic> json) {
+extension CatDogHumanUnionUnionDeserializer on CatDogHumanUnion {
+  static CatDogHumanUnion tryDeserialize(Map<String, dynamic> json) {
     try {
       return CatDogHumanUnionCatMapper.ensureInitialized()
           .decodeMap<CatDogHumanUnionCat>(json);
