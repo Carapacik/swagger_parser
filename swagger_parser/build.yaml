@@ -1,0 +1,22 @@
+global_options:
+  freezed:
+    runs_before:
+      - json_serializable
+  json_serializable:
+    runs_before:
+      - retrofit_generator
+  dart_mappable_builder:
+    runs_before:
+      - retrofit_generator
+    options:
+      renameMethods:
+        toJson: toJsonString
+        toMap: toJson
+
+targets:
+  $default:
+    sources:
+      include:
+        - $package$
+        - lib/**
+        - test/**

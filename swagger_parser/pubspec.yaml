@@ -19,5 +19,14 @@ dependencies:
   yaml: ^3.1.2
 
 dev_dependencies:
+  dart_mappable:
+  dart_mappable_builder:
+  json_annotation:
+  json_serializable:
+  freezed_annotation:
+  freezed:
+  retrofit:
+  retrofit_generator:
+  build_runner:
   carapacik_lints: ^1.8.1
   test: ^1.25.2
