@@ -14,9 +14,8 @@ part 'cat_dog_human_union.g.dart';
 sealed class CatDogHumanUnion {
   const CatDogHumanUnion();
 
-  static CatDogHumanUnion fromJson(Map<String, dynamic> json) {
-    return _CatDogHumanUnionHelper._tryDeserialize(json);
-  }
+  factory CatDogHumanUnion.fromJson(Map<String, dynamic> json) =>
+      _CatDogHumanUnionHelper._tryDeserialize(json);
 
   Map<String, dynamic> toJson();
 }

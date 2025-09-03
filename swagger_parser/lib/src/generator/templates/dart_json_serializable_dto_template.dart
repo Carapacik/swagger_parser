@@ -70,9 +70,8 @@ String _generateDiscriminatedUnionTemplate(UniversalComponentClass dataClass,
 sealed class $className {
   const $className();
   
-  static $className fromJson(Map<String, dynamic> json) {
-    return _${className}Helper._tryDeserialize(json);
-  }
+  factory $className.fromJson(Map<String, dynamic> json) =>
+      _${className}Helper._tryDeserialize(json);
   
   Map<String, dynamic> toJson();
 }''';
@@ -109,9 +108,8 @@ String _generateUndiscriminatedUnionTemplate(UniversalComponentClass dataClass,
 sealed class $className {
   const $className();
   
-  static $className fromJson(Map<String, dynamic> json) {
-    return _${className}Helper._tryDeserialize(json);
-  }
+  factory $className.fromJson(Map<String, dynamic> json) =>
+      _${className}Helper._tryDeserialize(json);
   
   Map<String, dynamic> toJson();
 }''';

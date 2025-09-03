@@ -17,9 +17,8 @@ part 'family1_members_union.g.dart';
 sealed class Family1MembersUnion {
   const Family1MembersUnion();
 
-  static Family1MembersUnion fromJson(Map<String, dynamic> json) {
-    return _Family1MembersUnionHelper._tryDeserialize(json);
-  }
+  factory Family1MembersUnion.fromJson(Map<String, dynamic> json) =>
+      _Family1MembersUnionHelper._tryDeserialize(json);
 
   Map<String, dynamic> toJson();
 }
