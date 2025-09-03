@@ -836,6 +836,8 @@ class OpenApiParser {
           return;
         }
 
+        _anchorRegistry.markContextAsIncluded(_contextStack.current!);
+
         value as Map<String, dynamic>;
 
         // Track schema dependencies for filtering
