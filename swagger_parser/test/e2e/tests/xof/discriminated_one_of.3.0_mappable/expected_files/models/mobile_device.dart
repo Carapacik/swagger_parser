@@ -41,30 +41,22 @@ class _MobileDeviceHelper {
 class MobileDeviceIosDevice extends MobileDevice
     with MobileDeviceIosDeviceMappable
     implements IosDevice {
-  final IosDevice _iosDevice;
-
-  const MobileDeviceIosDevice(this._iosDevice);
-
   @override
-  IosDeviceType get type => _iosDevice.type;
+  final IosDeviceType type;
 
-  static MobileDeviceIosDevice fromJson(Map<String, dynamic> json) =>
-      MobileDeviceIosDevice(
-          IosDeviceMapper.ensureInitialized().decodeMap<IosDevice>(json));
+  const MobileDeviceIosDevice({
+    required this.type,
+  });
 }
 
 @MappableClass(discriminatorValue: 'android')
 class MobileDeviceAndroidDevice extends MobileDevice
     with MobileDeviceAndroidDeviceMappable
     implements AndroidDevice {
-  final AndroidDevice _androidDevice;
-
-  const MobileDeviceAndroidDevice(this._androidDevice);
-
   @override
-  AndroidDeviceType get type => _androidDevice.type;
+  final AndroidDeviceType type;
 
-  static MobileDeviceAndroidDevice fromJson(Map<String, dynamic> json) =>
-      MobileDeviceAndroidDevice(AndroidDeviceMapper.ensureInitialized()
-          .decodeMap<AndroidDevice>(json));
+  const MobileDeviceAndroidDevice({
+    required this.type,
+  });
 }

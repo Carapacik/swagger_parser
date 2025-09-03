@@ -53,60 +53,46 @@ class _FamilyMembersUnionHelper {
 class FamilyMembersUnionCat extends FamilyMembersUnion
     with FamilyMembersUnionCatMappable
     implements Cat {
-  final Cat _cat;
-
-  const FamilyMembersUnionCat(this._cat);
-
   @override
-  int get mewCount => _cat.mewCount;
+  final int mewCount;
 
-  static FamilyMembersUnionCat fromJson(Map<String, dynamic> json) =>
-      FamilyMembersUnionCat(CatMapper.ensureInitialized().decodeMap<Cat>(json));
+  const FamilyMembersUnionCat({
+    required this.mewCount,
+  });
 }
 
 @MappableClass()
 class FamilyMembersUnionVariant2 extends FamilyMembersUnion
     with FamilyMembersUnionVariant2Mappable
     implements Variant2 {
-  final Variant2 _variant2;
-
-  const FamilyMembersUnionVariant2(this._variant2);
-
   @override
-  int get chirpVolume => _variant2.chirpVolume;
+  final int chirpVolume;
 
-  static FamilyMembersUnionVariant2 fromJson(Map<String, dynamic> json) =>
-      FamilyMembersUnionVariant2(
-          Variant2Mapper.ensureInitialized().decodeMap<Variant2>(json));
+  const FamilyMembersUnionVariant2({
+    required this.chirpVolume,
+  });
 }
 
 @MappableClass()
 class FamilyMembersUnionDog extends FamilyMembersUnion
     with FamilyMembersUnionDogMappable
     implements Dog {
-  final Dog _dog;
-
-  const FamilyMembersUnionDog(this._dog);
-
   @override
-  String get barkSound => _dog.barkSound;
+  final String barkSound;
 
-  static FamilyMembersUnionDog fromJson(Map<String, dynamic> json) =>
-      FamilyMembersUnionDog(DogMapper.ensureInitialized().decodeMap<Dog>(json));
+  const FamilyMembersUnionDog({
+    required this.barkSound,
+  });
 }
 
 @MappableClass()
 class FamilyMembersUnionVariant4 extends FamilyMembersUnion
     with FamilyMembersUnionVariant4Mappable
     implements Variant4 {
-  final Variant4 _variant4;
-
-  const FamilyMembersUnionVariant4(this._variant4);
-
   @override
-  String get job => _variant4.job;
+  final String job;
 
-  static FamilyMembersUnionVariant4 fromJson(Map<String, dynamic> json) =>
-      FamilyMembersUnionVariant4(
-          Variant4Mapper.ensureInitialized().decodeMap<Variant4>(json));
+  const FamilyMembersUnionVariant4({
+    required this.job,
+  });
 }

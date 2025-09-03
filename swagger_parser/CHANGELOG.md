@@ -1,5 +1,8 @@
 ## 1.31.0
-- Add simple unions(`oneOf`/`anyOf`) support for `json_serializeble` serializer
+- Add complete unions(`oneOf`/`anyOf`) support for `json_serializeble` serializer
+  - **WARNING**: Undiscriminated unions use O(n) try-catch deserialization where n is the number of variants
+  - **RECOMMENDED**: Add discriminator properties to your OpenAPI specification for O(1) performance
+  - Add support for union fallback for failed decoding
 - Add complete unions(`oneOf`/`anyOf`) support for `dart_mappable` serializer
   - **WARNING**: Undiscriminated unions use O(n) try-catch deserialization where n is the number of variants
   - **RECOMMENDED**: Add discriminator properties to your OpenAPI specification for O(1) performance

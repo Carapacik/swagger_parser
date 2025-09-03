@@ -738,7 +738,7 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
         ),
-        schemaFileName: 'openapi.yaml',
+        schemaFileName: 'discriminated_any_of_complete_mapping.3.1.yaml',
       );
     });
 
@@ -752,7 +752,7 @@ void main() {
           putClientsInFolder: true,
           dartMappableConvenientWhen: false,
         ),
-        schemaFileName: 'openapi.yaml',
+        schemaFileName: 'discriminated_any_of_complete_mapping.3.1.yaml',
       );
     });
 
@@ -902,6 +902,72 @@ void main() {
           putClientsInFolder: true,
         ),
         schemaFileName: 'non_discriminated_one_of.3.0.json',
+      );
+    });
+
+    test('fallback_union_json_serializable', () async {
+      await e2eTest(
+        'xof/fallback_union_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.jsonSerializable,
+          putClientsInFolder: true,
+          fallbackUnion: 'unknown',
+        ),
+        schemaFileName: 'fallback_union.json',
+      );
+    });
+
+    test('discriminated_any_of_complete_mapping_json_serializable', () async {
+      await e2eTest(
+        'xof/discriminated_any_of_complete_mapping_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.jsonSerializable,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('non_discriminated_any_of_deferred_json_serializable', () async {
+      await e2eTest(
+        'xof/non_discriminated_any_of_deferred_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.jsonSerializable,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('union_inline_and_refs_any_of_deferred_json_serializable', () async {
+      await e2eTest(
+        'xof/union_inline_and_refs_any_of_deferred_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.jsonSerializable,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('union_inline_and_refs_one_of_deferred_json_serializable', () async {
+      await e2eTest(
+        'xof/union_inline_and_refs_one_of_deferred_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.jsonSerializable,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
       );
     });
   });

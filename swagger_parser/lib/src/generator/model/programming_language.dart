@@ -79,6 +79,7 @@ enum ProgrammingLanguage {
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
                 useMultipartFile: useMultipartFile,
+                fallbackUnion: fallbackUnion,
               ),
             JsonSerializer.dartMappable => dartDartMappableDtoTemplate(
                 dataClass,

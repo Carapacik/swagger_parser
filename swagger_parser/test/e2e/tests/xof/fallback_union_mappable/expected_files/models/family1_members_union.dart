@@ -50,54 +50,45 @@ class _Family1MembersUnionHelper {
 class Family1MembersUnionCat extends Family1MembersUnion
     with Family1MembersUnionCatMappable
     implements Cat {
-  final Cat _cat;
-
-  const Family1MembersUnionCat(this._cat);
-
   @override
-  CatType get type => _cat.type;
+  final CatType type;
   @override
-  int get mewCount => _cat.mewCount;
+  final int mewCount;
 
-  static Family1MembersUnionCat fromJson(Map<String, dynamic> json) =>
-      Family1MembersUnionCat(
-          CatMapper.ensureInitialized().decodeMap<Cat>(json));
+  const Family1MembersUnionCat({
+    required this.type,
+    required this.mewCount,
+  });
 }
 
 @MappableClass(discriminatorValue: 'Dog')
 class Family1MembersUnionDog extends Family1MembersUnion
     with Family1MembersUnionDogMappable
     implements Dog {
-  final Dog _dog;
-
-  const Family1MembersUnionDog(this._dog);
-
   @override
-  DogType get type => _dog.type;
+  final DogType type;
   @override
-  String get barkSound => _dog.barkSound;
+  final String barkSound;
 
-  static Family1MembersUnionDog fromJson(Map<String, dynamic> json) =>
-      Family1MembersUnionDog(
-          DogMapper.ensureInitialized().decodeMap<Dog>(json));
+  const Family1MembersUnionDog({
+    required this.type,
+    required this.barkSound,
+  });
 }
 
 @MappableClass(discriminatorValue: 'Human')
 class Family1MembersUnionHuman extends Family1MembersUnion
     with Family1MembersUnionHumanMappable
     implements Human {
-  final Human _human;
-
-  const Family1MembersUnionHuman(this._human);
-
   @override
-  HumanType get type => _human.type;
+  final HumanType type;
   @override
-  String get job => _human.job;
+  final String job;
 
-  static Family1MembersUnionHuman fromJson(Map<String, dynamic> json) =>
-      Family1MembersUnionHuman(
-          HumanMapper.ensureInitialized().decodeMap<Human>(json));
+  const Family1MembersUnionHuman({
+    required this.type,
+    required this.job,
+  });
 }
 
 @MappableClass(discriminatorValue: MappableClass.useAsDefault)

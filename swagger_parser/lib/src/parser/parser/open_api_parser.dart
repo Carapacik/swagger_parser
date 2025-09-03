@@ -1025,10 +1025,6 @@ class OpenApiParser {
         discriminatedOneOfClass.imports.add(refedClass.import);
 
         dataClasses[refedClassIndex] = refedClass.copyWith(
-          imports: {
-            ...refedClass.imports,
-            discriminatedOneOfClass.import,
-          }.sortedBy((it) => it).toSet(),
           discriminatorValue: (
             propertyValue: discriminatedOneOfClass
                 .discriminator!.discriminatorValueToRefMapping.entries
@@ -1036,6 +1032,10 @@ class OpenApiParser {
                 .key,
             parentClass: discriminatedOneOfClass.name,
           ),
+          imports: {
+            ...refedClass.imports,
+            discriminatedOneOfClass.import,
+          }.sortedBy((it) => it).toSet(),
         );
       }
     }

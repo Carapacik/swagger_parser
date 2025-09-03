@@ -366,22 +366,24 @@ String _generateVariantWrappers(String className, Map<String, Set<UniversalType>
     final wrapperClassName = '$className${variantName.toPascal}';
     final originalClassName = variantName.toPascal;
     
-    // Generate property getters that delegate to the wrapped instance
-    final propertyGetters = properties.map((prop) => 
-      '${indentation(2)}@override\n${indentation(2)}${prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} get ${prop.name} => _${variantName.toCamel}.${prop.name};',
+    // Generate direct properties instead of delegating getters
+    final directProperties = properties.map((prop) => 
+      '${indentation(2)}@override\n${indentation(2)}final ${prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${prop.name};',
+    ).join('\n');
+    
+    // Generate constructor parameters
+    final constructorParams = properties.map((prop) => 
+      '${indentation(4)}required this.${prop.name},',
     ).join('\n');
     
     return '''
 @MappableClass()
 class $wrapperClassName extends $className with ${wrapperClassName}Mappable implements $originalClassName {
-${indentation(2)}final $originalClassName _${variantName.toCamel};
+$directProperties
 
-${indentation(2)}const $wrapperClassName(this._${variantName.toCamel});
-
-$propertyGetters
-
-${indentation(2)}static $wrapperClassName fromJson(Map<String, dynamic> json) =>
-${indentation(6)}$wrapperClassName(${originalClassName}Mapper.ensureInitialized().decodeMap<$originalClassName>(json));
+${indentation(2)}const $wrapperClassName({
+$constructorParams
+${indentation(2)}});
 }
 ''';
   }).join('\n');
@@ -529,22 +531,24 @@ String _generateDiscriminatedWrapperClasses(UniversalComponentClass dataClass, S
     // Include all properties (including discriminator property)
     final filteredProperties = variantProperties;
     
-    // Generate property getters that delegate to the wrapped instance
-    final propertyGetters = filteredProperties.map((prop) => 
-      '${indentation(2)}@override\n${indentation(2)}${prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} get ${prop.name} => _${variantName.toCamel}.${prop.name};',
+    // Generate direct properties instead of delegating getters
+    final directProperties = filteredProperties.map((prop) => 
+      '${indentation(2)}@override\n${indentation(2)}final ${prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${prop.name};',
+    ).join('\n');
+    
+    // Generate constructor parameters
+    final constructorParams = filteredProperties.map((prop) => 
+      '${indentation(4)}required this.${prop.name},',
     ).join('\n');
     
     wrappers.add('''
 @MappableClass(discriminatorValue: '$discriminatorValue')
 class $wrapperClassName extends $className with ${wrapperClassName}Mappable implements $variantName {
-  final $variantName _${variantName.toCamel};
+$directProperties
 
-  const $wrapperClassName(this._${variantName.toCamel});
-
-$propertyGetters
-
-${indentation(2)}static $wrapperClassName fromJson(Map<String, dynamic> json) =>
-${indentation(6)}$wrapperClassName(${variantName}Mapper.ensureInitialized().decodeMap<$variantName>(json));
+${indentation(2)}const $wrapperClassName({
+$constructorParams
+${indentation(2)}});
 }''');
   }
   
