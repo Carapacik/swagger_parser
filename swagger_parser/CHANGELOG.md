@@ -1,3 +1,7 @@
+## 1.30.1
+### Fixes
+- Fix the missing file generation for nested objects in schemas when filtering by tags. Addresses [#369](https://github.com/Carapacik/swagger_parser/issues/369)
+
 ## 1.30.0
 - Add support for merging all generated code into single output file using the `merge_outputs` option
 
