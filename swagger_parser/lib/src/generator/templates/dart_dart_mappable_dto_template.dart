@@ -430,11 +430,11 @@ String _generateDiscriminatorHelper(
     return '${indentation(6)}$wrapperClassName: \'$discriminatorValue\',';
   }).join('\n');
 
-  // Build switch cases
+  // Build switch cases using guarded mapping
   final switchCases = discriminatorMappings.entries.map((entry) {
     final variantName = entry.value;
     final wrapperClassName = '$className${variantName.toPascal}';
-    return '''${indentation(6)}effective[$wrapperClassName] => ${wrapperClassName}Mapper.ensureInitialized().decodeMap<$wrapperClassName>(json),''';
+    return '''${indentation(6)}_ when value == effective[$wrapperClassName] => ${wrapperClassName}Mapper.ensureInitialized().decodeMap<$wrapperClassName>(json),''';
   }).join('\n');
 
   final fallbackCase = (fallbackUnion != null && fallbackUnion.isNotEmpty)

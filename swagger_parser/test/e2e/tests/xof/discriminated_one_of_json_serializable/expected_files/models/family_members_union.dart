@@ -37,9 +37,11 @@ extension FamilyMembersUnionUnionDeserializer on FamilyMembersUnion {
     final value = json[key];
     final effective = mapping ?? mappingFallback;
     return switch (value) {
-      effective[FamilyMembersUnionCat] => FamilyMembersUnionCat.fromJson(json),
-      effective[FamilyMembersUnionDog] => FamilyMembersUnionDog.fromJson(json),
-      effective[FamilyMembersUnionHuman] =>
+      _ when value == effective[FamilyMembersUnionCat] =>
+        FamilyMembersUnionCat.fromJson(json),
+      _ when value == effective[FamilyMembersUnionDog] =>
+        FamilyMembersUnionDog.fromJson(json),
+      _ when value == effective[FamilyMembersUnionHuman] =>
         FamilyMembersUnionHuman.fromJson(json),
       _ => throw FormatException(
           'Unknown discriminator value "${json[key]}" for FamilyMembersUnion'),

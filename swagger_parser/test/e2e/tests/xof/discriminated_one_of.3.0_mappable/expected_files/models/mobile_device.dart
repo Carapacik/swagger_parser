@@ -35,10 +35,10 @@ extension MobileDeviceUnionDeserializer on MobileDevice {
     final value = json[key];
     final effective = mapping ?? mappingFallback;
     return switch (value) {
-      effective[MobileDeviceIosDevice] =>
+      _ when value == effective[MobileDeviceIosDevice] =>
         MobileDeviceIosDeviceMapper.ensureInitialized()
             .decodeMap<MobileDeviceIosDevice>(json),
-      effective[MobileDeviceAndroidDevice] =>
+      _ when value == effective[MobileDeviceAndroidDevice] =>
         MobileDeviceAndroidDeviceMapper.ensureInitialized()
             .decodeMap<MobileDeviceAndroidDevice>(json),
       _ => throw FormatException(

@@ -41,13 +41,13 @@ extension Family1MembersUnionUnionDeserializer on Family1MembersUnion {
     final value = json[key];
     final effective = mapping ?? mappingFallback;
     return switch (value) {
-      effective[Family1MembersUnionCat] =>
+      _ when value == effective[Family1MembersUnionCat] =>
         Family1MembersUnionCatMapper.ensureInitialized()
             .decodeMap<Family1MembersUnionCat>(json),
-      effective[Family1MembersUnionDog] =>
+      _ when value == effective[Family1MembersUnionDog] =>
         Family1MembersUnionDogMapper.ensureInitialized()
             .decodeMap<Family1MembersUnionDog>(json),
-      effective[Family1MembersUnionHuman] =>
+      _ when value == effective[Family1MembersUnionHuman] =>
         Family1MembersUnionHumanMapper.ensureInitialized()
             .decodeMap<Family1MembersUnionHuman>(json),
       _ => Family1MembersUnionUnknownMapper.ensureInitialized()

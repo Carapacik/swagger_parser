@@ -37,11 +37,11 @@ extension Family1MembersUnionUnionDeserializer on Family1MembersUnion {
     final value = json[key];
     final effective = mapping ?? mappingFallback;
     return switch (value) {
-      effective[Family1MembersUnionCat] =>
+      _ when value == effective[Family1MembersUnionCat] =>
         Family1MembersUnionCat.fromJson(json),
-      effective[Family1MembersUnionDog] =>
+      _ when value == effective[Family1MembersUnionDog] =>
         Family1MembersUnionDog.fromJson(json),
-      effective[Family1MembersUnionHuman] =>
+      _ when value == effective[Family1MembersUnionHuman] =>
         Family1MembersUnionHuman.fromJson(json),
       _ => Family1MembersUnionUnknown.fromJson(json),
     };

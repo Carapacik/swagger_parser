@@ -193,11 +193,11 @@ String _generateDiscriminatorExtension(
     return '      $wrapperClassName: \'$discriminatorValue\',';
   }).join('\n');
 
-  // Build switch cases using mapping
+  // Build switch cases using guarded mapping
   final switchCases = variants.entries.map((entry) {
     final variantName = entry.value;
     final wrapperClassName = '$className${variantName.toPascal}';
-    return '''      effective[$wrapperClassName] => $wrapperClassName.fromJson(json),''';
+    return '''      _ when value == effective[$wrapperClassName] => $wrapperClassName.fromJson(json),''';
   }).join('\n');
 
   final fallbackCase = (fallbackUnion != null && fallbackUnion.isNotEmpty)
