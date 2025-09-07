@@ -1,0 +1,70 @@
+openapi: 3.1.0
+info:
+  title: Tag Filtering Nested Objects API
+  version: 1.0.0
+  description: Test case for reproducing GitHub issue #369 - tag filtering prevents class generation for inline nested objects
+paths:
+  /api/v1/debug:
+    get:
+      operationId: getDebug
+      tags:
+        - include
+      responses:
+        '200':
+          description: Debug information with nested data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DebugSchema'
+  /api/v1/excluded:
+    get:
+      operationId: getExcluded  
+      tags:
+        - exclude
+      responses:
+        '200':
+          description: Excluded endpoint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExcludedSchema'
+components:
+  schemas:
+    DebugSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            name:
+              type: string
+            id:
+              type: integer
+            status:
+              type: string
+              enum:
+                - active
+                - inactive
+                - pending
+            metadata:
+              type: object
+              properties:
+                createdAt:
+                  type: string
+                  format: date-time
+                updatedBy:
+                  type: string
+    ExcludedSchema:
+      type: object
+      properties:
+        info:
+          type: string
+        details:
+          type: object
+          properties:
+            excluded:
+              type: boolean
