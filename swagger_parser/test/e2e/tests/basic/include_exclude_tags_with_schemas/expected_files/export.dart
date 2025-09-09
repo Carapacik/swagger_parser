@@ -10,5 +10,6 @@ export 'models/pet.dart';
 export 'models/category.dart';
 export 'models/user.dart';
 export 'models/user_profile.dart';
+export 'models/user_role.dart';
 // Root client
 export 'rest_client.dart';
