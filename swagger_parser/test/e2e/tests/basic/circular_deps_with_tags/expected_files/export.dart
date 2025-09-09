@@ -8,5 +8,6 @@ export 'clients/users_client.dart';
 export 'models/user.dart';
 export 'models/post.dart';
 export 'models/comment.dart';
+export 'models/user_status.dart';
 // Root client
 export 'rest_client.dart';
