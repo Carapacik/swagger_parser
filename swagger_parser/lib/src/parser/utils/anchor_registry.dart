@@ -70,9 +70,27 @@ class AnchorRegistry {
   Set<String> resolveAllIncludedSchemas(Set<String> directlyUsedSchemas) {
     final allIncluded = <String>{...directlyUsedSchemas};
 
-    // Add inline schemas that should be included
+    // Add inline schemas that should be included based on context
     final includedInlineSchemas = resolveIncludedInlineSchemas();
     allIncluded.addAll(includedInlineSchemas);
+
+    // Add inline schemas that are transitively reachable from included schemas
+    for (final entry in inlineSchemaContexts.entries) {
+      final schemaName = entry.key;
+      final definitionContext = entry.value.context;
+
+      // Check if this inline schema is defined within a schema that's already included
+      // Context format: 'schema:ParentSchemaName'
+      const schemaPrefix = 'schema:';
+      if (definitionContext.startsWith(schemaPrefix)) {
+        final parentSchemaName =
+            definitionContext.substring(schemaPrefix.length);
+        if (directlyUsedSchemas.contains(parentSchemaName) ||
+            allIncluded.contains(parentSchemaName)) {
+          allIncluded.add(schemaName);
+        }
+      }
+    }
 
     // Add schemas referenced from included contexts
     for (final entry in schemaReferencedFrom.entries) {

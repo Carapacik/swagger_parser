@@ -3,13 +3,11 @@
 // ignore_for_file: type=lint, unused_import, invalid_annotation_target, unnecessary_import
 
 // Clients
-export 'clients/pets_client.dart';
-export 'clients/users_client.dart';
+export 'clients/include_client.dart';
 // Data classes
-export 'models/pet.dart';
-export 'models/category.dart';
-export 'models/user.dart';
-export 'models/user_profile.dart';
-export 'models/user_role.dart';
+export 'models/debug_schema.dart';
+export 'models/metadata.dart';
+export 'models/data.dart';
+export 'models/status.dart';
 // Root client
 export 'rest_client.dart';

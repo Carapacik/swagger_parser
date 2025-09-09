@@ -10,5 +10,6 @@ export 'models/pet.dart';
 export 'models/category.dart';
 export 'models/get_api_v1_no_tags_response.dart';
 export 'models/get_api_v1_empty_tags_response.dart';
+export 'models/pet_status.dart';
 // Root client
 export 'rest_client.dart';
