@@ -257,7 +257,7 @@ If you name your configuration file something other than `swagger_parser.yaml` o
 you will need to specify the name of the YAML file as an argument.
 
 ```shell
-dart run swagger parser -f <path to your config file>
+dart run swagger_parser -f <path to your config file>
 ```
 
 #### Output directory argument
