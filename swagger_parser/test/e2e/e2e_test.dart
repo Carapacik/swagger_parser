@@ -45,6 +45,7 @@ void main() {
       );
     });
 
+
     test('multipart_request_with_ref', () async {
       await e2eTest(
         'multipart_request_with_ref',
@@ -568,6 +569,20 @@ void main() {
     test('deprecated', () async {
       await e2eTest(
         'basic/deprecated',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          useFreezed3: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('ref_properties', () async {
+      await e2eTest(
+        'basic/ref_properties',
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
