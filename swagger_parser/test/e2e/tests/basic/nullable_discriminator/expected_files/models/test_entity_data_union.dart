@@ -19,6 +19,6 @@ sealed class TestEntityDataUnion with _$TestEntityDataUnion {
     TestDataTypeType? type,
   }) = TestEntityDataUnionTestType;
 
-  
-  factory TestEntityDataUnion.fromJson(Map<String, Object?> json) => _$TestEntityDataUnionFromJson(json);
+  factory TestEntityDataUnion.fromJson(Map<String, Object?> json) =>
+      _$TestEntityDataUnionFromJson(json);
 }

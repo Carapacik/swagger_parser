@@ -21,6 +21,7 @@ class TestEntity with _$TestEntity {
     /// Test data
     TestEntityDataUnion? data,
   }) = _TestEntity;
-  
-  factory TestEntity.fromJson(Map<String, Object?> json) => _$TestEntityFromJson(json);
+
+  factory TestEntity.fromJson(Map<String, Object?> json) =>
+      _$TestEntityFromJson(json);
 }

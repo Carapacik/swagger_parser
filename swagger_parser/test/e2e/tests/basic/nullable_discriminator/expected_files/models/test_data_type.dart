@@ -17,6 +17,7 @@ class TestDataType with _$TestDataType {
     required String value,
     TestDataTypeType? type,
   }) = _TestDataType;
-  
-  factory TestDataType.fromJson(Map<String, Object?> json) => _$TestDataTypeFromJson(json);
+
+  factory TestDataType.fromJson(Map<String, Object?> json) =>
+      _$TestDataTypeFromJson(json);
 }
