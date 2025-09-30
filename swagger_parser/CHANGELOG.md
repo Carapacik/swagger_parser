@@ -1,3 +1,6 @@
+## 1.30.1
+- Fix resolve inline schemas nested within tagged operations
+
 ## 1.30.0
 - Add support for merging all generated code into single output file using the `merge_outputs` option
 
