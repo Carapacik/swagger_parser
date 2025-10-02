@@ -1569,6 +1569,7 @@ class OpenApiParser {
           ofType = UniversalType(
             type: newName.toPascal,
             isRequired: isRequired,
+            nullable: map[_nullableConst].toString().toBool() ?? false,
             // Nullability for ofType will be determined later by nullItems check
           );
           ofImport = newName.toPascal;
@@ -1774,8 +1775,8 @@ class OpenApiParser {
             ofList.every((item) =>
                 item is Map<String, dynamic> &&
                 item[_typeConst]?.toString() == 'null')) {
-          ofType = UniversalType(
-              type: _objectConst, isRequired: isRequired, nullable: true);
+          ofType = const UniversalType(
+              type: _objectConst, isRequired: false, nullable: true);
         } else {
           ofType ??= UniversalType(
             type: _objectConst,
