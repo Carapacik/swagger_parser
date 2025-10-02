@@ -1,0 +1,56 @@
+{
+	"openapi": "3.1.0",
+	"info": {
+		"title": "Nullable Discriminator API",
+		"version": "1.0.0"
+	},
+	"paths": {},
+	"components": {
+		"schemas": {
+			"TestEntity": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Test ID"
+					},
+					"name": {
+						"type": "string",
+						"description": "Test name"
+					},
+					"data": {
+						"description": "Test data",
+						"oneOf": [
+							{
+								"$ref": "#/components/schemas/TestDataType"
+							}
+						],
+						"discriminator": {
+							"propertyName": "type",
+							"mapping": {
+								"TEST_TYPE": "#/components/schemas/TestDataType"
+							}
+						},
+						"nullable": true
+					}
+				},
+				"required": ["id", "name"]
+			},
+			"TestDataType": {
+				"type": "object",
+				"properties": {
+					"type": {
+						"type": "string",
+						"enum": ["TEST_TYPE"],
+						"nullable": true
+					},
+					"value": {
+						"type": "string",
+						"description": "Test value"
+					}
+				},
+				"required": ["value"]
+			}
+		}
+	}
+}
