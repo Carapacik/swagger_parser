@@ -13,6 +13,7 @@ part 'fallback_client.g.dart';
 abstract class FallbackClient {
   factory FallbackClient(Dio dio, {String? baseUrl}) = _FallbackClient;
 
+  /// [offsetRequiredTrueWithDefault] - offsetRequiredTrueWithDefault
   @GET('/pets')
   Future<List<Pet>> findPets({
     @Query('offsetRequiredTrueWithoutDefault')

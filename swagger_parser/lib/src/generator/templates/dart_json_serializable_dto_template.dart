@@ -50,10 +50,26 @@ String _parametersInConstructor(Set<UniversalType> parameters) {
 
 /// if jsonKey is different from the name
 String _jsonKey(UniversalType t) {
-  if (t.jsonKey == null || t.name == t.jsonKey) {
-    return '';
+  final buffer = StringBuffer();
+
+  final jsonKeyParams = <String, String?>{};
+
+  if (t.isRequired && (t.nullable || t.referencedNullable)) {
+    jsonKeyParams['includeIfNull'] = 'true';
+  } else if (!t.isRequired && (t.nullable || t.referencedNullable)) {
+    jsonKeyParams['includeIfNull'] = 'false';
   }
-  return "  @JsonKey(name: '${protectJsonKey(t.jsonKey)}')\n";
+
+  if (t.jsonKey != null && t.name != t.jsonKey) {
+    jsonKeyParams['name'] = "'${protectJsonKey(t.jsonKey)}'";
+  }
+
+  if (jsonKeyParams.isNotEmpty) {
+    buffer.write(
+        "  @JsonKey(${jsonKeyParams.entries.map((e) => '${e.key}: ${e.value}').join(',')})\n");
+  }
+
+  return buffer.toString();
 }
 
 /// return required if isRequired

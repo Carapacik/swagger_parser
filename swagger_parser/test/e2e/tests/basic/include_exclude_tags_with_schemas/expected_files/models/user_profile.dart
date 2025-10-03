@@ -10,8 +10,8 @@ part 'user_profile.g.dart';
 @Freezed()
 class UserProfile with _$UserProfile {
   const factory UserProfile({
-    String? firstName,
-    String? lastName,
+    @JsonKey(includeIfNull: false) String? firstName,
+    @JsonKey(includeIfNull: false) String? lastName,
   }) = _UserProfile;
 
   factory UserProfile.fromJson(Map<String, Object?> json) =>

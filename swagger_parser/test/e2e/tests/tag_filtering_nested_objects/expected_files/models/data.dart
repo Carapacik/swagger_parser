@@ -13,10 +13,10 @@ part 'data.g.dart';
 @Freezed()
 class Data with _$Data {
   const factory Data({
-    String? name,
-    int? id,
-    Status? status,
-    Metadata? metadata,
+    @JsonKey(includeIfNull: false) String? name,
+    @JsonKey(includeIfNull: false) int? id,
+    @JsonKey(includeIfNull: false) Status? status,
+    @JsonKey(includeIfNull: false) Metadata? metadata,
   }) = _Data;
 
   factory Data.fromJson(Map<String, Object?> json) => _$DataFromJson(json);
