@@ -4,7 +4,7 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-import 'family_members_union.dart';
+import 'family_members_sealed.dart';
 
 part 'family.g.dart';
 
@@ -16,7 +16,7 @@ class Family {
 
   factory Family.fromJson(Map<String, Object?> json) => _$FamilyFromJson(json);
 
-  final List<FamilyMembersUnion> members;
+  final List<FamilyMembersSealed> members;
 
   Map<String, Object?> toJson() => _$FamilyToJson(this);
 }

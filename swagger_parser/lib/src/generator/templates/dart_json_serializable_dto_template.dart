@@ -13,11 +13,16 @@ String dartJsonSerializableDtoTemplate(
   required bool useMultipartFile,
   String? fallbackUnion,
 }) {
-  final className = dataClass.name.toPascal;
+  final originalClassName = dataClass.name.toPascal;
 
   // Check if this is a union type
   final isUnion = dataClass.discriminator != null ||
       (dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false);
+
+  final className = isUnion
+      ? _applySealedNaming(originalClassName)
+      : originalClassName;
+  final classNameSnake = className.toSnake;
 
   if (isUnion) {
     return _generateUnionTemplate(
@@ -27,7 +32,7 @@ String dartJsonSerializableDtoTemplate(
   return '''
 ${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: _filterUnionImportsForNonUnion(dataClass))}
-part '${dataClass.name.toSnake}.g.dart';
+part '${classNameSnake}.g.dart';
 
 ${descriptionComment(dataClass.description)}@JsonSerializable()
 class $className {
@@ -73,7 +78,7 @@ sealed class $className {
   const $className();
   
   factory $className.fromJson(Map<String, dynamic> json) =>
-      ${className}UnionDeserializer.tryDeserialize(json);
+      ${_deserializerExtensionName(className)}.tryDeserialize(json);
   
   Map<String, dynamic> toJson();
 }''';
@@ -90,7 +95,7 @@ sealed class $className {
 import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: _importsForDiscriminatedUnion(dataClass, fallbackUnion))}
 
-part '${dataClass.name.toSnake}.g.dart';
+part '${className.toSnake}.g.dart';
 
 ${descriptionComment(dataClass.description)}$baseClass
 
@@ -112,7 +117,7 @@ sealed class $className {
   const $className();
   
   factory $className.fromJson(Map<String, dynamic> json) =>
-      ${className}UnionDeserializer.tryDeserialize(json);
+      ${_deserializerExtensionName(className)}.tryDeserialize(json);
   
   Map<String, dynamic> toJson();
 }''';
@@ -129,7 +134,7 @@ sealed class $className {
 import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: _importsForUndiscriminatedUnion(dataClass))}
 
-part '${dataClass.name.toSnake}.g.dart';
+part '${className.toSnake}.g.dart';
 
 ${descriptionComment(dataClass.description)}$baseClass
 
@@ -163,7 +168,7 @@ String _generateSimpleMapWrapper(
   return '''
 import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: _filterUnionImports(dataClass))}
-part '${dataClass.name.toSnake}.g.dart';
+part '${className.toSnake}.g.dart';
 
 ${descriptionComment(dataClass.description)}@JsonSerializable()
 class $className {
@@ -205,7 +210,7 @@ String _generateDiscriminatorExtension(
       : "      _ => throw FormatException('Unknown discriminator value \"\${json[key]}\" for $className'),";
 
   return '''
-extension ${className}UnionDeserializer on $className {
+extension ${_deserializerExtensionName(className)} on $className {
   static $className tryDeserialize(
     Map<String, dynamic> json, {
     String key = '$discriminatorKey',
@@ -247,7 +252,7 @@ ${' ' * 4}} catch (_) {}'''
       : '';
 
   return '''
-extension ${className}UnionDeserializer on $className {
+extension ${_deserializerExtensionName(className)} on $className {
   static $className tryDeserialize(Map<String, dynamic> json) {
 $tryBlocks
 $fallbackTry
@@ -269,7 +274,7 @@ String _generateDiscriminatedWrapperClasses(String className,
     // Generate direct properties
     final directProperties = properties
         .map((prop) =>
-            '  @override\n  final ${prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${prop.name};')
+            '  @override\n  final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};')
         .join('\n');
 
     // Generate constructor parameters
@@ -313,7 +318,7 @@ String _generateUndiscriminatedWrapperClasses(
     // Generate direct properties
     final directProperties = properties
         .map((prop) =>
-            '  @override\n  final ${prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${prop.name};')
+            '  @override\n  final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};')
         .join('\n');
 
     // Generate constructor parameters
@@ -379,7 +384,7 @@ String _parametersInClass(
         .mapIndexed(
           (i, e) =>
               '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '  ')}'
-              '${_jsonKey(e)}  final ${e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${e.name};',
+              '${_jsonKey(e)}  final ${_renameUnionTypes(e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${e.name};',
         )
         .join();
 
@@ -428,7 +433,7 @@ Set<String> _filterUnionImports(UniversalComponentClass dataClass) {
     }
   }
 
-  return filteredImports;
+  return filteredImports.map(_applySealedNamingToImport).toSet();
 }
 
 /// Imports for discriminated unions: include variant interface classes and their enums.
@@ -458,7 +463,7 @@ Set<String> _importsForUndiscriminatedUnion(UniversalComponentClass dataClass) {
       }
     }
   }
-  return imports;
+  return imports.map(_applySealedNamingToImport).toSet();
 }
 
 /// Filters out union imports for regular (non-union) classes
@@ -480,5 +485,37 @@ Set<String> _filterUnionImportsForNonUnion(UniversalComponentClass dataClass) {
     }
   }
 
-  return filteredImports;
+  return filteredImports.map(_applySealedNamingToImport).toSet();
 }
+
+const _unionSuffix = 'Union';
+const _snakeUnionSuffix = '_union';
+
+String _applySealedNaming(String name) {
+  if (name.endsWith('Sealed')) {
+    return name;
+  }
+  if (name.endsWith(_unionSuffix)) {
+    return '${name.substring(0, name.length - _unionSuffix.length)}Sealed';
+  }
+  return name;
+}
+
+String _applySealedNamingToImport(String import) {
+  if (import.endsWith(_unionSuffix)) {
+    return _applySealedNaming(import);
+  }
+  if (import.endsWith(_snakeUnionSuffix)) {
+    return '${import.substring(0, import.length - _snakeUnionSuffix.length)}_sealed';
+  }
+  return import;
+}
+
+String _renameUnionTypes(String type) => type.replaceAllMapped(
+      RegExp(r'([A-Z][A-Za-z0-9_]*)Union\b'),
+      (match) => '${match.group(1)}Sealed',
+    );
+
+String _deserializerExtensionName(String className) => className.endsWith('Sealed')
+    ? '${className}Deserializer'
+    : '${className}SealedDeserializer';

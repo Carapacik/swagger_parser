@@ -18,28 +18,32 @@ String dartDartMappableDtoTemplate(
   // Use fallback union only if explicitly provided
   // Auto-fallback is disabled to avoid breaking existing tests
   final effectiveFallbackUnion = fallbackUnion;
-  final className = dataClass.name.toPascal;
+  final originalClassName = dataClass.name.toPascal;
   final discriminator = dataClass.discriminator;
   final isUndiscriminatedUnion =
       dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false;
+  final isUnion = discriminator != null || isUndiscriminatedUnion;
+
+  final className = isUnion
+      ? _applySealedNaming(originalClassName)
+      : originalClassName;
+  final classNameSnake = className.toSnake;
 
   // For dart_mappable, treat discriminated unions with complete mapping as undiscriminated
   // to use the wrapper pattern instead of direct inheritance
   final shouldUseWrapperPattern = isUndiscriminatedUnion ||
       (discriminator != null && _isCompleteDiscriminatorMapping(discriminator));
 
-  final isUnion = discriminator != null || isUndiscriminatedUnion;
-
   // For discriminated union variants that should become standalone classes for wrapper pattern
   // We detect this by checking if this is a discriminator variant (has discriminatorValue)
   // and if the discriminator value matches the class name (indicating complete mapping)
   final isDiscriminatorVariant = dataClass.discriminatorValue != null;
   final hasCompleteMapping = isDiscriminatorVariant &&
-      dataClass.discriminatorValue!.propertyValue == dataClass.name.toPascal;
+      dataClass.discriminatorValue!.propertyValue == originalClassName;
 
   final parent = (isDiscriminatorVariant && hasCompleteMapping)
       ? null
-      : dataClass.discriminatorValue?.parentClass;
+      : _applySealedNamingToParent(dataClass.discriminatorValue?.parentClass);
 
   // Check if this is a simple data class that could be used in unions
   final isSimpleDataClass = !isUnion &&
@@ -55,8 +59,8 @@ String dartDartMappableDtoTemplate(
 
   return '''
 ${dartImportDtoTemplate(JsonSerializer.dartMappable)}
-${dartImports(imports: _getAllImports(dataClass))}
-part '${dataClass.name.toSnake}.mapper.dart';
+${dartImports(imports: _getAllImports(dataClass, isUnion: isUnion))}
+part '${classNameSnake}.mapper.dart';
 
 ${descriptionComment(dataClass.description)}@MappableClass(${_getMappableClassAnnotation(dataClass, className, effectiveFallbackUnion)})
 ${_classModifier(isUnion: isUnion)}class $className ${parent != null ? "extends $parent " : ""}with ${className}Mappable {
@@ -66,8 +70,11 @@ ${_generateClassBody(dataClass, className, useMultipartFile, isUnion, dartMappab
 $additionalClasses''';
 }
 
-String getDiscriminatorConvenienceMethods(UniversalComponentClass dataClass,
-    [String? fallbackUnion]) {
+String getDiscriminatorConvenienceMethods(
+  UniversalComponentClass dataClass,
+  String className, [
+  String? fallbackUnion,
+]) {
   if (dataClass.discriminator == null) {
     return '';
   }
@@ -103,7 +110,7 @@ String getDiscriminatorConvenienceMethods(UniversalComponentClass dataClass,
 
   // Add fallback union if provided
   if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
-    final fallbackClassName = dataClass.name.toPascal + fallbackUnion.toPascal;
+    final fallbackClassName = className + fallbackUnion.toPascal;
     whenParams.add(
         'required T Function($fallbackClassName $fallbackUnion) $fallbackUnion,');
     maybeWhenParams
@@ -174,7 +181,7 @@ String _fieldsToString(
   return sortedByRequired
       .mapIndexed(
         (i, e) =>
-            '${_jsonKey(e)}${indentation(2)}final ${e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${e.name};',
+            '${_jsonKey(e)}${indentation(2)}final ${_renameUnionTypes(e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${e.name};',
       )
       .join('\n');
 }
@@ -231,7 +238,7 @@ String _generateClassBody(
     return '''
 ${indentation(2)}const $className(${getParameters(dataClass)});
 ${getFields(dataClass, useMultipartFile: useMultipartFile, isSimpleDataClass: isSimpleDataClass)}
-${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, fallbackUnion) : ''}
+${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, className, fallbackUnion) : ''}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
 ''';
   }
@@ -250,9 +257,9 @@ ${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${clas
     return '''
 ${indentation(2)}const $className();
 
-${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, fallbackUnion) : ''}
+${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, className, fallbackUnion) : ''}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) {
-${indentation(4)}return ${className}UnionDeserializer.tryDeserialize(json);
+${indentation(4)}return ${_deserializerExtensionName(className)}.tryDeserialize(json);
 ${indentation(2)}}
 ''';
   }
@@ -261,7 +268,7 @@ ${indentation(2)}}
   return '''
 ${indentation(2)}const $className();
 
-${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, fallbackUnion) : ''}
+${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, className, fallbackUnion) : ''}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
 ''';
 }
@@ -276,7 +283,7 @@ String _generateUndiscriminatedUnionBody(
 ${indentation(2)}const $className();
 ${dartMappableConvenientWhen ? '\n${_generateUndiscriminatedUnionConvenienceMethods(className, variants, fallbackUnion)}' : ''}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) {
-${indentation(4)}return ${className}UnionDeserializer.tryDeserialize(json);
+${indentation(4)}return ${_deserializerExtensionName(className)}.tryDeserialize(json);
 ${indentation(2)}}
 ''';
 }
@@ -406,7 +413,7 @@ ${indentation(4)}} catch (_) {}'''
       : '';
 
   return '''
-extension ${className}UnionDeserializer on $className {
+extension ${_deserializerExtensionName(className)} on $className {
 ${indentation(2)}static $className tryDeserialize(Map<String, dynamic> json) {
 $tryBlocks
 $fallbackBlock
@@ -442,7 +449,7 @@ String _generateDiscriminatorHelper(
       : "${indentation(6)}_ => throw FormatException('Unknown discriminator value \"\${json[key]}\" for $className'),";
 
   return '''
-extension ${className}UnionDeserializer on $className {
+extension ${_deserializerExtensionName(className)} on $className {
 ${indentation(2)}static $className tryDeserialize(
 ${indentation(2)}  Map<String, dynamic> json, {
 ${indentation(2)}  String key = '$discriminatorKey',
@@ -461,6 +468,41 @@ ${indentation(2)}}
 }''';
 }
 
+const _unionSuffix = 'Union';
+const _snakeUnionSuffix = '_union';
+
+String _applySealedNaming(String name) {
+  if (name.endsWith('Sealed')) {
+    return name;
+  }
+  if (name.endsWith(_unionSuffix)) {
+    return '${name.substring(0, name.length - _unionSuffix.length)}Sealed';
+  }
+  return name;
+}
+
+String? _applySealedNamingToParent(String? parent) =>
+    parent == null ? null : _applySealedNaming(parent);
+
+String _applySealedNamingToImport(String import) {
+  if (import.endsWith(_unionSuffix)) {
+    return _applySealedNaming(import);
+  }
+  if (import.endsWith(_snakeUnionSuffix)) {
+    return '${import.substring(0, import.length - _snakeUnionSuffix.length)}_sealed';
+  }
+  return import;
+}
+
+String _renameUnionTypes(String type) => type.replaceAllMapped(
+      RegExp(r'([A-Z][A-Za-z0-9_]*)Union\b'),
+      (match) => '${match.group(1)}Sealed',
+    );
+
+String _deserializerExtensionName(String className) => className.endsWith('Sealed')
+    ? '${className}Deserializer'
+    : '${className}SealedDeserializer';
+
 String _generateVariantWrappers(String className,
     Map<String, Set<UniversalType>> variants, bool useMultipartFile,
     [String? fallbackUnion]) {
@@ -474,7 +516,7 @@ String _generateVariantWrappers(String className,
     final directProperties = properties
         .map(
           (prop) =>
-              '${indentation(2)}@override\n${indentation(2)}final ${prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${prop.name};',
+              '${indentation(2)}@override\n${indentation(2)}final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};',
         )
         .join('\n');
 
@@ -576,7 +618,10 @@ String _getMappableClassAnnotation(UniversalComponentClass dataClass,
   return '';
 }
 
-Set<String> _getAllImports(UniversalComponentClass dataClass) {
+Set<String> _getAllImports(
+  UniversalComponentClass dataClass, {
+  required bool isUnion,
+}) {
   final imports = Set<String>.from(dataClass.imports);
 
   // For undiscriminated unions, add imports for referenced variant classes only
@@ -621,7 +666,7 @@ Set<String> _getAllImports(UniversalComponentClass dataClass) {
     });
   }
 
-  return imports;
+  return imports.map(_applySealedNamingToImport).toSet();
 }
 
 bool _isCompleteDiscriminatorMapping(Discriminator discriminator) {
@@ -675,7 +720,7 @@ String _generateDiscriminatedWrapperClasses(UniversalComponentClass dataClass,
     final directProperties = filteredProperties
         .map(
           (prop) =>
-              '${indentation(2)}@override\n${indentation(2)}final ${prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${prop.name};',
+              '${indentation(2)}@override\n${indentation(2)}final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};',
         )
         .join('\n');
 

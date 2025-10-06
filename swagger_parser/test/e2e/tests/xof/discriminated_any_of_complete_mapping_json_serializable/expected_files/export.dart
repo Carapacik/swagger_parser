@@ -7,7 +7,7 @@ export 'models/family.dart';
 export 'models/cat.dart';
 export 'models/dog.dart';
 export 'models/human.dart';
-export 'models/family_members_union.dart';
+export 'models/family_members_sealed.dart';
 export 'models/cat_type.dart';
 export 'models/dog_type.dart';
 export 'models/human_type.dart';

@@ -2668,4 +2668,66 @@ data class ClassName(
       expect(filledContent.content, expectedContent);
     });
   });
+
+  group('Union naming', () {
+    UniversalComponentClass buildUnionDataClass() => UniversalComponentClass(
+          name: 'AnimalUnion',
+          imports: {'cat', 'dog'},
+          parameters: {},
+          undiscriminatedUnionVariants: {
+            'Cat': {
+              const UniversalType(
+                type: 'int',
+                name: 'mewCount',
+                isRequired: true,
+              ),
+            },
+            'Dog': {
+              const UniversalType(
+                type: 'String',
+                name: 'barkSound',
+                isRequired: true,
+              ),
+            },
+          },
+        );
+
+    test('dart_mappable unions use sealed naming', () {
+      const controller = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.dartMappable,
+        ),
+      );
+
+      final generated = controller.fillDtoContent(buildUnionDataClass());
+
+      expect(generated.name, 'models/animal_sealed.dart');
+      expect(generated.content, contains("part 'animal_sealed.mapper.dart';"));
+      expect(generated.content, contains('sealed class AnimalSealed'));
+      expect(generated.content, contains('extension AnimalSealedDeserializer'));
+      expect(generated.content, contains('class AnimalSealedCat extends AnimalSealed'));
+      expect(generated.content, isNot(contains('AnimalUnion')));
+    });
+
+    test('json_serializable unions use sealed naming', () {
+      const controller = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.jsonSerializable,
+        ),
+      );
+
+      final generated = controller.fillDtoContent(buildUnionDataClass());
+
+      expect(generated.name, 'models/animal_sealed.dart');
+      expect(generated.content, contains("part 'animal_sealed.g.dart';"));
+      expect(generated.content, contains('sealed class AnimalSealed'));
+      expect(generated.content, contains('extension AnimalSealedDeserializer'));
+      expect(generated.content, contains('class AnimalSealedCat extends AnimalSealed'));
+      expect(generated.content, isNot(contains('AnimalUnion')));
+    });
+  });
 }

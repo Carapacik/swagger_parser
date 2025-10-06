@@ -6,4 +6,4 @@
 export 'models/family.dart';
 export 'models/cat.dart';
 export 'models/dog.dart';
-export 'models/family_members_union.dart';
+export 'models/family_members_sealed.dart';

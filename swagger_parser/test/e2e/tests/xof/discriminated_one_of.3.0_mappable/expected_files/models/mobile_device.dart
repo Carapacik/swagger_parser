@@ -18,11 +18,11 @@ sealed class MobileDevice with MobileDeviceMappable {
   const MobileDevice();
 
   static MobileDevice fromJson(Map<String, dynamic> json) {
-    return MobileDeviceUnionDeserializer.tryDeserialize(json);
+    return MobileDeviceSealedDeserializer.tryDeserialize(json);
   }
 }
 
-extension MobileDeviceUnionDeserializer on MobileDevice {
+extension MobileDeviceSealedDeserializer on MobileDevice {
   static MobileDevice tryDeserialize(
     Map<String, dynamic> json, {
     String key = 'type',
