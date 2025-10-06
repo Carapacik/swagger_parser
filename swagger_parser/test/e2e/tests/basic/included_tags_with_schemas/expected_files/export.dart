@@ -7,5 +7,6 @@ export 'clients/pets_client.dart';
 // Data classes
 export 'models/pet.dart';
 export 'models/category.dart';
+export 'models/pet_availability.dart';
 // Root client
 export 'rest_client.dart';

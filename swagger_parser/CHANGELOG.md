@@ -1,15 +1,18 @@
 ## 1.31.0
-- Add complete unions(`oneOf`/`anyOf`) support for `json_serializeble` serializer
-  - **WARNING**: Undiscriminated unions use O(n) try-catch deserialization where n is the number of variants
+- Add complete sealed classes(`oneOf`/`anyOf`) support for `json_serializeble` serializer
+  - **WARNING**: Undiscriminated sealed classes use O(n) try-catch deserialization where n is the number of variants
   - **RECOMMENDED**: Add discriminator properties to your OpenAPI specification for O(1) performance
-  - Add support for union fallback for failed decoding
-- Add complete unions(`oneOf`/`anyOf`) support for `dart_mappable` serializer
-  - **WARNING**: Undiscriminated unions use O(n) try-catch deserialization where n is the number of variants
+  - Add support for sealed classes fallback for failed decoding
+- Add complete sealed classes(`oneOf`/`anyOf`) support for `dart_mappable` serializer
+  - **WARNING**: Undiscriminated sealed classes use O(n) try-catch deserialization where n is the number of variants
   - **RECOMMENDED**: Add discriminator properties to your OpenAPI specification for O(1) performance
-  - Add support for union fallback for failed decoding
+  - Add support for sealed classes fallback for failed decoding
 - Add `dart_mappable_convenient_when` option for `when<T>, maybeWhen<T>` method with dart_mappable
 - Add `@Deprecated()` annotation to `when<T>, maybeWhen<T>` method with dart_mappable. Use dart pattern matching
 - Fix creating duplicated `unknown` property enum with dart_mappable and `unknown_enum_value: true`
+
+## 1.30.1
+- Fix resolve inline schemas nested within tagged operations
 
 ## 1.30.0
 - Add support for merging all generated code into single output file using the `merge_outputs` option

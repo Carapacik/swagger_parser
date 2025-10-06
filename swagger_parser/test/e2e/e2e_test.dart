@@ -469,6 +469,21 @@ void main() {
       );
     });
 
+    // https://github.com/Carapacik/swagger_parser/issues/369
+    test('tag_filtering_nested_objects', () async {
+      await e2eTest(
+        'tag_filtering_nested_objects',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          includeTags: ['include'],
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('use_freezed3.3.0', () async {
       await e2eTest(
         'basic/use_freezed3.3.0',

@@ -1569,6 +1569,7 @@ class OpenApiParser {
           ofType = UniversalType(
             type: newName.toPascal,
             isRequired: isRequired,
+            nullable: map[_nullableConst].toString().toBool() ?? false,
             // Nullability for ofType will be determined later by nullItems check
           );
           ofImport = newName.toPascal;
@@ -1774,8 +1775,8 @@ class OpenApiParser {
             ofList.every((item) =>
                 item is Map<String, dynamic> &&
                 item[_typeConst]?.toString() == 'null')) {
-          ofType = UniversalType(
-              type: _objectConst, isRequired: isRequired, nullable: true);
+          ofType = const UniversalType(
+              type: _objectConst, isRequired: false, nullable: true);
         } else {
           ofType ??= UniversalType(
             type: _objectConst,
@@ -1932,16 +1933,23 @@ class OpenApiParser {
   /// If both are empty, the path will always be included.
   bool _isPathIncluded(Map<String, dynamic> requestPath) {
     final tags = switch (requestPath[_tagsConst]) {
-      final List<dynamic> tags => tags.map((tag) => tag as String).toList(),
+      final List<dynamic> tags => tags
+          .map((tag) => tag as String)
+          .map((tag) => tag.toLowerCase())
+          .toList(),
       _ => <String>[],
     };
 
     if (config.includeTags.isNotEmpty) {
-      return config.includeTags.any(tags.contains);
+      return config.includeTags
+          .map((tag) => tag.toLowerCase())
+          .any(tags.contains);
     }
 
     if (config.excludeTags.isNotEmpty) {
-      return config.excludeTags.none(tags.contains);
+      return config.excludeTags
+          .map((tag) => tag.toLowerCase())
+          .none(tags.contains);
     }
 
     // If neither includeTags nor excludeTags is specified, include everything

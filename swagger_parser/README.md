@@ -31,19 +31,19 @@ In your pubspec.yaml, add the following dependencies:
 
 ```yaml
 dependencies:
-  # dart_mappable: ^4.6.0 # for dart_mappable
+  # dart_mappable: ^4.6.1 # for dart_mappable
   # dio: ^5.9.0
   # freezed_annotation: ^3.1.0 # for freezed
   # json_annotation: ^4.9.0
-  # retrofit: ^4.7.1
+  # retrofit: ^4.7.2
 
 dev_dependencies:
-  # build_runner: ^2.7.0
+  # build_runner: ^2.8.0
   # carapacik_lints: ^1.13.0
-  # dart_mappable_builder: ^4.6.0 # for dart_mappable
-  # freezed: ^3.2.0 # for freezed
-  # json_serializable: ^6.10.0
-  # retrofit_generator: ^10.0.2
+  # dart_mappable_builder: ^4.6.1 # for dart_mappable
+  # freezed: ^3.2.3 # for freezed
+  # json_serializable: ^6.11.1
+  # retrofit_generator: ^10.0.5
   swagger_parser:
 ```
 
@@ -263,7 +263,7 @@ If you name your configuration file something other than `swagger_parser.yaml` o
 you will need to specify the name of the YAML file as an argument.
 
 ```shell
-dart run swagger parser -f <path to your config file>
+dart run swagger_parser -f <path to your config file>
 ```
 
 #### Output directory argument
