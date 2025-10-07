@@ -353,20 +353,21 @@ String _defaultValue(UniversalType t) =>
 /// Filters out union imports for freezed classes to avoid circular dependencies
 Set<String> _filterUnionImportsForFreezed(UniversalComponentClass dataClass) {
   final filteredImports = <String>{};
-  
-  // If this class has a discriminatorValue, it means it's part of a union and 
+
+  // If this class has a discriminatorValue, it means it's part of a union and
   // shouldn't import the union file (to avoid circular dependencies)
   final shouldFilterUnionImports = dataClass.discriminatorValue != null;
-  
+
   for (final import in dataClass.imports) {
     // If this is a model that's part of a union, skip union imports
     // Otherwise, allow all imports (including union imports for classes that use unions)
-    final shouldSkip = shouldFilterUnionImports && import.toLowerCase().contains('union');
-    
+    final shouldSkip =
+        shouldFilterUnionImports && import.toLowerCase().contains('union');
+
     if (!shouldSkip) {
       filteredImports.add(import);
     }
   }
-  
+
   return filteredImports;
 }

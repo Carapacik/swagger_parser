@@ -24,9 +24,8 @@ String dartDartMappableDtoTemplate(
       dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false;
   final isUnion = discriminator != null || isUndiscriminatedUnion;
 
-  final className = isUnion
-      ? _applySealedNaming(originalClassName)
-      : originalClassName;
+  final className =
+      isUnion ? _applySealedNaming(originalClassName) : originalClassName;
   final classNameSnake = className.toSnake;
 
   // For dart_mappable, treat discriminated unions with complete mapping as undiscriminated
@@ -60,7 +59,7 @@ String dartDartMappableDtoTemplate(
   return '''
 ${dartImportDtoTemplate(JsonSerializer.dartMappable)}
 ${dartImports(imports: _getAllImports(dataClass, isUnion: isUnion))}
-part '${classNameSnake}.mapper.dart';
+part '$classNameSnake.mapper.dart';
 
 ${descriptionComment(dataClass.description)}@MappableClass(${_getMappableClassAnnotation(dataClass, className, effectiveFallbackUnion)})
 ${_classModifier(isUnion: isUnion)}class $className ${parent != null ? "extends $parent " : ""}with ${className}Mappable {
@@ -361,37 +360,6 @@ ${indentation(2)}}
 ''';
 }
 
-String _generatePrivateHelper(
-    String className, Map<String, Set<UniversalType>> variants,
-    [String? fallbackUnion]) {
-  final tryBlocks = variants.keys
-      .map(
-        (variantName) => '''
-${indentation(4)}try {
-${indentation(6)}return $className${variantName.toPascal}Mapper.ensureInitialized().decodeMap<$className${variantName.toPascal}>(json);
-${indentation(4)}} catch (_) {}''',
-      )
-      .join('\n');
-
-  final fallbackBlock = (fallbackUnion != null && fallbackUnion.isNotEmpty)
-      ? '''
-${indentation(4)}// Try fallback variant before throwing exception
-${indentation(4)}try {
-${indentation(6)}return $className${fallbackUnion.toPascal}Mapper.ensureInitialized().decodeMap<$className${fallbackUnion.toPascal}>(json);
-${indentation(4)}} catch (_) {}'''
-      : '';
-
-  return '''
-class _${className}Helper {
-${indentation(2)}static $className _tryDeserialize(Map<String, dynamic> json) {
-$tryBlocks
-$fallbackBlock
-
-${indentation(4)}throw FormatException('Could not determine the correct type for $className from: \$json');
-${indentation(2)}}
-}''';
-}
-
 String _generateUndiscriminatedMappableExtension(
     String className, Map<String, Set<UniversalType>> variants,
     [String? fallbackUnion]) {
@@ -434,7 +402,7 @@ String _generateDiscriminatorHelper(
     final variantName = entry.value;
     final discriminatorValue = entry.key;
     final wrapperClassName = '$className${variantName.toPascal}';
-    return '${indentation(6)}$wrapperClassName: \'$discriminatorValue\',';
+    return "${indentation(6)}$wrapperClassName: '$discriminatorValue',";
   }).join('\n');
 
   // Build switch cases using guarded mapping
@@ -445,7 +413,7 @@ String _generateDiscriminatorHelper(
   }).join('\n');
 
   final fallbackCase = (fallbackUnion != null && fallbackUnion.isNotEmpty)
-      ? '${indentation(6)}_ => $className${fallbackUnion.toPascal}Mapper.ensureInitialized().decodeMap<${className}${fallbackUnion.toPascal}>(json),'
+      ? '${indentation(6)}_ => $className${fallbackUnion.toPascal}Mapper.ensureInitialized().decodeMap<$className${fallbackUnion.toPascal}>(json),'
       : "${indentation(6)}_ => throw FormatException('Unknown discriminator value \"\${json[key]}\" for $className'),";
 
   return '''
@@ -499,9 +467,10 @@ String _renameUnionTypes(String type) => type.replaceAllMapped(
       (match) => '${match.group(1)}Sealed',
     );
 
-String _deserializerExtensionName(String className) => className.endsWith('Sealed')
-    ? '${className}Deserializer'
-    : '${className}SealedDeserializer';
+String _deserializerExtensionName(String className) =>
+    className.endsWith('Sealed')
+        ? '${className}Deserializer'
+        : '${className}SealedDeserializer';
 
 String _generateVariantWrappers(String className,
     Map<String, Set<UniversalType>> variants, bool useMultipartFile,

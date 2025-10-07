@@ -19,9 +19,8 @@ String dartJsonSerializableDtoTemplate(
   final isUnion = dataClass.discriminator != null ||
       (dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false);
 
-  final className = isUnion
-      ? _applySealedNaming(originalClassName)
-      : originalClassName;
+  final className =
+      isUnion ? _applySealedNaming(originalClassName) : originalClassName;
   final classNameSnake = className.toSnake;
 
   if (isUnion) {
@@ -32,7 +31,7 @@ String dartJsonSerializableDtoTemplate(
   return '''
 ${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: _filterUnionImportsForNonUnion(dataClass))}
-part '${classNameSnake}.g.dart';
+part '$classNameSnake.g.dart';
 
 ${descriptionComment(dataClass.description)}@JsonSerializable()
 class $className {
@@ -195,7 +194,7 @@ String _generateDiscriminatorExtension(
     final variantName = entry.value;
     final discriminatorValue = entry.key;
     final wrapperClassName = '$className${variantName.toPascal}';
-    return '      $wrapperClassName: \'$discriminatorValue\',';
+    return "      $wrapperClassName: '$discriminatorValue',";
   }).join('\n');
 
   // Build switch cases using guarded mapping
@@ -239,7 +238,8 @@ String _generateUndiscriminatedExtension(
   // Build sequential try-catch body (Dart switch cannot elegantly express try order)
   final tryBlocks = variants.keys.map((variantName) {
     final wrapperClassName = '$className${variantName.toPascal}';
-    return '''${' ' * 4}try {
+    return '''
+${' ' * 4}try {
 ${' ' * 6}return $wrapperClassName.fromJson(json);
 ${' ' * 4}} catch (_) {}''';
   }).join('\n');
@@ -247,7 +247,7 @@ ${' ' * 4}} catch (_) {}''';
   final fallbackTry = (fallbackUnion != null && fallbackUnion.isNotEmpty)
       ? '''
 ${' ' * 4}try {
-${' ' * 6}return ${className}${fallbackUnion.toPascal}.fromJson(json);
+${' ' * 6}return $className${fallbackUnion.toPascal}.fromJson(json);
 ${' ' * 4}} catch (_) {}'''
       : '';
 
@@ -516,6 +516,7 @@ String _renameUnionTypes(String type) => type.replaceAllMapped(
       (match) => '${match.group(1)}Sealed',
     );
 
-String _deserializerExtensionName(String className) => className.endsWith('Sealed')
-    ? '${className}Deserializer'
-    : '${className}SealedDeserializer';
+String _deserializerExtensionName(String className) =>
+    className.endsWith('Sealed')
+        ? '${className}Deserializer'
+        : '${className}SealedDeserializer';

@@ -2672,8 +2672,8 @@ data class ClassName(
   group('Union naming', () {
     UniversalComponentClass buildUnionDataClass() => UniversalComponentClass(
           name: 'AnimalUnion',
-          imports: {'cat', 'dog'},
-          parameters: {},
+          imports: const {'cat', 'dog'},
+          parameters: const {},
           undiscriminatedUnionVariants: {
             'Cat': {
               const UniversalType(
@@ -2716,7 +2716,6 @@ data class ClassName(
         config: GeneratorConfig(
           name: '',
           outputDirectory: '',
-          jsonSerializer: JsonSerializer.jsonSerializable,
         ),
       );
 

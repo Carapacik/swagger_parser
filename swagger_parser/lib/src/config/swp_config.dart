@@ -236,8 +236,9 @@ class SWPConfig {
         yamlMap['fallback_union'] as String? ?? rootConfig?.fallbackUnion;
 
     final dartMappableConvenientWhen =
-        yamlMap['dart_mappable_convenient_when'] as bool? ?? 
-        rootConfig?.dartMappableConvenientWhen ?? true;
+        yamlMap['dart_mappable_convenient_when'] as bool? ??
+            rootConfig?.dartMappableConvenientWhen ??
+            true;
 
     final excludedTagsYaml = yamlMap['exclude_tags'] as YamlList?;
     List<String>? excludedTags;

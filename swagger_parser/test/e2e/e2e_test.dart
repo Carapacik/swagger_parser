@@ -900,7 +900,6 @@ void main() {
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.jsonSerializable,
           putClientsInFolder: true,
         ),
         schemaFileName: 'discriminated_one_of.3.0.json',
@@ -913,7 +912,6 @@ void main() {
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.jsonSerializable,
           putClientsInFolder: true,
         ),
         schemaFileName: 'non_discriminated_one_of.3.0.json',
@@ -926,7 +924,6 @@ void main() {
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.jsonSerializable,
           putClientsInFolder: true,
           fallbackUnion: 'unknown',
         ),
@@ -940,7 +937,6 @@ void main() {
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.jsonSerializable,
           putClientsInFolder: true,
         ),
         schemaFileName: 'openapi.yaml',
@@ -953,7 +949,6 @@ void main() {
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.jsonSerializable,
           putClientsInFolder: true,
         ),
         schemaFileName: 'openapi.yaml',
@@ -966,7 +961,6 @@ void main() {
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.jsonSerializable,
           putClientsInFolder: true,
         ),
         schemaFileName: 'openapi.yaml',
@@ -979,7 +973,6 @@ void main() {
         (outputDirectory, schemaPath) => SWPConfig(
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.jsonSerializable,
           putClientsInFolder: true,
         ),
         schemaFileName: 'openapi.yaml',
