@@ -253,7 +253,7 @@ String _toJsonUndiscriminatedUnion(
 ) {
   final cases = {
     for (final variant in undiscriminatedUnionVariants.keys)
-      '        $className${variant.toPascal}() => _\$\$$className${variant.toPascal}ImplToJson(this),'
+      '        $className${variant.toPascal}() => _\$$className${variant.toPascal}ToJson(this as $className${variant.toPascal}),'
   };
 
   return '''
