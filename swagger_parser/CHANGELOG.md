@@ -7,7 +7,9 @@
   - **WARNING**: Undiscriminated sealed classes use O(n) try-catch deserialization where n is the number of variants
   - **RECOMMENDED**: Add discriminator properties to your OpenAPI specification for O(1) performance
   - Add support for sealed classes fallback for failed decoding
-- Add `dart_mappable_convenient_when` option for `when<T>, maybeWhen<T>` method with dart_mappable
+- Add `dart_mappable_convenient_when` option to control union type generation for `dart_mappable` serializer
+  - `dart_mappable_convenient_when: true` - generates legacy `when<T>, maybeWhen<T>` methods
+  - `dart_mappable_convenient_when: false` (default) - generates sealed classes for better type safety
 - Add `@Deprecated()` annotation to `when<T>, maybeWhen<T>` method with dart_mappable. Use dart pattern matching
 - Fix creating duplicated `unknown` property enum with dart_mappable and `unknown_enum_value: true`
 

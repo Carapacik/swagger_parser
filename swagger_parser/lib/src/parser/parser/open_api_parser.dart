@@ -1025,6 +1025,10 @@ class OpenApiParser {
         discriminatedOneOfClass.imports.add(refedClass.import);
 
         dataClasses[refedClassIndex] = refedClass.copyWith(
+          imports: {
+            ...refedClass.imports,
+            discriminatedOneOfClass.import,
+          }.sortedBy((it) => it).toSet(),
           discriminatorValue: (
             propertyValue: discriminatedOneOfClass
                 .discriminator!.discriminatorValueToRefMapping.entries
@@ -1032,10 +1036,6 @@ class OpenApiParser {
                 .key,
             parentClass: discriminatedOneOfClass.name,
           ),
-          imports: {
-            ...refedClass.imports,
-            discriminatedOneOfClass.import,
-          }.sortedBy((it) => it).toSet(),
         );
       }
     }
@@ -2060,10 +2060,7 @@ class OpenApiParser {
   }
 
   UniversalComponentClass? _createUnionComponentClass(
-    List<dynamic> values,
-    String schemaName,
-    String? unionDescription,
-  ) {
+      List<dynamic> values, String schemaName, String? unionDescription) {
     final unionVariants = filterNullTypes(values);
     if (!_getAreAllRefsOrInlineObjects(unionVariants)) {
       return null;
@@ -2092,11 +2089,9 @@ class OpenApiParser {
 
   List<Map<String, dynamic>> filterNullTypes(List<dynamic> values) => values
       .whereType<Map<String, dynamic>>()
-      .where(
-        (item) =>
-            // filter out explicit null variants if present
-            item[_typeConst]?.toString() != 'null',
-      )
+      .where((item) =>
+          // filter out explicit null variants if present
+          item[_typeConst]?.toString() != 'null')
       .toList();
 }
 

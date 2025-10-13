@@ -39,7 +39,7 @@ class SWPConfig {
     this.useFreezed3 = false,
     this.useMultipartFile = false,
     this.fallbackUnion,
-    this.dartMappableConvenientWhen = true,
+    this.dartMappableConvenientWhen = false,
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
     this.fallbackClient = 'fallback',

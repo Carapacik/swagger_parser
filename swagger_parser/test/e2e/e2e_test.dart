@@ -710,7 +710,6 @@ void main() {
           jsonSerializer: JsonSerializer.dartMappable,
           putClientsInFolder: true,
           fallbackUnion: 'unknown',
-          dartMappableConvenientWhen: false,
         ),
         schemaFileName: 'fallback_union.json',
       );
@@ -725,7 +724,6 @@ void main() {
           jsonSerializer: JsonSerializer.dartMappable,
           enumsToJson: true,
           putClientsInFolder: true,
-          dartMappableConvenientWhen: false,
         ),
         schemaFileName: 'discriminated_one_of.3.0.json',
       );
@@ -765,7 +763,6 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.dartMappable,
           putClientsInFolder: true,
-          dartMappableConvenientWhen: false,
         ),
         schemaFileName: 'discriminated_any_of_complete_mapping.3.1.yaml',
       );
@@ -792,7 +789,6 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.dartMappable,
           putClientsInFolder: true,
-          dartMappableConvenientWhen: false,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -819,7 +815,6 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.dartMappable,
           putClientsInFolder: true,
-          dartMappableConvenientWhen: false,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -846,7 +841,6 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.dartMappable,
           putClientsInFolder: true,
-          dartMappableConvenientWhen: false,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -873,7 +867,6 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.dartMappable,
           putClientsInFolder: true,
-          dartMappableConvenientWhen: false,
         ),
         schemaFileName: 'openapi.yaml',
       );

@@ -156,10 +156,10 @@ swagger_parser:
   # Default: "" (no fallbackUnion parameter)
   fallback_union: ""
 
-  # Optional (dart_mappable only). Set true to generate when/maybeWhen convenience methods for union types.
-  # Set false to use only native Dart pattern matching with sealed classes.
-  # Default: true
-  dart_mappable_convenient_when: true
+  # Optional (dart_mappable only). Set false to generate sealed classes for union types.
+  # Set true to generate when/maybeWhen convenience methods for legacy support of deprecated union features from versions prior to 3.31.
+  # Default: false
+  dart_mappable_convenient_when: false
 
   # DART ONLY
   # Optional. Set `true` to use MultipartFile instead of File as argument type for file parameters.
