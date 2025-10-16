@@ -161,19 +161,6 @@ void main() {
       );
     });
 
-    test('all_of.3.0', () async {
-      await e2eTest(
-        'basic/all_of.3.0',
-        (outputDirectory, schemaPath) => SWPConfig(
-          outputDirectory: outputDirectory,
-          schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.freezed,
-          putClientsInFolder: true,
-        ),
-        schemaFileName: 'all_of.3.0.json',
-      );
-    });
-
     test('basic_requests.2.0', () async {
       await e2eTest(
         'basic/basic_requests.2.0',
@@ -228,47 +215,6 @@ void main() {
       );
     });
 
-    test('discriminated_one_of.3.0', () async {
-      await e2eTest(
-        'basic/discriminated_one_of.3.0',
-        (outputDirectory, schemaPath) => SWPConfig(
-          outputDirectory: outputDirectory,
-          schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.freezed,
-          putClientsInFolder: true,
-        ),
-        schemaFileName: 'discriminated_one_of.3.0.json',
-      );
-    });
-
-    test('fallback_union', () async {
-      await e2eTest(
-        'basic/fallback_union',
-        (outputDirectory, schemaPath) => SWPConfig(
-          outputDirectory: outputDirectory,
-          schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.freezed,
-          putClientsInFolder: true,
-          fallbackUnion: 'unknown',
-        ),
-        schemaFileName: 'fallback_union.json',
-      );
-    });
-
-    test('discriminated_one_of.3.0_mappable', () async {
-      await e2eTest(
-        'basic/discriminated_one_of.3.0_mappable',
-        (outputDirectory, schemaPath) => SWPConfig(
-          outputDirectory: outputDirectory,
-          schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.dartMappable,
-          enumsToJson: true,
-          putClientsInFolder: true,
-        ),
-        schemaFileName: 'discriminated_one_of.3.0.json',
-      );
-    });
-
     test('empty_class.2.0', () async {
       await e2eTest(
         'basic/empty_class.2.0',
@@ -319,19 +265,6 @@ void main() {
           putClientsInFolder: true,
         ),
         schemaFileName: 'enum_class.json',
-      );
-    });
-
-    test('of_like_class.3.1', () async {
-      await e2eTest(
-        'basic/of_like_class.3.1',
-        (outputDirectory, schemaPath) => SWPConfig(
-          outputDirectory: outputDirectory,
-          schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.freezed,
-          putClientsInFolder: true,
-        ),
-        schemaFileName: 'of_like_class.3.1.json',
       );
     });
 
@@ -728,6 +661,87 @@ void main() {
   });
 
   group('xof', () {
+    test('all_of.3.0', () async {
+      await e2eTest(
+        'xof/all_of.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'all_of.3.0.json',
+      );
+    });
+
+    test('discriminated_one_of.3.0', () async {
+      await e2eTest(
+        'xof/discriminated_one_of.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'discriminated_one_of.3.0.json',
+      );
+    });
+
+    test('fallback_union', () async {
+      await e2eTest(
+        'xof/fallback_union',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          fallbackUnion: 'unknown',
+        ),
+        schemaFileName: 'fallback_union.json',
+      );
+    });
+
+    test('fallback_union_mappable', () async {
+      await e2eTest(
+        'xof/fallback_union_mappable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.dartMappable,
+          putClientsInFolder: true,
+          fallbackUnion: 'unknown',
+        ),
+        schemaFileName: 'fallback_union.json',
+      );
+    });
+
+    test('discriminated_one_of.3.0_mappable', () async {
+      await e2eTest(
+        'xof/discriminated_one_of.3.0_mappable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.dartMappable,
+          enumsToJson: true,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'discriminated_one_of.3.0.json',
+      );
+    });
+
+    test('of_like_class.3.1', () async {
+      await e2eTest(
+        'xof/of_like_class.3.1',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'of_like_class.3.1.json',
+      );
+    });
+
     test('discriminated_any_of_complete_mapping', () async {
       await e2eTest(
         'xof/discriminated_any_of_complete_mapping',
@@ -737,7 +751,20 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
         ),
-        schemaFileName: 'openapi.yaml',
+        schemaFileName: 'discriminated_any_of_complete_mapping.3.1.yaml',
+      );
+    });
+
+    test('discriminated_any_of_complete_mapping_mappable', () async {
+      await e2eTest(
+        'xof/discriminated_any_of_complete_mapping_mappable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.dartMappable,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'discriminated_any_of_complete_mapping.3.1.yaml',
       );
     });
 
@@ -748,6 +775,19 @@ void main() {
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('non_discriminated_one_of_deferred_mappable', () async {
+      await e2eTest(
+        'xof/non_discriminated_one_of_deferred_mappable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.dartMappable,
           putClientsInFolder: true,
         ),
         schemaFileName: 'openapi.yaml',
@@ -767,6 +807,19 @@ void main() {
       );
     });
 
+    test('non_discriminated_any_of_deferred_mappable', () async {
+      await e2eTest(
+        'xof/non_discriminated_any_of_deferred_mappable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.dartMappable,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('union_inline_and_refs_any_of_deferred', () async {
       await e2eTest(
         'xof/union_inline_and_refs_any_of_deferred',
@@ -774,6 +827,19 @@ void main() {
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('union_inline_and_refs_any_of_deferred_mappable', () async {
+      await e2eTest(
+        'xof/union_inline_and_refs_any_of_deferred_mappable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.dartMappable,
           putClientsInFolder: true,
         ),
         schemaFileName: 'openapi.yaml',
@@ -793,6 +859,19 @@ void main() {
       );
     });
 
+    test('union_inline_and_refs_one_of_deferred_mappable', () async {
+      await e2eTest(
+        'xof/union_inline_and_refs_one_of_deferred_mappable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.dartMappable,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('merged_outputs', () async {
       await e2eTest(
         'basic/merged_outputs',
@@ -805,6 +884,91 @@ void main() {
           mergeOutputs: true,
         ),
         schemaFileName: 'merged_outputs.json',
+      );
+    });
+
+    test('discriminated_one_of_json_serializable', () async {
+      await e2eTest(
+        'xof/discriminated_one_of_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'discriminated_one_of.3.0.json',
+      );
+    });
+
+    test('non_discriminated_one_of_json_serializable', () async {
+      await e2eTest(
+        'xof/non_discriminated_one_of_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'non_discriminated_one_of.3.0.json',
+      );
+    });
+
+    test('fallback_union_json_serializable', () async {
+      await e2eTest(
+        'xof/fallback_union_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          putClientsInFolder: true,
+          fallbackUnion: 'unknown',
+        ),
+        schemaFileName: 'fallback_union.json',
+      );
+    });
+
+    test('discriminated_any_of_complete_mapping_json_serializable', () async {
+      await e2eTest(
+        'xof/discriminated_any_of_complete_mapping_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('non_discriminated_any_of_deferred_json_serializable', () async {
+      await e2eTest(
+        'xof/non_discriminated_any_of_deferred_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('union_inline_and_refs_any_of_deferred_json_serializable', () async {
+      await e2eTest(
+        'xof/union_inline_and_refs_any_of_deferred_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('union_inline_and_refs_one_of_deferred_json_serializable', () async {
+      await e2eTest(
+        'xof/union_inline_and_refs_one_of_deferred_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
       );
     });
   });

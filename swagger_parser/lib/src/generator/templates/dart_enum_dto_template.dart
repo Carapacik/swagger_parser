@@ -59,7 +59,12 @@ String _dartEnumDartMappableTemplate(
 
   final values = [
     ...enumClass.items,
-    if (unknownEnumValue)
+    if (unknownEnumValue &&
+        !enumClass.items.any(
+          (item) =>
+              item.name.toLowerCase() == 'unknown' ||
+              item.jsonKey.toLowerCase() == 'unknown',
+        ))
       const UniversalEnumItem(name: 'unknown', jsonKey: 'unknown'),
   ]
       .mapIndexed(
