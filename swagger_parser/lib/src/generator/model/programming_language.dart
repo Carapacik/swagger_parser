@@ -1,18 +1,18 @@
-import '../../parser/swagger_parser_core.dart';
-import '../model/generated_file.dart';
-import '../model/json_serializer.dart';
-import '../templates/dart_dart_mappable_dto_template.dart';
-import '../templates/dart_enum_dto_template.dart';
-import '../templates/dart_export_file_template.dart';
-import '../templates/dart_freezed_dto_template.dart';
-import '../templates/dart_json_serializable_dto_template.dart';
-import '../templates/dart_retrofit_client_template.dart';
-import '../templates/dart_root_client_template.dart';
-import '../templates/dart_typedef_template.dart';
-import '../templates/kotlin_enum_dto_template.dart';
-import '../templates/kotlin_moshi_dto_template.dart';
-import '../templates/kotlin_retrofit_client_template.dart';
-import '../templates/kotlin_typedef_template.dart';
+import 'package:swagger_parser/src/generator/model/generated_file.dart';
+import 'package:swagger_parser/src/generator/model/json_serializer.dart';
+import 'package:swagger_parser/src/generator/templates/dart_dart_mappable_dto_template.dart';
+import 'package:swagger_parser/src/generator/templates/dart_enum_dto_template.dart';
+import 'package:swagger_parser/src/generator/templates/dart_export_file_template.dart';
+import 'package:swagger_parser/src/generator/templates/dart_freezed_dto_template.dart';
+import 'package:swagger_parser/src/generator/templates/dart_json_serializable_dto_template.dart';
+import 'package:swagger_parser/src/generator/templates/dart_retrofit_client_template.dart';
+import 'package:swagger_parser/src/generator/templates/dart_root_client_template.dart';
+import 'package:swagger_parser/src/generator/templates/dart_typedef_template.dart';
+import 'package:swagger_parser/src/generator/templates/kotlin_enum_dto_template.dart';
+import 'package:swagger_parser/src/generator/templates/kotlin_moshi_dto_template.dart';
+import 'package:swagger_parser/src/generator/templates/kotlin_retrofit_client_template.dart';
+import 'package:swagger_parser/src/generator/templates/kotlin_typedef_template.dart';
+import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 
 /// Enumerates supported programming languages to determine templates
 enum ProgrammingLanguage {

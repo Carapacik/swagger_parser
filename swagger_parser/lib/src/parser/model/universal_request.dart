@@ -1,8 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-
-import 'universal_request_type.dart';
-import 'universal_type.dart';
+import 'package:swagger_parser/src/parser/model/universal_request_type.dart';
+import 'package:swagger_parser/src/parser/model/universal_type.dart';
 
 /// Universal template for containing information about Request
 @immutable

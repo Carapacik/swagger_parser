@@ -2,11 +2,10 @@ import 'dart:convert' show JsonEncoder, jsonDecode;
 
 import 'package:args/args.dart';
 import 'package:path/path.dart' as p;
+import 'package:swagger_parser/src/config/config_exception.dart';
+import 'package:swagger_parser/src/config/swp_config.dart';
+import 'package:swagger_parser/src/utils/file/io_file.dart';
 import 'package:yaml/yaml.dart';
-
-import '../utils/file/io_file.dart';
-import 'config_exception.dart';
-import 'swp_config.dart';
 
 /// This class is used to process the config
 class ConfigProcessor {

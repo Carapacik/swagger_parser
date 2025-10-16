@@ -1,10 +1,10 @@
-import '../../parser/model/normalized_identifier.dart';
-import '../../parser/swagger_parser_core.dart';
-import '../../utils/base_utils.dart';
-import '../config/generator_config.dart';
-import '../model/generated_file.dart';
-import '../model/json_serializer.dart';
-import '../model/programming_language.dart';
+import 'package:swagger_parser/src/generator/config/generator_config.dart';
+import 'package:swagger_parser/src/generator/model/generated_file.dart';
+import 'package:swagger_parser/src/generator/model/json_serializer.dart';
+import 'package:swagger_parser/src/generator/model/programming_language.dart';
+import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
+import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
+import 'package:swagger_parser/src/utils/base_utils.dart';
 
 /// Handles generating files
 final class FillController {

@@ -1,4 +1,4 @@
-import '../model/json_serializer.dart';
+import 'package:swagger_parser/src/generator/model/json_serializer.dart';
 
 String dartImportDtoTemplate(JsonSerializer jsonSerializer) {
   switch (jsonSerializer) {

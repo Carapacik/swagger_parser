@@ -1,6 +1,6 @@
-import '../../parser/model/normalized_identifier.dart';
-import '../../parser/swagger_parser_core.dart';
-import '../../utils/base_utils.dart';
+import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
+import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
+import 'package:swagger_parser/src/utils/base_utils.dart';
 
 String dartRootClientTemplate({
   required OpenApiInfo openApiInfo,

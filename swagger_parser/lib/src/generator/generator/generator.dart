@@ -1,10 +1,10 @@
-import '../../parser/swagger_parser_core.dart';
-import '../../utils/file/io_file.dart';
-import '../config/generator_config.dart';
-import '../model/generated_file.dart';
-import '../model/generation_statistic.dart';
-import '../model/programming_language.dart';
-import 'fill_controller.dart';
+import 'package:swagger_parser/src/generator/config/generator_config.dart';
+import 'package:swagger_parser/src/generator/generator/fill_controller.dart';
+import 'package:swagger_parser/src/generator/model/generated_file.dart';
+import 'package:swagger_parser/src/generator/model/generation_statistic.dart';
+import 'package:swagger_parser/src/generator/model/programming_language.dart';
+import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
+import 'package:swagger_parser/src/utils/file/io_file.dart';
 
 /// Handles whole cycle of generation.
 class Generator {

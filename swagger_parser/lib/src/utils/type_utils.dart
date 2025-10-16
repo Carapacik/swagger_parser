@@ -1,5 +1,5 @@
-import '../generator/model/programming_language.dart';
-import '../parser/swagger_parser_core.dart';
+import 'package:swagger_parser/src/generator/model/programming_language.dart';
+import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 
 final _fileTypeRegExp = RegExp(r'\bFile\b');
 

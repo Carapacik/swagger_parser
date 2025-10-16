@@ -1,9 +1,8 @@
 import 'dart:convert' show json;
 
+import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
+import 'package:swagger_parser/swagger_parser.dart';
 import 'package:yaml/yaml.dart';
-
-import '../../../swagger_parser.dart';
-import '../model/normalized_identifier.dart';
 
 /// Class used to correct data class, method and field names in OpenAPI
 class OpenApiCorrector {
