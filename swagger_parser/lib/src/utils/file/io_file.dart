@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
-
-import '../../generator/model/generated_file.dart';
+import 'package:swagger_parser/src/generator/model/generated_file.dart';
 
 /// Checks if config exists at [filePath]
 /// Config can be a file provided in arguments,

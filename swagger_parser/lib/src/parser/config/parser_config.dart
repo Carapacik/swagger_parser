@@ -1,4 +1,4 @@
-import '../model/replacement_rule.dart';
+import 'package:swagger_parser/src/parser/model/replacement_rule.dart';
 
 /// The configuration that the OpenApiParser uses
 class ParserConfig {

@@ -3,23 +3,22 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:path/path.dart' as p;
+import 'package:swagger_parser/src/parser/config/parser_config.dart';
+import 'package:swagger_parser/src/parser/corrector/open_api_corrector.dart';
+import 'package:swagger_parser/src/parser/exception/open_api_parser_exception.dart';
+import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
+import 'package:swagger_parser/src/parser/model/open_api_info.dart';
+import 'package:swagger_parser/src/parser/model/universal_collections.dart';
+import 'package:swagger_parser/src/parser/model/universal_data_class.dart';
+import 'package:swagger_parser/src/parser/model/universal_request.dart';
+import 'package:swagger_parser/src/parser/model/universal_request_type.dart';
+import 'package:swagger_parser/src/parser/model/universal_rest_client.dart';
+import 'package:swagger_parser/src/parser/model/universal_type.dart';
+import 'package:swagger_parser/src/parser/utils/anchor_registry.dart';
+import 'package:swagger_parser/src/parser/utils/context_stack.dart';
+import 'package:swagger_parser/src/parser/utils/http_utils.dart';
+import 'package:swagger_parser/src/parser/utils/type_utils.dart';
 import 'package:yaml/yaml.dart';
-
-import '../config/parser_config.dart';
-import '../corrector/open_api_corrector.dart';
-import '../exception/open_api_parser_exception.dart';
-import '../model/normalized_identifier.dart';
-import '../model/open_api_info.dart';
-import '../model/universal_collections.dart';
-import '../model/universal_data_class.dart';
-import '../model/universal_request.dart';
-import '../model/universal_request_type.dart';
-import '../model/universal_rest_client.dart';
-import '../model/universal_type.dart';
-import '../utils/anchor_registry.dart';
-import '../utils/context_stack.dart';
-import '../utils/http_utils.dart';
-import '../utils/type_utils.dart';
 
 /// General class for parsing OpenApi specification into universal models
 class OpenApiParser {

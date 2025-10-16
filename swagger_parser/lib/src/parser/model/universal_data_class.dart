@@ -1,9 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-
-import '../utils/type_utils.dart';
-import 'normalized_identifier.dart';
-import 'universal_type.dart';
+import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
+import 'package:swagger_parser/src/parser/model/universal_type.dart';
+import 'package:swagger_parser/src/parser/utils/type_utils.dart';
 
 part 'universal_component_class.dart';
 part 'universal_enum_class.dart';

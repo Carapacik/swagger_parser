@@ -1,9 +1,9 @@
-import '../../config/config_processor.dart';
-import '../../config/swp_config.dart';
-import '../../parser/swagger_parser_core.dart';
-import '../model/generated_file.dart';
-import '../model/generation_statistic.dart';
-import 'generator.dart';
+import 'package:swagger_parser/src/config/config_processor.dart';
+import 'package:swagger_parser/src/config/swp_config.dart';
+import 'package:swagger_parser/src/generator/generator/generator.dart';
+import 'package:swagger_parser/src/generator/model/generated_file.dart';
+import 'package:swagger_parser/src/generator/model/generation_statistic.dart';
+import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 
 /// Handles whole cycle of generation.
 /// Can be provided with arguments

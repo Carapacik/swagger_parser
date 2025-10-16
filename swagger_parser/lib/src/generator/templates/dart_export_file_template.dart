@@ -1,4 +1,4 @@
-import '../model/generated_file.dart';
+import 'package:swagger_parser/src/generator/model/generated_file.dart';
 
 /// Provides template for generating dart export file
 String dartExportFileTemplate({

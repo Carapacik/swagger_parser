@@ -1,6 +1,5 @@
 import 'package:meta/meta.dart';
-
-import 'normalized_identifier.dart';
+import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
 
 /// Used to store regex patterns for replacing names during generation
 @immutable

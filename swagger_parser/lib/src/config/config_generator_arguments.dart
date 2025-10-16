@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
-
-import '../utils/output/output_utils.dart';
+import 'package:swagger_parser/src/utils/output/output_utils.dart';
 
 /// Returns the [ArgResults] based on the [configGeneratorArguments]
 /// for the [arguments] provided when running
