@@ -1,11 +1,10 @@
 import 'package:args/args.dart';
+import 'package:swagger_parser/src/config/config_exception.dart';
+import 'package:swagger_parser/src/generator/config/generator_config.dart';
+import 'package:swagger_parser/src/generator/model/json_serializer.dart';
+import 'package:swagger_parser/src/generator/model/programming_language.dart';
+import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 import 'package:yaml/yaml.dart';
-
-import '../generator/config/generator_config.dart';
-import '../generator/model/json_serializer.dart';
-import '../generator/model/programming_language.dart';
-import '../parser/swagger_parser_core.dart';
-import 'config_exception.dart';
 
 /// Swagger Parser Config
 class SWPConfig {

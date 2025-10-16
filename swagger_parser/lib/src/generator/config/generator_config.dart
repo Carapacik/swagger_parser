@@ -1,6 +1,6 @@
-import '../../parser/model/replacement_rule.dart';
-import '../model/json_serializer.dart';
-import '../model/programming_language.dart';
+import 'package:swagger_parser/src/generator/model/json_serializer.dart';
+import 'package:swagger_parser/src/generator/model/programming_language.dart';
+import 'package:swagger_parser/src/parser/model/replacement_rule.dart';
 
 /// The configuration that the Generator uses
 class GeneratorConfig {

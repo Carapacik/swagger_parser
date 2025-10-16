@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
-
-import '../../generator/model/generation_statistic.dart';
-import '../../parser/swagger_parser_core.dart';
-import '../base_utils.dart';
+import 'package:swagger_parser/src/generator/model/generation_statistic.dart';
+import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
+import 'package:swagger_parser/src/utils/base_utils.dart';
 
 const _green = '\x1B[32m';
 const _red = '\x1B[31m';

@@ -1,6 +1,6 @@
-import '../model/normalized_identifier.dart';
-import '../model/universal_data_class.dart';
-import 'dart_keywords.dart';
+import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
+import 'package:swagger_parser/src/parser/model/universal_data_class.dart';
+import 'package:swagger_parser/src/parser/utils/dart_keywords.dart';
 
 /// Extension for utils
 extension StringTypeX on String {

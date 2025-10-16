@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-
-import 'universal_request.dart';
+import 'package:swagger_parser/src/parser/model/universal_request.dart';
 
 /// Universal template for containing information about Rest client
 @immutable
