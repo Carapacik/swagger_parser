@@ -27,6 +27,7 @@ class GeneratorConfig {
     this.useFreezed3 = false,
     this.useMultipartFile = false,
     this.fallbackUnion,
+    this.dartMappableConvenientWhen = true,
     this.mergeOutputs = false,
   });
 
@@ -125,6 +126,11 @@ class GeneratorConfig {
   /// DART ONLY
   /// Optional. Set fallback constructor name to use fallbackUnion parameter when using Freezed annotation.
   final String? fallbackUnion;
+
+  /// DART ONLY
+  /// Optional. Set 'true' to generate when/maybeWhen convenience methods for dart_mappable unions.
+  /// Set 'false' to use only native Dart pattern matching.
+  final bool dartMappableConvenientWhen;
 
   /// Optional. Set to true to merge all generated code into a single file.
   ///

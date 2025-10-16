@@ -2668,4 +2668,202 @@ data class ClassName(
       expect(filledContent.content, expectedContent);
     });
   });
+
+  group('Union types', () {
+    UniversalComponentClass buildUnionDataClass() => UniversalComponentClass(
+          name: 'AnimalUnion',
+          imports: const {'cat', 'dog'},
+          parameters: const {},
+          undiscriminatedUnionVariants: {
+            'Cat': {
+              const UniversalType(
+                type: 'int',
+                name: 'mewCount',
+                isRequired: true,
+              ),
+            },
+            'Dog': {
+              const UniversalType(
+                type: 'String',
+                name: 'barkSound',
+                isRequired: true,
+              ),
+            },
+          },
+        );
+
+    test('dart_mappable unions use sealed naming', () {
+      const controller = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.dartMappable,
+        ),
+      );
+
+      final generated = controller.fillDtoContent(buildUnionDataClass());
+
+      expect(generated.name, 'models/animal_sealed.dart');
+
+      const expectedContents = r'''
+import 'package:dart_mappable/dart_mappable.dart';
+
+import 'cat.dart';
+import 'dog.dart';
+import 'cat.dart';
+import 'dog.dart';
+
+part 'animal_sealed.mapper.dart';
+
+@MappableClass(includeSubClasses: [AnimalSealedCat, AnimalSealedDog])
+sealed class AnimalSealed with AnimalSealedMappable {
+  const AnimalSealed();
+
+  @Deprecated('Use Dart pattern matching with sealed class')
+  T when<T>({
+    required T Function(AnimalSealedCat cat) cat,
+    required T Function(AnimalSealedDog dog) dog,
+  }) {
+    return maybeWhen(
+      cat: cat,
+      dog: dog,
+    )!;
+  }
+
+  @Deprecated('Use Dart pattern matching with sealed class')
+  T? maybeWhen<T>({
+    T Function(AnimalSealedCat cat)? cat,
+    T Function(AnimalSealedDog dog)? dog,
+  }) {
+    return switch (this) {
+      AnimalSealedCat _ => cat?.call(this as AnimalSealedCat),
+      AnimalSealedDog _ => dog?.call(this as AnimalSealedDog),
+      _ => throw Exception("Unhandled type: ${this.runtimeType}"),
+    };
+  }
+
+  static AnimalSealed fromJson(Map<String, dynamic> json) {
+    return AnimalSealedDeserializer.tryDeserialize(json);
+  }
+
+}
+
+extension AnimalSealedDeserializer on AnimalSealed {
+  static AnimalSealed tryDeserialize(Map<String, dynamic> json) {
+    try {
+      return AnimalSealedCatMapper.ensureInitialized().decodeMap<AnimalSealedCat>(json);
+    } catch (_) {}
+    try {
+      return AnimalSealedDogMapper.ensureInitialized().decodeMap<AnimalSealedDog>(json);
+    } catch (_) {}
+
+
+    throw FormatException('Could not determine the correct type for AnimalSealed from: $json');
+  }
+}
+
+@MappableClass()
+class AnimalSealedCat extends AnimalSealed with AnimalSealedCatMappable implements Cat {
+  @override
+  final int mewCount;
+
+  const AnimalSealedCat({
+    required this.mewCount,
+  });
+}
+
+@MappableClass()
+class AnimalSealedDog extends AnimalSealed with AnimalSealedDogMappable implements Dog {
+  @override
+  final String barkSound;
+
+  const AnimalSealedDog({
+    required this.barkSound,
+  });
+}
+''';
+      expect(generated.content, expectedContents);
+    });
+
+    test('json_serializable unions use sealed naming', () {
+      const controller = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+        ),
+      );
+
+      final generated = controller.fillDtoContent(buildUnionDataClass());
+
+      expect(generated.name, 'models/animal_sealed.dart');
+
+      const expectedContents = r'''
+import 'package:json_annotation/json_annotation.dart';
+
+import 'cat.dart';
+import 'dog.dart';
+import 'cat.dart';
+import 'dog.dart';
+
+
+part 'animal_sealed.g.dart';
+
+@JsonSerializable(createFactory: false)
+sealed class AnimalSealed {
+  const AnimalSealed();
+  
+  factory AnimalSealed.fromJson(Map<String, dynamic> json) =>
+      AnimalSealedDeserializer.tryDeserialize(json);
+  
+  Map<String, dynamic> toJson();
+}
+
+extension AnimalSealedDeserializer on AnimalSealed {
+  static AnimalSealed tryDeserialize(Map<String, dynamic> json) {
+    try {
+      return AnimalSealedCat.fromJson(json);
+    } catch (_) {}
+    try {
+      return AnimalSealedDog.fromJson(json);
+    } catch (_) {}
+
+
+    throw FormatException('Could not determine the correct type for AnimalSealed from: $json');
+  }
+}
+
+@JsonSerializable()
+class AnimalSealedCat extends AnimalSealed implements Cat {
+  @override
+  final int mewCount;
+
+  const AnimalSealedCat({
+    required this.mewCount,
+  });
+  
+  factory AnimalSealedCat.fromJson(Map<String, dynamic> json) =>
+      _$AnimalSealedCatFromJson(json);
+      
+  @override
+  Map<String, dynamic> toJson() => _$AnimalSealedCatToJson(this);
+}
+@JsonSerializable()
+class AnimalSealedDog extends AnimalSealed implements Dog {
+  @override
+  final String barkSound;
+
+  const AnimalSealedDog({
+    required this.barkSound,
+  });
+  
+  factory AnimalSealedDog.fromJson(Map<String, dynamic> json) =>
+      _$AnimalSealedDogFromJson(json);
+      
+  @override
+  Map<String, dynamic> toJson() => _$AnimalSealedDogToJson(this);
+}
+''';
+      expect(generated.content, expectedContents);
+    });
+  });
 }
