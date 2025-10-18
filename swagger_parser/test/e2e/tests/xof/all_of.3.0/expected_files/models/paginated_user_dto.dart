@@ -12,8 +12,8 @@ part 'paginated_user_dto.g.dart';
 @Freezed()
 class PaginatedUserDto with _$PaginatedUserDto {
   const factory PaginatedUserDto({
-    required String? nextCursor,
-    required String? previousCursor,
+    @JsonKey(includeIfNull: true) required String? nextCursor,
+    @JsonKey(includeIfNull: true) required String? previousCursor,
     required List<UserDto> data,
   }) = _PaginatedUserDto;
 

@@ -20,7 +20,9 @@ class PetDto {
   factory PetDto.fromJson(Map<String, Object?> json) => _$PetDtoFromJson(json);
 
   final String name;
+  @JsonKey(includeIfNull: false)
   final String? tag;
+  @JsonKey(includeIfNull: false)
   final NewPetDtoActionDto? action;
   final int id;
 

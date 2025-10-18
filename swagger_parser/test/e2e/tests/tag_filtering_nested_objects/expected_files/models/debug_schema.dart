@@ -12,9 +12,9 @@ part 'debug_schema.g.dart';
 @Freezed()
 class DebugSchema with _$DebugSchema {
   const factory DebugSchema({
-    int? id,
-    String? message,
-    Data? data,
+    @JsonKey(includeIfNull: false) int? id,
+    @JsonKey(includeIfNull: false) String? message,
+    @JsonKey(includeIfNull: false) Data? data,
   }) = _DebugSchema;
 
   factory DebugSchema.fromJson(Map<String, Object?> json) =>

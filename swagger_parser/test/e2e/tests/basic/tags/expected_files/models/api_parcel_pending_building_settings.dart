@@ -11,8 +11,8 @@ part 'api_parcel_pending_building_settings.g.dart';
 class ApiParcelPendingBuildingSettings with _$ApiParcelPendingBuildingSettings {
   const factory ApiParcelPendingBuildingSettings({
     required bool isDellaManaged,
-    String? externalPropertyId,
-    String? externalBuildingName,
+    @JsonKey(includeIfNull: false) String? externalPropertyId,
+    @JsonKey(includeIfNull: false) String? externalBuildingName,
   }) = _ApiParcelPendingBuildingSettings;
 
   factory ApiParcelPendingBuildingSettings.fromJson(

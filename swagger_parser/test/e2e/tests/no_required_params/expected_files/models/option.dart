@@ -12,11 +12,12 @@ class Option with _$Option {
   const factory Option({
     @JsonKey(name: 'required_id') required int requiredId,
     @JsonKey(name: 'required_name') required String requiredName,
-    @JsonKey(name: 'required_nullable_id') required int? requiredNullableId,
-    @JsonKey(name: 'required_nullable_name')
+    @JsonKey(includeIfNull: true, name: 'required_nullable_id')
+    required int? requiredNullableId,
+    @JsonKey(includeIfNull: true, name: 'required_nullable_name')
     required String? requiredNullableName,
-    @JsonKey(name: 'optional_id') int? optionalId,
-    @JsonKey(name: 'optional_name') String? optionalName,
+    @JsonKey(includeIfNull: false, name: 'optional_id') int? optionalId,
+    @JsonKey(includeIfNull: false, name: 'optional_name') String? optionalName,
   }) = _Option;
 
   factory Option.fromJson(Map<String, Object?> json) => _$OptionFromJson(json);

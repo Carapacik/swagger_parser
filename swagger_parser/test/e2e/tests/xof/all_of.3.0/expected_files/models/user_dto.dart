@@ -14,7 +14,7 @@ class UserDto with _$UserDto {
     required String id,
 
     /// The username of the user, can be null.
-    required String? username,
+    @JsonKey(includeIfNull: true) required String? username,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, Object?> json) =>

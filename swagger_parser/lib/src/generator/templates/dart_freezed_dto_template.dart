@@ -9,6 +9,7 @@ import 'package:swagger_parser/src/utils/type_utils.dart';
 String dartFreezedDtoTemplate(
   UniversalComponentClass dataClass, {
   required bool useMultipartFile,
+  required bool includeIfNull,
   bool generateValidator = false,
   bool isV3 = false,
   String? fallbackUnion,
@@ -32,7 +33,7 @@ ${descriptionComment(dataClass.description)}@Freezed(${[
       "fallbackUnion: '$fallbackUnion'",
   ].join(', ')})
 ${_classModifier(isUnion: isUnion, isV3: isV3)}class $className with _\$$className {
-${_factories(dataClass, className, useMultipartFile, fallbackUnion, isUnion: isUnion)}
+${_factories(dataClass, className, useMultipartFile, includeIfNull, fallbackUnion, isUnion: isUnion)}
 ${_jsonFactories(className, dataClass.undiscriminatedUnionVariants)}
 ${generateValidator ? dataClass.parameters.map(_validationString).nonNulls.join() : ''}}
 ${generateValidator ? _validateMethod(className, dataClass.parameters) : ''}''';
@@ -170,11 +171,11 @@ String _validateMethod(String className, Set<UniversalType> types) {
 }
 
 String _factories(UniversalComponentClass dataClass, String className,
-    bool useMultipartFile, String? fallbackUnion,
+    bool useMultipartFile, bool includeIfNull, String? fallbackUnion,
     {required bool isUnion}) {
   if (!isUnion) {
     return '''
-  const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters, useMultipartFile)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;''';
+  const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters, useMultipartFile, includeIfNull)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;''';
   }
 
   if (dataClass.undiscriminatedUnionVariants case final variants?
@@ -183,6 +184,7 @@ String _factories(UniversalComponentClass dataClass, String className,
       className,
       variants,
       useMultipartFile,
+      includeIfNull,
     );
   }
 
@@ -198,7 +200,7 @@ String _factories(UniversalComponentClass dataClass, String className,
 
     factories.add('''
   @FreezedUnionValue('$discriminatorValue')
-  const factory $className.$factoryName(${factoryParameters.isNotEmpty ? '{' : ''}${_parametersToString(factoryParameters, useMultipartFile)}${factoryParameters.isNotEmpty ? '\n  }' : ''}) = $unionItemClassName;
+  const factory $className.$factoryName(${factoryParameters.isNotEmpty ? '{' : ''}${_parametersToString(factoryParameters, useMultipartFile, includeIfNull)}${factoryParameters.isNotEmpty ? '\n  }' : ''}) = $unionItemClassName;
 ''');
   }
 
@@ -212,8 +214,11 @@ String _factories(UniversalComponentClass dataClass, String className,
   return factories.join('\n');
 }
 
-String _createFactoriesForUndiscriminatedUnion(String className,
-    Map<String, Set<UniversalType>> variants, bool useMultipartFile) {
+String _createFactoriesForUndiscriminatedUnion(
+    String className,
+    Map<String, Set<UniversalType>> variants,
+    bool useMultipartFile,
+    bool includeIfNull) {
   final factories = <String>[];
   for (final MapEntry(key: variantName, value: factoryParameters)
       in variants.entries) {
@@ -221,7 +226,7 @@ String _createFactoriesForUndiscriminatedUnion(String className,
     final unionItemClassName = className + variantName.toPascal;
     factories.add('''
   @JsonSerializable()
-  const factory $className.$factoryName(${factoryParameters.isNotEmpty ? '{' : ''}${_parametersToString(factoryParameters, useMultipartFile)}${factoryParameters.isNotEmpty ? '\n  }' : ''}) = $unionItemClassName;
+  const factory $className.$factoryName(${factoryParameters.isNotEmpty ? '{' : ''}${_parametersToString(factoryParameters, useMultipartFile, includeIfNull)}${factoryParameters.isNotEmpty ? '\n  }' : ''}) = $unionItemClassName;
   ''');
   }
   return factories.join('\n');
@@ -307,7 +312,7 @@ String? _validationString(UniversalType type) {
 }
 
 String _parametersToString(
-    Set<UniversalType> parameters, bool useMultipartFile) {
+    Set<UniversalType> parameters, bool useMultipartFile, bool includeIfNull) {
   final sortedByRequired = Set<UniversalType>.from(
     parameters.sorted((a, b) => a.compareTo(b)),
   );
@@ -315,27 +320,39 @@ String _parametersToString(
       .mapIndexed(
         (i, e) =>
             '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '    ')}'
-            '${_jsonKey(e)}    ${_required(e)}'
+            '${_jsonKey(e, includeIfNull)}    ${_required(e)}'
             '${e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${e.name},',
       )
       .join();
 }
 
-String _jsonKey(UniversalType t) {
+String _jsonKey(UniversalType t, bool includeIfNull) {
   final sb = StringBuffer();
-  if ((t.jsonKey == null || t.name == t.jsonKey) &&
-      t.defaultValue == null &&
-      !t.deprecated) {
-    return '';
+  final jsonKeyParams = <String, String?>{};
+
+  if (includeIfNull) {
+    if (t.isRequired && (t.nullable || t.referencedNullable)) {
+      jsonKeyParams['includeIfNull'] = 'true';
+    } else if (!t.isRequired && (t.nullable || t.referencedNullable)) {
+      jsonKeyParams['includeIfNull'] = 'false';
+    }
   }
-  if (t.deprecated) {
-    sb.write("    @Deprecated('This is marked as deprecated')\n");
-  }
+
   if (t.jsonKey != null && t.name != t.jsonKey) {
-    sb.write("    @JsonKey(name: '${protectJsonKey(t.jsonKey)}')\n");
+    jsonKeyParams['name'] = "'${protectJsonKey(t.jsonKey)}'";
   }
+
+  if (jsonKeyParams.isNotEmpty) {
+    sb.write(
+        "    @JsonKey(${jsonKeyParams.entries.map((e) => '${e.key}: ${e.value}').join(',')})\n");
+  }
+
   if (t.defaultValue != null) {
     sb.write('    @Default(${_defaultValue(t)})\n');
+  }
+
+  if (t.deprecated) {
+    sb.write("    @Deprecated('This is marked as deprecated')\n");
   }
 
   return sb.toString();

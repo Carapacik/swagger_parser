@@ -13,10 +13,10 @@ part 'pet.g.dart';
 @Freezed()
 class Pet with _$Pet {
   const factory Pet({
-    int? id,
-    String? name,
-    PetStatus? status,
-    Category? category,
+    @JsonKey(includeIfNull: false) int? id,
+    @JsonKey(includeIfNull: false) String? name,
+    @JsonKey(includeIfNull: false) PetStatus? status,
+    @JsonKey(includeIfNull: false) Category? category,
   }) = _Pet;
 
   factory Pet.fromJson(Map<String, Object?> json) => _$PetFromJson(json);

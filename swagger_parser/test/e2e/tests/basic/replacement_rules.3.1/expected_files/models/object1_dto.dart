@@ -14,7 +14,7 @@ part 'object1_dto.g.dart';
 class Object1Dto with _$Object1Dto {
   const factory Object1Dto({
     @JsonKey(name: 'p1_class') required P1ClassDto p1Class,
-    @JsonKey(name: 'p2_enum') P2EnumDto? p2Enum,
+    @JsonKey(includeIfNull: false, name: 'p2_enum') P2EnumDto? p2Enum,
   }) = _Object1Dto;
 
   factory Object1Dto.fromJson(Map<String, Object?> json) =>

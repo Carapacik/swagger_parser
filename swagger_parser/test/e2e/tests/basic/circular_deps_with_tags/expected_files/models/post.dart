@@ -13,10 +13,10 @@ part 'post.g.dart';
 @Freezed()
 class Post with _$Post {
   const factory Post({
-    int? id,
-    String? title,
-    User? author,
-    List<Comment>? comments,
+    @JsonKey(includeIfNull: false) int? id,
+    @JsonKey(includeIfNull: false) String? title,
+    @JsonKey(includeIfNull: false) User? author,
+    @JsonKey(includeIfNull: false) List<Comment>? comments,
   }) = _Post;
 
   factory Post.fromJson(Map<String, Object?> json) => _$PostFromJson(json);

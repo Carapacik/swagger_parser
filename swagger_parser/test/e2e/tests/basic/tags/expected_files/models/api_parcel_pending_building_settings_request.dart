@@ -12,8 +12,8 @@ class ApiParcelPendingBuildingSettingsRequest
     with _$ApiParcelPendingBuildingSettingsRequest {
   const factory ApiParcelPendingBuildingSettingsRequest({
     required bool isDellaManaged,
-    String? externalPropertyId,
-    String? externalBuildingName,
+    @JsonKey(includeIfNull: false) String? externalPropertyId,
+    @JsonKey(includeIfNull: false) String? externalBuildingName,
   }) = _ApiParcelPendingBuildingSettingsRequest;
 
   factory ApiParcelPendingBuildingSettingsRequest.fromJson(
