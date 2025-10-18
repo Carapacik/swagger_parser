@@ -11,8 +11,8 @@ part 'anchor_reference.g.dart';
 class AnchorReference with _$AnchorReference {
   const factory AnchorReference({
     /// Shared field from anchor
-    String? sharedField1,
-    int? sharedField2,
+    @JsonKey(includeIfNull: false) String? sharedField1,
+    @JsonKey(includeIfNull: false) int? sharedField2,
   }) = _AnchorReference;
 
   factory AnchorReference.fromJson(Map<String, Object?> json) =>

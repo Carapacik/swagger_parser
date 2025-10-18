@@ -34,6 +34,7 @@ final class FillController {
           useFreezed3: config.useFreezed3,
           useMultipartFile: config.useMultipartFile,
           dartMappableConvenientWhen: config.dartMappableConvenientWhen,
+          includeIfNull: config.includeIfNull,
           fallbackUnion: config.fallbackUnion,
         ),
       );

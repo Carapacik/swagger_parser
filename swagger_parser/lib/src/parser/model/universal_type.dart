@@ -26,6 +26,7 @@ final class UniversalType {
     this.pattern,
     this.uniqueItems,
     this.deprecated = false,
+    this.referencedNullable = false,
   });
 
   /// Object type
@@ -76,6 +77,9 @@ final class UniversalType {
   /// Whether or not this field is deprecated
   final bool deprecated;
 
+  /// Whether this property references a nullable schema
+  final bool referencedNullable;
+
   /// Copy of [UniversalType] with new values
   UniversalType copyWith({
     String? type,
@@ -97,6 +101,7 @@ final class UniversalType {
     String? pattern,
     bool? uniqueItems,
     bool? deprecated,
+    bool? referencedNullable,
   }) {
     return UniversalType(
       type: type ?? this.type,
@@ -118,6 +123,7 @@ final class UniversalType {
       pattern: pattern ?? this.pattern,
       uniqueItems: uniqueItems ?? this.uniqueItems,
       deprecated: deprecated ?? this.deprecated,
+      referencedNullable: referencedNullable ?? this.referencedNullable,
     );
   }
 

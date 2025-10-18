@@ -10,6 +10,7 @@ paths:
         - in: query
           name: offsetRequiredTrueWithDefault
           required: true
+          description: offsetRequiredTrueWithDefault
           schema:
             type: integer
             default: 0

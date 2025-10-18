@@ -10,7 +10,8 @@ part 'object0.g.dart';
 @Freezed()
 class Object0 with _$Object0 {
   const factory Object0({
-    String? street,
+    @JsonKey(includeIfNull: false) String? street,
+    @JsonKey(includeIfNull: false) bool? deleted,
   }) = _Object0;
 
   factory Object0.fromJson(Map<String, Object?> json) =>

@@ -14,7 +14,7 @@ class GetApiV1NotTaggedShouldBeIncludedResponse
     with _$GetApiV1NotTaggedShouldBeIncludedResponse {
   const factory GetApiV1NotTaggedShouldBeIncludedResponse({
     required String includedResponse,
-    IncludedData? includedData,
+    @JsonKey(includeIfNull: false) IncludedData? includedData,
   }) = _GetApiV1NotTaggedShouldBeIncludedResponse;
 
   factory GetApiV1NotTaggedShouldBeIncludedResponse.fromJson(

@@ -20,7 +20,9 @@ class NewPetDto {
       _$NewPetDtoFromJson(json);
 
   final String name;
+  @JsonKey(includeIfNull: false)
   final String? tag;
+  @JsonKey(includeIfNull: false)
   final NewPetDtoActionDto? action;
 
   Map<String, Object?> toJson() => _$NewPetDtoToJson(this);

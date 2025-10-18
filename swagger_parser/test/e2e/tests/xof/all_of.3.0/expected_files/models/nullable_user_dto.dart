@@ -12,7 +12,7 @@ part 'nullable_user_dto.g.dart';
 @Freezed()
 class NullableUserDto with _$NullableUserDto {
   const factory NullableUserDto({
-    required UserDto? data,
+    @JsonKey(includeIfNull: true) required UserDto? data,
   }) = _NullableUserDto;
 
   factory NullableUserDto.fromJson(Map<String, Object?> json) =>

@@ -14,7 +14,7 @@ class AuditData with _$AuditData {
     required DateTime lastModified,
 
     /// User who modified from anchor
-    String? modifiedBy,
+    @JsonKey(includeIfNull: false) String? modifiedBy,
   }) = _AuditData;
 
   factory AuditData.fromJson(Map<String, Object?> json) =>

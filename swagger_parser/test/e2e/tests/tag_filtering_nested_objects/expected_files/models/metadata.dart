@@ -10,8 +10,8 @@ part 'metadata.g.dart';
 @Freezed()
 class Metadata with _$Metadata {
   const factory Metadata({
-    DateTime? createdAt,
-    String? updatedBy,
+    @JsonKey(includeIfNull: false) DateTime? createdAt,
+    @JsonKey(includeIfNull: false) String? updatedBy,
   }) = _Metadata;
 
   factory Metadata.fromJson(Map<String, Object?> json) =>

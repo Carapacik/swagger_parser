@@ -13,7 +13,7 @@ part 'data_class2.g.dart';
 class DataClass2 with _$DataClass2 {
   const factory DataClass2({
     required List<Map<String, List<List<Map<String, DataClass1>>>>> errors,
-    String? title,
+    @JsonKey(includeIfNull: false) String? title,
   }) = _DataClass2;
 
   factory DataClass2.fromJson(Map<String, Object?> json) =>

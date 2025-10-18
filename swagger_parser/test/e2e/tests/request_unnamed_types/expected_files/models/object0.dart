@@ -11,8 +11,8 @@ part 'object0.g.dart';
 class Object0 with _$Object0 {
   const factory Object0({
     required List<dynamic> list,
-    required String? name,
-    String? lastname,
+    @JsonKey(includeIfNull: true) required String? name,
+    @JsonKey(includeIfNull: false) String? lastname,
   }) = _Object0;
 
   factory Object0.fromJson(Map<String, Object?> json) =>

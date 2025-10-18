@@ -1,3 +1,6 @@
+## 1.34.0
+- includeIfNull handling, turned off by default, use include_if_null=true to enable
+
 ## 1.33.0
 - Support correct processing of nested allOf classes
 

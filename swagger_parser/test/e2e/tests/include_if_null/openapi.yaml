@@ -1,0 +1,33 @@
+openapi: 3.0.0
+info:
+  title: Test API for includeIfNull
+  version: 1.0.0
+paths:
+  /test:
+    get:
+      operationId: getTest
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TestModel"
+components:
+  schemas:
+    TestModel:
+      type: object
+      required:
+        - id
+        - requiredNullableField
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        requiredNullableField:
+          type: string
+          nullable: true
+        optionalNullableField:
+          type: string
+          nullable: true
