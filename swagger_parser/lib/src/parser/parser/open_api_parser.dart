@@ -952,14 +952,41 @@ class OpenApiParser {
     _enumClasses.clear();
 
     // check for `allOf`
-    final allOfClasses = dataClasses.where(
-      (dc) => dc is UniversalComponentClass && dc.allOf != null,
-    );
-    for (final allOfClass in allOfClasses) {
-      if (allOfClass is! UniversalComponentClass) {
-        continue;
+    // Process allOf classes in topological order (resolve dependencies first)
+    final allOfClasses = dataClasses
+        .where(
+          (dc) => dc is UniversalComponentClass && dc.allOf != null,
+        )
+        .cast<UniversalComponentClass>()
+        .toList();
+
+    // Build a map of class names to classes for quick lookup
+    final classMap = <String, UniversalDataClass>{};
+    for (final dc in dataClasses) {
+      classMap[dc.name] = dc;
+    }
+
+    // Track which classes have been resolved
+    final resolved = <String>{};
+
+    // Recursive function to resolve allOf for a class
+    void resolveAllOf(UniversalComponentClass allOfClass) {
+      // If already resolved, skip
+      if (resolved.contains(allOfClass.name)) {
+        return;
       }
+
       final refs = allOfClass.allOf!.refs;
+
+      // First, resolve all referenced classes recursively
+      for (final ref in refs) {
+        final refClass = classMap[ref];
+        if (refClass is UniversalComponentClass && refClass.allOf != null) {
+          resolveAllOf(refClass);
+        }
+      }
+
+      // Now collect parameters from resolved references
       final foundClasses = dataClasses.where((e) => refs.contains(e.name));
       // allOf could be stack of different refs and properties
       // there is some chance that combined props will overlap by name
@@ -1001,6 +1028,12 @@ class OpenApiParser {
       }
 
       allOfClass.parameters.addAll(parameters.values);
+      resolved.add(allOfClass.name);
+    }
+
+    // Resolve all allOf classes
+    for (final allOfClass in allOfClasses) {
+      resolveAllOf(allOfClass);
     }
 
     // check for discriminated oneOf
