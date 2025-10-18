@@ -1,3 +1,6 @@
+## 1.33.0
+- Support correct processing of nested allOf classes
+
 ## 1.32.1
 - Fix CHANGELOG duplication
 
