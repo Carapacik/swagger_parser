@@ -255,6 +255,19 @@ void main() {
       );
     });
 
+    test('nested_allOf', () async {
+      await e2eTest(
+        'basic/nested_allOf',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('enum_class', () async {
       await e2eTest(
         'basic/enum_class',
