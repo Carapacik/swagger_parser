@@ -10,6 +10,7 @@ String dartJsonSerializableDtoTemplate(
   UniversalComponentClass dataClass, {
   required bool markFileAsGenerated,
   required bool useMultipartFile,
+  required bool includeIfNull,
   String? fallbackUnion,
 }) {
   final originalClassName = dataClass.name.toPascal;
@@ -24,7 +25,7 @@ String dartJsonSerializableDtoTemplate(
 
   if (isUnion) {
     return _generateUnionTemplate(
-        dataClass, className, useMultipartFile, fallbackUnion);
+        dataClass, className, useMultipartFile, includeIfNull, fallbackUnion);
   }
 
   return '''
@@ -34,27 +35,31 @@ part '$classNameSnake.g.dart';
 
 ${descriptionComment(dataClass.description)}@JsonSerializable()
 class $className {
-  const $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersInConstructor(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''});
+  const $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersInConstructor(dataClass.parameters, includeIfNull)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''});
   
   factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
-  ${_parametersInClass(dataClass.parameters, useMultipartFile)}${dataClass.parameters.isNotEmpty ? '\n' : ''}
+  ${_parametersInClass(dataClass.parameters, useMultipartFile, includeIfNull)}${dataClass.parameters.isNotEmpty ? '\n' : ''}
   Map<String, Object?> toJson() => _\$${className}ToJson(this);
 }
 ''';
 }
 
-String _generateUnionTemplate(UniversalComponentClass dataClass,
-    String className, bool useMultipartFile, String? fallbackUnion) {
+String _generateUnionTemplate(
+    UniversalComponentClass dataClass,
+    String className,
+    bool useMultipartFile,
+    bool includeIfNull,
+    String? fallbackUnion) {
   // Check if this is a discriminated union
   if (dataClass.discriminator != null) {
     return _generateDiscriminatedUnionTemplate(
-        dataClass, className, useMultipartFile, fallbackUnion);
+        dataClass, className, useMultipartFile, includeIfNull, fallbackUnion);
   }
 
   // Handle undiscriminated unions
   if (dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false) {
     return _generateUndiscriminatedUnionTemplate(
-        dataClass, className, useMultipartFile, fallbackUnion);
+        dataClass, className, useMultipartFile, includeIfNull, fallbackUnion);
   }
 
   // Fallback to simple map wrapper for unknown union types
@@ -65,6 +70,7 @@ String _generateDiscriminatedUnionTemplate(
   UniversalComponentClass dataClass,
   String className,
   bool useMultipartFile,
+  bool includeIfNull,
   String? fallbackUnion,
 ) {
   final discriminator = dataClass.discriminator!;
@@ -83,7 +89,7 @@ sealed class $className {
 
   // Generate wrapper classes first (they are referenced by the extension)
   final wrappers = _generateDiscriminatedWrapperClasses(
-      className, discriminator, useMultipartFile, fallbackUnion);
+      className, discriminator, useMultipartFile, includeIfNull, fallbackUnion);
 
   // Generate public extension-based deserializer
   final deserializerExtension =
@@ -103,8 +109,8 @@ $wrappers
 ''';
 }
 
-String _generateUndiscriminatedUnionTemplate(
-    UniversalComponentClass dataClass, String className, bool useMultipartFile,
+String _generateUndiscriminatedUnionTemplate(UniversalComponentClass dataClass,
+    String className, bool useMultipartFile, bool includeIfNull,
     [String? fallbackUnion]) {
   final variants = dataClass.undiscriminatedUnionVariants!;
 
@@ -122,7 +128,7 @@ sealed class $className {
 
   // Generate wrapper classes first (they are referenced by the extension)
   final wrappers = _generateUndiscriminatedWrapperClasses(
-      className, variants, useMultipartFile, fallbackUnion);
+      className, variants, useMultipartFile, includeIfNull, fallbackUnion);
 
   // Generate extension-based tryDeserialize helper for external usage
   final helperExtension =
@@ -261,8 +267,12 @@ $fallbackTry
 }''';
 }
 
-String _generateDiscriminatedWrapperClasses(String className,
-    Discriminator discriminator, bool useMultipartFile, String? fallbackUnion) {
+String _generateDiscriminatedWrapperClasses(
+    String className,
+    Discriminator discriminator,
+    bool useMultipartFile,
+    bool includeIfNull,
+    String? fallbackUnion) {
   final wrappers =
       discriminator.discriminatorValueToRefMapping.entries.map((entry) {
     final variantName = entry.value;
@@ -306,7 +316,8 @@ $constructorParams
 String _generateUndiscriminatedWrapperClasses(
   String className,
   Map<String, Set<UniversalType>> variants,
-  bool useMultipartFile, [
+  bool useMultipartFile,
+  bool includeIfNull, [
   String? fallbackUnion,
 ]) {
   final wrappers = variants.entries.map((entry) {
@@ -378,16 +389,18 @@ class $fallbackClassName extends $className {
 String _parametersInClass(
   Set<UniversalType> parameters,
   bool useMultipartFile,
+  bool includeIfNull,
 ) =>
     parameters
         .mapIndexed(
           (i, e) =>
               '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '  ')}'
-              '${_jsonKey(e)}  final ${_renameUnionTypes(e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${e.name};',
+              '${_jsonKey(e, includeIfNull)}  final ${_renameUnionTypes(e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${e.name};',
         )
         .join();
 
-String _parametersInConstructor(Set<UniversalType> parameters) {
+String _parametersInConstructor(
+    Set<UniversalType> parameters, bool includeIfNull) {
   final sortedByRequired = Set<UniversalType>.from(
     parameters.sorted((a, b) => a.compareTo(b)),
   );
@@ -397,11 +410,29 @@ String _parametersInConstructor(Set<UniversalType> parameters) {
 }
 
 /// if jsonKey is different from the name
-String _jsonKey(UniversalType t) {
-  if (t.jsonKey == null || t.name == t.jsonKey) {
-    return '';
+String _jsonKey(UniversalType t, bool includeIfNull) {
+  final buffer = StringBuffer();
+
+  final jsonKeyParams = <String, String?>{};
+
+  if (includeIfNull) {
+    if (t.isRequired && (t.nullable || t.referencedNullable)) {
+      jsonKeyParams['includeIfNull'] = 'true';
+    } else if (!t.isRequired && (t.nullable || t.referencedNullable)) {
+      jsonKeyParams['includeIfNull'] = 'false';
+    }
   }
-  return "  @JsonKey(name: '${protectJsonKey(t.jsonKey)}')\n";
+
+  if (t.jsonKey != null && t.name != t.jsonKey) {
+    jsonKeyParams['name'] = "'${protectJsonKey(t.jsonKey)}'";
+  }
+
+  if (jsonKeyParams.isNotEmpty) {
+    buffer.write(
+        "  @JsonKey(${jsonKeyParams.entries.map((e) => '${e.key}: ${e.value}').join(',')})\n");
+  }
+
+  return buffer.toString();
 }
 
 /// return required if isRequired

@@ -5,6 +5,20 @@ import 'e2e_util.dart';
 
 void main() {
   group('E2E', () {
+    test('include_if_null', () async {
+      await e2eTest(
+        'include_if_null',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          includeIfNull: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('enum_member_names', () async {
       await e2eTest(
         'enum_member_names',
@@ -28,6 +42,7 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
           enumsParentPrefix: false,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -40,6 +55,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.json',
       );
@@ -53,6 +69,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -71,6 +88,7 @@ void main() {
             ReplacementRule(pattern: RegExp('V1'), replacement: ''),
             ReplacementRule(pattern: RegExp(r'$'), replacement: 'DTO'),
           ],
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -86,6 +104,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.json',
       );
@@ -114,6 +133,7 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
           useXNullable: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'swagger.yaml',
       );
@@ -127,6 +147,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -333,6 +354,7 @@ void main() {
             ReplacementRule(pattern: RegExp('List'), replacement: 'Lizt'),
             ReplacementRule(pattern: RegExp(r'$'), replacement: 'DTO'),
           ],
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -350,6 +372,7 @@ void main() {
             ReplacementRule(pattern: RegExp('V1'), replacement: ''),
             ReplacementRule(pattern: RegExp(r'$'), replacement: 'DTO'),
           ],
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -363,6 +386,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -391,6 +415,7 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
           excludeTags: ['exclude'],
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -405,6 +430,7 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
           includeTags: ['include'],
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -420,6 +446,7 @@ void main() {
           putClientsInFolder: true,
           includeTags: ['include'],
           excludeTags: ['exclude'],
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -434,6 +461,7 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
           includeTags: ['include'],
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -448,6 +476,7 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
           excludeTags: ['exclude'],
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -462,6 +491,7 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
           includeTags: ['include'],
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -477,6 +507,7 @@ void main() {
           putClientsInFolder: true,
           includeTags: ['include'],
           excludeTags: ['exclude'],
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -492,6 +523,7 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
           includeTags: ['include'],
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -525,6 +557,21 @@ void main() {
       );
     });
 
+    test('ref_properties', () async {
+      await e2eTest(
+        'basic/ref_properties',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          useFreezed3: true,
+          includeIfNull: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('wrapping_collections.2.0', () async {
       await e2eTest(
         'basic/wrapping_collections.2.0',
@@ -547,6 +594,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'wrapping_collections.3.0.json',
       );
@@ -561,6 +609,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.json',
       );
@@ -574,6 +623,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -682,6 +732,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'all_of.3.0.json',
       );
@@ -695,6 +746,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'discriminated_one_of.3.0.json',
       );
@@ -709,6 +761,7 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
           fallbackUnion: 'unknown',
+          includeIfNull: true,
         ),
         schemaFileName: 'fallback_union.json',
       );
@@ -750,6 +803,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'of_like_class.3.1.json',
       );
@@ -763,6 +817,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'discriminated_any_of_complete_mapping.3.1.yaml',
       );
@@ -789,6 +844,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -815,6 +871,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -841,6 +898,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -867,6 +925,7 @@ void main() {
           schemaPath: schemaPath,
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -895,6 +954,7 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           useXNullable: true,
           mergeOutputs: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'merged_outputs.json',
       );
@@ -907,6 +967,7 @@ void main() {
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'discriminated_one_of.3.0.json',
       );
@@ -919,6 +980,7 @@ void main() {
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'non_discriminated_one_of.3.0.json',
       );
@@ -932,6 +994,7 @@ void main() {
           schemaPath: schemaPath,
           putClientsInFolder: true,
           fallbackUnion: 'unknown',
+          includeIfNull: true,
         ),
         schemaFileName: 'fallback_union.json',
       );
@@ -944,6 +1007,7 @@ void main() {
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -956,6 +1020,7 @@ void main() {
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -968,6 +1033,7 @@ void main() {
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );
@@ -980,6 +1046,7 @@ void main() {
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
           putClientsInFolder: true,
+          includeIfNull: true,
         ),
         schemaFileName: 'openapi.yaml',
       );

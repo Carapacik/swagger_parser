@@ -15,8 +15,8 @@ class Object0 with _$Object0 {
   const factory Object0({
     /// This field should be included
     required String includedField,
-    NestedIncluded? nestedIncluded,
-    Metadata? metadata,
+    @JsonKey(includeIfNull: false) NestedIncluded? nestedIncluded,
+    @JsonKey(includeIfNull: false) Metadata? metadata,
   }) = _Object0;
 
   factory Object0.fromJson(Map<String, Object?> json) =>

@@ -11,10 +11,10 @@ part 'metadata.g.dart';
 class Metadata with _$Metadata {
   const factory Metadata({
     /// Timestamp from anchor
-    DateTime? createdAt,
+    @JsonKey(includeIfNull: false) DateTime? createdAt,
 
     /// Semantic version from anchor
-    String? version,
+    @JsonKey(includeIfNull: false) String? version,
   }) = _Metadata;
 
   factory Metadata.fromJson(Map<String, Object?> json) =>

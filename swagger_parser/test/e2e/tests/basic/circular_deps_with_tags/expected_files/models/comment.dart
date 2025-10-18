@@ -13,10 +13,10 @@ part 'comment.g.dart';
 @Freezed()
 class Comment with _$Comment {
   const factory Comment({
-    int? id,
-    String? text,
-    User? author,
-    Post? post,
+    @JsonKey(includeIfNull: false) int? id,
+    @JsonKey(includeIfNull: false) String? text,
+    @JsonKey(includeIfNull: false) User? author,
+    @JsonKey(includeIfNull: false) Post? post,
   }) = _Comment;
 
   factory Comment.fromJson(Map<String, Object?> json) =>

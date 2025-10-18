@@ -10,9 +10,9 @@ part 'item.g.dart';
 @Freezed()
 class Item with _$Item {
   const factory Item({
-    String? id,
-    String? name,
-    String? type,
+    @JsonKey(includeIfNull: false) String? id,
+    @JsonKey(includeIfNull: false) String? name,
+    @JsonKey(includeIfNull: false) String? type,
   }) = _Item;
 
   factory Item.fromJson(Map<String, Object?> json) => _$ItemFromJson(json);

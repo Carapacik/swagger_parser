@@ -43,6 +43,7 @@ class SWPConfig {
     this.includeTags = const <String>[],
     this.fallbackClient = 'fallback',
     this.mergeOutputs = false,
+    this.includeIfNull = false,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -79,6 +80,7 @@ class SWPConfig {
     required this.fallbackClient,
     required this.mergeOutputs,
     required this.dartMappableConvenientWhen,
+    required this.includeIfNull,
     this.fallbackUnion,
   });
 
@@ -277,6 +279,9 @@ class SWPConfig {
     final mergeOutputs =
         yamlMap['merge_outputs'] as bool? ?? rootConfig?.mergeOutputs;
 
+    final includeIfNull =
+        yamlMap['include_if_null'] as bool? ?? rootConfig?.includeIfNull;
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -316,6 +321,7 @@ class SWPConfig {
       fallbackClient: fallbackClient ?? dc.fallbackClient,
       mergeOutputs: mergeOutputs ?? dc.mergeOutputs,
       dartMappableConvenientWhen: dartMappableConvenientWhen,
+      includeIfNull: includeIfNull ?? dc.includeIfNull,
     );
   }
 
@@ -495,6 +501,11 @@ class SWPConfig {
   /// input files to output files 1-to-1.
   final bool mergeOutputs;
 
+  /// DART ONLY
+  /// Optional. Set `true` to generate includeIfNull annotations for nullable fields.
+  /// If set to `false`, includeIfNull annotations will not be generated.
+  final bool includeIfNull;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -521,6 +532,7 @@ class SWPConfig {
       fallbackUnion: fallbackUnion,
       dartMappableConvenientWhen: dartMappableConvenientWhen,
       mergeOutputs: mergeOutputs,
+      includeIfNull: includeIfNull,
     );
   }
 

@@ -12,7 +12,7 @@ part 'nullable_enum_in_object.g.dart';
 @Freezed()
 class NullableEnumInObject with _$NullableEnumInObject {
   const factory NullableEnumInObject({
-    Fruits? fruits,
+    @JsonKey(includeIfNull: false) Fruits? fruits,
   }) = _NullableEnumInObject;
 
   factory NullableEnumInObject.fromJson(Map<String, Object?> json) =>

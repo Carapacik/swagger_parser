@@ -13,9 +13,9 @@ part 'object1.g.dart';
 class Object1 with _$Object1 {
   const factory Object1({
     required List<Example> list1,
-    required String? name,
-    List<Map<String, Example>>? list2,
-    String? lastname,
+    @JsonKey(includeIfNull: true) required String? name,
+    @JsonKey(includeIfNull: false) List<Map<String, Example>>? list2,
+    @JsonKey(includeIfNull: false) String? lastname,
   }) = _Object1;
 
   factory Object1.fromJson(Map<String, Object?> json) =>
