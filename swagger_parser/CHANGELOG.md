@@ -1,4 +1,13 @@
-## 1.34.1
+## 1.35.0
+- Add `infer_required_from_nullable`
+```
+infer_required_from_nullable: true
+
+Schema without required array:
+- id: type: integer → required int id
+- name: type: string → required String name
+- desc: type: string, nullable: true → String? desc
+```
 - Fix nullable array item types generation
 
 ## 1.34.0
