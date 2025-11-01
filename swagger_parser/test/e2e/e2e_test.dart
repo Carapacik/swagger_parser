@@ -124,6 +124,19 @@ void main() {
       );
     }, skip: true);
 
+    test('nullable_array_reference', () async {
+      await e2eTest(
+        'nullable_array_reference',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('nullable_types.2.0', () async {
       await e2eTest(
         'nullable_types.2.0',
