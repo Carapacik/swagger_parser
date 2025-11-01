@@ -200,6 +200,14 @@ swagger_parser:
   # Optional. Set `true` to generate includeIfNull annotations for nullable fields.
   # If set to `false`, includeIfNull annotations will not be generated.
   include_if_null: false
+
+  # DART ONLY
+  # Optional. Set `true` to infer required properties from nullability.
+  # When enabled and the schema has no explicit required array:
+  # - Properties without nullable: true are marked as required
+  # - Properties with nullable: true remain optional
+  # If the schema defines a required array, this option has no effect.
+  infer_required_from_nullable: false
 ```
 
 For multiple schemes:

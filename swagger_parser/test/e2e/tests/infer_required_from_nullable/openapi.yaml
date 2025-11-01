@@ -1,0 +1,42 @@
+openapi: 3.0.0
+info:
+  title: Test API for infer_required_from_nullable
+  version: 1.0.0
+paths:
+  /test:
+    get:
+      operationId: getTest
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+components:
+  schemas:
+    Product:
+      type: object
+      # NO required array!  This is crucial - when there's no required array:
+      # The parser will mark ALL properties as optional (nullable in constructor)
+      # With inferRequiredFromNullable: true:
+      # - Properties WITHOUT nullable: true should be marked required
+      # - Properties WITH nullable: true should stay optional
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Product ID (not marked nullable, should be required when inferring)
+        name:
+          type: string
+          minLength: 1
+          description: Product Name (not marked nullable, should be required when inferring)
+        description:
+          type: string
+          nullable: true
+          description: Product Description (marked nullable, should stay optional)
+        price:
+          type: number
+          format: double
+          nullable: true
+          description: Product Price (marked nullable, should stay optional)
