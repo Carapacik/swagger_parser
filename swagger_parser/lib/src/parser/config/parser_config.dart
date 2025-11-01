@@ -17,6 +17,7 @@ class ParserConfig {
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
     this.fallbackClient = 'fallback',
+    this.inferRequiredFromNullable = false,
   });
 
   /// Specification file content as [String]
@@ -74,4 +75,9 @@ class ParserConfig {
   ///
   /// defaults to 'fallback' which results in a client named `FallbackClient`.
   final String fallbackClient;
+
+  /// When true, infer required properties from nullability.
+  /// Properties without nullable: true in schema are marked as required.
+  /// Only applies when schema has no explicit required array.
+  final bool inferRequiredFromNullable;
 }

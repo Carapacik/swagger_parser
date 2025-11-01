@@ -44,6 +44,7 @@ class SWPConfig {
     this.fallbackClient = 'fallback',
     this.mergeOutputs = false,
     this.includeIfNull = false,
+    this.inferRequiredFromNullable = false,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -81,6 +82,7 @@ class SWPConfig {
     required this.mergeOutputs,
     required this.dartMappableConvenientWhen,
     required this.includeIfNull,
+    required this.inferRequiredFromNullable,
     this.fallbackUnion,
   });
 
@@ -282,6 +284,10 @@ class SWPConfig {
     final includeIfNull =
         yamlMap['include_if_null'] as bool? ?? rootConfig?.includeIfNull;
 
+    final inferRequiredFromNullable =
+        yamlMap['infer_required_from_nullable'] as bool? ??
+            rootConfig?.inferRequiredFromNullable;
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -322,6 +328,8 @@ class SWPConfig {
       mergeOutputs: mergeOutputs ?? dc.mergeOutputs,
       dartMappableConvenientWhen: dartMappableConvenientWhen,
       includeIfNull: includeIfNull ?? dc.includeIfNull,
+      inferRequiredFromNullable:
+          inferRequiredFromNullable ?? dc.inferRequiredFromNullable,
     );
   }
 
@@ -506,6 +514,12 @@ class SWPConfig {
   /// If set to `false`, includeIfNull annotations will not be generated.
   final bool includeIfNull;
 
+  /// DART ONLY
+  /// Optional. When true, infer required properties from nullability.
+  /// Properties without nullable: true in schema are marked as required.
+  /// Only applies when schema has no explicit required array.
+  final bool inferRequiredFromNullable;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -555,6 +569,7 @@ class SWPConfig {
       excludeTags: excludeTags,
       includeTags: includeTags,
       fallbackClient: fallbackClient,
+      inferRequiredFromNullable: inferRequiredFromNullable,
     );
   }
 }

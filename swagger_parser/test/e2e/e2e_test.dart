@@ -1051,5 +1051,19 @@ void main() {
         schemaFileName: 'openapi.yaml',
       );
     });
+
+    test('infer_required_from_nullable', () async {
+      await e2eTest(
+        'infer_required_from_nullable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          inferRequiredFromNullable: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
   });
 }
