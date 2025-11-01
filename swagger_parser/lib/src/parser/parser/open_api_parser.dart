@@ -757,7 +757,16 @@ class OpenApiParser {
               _ => false,
             };
 
-        final isRequired = requiredParameters.contains(propertyName);
+        var isRequired = requiredParameters.contains(propertyName);
+        // If inferRequiredFromNullable is enabled and there's no required array,
+        // infer required from nullability
+        if (!isRequired &&
+            config.inferRequiredFromNullable &&
+            requiredParameters.isEmpty &&
+            !hasDefaultKey &&
+            !isNullable) {
+          isRequired = true;
+        }
         final typeWithImport = _findType(
           propertyValue,
           name: propertyName,
