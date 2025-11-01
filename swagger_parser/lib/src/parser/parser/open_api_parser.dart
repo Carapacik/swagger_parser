@@ -1662,8 +1662,23 @@ class OpenApiParser {
             // Here, `map` is the `anyOf` schema. `optionalItem` is the array schema.
             // We need to preserve context like `items` if it's outside `anyOf` but part of the same definition.
 
+            final mergedOptionalItem = Map<String, dynamic>.from(optionalItem);
+            const keysToSkip = {
+              _typeConst,
+              _oneOfConst,
+              _anyOfConst,
+              _allOfConst,
+              _nullableConst,
+            };
+            for (final entry in map.entries) {
+              if (keysToSkip.contains(entry.key)) {
+                continue;
+              }
+              mergedOptionalItem.putIfAbsent(entry.key, () => entry.value);
+            }
+
             final (:type, :import) = _findType(
-              optionalItem,
+              mergedOptionalItem,
               root: root,
               // Pass root along
               // If nullItems is present, this type is effectively not required at this level of anyOf,
