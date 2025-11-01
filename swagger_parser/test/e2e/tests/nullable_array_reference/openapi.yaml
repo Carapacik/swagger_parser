@@ -1,0 +1,41 @@
+openapi: 3.1.0
+info:
+  title: Nullable array reference test
+  version: 1.0.0
+paths:
+  /owners:
+    get:
+      operationId: listOwners
+      responses:
+        '200':
+          description: Successful owners response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Owner'
+components:
+  schemas:
+    Pet:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Owner:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        pets:
+          type:
+            - array
+            - 'null'
+          items:
+            $ref: '#/components/schemas/Pet'

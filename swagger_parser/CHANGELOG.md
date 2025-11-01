@@ -1,3 +1,6 @@
+## 1.34.1
+- Fix nullable array item types generation
+
 ## 1.34.0
 - includeIfNull handling, turned off by default, use include_if_null=true to enable
 
