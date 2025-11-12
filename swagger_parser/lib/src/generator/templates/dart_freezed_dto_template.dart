@@ -191,7 +191,8 @@ String _factories(UniversalComponentClass dataClass, String className,
   final factories = <String>[];
   for (final discriminatorValue
       in dataClass.discriminator!.discriminatorValueToRefMapping.keys) {
-    final factoryName = discriminatorValue.toCamel;
+    final (protectedName, _) = protectName(discriminatorValue, isMethod: true);
+    final factoryName = protectedName!.toCamel;
     final discriminatorRef = dataClass
         .discriminator!.discriminatorValueToRefMapping[discriminatorValue]!;
     final factoryParameters =
@@ -205,9 +206,11 @@ String _factories(UniversalComponentClass dataClass, String className,
   }
 
   if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
+    final (protectedFallbackName, _) = protectName(fallbackUnion, isMethod: true);
+    final fallbackFactoryName = protectedFallbackName!.toCamel;
     final unionItemClassName = className + fallbackUnion.toPascal;
     factories.add('''
-  const factory $className.$fallbackUnion() = $unionItemClassName;
+  const factory $className.$fallbackFactoryName() = $unionItemClassName;
 ''');
   }
 
@@ -222,7 +225,8 @@ String _createFactoriesForUndiscriminatedUnion(
   final factories = <String>[];
   for (final MapEntry(key: variantName, value: factoryParameters)
       in variants.entries) {
-    final factoryName = variantName.toCamel;
+    final (protectedName, _) = protectName(variantName, isMethod: true);
+    final factoryName = protectedName!.toCamel;
     final unionItemClassName = className + variantName.toPascal;
     factories.add('''
   @JsonSerializable()
