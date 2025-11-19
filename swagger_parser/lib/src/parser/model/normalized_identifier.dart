@@ -27,7 +27,11 @@ class NormalizedIdentifier {
       return NormalizedIdentifier._([], isPrivate: isPrivate);
     }
 
-    final words = _parseWords(workingText);
+    // Remove apostrophes before parsing so they don't split words
+    // e.g., "What's New" becomes "Whats New" -> ["Whats", "New"]
+    final textWithoutApostrophes = workingText.replaceAll("'", '');
+
+    final words = _parseWords(textWithoutApostrophes);
     return NormalizedIdentifier._(words, isPrivate: isPrivate);
   }
 

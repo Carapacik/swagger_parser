@@ -85,6 +85,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiParcelPendingBuildingSettings'
 
+  /whats-new/items:
+    get:
+      tags:
+        - What's New
+      summary: Get what's new items
+      operationId: getWhatsNewItems
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    title:
+                      type: string
+
 components:
   schemas:
     ApiParcelPendingBuildingSettings:

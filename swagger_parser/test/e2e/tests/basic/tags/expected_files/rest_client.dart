@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'clients/fallback_client.dart';
 import 'clients/client2_client.dart';
 import 'clients/parcel_pending_client.dart';
+import 'clients/whats_new_client.dart';
 
 ///  `v0.0.0 (v1)`
 class RestClient {
@@ -24,6 +25,7 @@ class RestClient {
   FallbackClient? _fallback;
   Client2Client? _client2;
   ParcelPendingClient? _parcelPending;
+  WhatsNewClient? _whatsNew;
 
   FallbackClient get fallback =>
       _fallback ??= FallbackClient(_dio, baseUrl: _baseUrl);
@@ -33,4 +35,7 @@ class RestClient {
 
   ParcelPendingClient get parcelPending =>
       _parcelPending ??= ParcelPendingClient(_dio, baseUrl: _baseUrl);
+
+  WhatsNewClient get whatsNew =>
+      _whatsNew ??= WhatsNewClient(_dio, baseUrl: _baseUrl);
 }
