@@ -206,7 +206,8 @@ String _factories(UniversalComponentClass dataClass, String className,
   }
 
   if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
-    final (protectedFallbackName, _) = protectName(fallbackUnion, isMethod: true);
+    final (protectedFallbackName, _) =
+        protectName(fallbackUnion, isMethod: true);
     final fallbackFactoryName = protectedFallbackName!.toCamel;
     final unionItemClassName = className + fallbackUnion.toPascal;
     factories.add('''
