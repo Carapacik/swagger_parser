@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/enum_class.dart';
+import '../models/x_enum_names.dart';
 
 part 'api_client.g.dart';
 
@@ -13,9 +14,12 @@ part 'api_client.g.dart';
 abstract class ApiClient {
   factory ApiClient(Dio dio, {String? baseUrl}) = _ApiClient;
 
-  /// [enumClass] - description
+  /// [enumClass] - description.
+  ///
+  /// [xEnumNames] - x-enumNames test.
   @GET('/api/v1/category/')
   Future<void> apiV1CategoryList({
     @Query('enum_class') required List<EnumClass> enumClass,
+    @Query('xEnumNames') required XEnumNames xEnumNames,
   });
 }

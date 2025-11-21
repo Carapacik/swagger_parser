@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
 import 'package:swagger_parser/src/parser/model/universal_data_class.dart';
 import 'package:swagger_parser/src/parser/utils/dart_keywords.dart';
@@ -131,7 +132,7 @@ String? protectDefaultValue(
 }
 
 /// Protect enum items names from incorrect symbols, keywords, etc.
-Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names) {
+Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names, {Iterable<String>? values}) {
   var counter = 0;
   final items = <UniversalEnumItem>{};
 
@@ -154,7 +155,7 @@ Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names) {
     return name;
   }
 
-  for (final name in names) {
+  names.forEachIndexed((index, name) {
     final (newName, renameDescription) = switch (name) {
       _
           when _startWithNumberRegExp.hasMatch(name) &&
@@ -170,30 +171,15 @@ Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names) {
         ),
       _ => (leadingDashToMinus(name), null),
     };
+    final jsonKey = values?.elementAtOrNull(index) ?? name;
     items.add(
       UniversalEnumItem(
         name: newName,
-        jsonKey: name,
+        jsonKey: jsonKey,
         description: renameDescription,
       ),
     );
-  }
-
-  return items;
-}
-
-/// Protect enum items names from incorrect symbols, keywords, etc.
-Set<UniversalEnumItem> protectEnumItemsNamesAndValues(
-  Iterable<String> names,
-  Iterable<String> values,
-) {
-  final items = <UniversalEnumItem>{};
-  final nameList = names.toList();
-  final valueList = values.toList();
-
-  for (var i = 0; i < nameList.length; i++) {
-    items.add(UniversalEnumItem(name: nameList[i], jsonKey: valueList[i]));
-  }
+  });
 
   return items;
 }
