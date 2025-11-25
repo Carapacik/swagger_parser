@@ -31,6 +31,20 @@ paths:
                 - '5иллегалчарактер'
                 - '6 item six'
           description: 'description'
+        - in: query
+          name: xEnumNames
+          required: true
+          schema:
+            type: "number"
+            format: "int32"
+            description: "parsing mode"
+            enum:
+              - 0
+              - 1
+            x-enumNames:
+              - "default"
+              - "strict"
+          description: 'x-enumNames test'
       tags:
         - api
       responses:
