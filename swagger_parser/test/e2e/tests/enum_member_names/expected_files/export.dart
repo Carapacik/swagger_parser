@@ -6,5 +6,6 @@
 export 'clients/api_client.dart';
 // Data classes
 export 'models/enum_class.dart';
+export 'models/x_enum_names.dart';
 // Root client
 export 'rest_client.dart';

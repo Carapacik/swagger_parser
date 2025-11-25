@@ -870,7 +870,7 @@ class OpenApiParser {
           final values = (value[_enumConst] as List).map((e) => '$e');
           if (value.containsKey(_enumNamesConst)) {
             final names = (value[_enumNamesConst] as List).map((e) => '$e');
-            items = protectEnumItemsNamesAndValues(names, values);
+            items = protectEnumItemsNames(names, values: values);
           } else {
             items = protectEnumItemsNames(values);
           }
@@ -1394,7 +1394,7 @@ class OpenApiParser {
       final values = (map[_enumConst] as List).map((e) => '$e');
       if (map.containsKey(_enumNamesConst)) {
         final names = (map[_enumNamesConst] as List).map((e) => '$e');
-        items = protectEnumItemsNamesAndValues(names, values);
+        items = protectEnumItemsNames(names, values: values);
       } else {
         items = protectEnumItemsNames(values);
       }
