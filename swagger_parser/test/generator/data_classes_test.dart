@@ -2891,5 +2891,62 @@ class AnimalSealedDog extends AnimalSealed implements Dog {
 ''';
       expect(generated.content, expectedContents);
     });
+
+    test('freezed discriminated union with keyword factory names', () {
+      final dataClass = UniversalComponentClass(
+        name: 'DeviceTypeConfig',
+        imports: const {},
+        parameters: const {},
+        discriminator: (
+          propertyName: 'deviceType',
+          discriminatorValueToRefMapping: const {
+            'DEFAULT': '#/components/schemas/DefaultConfig',
+            'CUSTOM': '#/components/schemas/CustomConfig',
+          },
+          refProperties: {
+            '#/components/schemas/DefaultConfig': const {},
+            '#/components/schemas/CustomConfig': {
+              const UniversalType(
+                type: 'string',
+                name: 'configValue',
+                isRequired: true,
+              ),
+            },
+          },
+        ),
+      );
+
+      const controller = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+        ),
+      );
+
+      final generated = controller.fillDtoContent(dataClass);
+
+      const expectedContents = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'device_type_config.freezed.dart';
+part 'device_type_config.g.dart';
+
+@Freezed(unionKey: 'deviceType')
+sealed class DeviceTypeConfig with _$DeviceTypeConfig {
+  @FreezedUnionValue('DEFAULT')
+  const factory DeviceTypeConfig.defaultValue() = DeviceTypeConfigDefault;
+
+  @FreezedUnionValue('CUSTOM')
+  const factory DeviceTypeConfig.custom({
+    required String configValue,
+  }) = DeviceTypeConfigCustom;
+
+  
+  factory DeviceTypeConfig.fromJson(Map<String, Object?> json) => _$DeviceTypeConfigFromJson(json);
+}
+''';
+      expect(generated.content, expectedContents);
+    });
   });
 }
