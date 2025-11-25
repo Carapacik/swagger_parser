@@ -1,3 +1,6 @@
+## 1.35.1
+- Fixed enum names generation
+
 ## 1.35.0
 - Add `infer_required_from_nullable`
 ```
