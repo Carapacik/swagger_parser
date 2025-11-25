@@ -132,7 +132,8 @@ String? protectDefaultValue(
 }
 
 /// Protect enum items names from incorrect symbols, keywords, etc.
-Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names, {Iterable<String>? values}) {
+Set<UniversalEnumItem> protectEnumItemsNames(Iterable<String> names,
+    {Iterable<String>? values}) {
   var counter = 0;
   final items = <UniversalEnumItem>{};
 
