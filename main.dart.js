@@ -24571,7 +24571,7 @@ if(r)q.push("\n\n  const "+s+"(this.json);\n")
 if(e)q.push("\n  factory "+s+".fromJson("+A.Mb(a.d,null,!1)+" json) => values.firstWhere(\n        (e) => e.json == json,\n        orElse: () => $unknown,\n      );\n")
 if(r){p=A.Mb(a.d,null,!1)
 q.push("\n  final "+p+A.aBb(p)+" json;")}if(b){p=A.Mb(a.d,null,!1)
-q.push("\n\n  "+p+A.aBb(p)+" toJson() => json;")}if(r)q.push("\n\n  @override\n  String toString() => json ?? super.toString();")
+q.push("\n\n  "+p+A.aBb(p)+" toJson() => json;")}if(r)q.push("\n\n  @override\n  String toString() => json?.toString() ?? super.toString();")
 if(e)q.push("\n  /// Returns all defined enum values excluding the $unknown value.\n  static List<"+s+"> get $valuesDefined => values.where((value) => value != $unknown).toList();")
 return A.aur(c)+"\n\n"+A.e8(a.b,"","",!0)+"@JsonEnum()\nenum "+s+" {\n"+B.b.bv(q)+"\n}\n"}},
 aND(a,b,c){var s,r,q=a.a,p=A.bc(q),o=c||b,n=a.e,m=t.xU,l=A.W(n,m)
