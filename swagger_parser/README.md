@@ -35,7 +35,7 @@ dependencies:
   # dio: ^5.9.0
   # freezed_annotation: ^3.1.0 # for freezed
   # json_annotation: ^4.9.0
-  # retrofit: ^4.7.3
+  # retrofit: ^4.9.0
 
 dev_dependencies:
   # build_runner: ^2.9.0

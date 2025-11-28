@@ -1,3 +1,6 @@
+## 1.35.2
+- Fix enum name values being a int returned in a toString
+
 ## 1.35.1
 - Fixed enum names generation
 
