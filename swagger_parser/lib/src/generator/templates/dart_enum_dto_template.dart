@@ -178,7 +178,7 @@ String _toJson(UniversalEnumClass enumClass, String className) {
 }
 
 String _toString() =>
-    '\n\n  @override\n  String toString() => json ?? super.toString();';
+    '\n\n  @override\n  String toString() => json?.toString() ?? super.toString();';
 
 String _toStringDartMappable() =>
     '\n\n  @override\n  String toString() => toValue().toString();\n';
