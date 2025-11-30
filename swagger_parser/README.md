@@ -86,6 +86,11 @@ swagger_parser:
   extras_parameter_by_default: false
 
   # Optional (dart only).
+  # Add static OpenAPI metadata (tags, operationId, externalDocsUrl) into `extras`
+  # when extras_parameter_by_default is also true. Disabled by default.
+  add_openapi_metadata: false
+
+  # Optional (dart only).
   # Support @DioOptions annotation for interceptors.
   # If the value is 'true', then the annotation will be added to all requests.
   dio_options_parameter_by_default: false

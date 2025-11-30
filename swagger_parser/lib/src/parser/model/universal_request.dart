@@ -13,6 +13,9 @@ final class UniversalRequest {
     required this.route,
     required this.returnType,
     required this.parameters,
+    this.tags = const [],
+    this.operationId,
+    this.externalDocsUrl,
     this.contentType = 'application/json',
     this.description,
     this.isDeprecated = false,
@@ -23,6 +26,15 @@ final class UniversalRequest {
 
   /// Request description
   final String? description;
+
+  /// Original OpenAPI tags
+  final List<String> tags;
+
+  /// Original OpenAPI operationId
+  final String? operationId;
+
+  /// Optional OpenAPI externalDocs url
+  final String? externalDocsUrl;
 
   /// HTTP type of request
   final HttpRequestType requestType;
@@ -59,6 +71,9 @@ final class UniversalRequest {
           contentType == other.contentType &&
           route == other.route &&
           returnType == other.returnType &&
+          const DeepCollectionEquality().equals(tags, other.tags) &&
+          operationId == other.operationId &&
+          externalDocsUrl == other.externalDocsUrl &&
           const DeepCollectionEquality().equals(parameters, other.parameters) &&
           isMultiPart == other.isMultiPart &&
           isFormUrlEncoded == other.isFormUrlEncoded;
@@ -69,6 +84,9 @@ final class UniversalRequest {
       requestType.hashCode ^
       route.hashCode ^
       returnType.hashCode ^
+      tags.hashCode ^
+      operationId.hashCode ^
+      externalDocsUrl.hashCode ^
       contentType.hashCode ^
       parameters.hashCode ^
       isMultiPart.hashCode ^
@@ -76,6 +94,9 @@ final class UniversalRequest {
 
   @override
   String toString() => 'UniversalRequest(name: $name, '
+      'tags: $tags, '
+      'operationId: $operationId, '
+      'externalDocsUrl: $externalDocsUrl, '
       'requestType: $requestType, '
       'route: $route, '
       'parameters: $parameters, '
