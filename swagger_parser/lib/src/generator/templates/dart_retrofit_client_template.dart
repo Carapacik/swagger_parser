@@ -145,16 +145,17 @@ String _convertImport(UniversalRestClient restClient) =>
         : '';
 
 String _addExtraParameter(String? defaultExtras) =>
-    '    @Extras() Map<String, dynamic>? extras${defaultExtras != null ? ' = $defaultExtras' : ''},\n';
+    '    @Extras() Map<String, dynamic>? extras${defaultExtras != null ? ' =\n        $defaultExtras' : ''},\n';
 
 String _openApiExtrasReference(
   String? openApiExtrasConstName,
-  UniversalRequest request,
-  {required String className},
-) =>
-    openApiExtrasConstName != null
-        ? '$className.$openApiExtrasConstName'
-        : _openApiExtrasLiteral(request);
+  UniversalRequest request, {
+  required String className,
+}) {
+  return openApiExtrasConstName != null
+      ? '$className.$openApiExtrasConstName'
+      : _openApiExtrasLiteral(request);
+}
 
 String _openApiExtrasConst(UniversalRequest request) =>
     '  static const Map<String, dynamic> ${_openApiConstName(request)} =\n'
@@ -208,7 +209,7 @@ String _toParameter(UniversalRequestType parameter, bool useMultipartFile) {
       : '';
 
   return '$deprecatedAnnotation    @${parameter.parameterType.type}'
-      "(${parameter.name != null && !parameter.parameterType.isBody ? "${parameter.parameterType.isPart ? 'name: ' : ''}${_startWith$(parameter.name!) ? 'r' : ''}'${parameter.name}'" : ''}) "
+      "(${parameter.name != null && !parameter.parameterType.isBody ? "${parameter.parameterType.isPart ? 'name: ' : ''}${_startsWithDollar(parameter.name!) ? 'r' : ''}'${parameter.name}'" : ''}) "
       '${_required(parameter.type)}'
       '$parameterType '
       '$keywordArguments${_defaultValue(parameter.type)},';
@@ -250,4 +251,5 @@ String _defaultValue(UniversalType t) => !t.isRequired && t.defaultValue != null
         '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toCamel)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}'
     : '';
 
-bool _startWith$(String name) => name.isNotEmpty && name.startsWith(r'$');
+bool _startsWithDollar(String name) =>
+    name.isNotEmpty && name.startsWith(r'$');
