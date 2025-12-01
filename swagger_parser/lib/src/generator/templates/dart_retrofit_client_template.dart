@@ -251,5 +251,4 @@ String _defaultValue(UniversalType t) => !t.isRequired && t.defaultValue != null
         '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toCamel)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}'
     : '';
 
-bool _startsWithDollar(String name) =>
-    name.isNotEmpty && name.startsWith(r'$');
+bool _startsWithDollar(String name) => name.isNotEmpty && name.startsWith(r'$');
