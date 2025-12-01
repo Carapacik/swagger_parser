@@ -1,5 +1,5 @@
-## 1.35.3
-- Add `add_openapi_metadata` (default `false`) to prefill Dio `extras` with OpenAPI `tags`, `operationId`, and `externalDocsUrl` when `extras_parameter_by_default` is also `true`—handy for interceptors and logging without overwriting user-supplied extras
+## 1.36.0
+- Add `add_openapi_metadata` (default `false`) to generate OpenAPI `tags`, `operationId`, and `externalDocsUrl` constants for each endpoint; when `extras_parameter_by_default` is `true`, the metadata is also prefilled into Dio `extras`—handy for interceptors and logging without overwriting user-supplied extras
 ```
 swagger_parser:
   extras_parameter_by_default: true

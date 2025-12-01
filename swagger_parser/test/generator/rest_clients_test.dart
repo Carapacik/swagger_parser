@@ -2491,6 +2491,60 @@ abstract class ClassNameClient {
       expect(filledContent.content, expectedContents);
     });
 
+    test(
+      'generates OpenAPI metadata constants even without default extras param',
+      () async {
+        const restClient = UniversalRestClient(
+          name: 'ClassName',
+          imports: {},
+          requests: [
+            UniversalRequest(
+              name: 'getRequest',
+              operationId: 'getPet',
+              tags: ['pets', 'inventory'],
+              externalDocsUrl: 'https://docs.example.com/pets',
+              requestType: HttpRequestType.get,
+              route: '/pet',
+              returnType: null,
+              parameters: [],
+            ),
+          ],
+        );
+        const fillController = FillController(
+          config: GeneratorConfig(
+            name: '',
+            outputDirectory: '',
+            addOpenApiMetadata: true,
+          ),
+        );
+        final filledContent = fillController.fillRestClientContent(restClient);
+        const expectedContents = '''
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'class_name_client.g.dart';
+
+@RestApi()
+abstract class ClassNameClient {
+  factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
+
+  static const Map<String, dynamic> getRequestOpenapiExtras =
+      <String, dynamic>{
+    'openapi': <String, dynamic>{
+      'tags': <String>["pets", "inventory"],
+      'operationId': "getPet",
+      'externalDocsUrl': "https://docs.example.com/pets",
+    },
+  };
+
+  @GET('/pet')
+  Future<void> getRequest();
+}
+''';
+        expect(filledContent.content, expectedContents);
+      },
+    );
+
     test('dio options do not inject extras automatically', () async {
       const restClient = UniversalRestClient(
         name: 'ClassName',
@@ -2526,6 +2580,15 @@ part 'class_name_client.g.dart';
 @RestApi()
 abstract class ClassNameClient {
   factory ClassNameClient(Dio dio, {String? baseUrl}) = _ClassNameClient;
+
+  static const Map<String, dynamic> getRequestOpenapiExtras =
+      <String, dynamic>{
+    'openapi': <String, dynamic>{
+      'tags': <String>["pets"],
+      'operationId': "getPet",
+      'externalDocsUrl': "https://docs.example.com/pets/get",
+    },
+  };
 
   @GET('/pet')
   Future<void> getRequest({

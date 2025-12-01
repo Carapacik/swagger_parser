@@ -28,8 +28,9 @@ swagger_parser:
   extras_parameter_by_default: false
 
   # Optional (dart only).
-  # Add static OpenAPI metadata (tags, operationId, externalDocsUrl) into `extras`
-  # when extras_parameter_by_default is also true. Disabled by default.
+  # Generate static OpenAPI metadata (tags, operationId, externalDocsUrl) for each request.
+  # If extras_parameter_by_default is true, this metadata is also used as the default `extras` value.
+  # Disabled by default.
   add_openapi_metadata: false
 
   # Optional (dart only). Set 'true' to generate root client

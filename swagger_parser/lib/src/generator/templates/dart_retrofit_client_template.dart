@@ -21,7 +21,7 @@ String dartRetrofitClientTemplate({
       .expand((r) => r.parameters.map((p) => p.type))
       .toSet();
   final includeExtras = extrasParameterByDefault;
-  final includeMetadata = addOpenApiMetadata && extrasParameterByDefault;
+  final includeMetadata = addOpenApiMetadata;
   final sb = StringBuffer('''
 ${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
 import 'package:retrofit/retrofit.dart';
