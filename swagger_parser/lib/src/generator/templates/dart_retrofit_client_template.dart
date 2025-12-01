@@ -48,6 +48,7 @@ abstract class $name {
       _toClientRequest(
         request,
         defaultContentType,
+        className: name,
         originalHttpResponse: originalHttpResponse,
         addExtrasParameter: includeExtras,
         addDioOptionsParameter: dioOptionsParameterByDefault,
@@ -65,6 +66,7 @@ abstract class $name {
 String _toClientRequest(
   UniversalRequest request,
   String defaultContentType, {
+  required String className,
   required bool originalHttpResponse,
   required bool addExtrasParameter,
   required bool addDioOptionsParameter,
@@ -94,7 +96,11 @@ String _toClientRequest(
       isBinaryResponse ? '\n  @DioResponseType(ResponseType.bytes)' : '';
 
   final defaultExtras = includeMetadata && addExtrasParameter
-      ? _openApiExtrasReference(openApiExtrasConstName, request)
+      ? _openApiExtrasReference(
+          openApiExtrasConstName,
+          request,
+          className: className,
+        )
       : null;
 
   final sb = StringBuffer()
@@ -144,8 +150,11 @@ String _addExtraParameter(String? defaultExtras) =>
 String _openApiExtrasReference(
   String? openApiExtrasConstName,
   UniversalRequest request,
+  {required String className},
 ) =>
-    openApiExtrasConstName ?? _openApiExtrasLiteral(request);
+    openApiExtrasConstName != null
+        ? '$className.$openApiExtrasConstName'
+        : _openApiExtrasLiteral(request);
 
 String _openApiExtrasConst(UniversalRequest request) =>
     '  static const Map<String, dynamic> ${_openApiConstName(request)} =\n'

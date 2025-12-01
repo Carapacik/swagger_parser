@@ -2484,7 +2484,8 @@ abstract class ClassNameClient {
 
   @GET('/pet')
   Future<void> getRequest({
-    @Extras() Map<String, dynamic>? extras = getRequestOpenapiExtras,
+    @Extras() Map<String, dynamic>? extras =
+        ClassNameClient.getRequestOpenapiExtras,
   });
 }
 ''';

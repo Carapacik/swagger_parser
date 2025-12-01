@@ -1,5 +1,6 @@
 ## 1.36.0
 - Add `add_openapi_metadata` (default `false`) to generate OpenAPI `tags`, `operationId`, and `externalDocsUrl` constants for each endpoint; when `extras_parameter_by_default` is `true`, the metadata is also prefilled into Dio `extras`—handy for interceptors and logging without overwriting user-supplied extras
+- Use fully-qualified default extras values (e.g. `BannerApi.findAllBannersOpenapiExtras`) so generated implementations can access the static metadata constants
 ```
 swagger_parser:
   extras_parameter_by_default: true
@@ -18,7 +19,8 @@ abstract class PetsClient {
   @GET('/pets')
   Future<void> listPets({
     // defaults to the OpenAPI metadata; merge with your own extras if needed
-    @Extras() Map<String, dynamic>? extras = listPetsOpenapiExtras,
+    @Extras() Map<String, dynamic>? extras =
+        PetsClient.listPetsOpenapiExtras,
     @DioOptions() RequestOptions? options,
   });
 }
