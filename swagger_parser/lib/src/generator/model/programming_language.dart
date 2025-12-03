@@ -115,6 +115,7 @@ enum ProgrammingLanguage {
     required bool useMultipartFile,
     bool extrasParameterByDefault = false,
     bool dioOptionsParameterByDefault = false,
+    bool addOpenApiMetadata = false,
     bool originalHttpResponse = false,
     String? fileName,
   }) =>
@@ -125,6 +126,7 @@ enum ProgrammingLanguage {
             defaultContentType: defaultContentType,
             extrasParameterByDefault: extrasParameterByDefault,
             dioOptionsParameterByDefault: dioOptionsParameterByDefault,
+            addOpenApiMetadata: addOpenApiMetadata,
             originalHttpResponse: originalHttpResponse,
             useMultipartFile: useMultipartFile,
             fileName: fileName,

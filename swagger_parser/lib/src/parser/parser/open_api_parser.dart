@@ -62,6 +62,7 @@ class OpenApiParser {
   static const _discriminatorConst = 'discriminator';
   static const _enumConst = 'enum';
   static const _enumNamesConst = 'x-enumNames';
+  static const _externalDocsConst = 'externalDocs';
   static const _formatConst = 'format';
   static const _formUrlEncodedConst = 'application/x-www-form-urlencoded';
   static const _inConst = 'in';
@@ -92,6 +93,7 @@ class OpenApiParser {
   static const _tagsConst = 'tags';
   static const _titleConst = 'title';
   static const _typeConst = 'type';
+  static const _urlConst = 'url';
   static const _versionConst = 'version';
   static const _xNullableConst = 'x-nullable';
 
@@ -660,12 +662,14 @@ class OpenApiParser {
           // End build full description
 
           String requestName;
+          String? rawOperationId;
+          String? operationIdName;
 
           if (config.pathMethodName) {
             requestName = (key + path).toCamel;
           } else {
-            final operationIdName =
-                requestPath[_operationIdConst]?.toString().toCamel;
+            rawOperationId = requestPath[_operationIdConst]?.toString();
+            operationIdName = rawOperationId?.toCamel;
             final (_, nameDescription) = protectName(operationIdName);
             if (nameDescription != null) {
               description = '$description\n\n$nameDescription';
@@ -675,9 +679,22 @@ class OpenApiParser {
             }
           }
 
+          final tags = (requestPath[_tagsConst] as List<dynamic>?)
+                  ?.map((tag) => tag.toString())
+                  .where((tag) => tag.isNotEmpty)
+                  .toList(growable: false) ??
+              const <String>[];
+          final externalDocsUrl = switch (requestPath[_externalDocsConst]) {
+            final Map<String, dynamic> docs => docs[_urlConst]?.toString(),
+            _ => null,
+          };
+
           final request = UniversalRequest(
             name: requestName,
             description: description,
+            tags: tags,
+            operationId: rawOperationId,
+            externalDocsUrl: externalDocsUrl,
             requestType: HttpRequestType.fromString(key)!,
             route: path,
             contentType: resultContentType,

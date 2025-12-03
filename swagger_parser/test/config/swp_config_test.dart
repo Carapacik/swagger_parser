@@ -27,6 +27,7 @@ void main() {
         expect(config.defaultContentType, equals('application/json'));
         expect(config.extrasParameterByDefault, isFalse);
         expect(config.dioOptionsParameterByDefault, isFalse);
+        expect(config.addOpenApiMetadata, isFalse);
         expect(config.pathMethodName, isFalse);
         expect(config.mergeClients, isFalse);
         expect(config.enumsParentPrefix, isTrue);
@@ -67,6 +68,7 @@ void main() {
           defaultContentType: 'application/xml',
           extrasParameterByDefault: true,
           dioOptionsParameterByDefault: true,
+          addOpenApiMetadata: true,
           pathMethodName: true,
           mergeClients: true,
           enumsParentPrefix: false,
@@ -102,6 +104,7 @@ void main() {
         expect(config.defaultContentType, equals('application/xml'));
         expect(config.extrasParameterByDefault, isTrue);
         expect(config.dioOptionsParameterByDefault, isTrue);
+        expect(config.addOpenApiMetadata, isTrue);
         expect(config.pathMethodName, isTrue);
         expect(config.mergeClients, isTrue);
         expect(config.enumsParentPrefix, isFalse);
@@ -611,6 +614,7 @@ void main() {
         defaultContentType: 'application/xml',
         extrasParameterByDefault: true,
         dioOptionsParameterByDefault: true,
+        addOpenApiMetadata: true,
         rootClient: false,
         rootClientName: 'ApiClient',
         clientPostfix: 'Service',
@@ -636,6 +640,7 @@ void main() {
       expect(generatorConfig.defaultContentType, equals('application/xml'));
       expect(generatorConfig.extrasParameterByDefault, isTrue);
       expect(generatorConfig.dioOptionsParameterByDefault, isTrue);
+      expect(generatorConfig.addOpenApiMetadata, isTrue);
       expect(generatorConfig.rootClient, isFalse);
       expect(generatorConfig.rootClientName, equals('ApiClient'));
       expect(generatorConfig.clientPostfix, equals('Service'));

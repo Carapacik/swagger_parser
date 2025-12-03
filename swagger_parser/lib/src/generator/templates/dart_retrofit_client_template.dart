@@ -13,12 +13,15 @@ String dartRetrofitClientTemplate({
   required bool useMultipartFile,
   bool extrasParameterByDefault = false,
   bool dioOptionsParameterByDefault = false,
+  bool addOpenApiMetadata = false,
   bool originalHttpResponse = false,
   String? fileName,
 }) {
   final parameterTypes = restClient.requests
       .expand((r) => r.parameters.map((p) => p.type))
       .toSet();
+  final includeExtras = extrasParameterByDefault;
+  final includeMetadata = addOpenApiMetadata;
   final sb = StringBuffer('''
 ${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
 import 'package:retrofit/retrofit.dart';
@@ -29,15 +32,33 @@ part '${fileName ?? name.toSnake}.g.dart';
 abstract class $name {
   factory $name(Dio dio, {String? baseUrl}) = _$name;
 ''');
+
+  if (includeMetadata && restClient.requests.isNotEmpty) {
+    sb.write('\n');
+    for (final request in restClient.requests) {
+      sb.write(_openApiExtrasConst(request));
+    }
+  }
+
   for (final request in restClient.requests) {
+    final openApiExtrasConstName =
+        includeMetadata ? _openApiConstName(request) : null;
+    sb.write('\n');
     sb.write(
-      _toClientRequest(request, defaultContentType,
-          originalHttpResponse: originalHttpResponse,
-          extrasParameterByDefault: extrasParameterByDefault,
-          dioOptionsParameterByDefault: dioOptionsParameterByDefault,
-          useMultipartFile: useMultipartFile),
+      _toClientRequest(
+        request,
+        defaultContentType,
+        className: name,
+        originalHttpResponse: originalHttpResponse,
+        addExtrasParameter: includeExtras,
+        addDioOptionsParameter: dioOptionsParameterByDefault,
+        includeMetadata: includeMetadata,
+        useMultipartFile: useMultipartFile,
+        openApiExtrasConstName: openApiExtrasConstName,
+      ),
     );
   }
+
   sb.write('}\n');
   return sb.toString();
 }
@@ -45,10 +66,13 @@ abstract class $name {
 String _toClientRequest(
   UniversalRequest request,
   String defaultContentType, {
+  required String className,
   required bool originalHttpResponse,
-  required bool extrasParameterByDefault,
-  required bool dioOptionsParameterByDefault,
+  required bool addExtrasParameter,
+  required bool addDioOptionsParameter,
+  required bool includeMetadata,
   required bool useMultipartFile,
+  String? openApiExtrasConstName,
 }) {
   final responseType = request.returnType == null
       ? 'void'
@@ -71,32 +95,41 @@ String _toClientRequest(
   final dioResponseTypeAnnotation =
       isBinaryResponse ? '\n  @DioResponseType(ResponseType.bytes)' : '';
 
-  final sb = StringBuffer(
-    '''
+  final defaultExtras = includeMetadata && addExtrasParameter
+      ? _openApiExtrasReference(
+          openApiExtrasConstName,
+          request,
+          className: className,
+        )
+      : null;
 
-  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}@${request.requestType.name.toUpperCase()}('${request.route}')$dioResponseTypeAnnotation
-  Future<$finalResponseType> ${request.name}(''',
-  );
+  final sb = StringBuffer()
+    ..write(
+      "  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}@${request.requestType.name.toUpperCase()}('${request.route}')$dioResponseTypeAnnotation\n  Future<$finalResponseType> ${request.name}(",
+    );
+
   if (request.parameters.isNotEmpty ||
-      extrasParameterByDefault ||
-      dioOptionsParameterByDefault) {
+      addExtrasParameter ||
+      addDioOptionsParameter) {
     sb.write('{\n');
   }
+
   final sortedByRequired = List<UniversalRequestType>.from(
     request.parameters.sorted((a, b) => a.type.compareTo(b.type)),
   );
   for (final parameter in sortedByRequired) {
     sb.write('${_toParameter(parameter, useMultipartFile)}\n');
   }
-  if (extrasParameterByDefault) {
-    sb.write(_addExtraParameter());
+  if (addExtrasParameter) {
+    sb.write(_addExtraParameter(defaultExtras));
   }
-  if (dioOptionsParameterByDefault) {
+  if (addDioOptionsParameter) {
     sb.write(_addDioOptionsParameter());
   }
+
   if (request.parameters.isNotEmpty ||
-      extrasParameterByDefault ||
-      dioOptionsParameterByDefault) {
+      addExtrasParameter ||
+      addDioOptionsParameter) {
     sb.write('  });\n');
   } else {
     sb.write(');\n');
@@ -111,7 +144,43 @@ String _convertImport(UniversalRestClient restClient) =>
         ? "import 'dart:convert';\n"
         : '';
 
-String _addExtraParameter() => '    @Extras() Map<String, dynamic>? extras,\n';
+String _addExtraParameter(String? defaultExtras) =>
+    '    @Extras() Map<String, dynamic>? extras${defaultExtras != null ? ' =\n        $defaultExtras' : ''},\n';
+
+String _openApiExtrasReference(
+  String? openApiExtrasConstName,
+  UniversalRequest request, {
+  required String className,
+}) {
+  return openApiExtrasConstName != null
+      ? '$className.$openApiExtrasConstName'
+      : _openApiExtrasLiteral(request);
+}
+
+String _openApiExtrasConst(UniversalRequest request) =>
+    '  static const Map<String, dynamic> ${_openApiConstName(request)} =\n'
+    '      ${_openApiExtrasLiteral(request)};\n';
+
+String _openApiConstName(UniversalRequest request) =>
+    '${request.name}OpenapiExtras';
+
+String _openApiExtrasLiteral(UniversalRequest request) {
+  final tags = request.tags.map(_quoteJson).join(', ');
+  final operationId = _quoteJson(request.operationId ?? request.name);
+  final externalDocsUrl = request.externalDocsUrl != null
+      ? _quoteJson(request.externalDocsUrl!)
+      : 'null';
+  return '''<String, dynamic>{
+    'openapi': <String, dynamic>{
+      'tags': <String>[$tags],
+      'operationId': $operationId,
+      'externalDocsUrl': $externalDocsUrl,
+    },
+  }''';
+}
+
+String _quoteJson(String value) =>
+    '"${value.replaceAll(r'\\', r'\\\\').replaceAll('"', r'\\"')}"';
 
 String _addDioOptionsParameter() =>
     '    @DioOptions() RequestOptions? options,\n';
@@ -140,7 +209,7 @@ String _toParameter(UniversalRequestType parameter, bool useMultipartFile) {
       : '';
 
   return '$deprecatedAnnotation    @${parameter.parameterType.type}'
-      "(${parameter.name != null && !parameter.parameterType.isBody ? "${parameter.parameterType.isPart ? 'name: ' : ''}${_startWith$(parameter.name!) ? 'r' : ''}'${parameter.name}'" : ''}) "
+      "(${parameter.name != null && !parameter.parameterType.isBody ? "${parameter.parameterType.isPart ? 'name: ' : ''}${_startsWithDollar(parameter.name!) ? 'r' : ''}'${parameter.name}'" : ''}) "
       '${_required(parameter.type)}'
       '$parameterType '
       '$keywordArguments${_defaultValue(parameter.type)},';
@@ -182,4 +251,4 @@ String _defaultValue(UniversalType t) => !t.isRequired && t.defaultValue != null
         '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue?.toCamel)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}'
     : '';
 
-bool _startWith$(String name) => name.isNotEmpty && name.startsWith(r'$');
+bool _startsWithDollar(String name) => name.isNotEmpty && name.startsWith(r'$');
