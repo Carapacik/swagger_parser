@@ -43,20 +43,21 @@ abstract class $name {
   for (final request in restClient.requests) {
     final openApiExtrasConstName =
         includeMetadata ? _openApiConstName(request) : null;
-    sb.write('\n');
-    sb.write(
-      _toClientRequest(
-        request,
-        defaultContentType,
-        className: name,
-        originalHttpResponse: originalHttpResponse,
-        addExtrasParameter: includeExtras,
-        addDioOptionsParameter: dioOptionsParameterByDefault,
-        includeMetadata: includeMetadata,
-        useMultipartFile: useMultipartFile,
-        openApiExtrasConstName: openApiExtrasConstName,
-      ),
-    );
+    sb
+      ..write('\n')
+      ..write(
+        _toClientRequest(
+          request,
+          defaultContentType,
+          className: name,
+          originalHttpResponse: originalHttpResponse,
+          addExtrasParameter: includeExtras,
+          addDioOptionsParameter: dioOptionsParameterByDefault,
+          includeMetadata: includeMetadata,
+          useMultipartFile: useMultipartFile,
+          openApiExtrasConstName: openApiExtrasConstName,
+        ),
+      );
   }
 
   sb.write('}\n');
@@ -170,7 +171,8 @@ String _openApiExtrasLiteral(UniversalRequest request) {
   final externalDocsUrl = request.externalDocsUrl != null
       ? _quoteJson(request.externalDocsUrl!)
       : 'null';
-  return '''<String, dynamic>{
+  return '''
+<String, dynamic>{
     'openapi': <String, dynamic>{
       'tags': <String>[$tags],
       'operationId': $operationId,
