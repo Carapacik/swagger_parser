@@ -1,3 +1,33 @@
+## 1.36.0
+- Add `add_openapi_metadata` (default `false`) to generate OpenAPI `tags`, `operationId`, and `externalDocsUrl` constants for each endpoint; when `extras_parameter_by_default` is `true`, the metadata is also prefilled into Dio `extras`—handy for interceptors and logging without overwriting user-supplied extras
+- Use fully-qualified default extras values (e.g. `BannerApi.findAllBannersOpenapiExtras`) so generated implementations can access the static metadata constants
+```
+swagger_parser:
+  extras_parameter_by_default: true
+  add_openapi_metadata: true
+
+abstract class PetsClient {
+  static const Map<String, dynamic> listPetsOpenapiExtras =
+      <String, dynamic>{
+    'openapi': <String, dynamic>{
+      'tags': <String>['pets'],
+      'operationId': 'listPets',
+      'externalDocsUrl': 'https://docs.example.com/pets',
+    },
+  };
+
+  @GET('/pets')
+  Future<void> listPets({
+    // defaults to the OpenAPI metadata; merge with your own extras if needed
+    @Extras() Map<String, dynamic>? extras =
+        PetsClient.listPetsOpenapiExtras,
+    @DioOptions() RequestOptions? options,
+  });
+}
+
+# https://openapi.sepc/pets/listPets
+```
+
 ## 1.35.2
 - Fix enum name values being a int returned in a toString
 
