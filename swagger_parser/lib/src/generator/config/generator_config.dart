@@ -14,6 +14,7 @@ class GeneratorConfig {
     this.rootClient = true,
     this.extrasParameterByDefault = false,
     this.dioOptionsParameterByDefault = false,
+    this.addOpenApiMetadata = false,
     this.rootClientName = 'RestClient',
     this.clientPostfix,
     this.exportFile = true,
@@ -108,6 +109,10 @@ class GeneratorConfig {
   /// Future<String> myMethod({@DioOptions() RequestOptions? options});
   /// ```
   final bool dioOptionsParameterByDefault;
+
+  /// DART ONLY
+  /// Add static OpenAPI metadata into extras by default when extras are enabled.
+  final bool addOpenApiMetadata;
 
   /// Optional. Set regex replacement rules for the names of the generated classes/enums.
   /// All rules are applied in order.

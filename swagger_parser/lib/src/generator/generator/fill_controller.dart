@@ -91,6 +91,7 @@ final class FillController {
         defaultContentType: config.defaultContentType,
         extrasParameterByDefault: config.extrasParameterByDefault,
         dioOptionsParameterByDefault: config.dioOptionsParameterByDefault,
+        addOpenApiMetadata: config.addOpenApiMetadata,
         originalHttpResponse: config.originalHttpResponse,
         useMultipartFile: config.useMultipartFile,
         fileName: fileName,

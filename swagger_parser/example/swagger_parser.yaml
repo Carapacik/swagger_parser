@@ -27,6 +27,12 @@ swagger_parser:
   # If the value is 'true', then the annotation will be added to all requests.
   extras_parameter_by_default: false
 
+  # Optional (dart only).
+  # Generate static OpenAPI metadata (tags, operationId, externalDocsUrl) for each request.
+  # If extras_parameter_by_default is true, this metadata is also used as the default `extras` value.
+  # Disabled by default.
+  add_openapi_metadata: false
+
   # Optional (dart only). Set 'true' to generate root client
   # with interface and all clients instances.
   root_client: true

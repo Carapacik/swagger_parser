@@ -29,6 +29,7 @@ class SWPConfig {
     this.defaultContentType = 'application/json',
     this.extrasParameterByDefault = false,
     this.dioOptionsParameterByDefault = false,
+    this.addOpenApiMetadata = false,
     this.pathMethodName = false,
     this.mergeClients = false,
     this.enumsParentPrefix = true,
@@ -68,6 +69,7 @@ class SWPConfig {
     required this.defaultContentType,
     required this.extrasParameterByDefault,
     required this.dioOptionsParameterByDefault,
+    required this.addOpenApiMetadata,
     required this.pathMethodName,
     required this.mergeClients,
     required this.enumsParentPrefix,
@@ -144,6 +146,8 @@ class SWPConfig {
     final dioOptionsParameterByDefault =
         yamlMap['dio_options_parameter_by_default'] as bool? ??
             rootConfig?.dioOptionsParameterByDefault;
+    final addOpenApiMetadata = yamlMap['add_openapi_metadata'] as bool? ??
+        rootConfig?.addOpenApiMetadata;
     final pathMethodName =
         yamlMap['path_method_name'] as bool? ?? rootConfig?.pathMethodName;
     final mergeClients =
@@ -302,6 +306,7 @@ class SWPConfig {
           extrasParameterByDefault ?? dc.extrasParameterByDefault,
       dioOptionsParameterByDefault:
           dioOptionsParameterByDefault ?? dc.dioOptionsParameterByDefault,
+      addOpenApiMetadata: addOpenApiMetadata ?? dc.addOpenApiMetadata,
       mergeClients: mergeClients ?? dc.mergeClients,
       enumsParentPrefix: enumsParentPrefix ?? dc.enumsParentPrefix,
       skippedParameters: skippedParameters ?? dc.skippedParameters,
@@ -447,6 +452,10 @@ class SWPConfig {
   /// ```
   final bool dioOptionsParameterByDefault;
 
+  /// DART ONLY
+  /// Add static OpenAPI metadata into extras by default when extras are enabled.
+  final bool addOpenApiMetadata;
+
   /// If `true`, use the endpoint path for the method name.
   /// if `false`, use `operationId`.
   final bool pathMethodName;
@@ -530,6 +539,7 @@ class SWPConfig {
       defaultContentType: defaultContentType,
       extrasParameterByDefault: extrasParameterByDefault,
       dioOptionsParameterByDefault: dioOptionsParameterByDefault,
+      addOpenApiMetadata: addOpenApiMetadata,
       rootClient: rootClient,
       rootClientName: rootClientName,
       clientPostfix: clientPostfix,
