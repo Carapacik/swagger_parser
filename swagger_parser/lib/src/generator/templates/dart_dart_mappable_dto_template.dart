@@ -12,6 +12,7 @@ String dartDartMappableDtoTemplate(
   required bool markFileAsGenerated,
   required bool useMultipartFile,
   required bool dartMappableConvenientWhen,
+  bool useFlutterCompute = false,
   String? fallbackUnion,
 }) {
   // Use fallback union only if explicitly provided
@@ -55,6 +56,9 @@ String dartDartMappableDtoTemplate(
           dataClass, className, useMultipartFile, effectiveFallbackUnion)
       : '';
 
+  final serializerClass =
+      useFlutterCompute ? _generateFlutterComputeSerializer(className) : '';
+
   return '''
 ${dartImportDtoTemplate(JsonSerializer.dartMappable)}
 ${dartImports(imports: _getAllImports(dataClass, isUnion: isUnion))}
@@ -65,7 +69,7 @@ ${_classModifier(isUnion: isUnion)}class $className ${parent != null ? "extends 
 ${_generateClassBody(dataClass, className, useMultipartFile, isUnion, dartMappableConvenientWhen, isSimpleDataClass, effectiveFallbackUnion)}
 }
 
-$additionalClasses''';
+$additionalClasses$serializerClass''';
 }
 
 String getDiscriminatorConvenienceMethods(
@@ -437,6 +441,25 @@ ${indentation(2)}}
 
 const _unionSuffix = 'Union';
 const _snakeUnionSuffix = '_union';
+
+/// Generates top-level serialization functions for Flutter compute isolate support.
+/// These functions follow Retrofit's naming convention for Parser.FlutterCompute.
+String _generateFlutterComputeSerializer(String className) {
+  return '''
+
+// Flutter compute serialization functions for $className
+$className deserialize$className(Map<String, dynamic> json) =>
+    $className.fromJson(json);
+
+List<$className> deserialize${className}List(List<Map<String, dynamic>> json) =>
+    json.map((e) => $className.fromJson(e)).toList();
+
+Map<String, dynamic> serialize$className($className object) => object.toJson();
+
+List<Map<String, dynamic>> serialize${className}List(List<$className> objects) =>
+    objects.map((e) => e.toJson()).toList();
+''';
+}
 
 String _applySealedNaming(String name) {
   if (name.endsWith('Sealed')) {

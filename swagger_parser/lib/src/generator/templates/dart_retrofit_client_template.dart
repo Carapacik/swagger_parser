@@ -15,6 +15,7 @@ String dartRetrofitClientTemplate({
   bool dioOptionsParameterByDefault = false,
   bool addOpenApiMetadata = false,
   bool originalHttpResponse = false,
+  bool useFlutterCompute = false,
   String? fileName,
 }) {
   final parameterTypes = restClient.requests
@@ -22,13 +23,18 @@ String dartRetrofitClientTemplate({
       .toSet();
   final includeExtras = extrasParameterByDefault;
   final includeMetadata = addOpenApiMetadata;
+
+  // Determine @RestApi annotation
+  final restApiAnnotation =
+      useFlutterCompute ? '@RestApi(parser: Parser.FlutterCompute)' : '@RestApi()';
+
   final sb = StringBuffer('''
 ${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
 import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
 part '${fileName ?? name.toSnake}.g.dart';
 
-@RestApi()
+$restApiAnnotation
 abstract class $name {
   factory $name(Dio dio, {String? baseUrl}) = _$name;
 ''');

@@ -11,6 +11,7 @@ String dartJsonSerializableDtoTemplate(
   required bool markFileAsGenerated,
   required bool useMultipartFile,
   required bool includeIfNull,
+  bool useFlutterCompute = false,
   String? fallbackUnion,
 }) {
   final originalClassName = dataClass.name.toPascal;
@@ -28,6 +29,9 @@ String dartJsonSerializableDtoTemplate(
         dataClass, className, useMultipartFile, includeIfNull, fallbackUnion);
   }
 
+  final serializerClass =
+      useFlutterCompute ? _generateFlutterComputeSerializer(className) : '';
+
   return '''
 ${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: _filterUnionImportsForNonUnion(dataClass))}
@@ -41,7 +45,7 @@ class $className {
   ${_parametersInClass(dataClass.parameters, useMultipartFile, includeIfNull)}${dataClass.parameters.isNotEmpty ? '\n' : ''}
   Map<String, Object?> toJson() => _\$${className}ToJson(this);
 }
-''';
+$serializerClass''';
 }
 
 String _generateUnionTemplate(
@@ -520,6 +524,25 @@ Set<String> _filterUnionImportsForNonUnion(UniversalComponentClass dataClass) {
 
 const _unionSuffix = 'Union';
 const _snakeUnionSuffix = '_union';
+
+/// Generates top-level serialization functions for Flutter compute isolate support.
+/// These functions follow Retrofit's naming convention for Parser.FlutterCompute.
+String _generateFlutterComputeSerializer(String className) {
+  return '''
+
+// Flutter compute serialization functions for $className
+$className deserialize$className(Map<String, dynamic> json) =>
+    $className.fromJson(json);
+
+List<$className> deserialize${className}List(List<Map<String, dynamic>> json) =>
+    json.map((e) => $className.fromJson(e)).toList();
+
+Map<String, dynamic> serialize$className($className object) => object.toJson();
+
+List<Map<String, dynamic>> serialize${className}List(List<$className> objects) =>
+    objects.map((e) => e.toJson()).toList();
+''';
+}
 
 String _applySealedNaming(String name) {
   if (name.endsWith('Sealed')) {

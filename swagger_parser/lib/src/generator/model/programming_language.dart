@@ -51,6 +51,7 @@ enum ProgrammingLanguage {
     required bool useMultipartFile,
     required bool dartMappableConvenientWhen,
     required bool includeIfNull,
+    bool useFlutterCompute = false,
     String? fallbackUnion,
   }) {
     switch (this) {
@@ -75,6 +76,7 @@ enum ProgrammingLanguage {
                 isV3: useFreezed3,
                 useMultipartFile: useMultipartFile,
                 includeIfNull: includeIfNull,
+                useFlutterCompute: useFlutterCompute,
                 fallbackUnion: fallbackUnion,
               ),
             JsonSerializer.jsonSerializable => dartJsonSerializableDtoTemplate(
@@ -82,6 +84,7 @@ enum ProgrammingLanguage {
                 markFileAsGenerated: markFilesAsGenerated,
                 useMultipartFile: useMultipartFile,
                 includeIfNull: includeIfNull,
+                useFlutterCompute: useFlutterCompute,
                 fallbackUnion: fallbackUnion,
               ),
             JsonSerializer.dartMappable => dartDartMappableDtoTemplate(
@@ -90,6 +93,7 @@ enum ProgrammingLanguage {
                 useMultipartFile: useMultipartFile,
                 fallbackUnion: fallbackUnion,
                 dartMappableConvenientWhen: dartMappableConvenientWhen,
+                useFlutterCompute: useFlutterCompute,
               ),
           };
         }
@@ -117,6 +121,7 @@ enum ProgrammingLanguage {
     bool dioOptionsParameterByDefault = false,
     bool addOpenApiMetadata = false,
     bool originalHttpResponse = false,
+    bool useFlutterCompute = false,
     String? fileName,
   }) =>
       switch (this) {
@@ -129,6 +134,7 @@ enum ProgrammingLanguage {
             addOpenApiMetadata: addOpenApiMetadata,
             originalHttpResponse: originalHttpResponse,
             useMultipartFile: useMultipartFile,
+            useFlutterCompute: useFlutterCompute,
             fileName: fileName,
           ),
         kotlin =>
