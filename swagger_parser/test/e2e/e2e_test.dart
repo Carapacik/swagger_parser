@@ -1078,5 +1078,19 @@ void main() {
         schemaFileName: 'openapi.yaml',
       );
     });
+
+    test('flutter_compute', () async {
+      await e2eTest(
+        'flutter_compute',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          useFlutterCompute: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
   });
 }

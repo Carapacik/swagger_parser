@@ -1,3 +1,13 @@
+## 1.37.0
+- Add `use_flutter_compute` option for Flutter isolate-based multithreading support
+  - Generates `@RestApi(parser: Parser.FlutterCompute)` annotation in Retrofit clients
+  - Generates top-level serialization functions in each DTO model file following Retrofit's naming convention
+  - Works with all serializers: freezed, json_serializable, dart_mappable
+```yaml
+swagger_parser:
+  use_flutter_compute: true
+```
+
 ## 1.36.0
 - Add `add_openapi_metadata` (default `false`) to generate OpenAPI `tags`, `operationId`, and `externalDocsUrl` constants for each endpoint; when `extras_parameter_by_default` is `true`, the metadata is also prefilled into Dio `extras`—handy for interceptors and logging without overwriting user-supplied extras
 - Use fully-qualified default extras values (e.g. `BannerApi.findAllBannersOpenapiExtras`) so generated implementations can access the static metadata constants
