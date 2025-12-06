@@ -294,8 +294,8 @@ class SWPConfig {
         yamlMap['infer_required_from_nullable'] as bool? ??
             rootConfig?.inferRequiredFromNullable;
 
-    final useFlutterCompute =
-        yamlMap['use_flutter_compute'] as bool? ?? rootConfig?.useFlutterCompute;
+    final useFlutterCompute = yamlMap['use_flutter_compute'] as bool? ??
+        rootConfig?.useFlutterCompute;
 
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);

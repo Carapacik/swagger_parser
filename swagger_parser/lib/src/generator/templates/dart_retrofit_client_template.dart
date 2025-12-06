@@ -25,8 +25,9 @@ String dartRetrofitClientTemplate({
   final includeMetadata = addOpenApiMetadata;
 
   // Determine @RestApi annotation
-  final restApiAnnotation =
-      useFlutterCompute ? '@RestApi(parser: Parser.FlutterCompute)' : '@RestApi()';
+  final restApiAnnotation = useFlutterCompute
+      ? '@RestApi(parser: Parser.FlutterCompute)'
+      : '@RestApi()';
 
   // Flutter foundation import for compute function
   final flutterComputeImport = useFlutterCompute
