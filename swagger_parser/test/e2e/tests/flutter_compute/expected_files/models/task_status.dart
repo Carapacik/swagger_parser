@@ -41,7 +41,7 @@ TaskStatus deserializeTaskStatus(String json) => TaskStatus.fromJson(json);
 List<TaskStatus> deserializeTaskStatusList(List<String> json) =>
     json.map((e) => TaskStatus.fromJson(e)).toList();
 
-String? serializeTaskStatus(TaskStatus object) => object.json;
+String? serializeTaskStatus(TaskStatus? object) => object?.json;
 
-List<String?> serializeTaskStatusList(List<TaskStatus> objects) =>
-    objects.map((e) => e.json).toList();
+List<String?> serializeTaskStatusList(List<TaskStatus>? objects) =>
+    objects?.map((e) => e.json).toList() ?? [];

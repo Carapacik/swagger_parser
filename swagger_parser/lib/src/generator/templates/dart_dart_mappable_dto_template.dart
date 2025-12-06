@@ -444,6 +444,7 @@ const _snakeUnionSuffix = '_union';
 
 /// Generates top-level serialization functions for Flutter compute isolate support.
 /// These functions follow Retrofit's naming convention for Parser.FlutterCompute.
+/// Parameters are nullable to match Retrofit's compute function signature.
 String _generateFlutterComputeSerializer(String className) {
   return '''
 
@@ -454,10 +455,10 @@ $className deserialize$className(Map<String, dynamic> json) =>
 List<$className> deserialize${className}List(List<Map<String, dynamic>> json) =>
     json.map((e) => $className.fromJson(e)).toList();
 
-Map<String, dynamic> serialize$className($className object) => object.toJson();
+Map<String, dynamic>? serialize$className($className? object) => object?.toJson();
 
-List<Map<String, dynamic>> serialize${className}List(List<$className> objects) =>
-    objects.map((e) => e.toJson()).toList();
+List<Map<String, dynamic>> serialize${className}List(List<$className>? objects) =>
+    objects?.map((e) => e.toJson()).toList() ?? [];
 ''';
 }
 

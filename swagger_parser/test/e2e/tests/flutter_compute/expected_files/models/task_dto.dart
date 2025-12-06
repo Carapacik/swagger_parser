@@ -28,7 +28,7 @@ TaskDto deserializeTaskDto(Map<String, dynamic> json) => TaskDto.fromJson(json);
 List<TaskDto> deserializeTaskDtoList(List<Map<String, dynamic>> json) =>
     json.map((e) => TaskDto.fromJson(e)).toList();
 
-Map<String, dynamic> serializeTaskDto(TaskDto object) => object.toJson();
+Map<String, dynamic>? serializeTaskDto(TaskDto? object) => object?.toJson();
 
-List<Map<String, dynamic>> serializeTaskDtoList(List<TaskDto> objects) =>
-    objects.map((e) => e.toJson()).toList();
+List<Map<String, dynamic>> serializeTaskDtoList(List<TaskDto>? objects) =>
+    objects?.map((e) => e.toJson()).toList() ?? [];

@@ -25,7 +25,7 @@ UserDto deserializeUserDto(Map<String, dynamic> json) => UserDto.fromJson(json);
 List<UserDto> deserializeUserDtoList(List<Map<String, dynamic>> json) =>
     json.map((e) => UserDto.fromJson(e)).toList();
 
-Map<String, dynamic> serializeUserDto(UserDto object) => object.toJson();
+Map<String, dynamic>? serializeUserDto(UserDto? object) => object?.toJson();
 
-List<Map<String, dynamic>> serializeUserDtoList(List<UserDto> objects) =>
-    objects.map((e) => e.toJson()).toList();
+List<Map<String, dynamic>> serializeUserDtoList(List<UserDto>? objects) =>
+    objects?.map((e) => e.toJson()).toList() ?? [];

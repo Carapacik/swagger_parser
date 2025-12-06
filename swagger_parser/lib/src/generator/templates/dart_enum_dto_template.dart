@@ -215,9 +215,10 @@ String _generateFlutterComputeEnumSerializer(
   UniversalEnumClass enumClass,
 ) {
   final dartType = enumClass.type.toDartType();
-  // Note: Using object.json instead of object.toJson() because:
+  // Note: Using object?.json instead of object?.toJson() because:
   // - json field is always available when unknownEnumValue or enumsToJson is true
   // - toJson() may not be generated (only when enumsToJson is true)
+  // Parameters are nullable to match Retrofit's compute function signature
   return '''
 
 // Flutter compute serialization functions for $className
@@ -226,9 +227,9 @@ $className deserialize$className($dartType json) => $className.fromJson(json);
 List<$className> deserialize${className}List(List<$dartType> json) =>
     json.map((e) => $className.fromJson(e)).toList();
 
-$dartType? serialize$className($className object) => object.json;
+$dartType? serialize$className($className? object) => object?.json;
 
-List<$dartType?> serialize${className}List(List<$className> objects) =>
-    objects.map((e) => e.json).toList();
+List<$dartType?> serialize${className}List(List<$className>? objects) =>
+    objects?.map((e) => e.json).toList() ?? [];
 ''';
 }
