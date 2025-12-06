@@ -29,9 +29,9 @@ FutureOr<List<UserDto>> deserializeUserDtoList(
         List<Map<String, dynamic>> json) =>
     json.map((e) => UserDto.fromJson(e)).toList();
 
-FutureOr<Map<String, dynamic>> serializeUserDto(UserDto object) =>
-    object.toJson();
+FutureOr<Map<String, dynamic>?> serializeUserDto(UserDto? object) =>
+    object?.toJson();
 
 FutureOr<List<Map<String, dynamic>>> serializeUserDtoList(
-        List<UserDto> objects) =>
-    objects.map((e) => e.toJson()).toList();
+        List<UserDto>? objects) =>
+    objects?.map((e) => e.toJson()).toList() ?? [];

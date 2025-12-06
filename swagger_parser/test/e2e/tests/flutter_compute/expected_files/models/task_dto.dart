@@ -32,9 +32,9 @@ FutureOr<List<TaskDto>> deserializeTaskDtoList(
         List<Map<String, dynamic>> json) =>
     json.map((e) => TaskDto.fromJson(e)).toList();
 
-FutureOr<Map<String, dynamic>> serializeTaskDto(TaskDto object) =>
-    object.toJson();
+FutureOr<Map<String, dynamic>?> serializeTaskDto(TaskDto? object) =>
+    object?.toJson();
 
 FutureOr<List<Map<String, dynamic>>> serializeTaskDtoList(
-        List<TaskDto> objects) =>
-    objects.map((e) => e.toJson()).toList();
+        List<TaskDto>? objects) =>
+    objects?.map((e) => e.toJson()).toList() ?? [];

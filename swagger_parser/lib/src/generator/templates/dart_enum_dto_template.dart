@@ -217,7 +217,7 @@ String _generateFlutterComputeEnumSerializer(
   UniversalEnumClass enumClass,
 ) {
   final dartType = enumClass.type.toDartType();
-  // Note: Using object.json instead of object.toJson() because:
+  // Note: Using object?.json instead of object?.toJson() because:
   // - json field is always available when unknownEnumValue or enumsToJson is true
   // - toJson() may not be generated (only when enumsToJson is true)
   return '''
@@ -228,9 +228,9 @@ FutureOr<$className> deserialize$className($dartType json) => $className.fromJso
 FutureOr<List<$className>> deserialize${className}List(List<$dartType> json) =>
     json.map((e) => $className.fromJson(e)).toList();
 
-FutureOr<$dartType?> serialize$className($className object) => object.json;
+FutureOr<$dartType?> serialize$className($className? object) => object?.json;
 
-FutureOr<List<$dartType?>> serialize${className}List(List<$className> objects) =>
-    objects.map((e) => e.json).toList();
+FutureOr<List<$dartType?>> serialize${className}List(List<$className>? objects) =>
+    objects?.map((e) => e.json).toList() ?? [];
 ''';
 }

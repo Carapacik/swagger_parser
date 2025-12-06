@@ -44,7 +44,7 @@ FutureOr<TaskStatus> deserializeTaskStatus(String json) =>
 FutureOr<List<TaskStatus>> deserializeTaskStatusList(List<String> json) =>
     json.map((e) => TaskStatus.fromJson(e)).toList();
 
-FutureOr<String?> serializeTaskStatus(TaskStatus object) => object.json;
+FutureOr<String?> serializeTaskStatus(TaskStatus? object) => object?.json;
 
-FutureOr<List<String?>> serializeTaskStatusList(List<TaskStatus> objects) =>
-    objects.map((e) => e.json).toList();
+FutureOr<List<String?>> serializeTaskStatusList(List<TaskStatus>? objects) =>
+    objects?.map((e) => e.json).toList() ?? [];
