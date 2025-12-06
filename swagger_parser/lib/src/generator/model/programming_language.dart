@@ -63,6 +63,7 @@ enum ProgrammingLanguage {
             enumsToJson: enumsToJson,
             unknownEnumValue: unknownEnumValue,
             markFileAsGenerated: markFilesAsGenerated,
+            useFlutterCompute: useFlutterCompute,
           );
         } else if (dataClass is UniversalComponentClass) {
           if (dataClass.typeDef) {

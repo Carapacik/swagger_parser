@@ -8,5 +8,6 @@ export 'clients/user_client.dart';
 // Data classes
 export 'models/task_dto.dart';
 export 'models/user_dto.dart';
+export 'models/task_status.dart';
 // Root client
 export 'rest_client.dart';

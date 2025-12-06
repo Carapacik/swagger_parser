@@ -4,6 +4,8 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'task_status.dart';
+
 part 'task_dto.freezed.dart';
 part 'task_dto.g.dart';
 
@@ -13,6 +15,7 @@ class TaskDto with _$TaskDto {
     required int id,
     required String title,
     required bool completed,
+    required TaskStatus status,
   }) = _TaskDto;
 
   factory TaskDto.fromJson(Map<String, Object?> json) =>

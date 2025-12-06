@@ -12,12 +12,14 @@ String dartEnumDtoTemplate(
   required bool enumsToJson,
   required bool unknownEnumValue,
   required bool markFileAsGenerated,
+  required bool useFlutterCompute,
 }) {
   if (jsonSerializer == JsonSerializer.dartMappable) {
     return _dartEnumDartMappableTemplate(
       enumClass,
       enumsToJson: enumsToJson,
       unknownEnumValue: unknownEnumValue,
+      useFlutterCompute: useFlutterCompute,
     );
   } else {
     final className = enumClass.name.toPascal;
@@ -37,14 +39,20 @@ String dartEnumDtoTemplate(
       if (unknownEnumValue) _valuesDefined(className),
     ];
 
-    return '''
+    final sb = StringBuffer('''
 ${dartImportDtoTemplate(jsonSerializer)}
 
 ${descriptionComment(enumClass.description)}@JsonEnum()
 enum $className {
 ${enumBodyParts.join()}
 }
-''';
+''');
+
+    if (useFlutterCompute) {
+      sb.write(_generateFlutterComputeEnumSerializer(className, enumClass));
+    }
+
+    return sb.toString();
   }
 }
 
@@ -52,6 +60,7 @@ String _dartEnumDartMappableTemplate(
   UniversalEnumClass enumClass, {
   required bool enumsToJson,
   required bool unknownEnumValue,
+  required bool useFlutterCompute,
 }) {
   final className = enumClass.name.toPascal;
   final jsonParam = unknownEnumValue || enumsToJson;
@@ -83,7 +92,7 @@ String _dartEnumDartMappableTemplate(
     if (unknownEnumValue) _valuesDefinedDartMappable(className),
   ];
 
-  return '''
+  final sb = StringBuffer('''
 ${dartImportDtoTemplate(JsonSerializer.dartMappable)}
 
 part '${enumClass.name.toSnake}.mapper.dart';
@@ -92,7 +101,13 @@ ${descriptionComment(enumClass.description)}@MappableEnum($annotationParameters)
 enum $className {
 ${enumBodyParts.join()}
 }
-''';
+''');
+
+  if (useFlutterCompute) {
+    sb.write(_generateFlutterComputeEnumSerializer(className, enumClass));
+  }
+
+  return sb.toString();
 }
 
 String _constructor(String className) => '\n\n  const $className(this.json);\n';
@@ -192,3 +207,28 @@ String _valuesDefinedDartMappable(String className) => '''
 
   /// Returns all defined enum values excluding the unknown value.
   static List<$className> get \$valuesDefined => values.where((value) => value != $className.unknown).toList();''';
+
+/// Generates top-level serialization functions for Flutter compute isolate support.
+/// These functions follow Retrofit's naming convention for Parser.FlutterCompute.
+String _generateFlutterComputeEnumSerializer(
+  String className,
+  UniversalEnumClass enumClass,
+) {
+  final dartType = enumClass.type.toDartType();
+  // Note: Using object.json instead of object.toJson() because:
+  // - json field is always available when unknownEnumValue or enumsToJson is true
+  // - toJson() may not be generated (only when enumsToJson is true)
+  return '''
+
+// Flutter compute serialization functions for $className
+$className deserialize$className($dartType json) => $className.fromJson(json);
+
+List<$className> deserialize${className}List(List<$dartType> json) =>
+    json.map((e) => $className.fromJson(e)).toList();
+
+$dartType? serialize$className($className object) => object.json;
+
+List<$dartType?> serialize${className}List(List<$className> objects) =>
+    objects.map((e) => e.json).toList();
+''';
+}

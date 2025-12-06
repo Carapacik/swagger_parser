@@ -76,10 +76,13 @@ components:
           type: string
         completed:
           type: boolean
+        status:
+          $ref: '#/components/schemas/TaskStatus'
       required:
         - id
         - title
         - completed
+        - status
     UserDto:
       type: object
       properties:
@@ -93,4 +96,10 @@ components:
         - id
         - name
         - email
-
+    TaskStatus:
+      type: string
+      enum:
+        - pending
+        - in_progress
+        - completed
+        - cancelled
