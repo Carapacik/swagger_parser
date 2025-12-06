@@ -388,8 +388,8 @@ FutureOr<$className> deserialize$className(Map<String, dynamic> json) =>
 FutureOr<List<$className>> deserialize${className}List(List<Map<String, dynamic>> json) =>
     json.map((e) => $className.fromJson(e)).toList();
 
-FutureOr<Map<String, dynamic>?> serialize$className($className? object) =>
-    object?.toJson();
+FutureOr<Map<String, dynamic>> serialize$className($className? object) =>
+    object?.toJson() ?? <String, dynamic>{};
 
 FutureOr<List<Map<String, dynamic>>> serialize${className}List(List<$className>? objects) =>
     objects?.map((e) => e.toJson()).toList() ?? [];
