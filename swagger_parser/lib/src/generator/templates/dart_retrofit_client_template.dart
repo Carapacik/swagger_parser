@@ -28,9 +28,14 @@ String dartRetrofitClientTemplate({
   final restApiAnnotation =
       useFlutterCompute ? '@RestApi(parser: Parser.FlutterCompute)' : '@RestApi()';
 
+  // Flutter foundation import for compute function
+  final flutterComputeImport = useFlutterCompute
+      ? "import 'package:flutter/foundation.dart' show compute;\n"
+      : '';
+
   final sb = StringBuffer('''
 ${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
-import 'package:retrofit/retrofit.dart';
+${flutterComputeImport}import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
 part '${fileName ?? name.toSnake}.g.dart';
 
