@@ -24,6 +24,7 @@ String dartEnumDtoTemplate(
   } else {
     final className = enumClass.name.toPascal;
     final jsonParam = unknownEnumValue || enumsToJson;
+    final asyncImport = useFlutterCompute ? "import 'dart:async';\n\n" : '';
 
     final values =
         '${enumClass.items.mapIndexed((i, e) => _enumValue(i, enumClass.type, e, jsonParam: jsonParam)).join(',')}${unknownEnumValue ? ',' : ';'}';
@@ -40,7 +41,7 @@ String dartEnumDtoTemplate(
     ];
 
     final sb = StringBuffer('''
-${dartImportDtoTemplate(jsonSerializer)}
+$asyncImport${dartImportDtoTemplate(jsonSerializer)}
 
 ${descriptionComment(enumClass.description)}@JsonEnum()
 enum $className {
@@ -64,6 +65,7 @@ String _dartEnumDartMappableTemplate(
 }) {
   final className = enumClass.name.toPascal;
   final jsonParam = unknownEnumValue || enumsToJson;
+  final asyncImport = useFlutterCompute ? "import 'dart:async';\n\n" : '';
 
   final values = [
     ...enumClass.items,
@@ -93,7 +95,7 @@ String _dartEnumDartMappableTemplate(
   ];
 
   final sb = StringBuffer('''
-${dartImportDtoTemplate(JsonSerializer.dartMappable)}
+$asyncImport${dartImportDtoTemplate(JsonSerializer.dartMappable)}
 
 part '${enumClass.name.toSnake}.mapper.dart';
 
@@ -215,21 +217,20 @@ String _generateFlutterComputeEnumSerializer(
   UniversalEnumClass enumClass,
 ) {
   final dartType = enumClass.type.toDartType();
-  // Note: Using object?.json instead of object?.toJson() because:
+  // Note: Using object.json instead of object.toJson() because:
   // - json field is always available when unknownEnumValue or enumsToJson is true
   // - toJson() may not be generated (only when enumsToJson is true)
-  // Parameters are nullable to match Retrofit's compute function signature
   return '''
 
 // Flutter compute serialization functions for $className
-$className deserialize$className($dartType json) => $className.fromJson(json);
+FutureOr<$className> deserialize$className($dartType json) => $className.fromJson(json);
 
-List<$className> deserialize${className}List(List<$dartType> json) =>
+FutureOr<List<$className>> deserialize${className}List(List<$dartType> json) =>
     json.map((e) => $className.fromJson(e)).toList();
 
-$dartType? serialize$className($className? object) => object?.json;
+FutureOr<$dartType?> serialize$className($className object) => object.json;
 
-List<$dartType?> serialize${className}List(List<$className>? objects) =>
-    objects?.map((e) => e.json).toList() ?? [];
+FutureOr<List<$dartType?>> serialize${className}List(List<$className> objects) =>
+    objects.map((e) => e.json).toList();
 ''';
 }

@@ -22,9 +22,10 @@ String dartFreezedDtoTemplate(
   final isUnion = discriminator != null || isUndiscriminatedUnion;
   final serializerClass =
       useFlutterCompute ? _generateFlutterComputeSerializer(className) : '';
+  final asyncImport = useFlutterCompute ? "import 'dart:async';\n\n" : '';
 
   return '''
-${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:freezed_annotation/freezed_annotation.dart';
+$asyncImport${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:freezed_annotation/freezed_annotation.dart';
 ${isUndiscriminatedUnion ? "import 'package:json_annotation/json_annotation.dart';\n" : ''}${dartImports(imports: _filterUnionImportsForFreezed(dataClass))}
 part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';
@@ -377,21 +378,21 @@ String _defaultValue(UniversalType t) =>
 
 /// Generates top-level serialization functions for Flutter compute isolate support.
 /// These functions follow Retrofit's naming convention for Parser.FlutterCompute.
-/// Parameters are nullable to match Retrofit's compute function signature.
 String _generateFlutterComputeSerializer(String className) {
   return '''
 
 // Flutter compute serialization functions for $className
-$className deserialize$className(Map<String, dynamic> json) =>
+FutureOr<$className> deserialize$className(Map<String, dynamic> json) =>
     $className.fromJson(json);
 
-List<$className> deserialize${className}List(List<Map<String, dynamic>> json) =>
+FutureOr<List<$className>> deserialize${className}List(List<Map<String, dynamic>> json) =>
     json.map((e) => $className.fromJson(e)).toList();
 
-Map<String, dynamic>? serialize$className($className? object) => object?.toJson();
+FutureOr<Map<String, dynamic>> serialize$className($className object) =>
+    object.toJson();
 
-List<Map<String, dynamic>> serialize${className}List(List<$className>? objects) =>
-    objects?.map((e) => e.toJson()).toList() ?? [];
+FutureOr<List<Map<String, dynamic>>> serialize${className}List(List<$className> objects) =>
+    objects.map((e) => e.toJson()).toList();
 ''';
 }
 

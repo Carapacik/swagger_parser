@@ -58,9 +58,10 @@ String dartDartMappableDtoTemplate(
 
   final serializerClass =
       useFlutterCompute ? _generateFlutterComputeSerializer(className) : '';
+  final asyncImport = useFlutterCompute ? "import 'dart:async';\n\n" : '';
 
   return '''
-${dartImportDtoTemplate(JsonSerializer.dartMappable)}
+$asyncImport${dartImportDtoTemplate(JsonSerializer.dartMappable)}
 ${dartImports(imports: _getAllImports(dataClass, isUnion: isUnion))}
 part '$classNameSnake.mapper.dart';
 
@@ -444,21 +445,21 @@ const _snakeUnionSuffix = '_union';
 
 /// Generates top-level serialization functions for Flutter compute isolate support.
 /// These functions follow Retrofit's naming convention for Parser.FlutterCompute.
-/// Parameters are nullable to match Retrofit's compute function signature.
 String _generateFlutterComputeSerializer(String className) {
   return '''
 
 // Flutter compute serialization functions for $className
-$className deserialize$className(Map<String, dynamic> json) =>
+FutureOr<$className> deserialize$className(Map<String, dynamic> json) =>
     $className.fromJson(json);
 
-List<$className> deserialize${className}List(List<Map<String, dynamic>> json) =>
+FutureOr<List<$className>> deserialize${className}List(List<Map<String, dynamic>> json) =>
     json.map((e) => $className.fromJson(e)).toList();
 
-Map<String, dynamic>? serialize$className($className? object) => object?.toJson();
+FutureOr<Map<String, dynamic>> serialize$className($className object) =>
+    object.toJson();
 
-List<Map<String, dynamic>> serialize${className}List(List<$className>? objects) =>
-    objects?.map((e) => e.toJson()).toList() ?? [];
+FutureOr<List<Map<String, dynamic>>> serialize${className}List(List<$className> objects) =>
+    objects.map((e) => e.toJson()).toList();
 ''';
 }
 

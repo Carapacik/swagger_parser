@@ -2,6 +2,8 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, unused_import, invalid_annotation_target, unnecessary_import
 
+import 'dart:async';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 @JsonEnum()
@@ -36,12 +38,13 @@ enum TaskStatus {
 }
 
 // Flutter compute serialization functions for TaskStatus
-TaskStatus deserializeTaskStatus(String json) => TaskStatus.fromJson(json);
+FutureOr<TaskStatus> deserializeTaskStatus(String json) =>
+    TaskStatus.fromJson(json);
 
-List<TaskStatus> deserializeTaskStatusList(List<String> json) =>
+FutureOr<List<TaskStatus>> deserializeTaskStatusList(List<String> json) =>
     json.map((e) => TaskStatus.fromJson(e)).toList();
 
-String? serializeTaskStatus(TaskStatus? object) => object?.json;
+FutureOr<String?> serializeTaskStatus(TaskStatus object) => object.json;
 
-List<String?> serializeTaskStatusList(List<TaskStatus>? objects) =>
-    objects?.map((e) => e.json).toList() ?? [];
+FutureOr<List<String?>> serializeTaskStatusList(List<TaskStatus> objects) =>
+    objects.map((e) => e.json).toList();
