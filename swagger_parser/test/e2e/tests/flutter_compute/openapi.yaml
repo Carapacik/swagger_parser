@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+  title: Flutter Compute Test API
+  version: 1.0.0
+paths:
+  /tasks:
+    get:
+      tags:
+        - Task
+      operationId: getTasks
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskDto'
+    post:
+      tags:
+        - Task
+      operationId: createTask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+  /tasks/{id}:
+    get:
+      tags:
+        - Task
+      operationId: getTask
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+  /users:
+    get:
+      tags:
+        - User
+      operationId: getUsers
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDto'
+components:
+  schemas:
+    TaskDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        completed:
+          type: boolean
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+      required:
+        - id
+        - title
+        - completed
+        - status
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+      required:
+        - id
+        - name
+        - email
+    TaskStatus:
+      type: string
+      enum:
+        - pending
+        - in_progress
+        - completed
+        - cancelled
