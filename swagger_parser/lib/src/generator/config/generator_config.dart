@@ -31,6 +31,7 @@ class GeneratorConfig {
     this.dartMappableConvenientWhen = true,
     this.mergeOutputs = false,
     this.includeIfNull = false,
+    this.useFlutterCompute = false,
   });
 
   /// Optional. Set API name for folder and export file or merged output file
@@ -148,4 +149,9 @@ class GeneratorConfig {
   /// Optional. Set `true` to generate includeIfNull annotations for nullable fields.
   /// If set to `false`, includeIfNull annotations will not be generated.
   final bool includeIfNull;
+
+  /// DART/FLUTTER ONLY
+  /// Optional. Set `true` to generate Retrofit clients with `Parser.FlutterCompute`
+  /// and serialize/deserialize top-level functions for isolate-based multithreading.
+  final bool useFlutterCompute;
 }

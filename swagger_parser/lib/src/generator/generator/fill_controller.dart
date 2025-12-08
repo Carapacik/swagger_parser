@@ -35,6 +35,7 @@ final class FillController {
           useMultipartFile: config.useMultipartFile,
           dartMappableConvenientWhen: config.dartMappableConvenientWhen,
           includeIfNull: config.includeIfNull,
+          useFlutterCompute: config.useFlutterCompute,
           fallbackUnion: config.fallbackUnion,
         ),
       );
@@ -94,6 +95,7 @@ final class FillController {
         addOpenApiMetadata: config.addOpenApiMetadata,
         originalHttpResponse: config.originalHttpResponse,
         useMultipartFile: config.useMultipartFile,
+        useFlutterCompute: config.useFlutterCompute,
         fileName: fileName,
       ),
     );
