@@ -46,6 +46,7 @@ class SWPConfig {
     this.mergeOutputs = false,
     this.includeIfNull = false,
     this.inferRequiredFromNullable = false,
+    this.useFlutterCompute = false,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -85,6 +86,7 @@ class SWPConfig {
     required this.dartMappableConvenientWhen,
     required this.includeIfNull,
     required this.inferRequiredFromNullable,
+    required this.useFlutterCompute,
     this.fallbackUnion,
   });
 
@@ -292,6 +294,9 @@ class SWPConfig {
         yamlMap['infer_required_from_nullable'] as bool? ??
             rootConfig?.inferRequiredFromNullable;
 
+    final useFlutterCompute = yamlMap['use_flutter_compute'] as bool? ??
+        rootConfig?.useFlutterCompute;
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -335,6 +340,7 @@ class SWPConfig {
       includeIfNull: includeIfNull ?? dc.includeIfNull,
       inferRequiredFromNullable:
           inferRequiredFromNullable ?? dc.inferRequiredFromNullable,
+      useFlutterCompute: useFlutterCompute ?? dc.useFlutterCompute,
     );
   }
 
@@ -529,6 +535,11 @@ class SWPConfig {
   /// Only applies when schema has no explicit required array.
   final bool inferRequiredFromNullable;
 
+  /// DART/FLUTTER ONLY
+  /// Optional. Set `true` to generate Retrofit clients with `Parser.FlutterCompute`
+  /// and serialize/deserialize top-level functions for isolate-based multithreading.
+  final bool useFlutterCompute;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -557,6 +568,7 @@ class SWPConfig {
       dartMappableConvenientWhen: dartMappableConvenientWhen,
       mergeOutputs: mergeOutputs,
       includeIfNull: includeIfNull,
+      useFlutterCompute: useFlutterCompute,
     );
   }
 

@@ -12,6 +12,7 @@ String dartFreezedDtoTemplate(
   required bool includeIfNull,
   bool generateValidator = false,
   bool isV3 = false,
+  bool useFlutterCompute = false,
   String? fallbackUnion,
 }) {
   final className = dataClass.name.toPascal;
@@ -19,8 +20,12 @@ String dartFreezedDtoTemplate(
   final isUndiscriminatedUnion =
       dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false;
   final isUnion = discriminator != null || isUndiscriminatedUnion;
+  final serializerClass =
+      useFlutterCompute ? _generateFlutterComputeSerializer(className) : '';
+  final asyncImport = useFlutterCompute ? "import 'dart:async';\n\n" : '';
+
   return '''
-${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:freezed_annotation/freezed_annotation.dart';
+$asyncImport${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:freezed_annotation/freezed_annotation.dart';
 ${isUndiscriminatedUnion ? "import 'package:json_annotation/json_annotation.dart';\n" : ''}${dartImports(imports: _filterUnionImportsForFreezed(dataClass))}
 part '${dataClass.name.toSnake}.freezed.dart';
 part '${dataClass.name.toSnake}.g.dart';
@@ -36,7 +41,7 @@ ${_classModifier(isUnion: isUnion, isV3: isV3)}class $className with _\$$classNa
 ${_factories(dataClass, className, useMultipartFile, includeIfNull, fallbackUnion, isUnion: isUnion)}
 ${_jsonFactories(className, dataClass.undiscriminatedUnionVariants)}
 ${generateValidator ? dataClass.parameters.map(_validationString).nonNulls.join() : ''}}
-${generateValidator ? _validateMethod(className, dataClass.parameters) : ''}''';
+${generateValidator ? _validateMethod(className, dataClass.parameters) : ''}$serializerClass''';
 }
 
 String _classModifier({required bool isUnion, required bool isV3}) {
@@ -370,6 +375,26 @@ String _required(UniversalType t) =>
 /// return defaultValue if have
 String _defaultValue(UniversalType t) =>
     '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}';
+
+/// Generates top-level serialization functions for Flutter compute isolate support.
+/// These functions follow Retrofit's naming convention for Parser.FlutterCompute.
+String _generateFlutterComputeSerializer(String className) {
+  return '''
+
+// Flutter compute serialization functions for $className
+FutureOr<$className> deserialize$className(Map<String, dynamic> json) =>
+    $className.fromJson(json);
+
+FutureOr<List<$className>> deserialize${className}List(List<Map<String, dynamic>> json) =>
+    json.map((e) => $className.fromJson(e)).toList();
+
+FutureOr<Map<String, dynamic>> serialize$className($className? object) =>
+    object?.toJson() ?? <String, dynamic>{};
+
+FutureOr<List<Map<String, dynamic>>> serialize${className}List(List<$className>? objects) =>
+    objects?.map((e) => e.toJson()).toList() ?? [];
+''';
+}
 
 /// Filters out union imports for freezed classes to avoid circular dependencies
 Set<String> _filterUnionImportsForFreezed(UniversalComponentClass dataClass) {

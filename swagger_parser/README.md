@@ -214,6 +214,12 @@ swagger_parser:
   # - Properties with nullable: true remain optional
   # If the schema defines a required array, this option has no effect.
   infer_required_from_nullable: false
+
+  # DART/FLUTTER ONLY
+  # Optional. Set `true` to generate Retrofit clients with `Parser.FlutterCompute`
+  # and serialize/deserialize top-level functions for isolate-based multithreading.
+  # This enables parsing models on a separate thread using Flutter's compute function.
+  use_flutter_compute: false
 ```
 
 For multiple schemes:
