@@ -35,15 +35,15 @@ dependencies:
   # dio: ^5.9.0
   # freezed_annotation: ^3.1.0 # for freezed
   # json_annotation: ^4.9.0
-  # retrofit: ^4.9.0
+  # retrofit: ^4.9.1
 
 dev_dependencies:
-  # build_runner: ^2.9.0
-  # carapacik_lints: ^1.13.0
+  # build_runner: ^2.10.4
+  # carapacik_lints: ^3.10.2
   # dart_mappable_builder: ^4.6.1 # for dart_mappable
   # freezed: ^3.2.3 # for freezed
-  # json_serializable: ^6.11.1
-  # retrofit_generator: ^10.0.6
+  # json_serializable: ^6.11.2
+  # retrofit_generator: ^10.2.0
   swagger_parser:
 ```
 
