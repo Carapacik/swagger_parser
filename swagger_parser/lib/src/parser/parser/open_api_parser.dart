@@ -173,7 +173,9 @@ class OpenApiParser {
       Map<String, dynamic> map,
       String additionalName,
     ) {
-      final code2xx = code2xxMap(map);
+      final plainCode2xx = code2xxMap(map);
+      final code2xx = _resolveResponseReference(plainCode2xx);
+
       if (code2xx == null || !code2xx.containsKey(_contentConst)) {
         return null;
       }
@@ -467,7 +469,9 @@ class OpenApiParser {
       Map<String, dynamic> map,
       String additionalName,
     ) {
-      final code2xx = code2xxMap(map);
+      final plainCode2xx = code2xxMap(map);
+      final code2xx = _resolveResponseReference(plainCode2xx);
+
       if (code2xx == null || !code2xx.containsKey(_schemaConst)) {
         return null;
       }
@@ -1241,6 +1245,43 @@ class OpenApiParser {
     }
 
     return allUsedSchemas;
+  }
+
+  /// Resolves OpenAPI response references ($ref) to their actual content.
+  ///
+  /// When a response contains a `$ref` key pointing to a shared response
+  /// definition in `components/responses` (OpenAPI 3.x), this method looks up
+  /// and returns the referenced response content.
+  Map<String, dynamic>? _resolveResponseReference(
+    Map<String, dynamic>? response,
+  ) {
+    if (response == null || !response.containsKey(_refConst)) {
+      return response;
+    }
+
+    final refName = _formatRef(response);
+
+    final responsesMap = _apiInfo.schemaVersion == OAS.v2
+        ? _definitionFileContent[_responsesConst] as Map<String, dynamic>?
+        : (_definitionFileContent[_componentsConst]
+                as Map<String, dynamic>?)?[_responsesConst]
+            as Map<String, dynamic>?;
+
+    if (responsesMap == null) {
+      throw const OpenApiParserException(
+        'Responses section not found in OpenAPI schema',
+      );
+    }
+
+    final resolvedResponse = responsesMap[refName];
+
+    if (resolvedResponse is! Map<String, dynamic>) {
+      throw OpenApiParserException(
+        '${response[_refConst]} does not exist in schema',
+      );
+    }
+
+    return resolvedResponse;
   }
 
   /// Find type of map
