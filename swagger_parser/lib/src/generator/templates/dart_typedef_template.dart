@@ -14,7 +14,36 @@ String dartTypeDefTemplate(UniversalComponentClass dataClass,
   if (type == null) {
     return '';
   }
-  return '${import != null ? "import '${import.toSnake}.dart';\nexport '${import.toSnake}.dart';\n\n" : ''}'
+
+  // Check if the typedef uses MultipartFile
+  final typeString = type.toSuitableType(
+    ProgrammingLanguage.dart,
+    useMultipartFile: useMultipartFile,
+  );
+
+  final needsMultipartImport =
+      useMultipartFile && typeString.contains('MultipartFile');
+
+  final needsFileImport =
+      typeString.contains('File') && !typeString.contains('MultipartFile');
+
+  final imports = StringBuffer();
+
+  if (import != null) {
+    imports
+      ..write("import '${import.toSnake}.dart';\n")
+      ..write("export '${import.toSnake}.dart';\n\n");
+  }
+
+  if (needsFileImport) {
+    imports.write("import 'dart:io';\n\n");
+  }
+
+  if (needsMultipartImport) {
+    imports.write("import 'package:dio/dio.dart';\n\n");
+  }
+
+  return '$imports'
       '${descriptionComment(dataClass.description)}'
-      'typedef $className = ${type.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)};\n';
+      'typedef $className = $typeString;\n';
 }
