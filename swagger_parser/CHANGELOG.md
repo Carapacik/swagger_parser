@@ -1,3 +1,7 @@
+## 1.37.1
+- Fix missing import for MultipartFile([#408](https://github.com/Carapacik/swagger_parser/issues/408))
+- Fix refs in components.responses
+
 ## 1.37.0
 - Add `use_flutter_compute` option for Flutter isolate-based multithreading support
   - Generates `@RestApi(parser: Parser.FlutterCompute)` annotation in Retrofit clients
