@@ -184,8 +184,31 @@ String _enumValueDartMappable(
   required bool jsonParam,
 }) {
   final protectedJsonKey = protectJsonKey(item.jsonKey);
+  String? value;
+  if (protectedJsonKey == '{}') {
+    value = 'const {}';
+  } else if (type == 'string') {
+    value = "'$protectedJsonKey'";
+  } else {
+    if (protectedJsonKey?.isEmpty ?? true) {
+      value = "''";
+    } else {
+      if (protectedJsonKey == 'null') {
+        value = 'null';
+      } else {
+        final isNumber = RegExp(
+          r'^-?\d+(\.\d+)?$',
+        ).hasMatch(protectedJsonKey ?? '');
+        if (isNumber) {
+          value = protectedJsonKey;
+        } else {
+          value = "'$protectedJsonKey'";
+        }
+      }
+    }
+  }
   return '''
-${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}${indentation(2)}@MappableValue(${type == 'string' ? "'$protectedJsonKey'" : protectedJsonKey}) 
+${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}${indentation(2)}@MappableValue($value) 
 ${indentation(2)}${item.name.toCamel}''';
 }
 

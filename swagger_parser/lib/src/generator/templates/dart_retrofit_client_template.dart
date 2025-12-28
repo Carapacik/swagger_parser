@@ -87,12 +87,17 @@ String _toClientRequest(
   required bool useMultipartFile,
   String? openApiExtrasConstName,
 }) {
-  final responseType = request.returnType == null
+  var responseType = request.returnType == null
       ? 'void'
       : request.returnType!.toSuitableType(
           ProgrammingLanguage.dart,
           useMultipartFile: useMultipartFile,
         );
+
+  if (request.returnType != null &&
+      request.returnType!.wrappingCollections.length > 1) {
+    responseType = 'dynamic';
+  }
 
   // Check if this is a binary response (file download)
   final isBinaryResponse = request.returnType?.format == 'binary' ||
@@ -208,6 +213,8 @@ String _toParameter(UniversalRequestType parameter, bool useMultipartFile) {
   // https://github.com/Carapacik/swagger_parser/issues/110
   if (parameter.parameterType.isBody &&
       (parameterType == 'Object' || parameterType == 'Object?')) {
+    parameterType = 'dynamic';
+  } else if (parameterType == 'File?') {
     parameterType = 'dynamic';
   }
 

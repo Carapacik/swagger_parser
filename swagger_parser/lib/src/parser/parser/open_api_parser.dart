@@ -606,23 +606,28 @@ class OpenApiParser {
         globalParameters.addAll(params);
       }
 
-      pathValue.forEach((key, requestPath) {
+      pathValue.forEach((key, rawPath) {
         // Process this path/method within its context
         _contextStack.withContext('path:$path:$key', () {
-          // check if this requestPath has any tags that
-          // define wether the requestPath should be included
-          if (!_isPathIncluded(requestPath as Map<String, dynamic>)) {
-            return;
-          }
-
-          _anchorRegistry.markContextAsIncluded(_contextStack.current!);
-
           // `servers` contains List<dynamic>
           if (key == _serversConst ||
               key == _parametersConst ||
               key.startsWith('x-')) {
             return;
           }
+
+          if (rawPath is! Map<String, dynamic>) {
+            return;
+          }
+          final requestPath = rawPath;
+
+          // check if this requestPath has any tags that
+          // define wether the requestPath should be included
+          if (!_isPathIncluded(requestPath)) {
+            return;
+          }
+
+          _anchorRegistry.markContextAsIncluded(_contextStack.current!);
 
           final requestPathResponses =
               requestPath[_responsesConst] as Map<String, dynamic>;

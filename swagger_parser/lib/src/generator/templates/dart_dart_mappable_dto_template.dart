@@ -243,6 +243,8 @@ ${indentation(2)}const $className(${getParameters(dataClass)});
 ${getFields(dataClass, useMultipartFile: useMultipartFile, isSimpleDataClass: isSimpleDataClass)}
 ${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, className, fallbackUnion) : ''}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
+${indentation(2)}Map<String, dynamic> toJson() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
+${indentation(2)}Map<String, dynamic> toMap() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
 ''';
   }
 
@@ -264,6 +266,8 @@ ${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, cla
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) {
 ${indentation(4)}return ${_deserializerExtensionName(className)}.tryDeserialize(json);
 ${indentation(2)}}
+${indentation(2)}Map<String, dynamic> toJson() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
+${indentation(2)}Map<String, dynamic> toMap() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
 ''';
   }
 
@@ -273,6 +277,8 @@ ${indentation(2)}const $className();
 
 ${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, className, fallbackUnion) : ''}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
+${indentation(2)}Map<String, dynamic> toJson() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
+${indentation(2)}Map<String, dynamic> toMap() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
 ''';
 }
 
@@ -288,6 +294,8 @@ ${dartMappableConvenientWhen ? '\n${_generateUndiscriminatedUnionConvenienceMeth
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) {
 ${indentation(4)}return ${_deserializerExtensionName(className)}.tryDeserialize(json);
 ${indentation(2)}}
+${indentation(2)}Map<String, dynamic> toJson() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
+${indentation(2)}Map<String, dynamic> toMap() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
 ''';
 }
 
@@ -559,6 +567,10 @@ ${indentation(6)}$className${fallbackUnion.toPascal}(json);
 
 String _getMappableClassAnnotation(UniversalComponentClass dataClass,
     String className, String? fallbackUnion) {
+  final args = <String>[
+    'generateMethods: GenerateMethods.decode | GenerateMethods.stringify | GenerateMethods.equals | GenerateMethods.copy',
+  ];
+
   // For discriminated unions with complete mapping, use wrapper pattern
   if (dataClass.discriminator != null &&
       _isCompleteDiscriminatorMapping(dataClass.discriminator!)) {
@@ -571,10 +583,9 @@ String _getMappableClassAnnotation(UniversalComponentClass dataClass,
     }
     final formattedSubClasses =
         subClasses.map((sc) => '${indentation(2)}$sc').join(',\n');
-    return [
-      "discriminatorKey: '${dataClass.discriminator!.propertyName}'",
-      'includeSubClasses: [\n$formattedSubClasses\n]',
-    ].join(', ');
+    args.add("discriminatorKey: '${dataClass.discriminator!.propertyName}'");
+    args.add('includeSubClasses: [\n$formattedSubClasses\n]');
+    return args.join(', ');
   }
 
   // Original discriminated union logic (for incomplete mappings)
@@ -584,10 +595,9 @@ String _getMappableClassAnnotation(UniversalComponentClass dataClass,
     if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
       subClasses.add('$className${fallbackUnion.toPascal}');
     }
-    return [
-      "discriminatorKey: '${dataClass.discriminator!.propertyName}'",
-      'includeSubClasses: [${subClasses.join(', ')}]',
-    ].join(', ');
+    args.add("discriminatorKey: '${dataClass.discriminator!.propertyName}'");
+    args.add('includeSubClasses: [${subClasses.join(', ')}]');
+    return args.join(', ');
   }
   // For discriminated union variants that use wrapper pattern, don't include discriminatorValue
   if (dataClass.discriminatorValue != null) {
@@ -595,7 +605,9 @@ String _getMappableClassAnnotation(UniversalComponentClass dataClass,
     final isCompleteMapping =
         dataClass.discriminatorValue!.propertyValue == className;
     if (!isCompleteMapping) {
-      return "discriminatorValue: '${dataClass.discriminatorValue!.propertyValue}'";
+      args.add(
+          "discriminatorValue: '${dataClass.discriminatorValue!.propertyValue}'");
+      return args.join(', ');
     }
   }
   // Check for undiscriminated unions
@@ -606,9 +618,10 @@ String _getMappableClassAnnotation(UniversalComponentClass dataClass,
     if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
       subClasses.add('$className${fallbackUnion.toPascal}');
     }
-    return 'includeSubClasses: [${subClasses.join(', ')}]';
+    args.add('includeSubClasses: [${subClasses.join(', ')}]');
+    return args.join(', ');
   }
-  return '';
+  return args.join(', ');
 }
 
 Set<String> _getAllImports(
