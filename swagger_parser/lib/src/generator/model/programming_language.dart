@@ -122,7 +122,7 @@ enum ProgrammingLanguage {
     bool dioOptionsParameterByDefault = false,
     bool addOpenApiMetadata = false,
     bool originalHttpResponse = false,
-    bool useFlutterCompute = false,
+    JsonSerializer jsonSerializer = JsonSerializer.jsonSerializable,
     String? fileName,
   }) =>
       switch (this) {
@@ -135,7 +135,7 @@ enum ProgrammingLanguage {
             addOpenApiMetadata: addOpenApiMetadata,
             originalHttpResponse: originalHttpResponse,
             useMultipartFile: useMultipartFile,
-            useFlutterCompute: useFlutterCompute,
+            jsonSerializer: jsonSerializer,
             fileName: fileName,
           ),
         kotlin =>

@@ -95,7 +95,7 @@ final class FillController {
         addOpenApiMetadata: config.addOpenApiMetadata,
         originalHttpResponse: config.originalHttpResponse,
         useMultipartFile: config.useMultipartFile,
-        useFlutterCompute: config.useFlutterCompute,
+        jsonSerializer: config.jsonSerializer,
         fileName: fileName,
       ),
     );

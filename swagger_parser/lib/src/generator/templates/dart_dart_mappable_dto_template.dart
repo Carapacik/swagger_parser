@@ -243,8 +243,6 @@ ${indentation(2)}const $className(${getParameters(dataClass)});
 ${getFields(dataClass, useMultipartFile: useMultipartFile, isSimpleDataClass: isSimpleDataClass)}
 ${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, className, fallbackUnion) : ''}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
-${indentation(2)}Map<String, dynamic> toJson() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
-${indentation(2)}Map<String, dynamic> toMap() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
 ''';
   }
 
@@ -265,9 +263,6 @@ ${indentation(2)}const $className();
 ${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, className, fallbackUnion) : ''}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) {
 ${indentation(4)}return ${_deserializerExtensionName(className)}.tryDeserialize(json);
-${indentation(2)}}
-${indentation(2)}Map<String, dynamic> toJson() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
-${indentation(2)}Map<String, dynamic> toMap() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
 ''';
   }
 
@@ -277,8 +272,6 @@ ${indentation(2)}const $className();
 
 ${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, className, fallbackUnion) : ''}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
-${indentation(2)}Map<String, dynamic> toJson() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
-${indentation(2)}Map<String, dynamic> toMap() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
 ''';
 }
 
@@ -293,9 +286,6 @@ ${indentation(2)}const $className();
 ${dartMappableConvenientWhen ? '\n${_generateUndiscriminatedUnionConvenienceMethods(className, variants, fallbackUnion)}' : ''}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) {
 ${indentation(4)}return ${_deserializerExtensionName(className)}.tryDeserialize(json);
-${indentation(2)}}
-${indentation(2)}Map<String, dynamic> toJson() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
-${indentation(2)}Map<String, dynamic> toMap() => ${className}Mapper.ensureInitialized().encodeMap<$className>(this);
 ''';
 }
 
@@ -568,7 +558,7 @@ ${indentation(6)}$className${fallbackUnion.toPascal}(json);
 String _getMappableClassAnnotation(UniversalComponentClass dataClass,
     String className, String? fallbackUnion) {
   final args = <String>[
-    'generateMethods: GenerateMethods.decode | GenerateMethods.stringify | GenerateMethods.equals | GenerateMethods.copy',
+    // 'generateMethods: GenerateMethods.all',
   ];
 
   // For discriminated unions with complete mapping, use wrapper pattern
