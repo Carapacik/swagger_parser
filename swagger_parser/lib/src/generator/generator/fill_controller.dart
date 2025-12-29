@@ -96,6 +96,7 @@ final class FillController {
         originalHttpResponse: config.originalHttpResponse,
         useMultipartFile: config.useMultipartFile,
         jsonSerializer: config.jsonSerializer,
+        useFlutterCompute: config.useFlutterCompute,
         fileName: fileName,
       ),
     );

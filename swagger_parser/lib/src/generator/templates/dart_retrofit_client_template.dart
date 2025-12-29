@@ -17,6 +17,7 @@ String dartRetrofitClientTemplate({
   bool addOpenApiMetadata = false,
   bool originalHttpResponse = false,
   JsonSerializer jsonSerializer = JsonSerializer.jsonSerializable,
+  bool useFlutterCompute = false,
   String? fileName,
 }) {
   final parameterTypes = restClient.requests
@@ -26,15 +27,24 @@ String dartRetrofitClientTemplate({
   final includeMetadata = addOpenApiMetadata;
 
   // Determine @RestApi annotation
-  final restApiAnnotation = switch (jsonSerializer) {
-    JsonSerializer.dartMappable => '@RestApi(parser: Parser.DartMappable)',
-    _ => '@RestApi()',
-  };
+  final restApiAnnotation = useFlutterCompute
+      ? '@RestApi(parser: Parser.FlutterCompute)'
+      : switch (jsonSerializer) {
+          JsonSerializer.dartMappable =>
+            '@RestApi(parser: Parser.DartMappable)',
+          JsonSerializer.jsonSerializable =>
+            '@RestApi(parser: Parser.JsonSerializable)',
+          JsonSerializer.freezed => '@RestApi(parser: Parser.JsonSerializable)',
+        };
 
-  // TODO: This originally had the compute import. Do we need it at all?
+  // Flutter foundation import for compute function
+  final flutterComputeImport = useFlutterCompute
+      ? "import 'package:flutter/foundation.dart' show compute;\n"
+      : '';
+
   final sb = StringBuffer('''
 ${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
-import 'package:retrofit/retrofit.dart';
+${flutterComputeImport}import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
 part '${fileName ?? name.toSnake}.g.dart';
 
