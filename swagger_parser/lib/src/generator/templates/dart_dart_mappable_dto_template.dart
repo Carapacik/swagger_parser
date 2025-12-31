@@ -263,6 +263,7 @@ ${indentation(2)}const $className();
 ${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, className, fallbackUnion) : ''}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) {
 ${indentation(4)}return ${_deserializerExtensionName(className)}.tryDeserialize(json);
+}
 ''';
   }
 
@@ -286,6 +287,7 @@ ${indentation(2)}const $className();
 ${dartMappableConvenientWhen ? '\n${_generateUndiscriminatedUnionConvenienceMethods(className, variants, fallbackUnion)}' : ''}
 ${indentation(2)}static $className fromJson(Map<String, dynamic> json) {
 ${indentation(4)}return ${_deserializerExtensionName(className)}.tryDeserialize(json);
+}
 ''';
 }
 
@@ -571,10 +573,10 @@ String _getMappableClassAnnotation(UniversalComponentClass dataClass,
     if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
       subClasses.add('$className${fallbackUnion.toPascal}');
     }
-    final formattedSubClasses =
-        subClasses.map((sc) => '${indentation(2)}$sc').join(',\n');
+    // final formattedSubClasses =
+    //     subClasses.map((sc) => '${indentation(2)}$sc').join(',\n');
     args.add("discriminatorKey: '${dataClass.discriminator!.propertyName}'");
-    args.add('includeSubClasses: [\n$formattedSubClasses\n]');
+    // args.add('includeSubClasses: [\n$formattedSubClasses\n]');
     return args.join(', ');
   }
 
@@ -586,7 +588,7 @@ String _getMappableClassAnnotation(UniversalComponentClass dataClass,
       subClasses.add('$className${fallbackUnion.toPascal}');
     }
     args.add("discriminatorKey: '${dataClass.discriminator!.propertyName}'");
-    args.add('includeSubClasses: [${subClasses.join(', ')}]');
+    // args.add('includeSubClasses: [${subClasses.join(', ')}]');
     return args.join(', ');
   }
   // For discriminated union variants that use wrapper pattern, don't include discriminatorValue
@@ -608,7 +610,7 @@ String _getMappableClassAnnotation(UniversalComponentClass dataClass,
     if (fallbackUnion != null && fallbackUnion.isNotEmpty) {
       subClasses.add('$className${fallbackUnion.toPascal}');
     }
-    args.add('includeSubClasses: [${subClasses.join(', ')}]');
+    // args.add('includeSubClasses: [${subClasses.join(', ')}]');
     return args.join(', ');
   }
   return args.join(', ');
