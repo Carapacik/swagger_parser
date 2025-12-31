@@ -524,14 +524,21 @@ String _generateVariantWrappers(String className,
     final isInline = variantName.toLowerCase().startsWith('variant');
     final implementsClause = isInline ? '' : ' implements $originalClassName';
 
+    // dart doesn't support empty bracket params we should just disclude them entirely if it's empty
+    final bracketParams = properties.isEmpty
+        ? ''
+        : '''
+{
+$constructorParams
+${indentation(2)}}
+''';
+
     return '''
 @MappableClass()
 class $wrapperClassName extends $className with ${wrapperClassName}Mappable$implementsClause {
 $directProperties
 
-${indentation(2)}const $wrapperClassName({
-$constructorParams
-${indentation(2)}});
+${indentation(2)}const $wrapperClassName($bracketParams);
 }
 ''';
   }).join('\n');
