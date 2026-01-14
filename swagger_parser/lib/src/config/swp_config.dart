@@ -463,9 +463,9 @@ class SWPConfig {
 
   /// {@template replacement_rules_for_raw_schema}
   /// Optional. Set raw regex replacement rules for the names of the raw schema objects.
-  /// 
+  ///
   /// Applies to the raw schema objects before the generator will try to parse them into a Dart class.
-  /// 
+  ///
   /// Useful when raw schema objects have names are not valid Dart class names (e.g. "filters[name]")
   /// {@endtemplate}
   final List<ReplacementRule> replacementRulesForRawSchema;
