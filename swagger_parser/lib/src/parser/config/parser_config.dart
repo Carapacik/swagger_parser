@@ -13,6 +13,7 @@ class ParserConfig {
     this.enumsParentPrefix = true,
     this.skippedParameters = const <String>[],
     this.replacementRules = const [],
+    this.replacementRulesForRawSchema = const [],
     this.useXNullable = false,
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
@@ -54,6 +55,9 @@ class ParserConfig {
   /// Optional. Set regex replacement rules for the names of the generated classes/enums.
   /// All rules are applied in order.
   final List<ReplacementRule> replacementRules;
+
+  /// {@macro replacement_rules_for_raw_schema}
+  final List<ReplacementRule> replacementRulesForRawSchema;
 
   /// Does the Schema use x-nullable to indicate nullable fields
   /// Only used for OpenApi v2

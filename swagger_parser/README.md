@@ -146,6 +146,19 @@ swagger_parser:
     - pattern: "[0-9]+"
       replacement: ""
 
+  # Optional. Set raw regex replacement rules for the names of the raw schema objects.
+  # Applies to the raw schema objects before the generator will try to parse them into a Dart class.
+  # Useful when raw schema objects have names that are not valid Dart class names (e.g. "filters[name]")
+  replacement_rules_for_raw_schema:
+   - pattern: "\\]\\["
+     replacement: "_"
+   - pattern: "\\[]\\["
+     replacement: "_"
+   - pattern: "\\["
+     replacement: "_"
+   - pattern: "\\]"
+     replacement: "_"
+
   # Optional. Skip parameters with names.
   skipped_parameters:
     - "X-Some-Token"
@@ -240,6 +253,7 @@ swagger_parser:
       json_serializer: freezed
       put_in_folder: true
       replacement_rules: []
+      replacement_rules_for_raw_schema: []
 
     - schema_url: https://petstore.swagger.io/v2/swagger.json
       name: pet_service_dart_mappable
