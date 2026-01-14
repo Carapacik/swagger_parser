@@ -253,6 +253,7 @@ swagger_parser:
       json_serializer: freezed
       put_in_folder: true
       replacement_rules: []
+      replacement_rules_for_raw_schema: []
 
     - schema_url: https://petstore.swagger.io/v2/swagger.json
       name: pet_service_dart_mappable
