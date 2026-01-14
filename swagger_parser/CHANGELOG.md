@@ -1,3 +1,6 @@
+## 1.37.2
+- Add `replacement_rules_for_raw_schema` option for raw schema objects replacement rules
+
 ## 1.37.1
 - Fix missing import for MultipartFile([#408](https://github.com/Carapacik/swagger_parser/issues/408))
 - Fix refs in components.responses
