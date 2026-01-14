@@ -674,7 +674,10 @@ class OpenApiParser {
           } else {
             rawOperationId = requestPath[_operationIdConst]?.toString();
             operationIdName = rawOperationId?.toCamel;
-            final (_, nameDescription) = protectName(operationIdName);
+            final (_, nameDescription) = protectName(
+              operationIdName,
+              replacementRulesForRawSchema: config.replacementRulesForRawSchema,
+            );
             if (nameDescription != null) {
               description = '$description\n\n$nameDescription';
               requestName = (key + path).toCamel;
@@ -1310,6 +1313,7 @@ class OpenApiParser {
       final (newName, description) = protectName(
         name,
         description: map[_descriptionConst]?.toString(),
+        replacementRulesForRawSchema: config.replacementRulesForRawSchema,
       );
 
       // Nullability of the array itself.
@@ -1381,6 +1385,7 @@ class OpenApiParser {
       final (newName, description) = protectName(
         name,
         description: map[_descriptionConst]?.toString(),
+        replacementRulesForRawSchema: config.replacementRulesForRawSchema,
       );
 
       // Nullability of the map itself.
@@ -1437,6 +1442,7 @@ class OpenApiParser {
         isEnum: true,
         uniqueIfNull: true,
         description: map[_descriptionConst]?.toString(),
+        replacementRulesForRawSchema: config.replacementRulesForRawSchema,
       );
 
       var newName = variableName;
@@ -1520,6 +1526,7 @@ class OpenApiParser {
         originalName,
         uniqueIfNull: true,
         description: map[_descriptionConst]?.toString(),
+        replacementRulesForRawSchema: config.replacementRulesForRawSchema,
       );
 
       final (parameters, imports) = _findParametersAndImports(map);
@@ -1646,10 +1653,11 @@ class OpenApiParser {
           // Create a base union class for the discriminated types
           final baseClassName =
               '${additionalName ?? ''} ${name ?? ''} Union'.toPascal;
-          final (newName, description) = protectName(
+          final (newName, _) = protectName(
             baseClassName,
             uniqueIfNull: true,
             description: map[_descriptionConst]?.toString(),
+            replacementRulesForRawSchema: config.replacementRulesForRawSchema,
           );
 
           // Create a sealed class to represent the discriminated union
@@ -1805,6 +1813,8 @@ class OpenApiParser {
                   baseClassName,
                   uniqueIfNull: true,
                   description: map[_descriptionConst]?.toString(),
+                  replacementRulesForRawSchema:
+                      config.replacementRulesForRawSchema,
                 );
 
                 // Create a class to represent the allOf composition
@@ -1851,6 +1861,8 @@ class OpenApiParser {
                   baseClassName,
                   uniqueIfNull: true,
                   description: map[_descriptionConst]?.toString(),
+                  replacementRulesForRawSchema:
+                      config.replacementRulesForRawSchema,
                 );
 
                 final unionName = newName!.toPascal;
@@ -1915,6 +1927,7 @@ class OpenApiParser {
             name,
             description:
                 ofType.description ?? map[_descriptionConst]?.toString(),
+            replacementRulesForRawSchema: config.replacementRulesForRawSchema,
           );
           final enumType = map.containsKey(_defaultConst) && ofImport != null
               ? ofType.type
@@ -1949,6 +1962,7 @@ class OpenApiParser {
       final (newNameForReturn, descriptionForReturn) = protectName(
         name, // Use original name for top-level naming
         description: ofType?.description ?? map[_descriptionConst]?.toString(),
+        replacementRulesForRawSchema: config.replacementRulesForRawSchema,
       );
 
       return (
@@ -2001,6 +2015,7 @@ class OpenApiParser {
       final (newName, description) = protectName(
         name,
         description: map[_descriptionConst]?.toString(),
+        replacementRulesForRawSchema: config.replacementRulesForRawSchema,
       );
 
       final enumType = defaultValue != null && import != null ? type : null;
@@ -2219,6 +2234,7 @@ class OpenApiParser {
       baseClassName,
       uniqueIfNull: true,
       description: unionDescription,
+      replacementRulesForRawSchema: config.replacementRulesForRawSchema,
     );
     final unionName = newName!.toPascal;
     final (foundImports, variantRefToProps) = _getImportsAndProps(
