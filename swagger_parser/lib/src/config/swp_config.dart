@@ -241,7 +241,7 @@ class SWPConfig {
             r['pattern'] is! String ||
             r['replacement'] is! String) {
           throw const ConfigException(
-            "Config parameter 'replacement_rules' values must be maps of strings "
+            "Config parameter 'replacement_rules_for_raw_schema' values must be maps of strings "
             "and contain 'pattern' and 'replacement'.",
           );
         }
