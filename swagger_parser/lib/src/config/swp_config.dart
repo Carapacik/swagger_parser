@@ -26,6 +26,7 @@ class SWPConfig {
     this.markFilesAsGenerated = true,
     this.originalHttpResponse = false,
     this.replacementRules = const [],
+    this.replacementRulesForRawSchema = const [],
     this.defaultContentType = 'application/json',
     this.extrasParameterByDefault = false,
     this.dioOptionsParameterByDefault = false,
@@ -67,6 +68,7 @@ class SWPConfig {
     required this.markFilesAsGenerated,
     required this.originalHttpResponse,
     required this.replacementRules,
+    required this.replacementRulesForRawSchema,
     required this.defaultContentType,
     required this.extrasParameterByDefault,
     required this.dioOptionsParameterByDefault,
@@ -229,6 +231,32 @@ class SWPConfig {
       replacementRules = List.from(rootConfig!.replacementRules);
     }
 
+    final rawReplacementRulesForRawSchema =
+        yamlMap['replacement_rules_for_raw_schema'] as YamlList?;
+    List<ReplacementRule>? replacementRulesForRawSchema;
+    if (rawReplacementRulesForRawSchema != null) {
+      replacementRulesForRawSchema = [];
+      for (final r in rawReplacementRulesForRawSchema) {
+        if (r is! YamlMap ||
+            r['pattern'] is! String ||
+            r['replacement'] is! String) {
+          throw const ConfigException(
+            "Config parameter 'replacement_rules_for_raw_schema' values must be maps of strings "
+            "and contain 'pattern' and 'replacement'.",
+          );
+        }
+        replacementRulesForRawSchema.add(
+          ReplacementRule(
+            pattern: RegExp(r['pattern'].toString()),
+            replacement: r['replacement'].toString(),
+          ),
+        );
+      }
+    } else if (rootConfig?.replacementRulesForRawSchema != null) {
+      replacementRulesForRawSchema =
+          List.from(rootConfig!.replacementRulesForRawSchema);
+    }
+
     final generateValidator =
         yamlMap['generate_validator'] as bool? ?? rootConfig?.generateValidator;
 
@@ -327,6 +355,8 @@ class SWPConfig {
       markFilesAsGenerated: markFilesAsGenerated ?? dc.markFilesAsGenerated,
       originalHttpResponse: originalHttpResponse ?? dc.originalHttpResponse,
       replacementRules: replacementRules ?? dc.replacementRules,
+      replacementRulesForRawSchema:
+          replacementRulesForRawSchema ?? dc.replacementRulesForRawSchema,
       generateValidator: generateValidator ?? dc.generateValidator,
       useXNullable: useXNullable ?? dc.useXNullable,
       useFreezed3: useFreezed3 ?? dc.useFreezed3,
@@ -430,6 +460,15 @@ class SWPConfig {
   /// Optional. Set regex replacement rules for the names of the generated classes/enums.
   /// All rules are applied in order.
   final List<ReplacementRule> replacementRules;
+
+  /// {@template replacement_rules_for_raw_schema}
+  /// Optional. Set raw regex replacement rules for the names of the raw schema objects.
+  ///
+  /// Applies to the raw schema objects before the generator will try to parse them into a Dart class.
+  ///
+  /// Useful when raw schema objects have names are not valid Dart class names (e.g. "filters[name]")
+  /// {@endtemplate}
+  final List<ReplacementRule> replacementRulesForRawSchema;
 
   /// DART ONLY
   /// Default content type for all requests and responses.
@@ -589,6 +628,7 @@ class SWPConfig {
       replacementRules: replacementRules,
       useXNullable: useXNullable,
       excludeTags: excludeTags,
+      replacementRulesForRawSchema: replacementRulesForRawSchema,
       includeTags: includeTags,
       fallbackClient: fallbackClient,
       inferRequiredFromNullable: inferRequiredFromNullable,

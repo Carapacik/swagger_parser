@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
-import 'package:swagger_parser/src/parser/model/universal_data_class.dart';
 import 'package:swagger_parser/src/parser/utils/dart_keywords.dart';
+import 'package:swagger_parser/swagger_parser.dart';
 
 /// Extension for utils
 extension StringTypeX on String {
@@ -192,10 +192,17 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_-][a-zA-Z\d_-]*$');
   String? name, {
   String? description,
   bool uniqueIfNull = false,
+  List<ReplacementRule> replacementRulesForRawSchema = const [],
   bool isEnum = false,
   bool isMethod = false,
 }) {
-  final (newName, error) = switch (name) {
+  var replacedName = name;
+  if (replacedName != null) {
+    for (final rule in replacementRulesForRawSchema) {
+      replacedName = rule.apply(replacedName);
+    }
+  }
+  final (newName, error) = switch (replacedName) {
     null || '' => uniqueIfNull
         ? (
             uniqueName(isEnum: isEnum),
@@ -204,8 +211,8 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_-][a-zA-Z\d_-]*$');
         : (null, null),
     // https://github.com/Carapacik/swagger_parser/issues/262
     _
-        when name.startsWith(r'$') &&
-            name
+        when replacedName.startsWith(r'$') &&
+            replacedName
                     .split('')
                     .where(
                       (e) => e == r'$',
@@ -213,18 +220,18 @@ final _nameRegExp = RegExp(r'^[a-zA-Z_-][a-zA-Z\d_-]*$');
                     .length ==
                 1 =>
       (
-        name.substring(1),
+        replacedName.substring(1),
         'Incorrect name has been replaced. Original name: `$name`.',
       ),
-    _ when !_nameRegExp.hasMatch(name) => (
+    _ when !_nameRegExp.hasMatch(replacedName) => (
         uniqueName(isEnum: isEnum),
         'Incorrect name has been replaced. Original name: `$name`.',
       ),
-    _ when dartKeywords.contains(name.toCamel) => (
-        '$name ${isEnum ? _enumConst : _valueConst}',
+    _ when dartKeywords.contains(replacedName.toCamel) => (
+        '$replacedName ${isEnum ? _enumConst : _valueConst}',
         'The name has been replaced because it contains a keyword. Original name: `$name`.',
       ),
-    _ => (name, null),
+    _ => (replacedName, null),
   };
 
   return (
