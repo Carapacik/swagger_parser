@@ -9,7 +9,7 @@ export 'models/included_data.dart';
 export 'models/get_api_v1_tagged_as_include_should_be_included_response.dart';
 export 'models/nested_included.dart';
 export 'models/anchor_reference.dart';
-export 'models/object0.dart';
+export 'models/api_v1_tagged_as_include_should_be_included_request_body.dart';
 export 'models/category.dart';
 // Root client
 export 'rest_client.dart';
