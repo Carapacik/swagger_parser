@@ -1,3 +1,6 @@
+## 1.38.1
+- Fix incorrect deserialization syntax for undiscriminated unions (Freezed serializer)
+
 ## 1.38.0
 - Add `replacement_rules_for_raw_schema` option for raw schema objects replacement rules
 
