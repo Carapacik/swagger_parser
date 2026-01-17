@@ -2,6 +2,8 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, unused_import, invalid_annotation_target, unnecessary_import
 
+// Clients
+export 'clients/family_client.dart';
 // Data classes
 export 'models/family1.dart';
 export 'models/family2.dart';
@@ -13,3 +15,5 @@ export 'models/family2_members_sealed.dart';
 export 'models/cat_type.dart';
 export 'models/dog_type.dart';
 export 'models/human_type.dart';
+// Root client
+export 'rest_client.dart';

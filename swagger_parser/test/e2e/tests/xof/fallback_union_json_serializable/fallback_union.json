@@ -4,7 +4,46 @@
     "title": "Family API",
     "version": "1.0.0"
   },
-  "paths": {},
+  "paths": {
+    "/family1": {
+      "get": {
+        "operationId": "getFamily1",
+        "summary": "Get family 1 (with discriminator)",
+        "tags": ["family"],
+        "responses": {
+          "200": {
+            "description": "A family",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Family1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/family2": {
+      "get": {
+        "operationId": "getFamily2",
+        "summary": "Get family 2 (without discriminator)",
+        "tags": ["family"],
+        "responses": {
+          "200": {
+            "description": "A family",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Family2"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "components": {
     "schemas": {
       "Family1": {
