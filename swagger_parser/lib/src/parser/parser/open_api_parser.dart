@@ -97,6 +97,8 @@ class OpenApiParser {
   static const _versionConst = 'version';
   static const _xNullableConst = 'x-nullable';
 
+  static const _requestBodyNamePostfix = 'RequestBody';
+
   UniversalEnumClass _getUniqueEnumClass({
     required final String name,
     required final Set<UniversalEnumItem> items,
@@ -216,7 +218,10 @@ class OpenApiParser {
 
     /// Parses query parameters (parameters and requestBody)
     /// into universal models for OpenApi v3
-    List<UniversalRequestType> parametersV3(Map<String, dynamic> map) {
+    List<UniversalRequestType> parametersV3(
+      Map<String, dynamic> map,
+      String requestPath,
+    ) {
       if (!map.containsKey(_parametersConst) &&
           !map.containsKey(_requestBodyConst)) {
         return [];
@@ -436,6 +441,7 @@ class OpenApiParser {
           final typeWithImport = _findType(
             contentType[_schemaConst] as Map<String, dynamic>,
             isRequired: isRequired,
+            name: '${requestPath.toPascal}$_requestBodyNamePostfix',
           );
           final currentType = typeWithImport.type;
           if (typeWithImport.import != null) {
@@ -602,7 +608,7 @@ class OpenApiParser {
       if (pathValueMap.containsKey(_parametersConst)) {
         final params = _apiInfo.schemaVersion == OAS.v2
             ? parametersV2(pathValue)
-            : parametersV3(pathValue);
+            : parametersV3(pathValue, path);
         globalParameters.addAll(params);
       }
 
@@ -632,7 +638,7 @@ class OpenApiParser {
               : returnTypeV3(requestPathResponses, additionalName);
           final parameters = _apiInfo.schemaVersion == OAS.v2
               ? parametersV2(requestPath)
-              : parametersV3(requestPath);
+              : parametersV3(requestPath, path);
 
           // Add global parameters that have not been overridden by local parameters
           // defined at the request level.

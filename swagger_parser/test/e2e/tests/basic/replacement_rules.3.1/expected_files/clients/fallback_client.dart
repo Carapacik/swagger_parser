@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../models/api_request_body_dto.dart';
 import '../models/class_name1_dto.dart';
 import '../models/class_name2_dto.dart';
 import '../models/class_name3_dto.dart';
@@ -16,7 +17,6 @@ import '../models/data_att2_dto.dart';
 import '../models/data_att4_dto.dart';
 import '../models/enum0_dto.dart';
 import '../models/object0_dto.dart';
-import '../models/object1_dto.dart';
 import '../models/private_att_data3_dto.dart';
 import '../models/private_class_name4_dto.dart';
 
@@ -46,9 +46,8 @@ abstract class FallbackClient {
     @Part(name: 'p2_enum') Enum0Dto? p2Enum,
   });
 
-  /// [body] - Name not received and was auto-generated.
   @POST('/api/v1/')
   Future<String> postApiV1({
-    @Body() Object1Dto? body,
+    @Body() ApiRequestBodyDto? body,
   });
 }
