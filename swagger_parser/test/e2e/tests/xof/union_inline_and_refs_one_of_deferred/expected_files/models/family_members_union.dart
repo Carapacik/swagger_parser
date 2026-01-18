@@ -35,16 +35,17 @@ sealed class FamilyMembersUnion with _$FamilyMembersUnion {
   }) = FamilyMembersUnionVariant4;
 
   factory FamilyMembersUnion.fromJson(Map<String, Object?> json) =>
-      // TODO: Deserialization must be implemented by the user, because the OpenAPI specification did not provide a discriminator.
-      // Use _$$FamilyMembersUnion<UnionName>ImplFromJson(json) to deserialize the union <UnionName>.
+      // TODO: No discriminator in OpenAPI spec - you must implement this manually.
+      //
+      // Inspect the JSON and return the matching variant. Each variant has a fromJson:
+      //   FamilyMembersUnionVariantName.fromJson(json)
+      //
+      // Example pattern (check for unique fields):
+      //   json.containsKey('uniqueFieldA') ? FamilyMembersUnionTypeA.fromJson(json) :
+      //   json.containsKey('uniqueFieldB') ? FamilyMembersUnionTypeB.fromJson(json) :
+      //   FamilyMembersUnionDefault.fromJson(json);
+      //
+      // IMPORTANT: Keep the => arrow syntax. Converting to a { } body will cause
+      // freezed to skip generating toJson/fromJson for this class.
       throw UnimplementedError();
-
-  Map<String, Object?> toJson() => switch (this) {
-        FamilyMembersUnionCat() => _$$FamilyMembersUnionCatImplToJson(this),
-        FamilyMembersUnionVariant2() =>
-          _$$FamilyMembersUnionVariant2ImplToJson(this),
-        FamilyMembersUnionDog() => _$$FamilyMembersUnionDogImplToJson(this),
-        FamilyMembersUnionVariant4() =>
-          _$$FamilyMembersUnionVariant4ImplToJson(this),
-      };
 }
