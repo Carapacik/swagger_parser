@@ -1,4 +1,5 @@
-## 1.38.1
+## 1.39.0
+- Handle request body name generation case when request body is declared within request
 - Fix incorrect deserialization syntax for undiscriminated unions (Freezed serializer)
 
 ## 1.38.0
