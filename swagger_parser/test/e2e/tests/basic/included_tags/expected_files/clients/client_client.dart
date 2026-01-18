@@ -5,8 +5,8 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../models/api_v1_tagged_as_include_should_be_included_request_body.dart';
 import '../models/get_api_v1_tagged_as_include_should_be_included_response.dart';
-import '../models/object0.dart';
 
 part 'client_client.g.dart';
 
@@ -14,9 +14,8 @@ part 'client_client.g.dart';
 abstract class ClientClient {
   factory ClientClient(Dio dio, {String? baseUrl}) = _ClientClient;
 
-  /// [body] - Name not received and was auto-generated.
   @GET('/api/v1/tagged-as-include-should-be-included/')
   Future<GetApiV1TaggedAsIncludeShouldBeIncludedResponse> apiV1CategoryList({
-    @Body() required Object0 body,
+    @Body() required ApiV1TaggedAsIncludeShouldBeIncludedRequestBody body,
   });
 }

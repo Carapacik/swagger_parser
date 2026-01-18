@@ -6,8 +6,8 @@
 export 'clients/fallback_client.dart';
 // Data classes
 export 'models/example.dart';
-export 'models/object0.dart';
+export 'models/test1_request_body.dart';
 export 'models/get_test2_response.dart';
-export 'models/object1.dart';
+export 'models/test2_request_body.dart';
 // Root client
 export 'rest_client.dart';
