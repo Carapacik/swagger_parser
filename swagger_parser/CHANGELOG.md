@@ -1,3 +1,6 @@
+## 1.39.0
+- Handle request body name generation case when request body is declared within request
+
 ## 1.38.0
 - Add `replacement_rules_for_raw_schema` option for raw schema objects replacement rules
 

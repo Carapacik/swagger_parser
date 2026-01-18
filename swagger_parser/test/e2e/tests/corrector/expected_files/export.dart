@@ -17,7 +17,7 @@ export 'models/private_att_data3_dto.dart';
 export 'models/data_att4_dto.dart';
 export 'models/object0_dto.dart';
 export 'models/p1_class_dto.dart';
-export 'models/object1_dto.dart';
+export 'models/api_request_body_dto.dart';
 export 'models/enum0_dto.dart';
 export 'models/p2_enum_dto.dart';
 // Root client
