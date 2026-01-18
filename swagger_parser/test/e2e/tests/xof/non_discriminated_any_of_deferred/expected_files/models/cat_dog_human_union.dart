@@ -29,13 +29,17 @@ sealed class CatDogHumanUnion with _$CatDogHumanUnion {
   }) = CatDogHumanUnionHuman;
 
   factory CatDogHumanUnion.fromJson(Map<String, Object?> json) =>
-      // TODO: Deserialization must be implemented by the user, because the OpenAPI specification did not provide a discriminator.
-      // Use _$$CatDogHumanUnion<UnionName>ImplFromJson(json) to deserialize the union <UnionName>.
+      // TODO: No discriminator in OpenAPI spec - you must implement this manually.
+      //
+      // Inspect the JSON and return the matching variant. Each variant has a fromJson:
+      //   CatDogHumanUnionVariantName.fromJson(json)
+      //
+      // Example pattern (check for unique fields):
+      //   json.containsKey('uniqueFieldA') ? CatDogHumanUnionTypeA.fromJson(json) :
+      //   json.containsKey('uniqueFieldB') ? CatDogHumanUnionTypeB.fromJson(json) :
+      //   CatDogHumanUnionDefault.fromJson(json);
+      //
+      // IMPORTANT: Keep the => arrow syntax. Converting to a { } body will cause
+      // freezed to skip generating toJson/fromJson for this class.
       throw UnimplementedError();
-
-  Map<String, Object?> toJson() => switch (this) {
-        CatDogHumanUnionCat() => _$$CatDogHumanUnionCatImplToJson(this),
-        CatDogHumanUnionDog() => _$$CatDogHumanUnionDogImplToJson(this),
-        CatDogHumanUnionHuman() => _$$CatDogHumanUnionHumanImplToJson(this),
-      };
 }
