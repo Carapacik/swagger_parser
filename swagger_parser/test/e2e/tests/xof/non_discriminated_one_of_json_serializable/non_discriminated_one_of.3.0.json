@@ -4,7 +4,53 @@
     "title": "Family API",
     "version": "1.0.0"
   },
-  "paths": {},
+  "paths": {
+    "/family": {
+      "get": {
+        "operationId": "getFamily",
+        "summary": "Get a family",
+        "tags": ["family"],
+        "responses": {
+          "200": {
+            "description": "A family",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Family"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/family/members": {
+      "get": {
+        "operationId": "getFamilyMembers",
+        "summary": "Get family members (returns oneOf directly)",
+        "tags": ["family"],
+        "responses": {
+          "200": {
+            "description": "A list of family members",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      { "$ref": "#/components/schemas/Cat" },
+                      { "$ref": "#/components/schemas/Dog" },
+                      { "$ref": "#/components/schemas/Human" }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "components": {
     "schemas": {
       "Family": {

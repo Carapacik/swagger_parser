@@ -1,3 +1,6 @@
+## 1.40.0
+- Fix client methods returning `ModelNameUnion` instead of `ModelNameSealed` for oneOf types ([#393](https://github.com/Carapacik/swagger_parser/issues/393))
+
 ## 1.39.0
 - Handle request body name generation case when request body is declared within request
 - Fix incorrect deserialization syntax for undiscriminated unions (Freezed serializer)

@@ -2,7 +2,19 @@ openapi: 3.1.0
 info:
   title: Family API (anyOf with mixed refs and inline variants)
   version: 1.0.0
-paths: {}
+paths:
+  /family:
+    get:
+      operationId: getFamily
+      summary: Get a family
+      tags: [family]
+      responses:
+        '200':
+          description: A family
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Family'
 components:
   schemas:
     Family:

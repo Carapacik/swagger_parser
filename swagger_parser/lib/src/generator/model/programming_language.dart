@@ -124,6 +124,7 @@ enum ProgrammingLanguage {
     bool originalHttpResponse = false,
     bool useFlutterCompute = false,
     String? fileName,
+    JsonSerializer? jsonSerializer,
   }) =>
       switch (this) {
         dart => dartRetrofitClientTemplate(
@@ -137,6 +138,7 @@ enum ProgrammingLanguage {
             useMultipartFile: useMultipartFile,
             useFlutterCompute: useFlutterCompute,
             fileName: fileName,
+            jsonSerializer: jsonSerializer,
           ),
         kotlin =>
           kotlinRetrofitClientTemplate(restClient: restClient, name: name),

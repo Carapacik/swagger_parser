@@ -2,7 +2,31 @@ openapi: 3.1.0
 info:
   title: Family API (anyOf, non-discriminated)
   version: 1.0.0
-paths: {}
+paths:
+  /family:
+    get:
+      operationId: getFamily
+      summary: Get a family
+      tags: [family]
+      responses:
+        '200':
+          description: A family
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Family'
+  /entity:
+    get:
+      operationId: getEntity
+      summary: Get an entity (returns top-level anyOf)
+      tags: [entity]
+      responses:
+        '200':
+          description: An entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatDogHuman'
 components:
   schemas:
     # This top-level schema intentionally uses anyOf WITHOUT a discriminator

@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:swagger_parser/src/generator/model/json_serializer.dart';
 import 'package:swagger_parser/src/generator/model/programming_language.dart';
 import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
 import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
@@ -17,7 +18,11 @@ String dartRetrofitClientTemplate({
   bool originalHttpResponse = false,
   bool useFlutterCompute = false,
   String? fileName,
+  JsonSerializer? jsonSerializer,
 }) {
+  // For non-freezed serializers, apply sealed naming to union imports and types
+  final applySealedNaming =
+      jsonSerializer != null && jsonSerializer != JsonSerializer.freezed;
   final parameterTypes = restClient.requests
       .expand((r) => r.parameters.map((p) => p.type))
       .toSet();
@@ -34,10 +39,15 @@ String dartRetrofitClientTemplate({
       ? "import 'package:flutter/foundation.dart' show compute;\n"
       : '';
 
+  // Transform imports for sealed naming if needed
+  final imports = applySealedNaming
+      ? restClient.imports.map(_applySealedNamingToImport).toSet()
+      : restClient.imports;
+
   final sb = StringBuffer('''
 ${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
 ${flutterComputeImport}import 'package:retrofit/retrofit.dart';
-${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
+${dartImports(imports: imports, pathPrefix: '../models/')}
 part '${fileName ?? name.toSnake}.g.dart';
 
 $restApiAnnotation
@@ -68,6 +78,7 @@ abstract class $name {
           includeMetadata: includeMetadata,
           useMultipartFile: useMultipartFile,
           openApiExtrasConstName: openApiExtrasConstName,
+          applySealedNaming: applySealedNaming,
         ),
       );
   }
@@ -86,13 +97,19 @@ String _toClientRequest(
   required bool includeMetadata,
   required bool useMultipartFile,
   String? openApiExtrasConstName,
+  bool applySealedNaming = false,
 }) {
-  final responseType = request.returnType == null
+  var responseType = request.returnType == null
       ? 'void'
       : request.returnType!.toSuitableType(
           ProgrammingLanguage.dart,
           useMultipartFile: useMultipartFile,
         );
+
+  // Apply sealed naming transformation to response type if needed
+  if (applySealedNaming) {
+    responseType = _renameUnionTypes(responseType);
+  }
 
   // Check if this is a binary response (file download)
   final isBinaryResponse = request.returnType?.format == 'binary' ||
@@ -266,3 +283,22 @@ String _defaultValue(UniversalType t) => !t.isRequired && t.defaultValue != null
     : '';
 
 bool _startsWithDollar(String name) => name.isNotEmpty && name.startsWith(r'$');
+
+// Helper functions for sealed naming transformation
+const _unionSuffix = 'Union';
+const _snakeUnionSuffix = '_union';
+
+String _applySealedNamingToImport(String import) {
+  if (import.endsWith(_unionSuffix)) {
+    return '${import.substring(0, import.length - _unionSuffix.length)}Sealed';
+  }
+  if (import.endsWith(_snakeUnionSuffix)) {
+    return '${import.substring(0, import.length - _snakeUnionSuffix.length)}_sealed';
+  }
+  return import;
+}
+
+String _renameUnionTypes(String type) => type.replaceAllMapped(
+      RegExp(r'([A-Z][A-Za-z0-9_]*)Union\b'),
+      (match) => '${match.group(1)}Sealed',
+    );
