@@ -8,6 +8,7 @@ import 'cat.dart';
 import 'cat_type.dart';
 import 'dog.dart';
 import 'dog_type.dart';
+import 'get_family_members_response_sealed.dart';
 import 'human.dart';
 import 'human_type.dart';
 

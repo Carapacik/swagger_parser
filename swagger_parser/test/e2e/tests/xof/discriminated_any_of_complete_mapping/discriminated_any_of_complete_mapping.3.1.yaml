@@ -2,7 +2,42 @@ openapi: 3.1.0
 info:
   title: Family API (anyOf, discriminated)
   version: 1.0.0
-paths: {}
+paths:
+  /family:
+    get:
+      operationId: getFamily
+      summary: Get a family
+      tags: [family]
+      responses:
+        '200':
+          description: A family
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Family'
+  /family/members:
+    get:
+      operationId: getFamilyMembers
+      summary: Get family members (returns anyOf directly)
+      tags: [family]
+      responses:
+        '200':
+          description: A list of family members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: '#/components/schemas/Cat'
+                    - $ref: '#/components/schemas/Dog'
+                    - $ref: '#/components/schemas/Human'
+                  discriminator:
+                    propertyName: type
+                    mapping:
+                      Cat: '#/components/schemas/Cat'
+                      Dog: '#/components/schemas/Dog'
+                      Human: '#/components/schemas/Human'
 components:
   schemas:
     Family:
