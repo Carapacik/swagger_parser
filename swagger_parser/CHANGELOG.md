@@ -1,3 +1,6 @@
+## 1.39.2
+- Add `include_paths` option for filtering endpoints by paths
+
 ## 1.39.1
 - Fix client methods returning `ModelNameUnion` instead of `ModelNameSealed` for oneOf types ([#393](https://github.com/Carapacik/swagger_parser/issues/393))
 
