@@ -2267,7 +2267,6 @@ class OpenApiParser {
     );
   }
 
-
   List<Map<String, dynamic>> filterNullTypes(List<dynamic> values) => values
       .whereType<Map<String, dynamic>>()
       .where((item) =>

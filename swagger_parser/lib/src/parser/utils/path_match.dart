@@ -14,12 +14,36 @@ bool matchesPathPattern(String path, List<String> patterns) {
   const doubleStarEnd = '__DOUBLE_STAR_END__';
   for (final pattern in patterns) {
     final processedPattern = pattern
-        .replaceAll('/**', doubleStarEnd) // Replace /** with end marker (to distinguish from single star)
-        .replaceAll('**', doubleStarStart); // Replace ** with start marker (to distinguish from single star)
-    var escapedPattern = RegExp.escape(processedPattern) // Escape all regex special characters
-        .replaceAll(doubleStarEnd, '.*') // Replace end marker of double star with .*
-        .replaceAll(doubleStarStart, '(?:/.*)?') // Replace with optional trailing slash with any (0+) characters
-        .replaceAll(r'\*', '([^/]+)'); // Replace * with one or more characters except /
+        // Replace /** with end marker (to distinguish from single star)
+        .replaceAll(
+          '/**',
+          doubleStarEnd,
+        )
+        // Replace ** with start marker (to distinguish from single star)
+        .replaceAll(
+          '**',
+          doubleStarStart,
+        );
+
+    // Escape all regex special characters
+    var escapedPattern = RegExp.escape(
+      processedPattern,
+    )
+        // Replace end marker of double star with .*
+        .replaceAll(
+          doubleStarEnd,
+          '.*',
+        )
+        // Replace with optional trailing slash with any (0+) characters
+        .replaceAll(
+          doubleStarStart,
+          '(?:/.*)?',
+        )
+        // Replace * with one or more characters except /
+        .replaceAll(
+          r'\*',
+          '([^/]+)',
+        );
 
     // Special handling for patterns starting with * (but not **)
     // If pattern starts with *, but not with **, and path starts with /, add / at the beginning
