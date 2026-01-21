@@ -1,4 +1,4 @@
-## 1.39.2
+## 1.39.3
 - Add `include_paths` option for filtering endpoints by paths
 
 ## 1.39.1
