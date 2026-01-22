@@ -1,3 +1,6 @@
+## 1.39.2
+- Add `generate_urls_constants` option for generating URL constants for all endpoints
+
 ## 1.39.1
 - Fix client methods returning `ModelNameUnion` instead of `ModelNameSealed` for oneOf types ([#393](https://github.com/Carapacik/swagger_parser/issues/393))
 
