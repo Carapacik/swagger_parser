@@ -195,6 +195,10 @@ swagger_parser:
   use_multipart_file: false
 
   # DART ONLY
+  # Optional. Set `true` to generate URL constants for all endpoints.
+  generate_urls_constants: false
+
+  # DART ONLY
   # Optional. Set tags to be excluded on endpoint generation.
   #
   # Endpoints with these tags will not be included in the generated clients.

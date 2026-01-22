@@ -49,6 +49,7 @@ class SWPConfig {
     this.includeIfNull = false,
     this.inferRequiredFromNullable = false,
     this.useFlutterCompute = false,
+    this.generateUrlsConstants = false,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -91,6 +92,7 @@ class SWPConfig {
     required this.includeIfNull,
     required this.inferRequiredFromNullable,
     required this.useFlutterCompute,
+    required this.generateUrlsConstants,
     this.fallbackUnion,
   });
 
@@ -343,6 +345,9 @@ class SWPConfig {
     final useFlutterCompute = yamlMap['use_flutter_compute'] as bool? ??
         rootConfig?.useFlutterCompute;
 
+    final generateUrlsConstants = yamlMap['generate_urls_constants'] as bool? ??
+        rootConfig?.generateUrlsConstants;
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
@@ -390,6 +395,7 @@ class SWPConfig {
           inferRequiredFromNullable ?? dc.inferRequiredFromNullable,
       useFlutterCompute: useFlutterCompute ?? dc.useFlutterCompute,
       includePaths: includePathsList ?? dc.includePaths,
+      generateUrlsConstants: generateUrlsConstants ?? dc.generateUrlsConstants,
     );
   }
 
@@ -607,6 +613,10 @@ class SWPConfig {
   /// and serialize/deserialize top-level functions for isolate-based multithreading.
   final bool useFlutterCompute;
 
+  /// DART/FLUTTER ONLY
+  /// Optional. Set `true` to generate URL constants for all endpoints.
+  final bool generateUrlsConstants;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -636,6 +646,7 @@ class SWPConfig {
       mergeOutputs: mergeOutputs,
       includeIfNull: includeIfNull,
       useFlutterCompute: useFlutterCompute,
+      generateUrlsConstants: generateUrlsConstants,
     );
   }
 
