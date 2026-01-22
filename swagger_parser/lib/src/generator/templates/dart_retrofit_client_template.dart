@@ -6,12 +6,15 @@ import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 import 'package:swagger_parser/src/utils/base_utils.dart';
 import 'package:swagger_parser/src/utils/type_utils.dart';
 
+String getStaticFieldName(UniversalRequest request) => request.name.toCamel;
+
 /// Provides template for generating dart Retrofit client
 String dartRetrofitClientTemplate({
   required UniversalRestClient restClient,
   required String name,
   required String defaultContentType,
   required bool useMultipartFile,
+  required bool generateUrlsConstants,
   bool extrasParameterByDefault = false,
   bool dioOptionsParameterByDefault = false,
   bool addOpenApiMetadata = false,
@@ -72,11 +75,13 @@ abstract class $name {
           request,
           defaultContentType,
           className: name,
+          clientName: name,
           originalHttpResponse: originalHttpResponse,
           addExtrasParameter: includeExtras,
           addDioOptionsParameter: dioOptionsParameterByDefault,
           includeMetadata: includeMetadata,
           useMultipartFile: useMultipartFile,
+          generateUrlsConstants: generateUrlsConstants,
           openApiExtrasConstName: openApiExtrasConstName,
           applySealedNaming: applySealedNaming,
         ),
@@ -84,6 +89,17 @@ abstract class $name {
   }
 
   sb.write('}\n');
+  if (generateUrlsConstants) {
+    sb.write(
+      '''
+\n
+abstract class ${name}Urls {
+${restClient.requests.map((e) => '\t/// ${e.route}\n\tstatic const ${getStaticFieldName(e)} = "${e.route}";').join('\n')}
+}\n
+''',
+    );
+  }
+
   return sb.toString();
 }
 
@@ -96,6 +112,8 @@ String _toClientRequest(
   required bool addDioOptionsParameter,
   required bool includeMetadata,
   required bool useMultipartFile,
+  required String clientName,
+  required bool generateUrlsConstants,
   String? openApiExtrasConstName,
   bool applySealedNaming = false,
 }) {
@@ -133,9 +151,13 @@ String _toClientRequest(
         )
       : null;
 
+  final requestAnnotation = generateUrlsConstants
+      ? '@${request.requestType.name.toUpperCase()}(${clientName}Urls.${getStaticFieldName(request)})'
+      : "@${request.requestType.name.toUpperCase()}('${request.route}')";
+
   final sb = StringBuffer()
     ..write(
-      "  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}@${request.requestType.name.toUpperCase()}('${request.route}')$dioResponseTypeAnnotation\n  Future<$finalResponseType> ${request.name}(",
+      "  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}$requestAnnotation$dioResponseTypeAnnotation\n  Future<$finalResponseType> ${request.name}(",
     );
 
   if (request.parameters.isNotEmpty ||

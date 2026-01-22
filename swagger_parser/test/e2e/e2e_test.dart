@@ -19,6 +19,20 @@ void main() {
       );
     });
 
+    test('generate_urls_constants', () async {
+      await e2eTest(
+        'generate_urls_constants',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          generateUrlsConstants: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('enum_member_names', () async {
       await e2eTest(
         'enum_member_names',

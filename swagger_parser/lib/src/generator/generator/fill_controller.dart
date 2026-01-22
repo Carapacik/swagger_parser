@@ -98,6 +98,7 @@ final class FillController {
         useFlutterCompute: config.useFlutterCompute,
         fileName: fileName,
         jsonSerializer: config.jsonSerializer,
+        generateUrlsConstants: config.generateUrlsConstants,
       ),
     );
   }
