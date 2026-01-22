@@ -24389,7 +24389,7 @@ _.at=k
 _.dx=l
 _.dy=m
 _.fr=n},
-a0S:function a0S(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,a0,a1,a2,a3,a4){var _=this
+a0S:function a0S(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,a0,a1,a2,a3,a4,a5){var _=this
 _.a=a
 _.c=b
 _.d=c
@@ -24413,7 +24413,8 @@ _.dx=a0
 _.dy=a1
 _.fr=a2
 _.fx=a3
-_.fy=a4},
+_.fy=a4
+_.go=a5},
 If:function If(a,b){this.a=a
 this.b=b},
 a00:function a00(){},
@@ -24782,17 +24783,17 @@ aq4:function aq4(){},
 aq5:function aq5(){},
 apO:function apO(){},
 aqf:function aqf(){},
-aQs(a,b,c,d,e,f,g,h,i,a0,a1){var s,r,q,p,o,n=f!==B.kr,m=i.c,l=A.K(m).i("dU<1,c4>"),k=A.cv(new A.dU(m,new A.aqG(),l),l.i("o.E")),j=i.b
+aQs(a,b,c,d,e,f,g,h,i,a0,a1,a2){var s,r,q,p,o,n=g!==B.kr,m=a0.c,l=A.K(m).i("dU<1,c4>"),k=A.cv(new A.dU(m,new A.aqG(),l),l.i("o.E")),j=a0.b
 if(n){l=j.$ti.i("bL<1,k>")
-j=A.cv(new A.bL(j,A.aQw(),l),l.i("o.E"))}l=A.aNE(i)
+j=A.cv(new A.bL(j,A.aQw(),l),l.i("o.E"))}l=A.aNE(a0)
 s=A.auF(k,!1)
-r=A.aOv(i,b)
+r=A.aOv(a0,b)
 q=A.vx(j,"../models/")
-l=l+s+"import 'package:dio/dio.dart'"+r+";\nimport 'package:retrofit/retrofit.dart';\n"+q+"\npart '"+e+".g.dart';\n\n@RestApi()\nabstract class "+g+" {\n  factory "+g+"(Dio dio, {String? baseUrl}) = _"+g+";\n"
+l=l+s+"import 'package:dio/dio.dart'"+r+";\nimport 'package:retrofit/retrofit.dart';\n"+q+"\npart '"+e+".g.dart';\n\n@RestApi()\nabstract class "+h+" {\n  factory "+h+"(Dio dio, {String? baseUrl}) = _"+h+";\n"
 for(s=m.length,p=0;p<m.length;m.length===s||(0,A.x)(m),++p){o=m[p]
-l=l+"\n"+A.aPx(o,b,!1,!1,n,g,!1,null,!1,!1)}m=l+"}\n"
+l=l+"\n"+A.aPx(o,b,!1,!1,n,h,h,!1,!1,null,!1,!1)}m=l+"}\n"
 return m.charCodeAt(0)==0?m:m},
-aPx(a3,a4,a5,a6,a7,a8,a9,b0,b1,b2){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a=null,a0=a3.w,a1=a0==null,a2=a1?"void":A.fP(a0,B.a6,!1)
+aPx(a3,a4,a5,a6,a7,a8,a9,b0,b1,b2,b3,b4){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a=null,a0=a3.w,a1=a0==null,a2=a1?"void":A.fP(a0,B.a6,!1)
 if(a7)a2=A.aPj(a2)
 if((a1?a:a0.d)!=="binary")if((a1?a:a0.a)==="string"){a0=(a1?a:a0.d)==="binary"
 s=a0}else s=!1
@@ -24802,7 +24803,7 @@ else r=a2
 q=s?"\n  @DioResponseType(ResponseType.bytes)":""
 a0=A.e7(a3.b,"  ","  ",!1)
 a1=a3.z?"@Deprecated('This method is marked as deprecated')\n  ":""
-a1="  "+a0+a1+A.aND(a3,a4)+"@"+a3.f.b.toUpperCase()+"('"+a3.r+"')"+q+"\n  Future<"+r+"> "+a3.a+"("
+a1="  "+a0+a1+A.aND(a3,a4)+("@"+a3.f.b.toUpperCase()+"('"+a3.r+"')")+q+"\n  Future<"+r+"> "+a3.a+"("
 a0=a3.x
 p=a0.length
 if(p!==0)a1+="{\n"
@@ -82684,7 +82685,7 @@ a2Q(a){if(B.c.cf(a,"Sealed"))return a
 if(B.c.cf(a,"Union"))return B.c.T(a,0,a.length-5)+"Sealed"
 return a},
 akO(a){var s=this.b,r=s.e,q=s.c,p=a.a,o=q===B.a6?A.eA(p+"_"+r):A.bb(p)+A.bb(r),n=s.x?"clients":A.eA(p)
-return new A.ds(n+"/"+o+"."+q.c,q.apN(a,A.bb(p)+A.bb(r),!1,s.at,!1,!1,o,s.d,s.Q,!1,!1,!1))},
+return new A.ds(n+"/"+o+"."+q.c,q.apN(a,A.bb(p)+A.bb(r),!1,s.at,!1,!1,o,!1,s.d,s.Q,!1,!1,!1))},
 akP(a){var s,r,q,p,o,n,m,l=this.b,k=l.r,j=new A.H(a,new A.a00(),A.K(a).i("H<1,k>")).fw(0),i=t.N
 i=A.q(i,i)
 for(s=a.length,r=0;r<a.length;a.length===s||(0,A.x)(a),++r){q=a[r].a
@@ -82736,7 +82737,7 @@ j=h.acZ()
 h.b!==$&&A.bn()
 h.b=j
 g=h.aoM()
-q=new A.a0R(new A.a0S(n,o.e,o.f,o.r,o.w,o.x,!0,o.z,o.Q,o.as,o.at,!1,"application/json",!1,!1,!1,!1,!1,!1,null,!1,!1,!1,!1),j,h.aoL(),g).XH()
+q=new A.a0R(new A.a0S(n,o.e,o.f,o.r,o.w,o.x,!0,o.z,o.Q,o.as,o.at,!1,"application/json",!1,!1,!1,!1,!1,!1,null,!1,!1,!1,!1,!1),j,h.aoL(),g).XH()
 s=1
 break
 case 1:return A.R(q,r)}})
@@ -82812,8 +82813,8 @@ o=a4.d
 l=A.aPd(o)
 o=o.gb7(o)?"\n)":")"
 return"import com.squareup.moshi.Json\nimport com.squareup.moshi.JsonClass\n\n"+s+"@JsonClass(generateAdapter = true)\ndata class "+p+"("+l+o+"\n"}break}throw A.f(A.bs("Unknown type exception",a3))},
-apN(a,b,c,d,e,f,g,h,i,j,k,l){var s
-switch(this.a){case 0:s=A.aQs(!1,d,!1,!1,g,h,b,!1,a,!1,!1)
+apN(a,b,c,d,e,f,g,h,i,j,k,l,m){var s
+switch(this.a){case 0:s=A.aQs(!1,d,!1,!1,g,!1,i,b,!1,a,!1,!1)
 break
 case 1:s=A.aRi(b,a)
 break
