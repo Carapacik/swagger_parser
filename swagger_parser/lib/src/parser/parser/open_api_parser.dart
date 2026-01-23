@@ -17,6 +17,7 @@ import 'package:swagger_parser/src/parser/model/universal_type.dart';
 import 'package:swagger_parser/src/parser/utils/anchor_registry.dart';
 import 'package:swagger_parser/src/parser/utils/context_stack.dart';
 import 'package:swagger_parser/src/parser/utils/http_utils.dart';
+import 'package:swagger_parser/src/parser/utils/path_match.dart';
 import 'package:swagger_parser/src/parser/utils/type_utils.dart';
 import 'package:yaml/yaml.dart';
 
@@ -596,10 +597,17 @@ class OpenApiParser {
     if (!_definitionFileContent.containsKey(_pathsConst)) {
       return [];
     }
+
+    final includePaths = config.includePaths;
+
     (_definitionFileContent[_pathsConst] as Map<String, dynamic>).forEach((
       path,
       pathValue,
     ) {
+      if (includePaths != null && !matchesPathPattern(path, includePaths)) {
+        return;
+      }
+
       final pathValueMap = pathValue as Map<String, dynamic>;
 
       // global parameters are defined at the path level (i.e. /users/{id})
@@ -1111,7 +1119,9 @@ class OpenApiParser {
       }
     }
 
-    if (config.includeTags.isNotEmpty || config.excludeTags.isNotEmpty) {
+    if (config.includeTags.isNotEmpty ||
+        config.excludeTags.isNotEmpty ||
+        config.includePaths != null) {
       return _filterUsedClasses(dataClasses);
     }
 
