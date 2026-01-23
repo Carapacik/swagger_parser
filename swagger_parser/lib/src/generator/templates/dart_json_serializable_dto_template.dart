@@ -52,8 +52,7 @@ String dartJsonSerializableDtoTemplate(
 
   return '''
 $asyncImport${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:json_annotation/json_annotation.dart';
-${dartImports(imports: _filterUnionImportsForNonUnion(dataClass))}
-${actualFieldParsers.isEmpty ? '' : actualFieldParsers.map((e) => "import '${e.parserAbsolutePath}';").toSet().join('\n')}
+${dartImports(imports: _filterUnionImportsForNonUnion(dataClass))}${actualFieldParsers.isEmpty ? '' : '\n${actualFieldParsers.map((e) => "import '${e.parserAbsolutePath}';").toSet().join('\n')}'}
 part '$classNameSnake.g.dart';
 
 ${descriptionComment(dataClass.description)}@JsonSerializable()
@@ -422,7 +421,7 @@ String _parametersInClass(
       final fieldParser =
           fieldParsers.firstWhereOrNull((f) => f.applyToType == dartType);
       return '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '  ')}'
-          '${fieldParser != null ? '\t@${fieldParser.parserName}()\n' : ''} ${_jsonKey(e, includeIfNull)}  final ${_renameUnionTypes(e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${e.name};';
+          '${fieldParser != null ? '\t@${fieldParser.parserName}()\n' : ''}${_jsonKey(e, includeIfNull)}  final ${_renameUnionTypes(e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${e.name};';
     }).join();
 
 String _parametersInConstructor(
