@@ -28,6 +28,7 @@ final class FillController {
           dataClass,
           jsonSerializer: config.jsonSerializer,
           enumsToJson: config.enumsToJson,
+          fieldParsers: config.fieldParsers,
           unknownEnumValue: config.unknownEnumValue,
           markFilesAsGenerated: config.markFilesAsGenerated,
           generateValidator: config.generateValidator,
