@@ -43,6 +43,7 @@ class SWPConfig {
     this.dartMappableConvenientWhen = false,
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
+    this.includePaths,
     this.fallbackClient = 'fallback',
     this.mergeOutputs = false,
     this.includeIfNull = false,
@@ -84,6 +85,7 @@ class SWPConfig {
     required this.useMultipartFile,
     required this.excludeTags,
     required this.includeTags,
+    required this.includePaths,
     required this.fallbackClient,
     required this.mergeOutputs,
     required this.dartMappableConvenientWhen,
@@ -311,6 +313,22 @@ class SWPConfig {
       includedTags = List.from(rootConfig!.includeTags);
     }
 
+    final includePaths = yamlMap['include_paths'] as YamlList?;
+    List<String>? includePathsList;
+    if (includePaths != null) {
+      includePathsList = [];
+      for (final p in includePaths) {
+        if (p is! String) {
+          throw const ConfigException(
+            "Config parameter 'include_paths' values must be List of String.",
+          );
+        }
+        includePathsList.add(p);
+      }
+    } else if (rootConfig?.includePaths case final paths?) {
+      includePathsList = List.from(paths);
+    }
+
     final fallbackClient =
         yamlMap['fallback_client'] as String? ?? rootConfig?.fallbackClient;
 
@@ -376,6 +394,7 @@ class SWPConfig {
       inferRequiredFromNullable:
           inferRequiredFromNullable ?? dc.inferRequiredFromNullable,
       useFlutterCompute: useFlutterCompute ?? dc.useFlutterCompute,
+      includePaths: includePathsList ?? dc.includePaths,
       generateUrlsConstants: generateUrlsConstants ?? dc.generateUrlsConstants,
     );
   }
@@ -550,6 +569,15 @@ class SWPConfig {
   /// Endpoints with these tags will not be included in the generated clients.
   final List<String> excludeTags;
 
+  /// {@template include_paths}
+  /// Optional. Set included paths.
+  ///
+  /// Also supports wildcard paths (e.g. `/path/*/update` or `/path/**`)
+  ///
+  /// If set, only endpoints with these paths will be included in the generated clients.
+  /// {@endtemplate}
+  final List<String>? includePaths;
+
   /// DART ONLY
   /// Optional. Set included tags.
   ///
@@ -641,6 +669,7 @@ class SWPConfig {
       excludeTags: excludeTags,
       replacementRulesForRawSchema: replacementRulesForRawSchema,
       includeTags: includeTags,
+      includePaths: includePaths,
       fallbackClient: fallbackClient,
       inferRequiredFromNullable: inferRequiredFromNullable,
     );

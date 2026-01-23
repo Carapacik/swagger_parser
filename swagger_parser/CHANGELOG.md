@@ -1,3 +1,6 @@
+## 1.40.0
+- Add `include_paths` option for filtering endpoints by paths
+
 ## 1.39.2
 - Add `generate_urls_constants` option for generating URL constants for all endpoints
 
