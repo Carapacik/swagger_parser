@@ -1,3 +1,6 @@
+## 1.41.0
+- Add `field_parsers` option for setting field parsers for JSON serializable
+
 ## 1.40.0
 - Add `include_paths` option for filtering endpoints by paths
 
