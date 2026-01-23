@@ -17,6 +17,7 @@ class ParserConfig {
     this.useXNullable = false,
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
+    this.includePaths,
     this.fallbackClient = 'fallback',
     this.inferRequiredFromNullable = false,
   });
@@ -73,6 +74,9 @@ class ParserConfig {
   /// If set, only endpoints with these tags will be included in the generated clients.
   /// **NOTE: This will override the [excludeTags] if set.**
   final List<String> includeTags;
+
+  ///{@macro include_paths}
+  final List<String>? includePaths;
 
   /// DART ONLY
   /// Optional. Fallback client name for endpoints without tags.

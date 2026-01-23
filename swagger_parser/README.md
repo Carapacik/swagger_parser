@@ -159,6 +159,16 @@ swagger_parser:
    - pattern: "\\]"
      replacement: "_"
 
+  # Optional. Set paths to be included on endpoint generation.
+  #
+  # Also supports wildcard paths (e.g. `/path/*/update` or `/path/**`)
+  #
+  # If set, only endpoints with these paths will be included in the generated clients.
+  include_paths:
+    - "/some/concrete/path/{id}"
+    - "/some/wildcard/*/path"
+    - "/another/wildcard/**"
+
   # Optional. Skip parameters with names.
   skipped_parameters:
     - "X-Some-Token"
