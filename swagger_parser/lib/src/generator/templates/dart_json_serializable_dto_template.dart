@@ -53,7 +53,7 @@ String dartJsonSerializableDtoTemplate(
   return '''
 $asyncImport${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:json_annotation/json_annotation.dart';
 ${dartImports(imports: _filterUnionImportsForNonUnion(dataClass))}
-${actualFieldParsers.map((e) => "import '${e.parserAbsolutePath}';").toSet().join('\n')}
+${actualFieldParsers.isEmpty ? '' : actualFieldParsers.map((e) => "import '${e.parserAbsolutePath}';").toSet().join('\n')}
 part '$classNameSnake.g.dart';
 
 ${descriptionComment(dataClass.description)}@JsonSerializable()
