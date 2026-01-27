@@ -7,7 +7,7 @@ environment:
 
 dependencies:
   archive: ^4.0.7
-  file_picker: ^10.3.8
+  file_picker: 10.3.8
   flutter:
     sdk: flutter
   flutter_web_plugins:
