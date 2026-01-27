@@ -179,6 +179,40 @@ void main() {
         schemaFileName: 'openapi.yaml',
       );
     });
+
+    test('field_parsers', () async {
+      await e2eTest(
+        'field_parsers',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          // ignore: avoid_redundant_argument_values
+          jsonSerializer: JsonSerializer.jsonSerializable,
+          putClientsInFolder: true,
+          fieldParsers: [
+            const FieldParser(
+              applyToType: 'int',
+              parserName: 'CustomIntParser',
+              parserAbsolutePath:
+                  'package:your_package/lib/utils/parsers/custom_int_parser.dart',
+            ),
+            const FieldParser(
+              applyToType: 'int?',
+              parserName: 'CustomNullableIntParser',
+              parserAbsolutePath:
+                  'package:your_package/lib/utils/parsers/custom_nullable_int_parser.dart',
+            ),
+            const FieldParser(
+              applyToType: 'bool',
+              parserName: 'CustomBoolParser',
+              parserAbsolutePath:
+                  'package:your_package/lib/utils/parsers/custom_bool_parser.dart',
+            ),
+          ],
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
   });
 
   group('basic', () {

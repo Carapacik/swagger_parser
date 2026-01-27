@@ -11,6 +11,7 @@ export 'src/generator/exception/generator_exception.dart';
 export 'src/generator/generator/fill_controller.dart';
 export 'src/generator/generator/generator.dart';
 export 'src/generator/generator/generator_processor.dart';
+export 'src/generator/model/field_parser.dart';
 export 'src/generator/model/generated_file.dart';
 export 'src/generator/model/json_serializer.dart';
 export 'src/generator/model/programming_language.dart';

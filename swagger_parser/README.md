@@ -169,6 +169,22 @@ swagger_parser:
     - "/some/wildcard/*/path"
     - "/another/wildcard/**"
 
+  # Optional (dart & json_serializable only). Set field parsers for JSON serializable.
+  #
+  # Field parsers are used to parse specific fields of a DTO.
+  #
+  # Parser must implements JsonConverter<T, Object?> interface from json_annotation package.
+  field_parsers:
+    - apply_to_type: "int"
+      parser_name: "CustomIntParser"
+      parser_absolute_path: "package:your_package/lib/utils/parsers/custom_int_parser.dart"
+    - apply_to_type: "int?"
+      parser_name: "CustomNullableIntParser"
+      parser_absolute_path: "package:your_package/lib/utils/parsers/custom_nullable_int_parser.dart"
+    - apply_to_type: "bool"
+      parser_name: "CustomBoolParser"
+      parser_absolute_path: "package:your_package/lib/utils/parsers/custom_bool_parser.dart"
+
   # Optional. Skip parameters with names.
   skipped_parameters:
     - "X-Some-Token"

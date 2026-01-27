@@ -1,3 +1,4 @@
+import 'package:swagger_parser/src/generator/model/field_parser.dart';
 import 'package:swagger_parser/src/generator/model/json_serializer.dart';
 import 'package:swagger_parser/src/generator/model/programming_language.dart';
 import 'package:swagger_parser/src/parser/model/replacement_rule.dart';
@@ -33,6 +34,7 @@ class GeneratorConfig {
     this.includeIfNull = false,
     this.useFlutterCompute = false,
     this.generateUrlsConstants = false,
+    this.fieldParsers = const [],
   });
 
   /// Optional. Set API name for folder and export file or merged output file
@@ -159,4 +161,7 @@ class GeneratorConfig {
   /// DART/FLUTTER ONLY
   /// Optional. Set `true` to generate URL constants for all endpoints.
   final bool generateUrlsConstants;
+
+  /// {@macro field_parsers}
+  final List<FieldParser> fieldParsers;
 }
