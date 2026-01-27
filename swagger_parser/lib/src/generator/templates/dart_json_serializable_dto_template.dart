@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:swagger_parser/src/generator/model/field_parser.dart';
 import 'package:swagger_parser/src/generator/model/programming_language.dart';
 import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
 import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
@@ -11,6 +12,7 @@ String dartJsonSerializableDtoTemplate(
   required bool markFileAsGenerated,
   required bool useMultipartFile,
   required bool includeIfNull,
+  required List<FieldParser> fieldParsers,
   bool useFlutterCompute = false,
   String? fallbackUnion,
 }) {
@@ -33,9 +35,24 @@ String dartJsonSerializableDtoTemplate(
       useFlutterCompute ? _generateFlutterComputeSerializer(className) : '';
   final asyncImport = useFlutterCompute ? "import 'dart:async';\n\n" : '';
 
+  final actualFieldParsers = fieldParsers
+      .where(
+        (e) => dataClass.parameters.any(
+          (p) =>
+              _renameUnionTypes(
+                p.toSuitableType(
+                  ProgrammingLanguage.dart,
+                  useMultipartFile: useMultipartFile,
+                ),
+              ) ==
+              e.applyToType,
+        ),
+      )
+      .toList();
+
   return '''
 $asyncImport${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:json_annotation/json_annotation.dart';
-${dartImports(imports: _filterUnionImportsForNonUnion(dataClass))}
+${dartImports(imports: _filterUnionImportsForNonUnion(dataClass))}${actualFieldParsers.isEmpty ? '' : '\n${actualFieldParsers.map((e) => "import '${e.parserAbsolutePath}';").toSet().join('\n')}'}
 part '$classNameSnake.g.dart';
 
 ${descriptionComment(dataClass.description)}@JsonSerializable()
@@ -43,7 +60,7 @@ class $className {
   const $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersInConstructor(dataClass.parameters, includeIfNull)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''});
   
   factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);
-  ${_parametersInClass(dataClass.parameters, useMultipartFile, includeIfNull)}${dataClass.parameters.isNotEmpty ? '\n' : ''}
+  ${_parametersInClass(dataClass.parameters, useMultipartFile, includeIfNull, actualFieldParsers)}${dataClass.parameters.isNotEmpty ? '\n' : ''}
   Map<String, Object?> toJson() => _\$${className}ToJson(this);
 }
 $serializerClass''';
@@ -395,14 +412,17 @@ String _parametersInClass(
   Set<UniversalType> parameters,
   bool useMultipartFile,
   bool includeIfNull,
+  List<FieldParser> fieldParsers,
 ) =>
-    parameters
-        .mapIndexed(
-          (i, e) =>
-              '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '  ')}'
-              '${_jsonKey(e, includeIfNull)}  final ${_renameUnionTypes(e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${e.name};',
-        )
-        .join();
+    parameters.mapIndexed((i, e) {
+      final dartType = _renameUnionTypes(e.toSuitableType(
+          ProgrammingLanguage.dart,
+          useMultipartFile: useMultipartFile));
+      final fieldParser =
+          fieldParsers.firstWhereOrNull((f) => f.applyToType == dartType);
+      return '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '  ')}'
+          '${fieldParser != null ? '\t@${fieldParser.parserName}()\n' : ''}${_jsonKey(e, includeIfNull)}  final ${_renameUnionTypes(e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${e.name};';
+    }).join();
 
 String _parametersInConstructor(
     Set<UniversalType> parameters, bool includeIfNull) {

@@ -835,4 +835,363 @@ void main() {
       expect(generatorConfig.includeIfNull, isTrue);
     });
   });
+
+  group('Field Parsers Configuration', () {
+    test('should default fieldParsers to empty list', () {
+      const config = SWPConfig(outputDirectory: 'lib/api');
+      expect(config.fieldParsers, isEmpty);
+    });
+
+    test('should parse single field parser from YAML', () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'field_parsers': [
+          {
+            'apply_to_type': 'int',
+            'parser_name': 'CustomIntParser',
+            'parser_absolute_path':
+                'package:your_package/lib/utils/parsers/custom_int_parser.dart',
+          },
+        ],
+      });
+
+      final config = SWPConfig.fromYaml(yamlMap);
+      expect(config.fieldParsers, hasLength(1));
+      expect(config.fieldParsers[0].applyToType, equals('int'));
+      expect(config.fieldParsers[0].parserName, equals('CustomIntParser'));
+      expect(
+        config.fieldParsers[0].parserAbsolutePath,
+        equals('package:your_package/lib/utils/parsers/custom_int_parser.dart'),
+      );
+    });
+
+    test('should parse multiple field parsers from YAML', () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'field_parsers': [
+          {
+            'apply_to_type': 'int',
+            'parser_name': 'CustomIntParser',
+            'parser_absolute_path':
+                'package:your_package/lib/utils/parsers/custom_int_parser.dart',
+          },
+          {
+            'apply_to_type': 'int?',
+            'parser_name': 'CustomNullableIntParser',
+            'parser_absolute_path':
+                'package:your_package/lib/utils/parsers/custom_nullable_int_parser.dart',
+          },
+          {
+            'apply_to_type': 'bool',
+            'parser_name': 'CustomBoolParser',
+            'parser_absolute_path':
+                'package:your_package/lib/utils/parsers/custom_bool_parser.dart',
+          },
+        ],
+      });
+
+      final config = SWPConfig.fromYaml(yamlMap);
+      expect(config.fieldParsers, hasLength(3));
+
+      expect(config.fieldParsers[0].applyToType, equals('int'));
+      expect(config.fieldParsers[0].parserName, equals('CustomIntParser'));
+      expect(
+        config.fieldParsers[0].parserAbsolutePath,
+        equals('package:your_package/lib/utils/parsers/custom_int_parser.dart'),
+      );
+
+      expect(config.fieldParsers[1].applyToType, equals('int?'));
+      expect(
+          config.fieldParsers[1].parserName, equals('CustomNullableIntParser'));
+      expect(
+        config.fieldParsers[1].parserAbsolutePath,
+        equals(
+            'package:your_package/lib/utils/parsers/custom_nullable_int_parser.dart'),
+      );
+
+      expect(config.fieldParsers[2].applyToType, equals('bool'));
+      expect(config.fieldParsers[2].parserName, equals('CustomBoolParser'));
+      expect(
+        config.fieldParsers[2].parserAbsolutePath,
+        equals(
+            'package:your_package/lib/utils/parsers/custom_bool_parser.dart'),
+      );
+    });
+
+    test('should inherit field parsers from root config', () {
+      const rootConfig = SWPConfig(
+        outputDirectory: 'lib/shared',
+        fieldParsers: [
+          FieldParser(
+            applyToType: 'int',
+            parserName: 'RootIntParser',
+            parserAbsolutePath:
+                'package:root/lib/utils/parsers/root_int_parser.dart',
+          ),
+        ],
+      );
+
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/user.yaml',
+        'name': 'user_api',
+      });
+
+      final config = SWPConfig.fromYaml(yamlMap, rootConfig: rootConfig);
+      expect(config.fieldParsers, hasLength(1));
+      expect(config.fieldParsers[0].applyToType, equals('int'));
+      expect(config.fieldParsers[0].parserName, equals('RootIntParser'));
+      expect(
+        config.fieldParsers[0].parserAbsolutePath,
+        equals('package:root/lib/utils/parsers/root_int_parser.dart'),
+      );
+    });
+
+    test('should override root config field parsers with local values', () {
+      const rootConfig = SWPConfig(
+        outputDirectory: 'lib/shared',
+        fieldParsers: [
+          FieldParser(
+            applyToType: 'int',
+            parserName: 'RootIntParser',
+            parserAbsolutePath:
+                'package:root/lib/utils/parsers/root_int_parser.dart',
+          ),
+        ],
+      );
+
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/user.yaml',
+        'field_parsers': [
+          {
+            'apply_to_type': 'String',
+            'parser_name': 'LocalStringParser',
+            'parser_absolute_path':
+                'package:local/lib/utils/parsers/local_string_parser.dart',
+          },
+        ],
+      });
+
+      final config = SWPConfig.fromYaml(yamlMap, rootConfig: rootConfig);
+      expect(config.fieldParsers, hasLength(1));
+      expect(config.fieldParsers[0].applyToType, equals('String'));
+      expect(config.fieldParsers[0].parserName, equals('LocalStringParser'));
+      expect(
+        config.fieldParsers[0].parserAbsolutePath,
+        equals('package:local/lib/utils/parsers/local_string_parser.dart'),
+      );
+    });
+
+    test('should pass field parsers to GeneratorConfig', () {
+      const swpConfig = SWPConfig(
+        outputDirectory: 'lib/api',
+        fieldParsers: [
+          FieldParser(
+            applyToType: 'int',
+            parserName: 'CustomIntParser',
+            parserAbsolutePath:
+                'package:your_package/lib/utils/parsers/custom_int_parser.dart',
+          ),
+        ],
+      );
+
+      final generatorConfig = swpConfig.toGeneratorConfig();
+      expect(generatorConfig.fieldParsers, hasLength(1));
+      expect(generatorConfig.fieldParsers[0].applyToType, equals('int'));
+      expect(generatorConfig.fieldParsers[0].parserName,
+          equals('CustomIntParser'));
+      expect(
+        generatorConfig.fieldParsers[0].parserAbsolutePath,
+        equals('package:your_package/lib/utils/parsers/custom_int_parser.dart'),
+      );
+    });
+
+    test('should handle empty field parsers list from YAML', () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'field_parsers': <Map<String, String>>[],
+      });
+
+      final config = SWPConfig.fromYaml(yamlMap);
+      expect(config.fieldParsers, isEmpty);
+    });
+
+    test(
+        'should throw ConfigException for field parsers with missing apply_to_type',
+        () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'field_parsers': [
+          {
+            'parser_name': 'CustomIntParser',
+            'parser_absolute_path':
+                'package:your_package/lib/utils/parsers/custom_int_parser.dart',
+          },
+        ],
+      });
+
+      expect(
+        () => SWPConfig.fromYaml(yamlMap),
+        throwsA(isA<ConfigException>().having(
+          (e) => e.message,
+          'message',
+          equals(
+              "Config parameter 'field_parsers' values must be List of maps with 'apply_to_type', 'parser_name', and 'parser_absolute_path'."),
+        )),
+      );
+    });
+
+    test(
+        'should throw ConfigException for field parsers with missing parser_name',
+        () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'field_parsers': [
+          {
+            'apply_to_type': 'int',
+            'parser_absolute_path':
+                'package:your_package/lib/utils/parsers/custom_int_parser.dart',
+          },
+        ],
+      });
+
+      expect(
+        () => SWPConfig.fromYaml(yamlMap),
+        throwsA(isA<ConfigException>().having(
+          (e) => e.message,
+          'message',
+          equals(
+              "Config parameter 'field_parsers' values must be List of maps with 'apply_to_type', 'parser_name', and 'parser_absolute_path'."),
+        )),
+      );
+    });
+
+    test(
+        'should throw ConfigException for field parsers with missing parser_absolute_path',
+        () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'field_parsers': [
+          {
+            'apply_to_type': 'int',
+            'parser_name': 'CustomIntParser',
+          },
+        ],
+      });
+
+      expect(
+        () => SWPConfig.fromYaml(yamlMap),
+        throwsA(isA<ConfigException>().having(
+          (e) => e.message,
+          'message',
+          equals(
+              "Config parameter 'field_parsers' values must be List of maps with 'apply_to_type', 'parser_name', and 'parser_absolute_path'."),
+        )),
+      );
+    });
+
+    test('should throw ConfigException for field parsers with invalid format',
+        () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'field_parsers': ['invalid'],
+      });
+
+      expect(
+        () => SWPConfig.fromYaml(yamlMap),
+        throwsA(isA<ConfigException>().having(
+          (e) => e.message,
+          'message',
+          equals(
+              "Config parameter 'field_parsers' values must be List of maps with 'apply_to_type', 'parser_name', and 'parser_absolute_path'."),
+        )),
+      );
+    });
+
+    test(
+        'should throw ConfigException for field parsers with non-string apply_to_type',
+        () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'field_parsers': [
+          {
+            'apply_to_type': 123,
+            'parser_name': 'CustomIntParser',
+            'parser_absolute_path':
+                'package:your_package/lib/utils/parsers/custom_int_parser.dart',
+          },
+        ],
+      });
+
+      expect(
+        () => SWPConfig.fromYaml(yamlMap),
+        throwsA(isA<ConfigException>().having(
+          (e) => e.message,
+          'message',
+          equals(
+              "Config parameter 'field_parsers' values must be List of maps with 'apply_to_type', 'parser_name', and 'parser_absolute_path'."),
+        )),
+      );
+    });
+
+    test(
+        'should throw ConfigException for field parsers with non-string parser_name',
+        () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'field_parsers': [
+          {
+            'apply_to_type': 'int',
+            'parser_name': 123,
+            'parser_absolute_path':
+                'package:your_package/lib/utils/parsers/custom_int_parser.dart',
+          },
+        ],
+      });
+
+      expect(
+        () => SWPConfig.fromYaml(yamlMap),
+        throwsA(isA<ConfigException>().having(
+          (e) => e.message,
+          'message',
+          equals(
+              "Config parameter 'field_parsers' values must be List of maps with 'apply_to_type', 'parser_name', and 'parser_absolute_path'."),
+        )),
+      );
+    });
+
+    test(
+        'should throw ConfigException for field parsers with non-string parser_absolute_path',
+        () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'field_parsers': [
+          {
+            'apply_to_type': 'int',
+            'parser_name': 'CustomIntParser',
+            'parser_absolute_path': 123,
+          },
+        ],
+      });
+
+      expect(
+        () => SWPConfig.fromYaml(yamlMap),
+        throwsA(isA<ConfigException>().having(
+          (e) => e.message,
+          'message',
+          equals(
+              "Config parameter 'field_parsers' values must be List of maps with 'apply_to_type', 'parser_name', and 'parser_absolute_path'."),
+        )),
+      );
+    });
+  });
 }

@@ -1,3 +1,4 @@
+import 'package:swagger_parser/src/generator/model/field_parser.dart';
 import 'package:swagger_parser/src/generator/model/generated_file.dart';
 import 'package:swagger_parser/src/generator/model/json_serializer.dart';
 import 'package:swagger_parser/src/generator/templates/dart_dart_mappable_dto_template.dart';
@@ -51,6 +52,7 @@ enum ProgrammingLanguage {
     required bool useMultipartFile,
     required bool dartMappableConvenientWhen,
     required bool includeIfNull,
+    required List<FieldParser> fieldParsers,
     bool useFlutterCompute = false,
     String? fallbackUnion,
   }) {
@@ -84,6 +86,7 @@ enum ProgrammingLanguage {
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
                 useMultipartFile: useMultipartFile,
+                fieldParsers: fieldParsers,
                 includeIfNull: includeIfNull,
                 useFlutterCompute: useFlutterCompute,
                 fallbackUnion: fallbackUnion,

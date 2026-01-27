@@ -1,6 +1,7 @@
 import 'package:args/args.dart';
 import 'package:swagger_parser/src/config/config_exception.dart';
 import 'package:swagger_parser/src/generator/config/generator_config.dart';
+import 'package:swagger_parser/src/generator/model/field_parser.dart';
 import 'package:swagger_parser/src/generator/model/json_serializer.dart';
 import 'package:swagger_parser/src/generator/model/programming_language.dart';
 import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
@@ -50,6 +51,7 @@ class SWPConfig {
     this.inferRequiredFromNullable = false,
     this.useFlutterCompute = false,
     this.generateUrlsConstants = false,
+    this.fieldParsers = const [],
   });
 
   /// Internal constructor of [SWPConfig]
@@ -93,6 +95,7 @@ class SWPConfig {
     required this.inferRequiredFromNullable,
     required this.useFlutterCompute,
     required this.generateUrlsConstants,
+    required this.fieldParsers,
     this.fallbackUnion,
   });
 
@@ -348,12 +351,38 @@ class SWPConfig {
     final generateUrlsConstants = yamlMap['generate_urls_constants'] as bool? ??
         rootConfig?.generateUrlsConstants;
 
+    final rawFieldParsers = yamlMap['field_parsers'] as YamlList?;
+    List<FieldParser>? fieldParsers;
+    if (rawFieldParsers != null) {
+      fieldParsers = [];
+      for (final p in rawFieldParsers) {
+        if (p is! YamlMap ||
+            p['apply_to_type'] is! String ||
+            p['parser_name'] is! String ||
+            p['parser_absolute_path'] is! String) {
+          throw const ConfigException(
+            "Config parameter 'field_parsers' values must be List of maps with 'apply_to_type', 'parser_name', and 'parser_absolute_path'.",
+          );
+        }
+        fieldParsers.add(
+          FieldParser(
+            applyToType: p['apply_to_type'].toString(),
+            parserName: p['parser_name'].toString(),
+            parserAbsolutePath: p['parser_absolute_path'].toString(),
+          ),
+        );
+      }
+    } else if (rootConfig?.fieldParsers != null) {
+      fieldParsers = List.from(rootConfig!.fieldParsers);
+    }
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
     return SWPConfig._(
       schemaPath: schemaPath,
       schemaUrl: schemaUrl,
+      fieldParsers: fieldParsers ?? dc.fieldParsers,
       outputDirectory: outputDirectory,
       name: name,
       pathMethodName: pathMethodName ?? dc.pathMethodName,
@@ -617,6 +646,15 @@ class SWPConfig {
   /// Optional. Set `true` to generate URL constants for all endpoints.
   final bool generateUrlsConstants;
 
+  /// {@template field_parsers}
+  /// DART ONLY
+  /// Optional. Set field parsers.
+  ///
+  /// Field parsers are used to parse specific fields of a DTO.
+  ///
+  /// {@endtemplate}
+  final List<FieldParser> fieldParsers;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -647,6 +685,7 @@ class SWPConfig {
       includeIfNull: includeIfNull,
       useFlutterCompute: useFlutterCompute,
       generateUrlsConstants: generateUrlsConstants,
+      fieldParsers: fieldParsers,
     );
   }
 
