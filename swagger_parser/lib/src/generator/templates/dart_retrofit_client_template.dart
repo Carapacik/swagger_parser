@@ -48,6 +48,8 @@ String dartRetrofitClientTemplate({
       : restClient.imports;
 
   final sb = StringBuffer('''
+import 'dart:typed_data';
+
 ${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
 ${flutterComputeImport}import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: imports, pathPrefix: '../models/')}
@@ -129,19 +131,27 @@ String _toClientRequest(
     responseType = _renameUnionTypes(responseType);
   }
 
-  // Check if this is a binary response (file download)
-  final isBinaryResponse = request.returnType?.format == 'binary' ||
+  String finalResponseType;
+  String dioResponseTypeAnnotation;
+  // Check if this is a binary response.
+  if (request.returnType?.format == 'binary' ||
       (request.returnType?.type == 'string' &&
-          request.returnType?.format == 'binary');
-
-  // For binary responses, we need to use HttpResponse<List<int>> and add @DioResponseType
-  final finalResponseType = isBinaryResponse
-      ? 'HttpResponse<List<int>>'
-      : (originalHttpResponse ? 'HttpResponse<$responseType>' : responseType);
-
-  // Add @DioResponseType(ResponseType.bytes) for binary responses - after @GET
-  final dioResponseTypeAnnotation =
-      isBinaryResponse ? '\n  @DioResponseType(ResponseType.bytes)' : '';
+          request.returnType?.format == 'binary')) {
+    // Retrofit supports streaming and SSE, but only for event types of [String]
+    // or [Uint8List], also the [DioResponseType] **must** be set to
+    // [ResponseType.stream].
+    //
+    //See https://github.com/trevorwang/retrofit.dart/tree/master#streaming-and-server-sent-events-sse
+    final eventType =
+        request.returnType?.type == 'string' ? 'String' : 'Uint8List';
+    finalResponseType = 'Stream<$eventType>';
+    dioResponseTypeAnnotation = '\n  @DioResponseType(ResponseType.stream)';
+  } else {
+    finalResponseType =
+        (originalHttpResponse ? 'HttpResponse<$responseType>' : responseType);
+    finalResponseType = 'Future<$finalResponseType>';
+    dioResponseTypeAnnotation = '';
+  }
 
   final defaultExtras = includeMetadata && addExtrasParameter
       ? _openApiExtrasReference(
@@ -157,8 +167,15 @@ String _toClientRequest(
 
   final sb = StringBuffer()
     ..write(
-      "  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}$requestAnnotation$dioResponseTypeAnnotation\n  Future<$finalResponseType> ${request.name}(",
-    );
+        "  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}")
+    ..write(request.isDeprecated
+        ? "@Deprecated('This method is marked as deprecated')\n  "
+        : '')
+    ..write(_contentTypeHeader(request, defaultContentType))
+    ..write(requestAnnotation)
+    ..writeln(dioResponseTypeAnnotation)
+    ..write('  $finalResponseType ')
+    ..write('${request.name}(');
 
   if (request.parameters.isNotEmpty ||
       addExtrasParameter ||
