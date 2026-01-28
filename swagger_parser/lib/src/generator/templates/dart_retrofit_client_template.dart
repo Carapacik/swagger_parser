@@ -48,9 +48,7 @@ String dartRetrofitClientTemplate({
       : restClient.imports;
 
   final sb = StringBuffer('''
-import 'dart:typed_data';
-
-${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
+${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}${_typedDataImport(restClient)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
 ${flutterComputeImport}import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: imports, pathPrefix: '../models/')}
 part '${fileName ?? name.toSnake}.g.dart';
@@ -133,10 +131,7 @@ String _toClientRequest(
 
   String finalResponseType;
   String dioResponseTypeAnnotation;
-  // Check if this is a binary response.
-  if (request.returnType?.format == 'binary' ||
-      (request.returnType?.type == 'string' &&
-          request.returnType?.format == 'binary')) {
+  if (_hasBinaryResponse(request)) {
     // Retrofit supports streaming and SSE, but only for event types of [String]
     // or [Uint8List], also the [DioResponseType] **must** be set to
     // [ResponseType.stream].
@@ -206,12 +201,21 @@ String _toClientRequest(
   return sb.toString();
 }
 
-String _convertImport(UniversalRestClient restClient) =>
-    restClient.requests.any(
-      (r) => r.parameters.any((e) => e.parameterType.isPart),
-    )
-        ? "import 'dart:convert';\n"
-        : '';
+String _convertImport(UniversalRestClient restClient) {
+  return restClient.requests.any(
+    (r) =>
+        _hasBinaryStringResponse(r) ||
+        r.parameters.any((e) => e.parameterType.isPart),
+  )
+      ? "import 'dart:convert';\n"
+      : '';
+}
+
+String _typedDataImport(UniversalRestClient restClient) {
+  return restClient.requests.any(_hasBinaryResponse)
+      ? "import 'dart:typed_data';\n"
+      : '';
+}
 
 String _addExtraParameter(String? defaultExtras) =>
     '    @Extras() Map<String, dynamic>? extras${defaultExtras != null ? ' =\n        $defaultExtras' : ''},\n';
@@ -341,3 +345,13 @@ String _renameUnionTypes(String type) => type.replaceAllMapped(
       RegExp(r'([A-Z][A-Za-z0-9_]*)Union\b'),
       (match) => '${match.group(1)}Sealed',
     );
+
+bool _hasBinaryResponse(UniversalRequest request) {
+  return request.returnType?.format == 'binary' ||
+      _hasBinaryStringResponse(request);
+}
+
+bool _hasBinaryStringResponse(UniversalRequest request) {
+  return request.returnType?.type == 'string' &&
+      request.returnType?.format == 'binary';
+}
