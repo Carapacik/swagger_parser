@@ -19,6 +19,7 @@ final class UniversalRequest {
     this.contentType = 'application/json',
     this.description,
     this.isDeprecated = false,
+    this.configExtension = const UniversalRequestConfigExtension(),
   });
 
   /// Request name
@@ -60,6 +61,8 @@ final class UniversalRequest {
 
   /// Value indicating whether this request is deprecated
   final bool isDeprecated;
+
+  final UniversalRequestConfigExtension configExtension;
 
   @override
   bool operator ==(Object other) =>
@@ -138,4 +141,61 @@ enum HttpRequestType {
   /// Get type from string
   static HttpRequestType? fromString(String type) =>
       HttpRequestType.values.firstWhereOrNull((e) => e.name == type);
+}
+
+@immutable
+final class UniversalRequestConfigExtension {
+  const UniversalRequestConfigExtension({
+    bool? isCancelable,
+  }) : isCancelable = isCancelable ?? false;
+
+  factory UniversalRequestConfigExtension.parse(
+    Map<String, dynamic> requestConfig,
+  ) {
+    final xDart = requestConfig[_xDartSection] as Map<String, dynamic>?;
+    return UniversalRequestConfigExtension(
+      isCancelable: bool.tryParse(xDart?[_isCancelableKey]?.toString() ?? ''),
+    );
+  }
+
+  static const _xDartSection = 'x-dart';
+
+  /// Whether or not the request should be cancelable.
+  ///
+  /// True if the `cancelable` flag in the `x-dart` section has been set to
+  /// `true` for the specific request.
+  ///
+  /// ## Example
+  ///
+  /// ```yaml
+  /// paths:
+  ///   /path/variant4:
+  ///     get:
+  ///       x-dart:
+  ///         cancelable: true
+  ///       tags:
+  ///         - sse
+  ///       responses:
+  ///         200:
+  ///           content:
+  ///             application/octect-stream:
+  ///               schema:
+  ///                 type: integer
+  ///                 format: binary
+  /// ```
+  final bool isCancelable;
+  static const _isCancelableKey = 'cancelable';
+
+  @override
+  int get hashCode => isCancelable.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      other is UniversalRequestConfigExtension &&
+      other.isCancelable == isCancelable;
+
+  @override
+  String toString() => 'UniversalRequestConfigExtension('
+      'isCancelable: $isCancelable'
+      ')';
 }
