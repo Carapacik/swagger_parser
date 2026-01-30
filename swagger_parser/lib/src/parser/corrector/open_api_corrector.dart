@@ -31,6 +31,105 @@ class OpenApiCorrector {
     final models = schemes ?? definitions;
 
     if (models != null) {
+      // BUGFIX: Protect properties blocks by detecting their range and replacing with placeholders
+      final blocks =
+          <({int start, int end, String placeholder, String original})>[];
+
+      // Detect lines starting with 'properties:' and their indentation level
+      final propertiesPattern = RegExp(
+        r'^([ \t]*)(properties:)\s*$',
+        multiLine: true,
+      );
+
+      for (final match in propertiesPattern.allMatches(fileContent)) {
+        final indent = match[1]!;
+        final indentLength = indent.length;
+        final matchStart = match.start;
+        final matchEnd = match.end;
+
+        // Find the block end by detecting the next key with same or shallower indentation
+        var blockEnd = matchEnd;
+        final lines = fileContent.substring(matchEnd).split('\n');
+
+        for (var i = 1; i < lines.length; i++) {
+          final line = lines[i];
+
+          // Skip empty lines
+          if (line.trim().isEmpty) {
+            blockEnd += line.length + 1; // +1 for \n
+            continue;
+          }
+
+          // Check indentation level
+          final lineIndent = line.length - line.trimLeft().length;
+
+          // Block ends when a key with same or shallower indentation is found
+          if (lineIndent <= indentLength && line.trimLeft().isNotEmpty) {
+            break;
+          }
+
+          blockEnd += line.length + 1; // +1 for \n
+        }
+
+        // Get the entire properties block
+        final originalBlock = fileContent.substring(matchStart, blockEnd);
+
+        // Generate placeholder
+        final placeholder = '${indent}___PROPERTIES_BLOCK_${blocks.length}___';
+
+        blocks.add((
+          start: matchStart,
+          end: blockEnd,
+          placeholder: placeholder,
+          original: originalBlock,
+        ));
+      }
+
+      // Check for duplicate blocks and exclude them
+      final validBlocks =
+          <({int start, int end, String placeholder, String original})>[];
+      for (var i = 0; i < blocks.length; i++) {
+        final block = blocks[i];
+        var isValid = true;
+
+        // Check if this block is completely contained within another block
+        for (var j = 0; j < blocks.length; j++) {
+          if (i != j) {
+            final other = blocks[j];
+            // Skip if block is completely contained within other
+            if (block.start >= other.start && block.end <= other.end) {
+              isValid = false;
+              break;
+            }
+          }
+        }
+
+        if (isValid) {
+          validBlocks.add(block);
+        }
+      }
+
+      // Reconstruct string from back to front
+      var result = '';
+      var lastEnd = fileContent.length;
+
+      for (var i = validBlocks.length - 1; i >= 0; i--) {
+        final block = validBlocks[i];
+
+        // Add the part after the block
+        result = fileContent.substring(block.end, lastEnd) + result;
+
+        // Add placeholder
+        result = block.placeholder + result;
+
+        lastEnd = block.start;
+      }
+
+      // Add the first part
+      result = fileContent.substring(0, lastEnd) + result;
+
+      fileContent = result;
+
       // Apply replacement rules to all class names and format to PascalCase
       for (final type in models.keys) {
         var correctType = type;
@@ -50,11 +149,49 @@ class OpenApiCorrector {
                 '\\${m[0]}',
           );
 
+          // Replace schema names (properties blocks are already replaced with placeholders)
+          final replacementPattern = RegExp('[ "\'/]$escapedType[ "\':]');
+
           fileContent = fileContent.replaceAllMapped(
-            RegExp('[ "\'/]$escapedType[ "\':]'),
+            replacementPattern,
             (match) => match[0]!.replaceAll(type, correctType),
           );
         }
+      }
+
+      // Restore properties blocks from placeholders
+      // Convert $ref schema names within the blocks while preserving property names
+      for (final block in validBlocks) {
+        final placeholder = block.placeholder;
+        var restoredBlock = block.original;
+
+        // Convert schema names in $ref within the block
+        // Uses same pattern as original code (handles 'schemes' typo as well)
+        for (final type in models.keys) {
+          var correctType = type;
+
+          for (final rule in config.replacementRules) {
+            correctType = rule.apply(correctType)!;
+          }
+
+          correctType = correctType.toPascal;
+
+          if (correctType != type) {
+            // Escape all special characters for regular expressions
+            final escapedType = type.replaceAllMapped(
+              RegExp(r'[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]'),
+              (m) => '\\${m[0]}',
+            );
+
+            // In properties blocks, only convert $ref values (not property names)
+            restoredBlock = restoredBlock.replaceAllMapped(
+              RegExp('\\\$ref:\\s*[\'"]#/[^\'"]*/$escapedType[\'"]'),
+              (match) => match[0]!.replaceAll(type, correctType),
+            );
+          }
+        }
+
+        fileContent = fileContent.replaceAll(placeholder, restoredBlock);
       }
     }
 
