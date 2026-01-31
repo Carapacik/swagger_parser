@@ -108,6 +108,20 @@ void main() {
       );
     });
 
+    // Test for properties block preservation and required property handling
+    test('properties_block_preservation', () async {
+      await e2eTest(
+        'properties_block_preservation',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     // https://github.com/Carapacik/swagger_parser/issues/224
     // https://github.com/Carapacik/swagger_parser/issues/214
     test('request_unnamed_types', () async {
