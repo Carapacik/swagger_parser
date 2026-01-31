@@ -48,7 +48,7 @@ String dartRetrofitClientTemplate({
       : restClient.imports;
 
   final sb = StringBuffer('''
-${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
+${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}${_typedDataImport(restClient)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
 ${flutterComputeImport}import 'package:retrofit/retrofit.dart';
 ${dartImports(imports: imports, pathPrefix: '../models/')}
 part '${fileName ?? name.toSnake}.g.dart';
@@ -129,19 +129,24 @@ String _toClientRequest(
     responseType = _renameUnionTypes(responseType);
   }
 
-  // Check if this is a binary response (file download)
-  final isBinaryResponse = request.returnType?.format == 'binary' ||
-      (request.returnType?.type == 'string' &&
-          request.returnType?.format == 'binary');
-
-  // For binary responses, we need to use HttpResponse<List<int>> and add @DioResponseType
-  final finalResponseType = isBinaryResponse
-      ? 'HttpResponse<List<int>>'
-      : (originalHttpResponse ? 'HttpResponse<$responseType>' : responseType);
-
-  // Add @DioResponseType(ResponseType.bytes) for binary responses - after @GET
-  final dioResponseTypeAnnotation =
-      isBinaryResponse ? '\n  @DioResponseType(ResponseType.bytes)' : '';
+  String finalResponseType;
+  String dioResponseTypeAnnotation;
+  if (_hasBinaryResponse(request)) {
+    // Retrofit supports streaming and SSE, but only for event types of [String]
+    // or [Uint8List], also the [DioResponseType] **must** be set to
+    // [ResponseType.stream].
+    //
+    //See https://github.com/trevorwang/retrofit.dart/tree/master#streaming-and-server-sent-events-sse
+    final eventType =
+        request.returnType?.type == 'string' ? 'String' : 'Uint8List';
+    finalResponseType = 'Stream<$eventType>';
+    dioResponseTypeAnnotation = '\n  @DioResponseType(ResponseType.stream)';
+  } else {
+    finalResponseType =
+        (originalHttpResponse ? 'HttpResponse<$responseType>' : responseType);
+    finalResponseType = 'Future<$finalResponseType>';
+    dioResponseTypeAnnotation = '';
+  }
 
   final defaultExtras = includeMetadata && addExtrasParameter
       ? _openApiExtrasReference(
@@ -157,8 +162,15 @@ String _toClientRequest(
 
   final sb = StringBuffer()
     ..write(
-      "  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}$requestAnnotation$dioResponseTypeAnnotation\n  Future<$finalResponseType> ${request.name}(",
-    );
+        "  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}")
+    ..write(request.isDeprecated
+        ? "@Deprecated('This method is marked as deprecated')\n  "
+        : '')
+    ..write(_contentTypeHeader(request, defaultContentType))
+    ..write(requestAnnotation)
+    ..writeln(dioResponseTypeAnnotation)
+    ..write('  $finalResponseType ')
+    ..write('${request.name}(');
 
   if (request.parameters.isNotEmpty ||
       addExtrasParameter ||
@@ -189,12 +201,21 @@ String _toClientRequest(
   return sb.toString();
 }
 
-String _convertImport(UniversalRestClient restClient) =>
-    restClient.requests.any(
-      (r) => r.parameters.any((e) => e.parameterType.isPart),
-    )
-        ? "import 'dart:convert';\n"
-        : '';
+String _convertImport(UniversalRestClient restClient) {
+  return restClient.requests.any(
+    (r) =>
+        _hasBinaryStringResponse(r) ||
+        r.parameters.any((e) => e.parameterType.isPart),
+  )
+      ? "import 'dart:convert';\n"
+      : '';
+}
+
+String _typedDataImport(UniversalRestClient restClient) {
+  return restClient.requests.any(_hasBinaryResponse)
+      ? "import 'dart:typed_data';\n"
+      : '';
+}
 
 String _addExtraParameter(String? defaultExtras) =>
     '    @Extras() Map<String, dynamic>? extras${defaultExtras != null ? ' =\n        $defaultExtras' : ''},\n';
@@ -324,3 +345,13 @@ String _renameUnionTypes(String type) => type.replaceAllMapped(
       RegExp(r'([A-Z][A-Za-z0-9_]*)Union\b'),
       (match) => '${match.group(1)}Sealed',
     );
+
+bool _hasBinaryResponse(UniversalRequest request) {
+  return request.returnType?.format == 'binary' ||
+      _hasBinaryStringResponse(request);
+}
+
+bool _hasBinaryStringResponse(UniversalRequest request) {
+  return request.returnType?.type == 'string' &&
+      request.returnType?.format == 'binary';
+}
