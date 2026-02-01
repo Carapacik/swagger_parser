@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: Properties Block Preservation Test
+  version: 1.0.0
+paths:
+  /api/v1/user_characters:
+    get:
+      operationId: get_user_characters
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UserCharacter'
+                required:
+                  - data
+
+components:
+  schemas:
+    UserCharacter:
+      type: object
+      required:
+        - name
+        - level
+        - character
+      properties:
+        name:
+          type: string
+          description: User character name
+        level:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Character level
+        character:
+          $ref: '#/components/schemas/Character'
+          description: Character information
+
+    Character:
+      type: object
+      required:
+        - urlName
+        - name
+        - characterType
+      properties:
+        urlName:
+          type: string
+          format: uuid
+          description: Unique name for URL
+        name:
+          type: string
+          description: Character name
+        characterType:
+          type: string
+          enum: [self, friend]
+          description: Character type
