@@ -1,3 +1,8 @@
+## 1.42.0
+- Support for streaming & SSE
+- Fix preserve property names and required modifiers in properties blocks
+- Fix API path definitions are incorrectly converted to PascalCase
+
 ## 1.41.0
 - Add `field_parsers` option for setting field parsers for JSON serializable
 
