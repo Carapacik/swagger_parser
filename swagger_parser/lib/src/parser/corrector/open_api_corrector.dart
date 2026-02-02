@@ -31,13 +31,19 @@ class OpenApiCorrector {
     final models = schemes ?? definitions;
 
     if (models != null) {
-      // BUGFIX: Protect properties blocks by detecting their range and replacing with placeholders
+      // BUGFIX: Protect properties blocks and API path definitions by detecting their range and replacing with placeholders
       final blocks =
           <({int start, int end, String placeholder, String original})>[];
 
       // Detect lines starting with 'properties:' and their indentation level
       final propertiesPattern = RegExp(
         r'^([ \t]*)(properties:)\s*$',
+        multiLine: true,
+      );
+
+      // Detect API path definition lines (e.g., "  /api/v1/app/user_point_balance:")
+      final pathPattern = RegExp(
+        r'^([ \t]*)(/[^\s:]+:)\s*$',
         multiLine: true,
       );
 
@@ -84,6 +90,29 @@ class OpenApiCorrector {
           original: originalBlock,
         ));
       }
+
+      // Detect and protect API path definitions (e.g., "  /api/v1/app/user_point_balance:")
+      for (final match in pathPattern.allMatches(fileContent)) {
+        final indent = match[1]!;
+        final matchStart = match.start;
+        final matchEnd = match.end;
+
+        // API path definitions are single lines, so we just protect the entire line
+        final originalPath = fileContent.substring(matchStart, matchEnd);
+
+        // Generate placeholder
+        final placeholder = '${indent}___PATH_DEFINITION_${blocks.length}___';
+
+        blocks.add((
+          start: matchStart,
+          end: matchEnd,
+          placeholder: placeholder,
+          original: originalPath,
+        ));
+      }
+
+      // Sort blocks by start position
+      blocks.sort((a, b) => a.start.compareTo(b.start));
 
       // Check for duplicate blocks and exclude them
       final validBlocks =
@@ -159,35 +188,39 @@ class OpenApiCorrector {
         }
       }
 
-      // Restore properties blocks from placeholders
-      // Convert $ref schema names within the blocks while preserving property names
+      // Restore blocks from placeholders
+      // Convert $ref schema names within properties blocks while preserving property names
+      // API path definitions are restored without any conversion
       for (final block in validBlocks) {
         final placeholder = block.placeholder;
         var restoredBlock = block.original;
 
-        // Convert schema names in $ref within the block
-        // Uses same pattern as original code (handles 'schemes' typo as well)
-        for (final type in models.keys) {
-          var correctType = type;
+        // Only convert $ref in properties blocks, not in API path definitions
+        if (!placeholder.contains('___PATH_DEFINITION___')) {
+          // Convert schema names in $ref within the block
+          // Uses same pattern as original code (handles 'schemes' typo as well)
+          for (final type in models.keys) {
+            var correctType = type;
 
-          for (final rule in config.replacementRules) {
-            correctType = rule.apply(correctType)!;
-          }
+            for (final rule in config.replacementRules) {
+              correctType = rule.apply(correctType)!;
+            }
 
-          correctType = correctType.toPascal;
+            correctType = correctType.toPascal;
 
-          if (correctType != type) {
-            // Escape all special characters for regular expressions
-            final escapedType = type.replaceAllMapped(
-              RegExp(r'[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]'),
-              (m) => '\\${m[0]}',
-            );
+            if (correctType != type) {
+              // Escape all special characters for regular expressions
+              final escapedType = type.replaceAllMapped(
+                RegExp(r'[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]'),
+                (m) => '\\${m[0]}',
+              );
 
-            // In properties blocks, only convert $ref values (not property names)
-            restoredBlock = restoredBlock.replaceAllMapped(
-              RegExp('\\\$ref:\\s*[\'"]#/[^\'"]*/$escapedType[\'"]'),
-              (match) => match[0]!.replaceAll(type, correctType),
-            );
+              // In properties blocks, only convert $ref values (not property names)
+              restoredBlock = restoredBlock.replaceAllMapped(
+                RegExp('\\\$ref:\\s*[\'"]#/[^\'"]*/$escapedType[\'"]'),
+                (match) => match[0]!.replaceAll(type, correctType),
+              );
+            }
           }
         }
 

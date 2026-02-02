@@ -122,6 +122,20 @@ void main() {
       );
     });
 
+    // Test for API path definition preservation (snake_case should not be converted to PascalCase)
+    test('api_path_preservation', () async {
+      await e2eTest(
+        'api_path_preservation',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     // https://github.com/Carapacik/swagger_parser/issues/224
     // https://github.com/Carapacik/swagger_parser/issues/214
     test('request_unnamed_types', () async {

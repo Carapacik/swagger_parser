@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: API Path Preservation Test
+  version: 1.0.0
+  description: Test that API path definitions with snake_case are preserved and not converted to PascalCase
+
+paths:
+  /api/v1/app/user_point_balance:
+    get:
+      operationId: getUserPointBalance
+      summary: Get user point balance
+      description: |
+        This endpoint path should remain as /api/v1/app/user_point_balance (snake_case)
+        even though the schema name is UserPointBalance (PascalCase)
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPointBalance'
+
+  /api/v1/app/user_point_transactions:
+    get:
+      operationId: getUserPointTransactions
+      summary: Get user point transactions
+      description: |
+        This endpoint path should remain as /api/v1/app/user_point_transactions (snake_case)
+        even though the schema includes UserPointTransaction (PascalCase)
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: cursor
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserPointTransaction'
+                  next_cursor:
+                    type: string
+                    nullable: true
+                required:
+                  - data
+
+components:
+  schemas:
+    UserPointBalance:
+      type: object
+      description: User point balance response
+      required:
+        - balance
+      properties:
+        balance:
+          type: integer
+          format: int64
+          description: Current point balance
+
+    UserPointTransaction:
+      type: object
+      description: User point transaction record
+      required:
+        - id
+        - amount
+        - occurred_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Transaction ID
+        amount:
+          type: integer
+          format: int64
+          description: Transaction amount (positive for earn, negative for spend)
+        occurred_at:
+          type: string
+          format: date-time
+          description: Transaction timestamp
+        description:
+          type: string
+          description: Transaction description
