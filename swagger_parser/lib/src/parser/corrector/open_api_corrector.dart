@@ -94,7 +94,6 @@ class OpenApiCorrector {
       // Detect and protect API path definitions (e.g., "  /api/v1/app/user_point_balance:")
       for (final match in pathPattern.allMatches(fileContent)) {
         final indent = match[1]!;
-        final path = match[2]!;
         final matchStart = match.start;
         final matchEnd = match.end;
 
