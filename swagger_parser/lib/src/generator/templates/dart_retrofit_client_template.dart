@@ -6,12 +6,15 @@ import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 import 'package:swagger_parser/src/utils/base_utils.dart';
 import 'package:swagger_parser/src/utils/type_utils.dart';
 
+String getStaticFieldName(UniversalRequest request) => request.name.toCamel;
+
 /// Provides template for generating dart Retrofit client
 String dartRetrofitClientTemplate({
   required UniversalRestClient restClient,
   required String name,
   required String defaultContentType,
   required bool useMultipartFile,
+  required bool generateUrlsConstants,
   bool extrasParameterByDefault = false,
   bool dioOptionsParameterByDefault = false,
   bool addOpenApiMetadata = false,
@@ -19,7 +22,11 @@ String dartRetrofitClientTemplate({
   JsonSerializer jsonSerializer = JsonSerializer.jsonSerializable,
   bool useFlutterCompute = false,
   String? fileName,
+  JsonSerializer? jsonSerializer,
 }) {
+  // For non-freezed serializers, apply sealed naming to union imports and types
+  final applySealedNaming =
+      jsonSerializer != null && jsonSerializer != JsonSerializer.freezed;
   final parameterTypes = restClient.requests
       .expand((r) => r.parameters.map((p) => p.type))
       .toSet();
@@ -42,10 +49,15 @@ String dartRetrofitClientTemplate({
       ? "import 'package:flutter/foundation.dart' show compute;\n"
       : '';
 
+  // Transform imports for sealed naming if needed
+  final imports = applySealedNaming
+      ? restClient.imports.map(_applySealedNamingToImport).toSet()
+      : restClient.imports;
+
   final sb = StringBuffer('''
-${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
+${_convertImport(restClient)}${ioImport(parameterTypes, useMultipartFile: useMultipartFile)}${_typedDataImport(restClient)}import 'package:dio/dio.dart'${_hideHeaders(restClient, defaultContentType)};
 ${flutterComputeImport}import 'package:retrofit/retrofit.dart';
-${dartImports(imports: restClient.imports, pathPrefix: '../models/')}
+${dartImports(imports: imports, pathPrefix: '../models/')}
 part '${fileName ?? name.toSnake}.g.dart';
 
 $restApiAnnotation
@@ -70,17 +82,31 @@ abstract class $name {
           request,
           defaultContentType,
           className: name,
+          clientName: name,
           originalHttpResponse: originalHttpResponse,
           addExtrasParameter: includeExtras,
           addDioOptionsParameter: dioOptionsParameterByDefault,
           includeMetadata: includeMetadata,
           useMultipartFile: useMultipartFile,
+          generateUrlsConstants: generateUrlsConstants,
           openApiExtrasConstName: openApiExtrasConstName,
+          applySealedNaming: applySealedNaming,
         ),
       );
   }
 
   sb.write('}\n');
+  if (generateUrlsConstants) {
+    sb.write(
+      '''
+\n
+abstract class ${name}Urls {
+${restClient.requests.map((e) => '\t/// ${e.route}\n\tstatic const ${getStaticFieldName(e)} = "${e.route}";').join('\n')}
+}\n
+''',
+    );
+  }
+
   return sb.toString();
 }
 
@@ -93,7 +119,10 @@ String _toClientRequest(
   required bool addDioOptionsParameter,
   required bool includeMetadata,
   required bool useMultipartFile,
+  required String clientName,
+  required bool generateUrlsConstants,
   String? openApiExtrasConstName,
+  bool applySealedNaming = false,
 }) {
   var responseType = request.returnType == null
       ? 'void'
@@ -116,10 +145,29 @@ String _toClientRequest(
   final finalResponseType = isBinaryResponse
       ? 'HttpResponse<List<int>>'
       : (originalHttpResponse ? 'HttpResponse<$responseType>' : responseType);
+  // Apply sealed naming transformation to response type if needed
+  if (applySealedNaming) {
+    responseType = _renameUnionTypes(responseType);
+  }
 
-  // Add @DioResponseType(ResponseType.bytes) for binary responses - after @GET
-  final dioResponseTypeAnnotation =
-      isBinaryResponse ? '\n  @DioResponseType(ResponseType.bytes)' : '';
+  String finalResponseType;
+  String dioResponseTypeAnnotation;
+  if (_hasBinaryResponse(request)) {
+    // Retrofit supports streaming and SSE, but only for event types of [String]
+    // or [Uint8List], also the [DioResponseType] **must** be set to
+    // [ResponseType.stream].
+    //
+    //See https://github.com/trevorwang/retrofit.dart/tree/master#streaming-and-server-sent-events-sse
+    final eventType =
+        request.returnType?.type == 'string' ? 'String' : 'Uint8List';
+    finalResponseType = 'Stream<$eventType>';
+    dioResponseTypeAnnotation = '\n  @DioResponseType(ResponseType.stream)';
+  } else {
+    finalResponseType =
+        (originalHttpResponse ? 'HttpResponse<$responseType>' : responseType);
+    finalResponseType = 'Future<$finalResponseType>';
+    dioResponseTypeAnnotation = '';
+  }
 
   final defaultExtras = includeMetadata && addExtrasParameter
       ? _openApiExtrasReference(
@@ -129,10 +177,21 @@ String _toClientRequest(
         )
       : null;
 
+  final requestAnnotation = generateUrlsConstants
+      ? '@${request.requestType.name.toUpperCase()}(${clientName}Urls.${getStaticFieldName(request)})'
+      : "@${request.requestType.name.toUpperCase()}('${request.route}')";
+
   final sb = StringBuffer()
     ..write(
-      "  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}${request.isDeprecated ? "@Deprecated('This method is marked as deprecated')\n  " : ''}${_contentTypeHeader(request, defaultContentType)}@${request.requestType.name.toUpperCase()}('${request.route}')$dioResponseTypeAnnotation\n  Future<$finalResponseType> ${request.name}(",
-    );
+        "  ${descriptionComment(request.description, tabForFirstLine: false, tab: '  ', end: '  ')}")
+    ..write(request.isDeprecated
+        ? "@Deprecated('This method is marked as deprecated')\n  "
+        : '')
+    ..write(_contentTypeHeader(request, defaultContentType))
+    ..write(requestAnnotation)
+    ..writeln(dioResponseTypeAnnotation)
+    ..write('  $finalResponseType ')
+    ..write('${request.name}(');
 
   if (request.parameters.isNotEmpty ||
       addExtrasParameter ||
@@ -163,12 +222,21 @@ String _toClientRequest(
   return sb.toString();
 }
 
-String _convertImport(UniversalRestClient restClient) =>
-    restClient.requests.any(
-      (r) => r.parameters.any((e) => e.parameterType.isPart),
-    )
-        ? "import 'dart:convert';\n"
-        : '';
+String _convertImport(UniversalRestClient restClient) {
+  return restClient.requests.any(
+    (r) =>
+        _hasBinaryStringResponse(r) ||
+        r.parameters.any((e) => e.parameterType.isPart),
+  )
+      ? "import 'dart:convert';\n"
+      : '';
+}
+
+String _typedDataImport(UniversalRestClient restClient) {
+  return restClient.requests.any(_hasBinaryResponse)
+      ? "import 'dart:typed_data';\n"
+      : '';
+}
 
 String _addExtraParameter(String? defaultExtras) =>
     '    @Extras() Map<String, dynamic>? extras${defaultExtras != null ? ' =\n        $defaultExtras' : ''},\n';
@@ -281,3 +349,32 @@ String _defaultValue(UniversalType t) => !t.isRequired && t.defaultValue != null
     : '';
 
 bool _startsWithDollar(String name) => name.isNotEmpty && name.startsWith(r'$');
+
+// Helper functions for sealed naming transformation
+const _unionSuffix = 'Union';
+const _snakeUnionSuffix = '_union';
+
+String _applySealedNamingToImport(String import) {
+  if (import.endsWith(_unionSuffix)) {
+    return '${import.substring(0, import.length - _unionSuffix.length)}Sealed';
+  }
+  if (import.endsWith(_snakeUnionSuffix)) {
+    return '${import.substring(0, import.length - _snakeUnionSuffix.length)}_sealed';
+  }
+  return import;
+}
+
+String _renameUnionTypes(String type) => type.replaceAllMapped(
+      RegExp(r'([A-Z][A-Za-z0-9_]*)Union\b'),
+      (match) => '${match.group(1)}Sealed',
+    );
+
+bool _hasBinaryResponse(UniversalRequest request) {
+  return request.returnType?.format == 'binary' ||
+      _hasBinaryStringResponse(request);
+}
+
+bool _hasBinaryStringResponse(UniversalRequest request) {
+  return request.returnType?.type == 'string' &&
+      request.returnType?.format == 'binary';
+}

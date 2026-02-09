@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -54,20 +55,21 @@ class _GeneratorContentState extends State<GeneratorContent> {
                   height: 48,
                   child: ElevatedButton(
                     onPressed: () async {
-                      final result = await FilePicker.platform.pickFiles(
-                        type: FileType.custom,
-                        allowedExtensions: ['json', 'yaml', 'JSON', 'YAML'],
-                      );
+                      final FilePickerResult? result = await FilePicker.platform
+                          .pickFiles(
+                            type: FileType.custom,
+                            allowedExtensions: ['json', 'yaml', 'JSON', 'YAML'],
+                          );
                       if (result != null) {
-                        final fileBytes = result.files.first.bytes;
-                        final fileName = result.files.first.name;
+                        final Uint8List? fileBytes = result.files.first.bytes;
+                        final String fileName = result.files.first.name;
                         setState(() {
                           _isJson =
                               fileName.split('.').lastOrNull?.toLowerCase() !=
                               'yaml';
                         });
                         if (fileBytes != null) {
-                          final s = utf8.decode(fileBytes);
+                          final String s = utf8.decode(fileBytes);
                           _fileContent.text = s;
                         }
                       }
@@ -372,10 +374,10 @@ Future<void> _generateOutputs(
   required String fileContent,
   required bool isJson,
 }) async {
-  final sm = ScaffoldMessenger.of(context);
+  final ScaffoldMessengerState sm = ScaffoldMessenger.of(context);
   final generator = GenProcessor(config);
   try {
-    final files = await generator.generateContent((
+    final List<GeneratedFile> files = await generator.generateContent((
       fileContent: fileContent,
       isJson: isJson,
     ));

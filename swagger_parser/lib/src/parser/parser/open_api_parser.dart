@@ -17,6 +17,7 @@ import 'package:swagger_parser/src/parser/model/universal_type.dart';
 import 'package:swagger_parser/src/parser/utils/anchor_registry.dart';
 import 'package:swagger_parser/src/parser/utils/context_stack.dart';
 import 'package:swagger_parser/src/parser/utils/http_utils.dart';
+import 'package:swagger_parser/src/parser/utils/path_match.dart';
 import 'package:swagger_parser/src/parser/utils/type_utils.dart';
 import 'package:yaml/yaml.dart';
 
@@ -96,6 +97,8 @@ class OpenApiParser {
   static const _urlConst = 'url';
   static const _versionConst = 'version';
   static const _xNullableConst = 'x-nullable';
+
+  static const _requestBodyNamePostfix = 'RequestBody';
 
   UniversalEnumClass _getUniqueEnumClass({
     required final String name,
@@ -216,7 +219,10 @@ class OpenApiParser {
 
     /// Parses query parameters (parameters and requestBody)
     /// into universal models for OpenApi v3
-    List<UniversalRequestType> parametersV3(Map<String, dynamic> map) {
+    List<UniversalRequestType> parametersV3(
+      Map<String, dynamic> map,
+      String requestPath,
+    ) {
       if (!map.containsKey(_parametersConst) &&
           !map.containsKey(_requestBodyConst)) {
         return [];
@@ -436,6 +442,7 @@ class OpenApiParser {
           final typeWithImport = _findType(
             contentType[_schemaConst] as Map<String, dynamic>,
             isRequired: isRequired,
+            name: '${requestPath.toPascal}$_requestBodyNamePostfix',
           );
           final currentType = typeWithImport.type;
           if (typeWithImport.import != null) {
@@ -590,10 +597,17 @@ class OpenApiParser {
     if (!_definitionFileContent.containsKey(_pathsConst)) {
       return [];
     }
+
+    final includePaths = config.includePaths;
+
     (_definitionFileContent[_pathsConst] as Map<String, dynamic>).forEach((
       path,
       pathValue,
     ) {
+      if (includePaths != null && !matchesPathPattern(path, includePaths)) {
+        return;
+      }
+
       final pathValueMap = pathValue as Map<String, dynamic>;
 
       // global parameters are defined at the path level (i.e. /users/{id})
@@ -602,7 +616,7 @@ class OpenApiParser {
       if (pathValueMap.containsKey(_parametersConst)) {
         final params = _apiInfo.schemaVersion == OAS.v2
             ? parametersV2(pathValue)
-            : parametersV3(pathValue);
+            : parametersV3(pathValue, path);
         globalParameters.addAll(params);
       }
 
@@ -637,7 +651,7 @@ class OpenApiParser {
               : returnTypeV3(requestPathResponses, additionalName);
           final parameters = _apiInfo.schemaVersion == OAS.v2
               ? parametersV2(requestPath)
-              : parametersV3(requestPath);
+              : parametersV3(requestPath, path);
 
           // Add global parameters that have not been overridden by local parameters
           // defined at the request level.
@@ -679,7 +693,10 @@ class OpenApiParser {
           } else {
             rawOperationId = requestPath[_operationIdConst]?.toString();
             operationIdName = rawOperationId?.toCamel;
-            final (_, nameDescription) = protectName(operationIdName);
+            final (_, nameDescription) = protectName(
+              operationIdName,
+              replacementRulesForRawSchema: config.replacementRulesForRawSchema,
+            );
             if (nameDescription != null) {
               description = '$description\n\n$nameDescription';
               requestName = (key + path).toCamel;
@@ -1107,7 +1124,9 @@ class OpenApiParser {
       }
     }
 
-    if (config.includeTags.isNotEmpty || config.excludeTags.isNotEmpty) {
+    if (config.includeTags.isNotEmpty ||
+        config.excludeTags.isNotEmpty ||
+        config.includePaths != null) {
       return _filterUsedClasses(dataClasses);
     }
 
@@ -1315,6 +1334,7 @@ class OpenApiParser {
       final (newName, description) = protectName(
         name,
         description: map[_descriptionConst]?.toString(),
+        replacementRulesForRawSchema: config.replacementRulesForRawSchema,
       );
 
       // Nullability of the array itself.
@@ -1386,6 +1406,7 @@ class OpenApiParser {
       final (newName, description) = protectName(
         name,
         description: map[_descriptionConst]?.toString(),
+        replacementRulesForRawSchema: config.replacementRulesForRawSchema,
       );
 
       // Nullability of the map itself.
@@ -1442,6 +1463,7 @@ class OpenApiParser {
         isEnum: true,
         uniqueIfNull: true,
         description: map[_descriptionConst]?.toString(),
+        replacementRulesForRawSchema: config.replacementRulesForRawSchema,
       );
 
       var newName = variableName;
@@ -1525,6 +1547,7 @@ class OpenApiParser {
         originalName,
         uniqueIfNull: true,
         description: map[_descriptionConst]?.toString(),
+        replacementRulesForRawSchema: config.replacementRulesForRawSchema,
       );
 
       final (parameters, imports) = _findParametersAndImports(map);
@@ -1651,10 +1674,11 @@ class OpenApiParser {
           // Create a base union class for the discriminated types
           final baseClassName =
               '${additionalName ?? ''} ${name ?? ''} Union'.toPascal;
-          final (newName, description) = protectName(
+          final (newName, _) = protectName(
             baseClassName,
             uniqueIfNull: true,
             description: map[_descriptionConst]?.toString(),
+            replacementRulesForRawSchema: config.replacementRulesForRawSchema,
           );
 
           // Create a sealed class to represent the discriminated union
@@ -1810,6 +1834,8 @@ class OpenApiParser {
                   baseClassName,
                   uniqueIfNull: true,
                   description: map[_descriptionConst]?.toString(),
+                  replacementRulesForRawSchema:
+                      config.replacementRulesForRawSchema,
                 );
 
                 // Create a class to represent the allOf composition
@@ -1856,6 +1882,8 @@ class OpenApiParser {
                   baseClassName,
                   uniqueIfNull: true,
                   description: map[_descriptionConst]?.toString(),
+                  replacementRulesForRawSchema:
+                      config.replacementRulesForRawSchema,
                 );
 
                 final unionName = newName!.toPascal;
@@ -1920,6 +1948,7 @@ class OpenApiParser {
             name,
             description:
                 ofType.description ?? map[_descriptionConst]?.toString(),
+            replacementRulesForRawSchema: config.replacementRulesForRawSchema,
           );
           final enumType = map.containsKey(_defaultConst) && ofImport != null
               ? ofType.type
@@ -1954,6 +1983,7 @@ class OpenApiParser {
       final (newNameForReturn, descriptionForReturn) = protectName(
         name, // Use original name for top-level naming
         description: ofType?.description ?? map[_descriptionConst]?.toString(),
+        replacementRulesForRawSchema: config.replacementRulesForRawSchema,
       );
 
       return (
@@ -2006,6 +2036,7 @@ class OpenApiParser {
       final (newName, description) = protectName(
         name,
         description: map[_descriptionConst]?.toString(),
+        replacementRulesForRawSchema: config.replacementRulesForRawSchema,
       );
 
       final enumType = defaultValue != null && import != null ? type : null;
@@ -2224,6 +2255,7 @@ class OpenApiParser {
       baseClassName,
       uniqueIfNull: true,
       description: unionDescription,
+      replacementRulesForRawSchema: config.replacementRulesForRawSchema,
     );
     final unionName = newName!.toPascal;
     final (foundImports, variantRefToProps) = _getImportsAndProps(

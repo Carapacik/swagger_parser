@@ -1,3 +1,4 @@
+import 'package:swagger_parser/src/generator/model/field_parser.dart';
 import 'package:swagger_parser/src/generator/model/generated_file.dart';
 import 'package:swagger_parser/src/generator/model/json_serializer.dart';
 import 'package:swagger_parser/src/generator/templates/dart_dart_mappable_dto_template.dart';
@@ -51,6 +52,7 @@ enum ProgrammingLanguage {
     required bool useMultipartFile,
     required bool dartMappableConvenientWhen,
     required bool includeIfNull,
+    required List<FieldParser> fieldParsers,
     bool useFlutterCompute = false,
     String? fallbackUnion,
   }) {
@@ -84,6 +86,7 @@ enum ProgrammingLanguage {
                 dataClass,
                 markFileAsGenerated: markFilesAsGenerated,
                 useMultipartFile: useMultipartFile,
+                fieldParsers: fieldParsers,
                 includeIfNull: includeIfNull,
                 useFlutterCompute: useFlutterCompute,
                 fallbackUnion: fallbackUnion,
@@ -118,6 +121,7 @@ enum ProgrammingLanguage {
     required bool markFilesAsGenerated,
     required String defaultContentType,
     required bool useMultipartFile,
+    required bool generateUrlsConstants,
     bool extrasParameterByDefault = false,
     bool dioOptionsParameterByDefault = false,
     bool addOpenApiMetadata = false,
@@ -125,6 +129,7 @@ enum ProgrammingLanguage {
     JsonSerializer jsonSerializer = JsonSerializer.jsonSerializable,
     bool useFlutterCompute = false,
     String? fileName,
+    JsonSerializer? jsonSerializer,
   }) =>
       switch (this) {
         dart => dartRetrofitClientTemplate(
@@ -138,7 +143,9 @@ enum ProgrammingLanguage {
             useMultipartFile: useMultipartFile,
             jsonSerializer: jsonSerializer,
             useFlutterCompute: useFlutterCompute,
+            generateUrlsConstants: generateUrlsConstants,
             fileName: fileName,
+            jsonSerializer: jsonSerializer,
           ),
         kotlin =>
           kotlinRetrofitClientTemplate(restClient: restClient, name: name),

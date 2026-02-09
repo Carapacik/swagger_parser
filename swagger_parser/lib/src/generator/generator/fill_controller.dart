@@ -28,6 +28,7 @@ final class FillController {
           dataClass,
           jsonSerializer: config.jsonSerializer,
           enumsToJson: config.enumsToJson,
+          fieldParsers: config.fieldParsers,
           unknownEnumValue: config.unknownEnumValue,
           markFilesAsGenerated: config.markFilesAsGenerated,
           generateValidator: config.generateValidator,
@@ -98,6 +99,8 @@ final class FillController {
         jsonSerializer: config.jsonSerializer,
         useFlutterCompute: config.useFlutterCompute,
         fileName: fileName,
+        jsonSerializer: config.jsonSerializer,
+        generateUrlsConstants: config.generateUrlsConstants,
       ),
     );
   }

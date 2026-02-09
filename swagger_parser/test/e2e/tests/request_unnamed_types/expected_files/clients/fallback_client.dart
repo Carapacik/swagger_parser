@@ -6,8 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/get_test2_response.dart';
-import '../models/object0.dart';
-import '../models/object1.dart';
+import '../models/test1_request_body.dart';
+import '../models/test2_request_body.dart';
 
 part 'fallback_client.g.dart';
 
@@ -15,15 +15,13 @@ part 'fallback_client.g.dart';
 abstract class FallbackClient {
   factory FallbackClient(Dio dio, {String? baseUrl}) = _FallbackClient;
 
-  /// [body] - Name not received and was auto-generated.
   @POST('/test1')
   Future<dynamic> test({
-    @Body() required Object0 body,
+    @Body() required Test1RequestBody body,
   });
 
-  /// [body] - Name not received and was auto-generated.
   @GET('/test2')
   Future<GetTest2Response> test({
-    @Body() Object1? body,
+    @Body() Test2RequestBody? body,
   });
 }

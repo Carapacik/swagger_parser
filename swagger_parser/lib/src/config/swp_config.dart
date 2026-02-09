@@ -1,6 +1,7 @@
 import 'package:args/args.dart';
 import 'package:swagger_parser/src/config/config_exception.dart';
 import 'package:swagger_parser/src/generator/config/generator_config.dart';
+import 'package:swagger_parser/src/generator/model/field_parser.dart';
 import 'package:swagger_parser/src/generator/model/json_serializer.dart';
 import 'package:swagger_parser/src/generator/model/programming_language.dart';
 import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
@@ -26,6 +27,7 @@ class SWPConfig {
     this.markFilesAsGenerated = true,
     this.originalHttpResponse = false,
     this.replacementRules = const [],
+    this.replacementRulesForRawSchema = const [],
     this.defaultContentType = 'application/json',
     this.extrasParameterByDefault = false,
     this.dioOptionsParameterByDefault = false,
@@ -42,11 +44,14 @@ class SWPConfig {
     this.dartMappableConvenientWhen = false,
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
+    this.includePaths,
     this.fallbackClient = 'fallback',
     this.mergeOutputs = false,
     this.includeIfNull = false,
     this.inferRequiredFromNullable = false,
     this.useFlutterCompute = false,
+    this.generateUrlsConstants = false,
+    this.fieldParsers = const [],
   });
 
   /// Internal constructor of [SWPConfig]
@@ -67,6 +72,7 @@ class SWPConfig {
     required this.markFilesAsGenerated,
     required this.originalHttpResponse,
     required this.replacementRules,
+    required this.replacementRulesForRawSchema,
     required this.defaultContentType,
     required this.extrasParameterByDefault,
     required this.dioOptionsParameterByDefault,
@@ -81,12 +87,15 @@ class SWPConfig {
     required this.useMultipartFile,
     required this.excludeTags,
     required this.includeTags,
+    required this.includePaths,
     required this.fallbackClient,
     required this.mergeOutputs,
     required this.dartMappableConvenientWhen,
     required this.includeIfNull,
     required this.inferRequiredFromNullable,
     required this.useFlutterCompute,
+    required this.generateUrlsConstants,
+    required this.fieldParsers,
     this.fallbackUnion,
   });
 
@@ -229,6 +238,32 @@ class SWPConfig {
       replacementRules = List.from(rootConfig!.replacementRules);
     }
 
+    final rawReplacementRulesForRawSchema =
+        yamlMap['replacement_rules_for_raw_schema'] as YamlList?;
+    List<ReplacementRule>? replacementRulesForRawSchema;
+    if (rawReplacementRulesForRawSchema != null) {
+      replacementRulesForRawSchema = [];
+      for (final r in rawReplacementRulesForRawSchema) {
+        if (r is! YamlMap ||
+            r['pattern'] is! String ||
+            r['replacement'] is! String) {
+          throw const ConfigException(
+            "Config parameter 'replacement_rules_for_raw_schema' values must be maps of strings "
+            "and contain 'pattern' and 'replacement'.",
+          );
+        }
+        replacementRulesForRawSchema.add(
+          ReplacementRule(
+            pattern: RegExp(r['pattern'].toString()),
+            replacement: r['replacement'].toString(),
+          ),
+        );
+      }
+    } else if (rootConfig?.replacementRulesForRawSchema != null) {
+      replacementRulesForRawSchema =
+          List.from(rootConfig!.replacementRulesForRawSchema);
+    }
+
     final generateValidator =
         yamlMap['generate_validator'] as bool? ?? rootConfig?.generateValidator;
 
@@ -281,6 +316,22 @@ class SWPConfig {
       includedTags = List.from(rootConfig!.includeTags);
     }
 
+    final includePaths = yamlMap['include_paths'] as YamlList?;
+    List<String>? includePathsList;
+    if (includePaths != null) {
+      includePathsList = [];
+      for (final p in includePaths) {
+        if (p is! String) {
+          throw const ConfigException(
+            "Config parameter 'include_paths' values must be List of String.",
+          );
+        }
+        includePathsList.add(p);
+      }
+    } else if (rootConfig?.includePaths case final paths?) {
+      includePathsList = List.from(paths);
+    }
+
     final fallbackClient =
         yamlMap['fallback_client'] as String? ?? rootConfig?.fallbackClient;
 
@@ -297,12 +348,41 @@ class SWPConfig {
     final useFlutterCompute = yamlMap['use_flutter_compute'] as bool? ??
         rootConfig?.useFlutterCompute;
 
+    final generateUrlsConstants = yamlMap['generate_urls_constants'] as bool? ??
+        rootConfig?.generateUrlsConstants;
+
+    final rawFieldParsers = yamlMap['field_parsers'] as YamlList?;
+    List<FieldParser>? fieldParsers;
+    if (rawFieldParsers != null) {
+      fieldParsers = [];
+      for (final p in rawFieldParsers) {
+        if (p is! YamlMap ||
+            p['apply_to_type'] is! String ||
+            p['parser_name'] is! String ||
+            p['parser_absolute_path'] is! String) {
+          throw const ConfigException(
+            "Config parameter 'field_parsers' values must be List of maps with 'apply_to_type', 'parser_name', and 'parser_absolute_path'.",
+          );
+        }
+        fieldParsers.add(
+          FieldParser(
+            applyToType: p['apply_to_type'].toString(),
+            parserName: p['parser_name'].toString(),
+            parserAbsolutePath: p['parser_absolute_path'].toString(),
+          ),
+        );
+      }
+    } else if (rootConfig?.fieldParsers != null) {
+      fieldParsers = List.from(rootConfig!.fieldParsers);
+    }
+
     // Default config
     final dc = SWPConfig(name: name, outputDirectory: outputDirectory);
 
     return SWPConfig._(
       schemaPath: schemaPath,
       schemaUrl: schemaUrl,
+      fieldParsers: fieldParsers ?? dc.fieldParsers,
       outputDirectory: outputDirectory,
       name: name,
       pathMethodName: pathMethodName ?? dc.pathMethodName,
@@ -327,6 +407,8 @@ class SWPConfig {
       markFilesAsGenerated: markFilesAsGenerated ?? dc.markFilesAsGenerated,
       originalHttpResponse: originalHttpResponse ?? dc.originalHttpResponse,
       replacementRules: replacementRules ?? dc.replacementRules,
+      replacementRulesForRawSchema:
+          replacementRulesForRawSchema ?? dc.replacementRulesForRawSchema,
       generateValidator: generateValidator ?? dc.generateValidator,
       useXNullable: useXNullable ?? dc.useXNullable,
       useFreezed3: useFreezed3 ?? dc.useFreezed3,
@@ -341,6 +423,8 @@ class SWPConfig {
       inferRequiredFromNullable:
           inferRequiredFromNullable ?? dc.inferRequiredFromNullable,
       useFlutterCompute: useFlutterCompute ?? dc.useFlutterCompute,
+      includePaths: includePathsList ?? dc.includePaths,
+      generateUrlsConstants: generateUrlsConstants ?? dc.generateUrlsConstants,
     );
   }
 
@@ -431,6 +515,15 @@ class SWPConfig {
   /// All rules are applied in order.
   final List<ReplacementRule> replacementRules;
 
+  /// {@template replacement_rules_for_raw_schema}
+  /// Optional. Set raw regex replacement rules for the names of the raw schema objects.
+  ///
+  /// Applies to the raw schema objects before the generator will try to parse them into a Dart class.
+  ///
+  /// Useful when raw schema objects have names are not valid Dart class names (e.g. "filters[name]")
+  /// {@endtemplate}
+  final List<ReplacementRule> replacementRulesForRawSchema;
+
   /// DART ONLY
   /// Default content type for all requests and responses.
   ///
@@ -505,6 +598,15 @@ class SWPConfig {
   /// Endpoints with these tags will not be included in the generated clients.
   final List<String> excludeTags;
 
+  /// {@template include_paths}
+  /// Optional. Set included paths.
+  ///
+  /// Also supports wildcard paths (e.g. `/path/*/update` or `/path/**`)
+  ///
+  /// If set, only endpoints with these paths will be included in the generated clients.
+  /// {@endtemplate}
+  final List<String>? includePaths;
+
   /// DART ONLY
   /// Optional. Set included tags.
   ///
@@ -540,6 +642,19 @@ class SWPConfig {
   /// and serialize/deserialize top-level functions for isolate-based multithreading.
   final bool useFlutterCompute;
 
+  /// DART/FLUTTER ONLY
+  /// Optional. Set `true` to generate URL constants for all endpoints.
+  final bool generateUrlsConstants;
+
+  /// {@template field_parsers}
+  /// DART ONLY
+  /// Optional. Set field parsers.
+  ///
+  /// Field parsers are used to parse specific fields of a DTO.
+  ///
+  /// {@endtemplate}
+  final List<FieldParser> fieldParsers;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -569,6 +684,8 @@ class SWPConfig {
       mergeOutputs: mergeOutputs,
       includeIfNull: includeIfNull,
       useFlutterCompute: useFlutterCompute,
+      generateUrlsConstants: generateUrlsConstants,
+      fieldParsers: fieldParsers,
     );
   }
 
@@ -589,7 +706,9 @@ class SWPConfig {
       replacementRules: replacementRules,
       useXNullable: useXNullable,
       excludeTags: excludeTags,
+      replacementRulesForRawSchema: replacementRulesForRawSchema,
       includeTags: includeTags,
+      includePaths: includePaths,
       fallbackClient: fallbackClient,
       inferRequiredFromNullable: inferRequiredFromNullable,
     );

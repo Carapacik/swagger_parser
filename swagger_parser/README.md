@@ -146,6 +146,45 @@ swagger_parser:
     - pattern: "[0-9]+"
       replacement: ""
 
+  # Optional. Set raw regex replacement rules for the names of the raw schema objects.
+  # Applies to the raw schema objects before the generator will try to parse them into a Dart class.
+  # Useful when raw schema objects have names that are not valid Dart class names (e.g. "filters[name]")
+  replacement_rules_for_raw_schema:
+   - pattern: "\\]\\["
+     replacement: "_"
+   - pattern: "\\[]\\["
+     replacement: "_"
+   - pattern: "\\["
+     replacement: "_"
+   - pattern: "\\]"
+     replacement: "_"
+
+  # Optional. Set paths to be included on endpoint generation.
+  #
+  # Also supports wildcard paths (e.g. `/path/*/update` or `/path/**`)
+  #
+  # If set, only endpoints with these paths will be included in the generated clients.
+  include_paths:
+    - "/some/concrete/path/{id}"
+    - "/some/wildcard/*/path"
+    - "/another/wildcard/**"
+
+  # Optional (dart & json_serializable only). Set field parsers for JSON serializable.
+  #
+  # Field parsers are used to parse specific fields of a DTO.
+  #
+  # Parser must implements JsonConverter<T, Object?> interface from json_annotation package.
+  field_parsers:
+    - apply_to_type: "int"
+      parser_name: "CustomIntParser"
+      parser_absolute_path: "package:your_package/lib/utils/parsers/custom_int_parser.dart"
+    - apply_to_type: "int?"
+      parser_name: "CustomNullableIntParser"
+      parser_absolute_path: "package:your_package/lib/utils/parsers/custom_nullable_int_parser.dart"
+    - apply_to_type: "bool"
+      parser_name: "CustomBoolParser"
+      parser_absolute_path: "package:your_package/lib/utils/parsers/custom_bool_parser.dart"
+
   # Optional. Skip parameters with names.
   skipped_parameters:
     - "X-Some-Token"
@@ -170,6 +209,10 @@ swagger_parser:
   # DART ONLY
   # Optional. Set `true` to use MultipartFile instead of File as argument type for file parameters.
   use_multipart_file: false
+
+  # DART ONLY
+  # Optional. Set `true` to generate URL constants for all endpoints.
+  generate_urls_constants: false
 
   # DART ONLY
   # Optional. Set tags to be excluded on endpoint generation.
@@ -240,6 +283,7 @@ swagger_parser:
       json_serializer: freezed
       put_in_folder: true
       replacement_rules: []
+      replacement_rules_for_raw_schema: []
 
     - schema_url: https://petstore.swagger.io/v2/swagger.json
       name: pet_service_dart_mappable

@@ -11,18 +11,18 @@ void generateArchive(List<GeneratedFile> files) {
   final encoder = ZipEncoder();
   final archive = Archive();
   for (final file in files) {
-    final contentBytes = utf8.encode(file.content);
+    final Uint8List contentBytes = utf8.encode(file.content);
     archive.addFile(ArchiveFile(file.name, contentBytes.length, contentBytes));
   }
   final outputStream = OutputMemoryStream();
-  final bytes = encoder.encode(
+  final List<int> bytes = encoder.encode(
     archive,
     level: DeflateLevel.bestCompression,
     output: outputStream,
   );
 
   final blobWeb = web.Blob(<JSUint8Array>[Uint8List.fromList(bytes).toJS].toJS);
-  final url = web.URL.createObjectURL(blobWeb);
+  final String url = web.URL.createObjectURL(blobWeb);
   final anchor = web.document.createElement('a') as web.HTMLAnchorElement
     ..href = url
     ..style.display = 'none'

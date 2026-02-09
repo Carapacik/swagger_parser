@@ -1,3 +1,25 @@
+## 1.42.0
+- Support for streaming & SSE
+- Fix preserve property names and required modifiers in properties blocks
+- Fix API path definitions are incorrectly converted to PascalCase
+
+## 1.41.0
+- Add `field_parsers` option for setting field parsers for JSON serializable
+
+## 1.40.0
+- Add `include_paths` option for filtering endpoints by paths
+- Add `generate_urls_constants` option for generating URL constants for all endpoints
+
+## 1.39.1
+- Fix client methods returning `ModelNameUnion` instead of `ModelNameSealed` for oneOf types ([#393](https://github.com/Carapacik/swagger_parser/issues/393))
+
+## 1.39.0
+- Handle request body name generation case when request body is declared within request
+- Fix incorrect deserialization syntax for undiscriminated unions (Freezed serializer)
+
+## 1.38.0
+- Add `replacement_rules_for_raw_schema` option for raw schema objects replacement rules
+
 ## 1.37.1
 - Fix missing import for MultipartFile([#408](https://github.com/Carapacik/swagger_parser/issues/408))
 - Fix refs in components.responses

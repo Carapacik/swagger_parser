@@ -19,6 +19,20 @@ void main() {
       );
     });
 
+    test('generate_urls_constants', () async {
+      await e2eTest(
+        'generate_urls_constants',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          generateUrlsConstants: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('enum_member_names', () async {
       await e2eTest(
         'enum_member_names',
@@ -94,6 +108,34 @@ void main() {
       );
     });
 
+    // Test for properties block preservation and required property handling
+    test('properties_block_preservation', () async {
+      await e2eTest(
+        'properties_block_preservation',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    // Test for API path definition preservation (snake_case should not be converted to PascalCase)
+    test('api_path_preservation', () async {
+      await e2eTest(
+        'api_path_preservation',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     // https://github.com/Carapacik/swagger_parser/issues/224
     // https://github.com/Carapacik/swagger_parser/issues/214
     test('request_unnamed_types', () async {
@@ -161,6 +203,40 @@ void main() {
           jsonSerializer: JsonSerializer.freezed,
           putClientsInFolder: true,
           includeIfNull: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    test('field_parsers', () async {
+      await e2eTest(
+        'field_parsers',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          // ignore: avoid_redundant_argument_values
+          jsonSerializer: JsonSerializer.jsonSerializable,
+          putClientsInFolder: true,
+          fieldParsers: [
+            const FieldParser(
+              applyToType: 'int',
+              parserName: 'CustomIntParser',
+              parserAbsolutePath:
+                  'package:your_package/lib/utils/parsers/custom_int_parser.dart',
+            ),
+            const FieldParser(
+              applyToType: 'int?',
+              parserName: 'CustomNullableIntParser',
+              parserAbsolutePath:
+                  'package:your_package/lib/utils/parsers/custom_nullable_int_parser.dart',
+            ),
+            const FieldParser(
+              applyToType: 'bool',
+              parserName: 'CustomBoolParser',
+              parserAbsolutePath:
+                  'package:your_package/lib/utils/parsers/custom_bool_parser.dart',
+            ),
+          ],
         ),
         schemaFileName: 'openapi.yaml',
       );

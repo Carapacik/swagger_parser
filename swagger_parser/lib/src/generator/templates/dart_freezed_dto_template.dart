@@ -246,8 +246,7 @@ String _jsonFactories(String className,
     Map<String, Set<UniversalType>>? undiscriminatedUnionVariants) {
   if (undiscriminatedUnionVariants case final unionVariants?
       when unionVariants.isNotEmpty) {
-    return '${_fromJsonUndiscriminatedUnion(className)}\n'
-        '${_toJsonUndiscriminatedUnion(className, unionVariants)}';
+    return _fromJsonUndiscriminatedUnion(className);
   }
 
   return '  \n  factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);';
@@ -256,25 +255,20 @@ String _jsonFactories(String className,
 String _fromJsonUndiscriminatedUnion(String className) => '''
 
   factory $className.fromJson(Map<String, Object?> json) =>
-      // TODO: Deserialization must be implemented by the user, because the OpenAPI specification did not provide a discriminator.
-      // Use _\$\$$className<UnionName>ImplFromJson(json) to deserialize the union <UnionName>.
+      // TODO: No discriminator in OpenAPI spec - you must implement this manually.
+      //
+      // Inspect the JSON and return the matching variant. Each variant has a fromJson:
+      //   ${className}VariantName.fromJson(json)
+      //
+      // Example pattern (check for unique fields):
+      //   json.containsKey('uniqueFieldA') ? ${className}TypeA.fromJson(json) :
+      //   json.containsKey('uniqueFieldB') ? ${className}TypeB.fromJson(json) :
+      //   ${className}Default.fromJson(json);
+      //
+      // IMPORTANT: Keep the => arrow syntax. Converting to a { } body will cause
+      // freezed to skip generating toJson/fromJson for this class.
       throw UnimplementedError();
 ''';
-
-String _toJsonUndiscriminatedUnion(
-  String className,
-  Map<String, Set<UniversalType>> undiscriminatedUnionVariants,
-) {
-  final cases = {
-    for (final variant in undiscriminatedUnionVariants.keys)
-      '        $className${variant.toPascal}() => _\$\$$className${variant.toPascal}ImplToJson(this),'
-  };
-
-  return '''
-  Map<String, Object?> toJson() => switch (this) {
-${cases.join('\n')}
-      };''';
-}
 
 String? _validationString(UniversalType type) {
   final sb = StringBuffer();
