@@ -7,5 +7,6 @@ export 'clients/fallback_client.dart';
 // Data classes
 export 'models/object0.dart';
 export 'models/object1.dart';
+export 'models/enum0.dart';
 // Root client
 export 'rest_client.dart';

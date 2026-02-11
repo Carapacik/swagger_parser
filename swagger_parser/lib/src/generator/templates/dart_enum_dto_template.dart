@@ -191,7 +191,7 @@ ${indentation(2)}${item.name.toCamel}''';
 
 String _toJson(UniversalEnumClass enumClass, String className) {
   final dartType = enumClass.type.toDartType();
-  return '\n\n  $dartType${_nullableSign(dartType)} toJson() => json;';
+  return '\n\n  $dartType toJson() => json as $dartType;';
 }
 
 String _toString() =>

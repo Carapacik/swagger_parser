@@ -1664,7 +1664,7 @@ enum EnumName {
 
   final int? json;
 
-  int? toJson() => json;
+  int toJson() => json as int;
 
   @override
   String toString() => json?.toString() ?? super.toString();
@@ -1689,7 +1689,7 @@ enum EnumNameString {
 
   final String? json;
 
-  String? toJson() => json;
+  String toJson() => json as String;
 
   @override
   String toString() => json?.toString() ?? super.toString();
@@ -1698,6 +1698,56 @@ enum EnumNameString {
 
         expect(files[0].content, expectedContent0);
         expect(files[1].content, expectedContent1);
+      });
+
+      test('without toJson() but with unknownEnumValue', () async {
+        final dataClass = UniversalEnumClass(
+          name: 'Status',
+          type: 'string',
+          items: UniversalEnumItem.listFromNames({'first', 'second'}),
+        );
+
+        const fillController = FillController(
+          config: GeneratorConfig(
+            name: '',
+            outputDirectory: '',
+            jsonSerializer: JsonSerializer.freezed,
+            enumsToJson: false,
+            unknownEnumValue: true,
+          ),
+        );
+
+        final file = fillController.fillDtoContent(dataClass);
+
+        const expectedContent = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+@JsonEnum()
+enum Status {
+  @JsonValue('first')
+  first('first'),
+  @JsonValue('second')
+  second('second'),
+  /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
+  $unknown(null);
+
+  const Status(this.json);
+
+  factory Status.fromJson(String json) => values.firstWhere(
+        (e) => e.json == json,
+        orElse: () => $unknown,
+      );
+
+  final String? json;
+
+  @override
+  String toString() => json?.toString() ?? super.toString();
+  /// Returns all defined enum values excluding the $unknown value.
+  static List<Status> get $valuesDefined => values.where((value) => value != $unknown).toList();
+}
+''';
+
+        expect(file.content, expectedContent);
       });
     });
 
@@ -1842,7 +1892,7 @@ enum EnumName {
 
   final int? json;
 
-  int? toJson() => json;
+  int toJson() => json as int;
 
   @override
   String toString() => json?.toString() ?? super.toString();
@@ -1878,7 +1928,7 @@ enum EnumNameString {
 
   final String? json;
 
-  String? toJson() => json;
+  String toJson() => json as String;
 
   @override
   String toString() => json?.toString() ?? super.toString();
@@ -1888,6 +1938,59 @@ enum EnumNameString {
 ''';
         expect(files[0].content, expectedContent0);
         expect(files[1].content, expectedContent1);
+      });
+
+      test('with toJson() string enum', () async {
+        final dataClass = UniversalEnumClass(
+          name: 'Status',
+          type: 'string',
+          description: 'Name not received and was auto-generated.',
+          items: UniversalEnumItem.listFromNames({'first', 'second'}),
+        );
+
+        const fillController = FillController(
+          config: GeneratorConfig(
+            name: '',
+            outputDirectory: '',
+            jsonSerializer: JsonSerializer.freezed,
+            enumsToJson: true,
+          ),
+        );
+
+        final file = fillController.fillDtoContent(dataClass);
+
+        const expectedContent = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+/// Name not received and was auto-generated.
+@JsonEnum()
+enum Status {
+  @JsonValue('first')
+  first('first'),
+  @JsonValue('second')
+  second('second'),
+  /// Default value for all unparsed values, allows backward compatibility when adding new values on the backend.
+  $unknown(null);
+
+  const Status(this.json);
+
+  factory Status.fromJson(String json) => values.firstWhere(
+        (e) => e.json == json,
+        orElse: () => $unknown,
+      );
+
+  final String? json;
+
+  String toJson() => json as String;
+
+  @override
+  String toString() => json?.toString() ?? super.toString();
+  /// Returns all defined enum values excluding the $unknown value.
+  static List<Status> get $valuesDefined => values.where((value) => value != $unknown).toList();
+}
+''';
+
+        expect(file.content, expectedContent);
       });
     });
 
