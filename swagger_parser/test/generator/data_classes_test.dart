@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_redundant_argument_values
+
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:test/test.dart';
 
@@ -1648,7 +1650,7 @@ enum EnumNameStringWithLeadingNumbers {
         for (final enumClass in dataClasses) {
           files.add(fillController.fillDtoContent(enumClass));
         }
-        const expectedContent0 = '''
+        const expectedContent0 = r'''
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
@@ -1664,14 +1666,21 @@ enum EnumName {
 
   final int? json;
 
-  int toJson() => json as int;
+  int toJson() {
+    final value = json;
+    if (value == null) {
+      throw StateError('Cannot convert enum value with null JSON representation to int. '
+          'This usually happens for $unknown or @JsonValue(null) entries.');
+    }
+    return value as int;
+  }
 
   @override
   String toString() => json?.toString() ?? super.toString();
 }
 ''';
 
-        const expectedContent1 = '''
+        const expectedContent1 = r'''
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
@@ -1689,7 +1698,14 @@ enum EnumNameString {
 
   final String? json;
 
-  String toJson() => json as String;
+  String toJson() {
+    final value = json;
+    if (value == null) {
+      throw StateError('Cannot convert enum value with null JSON representation to String. '
+          'This usually happens for $unknown or @JsonValue(null) entries.');
+    }
+    return value as String;
+  }
 
   @override
   String toString() => json?.toString() ?? super.toString();
@@ -1892,7 +1908,14 @@ enum EnumName {
 
   final int? json;
 
-  int toJson() => json as int;
+  int toJson() {
+    final value = json;
+    if (value == null) {
+      throw StateError('Cannot convert enum value with null JSON representation to int. '
+          'This usually happens for $unknown or @JsonValue(null) entries.');
+    }
+    return value as int;
+  }
 
   @override
   String toString() => json?.toString() ?? super.toString();
@@ -1928,7 +1951,14 @@ enum EnumNameString {
 
   final String? json;
 
-  String toJson() => json as String;
+  String toJson() {
+    final value = json;
+    if (value == null) {
+      throw StateError('Cannot convert enum value with null JSON representation to String. '
+          'This usually happens for $unknown or @JsonValue(null) entries.');
+    }
+    return value as String;
+  }
 
   @override
   String toString() => json?.toString() ?? super.toString();
@@ -1981,7 +2011,14 @@ enum Status {
 
   final String? json;
 
-  String toJson() => json as String;
+  String toJson() {
+    final value = json;
+    if (value == null) {
+      throw StateError('Cannot convert enum value with null JSON representation to String. '
+          'This usually happens for $unknown or @JsonValue(null) entries.');
+    }
+    return value as String;
+  }
 
   @override
   String toString() => json?.toString() ?? super.toString();
