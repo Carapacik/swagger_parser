@@ -1665,7 +1665,6 @@ enum EnumName {
   const EnumName(this.json);
 
   final int? json;
-
   int toJson() {
     final value = json;
     if (value == null) {
@@ -1697,7 +1696,6 @@ enum EnumNameString {
   const EnumNameString(this.json);
 
   final String? json;
-
   String toJson() {
     final value = json;
     if (value == null) {
@@ -1907,7 +1905,6 @@ enum EnumName {
       );
 
   final int? json;
-
   int toJson() {
     final value = json;
     if (value == null) {
@@ -1950,7 +1947,6 @@ enum EnumNameString {
       );
 
   final String? json;
-
   String toJson() {
     final value = json;
     if (value == null) {
@@ -2010,7 +2006,6 @@ enum Status {
       );
 
   final String? json;
-
   String toJson() {
     final value = json;
     if (value == null) {
