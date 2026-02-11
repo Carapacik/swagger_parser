@@ -191,7 +191,16 @@ ${indentation(2)}${item.name.toCamel}''';
 
 String _toJson(UniversalEnumClass enumClass, String className) {
   final dartType = enumClass.type.toDartType();
-  return '\n\n  $dartType${_nullableSign(dartType)} toJson() => json;';
+  return '''
+
+  $dartType toJson() {
+    final value = json;
+    if (value == null) {
+      throw StateError('Cannot convert enum value with null JSON representation to $dartType. '
+          'This usually happens for \$unknown or @JsonValue(null) entries.');
+    }
+    return value as $dartType;
+  }''';
 }
 
 String _toString() =>
