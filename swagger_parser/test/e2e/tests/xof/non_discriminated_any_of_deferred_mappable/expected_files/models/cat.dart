@@ -11,6 +11,8 @@ class Cat with CatMappable {
   const Cat({
     required this.mewCount,
   });
+
+  /// Number of times the cat meows.
   final int mewCount;
 
   static Cat fromJson(Map<String, dynamic> json) =>

@@ -11,6 +11,8 @@ class Dog with DogMappable {
   const Dog({
     required this.barkSound,
   });
+
+  /// The sound of the dog's bark.
   final String barkSound;
 
   static Dog fromJson(Map<String, dynamic> json) =>
