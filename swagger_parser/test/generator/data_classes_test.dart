@@ -461,6 +461,37 @@ class ClassName with ClassNameMappable {
       expect(filledContent.content, equalsIgnoringWhitespace(expectedContents));
     });
 
+    test('dart + dart_mappable + useDartMappableNaming: true', () async {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        parameters: {},
+      );
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.dartMappable,
+          useDartMappableNaming: true,
+        ),
+      );
+      final filledContent = fillController.fillDtoContent(dataClass);
+      const expectedContents = '''
+import 'package:dart_mappable/dart_mappable.dart';
+
+part 'class_name.mapper.dart';
+
+@MappableClass()
+class ClassName with ClassNameMappable {
+
+  const ClassName();
+
+  static ClassName fromMap(Map<String, dynamic> json) => ClassNameMapper.ensureInitialized().decodeMap<ClassName>(json);
+}
+''';
+      expect(filledContent.content, equalsIgnoringWhitespace(expectedContents));
+    });
+
     test('dart + dart_mappable with custom json key', () async {
       final dataClass = UniversalComponentClass(
         name: 'ClassName',

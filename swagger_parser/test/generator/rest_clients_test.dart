@@ -1,7 +1,4 @@
-import 'package:swagger_parser/src/generator/config/generator_config.dart';
-import 'package:swagger_parser/src/generator/generator/fill_controller.dart';
-import 'package:swagger_parser/src/generator/model/programming_language.dart';
-import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
+import 'package:swagger_parser/swagger_parser.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -14,6 +11,62 @@ void main() {
       );
       const fillController = FillController(
         config: GeneratorConfig(name: '', outputDirectory: ''),
+      );
+      final filledContent = fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'some_client.g.dart';
+
+@RestApi()
+abstract class SomeClient {
+  factory SomeClient(Dio dio, {String? baseUrl}) = _SomeClient;
+}
+''';
+      expect(filledContent.content, expectedContents);
+    });
+
+    test('dart + retrofit + use_dart_mappable_naming: true', () async {
+      const restClient = UniversalRestClient(
+        name: 'Some',
+        imports: {},
+        requests: [],
+      );
+      const fillController = FillController(
+        config: GeneratorConfig(
+            name: '',
+            outputDirectory: '',
+            jsonSerializer: JsonSerializer.dartMappable,
+            useDartMappableNaming: true),
+      );
+      final filledContent = fillController.fillRestClientContent(restClient);
+      const expectedContents = '''
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'some_client.g.dart';
+
+@RestApi(parser: Parser.DartMappable)
+abstract class SomeClient {
+  factory SomeClient(Dio dio, {String? baseUrl}) = _SomeClient;
+}
+''';
+      expect(filledContent.content, expectedContents);
+    });
+
+    test('dart + retrofit + use_dart_mappable_naming: false', () async {
+      const restClient = UniversalRestClient(
+        name: 'Some',
+        imports: {},
+        requests: [],
+      );
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.dartMappable,
+        ),
       );
       final filledContent = fillController.fillRestClientContent(restClient);
       const expectedContents = '''

@@ -12,6 +12,7 @@ String dartDartMappableDtoTemplate(
   required bool markFileAsGenerated,
   required bool useMultipartFile,
   required bool dartMappableConvenientWhen,
+  required bool useDartMappableNaming,
   bool useFlutterCompute = false,
   String? fallbackUnion,
 }) {
@@ -53,7 +54,11 @@ String dartDartMappableDtoTemplate(
   // Generate additional classes for undiscriminated unions or discriminated unions with complete mapping
   final additionalClasses = shouldUseWrapperPattern
       ? _generateWrapperClasses(
-          dataClass, className, useMultipartFile, effectiveFallbackUnion)
+          dataClass: dataClass,
+          className: className,
+          useMultipartFile: useMultipartFile,
+          fallbackUnion: effectiveFallbackUnion,
+          useDartMappableNaming: useDartMappableNaming)
       : '';
 
   final serializerClass =
@@ -67,7 +72,7 @@ part '$classNameSnake.mapper.dart';
 
 ${descriptionComment(dataClass.description)}@MappableClass(${_getMappableClassAnnotation(dataClass, className, effectiveFallbackUnion)})
 ${_classModifier(isUnion: isUnion)}class $className ${parent != null ? "extends $parent " : ""}with ${className}Mappable {
-${_generateClassBody(dataClass, className, useMultipartFile, isUnion, dartMappableConvenientWhen, isSimpleDataClass, effectiveFallbackUnion)}
+${_generateClassBody(dataClass: dataClass, className: className, useMultipartFile: useMultipartFile, isUnion: isUnion, dartMappableConvenientWhen: dartMappableConvenientWhen, isSimpleDataClass: isSimpleDataClass, useDartMappableNaming: useDartMappableNaming, fallbackUnion: effectiveFallbackUnion)}
 }
 
 $additionalClasses$serializerClass''';
@@ -228,29 +233,36 @@ String _classModifier({required bool isUnion}) {
   return isUnion ? 'sealed ' : '';
 }
 
-String _generateClassBody(
-    UniversalComponentClass dataClass,
-    String className,
-    bool useMultipartFile,
-    bool isUnion,
-    bool dartMappableConvenientWhen,
-    bool isSimpleDataClass,
-    [String? fallbackUnion]) {
+String _generateClassBody({
+  required UniversalComponentClass dataClass,
+  required String className,
+  required bool useMultipartFile,
+  required bool isUnion,
+  required bool dartMappableConvenientWhen,
+  required bool isSimpleDataClass,
+  required bool useDartMappableNaming,
+  String? fallbackUnion,
+}) {
   if (!isUnion) {
     // Regular class generation
     return '''
 ${indentation(2)}const $className(${getParameters(dataClass)});
 ${getFields(dataClass, useMultipartFile: useMultipartFile, isSimpleDataClass: isSimpleDataClass)}
 ${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, className, fallbackUnion) : ''}
-${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
+${indentation(2)}static $className ${useDartMappableNaming ? 'fromMap' : 'fromJson'}(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
 ''';
   }
 
   // Union class generation
   if (dataClass.undiscriminatedUnionVariants case final variants?
       when variants.isNotEmpty) {
-    return _generateUndiscriminatedUnionBody(className, variants,
-        useMultipartFile, dartMappableConvenientWhen, fallbackUnion);
+    return _generateUndiscriminatedUnionBody(
+        className: className,
+        variants: variants,
+        useMultipartFile: useMultipartFile,
+        dartMappableConvenientWhen: dartMappableConvenientWhen,
+        useDartMappableNaming: useDartMappableNaming,
+        fallbackUnion: fallbackUnion);
   }
 
   // Discriminated unions with complete mapping use wrapper pattern
@@ -261,7 +273,7 @@ ${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${clas
 ${indentation(2)}const $className();
 
 ${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, className, fallbackUnion) : ''}
-${indentation(2)}static $className fromJson(Map<String, dynamic> json) {
+${indentation(2)}static $className ${useDartMappableNaming ? 'fromMap' : 'fromJson'}(Map<String, dynamic> json) {
 ${indentation(4)}return ${_deserializerExtensionName(className)}.tryDeserialize(json);
 ${indentation(2)}}
 ''';
@@ -272,32 +284,38 @@ ${indentation(2)}}
 ${indentation(2)}const $className();
 
 ${dartMappableConvenientWhen ? getDiscriminatorConvenienceMethods(dataClass, className, fallbackUnion) : ''}
-${indentation(2)}static $className fromJson(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
+${indentation(2)}static $className ${useDartMappableNaming ? 'fromMap' : 'fromJson'}(Map<String, dynamic> json) => ${className}Mapper.ensureInitialized().decodeMap<$className>(json);
 ''';
 }
 
-String _generateUndiscriminatedUnionBody(
-    String className,
-    Map<String, Set<UniversalType>> variants,
-    bool useMultipartFile,
-    bool dartMappableConvenientWhen,
-    [String? fallbackUnion]) {
+String _generateUndiscriminatedUnionBody({
+  required String className,
+  required Map<String, Set<UniversalType>> variants,
+  required bool useMultipartFile,
+  required bool dartMappableConvenientWhen,
+  required bool useDartMappableNaming,
+  String? fallbackUnion,
+}) {
   return '''
 ${indentation(2)}const $className();
 ${dartMappableConvenientWhen ? '\n${_generateUndiscriminatedUnionConvenienceMethods(className, variants, fallbackUnion)}' : ''}
-${indentation(2)}static $className fromJson(Map<String, dynamic> json) {
+${indentation(2)}static $className ${useDartMappableNaming ? 'fromMap' : 'fromJson'}(Map<String, dynamic> json) {
 ${indentation(4)}return ${_deserializerExtensionName(className)}.tryDeserialize(json);
 ${indentation(2)}}
 ''';
 }
 
-String _generateUndiscriminatedUnionClasses(String className,
-    Map<String, Set<UniversalType>> variants, bool useMultipartFile,
-    [String? fallbackUnion]) {
+String _generateUndiscriminatedUnionClasses({
+  required String className,
+  required Map<String, Set<UniversalType>> variants,
+  required bool useMultipartFile,
+  required bool useDartMappableNaming,
+  String? fallbackUnion,
+}) {
   return '''
-${_generateUndiscriminatedMappableExtension(className, variants, fallbackUnion)}
+${_generateUndiscriminatedMappableExtension(className: className, variants: variants, useMultipartFile: useMultipartFile, useDartMappableNaming: useDartMappableNaming, fallbackUnion: fallbackUnion)}
 
-${_generateVariantWrappers(className, variants, useMultipartFile, fallbackUnion)}''';
+${_generateVariantWrappers(className: className, variants: variants, useMultipartFile: useMultipartFile, useDartMappableNaming: useDartMappableNaming, fallbackUnion: fallbackUnion)}''';
 }
 
 String _generateUndiscriminatedUnionConvenienceMethods(
@@ -364,9 +382,13 @@ ${indentation(2)}}
 ''';
 }
 
-String _generateUndiscriminatedMappableExtension(
-    String className, Map<String, Set<UniversalType>> variants,
-    [String? fallbackUnion]) {
+String _generateUndiscriminatedMappableExtension({
+  required String className,
+  required Map<String, Set<UniversalType>> variants,
+  required bool useMultipartFile,
+  required bool useDartMappableNaming,
+  String? fallbackUnion,
+}) {
   final tryBlocks = variants.keys
       .map(
         (variantName) => '''
@@ -496,9 +518,13 @@ String _deserializerExtensionName(String className) =>
         ? '${className}Deserializer'
         : '${className}SealedDeserializer';
 
-String _generateVariantWrappers(String className,
-    Map<String, Set<UniversalType>> variants, bool useMultipartFile,
-    [String? fallbackUnion]) {
+String _generateVariantWrappers({
+  required String className,
+  required Map<String, Set<UniversalType>> variants,
+  required bool useMultipartFile,
+  required bool useDartMappableNaming,
+  String? fallbackUnion,
+}) {
   final regularWrappers = variants.entries.map((entry) {
     final variantName = entry.key;
     final properties = entry.value;
@@ -548,7 +574,7 @@ ${indentation(2)}const $className${fallbackUnion.toPascal}(this._json);
 ${indentation(2)}/// Access raw JSON data for unknown union variant
 ${indentation(2)}Map<String, dynamic> get json => _json;
 
-${indentation(2)}static $className${fallbackUnion.toPascal} fromJson(Map<String, dynamic> json) =>
+${indentation(2)}static $className${fallbackUnion.toPascal} ${useDartMappableNaming ? 'fromMap' : 'fromJson'}(Map<String, dynamic> json) =>
 ${indentation(6)}$className${fallbackUnion.toPascal}(json);
 }
 '''
@@ -668,30 +694,45 @@ bool _isCompleteDiscriminatorMapping(Discriminator discriminator) {
   return discriminator.discriminatorValueToRefMapping.isNotEmpty;
 }
 
-String _generateWrapperClasses(UniversalComponentClass dataClass,
-    String className, bool useMultipartFile, String? fallbackUnion) {
+String _generateWrapperClasses({
+  required UniversalComponentClass dataClass,
+  required String className,
+  required bool useMultipartFile,
+  required bool useDartMappableNaming,
+  String? fallbackUnion,
+}) {
   // Handle undiscriminated unions
   if (dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false) {
     return _generateUndiscriminatedUnionClasses(
-        className,
-        dataClass.undiscriminatedUnionVariants!,
-        useMultipartFile,
-        fallbackUnion);
+        className: className,
+        variants: dataClass.undiscriminatedUnionVariants!,
+        useMultipartFile: useMultipartFile,
+        useDartMappableNaming: useDartMappableNaming,
+        fallbackUnion: fallbackUnion);
   }
 
   // Handle discriminated unions with complete mapping using wrapper pattern
   if (dataClass.discriminator != null &&
       _isCompleteDiscriminatorMapping(dataClass.discriminator!)) {
     final wrappers = _generateDiscriminatedWrapperClasses(
-        dataClass, className, useMultipartFile, fallbackUnion);
+        dataClass: dataClass,
+        className: className,
+        useMultipartFile: useMultipartFile,
+        useDartMappableNaming: useDartMappableNaming,
+        fallbackUnion: fallbackUnion);
     return wrappers;
   }
 
   return '';
 }
 
-String _generateDiscriminatedWrapperClasses(UniversalComponentClass dataClass,
-    String className, bool useMultipartFile, String? fallbackUnion) {
+String _generateDiscriminatedWrapperClasses({
+  required UniversalComponentClass dataClass,
+  required String className,
+  required bool useMultipartFile,
+  required bool useDartMappableNaming,
+  String? fallbackUnion,
+}) {
   final discriminator = dataClass.discriminator!;
   final wrappers = <String>[];
 
@@ -747,7 +788,7 @@ ${indentation(2)}const $className${fallbackUnion.toPascal}(this._json);
 ${indentation(2)}/// Access raw JSON data for unknown union variant
 ${indentation(2)}Map<String, dynamic> get json => _json;
 
-${indentation(2)}static $className${fallbackUnion.toPascal} fromJson(Map<String, dynamic> json) =>
+${indentation(2)}static $className${fallbackUnion.toPascal} ${useDartMappableNaming ? 'fromMap' : 'fromJson'}(Map<String, dynamic> json) =>
 ${indentation(6)}$className${fallbackUnion.toPascal}(json);
 }''');
   }
