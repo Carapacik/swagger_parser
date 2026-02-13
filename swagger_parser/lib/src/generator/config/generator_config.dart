@@ -148,10 +148,11 @@ class GeneratorConfig {
   /// dart_mappable. This is a new feature introduced in Retrofit 4.9.2. Prior to this
   /// it was required to rename these methods in the build.yaml to `fromJson` and `toJson`
   /// to make dart_mappable compatible with retrofit. To avoid breaking changes for existing
-  /// dart_mappabple implementations, this flag must be explicitely set to true
+  /// dart_mappable implementations, this flag must be explicitely set to true
   ///
-  /// dart_mappable serialization the default behavior.
+  /// This flag exists to avoid making dart_mappable serialization the default behavior.
   // TODO(carapacik): This flag can be removed in the next major version to make the standard
+  // dart_mappable serialization the default behavior.
   final bool useDartMappableNaming;
 
   /// Optional. Set to true to merge all generated code into a single file.

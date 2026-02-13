@@ -461,13 +461,13 @@ void main() {
 ```
 
 This has been made default as `retrofit` prior to version `retrofit: 4.9.2`, did not support `dart_mappable`. 
-The `retrofit` package was expecting the`toJson` method being able to handle objects of type 
+The `retrofit` package was expecting the `toJson` method being able to handle objects of type 
 `Map<String, dynamic>`. Therefore the standard naming convention in dart_mappable had to be overriden using the `build.yaml`. 
 To avoid breaking changes, this behaviour has been made default and may be changed in a future major release.
 
 #### use `dart_mappable` standard naming
 
-In order to use the default namings of `dart_mappable` set the `use_dart_mappable_naming` to `true`;
+In order to use the default namings of `dart_mappable` set the `use_dart_mappable_naming` to `true`.
 
 This will result in the following code usage:
 
@@ -491,7 +491,7 @@ void main() {
 }
 ```
 
-**NOTE: ** If you want to migrate existing projects that have been using the renaming options, do not forget to remove these
+**NOTE:** If you want to migrate existing projects that have been using the renaming options, do not forget to remove these
 options from the `build.yaml`.
 
 
