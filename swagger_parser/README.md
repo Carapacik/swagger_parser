@@ -206,6 +206,24 @@ swagger_parser:
   # Default: false
   dart_mappable_convenient_when: false
 
+  # Optional (dart_mappable only).
+  # Set to true to use the standard `toMap` and `fromMap` serialization from dart_mappable.
+  # The default implementation requires you to rename the serialization methods in the `build.yaml` to
+  # ensure compatibility between retrofit and dart_mappable
+  # ```yaml
+  # global_options:
+  #   dart_mappable_builder:
+  #     runs_before:
+  #       - retrofit_generator
+  #     options:
+  #       renameMethods:
+  #         toJson: toJsonString
+  #         toMap: toJson
+  # ```
+  # 
+  # Default: false
+  use_dart_mappable_naming: false
+
   # DART ONLY
   # Optional. Set `true` to use MultipartFile instead of File as argument type for file parameters.
   use_multipart_file: false
@@ -397,6 +415,85 @@ To run the code generation with build_runner, execute the following command:
 ```shell
 dart run build_runner build -d
 ```
+
+### (Only for dart_mappable) Generate files using [dart_mappable](https://pub.dev/packages/build_runner) for retrofit and dart_mappable
+
+While most JSON serializer stick to the convention of naming the serializers `fromJson` and `toJson`, `dart_mappable` names these methods
+according to the used data type `Map`. Therefore these serializing methods are called `toMap` and `fromMap`. This conflicted with `retrofit`.
+
+#### Default settings
+
+In the default settings the parameter `use_dart_mappable_naming` is set to `false` in the `swagger_parser.yaml`. 
+`retrofit` will therefore expect a `fromJson` and `toJson` method to be provided. In order to achieve that, set the following options
+in the `build.yaml`:
+
+```yaml
+global_options:
+  dart_mappable_builder:
+    runs_before:
+      - retrofit_generator
+    options:
+      renameMethods:
+        toJson: toJsonString
+        toMap: toJson
+```
+
+This will result in the following code usage:
+
+```dart
+
+@MappableClass()
+class Foo with FooMappable {
+  final String name;
+
+  const Foo(this.name);
+
+  static Foo fromJson(Map<String, dynamic> json);
+}
+
+void main() {
+  final Foo foo = Foo('Dave');
+  // parse to JSON
+  final Map<String, dynamic> serializedFoo = foo.toJson();
+  // parse from JSON
+  final Foo deserializedFoo = Foo.fromJson(serializedFoo);
+}
+```
+
+This has been made default as `retrofit` prior to version `retrofit: 4.9.2`, did not support `dart_mappable`. 
+The `retrofit` package was expecting the `toJson` method being able to handle objects of type 
+`Map<String, dynamic>`. Therefore the standard naming convention in dart_mappable had to be overriden using the `build.yaml`. 
+To avoid breaking changes, this behaviour has been made default and may be changed in a future major release.
+
+#### use `dart_mappable` standard naming
+
+In order to use the default namings of `dart_mappable` set the `use_dart_mappable_naming` to `true`.
+
+This will result in the following code usage:
+
+```dart
+
+@MappableClass()
+class Foo with FooMappable {
+  final String name;
+
+  const Foo(this.name);
+
+  static Foo fromMap(Map<String, dynamic> json);
+}
+
+void main() {
+  final Foo foo = Foo('Dave');
+  // parse to JSON
+  final Map<String, dynamic> serializedFoo = foo.toMap();
+  // parse from JSON
+  final Foo deserializedFoo = Foo.fromMap(serializedFoo);
+}
+```
+
+**NOTE:** If you want to migrate existing projects that have been using the renaming options, do not forget to remove these
+options from the `build.yaml`.
+
 
 ## Contributing
 

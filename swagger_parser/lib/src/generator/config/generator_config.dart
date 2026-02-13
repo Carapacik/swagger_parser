@@ -30,6 +30,7 @@ class GeneratorConfig {
     this.useMultipartFile = false,
     this.fallbackUnion,
     this.dartMappableConvenientWhen = true,
+    this.useDartMappableNaming = false,
     this.mergeOutputs = false,
     this.includeIfNull = false,
     this.useFlutterCompute = false,
@@ -141,6 +142,18 @@ class GeneratorConfig {
   /// Optional. Set 'true' to generate when/maybeWhen convenience methods for dart_mappable unions.
   /// Set 'false' to use only native Dart pattern matching.
   final bool dartMappableConvenientWhen;
+
+  /// DART ONLY
+  /// Optional, defaults to false. Set to true to use the standard `toMap` and `fromMap` serialization from
+  /// dart_mappable. This is a new feature introduced in Retrofit 4.9.2. Prior to this
+  /// it was required to rename these methods in the build.yaml to `fromJson` and `toJson`
+  /// to make dart_mappable compatible with retrofit. To avoid breaking changes for existing
+  /// dart_mappable implementations, this flag must be explicitely set to true
+  ///
+  /// This flag exists to avoid making dart_mappable serialization the default behavior.
+  // TODO(carapacik): This flag can be removed in the next major version to make the standard
+  // dart_mappable serialization the default behavior.
+  final bool useDartMappableNaming;
 
   /// Optional. Set to true to merge all generated code into a single file.
   ///

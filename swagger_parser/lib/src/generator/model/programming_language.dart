@@ -51,6 +51,7 @@ enum ProgrammingLanguage {
     required bool useFreezed3,
     required bool useMultipartFile,
     required bool dartMappableConvenientWhen,
+    required bool useDartMappableNaming,
     required bool includeIfNull,
     required List<FieldParser> fieldParsers,
     bool useFlutterCompute = false,
@@ -97,6 +98,7 @@ enum ProgrammingLanguage {
                 useMultipartFile: useMultipartFile,
                 fallbackUnion: fallbackUnion,
                 dartMappableConvenientWhen: dartMappableConvenientWhen,
+                useDartMappableNaming: useDartMappableNaming,
                 useFlutterCompute: useFlutterCompute,
               ),
           };
@@ -122,6 +124,7 @@ enum ProgrammingLanguage {
     required String defaultContentType,
     required bool useMultipartFile,
     required bool generateUrlsConstants,
+    bool useDartMappableNaming = false,
     bool extrasParameterByDefault = false,
     bool dioOptionsParameterByDefault = false,
     bool addOpenApiMetadata = false,
@@ -144,6 +147,7 @@ enum ProgrammingLanguage {
             generateUrlsConstants: generateUrlsConstants,
             fileName: fileName,
             jsonSerializer: jsonSerializer,
+            useDartMappableNaming: useDartMappableNaming,
           ),
         kotlin =>
           kotlinRetrofitClientTemplate(restClient: restClient, name: name),

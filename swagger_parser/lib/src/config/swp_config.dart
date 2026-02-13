@@ -42,6 +42,7 @@ class SWPConfig {
     this.useMultipartFile = false,
     this.fallbackUnion,
     this.dartMappableConvenientWhen = false,
+    this.useDartMappableNaming = false,
     this.excludeTags = const <String>[],
     this.includeTags = const <String>[],
     this.includePaths,
@@ -91,6 +92,7 @@ class SWPConfig {
     required this.fallbackClient,
     required this.mergeOutputs,
     required this.dartMappableConvenientWhen,
+    required this.useDartMappableNaming,
     required this.includeIfNull,
     required this.inferRequiredFromNullable,
     required this.useFlutterCompute,
@@ -284,6 +286,10 @@ class SWPConfig {
             rootConfig?.dartMappableConvenientWhen ??
             true;
 
+    final useDartMappableNaming =
+        yamlMap['use_dart_mappable_naming'] as bool? ??
+            rootConfig?.useDartMappableNaming;
+
     final excludedTagsYaml = yamlMap['exclude_tags'] as YamlList?;
     List<String>? excludedTags;
     if (excludedTagsYaml != null) {
@@ -419,6 +425,7 @@ class SWPConfig {
       fallbackClient: fallbackClient ?? dc.fallbackClient,
       mergeOutputs: mergeOutputs ?? dc.mergeOutputs,
       dartMappableConvenientWhen: dartMappableConvenientWhen,
+      useDartMappableNaming: useDartMappableNaming ?? dc.useDartMappableNaming,
       includeIfNull: includeIfNull ?? dc.includeIfNull,
       inferRequiredFromNullable:
           inferRequiredFromNullable ?? dc.inferRequiredFromNullable,
@@ -475,6 +482,18 @@ class SWPConfig {
   /// DART ONLY
   /// Optional. Current available serializers are: json_serializable, freezed, dart_mappable.
   final JsonSerializer jsonSerializer;
+
+  /// DART ONLY
+  /// Optional, defaults to false. Set to true to use the standard `toMap` and `fromMap` serialization from
+  /// dart_mappable. This is a new feature introduced in Retrofit 4.9.2. Prior to this
+  /// it was required to rename these methods in the build.yaml to `fromJson` and `toJson`
+  /// to make dart_mappable compatible with retrofit. To avoid breaking changes for existing
+  /// dart_mappable implementations, this flag must be explicitely set to true
+  ///
+  /// This flag exists to avoid making dart_mappable serialization the default behavior.
+  // TODO(carapacik): This flag can be removed in the next major version to make the standard
+  // dart_mappable serialization the default behavior.
+  final bool useDartMappableNaming;
 
   /// Optional. Set postfix for client classes and files.
   final String? clientPostfix;
@@ -681,6 +700,7 @@ class SWPConfig {
       useMultipartFile: useMultipartFile,
       fallbackUnion: fallbackUnion,
       dartMappableConvenientWhen: dartMappableConvenientWhen,
+      useDartMappableNaming: useDartMappableNaming,
       mergeOutputs: mergeOutputs,
       includeIfNull: includeIfNull,
       useFlutterCompute: useFlutterCompute,
