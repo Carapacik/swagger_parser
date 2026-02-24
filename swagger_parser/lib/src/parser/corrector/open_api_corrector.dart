@@ -215,9 +215,12 @@ class OpenApiCorrector {
                 (m) => '\\${m[0]}',
               );
 
-              // In properties blocks, only convert $ref values (not property names)
+              // In properties blocks, convert $ref values and
+              // discriminator mapping values (not property names)
               restoredBlock = restoredBlock.replaceAllMapped(
-                RegExp('\\\$ref:\\s*[\'"]#/[^\'"]*/$escapedType[\'"]'),
+                RegExp(
+                  '(?:\\\$ref:|\\w+):\\s*[\'"]#/[^\'"]*/$escapedType[\'"]',
+                ),
                 (match) => match[0]!.replaceAll(type, correctType),
               );
             }
