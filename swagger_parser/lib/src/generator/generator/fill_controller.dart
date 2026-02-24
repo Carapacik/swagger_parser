@@ -35,6 +35,7 @@ final class FillController {
           useFreezed3: config.useFreezed3,
           useMultipartFile: config.useMultipartFile,
           dartMappableConvenientWhen: config.dartMappableConvenientWhen,
+          useDartMappableNaming: config.useDartMappableNaming,
           includeIfNull: config.includeIfNull,
           useFlutterCompute: config.useFlutterCompute,
           fallbackUnion: config.fallbackUnion,
@@ -100,6 +101,7 @@ final class FillController {
         fileName: fileName,
         jsonSerializer: config.jsonSerializer,
         generateUrlsConstants: config.generateUrlsConstants,
+        useDartMappableNaming: config.useDartMappableNaming,
       ),
     );
   }

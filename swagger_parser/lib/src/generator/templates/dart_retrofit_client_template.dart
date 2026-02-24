@@ -15,6 +15,7 @@ String dartRetrofitClientTemplate({
   required String defaultContentType,
   required bool useMultipartFile,
   required bool generateUrlsConstants,
+  bool useDartMappableNaming = false,
   bool extrasParameterByDefault = false,
   bool dioOptionsParameterByDefault = false,
   bool addOpenApiMetadata = false,
@@ -35,7 +36,9 @@ String dartRetrofitClientTemplate({
   // Determine @RestApi annotation
   final restApiAnnotation = useFlutterCompute
       ? '@RestApi(parser: Parser.FlutterCompute)'
-      : '@RestApi()';
+      : jsonSerializer == JsonSerializer.dartMappable && useDartMappableNaming
+          ? '@RestApi(parser: Parser.DartMappable)'
+          : '@RestApi()';
 
   // Flutter foundation import for compute function
   final flutterComputeImport = useFlutterCompute
