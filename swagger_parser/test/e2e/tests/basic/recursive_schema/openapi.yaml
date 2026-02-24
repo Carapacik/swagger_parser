@@ -1,0 +1,80 @@
+openapi: 3.1.0
+info:
+  title: API with Recursive Schemas
+  version: 1.0.0
+paths:
+  /api/v1/nodes:
+    get:
+      operationId: getNodes
+      tags:
+        - nodes
+      responses:
+        '200':
+          description: A node tree
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Node'
+  /api/v1/groups:
+    get:
+      operationId: getGroups
+      tags:
+        - groups
+      responses:
+        '200':
+          description: A group list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ACMEGroupList'
+components:
+  schemas:
+    Node:
+      type: object
+      properties:
+        id:
+          type: integer
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/Node'
+    ACMEGroupList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/ACMEGroup'
+              - $ref: '#/components/schemas/BasicGroup'
+            discriminator:
+              propertyName: type
+              mapping:
+                ACME: '#/components/schemas/ACMEGroup'
+                BASIC: '#/components/schemas/BasicGroup'
+    ACMEGroup:
+      type: object
+      required:
+        - type
+        - name
+      properties:
+        type:
+          type: string
+          enum: ['ACME']
+        name:
+          type: string
+        specialField:
+          type: string
+    BasicGroup:
+      type: object
+      required:
+        - type
+        - name
+      properties:
+        type:
+          type: string
+          enum: ['BASIC']
+        name:
+          type: string

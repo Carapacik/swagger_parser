@@ -571,6 +571,19 @@ void main() {
       );
     });
 
+    test('recursive_schema', () async {
+      await e2eTest(
+        'basic/recursive_schema',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('circular_deps_with_tags', () async {
       await e2eTest(
         'basic/circular_deps_with_tags',
