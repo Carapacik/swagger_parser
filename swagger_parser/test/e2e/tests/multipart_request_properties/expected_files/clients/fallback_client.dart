@@ -8,6 +8,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../models/enum0.dart';
 import '../models/object0.dart';
 import '../models/object1.dart';
 
@@ -26,12 +27,16 @@ abstract class FallbackClient {
   /// [address] - Sample Address.
   /// Name not received and was auto-generated.
   ///
+  /// [status] - Sample Status.
+  /// Name not received and was auto-generated.
+  ///
   /// [image] - Sample Image.
   @MultiPart()
   @GET('/test-multipart-required-true')
   Future<void> testMultipartRequiredTrue({
     @Part(name: 'files') required List<File> files,
     @Part(name: 'name') required String? name,
+    @Part(name: 'status') Enum0? status = Enum0.first,
     @Part(name: 'address') Object0? address,
     @Part(name: 'image') File? image,
   });
