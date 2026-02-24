@@ -11,6 +11,8 @@ class Human with HumanMappable {
   const Human({
     required this.job,
   });
+
+  /// The job of the human.
   final String job;
 
   static Human fromJson(Map<String, dynamic> json) =>

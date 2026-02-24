@@ -15,6 +15,8 @@ class Dog with DogMappable {
     required this.barkSound,
   });
   final DogType type;
+
+  /// The sound of the dog's bark.
   final String barkSound;
 
   static Dog fromJson(Map<String, dynamic> json) =>

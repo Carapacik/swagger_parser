@@ -188,7 +188,7 @@ String _fieldsToString(
   );
   return sortedByRequired
       .mapIndexed(
-        (i, e) =>
+        (i, e) => '${descriptionComment(e.description, tab: '  ')}'
             '${_jsonKey(e)}${indentation(2)}final ${_renameUnionTypes(e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${e.name};',
       )
       .join('\n');
