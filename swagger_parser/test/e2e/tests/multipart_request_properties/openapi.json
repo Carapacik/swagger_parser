@@ -25,9 +25,7 @@
                   "address": {
                     "description": "Sample Address",
                     "type": "object",
-                    "required": [
-                      "street"
-                    ],
+                    "required": ["street"],
                     "properties": {
                       "street": {
                         "description": "Sample Street.",
@@ -39,6 +37,12 @@
                     "type": "string",
                     "nullable": true
                   },
+                  "status": {
+                    "description": "Sample Status",
+                    "type": "string",
+                    "enum": ["first", "second", "unknown"],
+                    "default": "first"
+                  },
                   "image": {
                     "description": "Sample Image",
                     "type": "string",
@@ -46,10 +50,7 @@
                     "nullable": true
                   }
                 },
-                "required": [
-                  "files",
-                  "name"
-                ]
+                "required": ["files", "name"]
               }
             }
           }
@@ -96,10 +97,7 @@
                     "nullable": true
                   }
                 },
-                "required": [
-                  "files",
-                  "name"
-                ]
+                "required": ["files", "name"]
               }
             }
           }

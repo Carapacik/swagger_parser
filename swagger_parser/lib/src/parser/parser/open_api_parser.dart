@@ -417,16 +417,9 @@ class OpenApiParser {
                 parameterType: HttpParameterType.part,
                 name: propName,
                 description: currentType.description,
-                type: UniversalType(
-                  type: currentType.type,
+                type: currentType.copyWith(
                   name: propName.toCamel,
-                  description: currentType.description,
-                  format: currentType.format,
-                  defaultValue: currentType.defaultValue,
-                  isRequired: currentType.isRequired,
-                  nullable: currentType.nullable,
-                  wrappingCollections: currentType.wrappingCollections,
-                  deprecated: currentType.deprecated,
+                  jsonKey: propName,
                 ),
               ),
             );
@@ -453,16 +446,9 @@ class OpenApiParser {
             UniversalRequestType(
               parameterType: HttpParameterType.body,
               description: currentType.description,
-              type: UniversalType(
-                type: currentType.type,
+              type: currentType.copyWith(
                 name: _bodyConst,
-                description: currentType.description,
-                format: currentType.format,
-                defaultValue: currentType.defaultValue,
-                isRequired: currentType.isRequired,
-                nullable: currentType.nullable,
-                wrappingCollections: currentType.wrappingCollections,
-                deprecated: currentType.deprecated,
+                jsonKey: _bodyConst,
               ),
             ),
           );
