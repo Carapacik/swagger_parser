@@ -1,0 +1,66 @@
+# Reproduction for https://github.com/Carapacik/swagger_parser/issues/240
+# components.responses refs should be resolved when referenced in paths
+openapi: 3.0.0
+info:
+  title: Components Responses Ref Test
+  version: 1.0.0
+paths:
+  /items:
+    get:
+      operationId: getItems
+      responses:
+        "200":
+          $ref: "#/components/responses/SuccessResponse"
+  /items/{id}:
+    get:
+      operationId: getItem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: "#/components/responses/ItemResponse"
+        "400":
+          $ref: "#/components/responses/HttpErrorResponse"
+components:
+  responses:
+    SuccessResponse:
+      description: List of items
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Item"
+    ItemResponse:
+      description: Single item
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Item"
+    HttpErrorResponse:
+      description: The request has failed
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DefaultError"
+  schemas:
+    Item:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    DefaultError:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
