@@ -60,6 +60,8 @@ class OpenApiCorrector {
     Map<String, dynamic> models,
     Map<String, String> typeCorrections,
   ) {
+    var correctedContent = fileContent;
+
     // BUGFIX: Protect properties blocks and API path definitions by detecting
     // their range and replacing with placeholders
     final blocks =
@@ -77,7 +79,7 @@ class OpenApiCorrector {
       multiLine: true,
     );
 
-    for (final match in propertiesPattern.allMatches(fileContent)) {
+    for (final match in propertiesPattern.allMatches(correctedContent)) {
       final indent = match[1]!;
       final indentLength = indent.length;
       final matchStart = match.start;
@@ -86,7 +88,7 @@ class OpenApiCorrector {
       // Find the block end by detecting the next key with same or shallower
       // indentation
       var blockEnd = matchEnd;
-      final lines = fileContent.substring(matchEnd).split('\n');
+      final lines = correctedContent.substring(matchEnd).split('\n');
 
       for (var i = 1; i < lines.length; i++) {
         final line = lines[i];
@@ -109,7 +111,7 @@ class OpenApiCorrector {
       }
 
       // Get the entire properties block
-      final originalBlock = fileContent.substring(matchStart, blockEnd);
+      final originalBlock = correctedContent.substring(matchStart, blockEnd);
 
       // Generate placeholder
       final placeholder = '${indent}___PROPERTIES_BLOCK_${blocks.length}___';
@@ -123,13 +125,13 @@ class OpenApiCorrector {
     }
 
     // Detect and protect API path definitions
-    for (final match in pathPattern.allMatches(fileContent)) {
+    for (final match in pathPattern.allMatches(correctedContent)) {
       final indent = match[1]!;
       final matchStart = match.start;
       final matchEnd = match.end;
 
       // API path definitions are single lines
-      final originalPath = fileContent.substring(matchStart, matchEnd);
+      final originalPath = correctedContent.substring(matchStart, matchEnd);
 
       // Generate placeholder
       final placeholder = '${indent}___PATH_DEFINITION_${blocks.length}___';
@@ -177,13 +179,14 @@ class OpenApiCorrector {
         <String, ({int start, int end, String placeholder, String original})>{};
 
     for (final block in validBlocks) {
-      placeholderBuf.write(fileContent.substring(lastEnd, block.start));
-      placeholderBuf.write(block.placeholder);
+      placeholderBuf
+        ..write(correctedContent.substring(lastEnd, block.start))
+        ..write(block.placeholder);
       placeholderToBlock[block.placeholder] = block;
       lastEnd = block.end;
     }
-    placeholderBuf.write(fileContent.substring(lastEnd));
-    fileContent = placeholderBuf.toString();
+    placeholderBuf.write(correctedContent.substring(lastEnd));
+    correctedContent = placeholderBuf.toString();
 
     // Apply replacement rules to all class names and format to PascalCase
     // (properties blocks are already replaced with placeholders)
@@ -203,7 +206,7 @@ class OpenApiCorrector {
       // placeholders)
       final replacementPattern = RegExp('[ "\'/]$escapedType[ "\':]');
 
-      fileContent = fileContent.replaceAllMapped(
+      correctedContent = correctedContent.replaceAllMapped(
         replacementPattern,
         (match) => match[0]!.replaceAll(type, correctType),
       );
@@ -222,11 +225,13 @@ class OpenApiCorrector {
 
     for (final block in validBlocks) {
       final placeholder = block.placeholder;
-      final idx = fileContent.indexOf(placeholder, searchStart);
-      if (idx == -1) continue;
+      final idx = correctedContent.indexOf(placeholder, searchStart);
+      if (idx == -1) {
+        continue;
+      }
 
       // Write everything before the placeholder
-      resultBuf.write(fileContent.substring(searchStart, idx));
+      resultBuf.write(correctedContent.substring(searchStart, idx));
 
       var restoredBlock = block.original;
 
@@ -254,7 +259,7 @@ class OpenApiCorrector {
     }
 
     // Write remaining content after the last placeholder
-    resultBuf.write(fileContent.substring(searchStart));
+    resultBuf.write(correctedContent.substring(searchStart));
 
     return resultBuf.toString();
   }
@@ -262,7 +267,9 @@ class OpenApiCorrector {
   /// Build a single regex that matches any $ref or discriminator mapping value
   /// containing any of the types that need correction.
   RegExp? _buildCombinedRefPattern(Map<String, String> typeCorrections) {
-    if (typeCorrections.isEmpty) return null;
+    if (typeCorrections.isEmpty) {
+      return null;
+    }
 
     // Escape each type for use in regex, sort by length descending so longer
     // names match first (prevents partial matches)
@@ -279,7 +286,7 @@ class OpenApiCorrector {
     // Match $ref or discriminator mapping values that reference any of the
     // types. Captures the schema name in group 1.
     return RegExp(
-      '(?:\\\$ref:|\\w+):\\s*[\'"]#/[^\'"]*/(${alternation})[\'"]',
+      '(?:\\\$ref:|\\w+):\\s*[\'"]#/[^\'"]*/($alternation)[\'"]',
     );
   }
 }
