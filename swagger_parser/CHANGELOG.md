@@ -1,3 +1,8 @@
+## 1.43.0
+- Allow standard dart_mappable serializer method naming convention
+- Fix default values for Enums in forms
+- Fix errors with corrector
+
 ## 1.42.0
 - Support for streaming & SSE
 - Fix preserve property names and required modifiers in properties blocks

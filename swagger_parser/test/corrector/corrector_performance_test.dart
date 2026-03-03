@@ -25,7 +25,7 @@ String _generateLargeSchema({
     ..writeln('          content:')
     ..writeln('            application/json:')
     ..writeln('              schema:')
-    ..writeln("                \$ref: '#/components/schemas/Schema0'")
+    ..writeln(r"                $ref: '#/components/schemas/Schema0'")
     ..writeln('components:')
     ..writeln('  schemas:');
 
@@ -52,7 +52,7 @@ void main() {
       'corrector with replacement rules completes in reasonable time '
       'for large schemas',
       () {
-        final schemaCount = 200;
+        const schemaCount = 200;
         final schema = _generateLargeSchema(
           schemaCount: schemaCount,
           propertiesPerSchema: 5,
