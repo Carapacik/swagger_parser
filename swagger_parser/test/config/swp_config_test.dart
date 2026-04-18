@@ -36,6 +36,7 @@ void main() {
         expect(config.useXNullable, isFalse);
         expect(config.useFreezed3, isFalse);
         expect(config.freezedJsonSerialization, isTrue);
+        expect(config.freezedNullablePresence, isFalse);
         expect(config.useMultipartFile, isFalse);
         expect(config.fallbackUnion, isNull);
         expect(config.excludeTags, isEmpty);
@@ -56,6 +57,18 @@ void main() {
 
         expect(config.freezedJsonSerialization, isFalse);
         expect(config.toGeneratorConfig().freezedJsonSerialization, isFalse);
+      });
+
+      test('can enable Freezed nullable presence in YAML', () {
+        final config = SWPConfig.fromYaml(YamlMap.wrap({
+          'schema_path': 'schema.yaml',
+          'output_directory': 'lib/api',
+          'json_serializer': 'freezed',
+          'freezed_nullable_presence': true,
+        }));
+
+        expect(config.freezedNullablePresence, isTrue);
+        expect(config.toGeneratorConfig().freezedNullablePresence, isTrue);
       });
 
       test('should create config with all parameters specified', () {

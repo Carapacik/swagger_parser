@@ -199,6 +199,13 @@ swagger_parser:
   # Default: true, preserving the existing JSON-enabled generation.
   freezed_json_serialization: true
 
+  # Optional (dart & freezed only). Set true to tell an omitted optional nullable
+  # field from an explicit null in toJson: each such field gets a `<name>Present`
+  # flag, and setting it with a null value sends `"<name>": null` (e.g. to clear
+  # a field in a PATCH body). Requires freezed_json_serialization: true.
+  # Default: false.
+  freezed_nullable_presence: false
+
   # Optional (dart & freezed/dart_mappable). Set string value to use fallbackUnion parameter.
   # For freezed: adds fallbackUnion: <value> to the @Freezed annotation.
   # For dart_mappable: creates additional fallback variant for unknown discriminator values.
