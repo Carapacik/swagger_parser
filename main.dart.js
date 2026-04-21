@@ -24926,7 +24926,7 @@ if(c&&!n.dn(0,new A.apX()))l.push(B.WI)
 s=A.ayB(l,new A.apY(a,o),m,t.N).ap(0,",\n")
 n=t.s
 m=A.c([],n)
-if(c)m.push("defaultValue: 'unknown'")
+if(c)m.push("defaultValue: "+p+".unknown")
 r=B.b.ap(m,", ")
 n=A.c([s+";"],n)
 if(b)n.push("\n\n  String toJson() => toValue().toString();")
