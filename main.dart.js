@@ -24917,7 +24917,7 @@ if(r)q.push("\n\n  const "+s+"(this.json);\n")
 if(e)q.push("\n  factory "+s+".fromJson("+A.ML(a.d,null,!1)+" json) => values.firstWhere(\n        (e) => e.json == json,\n        orElse: () => $unknown,\n      );\n")
 if(r){p=A.ML(a.d,null,!1)
 q.push("\n  final "+p+A.aQf(p)+" json;")}if(b){p=A.ML(a.d,null,!1)
-q.push("\n  "+p+" toJson() {\n    final value = json;\n    if (value == null) {\n      throw StateError('Cannot convert enum value with null JSON representation to "+p+". '\n          'This usually happens for $unknown or @JsonValue(null) entries.');\n    }\n    return value as "+p+";\n  }")}if(r)q.push("\n\n  @override\n  String toString() => json?.toString() ?? super.toString();")
+q.push("\n  "+p+" toJson() {\n    final value = json;\n    if (value == null) {\n      throw StateError('Cannot convert enum value with null JSON representation to "+p+". '\n          'This usually happens for \\$unknown or @JsonValue(null) entries.');\n    }\n    return value as "+p+";\n  }")}if(r)q.push("\n\n  @override\n  String toString() => json?.toString() ?? super.toString();")
 if(e)q.push("\n  /// Returns all defined enum values excluding the $unknown value.\n  static List<"+s+"> get $valuesDefined => values.where((value) => value != $unknown).toList();")
 q=A.avr(c)+"\n\n"+A.dQ(a.b,"","",!0)+"@JsonEnum()\nenum "+s+" {\n"+B.b.bL(q)+"\n}\n"
 return q.charCodeAt(0)==0?q:q}},
