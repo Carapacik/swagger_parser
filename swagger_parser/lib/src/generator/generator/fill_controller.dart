@@ -193,9 +193,12 @@ final class FillController {
       buffer.writeln();
     }
 
+    if (config.jsonSerializer == JsonSerializer.freezed) {
+      buffer.writeln(
+        "part '${config.name}.freezed.${config.language.fileExtension}';",
+      );
+    }
     buffer
-      ..writeln(
-          "part '${config.name}.freezed.${config.language.fileExtension}';")
       ..writeln("part '${config.name}.g.${config.language.fileExtension}';")
       ..writeln();
 
