@@ -1076,6 +1076,22 @@ void main() {
       );
     });
 
+    test('merged_outputs_json_serializable', () async {
+      await e2eTest(
+        'basic/merged_outputs_json_serializable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          name: 'merged_outputs',
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.jsonSerializable,
+          useXNullable: true,
+          mergeOutputs: true,
+          includeIfNull: true,
+        ),
+        schemaFileName: 'merged_outputs.json',
+      );
+    });
+
     test('discriminated_one_of_json_serializable', () async {
       await e2eTest(
         'xof/discriminated_one_of_json_serializable',
