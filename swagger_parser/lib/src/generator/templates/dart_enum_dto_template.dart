@@ -84,7 +84,7 @@ String _dartEnumDartMappableTemplate(
       .join(',\n');
 
   final annotationParameters = [
-    if (unknownEnumValue) "defaultValue: 'unknown'",
+    if (unknownEnumValue) 'defaultValue: $className.unknown',
   ].join(', ');
 
   final enumBodyParts = [

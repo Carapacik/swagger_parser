@@ -6,7 +6,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 part 'human_type.mapper.dart';
 
-@MappableEnum(defaultValue: 'unknown')
+@MappableEnum(defaultValue: HumanType.unknown)
 enum HumanType {
   @MappableValue('Human')
   human,

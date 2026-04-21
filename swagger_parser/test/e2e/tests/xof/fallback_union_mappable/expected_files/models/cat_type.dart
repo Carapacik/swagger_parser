@@ -6,7 +6,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 part 'cat_type.mapper.dart';
 
-@MappableEnum(defaultValue: 'unknown')
+@MappableEnum(defaultValue: CatType.unknown)
 enum CatType {
   @MappableValue('Cat')
   cat,
