@@ -1700,7 +1700,7 @@ enum EnumName {
     final value = json;
     if (value == null) {
       throw StateError('Cannot convert enum value with null JSON representation to int. '
-          'This usually happens for $unknown or @JsonValue(null) entries.');
+          'This usually happens for \$unknown or @JsonValue(null) entries.');
     }
     return value as int;
   }
@@ -1731,7 +1731,7 @@ enum EnumNameString {
     final value = json;
     if (value == null) {
       throw StateError('Cannot convert enum value with null JSON representation to String. '
-          'This usually happens for $unknown or @JsonValue(null) entries.');
+          'This usually happens for \$unknown or @JsonValue(null) entries.');
     }
     return value as String;
   }
@@ -1940,7 +1940,7 @@ enum EnumName {
     final value = json;
     if (value == null) {
       throw StateError('Cannot convert enum value with null JSON representation to int. '
-          'This usually happens for $unknown or @JsonValue(null) entries.');
+          'This usually happens for \$unknown or @JsonValue(null) entries.');
     }
     return value as int;
   }
@@ -1982,7 +1982,7 @@ enum EnumNameString {
     final value = json;
     if (value == null) {
       throw StateError('Cannot convert enum value with null JSON representation to String. '
-          'This usually happens for $unknown or @JsonValue(null) entries.');
+          'This usually happens for \$unknown or @JsonValue(null) entries.');
     }
     return value as String;
   }
@@ -2041,7 +2041,7 @@ enum Status {
     final value = json;
     if (value == null) {
       throw StateError('Cannot convert enum value with null JSON representation to String. '
-          'This usually happens for $unknown or @JsonValue(null) entries.');
+          'This usually happens for \$unknown or @JsonValue(null) entries.');
     }
     return value as String;
   }
