@@ -22,6 +22,7 @@
   - [dart_mappable](https://pub.dev/packages/dart_mappable)
 - Support for multiple languages (Dart, Kotlin)
 - Web interface at https://carapacik.github.io/swagger_parser
+- Supports Server-Sent-Events (SSE) in Dart
 
 ## Usage
 
@@ -494,7 +495,71 @@ void main() {
 **NOTE:** If you want to migrate existing projects that have been using the renaming options, do not forget to remove these
 options from the `build.yaml`.
 
+### Use Server-Sent-Events (SSE)
 
+[retrofit](https://pub.dev/packages/retrofit), the package that generates the REST implementation, supports streaming responses using `@DioResponseType(ResponseType.stream)`. In retrofit you can use the return type
+  * `Stream<Uint8List>` for raw bytes
+  * `Stream<String>` for text
+
+#### Generate `Stream<Uint8List>`
+
+To generate methods with these return types, you must set the `format` of your
+response to `binary` and the `type` to `integer`.
+
+For example the following OpenAPI spec:
+
+```yaml
+paths:
+  /pets:
+    get:
+      operationId: getBinaryStream
+      responses:
+        '200':
+          description: Returns a stream of bytes.
+          content:
+            application/octet-stream:
+              schema:
+                type: integer
+                format: binary
+```
+
+generates a dart client class with this method:
+
+```dart
+@GET('/pets')
+@DioResponseType(ResponseType.stream)
+Stream<Uint8List> getBinaryStream();
+```
+
+#### Generate `Stream<String>`
+
+To generate methods with these return types, you must set the `format` of your
+response to `binary` and the `type` to `string`.
+
+For example the following OpenAPI spec:
+
+```yaml
+paths:
+  /pets:
+    get:
+      operationId: getStringStream
+      responses:
+        '200':
+          description: Returns a stream of strings.
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+```
+
+generates a dart client class with this method:
+
+```dart
+@GET('/pets')
+@DioResponseType(ResponseType.stream)
+Stream<String> getStringStream();
+```
 ## Contributing
 
 Contributions are welcome!
