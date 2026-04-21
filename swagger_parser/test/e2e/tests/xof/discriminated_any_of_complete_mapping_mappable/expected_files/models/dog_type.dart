@@ -6,7 +6,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 part 'dog_type.mapper.dart';
 
-@MappableEnum(defaultValue: 'unknown')
+@MappableEnum(defaultValue: DogType.unknown)
 enum DogType {
   @MappableValue('Dog')
   dog,

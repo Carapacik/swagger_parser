@@ -6,7 +6,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 part 'ios_device_type.mapper.dart';
 
-@MappableEnum(defaultValue: 'unknown')
+@MappableEnum(defaultValue: IosDeviceType.unknown)
 enum IosDeviceType {
   @MappableValue('ios')
   ios,
