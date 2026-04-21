@@ -1083,7 +1083,6 @@ void main() {
           name: 'merged_outputs',
           outputDirectory: outputDirectory,
           schemaPath: schemaPath,
-          jsonSerializer: JsonSerializer.jsonSerializable,
           useXNullable: true,
           mergeOutputs: true,
           includeIfNull: true,
