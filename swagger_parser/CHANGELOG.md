@@ -1,3 +1,9 @@
+## 1.43.1
+- Fix escaping `$unknown` in generated enum `toJson` error messages
+- Fix generated code when using `json_serializable`
+- Fix default enum values for `dart_mappable`
+- Add README section about Server-Sent Events
+
 ## 1.43.0
 - Allow standard dart_mappable serializer method naming convention
 - Fix default values for Enums in forms
@@ -27,13 +33,13 @@
 
 ## 1.37.1
 - Fix missing import for MultipartFile([#408](https://github.com/Carapacik/swagger_parser/issues/408))
-- Fix refs in components.responses
+- Fix refs in `components.responses`
 
 ## 1.37.0
 - Add `use_flutter_compute` option for Flutter isolate-based multithreading support
   - Generates `@RestApi(parser: Parser.FlutterCompute)` annotation in Retrofit clients
   - Generates top-level serialization functions in each DTO model file following Retrofit's naming convention
-  - Works with all serializers: freezed, json_serializable, dart_mappable
+  - Works with all serializers: `freezed`, `json_serializable`, `dart_mappable`
 ```yaml
 swagger_parser:
   use_flutter_compute: true
@@ -70,7 +76,7 @@ abstract class PetsClient {
 ```
 
 ## 1.35.2
-- Fix enum name values being a int returned in a toString
+- Fix enum name values being an int returned in a toString
 
 ## 1.35.1
 - Fixed enum names generation
@@ -164,7 +170,7 @@ Schema without required array:
 - proper handling of binary responses aka file downloads, picked up from https://github.com/trevorwang/retrofit.dart/issues/503
 
 ## 1.24.5
-- enum `toString()` override implementation to provide a json value for third party consumers like retrofit
+- enum `toString()` override implementation to provide a JSON value for third party consumers like retrofit
 
 ## 1.24.4
 - added generation of getter $valuesDefined to automatically filter out unknown values
@@ -182,7 +188,7 @@ Schema without required array:
 - Remove duplicate parameters in dataclass([#322](https://github.com/Carapacik/swagger_parser/issues/322))
 
 ## 1.24.0
-- Fix detection of nullable list with non null items vs nullable list with nullable items([#323](https://github.com/Carapacik/swagger_parser/issues/323))
+- Fix detection of nullable list with non-null items vs nullable list with nullable items([#323](https://github.com/Carapacik/swagger_parser/issues/323))
 - Bump Dart SDK to 3.6
 
 ## 1.23.2
@@ -215,7 +221,7 @@ Schema without required array:
 - Fixed error with config([#296](https://github.com/Carapacik/swagger_parser/pull/296))
 
 ## 1.21.1
-- Fixed config properties inheritance with multi-scheme urls([#293](https://github.com/Carapacik/swagger_parser/issues/293))
+- Fixed config properties inheritance with multi-scheme URLs([#293](https://github.com/Carapacik/swagger_parser/issues/293))
 
 ## 1.21.0
 - Add support for union types `oneOf`([#265](https://github.com/Carapacik/swagger_parser/issues/265), [#286](https://github.com/Carapacik/swagger_parser/issues/265))
@@ -256,7 +262,7 @@ final version = RestClient.version;
 - Handle empty enum value case ([#238](https://github.com/Carapacik/swagger_parser/pull/238))
 - Some fixes for the replacement rules
 - Support for nullable lists and maps
-- Remove config parameter `required_by_default`, behaviour is now consistent `required_by_default: false`
+- Remove config parameter `required_by_default`, behavior is now consistent `required_by_default: false`
 - Requires Dart 3.4
 
 ## 1.17.3
@@ -497,7 +503,7 @@ final version = RestClient.version;
 
 ## 1.4.0
 
-- By default value nullable and not required for process default values ([#76](https://github.com/Carapacik/swagger_parser/issues/76))
+- By default, value nullable and not required for process default values ([#76](https://github.com/Carapacik/swagger_parser/issues/76))
 - Add support for common parameters for various paths ([#78](https://github.com/Carapacik/swagger_parser/issues/78))
 
 ## 1.3.5
@@ -570,7 +576,7 @@ final version = RestClient.version;
 
 ## 1.0.3
 
-- Fixed error with default value in dart json_serializable generation
+- Fixed error with default value in `json_serializable` generation
 
 ## 1.0.2
 
@@ -636,7 +642,7 @@ final version = RestClient.version;
 - Fixed error with import for ` File ` type
 - Add support for ` additionalProperties ` annotations
 - Fixed templates
-- Fixed error with yaml files
+- Fixed error with YAML files
 
 ## 0.6.4
 
