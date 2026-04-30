@@ -709,6 +709,7 @@ class OpenApiParser {
             parameters: parameters,
             isDeprecated:
                 requestPath[_deprecatedConst].toString().toBool() ?? false,
+            configExtension: UniversalRequestConfigExtension.parse(requestPath),
           );
           // we are converting the tag to the snake case
           // later tag is used to determine the file name
