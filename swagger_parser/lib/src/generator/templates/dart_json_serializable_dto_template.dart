@@ -99,7 +99,7 @@ String _generateDiscriminatedUnionTemplate(
 
   // Generate sealed base class
   final baseClass = '''
-@JsonSerializable(createFactory: false)
+@JsonSerializable(createFactory: false, createToJson: false)
 sealed class $className {
   const $className();
   
@@ -295,6 +295,12 @@ String _generateDiscriminatedWrapperClasses(
     bool useMultipartFile,
     bool includeIfNull,
     String? fallbackUnion) {
+  // Build default mapping literal: { WrapperType: 'DiscriminatorValue', ... }
+  final discriminatorsByVariant =
+      discriminator.discriminatorValueToRefMapping.map((key, val) {
+    return MapEntry(val, key);
+  });
+
   final wrappers =
       discriminator.discriminatorValueToRefMapping.entries.map((entry) {
     final variantName = entry.value;
@@ -303,14 +309,21 @@ String _generateDiscriminatedWrapperClasses(
         discriminator.refProperties[variantName] ?? <UniversalType>{};
 
     // Generate direct properties
-    final directProperties = properties
-        .map((prop) =>
-            '  @override\n  final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};')
-        .join('\n');
+    final directProperties = properties.map((prop) {
+      if (prop.jsonKey == discriminator.jsonKey) {
+        final val = discriminatorsByVariant[variantName];
+        final jsonKey = "JsonKey(includeToJson: true, name: '${prop.jsonKey}')";
+        return '  @$jsonKey\n  @override\n  ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} get ${prop.name} => "$val";';
+      } else {
+        return '  @override\n  final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};';
+      }
+    }).join('\n');
 
     // Generate constructor parameters
-    final constructorParams =
-        properties.map((prop) => '    required this.${prop.name},').join('\n');
+    final constructorParams = properties
+        .whereNot((prop) => prop.jsonKey == discriminator.jsonKey)
+        .map((prop) => '    required this.${prop.name},')
+        .join('\n');
 
     return '''
 @JsonSerializable()

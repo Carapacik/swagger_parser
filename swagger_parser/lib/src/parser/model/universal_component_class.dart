@@ -4,6 +4,9 @@ typedef Discriminator = ({
   /// The name of the property that is used to discriminate the oneOf variants
   String propertyName,
 
+  /// This is the equivalent to [UniversalType.jsonKey]
+  String jsonKey,
+
   /// The mapping of the property value to the ref
   Map<String, String> discriminatorValueToRefMapping,
 
