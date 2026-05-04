@@ -3064,6 +3064,7 @@ class AnimalSealedDog extends AnimalSealed implements Dog {
         imports: const {},
         parameters: const {},
         discriminator: (
+          jsonKey: 'deviceType',
           propertyName: 'deviceType',
           discriminatorValueToRefMapping: const {
             'DEFAULT': '#/components/schemas/DefaultConfig',

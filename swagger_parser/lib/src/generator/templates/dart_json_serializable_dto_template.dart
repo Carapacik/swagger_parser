@@ -310,12 +310,20 @@ String _generateDiscriminatedWrapperClasses(
 
     // Generate direct properties
     final directProperties = properties.map((prop) {
+      final dataType = _renameUnionTypes(prop.toSuitableType(
+          ProgrammingLanguage.dart,
+          useMultipartFile: useMultipartFile));
       if (prop.jsonKey == discriminator.jsonKey) {
-        final val = discriminatorsByVariant[variantName];
         final jsonKey = "JsonKey(includeToJson: true, name: '${prop.jsonKey}')";
-        return '  @$jsonKey\n  @override\n  ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} get ${prop.name} => "$val";';
+
+        var val = '"${discriminatorsByVariant[variantName]}"';
+        if (prop.enumType != null) {
+          val = '$dataType.fromJson($val)';
+        }
+
+        return '  @$jsonKey\n  @override\n  $dataType get ${prop.name} => $val;';
       } else {
-        return '  @override\n  final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};';
+        return '  @override\n  final $dataType ${prop.name};';
       }
     }).join('\n');
 
