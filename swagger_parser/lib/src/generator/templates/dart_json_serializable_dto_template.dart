@@ -328,19 +328,24 @@ String _generateDiscriminatedWrapperClasses(
     }).join('\n');
 
     // Generate constructor parameters
-    final constructorParams = properties
-        .whereNot((prop) => prop.jsonKey == discriminator.jsonKey)
-        .map((prop) => '    required this.${prop.name},')
-        .join('\n');
+    final constructorParams =
+        properties.whereNot((prop) => prop.jsonKey == discriminator.jsonKey);
+
+    var constructor = '  const $wrapperClassName(';
+    if (constructorParams.isNotEmpty) {
+      final constructorParamsStr = constructorParams
+          .map((prop) => '    required this.${prop.name},')
+          .join('\n');
+      constructor += '{\n$constructorParamsStr\n  }';
+    }
+    constructor += ');';
 
     return '''
 @JsonSerializable()
 class $wrapperClassName extends $className implements $variantName {
 $directProperties
 
-  const $wrapperClassName({
-$constructorParams
-  });
+$constructor
   
   factory $wrapperClassName.fromJson(Map<String, dynamic> json) =>
       _\$${wrapperClassName}FromJson(json);
