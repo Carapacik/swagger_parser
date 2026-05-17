@@ -32,6 +32,12 @@ class OpenApiParser {
   /// [ParserConfig] that [OpenApiParser] use
   final ParserConfig config;
 
+  /// Normalises a schema-derived identifier — preserves the spec author's
+  /// casing (stripping separators only) when [ParserConfig.preserveSchemaCasing]
+  /// is on, otherwise falls back to PascalCase.
+  String _schemaIdentifier(String input) =>
+      config.preserveSchemaCasing ? input.toPreservedCase : input.toPascal;
+
   /// `info` section in specification
   late final OpenApiInfo _apiInfo;
 
@@ -129,7 +135,7 @@ class OpenApiParser {
 
     return UniversalEnumClass(
       originalName: name,
-      name: uniqueName.toPascal,
+      name: _schemaIdentifier(uniqueName),
       type: type,
       items: items,
       defaultValue: defaultValue,
@@ -1533,7 +1539,7 @@ class OpenApiParser {
 
       final (parameters, imports) = _findParametersAndImports(map);
 
-      var type = newName.toPascal;
+      var type = _schemaIdentifier(newName);
 
       for (final replacementRule in config.replacementRules) {
         type = replacementRule.apply(type)!;
@@ -1991,15 +1997,15 @@ class OpenApiParser {
       String? import;
       String type;
       if (map.containsKey(_refConst)) {
-        import = _formatRef(map).toPascal;
+        import = _schemaIdentifier(_formatRef(map));
       } else if (map.containsKey(_additionalPropertiesConst) &&
           map[_additionalPropertiesConst] is Map<String, dynamic> &&
           (map[_additionalPropertiesConst] as Map<String, dynamic>).containsKey(
             _refConst,
           )) {
-        import = _formatRef(
+        import = _schemaIdentifier(_formatRef(
           map[_additionalPropertiesConst] as Map<String, dynamic>,
-        ).toPascal;
+        ));
       }
 
       if (map.containsKey(_typeConst)) {
@@ -2010,7 +2016,7 @@ class OpenApiParser {
         type = import ?? _objectConst;
       }
       if (import != null) {
-        type = type.toPascal;
+        type = _schemaIdentifier(type);
       }
 
       final defaultValue = map[_defaultConst]?.toString();
@@ -2178,7 +2184,7 @@ class OpenApiParser {
 
     for (final item in otherItems) {
       if (item.containsKey(_refConst)) {
-        final refName = _formatRef(item).toPascal;
+        final refName = _schemaIdentifier(_formatRef(item));
 
         // Locate the referenced component to get its properties if available.
         if (_definitionFileContent

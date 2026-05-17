@@ -240,6 +240,33 @@ extension StringToCaseX on String {
         : identifier.pascalCase;
   }
 
+  /// Strip separator characters (spaces, dashes, dots, underscores, etc.)
+  /// while preserving the casing of every other character.
+  ///
+  /// - `XMLHttpRequest` → `XMLHttpRequest`
+  /// - `kUserStatus` → `kUserStatus`
+  /// - `iOSDevice` → `iOSDevice`
+  /// - `URL` → `URL`
+  /// - `user_status` → `userstatus`
+  /// - `My-Class` → `MyClass`
+  /// - `XML Http Request` → `XMLHttpRequest`
+  ///
+  /// Mirrors [toPascal]'s `Private` prefix handling for inputs starting
+  /// with a single underscore.
+  ///
+  /// Used by the `preserve_schema_casing` config option to project
+  /// spec-author identifiers into the target language verbatim where
+  /// possible.
+  String get toPreservedCase {
+    if (isEmpty) {
+      return '';
+    }
+    final isPrivate = startsWith('_');
+    final body = isPrivate ? substring(1) : this;
+    final stripped = body.replaceAll(_separatorPattern, '');
+    return isPrivate ? 'Private$stripped' : stripped;
+  }
+
   /// Return text formatted to snake_case
   ///
   /// The result is prefixed with `private_` if the given text indicates a private entity

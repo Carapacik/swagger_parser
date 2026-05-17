@@ -19,6 +19,20 @@ void main() {
       );
     });
 
+    test('preserve_schema_casing', () async {
+      await e2eTest(
+        'preserve_schema_casing',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          preserveSchemaCasing: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('generate_urls_constants', () async {
       await e2eTest(
         'generate_urls_constants',

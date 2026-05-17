@@ -53,6 +53,7 @@ class SWPConfig {
     this.useFlutterCompute = false,
     this.generateUrlsConstants = false,
     this.fieldParsers = const [],
+    this.preserveSchemaCasing = false,
   });
 
   /// Internal constructor of [SWPConfig]
@@ -98,6 +99,7 @@ class SWPConfig {
     required this.useFlutterCompute,
     required this.generateUrlsConstants,
     required this.fieldParsers,
+    required this.preserveSchemaCasing,
     this.fallbackUnion,
   });
 
@@ -357,6 +359,9 @@ class SWPConfig {
     final generateUrlsConstants = yamlMap['generate_urls_constants'] as bool? ??
         rootConfig?.generateUrlsConstants;
 
+    final preserveSchemaCasing = yamlMap['preserve_schema_casing'] as bool? ??
+        rootConfig?.preserveSchemaCasing;
+
     final rawFieldParsers = yamlMap['field_parsers'] as YamlList?;
     List<FieldParser>? fieldParsers;
     if (rawFieldParsers != null) {
@@ -432,6 +437,7 @@ class SWPConfig {
       useFlutterCompute: useFlutterCompute ?? dc.useFlutterCompute,
       includePaths: includePathsList ?? dc.includePaths,
       generateUrlsConstants: generateUrlsConstants ?? dc.generateUrlsConstants,
+      preserveSchemaCasing: preserveSchemaCasing ?? dc.preserveSchemaCasing,
     );
   }
 
@@ -674,6 +680,31 @@ class SWPConfig {
   /// {@endtemplate}
   final List<FieldParser> fieldParsers;
 
+  /// Optional. When `true`, schema and enum names are projected into the
+  /// target language by stripping separator characters (spaces, dashes,
+  /// dots, underscores) while preserving the casing of every other
+  /// character. Defaults to `false` — the default behaviour, which
+  /// normalises every name to PascalCase and loses internal acronym and
+  /// lowercase-prefix casing (e.g. `XMLHttpRequest` becomes
+  /// `XmlHttpRequest`).
+  ///
+  /// Examples (flag `true`):
+  /// - `kUserStatus` → `kUserStatus`
+  /// - `XMLHttpRequest` → `XMLHttpRequest`
+  /// - `iOSDevice` → `iOSDevice`
+  /// - `URL` → `URL`
+  /// - `HTTPSConnection` → `HTTPSConnection`
+  /// - `UserStatus` → `UserStatus`
+  /// - `user_status` → `userstatus`
+  /// - `My-Class` → `MyClass`
+  ///
+  /// Useful when the spec author has deliberate casing intent the
+  /// generated code should honour (e.g. `XMLHttpRequest`, a `k`-prefixed
+  /// constant-style enum). `replacement_rules` cannot recover this because
+  /// the normalisation runs first; this flag opts out of the normalisation
+  /// instead.
+  final bool preserveSchemaCasing;
+
   /// Convert [SWPConfig] to [GeneratorConfig]
   GeneratorConfig toGeneratorConfig() {
     return GeneratorConfig(
@@ -731,6 +762,7 @@ class SWPConfig {
       includePaths: includePaths,
       fallbackClient: fallbackClient,
       inferRequiredFromNullable: inferRequiredFromNullable,
+      preserveSchemaCasing: preserveSchemaCasing,
     );
   }
 }
