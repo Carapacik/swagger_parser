@@ -8,7 +8,7 @@ import 'package:swagger_parser/src/utils/type_utils.dart';
 /// Provides template for generating dart typedefs using JSON serializable
 String dartTypeDefTemplate(UniversalComponentClass dataClass,
     {required bool useMultipartFile}) {
-  final className = dataClass.name.toPascal;
+  final className = dataClass.name;
   final type = dataClass.parameters.firstOrNull;
   final import = dataClass.imports.firstOrNull;
   if (type == null) {
