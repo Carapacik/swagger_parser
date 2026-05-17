@@ -251,8 +251,8 @@ extension StringToCaseX on String {
   /// - `My-Class` → `MyClass`
   /// - `XML Http Request` → `XMLHttpRequest`
   ///
-  /// Mirrors [toPascal]'s `Private` prefix handling for inputs starting
-  /// with a single underscore.
+  /// Mirrors [toPascal]'s `Private` prefix handling for inputs that start
+  /// with an underscore.
   ///
   /// Used by the `preserve_schema_casing` config option to project
   /// spec-author identifiers into the target language verbatim where

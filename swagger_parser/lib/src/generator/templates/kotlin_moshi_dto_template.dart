@@ -1,5 +1,4 @@
 import 'package:swagger_parser/src/generator/model/programming_language.dart';
-import 'package:swagger_parser/src/parser/model/normalized_identifier.dart';
 import 'package:swagger_parser/src/parser/swagger_parser_core.dart';
 import 'package:swagger_parser/src/utils/base_utils.dart';
 import 'package:swagger_parser/src/utils/type_utils.dart';
@@ -11,7 +10,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 ${descriptionComment(dataClass.description)}@JsonClass(generateAdapter = true)
-data class ${dataClass.name.toPascal}(${_parameters(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n)' : ')'}
+data class ${dataClass.name}(${_parameters(dataClass.parameters)}${dataClass.parameters.isNotEmpty ? '\n)' : ')'}
 ''';
 }
 
