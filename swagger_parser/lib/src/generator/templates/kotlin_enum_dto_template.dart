@@ -10,7 +10,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-enum class ${dataClass.name.toPascal} {${_parameters(dataClass)}
+enum class ${dataClass.name} {${_parameters(dataClass)}
 }
 ''';
 }

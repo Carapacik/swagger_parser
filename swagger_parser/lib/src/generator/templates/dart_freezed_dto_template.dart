@@ -15,7 +15,7 @@ String dartFreezedDtoTemplate(
   bool useFlutterCompute = false,
   String? fallbackUnion,
 }) {
-  final className = dataClass.name.toPascal;
+  final className = dataClass.name;
   final discriminator = dataClass.discriminator;
   final isUndiscriminatedUnion =
       dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false;

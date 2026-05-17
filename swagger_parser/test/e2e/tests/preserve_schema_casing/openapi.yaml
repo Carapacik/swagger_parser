@@ -1,0 +1,63 @@
+openapi: 3.0.0
+info:
+  title: Test API for preserve_schema_casing
+  version: 1.0.0
+paths:
+  /me:
+    get:
+      operationId: getMe
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+components:
+  schemas:
+    # camelCase prefix should be preserved.
+    kUserStatus:
+      type: string
+      enum:
+        - PENDING
+        - ACTIVE
+    # All-uppercase acronym should be preserved.
+    URL:
+      type: string
+    # Acronym in the middle of a PascalCase name should be preserved
+    # (currently swagger_parser would emit XmlHttpRequest).
+    XMLHttpRequest:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          $ref: "#/components/schemas/URL"
+    # Lowercase prefix that wraps a PascalCase suffix should round-trip
+    # (currently swagger_parser would emit IOSDevice).
+    iOSDevice:
+      type: object
+      required:
+        - deviceId
+      properties:
+        deviceId:
+          type: string
+    User:
+      type: object
+      required:
+        - userId
+        - status
+        - device
+        - homepage
+        - lastRequest
+      properties:
+        userId:
+          type: string
+        status:
+          $ref: "#/components/schemas/kUserStatus"
+        device:
+          $ref: "#/components/schemas/iOSDevice"
+        homepage:
+          $ref: "#/components/schemas/URL"
+        lastRequest:
+          $ref: "#/components/schemas/XMLHttpRequest"
