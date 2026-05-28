@@ -99,7 +99,7 @@ String _generateDiscriminatedUnionTemplate(
 
   // Generate sealed base class
   final baseClass = '''
-@JsonSerializable(createFactory: false)
+@JsonSerializable(createFactory: false, createToJson: false)
 sealed class $className {
   const $className();
   
@@ -295,6 +295,12 @@ String _generateDiscriminatedWrapperClasses(
     bool useMultipartFile,
     bool includeIfNull,
     String? fallbackUnion) {
+  // Build default mapping literal: { WrapperType: 'DiscriminatorValue', ... }
+  final discriminatorsByVariant =
+      discriminator.discriminatorValueToRefMapping.map((key, val) {
+    return MapEntry(val, key);
+  });
+
   final wrappers =
       discriminator.discriminatorValueToRefMapping.entries.map((entry) {
     final variantName = entry.value;
@@ -303,23 +309,43 @@ String _generateDiscriminatedWrapperClasses(
         discriminator.refProperties[variantName] ?? <UniversalType>{};
 
     // Generate direct properties
-    final directProperties = properties
-        .map((prop) =>
-            '  @override\n  final ${_renameUnionTypes(prop.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile))} ${prop.name};')
-        .join('\n');
+    final directProperties = properties.map((prop) {
+      final dataType = _renameUnionTypes(prop.toSuitableType(
+          ProgrammingLanguage.dart,
+          useMultipartFile: useMultipartFile));
+      if (prop.jsonKey == discriminator.jsonKey) {
+        final jsonKey = "JsonKey(includeToJson: true, name: '${prop.jsonKey}')";
+
+        var val = '"${discriminatorsByVariant[variantName]}"';
+        if (prop.enumType != null) {
+          val = '$dataType.fromJson($val)';
+        }
+
+        return '  @$jsonKey\n  @override\n  $dataType get ${prop.name} => $val;';
+      } else {
+        return '  @override\n  final $dataType ${prop.name};';
+      }
+    }).join('\n');
 
     // Generate constructor parameters
     final constructorParams =
-        properties.map((prop) => '    required this.${prop.name},').join('\n');
+        properties.whereNot((prop) => prop.jsonKey == discriminator.jsonKey);
+
+    var constructor = '  const $wrapperClassName(';
+    if (constructorParams.isNotEmpty) {
+      final constructorParamsStr = constructorParams
+          .map((prop) => '    ${_required(prop)}this.${prop.name},')
+          .join('\n');
+      constructor += '{\n$constructorParamsStr\n  }';
+    }
+    constructor += ');';
 
     return '''
 @JsonSerializable()
 class $wrapperClassName extends $className implements $variantName {
 $directProperties
 
-  const $wrapperClassName({
-$constructorParams
-  });
+$constructor
   
   factory $wrapperClassName.fromJson(Map<String, dynamic> json) =>
       _\$${wrapperClassName}FromJson(json);
@@ -355,7 +381,7 @@ String _generateUndiscriminatedWrapperClasses(
 
     // Generate constructor parameters
     final constructorParams =
-        properties.map((prop) => '    required this.${prop.name},').join('\n');
+        properties.map((prop) => '    ${_required(prop)}this.${prop.name},').join('\n');
 
     // Inline synthesized variants (variantX) should not implement any interface
     final isInline = variantName.toLowerCase().startsWith('variant');

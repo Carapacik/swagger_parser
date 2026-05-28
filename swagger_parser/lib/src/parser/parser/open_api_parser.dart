@@ -2142,6 +2142,8 @@ class OpenApiParser {
       return null;
     }
 
+    final jsonKey = discriminatorRaw[_propertyNameConst] as String;
+
     final propertyName = discriminatorRaw[_propertyNameConst] as String;
     final refMappingRaw = discriminatorRaw[_mappingConst];
     if (refMappingRaw is! Map) {
@@ -2157,6 +2159,7 @@ class OpenApiParser {
     }
 
     return (
+      jsonKey: jsonKey,
       propertyName: propertyName,
       discriminatorValueToRefMapping: cleanedRefMapping,
       // This property is populated by the parser after all the data classes are created

@@ -13,7 +13,7 @@ import 'human_type.dart';
 
 part 'family1_members_sealed.g.dart';
 
-@JsonSerializable(createFactory: false)
+@JsonSerializable(createFactory: false, createToJson: false)
 sealed class Family1MembersSealed {
   const Family1MembersSealed();
 
@@ -50,13 +50,13 @@ extension Family1MembersSealedDeserializer on Family1MembersSealed {
 
 @JsonSerializable()
 class Family1MembersSealedCat extends Family1MembersSealed implements Cat {
+  @JsonKey(includeToJson: true, name: 'type')
   @override
-  final CatType type;
+  CatType get type => CatType.fromJson("Cat");
   @override
   final int mewCount;
 
   const Family1MembersSealedCat({
-    required this.type,
     required this.mewCount,
   });
 
@@ -69,13 +69,13 @@ class Family1MembersSealedCat extends Family1MembersSealed implements Cat {
 
 @JsonSerializable()
 class Family1MembersSealedDog extends Family1MembersSealed implements Dog {
+  @JsonKey(includeToJson: true, name: 'type')
   @override
-  final DogType type;
+  DogType get type => DogType.fromJson("Dog");
   @override
   final String barkSound;
 
   const Family1MembersSealedDog({
-    required this.type,
     required this.barkSound,
   });
 
@@ -88,13 +88,13 @@ class Family1MembersSealedDog extends Family1MembersSealed implements Dog {
 
 @JsonSerializable()
 class Family1MembersSealedHuman extends Family1MembersSealed implements Human {
+  @JsonKey(includeToJson: true, name: 'type')
   @override
-  final HumanType type;
+  HumanType get type => HumanType.fromJson("Human");
   @override
   final String job;
 
   const Family1MembersSealedHuman({
-    required this.type,
     required this.job,
   });
 
