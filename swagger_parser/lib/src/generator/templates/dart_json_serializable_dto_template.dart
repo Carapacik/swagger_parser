@@ -334,7 +334,7 @@ String _generateDiscriminatedWrapperClasses(
     var constructor = '  const $wrapperClassName(';
     if (constructorParams.isNotEmpty) {
       final constructorParamsStr = constructorParams
-          .map((prop) => '    required this.${prop.name},')
+          .map((prop) => '    ${_required(prop)}this.${prop.name},')
           .join('\n');
       constructor += '{\n$constructorParamsStr\n  }';
     }
@@ -381,7 +381,7 @@ String _generateUndiscriminatedWrapperClasses(
 
     // Generate constructor parameters
     final constructorParams =
-        properties.map((prop) => '    required this.${prop.name},').join('\n');
+        properties.map((prop) => '    ${_required(prop)}this.${prop.name},').join('\n');
 
     // Inline synthesized variants (variantX) should not implement any interface
     final isInline = variantName.toLowerCase().startsWith('variant');
