@@ -175,9 +175,14 @@ String _validateMethod(String className, Set<UniversalType> types) {
   return funcBuffer.toString();
 }
 
-String _factories(UniversalComponentClass dataClass, String className,
-    bool useMultipartFile, bool includeIfNull, String? fallbackUnion,
-    {required bool isUnion}) {
+String _factories(
+  UniversalComponentClass dataClass,
+  String className,
+  bool useMultipartFile,
+  bool includeIfNull,
+  String? fallbackUnion, {
+  required bool isUnion,
+}) {
   if (!isUnion) {
     return '''
   const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters, useMultipartFile, includeIfNull)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;''';
@@ -196,12 +201,18 @@ String _factories(UniversalComponentClass dataClass, String className,
   final factories = <String>[];
   for (final discriminatorValue
       in dataClass.discriminator!.discriminatorValueToRefMapping.keys) {
+    final discriminator = dataClass.discriminator!;
+    final discriminatorRef =
+        discriminator.discriminatorValueToRefMapping[discriminatorValue]!;
+
     final (protectedName, _) = protectName(discriminatorValue, isMethod: true);
     final factoryName = protectedName!.toCamel;
-    final discriminatorRef = dataClass
-        .discriminator!.discriminatorValueToRefMapping[discriminatorValue]!;
+
     final factoryParameters =
-        dataClass.discriminator!.refProperties[discriminatorRef]!;
+        discriminator.refProperties[discriminatorRef]!.where((e) {
+      return e.jsonKey != discriminator.jsonKey;
+    }).toSet();
+
     final unionItemClassName = className + discriminatorValue.toPascal;
 
     factories.add('''
