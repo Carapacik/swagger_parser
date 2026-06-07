@@ -41,6 +41,7 @@ void main() {
         expect(config.includeTags, isEmpty);
         expect(config.fallbackClient, 'fallback');
         expect(config.includeIfNull, isFalse);
+        expect(config.preserveSchemaCasing, isFalse);
       });
 
       test('should create config with all parameters specified', () {
@@ -82,6 +83,7 @@ void main() {
           includeTags: ['public', 'stable'],
           fallbackClient: 'common',
           includeIfNull: true,
+          preserveSchemaCasing: true,
         );
 
         expect(config.outputDirectory, equals('lib/generated'));
@@ -118,6 +120,7 @@ void main() {
         expect(config.includeTags, equals(['public', 'stable']));
         expect(config.fallbackClient, equals('common'));
         expect(config.includeIfNull, isTrue);
+        expect(config.preserveSchemaCasing, isTrue);
       });
     });
 
@@ -169,6 +172,7 @@ void main() {
             'exclude_tags': ['internal', 'deprecated'],
             'include_tags': ['public', 'stable'],
             'include_if_null': true,
+            'preserve_schema_casing': true,
             'replacement_rules': [
               {'pattern': 'Test', 'replacement': 'Mock'},
               {'pattern': 'Dto', 'replacement': 'Model'},
@@ -209,6 +213,7 @@ void main() {
           expect(config.excludeTags, equals(['internal', 'deprecated']));
           expect(config.includeTags, equals(['public', 'stable']));
           expect(config.includeIfNull, isTrue);
+          expect(config.preserveSchemaCasing, isTrue);
           expect(config.replacementRules, hasLength(2));
           expect(config.replacementRules[0].pattern.pattern, equals('Test'));
           expect(config.replacementRules[0].replacement, equals('Mock'));
@@ -764,6 +769,79 @@ void main() {
       // The exact behavior depends on ProgrammingLanguage.fromString implementation
       expect(() => SWPConfig.fromYaml(yamlMap),
           isNot(throwsA(isA<ConfigException>())));
+    });
+  });
+
+  group('Preserve Schema Casing Configuration', () {
+    test('should default preserveSchemaCasing to false', () {
+      const config = SWPConfig(outputDirectory: 'lib/api');
+      expect(config.preserveSchemaCasing, isFalse);
+    });
+
+    test('should parse preserveSchemaCasing from YAML when set to true', () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'preserve_schema_casing': true,
+      });
+
+      final config = SWPConfig.fromYaml(yamlMap);
+      expect(config.preserveSchemaCasing, isTrue);
+    });
+
+    test('should parse preserveSchemaCasing from YAML when set to false', () {
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/openapi.yaml',
+        'output_directory': 'lib/api',
+        'preserve_schema_casing': false,
+      });
+
+      final config = SWPConfig.fromYaml(yamlMap);
+      expect(config.preserveSchemaCasing, isFalse);
+    });
+
+    test('should inherit preserveSchemaCasing from root config', () {
+      const rootConfig = SWPConfig(
+        outputDirectory: 'lib/shared',
+        preserveSchemaCasing: true,
+      );
+
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/user.yaml',
+        'name': 'user_api',
+      });
+
+      final config = SWPConfig.fromYaml(yamlMap, rootConfig: rootConfig);
+      expect(config.preserveSchemaCasing, isTrue);
+    });
+
+    test('should override root config preserveSchemaCasing with local value',
+        () {
+      const rootConfig = SWPConfig(
+        outputDirectory: 'lib/shared',
+        preserveSchemaCasing: true,
+      );
+
+      final yamlMap = YamlMap.wrap({
+        'schema_path': 'api/user.yaml',
+        'preserve_schema_casing': false,
+      });
+
+      final config = SWPConfig.fromYaml(yamlMap, rootConfig: rootConfig);
+      expect(config.preserveSchemaCasing, isFalse);
+    });
+
+    test('should pass preserveSchemaCasing to ParserConfig', () {
+      const swpConfig = SWPConfig(
+        outputDirectory: 'lib/api',
+        preserveSchemaCasing: true,
+      );
+
+      final parserConfig = swpConfig.toParserConfig(
+        fileContent: '{}',
+        isJson: true,
+      );
+      expect(parserConfig.preserveSchemaCasing, isTrue);
     });
   });
 

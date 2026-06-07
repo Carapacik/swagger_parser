@@ -19,7 +19,7 @@ String dartDartMappableDtoTemplate(
   // Use fallback union only if explicitly provided
   // Auto-fallback is disabled to avoid breaking existing tests
   final effectiveFallbackUnion = fallbackUnion;
-  final originalClassName = dataClass.name.toPascal;
+  final originalClassName = dataClass.name;
   final discriminator = dataClass.discriminator;
   final isUndiscriminatedUnion =
       dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false;

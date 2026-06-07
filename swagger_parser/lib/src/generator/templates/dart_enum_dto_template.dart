@@ -22,7 +22,7 @@ String dartEnumDtoTemplate(
       useFlutterCompute: useFlutterCompute,
     );
   } else {
-    final className = enumClass.name.toPascal;
+    final className = enumClass.name;
     final jsonParam = unknownEnumValue || enumsToJson;
     final asyncImport = useFlutterCompute ? "import 'dart:async';\n\n" : '';
 
@@ -63,7 +63,7 @@ String _dartEnumDartMappableTemplate(
   required bool unknownEnumValue,
   required bool useFlutterCompute,
 }) {
-  final className = enumClass.name.toPascal;
+  final className = enumClass.name;
   final jsonParam = unknownEnumValue || enumsToJson;
   final asyncImport = useFlutterCompute ? "import 'dart:async';\n\n" : '';
 

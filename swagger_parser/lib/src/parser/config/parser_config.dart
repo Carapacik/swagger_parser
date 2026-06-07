@@ -20,6 +20,7 @@ class ParserConfig {
     this.includePaths,
     this.fallbackClient = 'fallback',
     this.inferRequiredFromNullable = false,
+    this.preserveSchemaCasing = false,
   });
 
   /// Specification file content as [String]
@@ -88,4 +89,17 @@ class ParserConfig {
   /// Properties without nullable: true in schema are marked as required.
   /// Only applies when schema has no explicit required array.
   final bool inferRequiredFromNullable;
+
+  /// When `true`, schema and enum names are projected by stripping
+  /// separator characters while preserving the casing of every other
+  /// character.
+  ///
+  /// Examples (flag `true`):
+  /// - `kUserStatus` → `kUserStatus`
+  /// - `XMLHttpRequest` → `XMLHttpRequest`
+  /// - `iOSDevice` → `iOSDevice`
+  /// - `URL` → `URL`
+  /// - `user_status` → `userstatus`
+  /// - `My-Class` → `MyClass`
+  final bool preserveSchemaCasing;
 }

@@ -1060,5 +1060,54 @@ void main() {
         expect(identifier.words, edgeCase.expectedWords);
       });
     }
+
+    group('String.toPreservedCase', () {
+      test('preserves no-separator identifiers verbatim', () {
+        expect('UserStatus'.toPreservedCase, 'UserStatus');
+        expect('User'.toPreservedCase, 'User');
+        expect('kUserStatus'.toPreservedCase, 'kUserStatus');
+        expect('XMLHttpRequest'.toPreservedCase, 'XMLHttpRequest');
+        expect('iOSDevice'.toPreservedCase, 'iOSDevice');
+        expect('URL'.toPreservedCase, 'URL');
+        expect('HTTPSConnection'.toPreservedCase, 'HTTPSConnection');
+      });
+
+      test('strips separators while keeping the casing of letters/digits', () {
+        expect('user_status'.toPreservedCase, 'userstatus');
+        expect('My-Class'.toPreservedCase, 'MyClass');
+        expect('XML Http Request'.toPreservedCase, 'XMLHttpRequest');
+        expect('com.example.Api'.toPreservedCase, 'comexampleApi');
+      });
+
+      test('mirrors toPascal Private-prefix handling', () {
+        expect('_kUserStatus'.toPreservedCase, 'PrivatekUserStatus');
+        expect('_XMLHttpRequest'.toPreservedCase, 'PrivateXMLHttpRequest');
+        expect('_UserStatus'.toPreservedCase, 'PrivateUserStatus');
+      });
+
+      test('strips inner underscores even after a private prefix', () {
+        // The leading underscore is consumed as the private marker; any
+        // remaining underscores are stripped along with other separators.
+        expect('_user_status'.toPreservedCase, 'Privateuserstatus');
+      });
+
+      test('is idempotent on its own output', () {
+        for (final input in [
+          'XMLHttpRequest',
+          'kUserStatus',
+          'UserStatus',
+          'iOSDevice',
+          'URL',
+        ]) {
+          final once = input.toPreservedCase;
+          expect(once.toPreservedCase, once,
+              reason: 'not idempotent for $input');
+        }
+      });
+
+      test('returns empty for empty input', () {
+        expect(''.toPreservedCase, '');
+      });
+    });
   });
 }

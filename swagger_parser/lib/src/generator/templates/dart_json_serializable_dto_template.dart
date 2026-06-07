@@ -16,7 +16,7 @@ String dartJsonSerializableDtoTemplate(
   bool useFlutterCompute = false,
   String? fallbackUnion,
 }) {
-  final originalClassName = dataClass.name.toPascal;
+  final originalClassName = dataClass.name;
 
   // Check if this is a union type
   final isUnion = dataClass.discriminator != null ||
