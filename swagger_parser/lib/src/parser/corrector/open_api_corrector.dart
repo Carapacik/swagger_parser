@@ -38,7 +38,9 @@ class OpenApiCorrector {
         for (final rule in config.replacementRules) {
           correctType = rule.apply(correctType)!;
         }
-        correctType = correctType.toPascal;
+        correctType = config.preserveSchemaCasing
+            ? correctType.toPreservedCase
+            : correctType.toPascal;
         if (correctType != type) {
           typeCorrections[type] = correctType;
         }
