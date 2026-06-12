@@ -953,6 +953,20 @@ void main() {
       );
     });
 
+    test('freezed_nested_union_variant_imports', () async {
+      await e2eTest(
+        'xof/freezed_nested_union_variant_imports',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          useFreezed3: true,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'freezed_nested_union_variant_imports.3.1.yaml',
+      );
+    });
+
     test('discriminated_any_of_complete_mapping_mappable', () async {
       await e2eTest(
         'xof/discriminated_any_of_complete_mapping_mappable',
