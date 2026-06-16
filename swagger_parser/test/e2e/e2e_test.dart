@@ -868,6 +868,20 @@ void main() {
       );
     });
 
+    test('nullable_sibling_all_of.3.0', () async {
+      await e2eTest(
+        'xof/nullable_sibling_all_of.3.0',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          useFreezed3: true,
+          putClientsInFolder: true,
+        ),
+        schemaFileName: 'nullable_sibling_all_of.3.0.json',
+      );
+    });
+
     test('discriminated_one_of.3.0', () async {
       await e2eTest(
         'xof/discriminated_one_of.3.0',
