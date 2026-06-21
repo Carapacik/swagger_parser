@@ -1,0 +1,25 @@
+openapi: 3.1.0
+info:
+  title: API
+  version: 1.0.0
+paths:
+  /multipart/request/empty-ref:
+    post:
+      summary: import with an empty multipart body
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmptyRequest'
+      responses:
+        '200':
+          description: dummy
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  schemas:
+    EmptyRequest:
+      type: object
