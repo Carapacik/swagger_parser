@@ -103,7 +103,22 @@ void main() {
       );
     });
 
-    // https://github.com/Carapacik/swagger_parser/issues/223
+    // https://github.com/Carapacik/swagger_parser/issues/466
+    test('multipart_request_with_ref_no_properties', () async {
+      await e2eTest(
+        'multipart_request_with_ref_no_properties',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          includeIfNull: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
+    // https://github.com/Carapacik/swagger_parser/issues/444
     test('corrector', () async {
       await e2eTest(
         'corrector',

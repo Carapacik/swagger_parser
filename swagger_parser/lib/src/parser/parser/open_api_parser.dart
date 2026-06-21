@@ -390,7 +390,9 @@ class OpenApiParser {
                 as Map<String, dynamic>;
             final schemes = components[_schemasConst] as Map<String, dynamic>;
             final dataClass = schemes[type] as Map<String, dynamic>;
-            final props = dataClass[_propertiesConst] as Map<String, dynamic>;
+            final props =
+                (dataClass[_propertiesConst] as Map<String, dynamic>?) ??
+                    <String, dynamic>{};
             final required = dataClass[_requiredConst] as List<dynamic>?;
 
             properties = props;
