@@ -27230,7 +27230,7 @@ $S:2}
 A.ar7.prototype={
 $1(a){var s=A.dc().b
 s=s==null?null:s.canvasKitBaseUrl
-return(s==null?"https://www.gstatic.com/flutter-canvaskit/c416acfeb8126e097f758c664aaa3da929e27da0/":s)+a},
+return(s==null?"https://www.gstatic.com/flutter-canvaskit/77e2e94772b6eb43759e34ed1ad7da4674e19cab/":s)+a},
 $S:10}
 A.HL.prototype={
 WR(){var s=this.acv(),r=$.bc.bk().ImageFilter.MakeColorFilter(s,null)
@@ -86864,7 +86864,8 @@ p.r.push(a2)
 p=p.c
 p===$&&A.a()
 a3=r.a(r.a(r.a(p.h(0,b6)).h(0,"schemas")).h(0,a2))
-a4=r.a(a3.h(0,c4))
+a4=t.nA.a(a3.h(0,c4))
+if(a4==null)a4=A.o(t.N,t.z)
 a5=t.kc.a(a3.h(0,b9))
 if(a5==null)a6=b4
 else{q=J.ew(a5,new A.a8K(),t.N)
