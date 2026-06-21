@@ -1,0 +1,49 @@
+{
+  "openapi": "3.0.0",
+  "info": { "title": "API", "description": "API description", "version": "1.0" },
+  "paths": {
+    "/composition": {
+      "get": {
+        "operationId": "getComposition",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CompositionDto" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ItemDto": {
+        "type": "object",
+        "properties": { "id": { "type": "string" } },
+        "required": ["id"]
+      },
+      "CompositionDto": {
+        "type": "object",
+        "properties": {
+          "nullableAllOf": {
+            "description": "OpenAPI 3.0 style: sibling nullable:true next to a single-element allOf",
+            "nullable": true,
+            "type": "object",
+            "allOf": [{ "$ref": "#/components/schemas/ItemDto" }]
+          },
+          "nullableOneOf": {
+            "description": "OpenAPI 3.1 style: oneOf with an explicit null branch (already supported)",
+            "oneOf": [
+              { "$ref": "#/components/schemas/ItemDto" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "required": ["nullableAllOf", "nullableOneOf"]
+      }
+    }
+  }
+}
