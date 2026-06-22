@@ -2,6 +2,8 @@
 
 - Add `preserve_schema_casing` option to preserve original casing of schema-derived identifiers, defaults to `false` for backwards compatibility, which normalises to PascalCase
 - Fix crash when a `multipart/form-data` request body references a schema without `properties`
+- Fix nullable handling for single-element `allOf`, `oneOf`, and `anyOf` schemas with sibling `nullable: true`
+- Fix missing imports for nested union properties in Freezed discriminated-union variants
 
 ## 1.43.1
 - Fix escaping `$unknown` in generated enum `toJson` error messages
