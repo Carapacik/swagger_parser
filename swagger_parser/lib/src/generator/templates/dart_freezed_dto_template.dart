@@ -390,21 +390,38 @@ FutureOr<List<Map<String, dynamic>>> serialize${className}List(List<$className>?
 ''';
 }
 
-/// Filters out union imports for freezed classes to avoid circular dependencies
+/// Filters out the parent-union back-import for freezed union variants.
+///
+/// A discriminated-union *variant* (`discriminatorValue != null`) is inlined
+/// into its parent union file, so the parent union gets injected into this
+/// class's `imports` even though the variant never references that type. That
+/// back-import must be dropped (it is a dependency cycle and is unused).
+///
+/// However, a variant may have its own `oneOf`-typed properties whose generated
+/// union files it genuinely references and MUST import — otherwise the property
+/// types are undefined and the file fails to compile. We tell the two apart by
+/// keeping only the union imports that correspond to a type actually used by
+/// one of this class's properties.
 Set<String> _filterUnionImportsForFreezed(UniversalComponentClass dataClass) {
+  // Only variants risk the parent-union back-import; every other class keeps
+  // all of its imports untouched.
+  if (dataClass.discriminatorValue == null) {
+    return dataClass.imports;
+  }
+
+  final referencedTypes = <String>{
+    for (final p in dataClass.parameters) p.type,
+    ...?dataClass.allOf?.properties.map((p) => p.type),
+  };
+
   final filteredImports = <String>{};
 
-  // If this class has a discriminatorValue, it means it's part of a union and
-  // shouldn't import the union file (to avoid circular dependencies)
-  final shouldFilterUnionImports = dataClass.discriminatorValue != null;
-
   for (final import in dataClass.imports) {
-    // If this is a model that's part of a union, skip union imports
-    // Otherwise, allow all imports (including union imports for classes that use unions)
-    final shouldSkip =
-        shouldFilterUnionImports && import.toLowerCase().contains('union');
-
-    if (!shouldSkip) {
+    final isUnionImport = import.toLowerCase().contains('union');
+    // Keep non-union imports, and union imports that this class references
+    // through its own properties (its inline `oneOf` fields). Drop the rest
+    // (the parent union this variant belongs to).
+    if (!isUnionImport || referencedTypes.contains(import)) {
       filteredImports.add(import);
     }
   }
