@@ -3,7 +3,6 @@
 - Add `preserve_schema_casing` option to preserve original casing of schema-derived identifiers, defaults to `false` for backwards compatibility, which normalises to PascalCase
 - Fix crash when a `multipart/form-data` request body references a schema without `properties`
 
-
 ## 1.43.1
 - Fix escaping `$unknown` in generated enum `toJson` error messages
 - Fix generated code when using `json_serializable`
