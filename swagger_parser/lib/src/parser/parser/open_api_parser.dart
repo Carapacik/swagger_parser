@@ -107,11 +107,11 @@ class OpenApiParser {
   static const _requestBodyNamePostfix = 'RequestBody';
 
   UniversalEnumClass _getUniqueEnumClass({
-    required final String name,
-    required final Set<UniversalEnumItem> items,
-    required final String type,
-    required final String? defaultValue,
-    required final String? description,
+    required String name,
+    required Set<UniversalEnumItem> items,
+    required String type,
+    required String? defaultValue,
+    required String? description,
   }) {
     // Search _enumClasses for an enum with the same name and values
     final enumClass = _enumClasses.firstWhereOrNull(
@@ -1446,7 +1446,6 @@ class OpenApiParser {
     }
     // Enum
     else if (map.containsKey(_enumConst)) {
-      // ignore: unnecessary_null_checks
       final (variableName!, description) = protectName(
         name,
         isEnum: true,
@@ -1531,7 +1530,6 @@ class OpenApiParser {
                     .containsKey(_refConst))) {
       final originalName = name ?? additionalName;
       // false positive result
-      // ignore: unnecessary_null_checks
       final (newName!, description) = protectName(
         originalName,
         uniqueIfNull: true,
