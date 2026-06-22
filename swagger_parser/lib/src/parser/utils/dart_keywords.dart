@@ -94,7 +94,7 @@ const dartKeywords = {
 };
 
 /// Set of words that can't be used as members of an enum
-const dartEnumMemberKeywords = {
+const Set<String> dartEnumMemberKeywords = {
   ...dartKeywords,
   'values',
   'index',

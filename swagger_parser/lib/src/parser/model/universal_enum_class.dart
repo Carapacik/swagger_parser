@@ -8,7 +8,7 @@ final class UniversalEnumClass extends UniversalDataClass {
     required super.name,
     required this.type,
     required this.items,
-    final String? originalName,
+    String? originalName,
     this.defaultValue,
     super.description,
   }) : originalName = originalName ?? name;
