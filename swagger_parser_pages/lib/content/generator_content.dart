@@ -55,8 +55,8 @@ class _GeneratorContentState extends State<GeneratorContent> {
                   height: 48,
                   child: ElevatedButton(
                     onPressed: () async {
-                      final FilePickerResult? result = await FilePicker.platform
-                          .pickFiles(
+                      final FilePickerResult? result =
+                          await FilePicker.pickFiles(
                             type: FileType.custom,
                             allowedExtensions: ['json', 'yaml', 'JSON', 'YAML'],
                           );

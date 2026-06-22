@@ -32,19 +32,19 @@ In your pubspec.yaml, add the following dependencies:
 
 ```yaml
 dependencies:
-  # dart_mappable: ^4.6.1 # for dart_mappable
-  # dio: ^5.9.0
+  # dart_mappable: ^4.8.0 # for dart_mappable
+  # dio: ^5.9.2
   # freezed_annotation: ^3.1.0 # for freezed
-  # json_annotation: ^4.9.0
-  # retrofit: ^4.9.1
+  # json_annotation: ^4.12.0
+  # retrofit: ^4.9.2
 
 dev_dependencies:
-  # build_runner: ^2.10.4
-  # carapacik_lints: ^3.10.2
-  # dart_mappable_builder: ^4.6.1 # for dart_mappable
-  # freezed: ^3.2.3 # for freezed
-  # json_serializable: ^6.11.2
-  # retrofit_generator: ^10.2.0
+  # build_runner: ^2.15.0
+  # carapacik_lints: ^3.12.0
+  # dart_mappable_builder: ^4.9.0 # for dart_mappable
+  # freezed: ^3.2.5 # for freezed
+  # json_serializable: ^6.14.0
+  # retrofit_generator: ^10.2.7
   swagger_parser:
 ```
 
