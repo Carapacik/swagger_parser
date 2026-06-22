@@ -1,0 +1,72 @@
+openapi: 3.1.0
+info:
+  title: Nested Union Variant Imports API
+  version: 1.0.0
+paths:
+  /pets:
+    get:
+      operationId: getPets
+      summary: List pets (discriminated union); the Cat variant nests its own union.
+      tags: [pets]
+      responses:
+        '200':
+          description: A list of pets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/Cat'
+                    - $ref: '#/components/schemas/Dog'
+                  discriminator:
+                    propertyName: type
+                    mapping:
+                      Cat: '#/components/schemas/Cat'
+                      Dog: '#/components/schemas/Dog'
+components:
+  schemas:
+    Cat:
+      type: object
+      description: A union variant that itself contains a nested discriminated union.
+      properties:
+        type:
+          type: string
+          enum: [Cat]
+        toy:
+          oneOf:
+            - $ref: '#/components/schemas/Ball'
+            - $ref: '#/components/schemas/Mouse'
+          discriminator:
+            propertyName: kind
+            mapping:
+              Ball: '#/components/schemas/Ball'
+              Mouse: '#/components/schemas/Mouse'
+      required: [type, toy]
+    Dog:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [Dog]
+        barkSound:
+          type: string
+      required: [type, barkSound]
+    Ball:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum: [Ball]
+        diameterCm:
+          type: integer
+      required: [kind, diameterCm]
+    Mouse:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum: [Mouse]
+        squeaky:
+          type: boolean
+      required: [kind, squeaky]
