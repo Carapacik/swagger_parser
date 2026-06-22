@@ -390,7 +390,9 @@ class OpenApiParser {
                 as Map<String, dynamic>;
             final schemes = components[_schemasConst] as Map<String, dynamic>;
             final dataClass = schemes[type] as Map<String, dynamic>;
-            final props = dataClass[_propertiesConst] as Map<String, dynamic>;
+            final props =
+                (dataClass[_propertiesConst] as Map<String, dynamic>?) ??
+                    <String, dynamic>{};
             final required = dataClass[_requiredConst] as List<dynamic>?;
 
             properties = props;
@@ -1709,6 +1711,15 @@ class OpenApiParser {
               name: name,
               additionalName: additionalName,
             );
+            // OpenAPI 3.0 expresses a nullable composed type with a sibling
+            // `nullable: true` next to a single-element allOf/oneOf/anyOf, e.g.
+            // {nullable: true, allOf: [{$ref: ...}]}. The inner item itself is
+            // not nullable, so honor the outer flag here (the 3.1 form,
+            // {oneOf: [{$ref}, {type: null}]}, is handled by the multi-element
+            // branch below via nullItems).
+            if (map[_nullableConst].toString().toBool() ?? false) {
+              ofType = makeNullable(ofType);
+            }
           }
         }
         // Find n-element anyOf/allOf/oneOf (without discriminator) or type: [type, "null"]
