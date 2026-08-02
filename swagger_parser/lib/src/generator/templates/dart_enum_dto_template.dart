@@ -141,6 +141,27 @@ String _fromJson(String className, UniversalEnumClass enumClass) => '''
       );
 ''';
 
+/// Computes the Dart literal for an enum item's JSON value.
+///
+/// String values (and any non-numeric value) are wrapped in quotes so the
+/// generated code is a valid constant expression. Numbers are emitted as-is.
+/// The [type] can be a plain type like `string`/`integer` or a JSON Schema
+/// type list such as `[string, null]`, in which case the value is quoted
+/// unless it is purely numeric.
+String? _enumJsonValue(String type, String? protectedJsonKey) {
+  if (type == 'string') {
+    return "'$protectedJsonKey'";
+  }
+  if (protectedJsonKey?.isEmpty ?? true) {
+    return "''";
+  }
+  if (protectedJsonKey == 'null') {
+    return null;
+  }
+  final isNumber = RegExp(r'^-?\d+(\.\d+)?$').hasMatch(protectedJsonKey ?? '');
+  return isNumber ? protectedJsonKey : "'$protectedJsonKey'";
+}
+
 String _enumValue(
   int index,
   String type,
@@ -149,27 +170,7 @@ String _enumValue(
 }) {
   final protectedJsonKey = protectJsonKey(item.jsonKey);
 
-  final String? value;
-  if (type == 'string') {
-    value = "'$protectedJsonKey'";
-  } else {
-    if (protectedJsonKey?.isEmpty ?? true) {
-      value = "''";
-    } else {
-      if (protectedJsonKey == 'null') {
-        value = null;
-      } else {
-        final isNumber = RegExp(
-          r'^-?\d+(\.\d+)?$',
-        ).hasMatch(protectedJsonKey ?? '');
-        if (isNumber) {
-          value = protectedJsonKey;
-        } else {
-          value = "'$protectedJsonKey'";
-        }
-      }
-    }
-  }
+  final value = _enumJsonValue(type, protectedJsonKey);
 
   final name = item.name.isEmpty ? 'empty' : item.name;
   return '''
@@ -184,8 +185,9 @@ String _enumValueDartMappable(
   required bool jsonParam,
 }) {
   final protectedJsonKey = protectJsonKey(item.jsonKey);
+  final value = _enumJsonValue(type, protectedJsonKey);
   return '''
-${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}${indentation(2)}@MappableValue(${type == 'string' ? "'$protectedJsonKey'" : protectedJsonKey}) 
+${index != 0 ? '\n' : ''}${descriptionComment(item.description, tab: '  ')}${indentation(2)}@MappableValue($value)
 ${indentation(2)}${item.name.toCamel}''';
 }
 
