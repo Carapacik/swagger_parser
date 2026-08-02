@@ -175,9 +175,12 @@ String _toClientRequest(
     ..write('  $finalResponseType ')
     ..write('${request.name}(');
 
-  if (request.parameters.isNotEmpty ||
+  final hasParameters = request.parameters.isNotEmpty ||
       addExtrasParameter ||
-      addDioOptionsParameter) {
+      addDioOptionsParameter ||
+      request.configExtension.isCancelable;
+
+  if (hasParameters) {
     sb.write('{\n');
   }
 
@@ -193,10 +196,11 @@ String _toClientRequest(
   if (addDioOptionsParameter) {
     sb.write(_addDioOptionsParameter());
   }
+  if (request.configExtension.isCancelable) {
+    sb.write(_addDioCancelToken());
+  }
 
-  if (request.parameters.isNotEmpty ||
-      addExtrasParameter ||
-      addDioOptionsParameter) {
+  if (hasParameters) {
     sb.write('  });\n');
   } else {
     sb.write(');\n');
@@ -261,6 +265,9 @@ String _quoteJson(String value) =>
 
 String _addDioOptionsParameter() =>
     '    @DioOptions() RequestOptions? options,\n';
+
+String _addDioCancelToken() =>
+    '    @CancelRequest() CancelToken? cancelToken,\n';
 
 String _toParameter(UniversalRequestType parameter, bool useMultipartFile) {
   var parameterType = parameter.type.toSuitableType(
