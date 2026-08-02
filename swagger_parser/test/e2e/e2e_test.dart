@@ -75,6 +75,19 @@ void main() {
         schemaFileName: 'openapi.yaml',
       );
     });
+    test('enum_types_list_mappable', () async {
+      await e2eTest(
+        'enum_types_list_mappable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.dartMappable,
+          putClientsInFolder: true,
+          enumsParentPrefix: false,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
     test('multipart_request_properties', () async {
       await e2eTest(
         'multipart_request_properties',
