@@ -1,0 +1,95 @@
+openapi: 3.1.0
+info:
+  title: ""
+  version: 0.0.0 (v1)
+paths:
+  /api/v1/category/:
+    get:
+      operationId: api_v1_category_list
+      parameters:
+        - in: query
+          name: enum_class
+          required: true
+          schema:
+            type: array
+            items:
+              type:
+                - string
+                - null
+              enum:
+                - -index
+                - -name
+                - index
+                - name
+                - json
+                - yaml
+                - -1
+                - 0
+                - "1"
+                - "1itemOne"
+                - "2ItemTwo"
+                - "3item_three"
+                - "4ITEM-FOUR"
+                - "5иллегалчарактер"
+                - "6 item six"
+                - null
+          description: "description"
+        - in: query
+          name: enum_class_dynamic
+          required: true
+          schema:
+            type: array
+            items:
+              type:
+                - string
+                - integer
+              enum:
+                - -index
+                - -name
+                - index
+                - name
+                - json
+                - yaml
+                - -1
+                - 0
+                - "1"
+                - "1itemOne"
+                - "2ItemTwo"
+                - "3item_three"
+                - "4ITEM-FOUR"
+                - "5иллегалчарактер"
+                - "6 item six"
+          description: "description"
+        - in: query
+          name: nullable_enum_in_object
+          required: true
+          schema:
+            type: object
+            properties:
+              fruits:
+                type:
+                  - string
+                  - "null"
+                enum:
+                  - apple
+                  - orange
+                  - null
+        - name: credentialTypes
+          in: query
+          required: false
+          allowReserved: true
+          schema:
+            type: array
+            default: [ apple ]
+            minItems: 1
+            items:
+              enum:
+                - apple
+                - orange
+
+          description: "description"
+      tags:
+        - api
+      responses:
+        "204":
+          description: ""
