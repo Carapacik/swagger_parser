@@ -267,10 +267,17 @@ class OpenApiParser {
           }
           final isRequired =
               parameter[_requiredConst]?.toString().toBool() ?? false;
+          final parameterSchema = parameter[_schemaConst] != null
+              ? parameter[_schemaConst] as Map<String, dynamic>
+              : parameter;
+
+          // Query/path/header parameters may reference component schemas.
+          // Register those references so tag-based schema filtering does not
+          // discard models used only by parameters.
+          _extractSchemaRefs(parameterSchema, null);
+
           final typeWithImport = _findType(
-            parameter[_schemaConst] != null
-                ? parameter[_schemaConst] as Map<String, dynamic>
-                : parameter,
+            parameterSchema,
             name: parameter[_nameConst].toString(),
             isRequired: isRequired,
           );
@@ -549,10 +556,15 @@ class OpenApiParser {
               as Map<String, dynamic>;
         }
 
+        final parameterSchema = parameter[_schemaConst] != null
+            ? parameter[_schemaConst] as Map<String, dynamic>
+            : parameter;
+
+        // Keep component schemas referenced by parameters when filtering.
+        _extractSchemaRefs(parameterSchema, null);
+
         final typeWithImport = _findType(
-          rawParameter[_schemaConst] != null
-              ? rawParameter[_schemaConst] as Map<String, dynamic>
-              : rawParameter,
+          parameterSchema,
           name: rawParameter[_nameConst].toString(),
           isRequired: isRequired,
         );
