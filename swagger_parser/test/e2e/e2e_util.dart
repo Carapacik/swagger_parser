@@ -42,7 +42,18 @@ Future<void> e2eTest(
 
   await processor.generateFiles();
 
-  await Process.run('dart', ['format', testFolder]);
+  final formatResult = await Process.run(
+    Platform.resolvedExecutable,
+    ['format', testFolder],
+  );
+  if (formatResult.exitCode != 0) {
+    throw ProcessException(
+      Platform.resolvedExecutable,
+      ['format', testFolder],
+      formatResult.stderr.toString(),
+      formatResult.exitCode,
+    );
+  }
 
   // Getting a list of all files from expectedFolderPath
   final expectedFiles = Directory(expectedFolderPath)
@@ -83,10 +94,13 @@ Future<void> e2eTest(
       return relPath == relativePath;
     });
 
-    // Comparing the contents of the file
+    // Dart SDK versions may format the end of a generated file with a
+    // different number of trailing newlines. Keep the golden comparison
+    // strict for the file contents while normalizing that insignificant EOF
+    // difference.
     expect(
-      generatedFile.readAsStringSync(),
-      file.readAsStringSync(),
+      _normalizeTrailingNewlines(generatedFile.readAsStringSync()),
+      _normalizeTrailingNewlines(file.readAsStringSync()),
       reason: 'Contents do not match for file: $relativePath',
     );
   }
@@ -101,3 +115,6 @@ Future<void> e2eTest(
   // Deleting the generated files
   Directory(generatedFolderPath).deleteSync(recursive: true);
 }
+
+String _normalizeTrailingNewlines(String content) =>
+    content.replaceFirst(RegExp(r'\n+$'), '\n');

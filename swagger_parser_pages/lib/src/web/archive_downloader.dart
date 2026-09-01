@@ -7,7 +7,7 @@ import 'package:archive/archive.dart';
 import 'package:swagger_parser/swagger_parser.dart';
 import 'package:web/web.dart' as web;
 
-void generateArchive(List<GeneratedFile> files) {
+void downloadArchive(List<GeneratedFile> files) {
   final encoder = ZipEncoder();
   final archive = Archive();
   for (final file in files) {
@@ -29,10 +29,8 @@ void generateArchive(List<GeneratedFile> files) {
     ..download = 'generated.zip';
   web.document.body!.children.add(anchor);
 
-  // download
   anchor.click();
 
-  // cleanup
   web.document.body!.children.delete(anchor);
   web.URL.revokeObjectURL(url);
 }
