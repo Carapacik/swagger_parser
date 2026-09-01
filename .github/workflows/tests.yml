@@ -20,7 +20,7 @@ jobs:
           - stable
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: dart-lang/setup-dart@v1.7.2
+      - uses: dart-lang/setup-dart@v1.8.1
         with:
           sdk: "${{ matrix.sdk }}"
       - name: Install dependencies
