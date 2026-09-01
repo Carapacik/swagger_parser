@@ -1,3 +1,8 @@
+## 1.44.2
+
+* Fixes schema filtering for component schemas referenced by endpoint parameters
+  ([#470](https://github.com/Carapacik/swagger_parser/pull/470)).
+
 ## 1.44.1
 
 * Fixes `dart_mappable` enum generation for JSON Schema type lists by quoting
@@ -67,6 +72,7 @@
   * Generates top-level serialization functions in each DTO model file following Retrofit's naming
     convention.
   * Works with all serializers: `freezed`, `json_serializable`, `dart_mappable`.
+
 ```yaml
 swagger_parser:
   use_flutter_compute: true
@@ -80,6 +86,7 @@ swagger_parser:
   overwriting user-supplied extras.
 * Uses fully-qualified default extras values (e.g. `BannerApi.findAllBannersOpenapiExtras`) so
   generated implementations can access the static metadata constants.
+
 ```
 swagger_parser:
   extras_parameter_by_default: true
@@ -118,6 +125,7 @@ abstract class PetsClient {
 ## 1.35.0
 
 * Adds `infer_required_from_nullable`.
+
 ```
 infer_required_from_nullable: true
 
@@ -126,6 +134,7 @@ Schema without required array:
 - name: type: string → required String name
 - desc: type: string, nullable: true → String? desc
 ```
+
 * Fixes nullable array item types generation.
 
 ## 1.34.0
@@ -351,9 +360,12 @@ Schema without required array:
 ## 1.19.0
 
 * Adds version getter to root client:
+
 ```dart
+
 final version = RestClient.version;
 ```
+
 * Adds `dio_options_parameter_by_default`.
 
 ## 1.18.3
@@ -437,9 +449,9 @@ final version = RestClient.version;
 * Fixes error with `required_by_default`
   ([#168](https://github.com/Carapacik/swagger_parser/issues/168)).
 * Refactors config and rename parameters:
-    * `squash_clients`to`merge_clients`.
-    * `enums_prefix`to`enums_parent_prefix`.
-    * `skipp_parameters`to`skipped_parameters`.
+  * `squash_clients`to`merge_clients`.
+  * `enums_prefix`to`enums_parent_prefix`.
+  * `skipp_parameters`to`skipped_parameters`.
 * Removes config parameter `put_in_folder`.
 
 ## 1.15.5
