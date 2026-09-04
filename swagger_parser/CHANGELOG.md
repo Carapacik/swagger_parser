@@ -1,3 +1,9 @@
+## 1.44.3
+
+* Fixes `infer_required_from_nullable` treating OpenAPI 3.1 type lists containing `"null"`
+  as non-nullable, which generated them as `required T?`
+  ([#472](https://github.com/Carapacik/swagger_parser/pull/472)).
+
 ## 1.44.2
 
 * Fixes schema filtering for component schemas referenced by endpoint parameters

@@ -798,6 +798,9 @@ class OpenApiParser {
               {_allOfConst: final List<dynamic> allOf} => allOf.any(
                   (e) => e is Map<String, dynamic> && e['type'] == 'null',
                 ),
+              // OpenAPI 3.1 / JSON Schema: `type: [string, "null"]`
+              {_typeConst: final List<dynamic> types} =>
+                types.any((e) => e.toString() == 'null'),
               _ => false,
             };
 
