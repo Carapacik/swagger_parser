@@ -1,3 +1,11 @@
+## 1.45.0
+
+* Adds `freezed_json_serialization` (default `true`) to generate Freezed models
+  without `.g.dart` and `fromJson` when JSON serialization is not needed.
+  Existing JSON-enabled generation remains the default
+  ([#473](https://github.com/Carapacik/swagger_parser/issues/473)).
+* Documents Freezed 4 and current code generation dependency versions.
+
 ## 1.44.3
 
 * Fixes `infer_required_from_nullable` treating OpenAPI 3.1 type lists containing `"null"`

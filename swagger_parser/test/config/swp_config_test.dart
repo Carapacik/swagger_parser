@@ -35,6 +35,7 @@ void main() {
         expect(config.generateValidator, isFalse);
         expect(config.useXNullable, isFalse);
         expect(config.useFreezed3, isFalse);
+        expect(config.freezedJsonSerialization, isTrue);
         expect(config.useMultipartFile, isFalse);
         expect(config.fallbackUnion, isNull);
         expect(config.excludeTags, isEmpty);
@@ -42,6 +43,19 @@ void main() {
         expect(config.fallbackClient, 'fallback');
         expect(config.includeIfNull, isFalse);
         expect(config.preserveSchemaCasing, isFalse);
+      });
+
+      test('can disable Freezed JSON serialization in YAML', () {
+        final config = SWPConfig.fromYaml(YamlMap.wrap({
+          'schema_path': 'schema.yaml',
+          'output_directory': 'lib/api',
+          'json_serializer': 'freezed',
+          'use_freezed3': true,
+          'freezed_json_serialization': false,
+        }));
+
+        expect(config.freezedJsonSerialization, isFalse);
+        expect(config.toGeneratorConfig().freezedJsonSerialization, isFalse);
       });
 
       test('should create config with all parameters specified', () {

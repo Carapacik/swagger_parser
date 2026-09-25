@@ -39,6 +39,7 @@ class SWPConfig {
     this.generateValidator = false,
     this.useXNullable = false,
     this.useFreezed3 = false,
+    this.freezedJsonSerialization = true,
     this.useMultipartFile = false,
     this.fallbackUnion,
     this.dartMappableConvenientWhen = false,
@@ -86,6 +87,7 @@ class SWPConfig {
     required this.generateValidator,
     required this.useXNullable,
     required this.useFreezed3,
+    required this.freezedJsonSerialization,
     required this.useMultipartFile,
     required this.excludeTags,
     required this.includeTags,
@@ -277,6 +279,10 @@ class SWPConfig {
     final useFreezed3 =
         yamlMap['use_freezed3'] as bool? ?? rootConfig?.useFreezed3;
 
+    final freezedJsonSerialization =
+        yamlMap['freezed_json_serialization'] as bool? ??
+            rootConfig?.freezedJsonSerialization;
+
     final useMultipartFile =
         yamlMap['use_multipart_file'] as bool? ?? rootConfig?.useMultipartFile;
 
@@ -423,6 +429,8 @@ class SWPConfig {
       generateValidator: generateValidator ?? dc.generateValidator,
       useXNullable: useXNullable ?? dc.useXNullable,
       useFreezed3: useFreezed3 ?? dc.useFreezed3,
+      freezedJsonSerialization:
+          freezedJsonSerialization ?? dc.freezedJsonSerialization,
       useMultipartFile: useMultipartFile ?? dc.useMultipartFile,
       fallbackUnion: fallbackUnion,
       excludeTags: excludedTags ?? dc.excludeTags,
@@ -603,6 +611,9 @@ class SWPConfig {
   /// Set `false` to maintain compatibility with Freezed 2.x
   final bool useFreezed3;
 
+  /// Generate Freezed JSON helpers through json_serializable.
+  final bool freezedJsonSerialization;
+
   /// DART ONLY
   /// Optional. Set `true` to use MultipartFile instead of File as argument type
   /// for file parameters.
@@ -728,6 +739,7 @@ class SWPConfig {
       replacementRules: replacementRules,
       generateValidator: generateValidator,
       useFreezed3: useFreezed3,
+      freezedJsonSerialization: freezedJsonSerialization,
       useMultipartFile: useMultipartFile,
       fallbackUnion: fallbackUnion,
       dartMappableConvenientWhen: dartMappableConvenientWhen,

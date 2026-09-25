@@ -33,6 +33,7 @@ final class FillController {
           markFilesAsGenerated: config.markFilesAsGenerated,
           generateValidator: config.generateValidator,
           useFreezed3: config.useFreezed3,
+          freezedJsonSerialization: config.freezedJsonSerialization,
           useMultipartFile: config.useMultipartFile,
           dartMappableConvenientWhen: config.dartMappableConvenientWhen,
           useDartMappableNaming: config.useDartMappableNaming,

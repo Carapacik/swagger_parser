@@ -32,19 +32,19 @@ In your pubspec.yaml, add the following dependencies:
 
 ```yaml
 dependencies:
-  # dart_mappable: ^4.8.0 # for dart_mappable
-  # dio: ^5.9.2
+  # dart_mappable: ^4.10.0 # for dart_mappable
+  # dio: ^5.11.1
   # freezed_annotation: ^3.1.0 # for freezed
   # json_annotation: ^4.12.0
-  # retrofit: ^4.9.2
+  # retrofit: ^4.10.0
 
 dev_dependencies:
-  # build_runner: ^2.15.0
-  # carapacik_lints: ^3.12.0
-  # dart_mappable_builder: ^4.9.0 # for dart_mappable
-  # freezed: ^3.2.5 # for freezed
-  # json_serializable: ^6.14.0
-  # retrofit_generator: ^10.2.7
+  # build_runner: ^2.16.1
+  # carapacik_lints: ^3.13.1
+  # dart_mappable_builder: ^4.10.0 # for dart_mappable
+  # freezed: ^4.0.2 # for freezed
+  # json_serializable: ^6.14.1
+  # retrofit_generator: ^10.2.11
   swagger_parser:
 ```
 
@@ -193,6 +193,11 @@ swagger_parser:
   # Optional (dart & freezed only). Set 'true' to use Freezed 3.x code generation syntax.
   # Set 'false' to maintain compatibility with Freezed 2.x.
   use_freezed3: false
+
+  # Optional (dart & freezed only). Set false to generate Freezed models without
+  # JSON serialization: no .g.dart part or fromJson factory is emitted.
+  # Default: true, preserving the existing JSON-enabled generation.
+  freezed_json_serialization: true
 
   # Optional (dart & freezed/dart_mappable). Set string value to use fallbackUnion parameter.
   # For freezed: adds fallbackUnion: <value> to the @Freezed annotation.
@@ -398,6 +403,14 @@ dart run swagger_parser --json_serializer <dart_mappable | freezed | json_serial
 
 
 ### (Only for freezed) Generate files using [build_runner](https://pub.dev/packages/build_runner) for retrofit, json_serializable and freezed
+
+Freezed 3.x and 4.x require `use_freezed3: true`. When generated models need
+`fromJson`/`toJson` (including JSON request and response models used by Retrofit),
+keep `freezed_json_serialization: true` and add `json_annotation` and
+`json_serializable` to your project. Freezed does not generate these methods on
+its own. For Freezed models that do not need JSON, set
+`freezed_json_serialization: false`; this omits the `.g.dart` part and `fromJson`
+factory. This mode cannot be combined with `use_flutter_compute`.
 
 #### For `freezed` with `retrofit` use build.yaml file with this content:
 

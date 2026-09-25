@@ -27,6 +27,7 @@ class GeneratorConfig {
     this.replacementRules = const [],
     this.generateValidator = false,
     this.useFreezed3 = false,
+    this.freezedJsonSerialization = true,
     this.useMultipartFile = false,
     this.fallbackUnion,
     this.dartMappableConvenientWhen = true,
@@ -128,6 +129,9 @@ class GeneratorConfig {
 
   /// Optional. Set `true` to use freezed v3 if jsonSerializer is freezed.
   final bool useFreezed3;
+
+  /// Generate Freezed JSON helpers through json_serializable.
+  final bool freezedJsonSerialization;
 
   /// DART ONLY
   /// Optional. Set `true` to use MultipartFile instead of File as argument type
