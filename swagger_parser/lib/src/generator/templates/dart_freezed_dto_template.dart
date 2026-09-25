@@ -12,6 +12,7 @@ String dartFreezedDtoTemplate(
   required bool includeIfNull,
   bool generateValidator = false,
   bool isV3 = false,
+  bool jsonSerialization = true,
   bool useFlutterCompute = false,
   String? fallbackUnion,
 }) {
@@ -20,15 +21,20 @@ String dartFreezedDtoTemplate(
   final isUndiscriminatedUnion =
       dataClass.undiscriminatedUnionVariants?.isNotEmpty ?? false;
   final isUnion = discriminator != null || isUndiscriminatedUnion;
+  if (!jsonSerialization && useFlutterCompute) {
+    throw ArgumentError(
+      'Flutter compute requires Freezed JSON serialization.',
+    );
+  }
   final serializerClass =
       useFlutterCompute ? _generateFlutterComputeSerializer(className) : '';
   final asyncImport = useFlutterCompute ? "import 'dart:async';\n\n" : '';
 
   return '''
 $asyncImport${ioImport(dataClass.parameters, useMultipartFile: useMultipartFile)}import 'package:freezed_annotation/freezed_annotation.dart';
-${isUndiscriminatedUnion ? "import 'package:json_annotation/json_annotation.dart';\n" : ''}${dartImports(imports: _filterUnionImportsForFreezed(dataClass))}
+${isUndiscriminatedUnion && jsonSerialization ? "import 'package:json_annotation/json_annotation.dart';\n" : ''}${dartImports(imports: _filterUnionImportsForFreezed(dataClass))}
 part '${dataClass.name.toSnake}.freezed.dart';
-part '${dataClass.name.toSnake}.g.dart';
+${jsonSerialization ? "part '${dataClass.name.toSnake}.g.dart';" : ''}
 
 ${descriptionComment(dataClass.description)}@Freezed(${[
     if (discriminator != null) "unionKey: '${discriminator.propertyName}'",
@@ -38,8 +44,8 @@ ${descriptionComment(dataClass.description)}@Freezed(${[
       "fallbackUnion: '$fallbackUnion'",
   ].join(', ')})
 ${_classModifier(isUnion: isUnion, isV3: isV3)}class $className with _\$$className {
-${_factories(dataClass, className, useMultipartFile, includeIfNull, fallbackUnion, isUnion: isUnion)}
-${_jsonFactories(className, dataClass.undiscriminatedUnionVariants)}
+${_factories(dataClass, className, useMultipartFile, includeIfNull, fallbackUnion, isUnion: isUnion, jsonSerialization: jsonSerialization)}
+${jsonSerialization ? _jsonFactories(className, dataClass.undiscriminatedUnionVariants) : ''}
 ${generateValidator ? dataClass.parameters.map(_validationString).nonNulls.join() : ''}}
 ${generateValidator ? _validateMethod(className, dataClass.parameters) : ''}$serializerClass''';
 }
@@ -177,7 +183,7 @@ String _validateMethod(String className, Set<UniversalType> types) {
 
 String _factories(UniversalComponentClass dataClass, String className,
     bool useMultipartFile, bool includeIfNull, String? fallbackUnion,
-    {required bool isUnion}) {
+    {required bool isUnion, required bool jsonSerialization}) {
   if (!isUnion) {
     return '''
   const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters, useMultipartFile, includeIfNull)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;''';
@@ -190,6 +196,7 @@ String _factories(UniversalComponentClass dataClass, String className,
       variants,
       useMultipartFile,
       includeIfNull,
+      jsonSerialization,
     );
   }
 
@@ -227,7 +234,8 @@ String _createFactoriesForUndiscriminatedUnion(
     String className,
     Map<String, Set<UniversalType>> variants,
     bool useMultipartFile,
-    bool includeIfNull) {
+    bool includeIfNull,
+    bool jsonSerialization) {
   final factories = <String>[];
   for (final MapEntry(key: variantName, value: factoryParameters)
       in variants.entries) {
@@ -235,7 +243,7 @@ String _createFactoriesForUndiscriminatedUnion(
     final factoryName = protectedName!.toCamel;
     final unionItemClassName = className + variantName.toPascal;
     factories.add('''
-  @JsonSerializable()
+  ${jsonSerialization ? '@JsonSerializable()' : ''}
   const factory $className.$factoryName(${factoryParameters.isNotEmpty ? '{' : ''}${_parametersToString(factoryParameters, useMultipartFile, includeIfNull)}${factoryParameters.isNotEmpty ? '\n  }' : ''}) = $unionItemClassName;
   ''');
   }

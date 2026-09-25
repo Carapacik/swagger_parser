@@ -62,6 +62,56 @@ class ClassName with _$ClassName {
       expect(filledContent.content, expectedContents);
     });
 
+    test('dart + freezed without JSON serialization', () {
+      const dataClass = UniversalComponentClass(
+        name: 'ClassName',
+        imports: {},
+        parameters: {},
+      );
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+          useFreezed3: true,
+          freezedJsonSerialization: false,
+        ),
+      );
+
+      final content = fillController.fillDtoContent(dataClass).content;
+      expect(content, contains(r'abstract class ClassName with _$ClassName'));
+      expect(content, contains("part 'class_name.freezed.dart';"));
+      expect(content, isNot(contains("part 'class_name.g.dart';")));
+      expect(content, isNot(contains('ClassName.fromJson')));
+    });
+
+    test('dart + freezed union without JSON serialization', () {
+      const dataClass = UniversalComponentClass(
+        name: 'ResultUnion',
+        imports: {},
+        parameters: {},
+        undiscriminatedUnionVariants: {
+          'success': {},
+          'failure': {},
+        },
+      );
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+          useFreezed3: true,
+          freezedJsonSerialization: false,
+        ),
+      );
+
+      final content = fillController.fillDtoContent(dataClass).content;
+      expect(content, contains('sealed class ResultUnion'));
+      expect(content, isNot(contains('@JsonSerializable()')));
+      expect(content, isNot(contains('package:json_annotation')));
+      expect(content, isNot(contains('ResultUnion.fromJson')));
+    });
+
     test('kotlin + moshi', () async {
       const dataClass = UniversalComponentClass(
         name: 'ClassName',
