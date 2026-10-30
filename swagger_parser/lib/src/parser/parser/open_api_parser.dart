@@ -766,16 +766,8 @@ class OpenApiParser {
     final imports = <String>{};
 
     var requiredParameters = <String>[];
-    var hasAllOfKey = false;
     if (map case {_requiredConst: final List<dynamic> rawParameters}) {
       requiredParameters = rawParameters.map((e) => e.toString()).toList();
-    } else if (map case {_propertiesConst: final Map<String, dynamic> props}) {
-      for (final propertyName in props.keys) {
-        final propertyValue = props[propertyName] as Map<String, dynamic>;
-        if (propertyValue.containsKey(_allOfConst)) {
-          hasAllOfKey = true;
-        }
-      }
     }
 
     if (map case {_propertiesConst: final Map<String, dynamic> props}) {
@@ -820,7 +812,7 @@ class OpenApiParser {
           additionalName: additionalName,
           isRequired: (_apiInfo.schemaVersion == OAS.v2 && !config.useXNullable)
               ? isRequired
-              : isRequired || hasAllOfKey || hasDefaultKey,
+              : isRequired || hasDefaultKey,
         );
 
         var validation = propertyValue;
