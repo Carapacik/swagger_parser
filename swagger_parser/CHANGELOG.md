@@ -1,3 +1,9 @@
+## 1.45.1
+
+* Fixes OpenAPI 3 schemas without a `required` array generating every property as `required`
+  when any property uses `allOf`
+  ([#460](https://github.com/Carapacik/swagger_parser/issues/460)).
+
 ## 1.45.0
 
 * Adds `freezed_json_serialization` (default `true`) to generate Freezed models
