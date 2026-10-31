@@ -28,6 +28,7 @@ class GeneratorConfig {
     this.generateValidator = false,
     this.useFreezed3 = false,
     this.freezedJsonSerialization = true,
+    this.freezedNullablePresence = false,
     this.useMultipartFile = false,
     this.fallbackUnion,
     this.dartMappableConvenientWhen = true,
@@ -132,6 +133,12 @@ class GeneratorConfig {
 
   /// Generate Freezed JSON helpers through json_serializable.
   final bool freezedJsonSerialization;
+
+  /// DART & FREEZED ONLY
+  /// Optional. Set `true` to track whether optional nullable fields were
+  /// present in JSON, so `toJson` can tell an omitted key from an explicit
+  /// `null` (e.g. to clear a field in a PATCH request body).
+  final bool freezedNullablePresence;
 
   /// DART ONLY
   /// Optional. Set `true` to use MultipartFile instead of File as argument type

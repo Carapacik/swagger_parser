@@ -40,6 +40,7 @@ class SWPConfig {
     this.useXNullable = false,
     this.useFreezed3 = false,
     this.freezedJsonSerialization = true,
+    this.freezedNullablePresence = false,
     this.useMultipartFile = false,
     this.fallbackUnion,
     this.dartMappableConvenientWhen = false,
@@ -88,6 +89,7 @@ class SWPConfig {
     required this.useXNullable,
     required this.useFreezed3,
     required this.freezedJsonSerialization,
+    required this.freezedNullablePresence,
     required this.useMultipartFile,
     required this.excludeTags,
     required this.includeTags,
@@ -283,6 +285,10 @@ class SWPConfig {
         yamlMap['freezed_json_serialization'] as bool? ??
             rootConfig?.freezedJsonSerialization;
 
+    final freezedNullablePresence =
+        yamlMap['freezed_nullable_presence'] as bool? ??
+            rootConfig?.freezedNullablePresence;
+
     final useMultipartFile =
         yamlMap['use_multipart_file'] as bool? ?? rootConfig?.useMultipartFile;
 
@@ -431,6 +437,8 @@ class SWPConfig {
       useFreezed3: useFreezed3 ?? dc.useFreezed3,
       freezedJsonSerialization:
           freezedJsonSerialization ?? dc.freezedJsonSerialization,
+      freezedNullablePresence:
+          freezedNullablePresence ?? dc.freezedNullablePresence,
       useMultipartFile: useMultipartFile ?? dc.useMultipartFile,
       fallbackUnion: fallbackUnion,
       excludeTags: excludedTags ?? dc.excludeTags,
@@ -614,6 +622,12 @@ class SWPConfig {
   /// Generate Freezed JSON helpers through json_serializable.
   final bool freezedJsonSerialization;
 
+  /// DART & FREEZED ONLY
+  /// Optional. Set `true` to track whether optional nullable fields were
+  /// present in JSON, so `toJson` can tell an omitted key from an explicit
+  /// `null` (e.g. to clear a field in a PATCH request body).
+  final bool freezedNullablePresence;
+
   /// DART ONLY
   /// Optional. Set `true` to use MultipartFile instead of File as argument type
   /// for file parameters.
@@ -740,6 +754,7 @@ class SWPConfig {
       generateValidator: generateValidator,
       useFreezed3: useFreezed3,
       freezedJsonSerialization: freezedJsonSerialization,
+      freezedNullablePresence: freezedNullablePresence,
       useMultipartFile: useMultipartFile,
       fallbackUnion: fallbackUnion,
       dartMappableConvenientWhen: dartMappableConvenientWhen,

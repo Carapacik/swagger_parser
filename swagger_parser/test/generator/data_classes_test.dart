@@ -2639,6 +2639,165 @@ data class ClassName(
     });
   });
 
+  group('Presence aware serialization', () {
+    test('dart + freezed adds fieldPresent for optional nullable refs',
+        () async {
+      final dataClass = UniversalComponentClass(
+        name: 'UpdateAppointmentDto',
+        imports: const {'UpdateRecurringRuleDto'},
+        parameters: {
+          const UniversalType(
+            type: 'string',
+            name: 'appointmentId',
+            isRequired: true,
+          ),
+          const UniversalType(
+            type: 'UpdateRecurringRuleDto',
+            name: 'recurringRuleData',
+            isRequired: false,
+            referencedNullable: true,
+          ),
+          const UniversalType(
+            type: 'string',
+            name: 'notes',
+            isRequired: false,
+            nullable: true,
+          ),
+        },
+      );
+      const fillController = FillController(
+        config: GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+          includeIfNull: true,
+          freezedNullablePresence: true,
+        ),
+      );
+      final filledContent = fillController.fillDtoContent(dataClass);
+      const expectedContents = r'''
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'update_recurring_rule_dto.dart';
+
+part 'update_appointment_dto.freezed.dart';
+part 'update_appointment_dto.g.dart';
+
+@Freezed(fromJson: false, toJson: false)
+class UpdateAppointmentDto with _$UpdateAppointmentDto {
+  const UpdateAppointmentDto._();
+
+  const factory UpdateAppointmentDto({
+    required String appointmentId,
+    @JsonKey(includeIfNull: false)
+    UpdateRecurringRuleDto? recurringRuleData,
+    @Default(false)
+    bool recurringRuleDataPresent,
+    @JsonKey(includeIfNull: false)
+    String? notes,
+    @Default(false)
+    bool notesPresent,
+  }) = _UpdateAppointmentDto;
+
+  factory UpdateAppointmentDto.fromJson(Map<String, Object?> json) {
+    final data = _UpdateAppointmentDtoJson.fromJson(json);
+    return UpdateAppointmentDto(
+      appointmentId: data.appointmentId,
+      recurringRuleData: data.recurringRuleData,
+      recurringRuleDataPresent: json.containsKey('recurringRuleData'),
+      notes: data.notes,
+      notesPresent: json.containsKey('notes'),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    final json = _UpdateAppointmentDtoJson(
+      appointmentId: appointmentId,
+      recurringRuleData: recurringRuleData,
+      notes: notes,
+    ).toJson();
+    if (recurringRuleData == null) {
+      if (recurringRuleDataPresent) {
+        json['recurringRuleData'] = null;
+      } else {
+        json.remove('recurringRuleData');
+      }
+    }
+    if (notes == null) {
+      if (notesPresent) {
+        json['notes'] = null;
+      } else {
+        json.remove('notes');
+      }
+    }
+    return json;
+  }
+}
+
+@JsonSerializable()
+class _UpdateAppointmentDtoJson {
+  const _UpdateAppointmentDtoJson({
+    required this.appointmentId,
+    this.recurringRuleData,
+    this.notes,
+  });
+
+  factory _UpdateAppointmentDtoJson.fromJson(Map<String, Object?> json) => _$UpdateAppointmentDtoJsonFromJson(json);
+
+  final String appointmentId;
+  @JsonKey(includeIfNull: false)
+  final UpdateRecurringRuleDto? recurringRuleData;
+  @JsonKey(includeIfNull: false)
+  final String? notes;
+
+  Map<String, Object?> toJson() => _$UpdateAppointmentDtoJsonToJson(this);
+}
+''';
+      expect(filledContent.content, expectedContents);
+    });
+    for (final (description, config) in [
+      (
+        'is opt-in',
+        const GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+          includeIfNull: true,
+        ),
+      ),
+      (
+        'is skipped without JSON serialization',
+        const GeneratorConfig(
+          name: '',
+          outputDirectory: '',
+          jsonSerializer: JsonSerializer.freezed,
+          useFreezed3: true,
+          freezedJsonSerialization: false,
+          freezedNullablePresence: true,
+        ),
+      ),
+    ]) {
+      test('dart + freezed presence tracking $description', () {
+        final dataClass = UniversalComponentClass(
+          name: 'ClassName',
+          imports: const {},
+          parameters: {
+            const UniversalType(
+              type: 'string',
+              name: 'notes',
+              isRequired: false,
+              nullable: true,
+            ),
+          },
+        );
+        final content =
+            FillController(config: config).fillDtoContent(dataClass).content;
+        expect(content, isNot(contains('notesPresent')));
+        expect(content, isNot(contains('_ClassNameJson')));
+      });
+    }
+  });
+
   group('description', () {
     test('dart + json_serializable', () async {
       final dataClass = UniversalComponentClass(

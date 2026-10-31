@@ -10,6 +10,7 @@ String dartFreezedDtoTemplate(
   UniversalComponentClass dataClass, {
   required bool useMultipartFile,
   required bool includeIfNull,
+  bool nullablePresence = false,
   bool generateValidator = false,
   bool isV3 = false,
   bool jsonSerialization = true,
@@ -26,6 +27,10 @@ String dartFreezedDtoTemplate(
       'Flutter compute requires Freezed JSON serialization.',
     );
   }
+  final trackNullablePresence = nullablePresence &&
+      jsonSerialization &&
+      !isUnion &&
+      dataClass.parameters.any(_needsPresenceFlag);
   final serializerClass =
       useFlutterCompute ? _generateFlutterComputeSerializer(className) : '';
   final asyncImport = useFlutterCompute ? "import 'dart:async';\n\n" : '';
@@ -42,12 +47,13 @@ ${descriptionComment(dataClass.description)}@Freezed(${[
         fallbackUnion != null &&
         fallbackUnion.isNotEmpty)
       "fallbackUnion: '$fallbackUnion'",
+    if (trackNullablePresence) ...['fromJson: false', 'toJson: false'],
   ].join(', ')})
 ${_classModifier(isUnion: isUnion, isV3: isV3)}class $className with _\$$className {
-${_factories(dataClass, className, useMultipartFile, includeIfNull, fallbackUnion, isUnion: isUnion, jsonSerialization: jsonSerialization)}
-${jsonSerialization ? _jsonFactories(className, dataClass.undiscriminatedUnionVariants) : ''}
+${trackNullablePresence ? '  const $className._();\n\n' : ''}${_factories(dataClass, className, useMultipartFile, includeIfNull, fallbackUnion, isUnion: isUnion, jsonSerialization: jsonSerialization, includePresenceFlags: trackNullablePresence)}
+${jsonSerialization ? (trackNullablePresence ? _presenceAwareJsonMethods(className, dataClass.parameters) : _jsonFactories(className, dataClass.undiscriminatedUnionVariants)) : ''}
 ${generateValidator ? dataClass.parameters.map(_validationString).nonNulls.join() : ''}}
-${generateValidator ? _validateMethod(className, dataClass.parameters) : ''}$serializerClass''';
+${trackNullablePresence ? _presenceJsonHelperClass(className, dataClass.parameters, useMultipartFile, includeIfNull) : ''}${generateValidator ? _validateMethod(className, dataClass.parameters) : ''}$serializerClass''';
 }
 
 String _classModifier({required bool isUnion, required bool isV3}) {
@@ -183,10 +189,12 @@ String _validateMethod(String className, Set<UniversalType> types) {
 
 String _factories(UniversalComponentClass dataClass, String className,
     bool useMultipartFile, bool includeIfNull, String? fallbackUnion,
-    {required bool isUnion, required bool jsonSerialization}) {
+    {required bool isUnion,
+    required bool jsonSerialization,
+    bool includePresenceFlags = false}) {
   if (!isUnion) {
     return '''
-  const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters, useMultipartFile, includeIfNull)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;''';
+  const factory $className(${dataClass.parameters.isNotEmpty ? '{' : ''}${_parametersToString(dataClass.parameters, useMultipartFile, includeIfNull, includePresenceFlags: includePresenceFlags)}${dataClass.parameters.isNotEmpty ? '\n  }' : ''}) = _$className;''';
   }
 
   if (dataClass.undiscriminatedUnionVariants case final variants?
@@ -324,7 +332,8 @@ String? _validationString(UniversalType type) {
 }
 
 String _parametersToString(
-    Set<UniversalType> parameters, bool useMultipartFile, bool includeIfNull) {
+    Set<UniversalType> parameters, bool useMultipartFile, bool includeIfNull,
+    {bool includePresenceFlags = false}) {
   final sortedByRequired = Set<UniversalType>.from(
     parameters.sorted((a, b) => a.compareTo(b)),
   );
@@ -333,26 +342,15 @@ String _parametersToString(
         (i, e) =>
             '\n${i != 0 && (e.description?.isNotEmpty ?? false) ? '\n' : ''}${descriptionComment(e.description, tab: '    ')}'
             '${_jsonKey(e, includeIfNull)}    ${_required(e)}'
-            '${e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${e.name},',
+            '${e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${e.name},'
+            '${includePresenceFlags && _needsPresenceFlag(e) ? _presenceFlagParameter(e) : ''}',
       )
       .join();
 }
 
 String _jsonKey(UniversalType t, bool includeIfNull) {
   final sb = StringBuffer();
-  final jsonKeyParams = <String, String?>{};
-
-  if (includeIfNull) {
-    if (t.isRequired && (t.nullable || t.referencedNullable)) {
-      jsonKeyParams['includeIfNull'] = 'true';
-    } else if (!t.isRequired && (t.nullable || t.referencedNullable)) {
-      jsonKeyParams['includeIfNull'] = 'false';
-    }
-  }
-
-  if (t.jsonKey != null && t.name != t.jsonKey) {
-    jsonKeyParams['name'] = "'${protectJsonKey(t.jsonKey)}'";
-  }
+  final jsonKeyParams = _jsonKeyParams(t, includeIfNull);
 
   if (jsonKeyParams.isNotEmpty) {
     sb.write(
@@ -370,6 +368,24 @@ String _jsonKey(UniversalType t, bool includeIfNull) {
   return sb.toString();
 }
 
+Map<String, String?> _jsonKeyParams(UniversalType t, bool includeIfNull) {
+  final jsonKeyParams = <String, String?>{};
+
+  if (includeIfNull) {
+    if (t.isRequired && (t.nullable || t.referencedNullable)) {
+      jsonKeyParams['includeIfNull'] = 'true';
+    } else if (!t.isRequired && (t.nullable || t.referencedNullable)) {
+      jsonKeyParams['includeIfNull'] = 'false';
+    }
+  }
+
+  if (t.jsonKey != null && t.name != t.jsonKey) {
+    jsonKeyParams['name'] = "'${protectJsonKey(t.jsonKey)}'";
+  }
+
+  return jsonKeyParams;
+}
+
 /// return required if isRequired
 String _required(UniversalType t) =>
     t.isRequired && t.defaultValue == null ? 'required ' : '';
@@ -377,6 +393,96 @@ String _required(UniversalType t) =>
 /// return defaultValue if have
 String _defaultValue(UniversalType t) =>
     '${t.enumType != null ? '${t.type}.${protectDefaultEnum(t.defaultValue)?.toCamel}' : protectDefaultValue(t.defaultValue, type: t.type)}';
+
+/// Optional nullable fields get a `<name>Present` flag so `toJson` can tell an
+/// omitted key from an explicit `null` (e.g. clearing a field in a PATCH body).
+bool _needsPresenceFlag(UniversalType t) =>
+    !t.isRequired && (t.nullable || t.referencedNullable);
+
+String _presenceFlagName(UniversalType t) => '${t.name}Present';
+
+String _presenceFlagParameter(UniversalType t) => '\n'
+    '    @Default(false)\n'
+    '    bool ${_presenceFlagName(t)},';
+
+String _presenceJsonHelperName(String className) => '_${className}Json';
+
+/// `fromJson`/`toJson` for presence-aware classes. Freezed JSON generation is
+/// disabled for them, and a private json_serializable helper converts values,
+/// so the presence flags can be set from, and applied to, the raw JSON map.
+String _presenceAwareJsonMethods(
+    String className, Set<UniversalType> parameters) {
+  final sorted = parameters.sorted((a, b) => a.compareTo(b));
+  final helperName = _presenceJsonHelperName(className);
+  final fromJsonArgs = sorted.map((e) {
+    final key = protectJsonKey(e.jsonKey ?? e.name);
+    return '      ${e.name}: data.${e.name},'
+        '${_needsPresenceFlag(e) ? "\n      ${_presenceFlagName(e)}: json.containsKey('$key')," : ''}';
+  }).join('\n');
+  final toJsonArgs =
+      sorted.map((e) => '      ${e.name}: ${e.name},').join('\n');
+  final explicitNulls = sorted.where(_needsPresenceFlag).map((e) {
+    final key = protectJsonKey(e.jsonKey ?? e.name);
+    return '''
+    if (${e.name} == null) {
+      if (${_presenceFlagName(e)}) {
+        json['$key'] = null;
+      } else {
+        json.remove('$key');
+      }
+    }''';
+  }).join('\n');
+
+  return '''
+
+  factory $className.fromJson(Map<String, Object?> json) {
+    final data = $helperName.fromJson(json);
+    return $className(
+$fromJsonArgs
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    final json = $helperName(
+$toJsonArgs
+    ).toJson();
+$explicitNulls
+    return json;
+  }''';
+}
+
+String _presenceJsonHelperClass(String className, Set<UniversalType> parameters,
+    bool useMultipartFile, bool includeIfNull) {
+  final sorted = parameters.sorted((a, b) => a.compareTo(b));
+  final helperName = _presenceJsonHelperName(className);
+  final generatedName = helperName.substring(1);
+  final constructorParams = sorted.map((e) {
+    final defaultValue = e.defaultValue == null
+        ? ''
+        : ' = ${e.wrappingCollections.isNotEmpty ? 'const ' : ''}${_defaultValue(e)}';
+    return '\n    ${_required(e)}this.${e.name}$defaultValue,';
+  }).join();
+  final fields = sorted.map((e) {
+    final jsonKeyParams = _jsonKeyParams(e, includeIfNull);
+    final jsonKey = jsonKeyParams.isEmpty
+        ? ''
+        : "  @JsonKey(${jsonKeyParams.entries.map((p) => '${p.key}: ${p.value}').join(',')})\n";
+    return '\n$jsonKey  final ${e.toSuitableType(ProgrammingLanguage.dart, useMultipartFile: useMultipartFile)} ${e.name};';
+  }).join();
+
+  return '''
+
+@JsonSerializable()
+class $helperName {
+  const $helperName(${sorted.isNotEmpty ? '{$constructorParams\n  }' : ''});
+
+  factory $helperName.fromJson(Map<String, Object?> json) => _\$${generatedName}FromJson(json);
+$fields
+
+  Map<String, Object?> toJson() => _\$${generatedName}ToJson(this);
+}
+''';
+}
 
 /// Generates top-level serialization functions for Flutter compute isolate support.
 /// These functions follow Retrofit's naming convention for Parser.FlutterCompute.
