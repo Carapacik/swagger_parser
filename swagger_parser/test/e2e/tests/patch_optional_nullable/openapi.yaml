@@ -1,0 +1,51 @@
+openapi: 3.0.0
+info:
+  title: Patch Optional Nullable
+  version: 1.0.0
+paths:
+  /appointments/{appointmentId}:
+    patch:
+      operationId: updateAppointment
+      parameters:
+        - in: path
+          name: appointmentId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAppointmentDto'
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateAppointmentDto'
+components:
+  schemas:
+    UpdateRecurringRuleDto:
+      type: object
+      required:
+        - frequency
+      properties:
+        frequency:
+          type: string
+        interval:
+          type: integer
+    UpdateAppointmentDto:
+      type: object
+      properties:
+        recurringRuleData:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/UpdateRecurringRuleDto'
+        notes:
+          type: string
+          nullable: true
+        reminderEnabled:
+          type: boolean
+          default: false

@@ -34,6 +34,7 @@ final class FillController {
           generateValidator: config.generateValidator,
           useFreezed3: config.useFreezed3,
           freezedJsonSerialization: config.freezedJsonSerialization,
+          freezedNullablePresence: config.freezedNullablePresence,
           useMultipartFile: config.useMultipartFile,
           dartMappableConvenientWhen: config.dartMappableConvenientWhen,
           useDartMappableNaming: config.useDartMappableNaming,

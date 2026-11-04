@@ -1,3 +1,10 @@
+## 1.46.0
+
+* Adds `freezed_nullable_presence` (default `false`) to generate a `<name>Present` flag
+  for each optional nullable property of Freezed models, so `toJson` can tell an omitted
+  key from an explicit `null`, for example to clear a field in a PATCH request body
+  ([#477](https://github.com/Carapacik/swagger_parser/issues/477)).
+
 ## 1.45.1
 
 * Fixes OpenAPI 3 schemas without a `required` array generating every property as `required`
