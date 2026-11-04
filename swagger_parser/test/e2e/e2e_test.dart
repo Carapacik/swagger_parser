@@ -1267,6 +1267,21 @@ void main() {
       );
     });
 
+    test('patch_optional_nullable', () async {
+      await e2eTest(
+        'patch_optional_nullable',
+        (outputDirectory, schemaPath) => SWPConfig(
+          outputDirectory: outputDirectory,
+          schemaPath: schemaPath,
+          jsonSerializer: JsonSerializer.freezed,
+          putClientsInFolder: true,
+          includeIfNull: true,
+          freezedNullablePresence: true,
+        ),
+        schemaFileName: 'openapi.yaml',
+      );
+    });
+
     test('flutter_compute', () async {
       await e2eTest(
         'flutter_compute',
