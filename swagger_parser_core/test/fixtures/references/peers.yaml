@@ -1,0 +1,7 @@
+Peer:
+  type: object
+  properties:
+    name:
+      type: string
+    parent:
+      $ref: '#/Peer'

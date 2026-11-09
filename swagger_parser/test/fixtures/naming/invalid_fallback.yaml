@@ -1,0 +1,3 @@
+schema_path: naming_v3_2.yaml
+generation:
+  fallback_client_name: invalid name

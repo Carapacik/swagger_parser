@@ -1,0 +1,23 @@
+swagger_parser:
+  output_directory: "../out"
+  generation:
+    root_api_class_name: TransitApi
+    serializer: plain
+    http_client: http
+  inputs:
+    v2_0_json:
+      schema_path: "../inputs/v2_0.json"
+    v2_0_yaml:
+      schema_path: "../inputs/v2_0.yaml"
+    v3_0_json:
+      schema_path: "../inputs/v3_0.json"
+    v3_0_yaml:
+      schema_path: "../inputs/v3_0.yaml"
+    v3_1_json:
+      schema_path: "../inputs/v3_1.json"
+    v3_1_yaml:
+      schema_path: "../inputs/v3_1.yaml"
+    v3_2_json:
+      schema_path: "../inputs/v3_2.json"
+    v3_2_yaml:
+      schema_path: "../inputs/v3_2.yaml"

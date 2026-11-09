@@ -1,19 +1,29 @@
-/// Provides generation functions that generates REST clients and data classes from OpenApi definition file
-/// [swagger_parser](https://pub.dev/packages/swagger_parser)
+/// Parses OpenAPI sources and generates Dart libraries.
+///
+/// Use `FileSchemaSourceLoader` to read a local file on Dart I/O platforms.
+/// Use `SchemaSource` for text or bytes on the VM and web.
 library;
 
-export 'src/config/config_exception.dart';
-export 'src/config/config_generator_arguments.dart'
-    show parseConfigGeneratorArguments;
-export 'src/config/swp_config.dart';
-export 'src/generator/config/generator_config.dart';
-export 'src/generator/exception/generator_exception.dart';
-export 'src/generator/generator/fill_controller.dart';
-export 'src/generator/generator/generator.dart';
-export 'src/generator/generator/generator_processor.dart';
-export 'src/generator/model/field_parser.dart';
-export 'src/generator/model/generated_file.dart';
-export 'src/generator/model/json_serializer.dart';
-export 'src/generator/model/programming_language.dart';
-export 'src/parser/model/replacement_rule.dart';
-export 'src/parser/swagger_parser_core.dart';
+export 'package:swagger_parser_core/swagger_parser_core.dart';
+
+export 'src/config/generation_config.dart';
+export 'src/config/naming_config.dart';
+export 'src/config/operation_filter_config.dart';
+export 'src/config/parameter_exclusion.dart';
+export 'src/config/pipeline_config.dart';
+export 'src/config/type_mapping.dart';
+export 'src/dart/dart_code_builder.dart';
+export 'src/dart/dart_generation_model.dart';
+export 'src/dart/dart_model_mapper.dart';
+export 'src/dart/dart_operation_name.dart';
+export 'src/extraction/api_definition.dart';
+export 'src/extraction/api_definition_extractor.dart';
+export 'src/generation/dart_generator.dart';
+export 'src/generation/generation_exception.dart';
+export 'src/input/file_schema_source_loader.dart';
+export 'src/output/generated_file.dart';
+export 'src/output/generation_result.dart';
+export 'src/planning/dart_output_planner.dart';
+export 'src/planning/generation_plan.dart';
+export 'src/rendering/dart_source_renderer.dart';
+export 'src/runner/swagger_parser_runner.dart';

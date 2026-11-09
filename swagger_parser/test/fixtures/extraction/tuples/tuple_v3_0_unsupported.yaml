@@ -1,0 +1,13 @@
+openapi: 3.0.4
+info:
+  title: Unsupported tuple
+  version: '1'
+paths: {}
+components:
+  schemas:
+    Reading:
+      type: array
+      items:
+        type: string
+      prefixItems:
+        - type: string

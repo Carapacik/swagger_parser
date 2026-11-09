@@ -1,0 +1,10 @@
+---
+openapi: 3.2.1
+info:
+  title: Operation filters
+  version: '1'
+paths:
+  "/mounted/{id}":
+    "$ref": path_item.yaml
+servers:
+- url: https://example.com

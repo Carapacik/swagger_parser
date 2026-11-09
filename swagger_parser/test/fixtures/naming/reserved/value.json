@@ -1,0 +1,21 @@
+{
+  "class2": "class2",
+  "class": "class",
+  "fromJson2": "fromJson2",
+  "fromJson": "fromJson",
+  "toJson": "toJson",
+  "hashCode": "hashCode",
+  "copyWith2": "copyWith2",
+  "copyWith": "copyWith",
+  "toMap2": "toMap2",
+  "toMap": "toMap",
+  "user-id": "user-id",
+  "user_id": "user_id",
+  "response": {
+    "value": "response"
+  },
+  "text": {
+    "value": "text"
+  },
+  "status": "second"
+}

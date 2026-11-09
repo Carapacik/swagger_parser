@@ -1,0 +1,15 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "Enum contracts",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Invalid": {
+        "$ref": "v3_2_external.json#/components/schemas/Missing"
+      }
+    }
+  }
+}

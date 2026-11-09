@@ -1,0 +1,8 @@
+---
+inputs:
+  one:
+    schema_path: stations_v2_0.yaml
+    output: same
+  two:
+    schema_path: stations_v3_2.json
+    output_directory: same

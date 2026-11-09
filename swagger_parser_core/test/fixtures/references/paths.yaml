@@ -1,0 +1,12 @@
+pets:
+  get:
+    operationId: listPets
+    responses:
+      '200':
+        description: Pet list
+events:
+  get:
+    operationId: listEvents
+    responses:
+      '200':
+        description: Event list

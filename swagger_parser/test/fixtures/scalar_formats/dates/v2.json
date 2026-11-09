@@ -1,0 +1,47 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "V1 regressions",
+    "version": "1"
+  },
+  "paths": {},
+  "definitions": {
+    "CalendarDate": {
+      "type": "string",
+      "format": "date",
+      "default": "2024-02-29"
+    },
+    "DateAlias": {
+      "$ref": "#/definitions/CalendarDate"
+    },
+    "Schedule": {
+      "type": "object",
+      "required": [
+        "dates",
+        "by_name"
+      ],
+      "properties": {
+        "day": {
+          "$ref": "#/definitions/DateAlias"
+        },
+        "direct": {
+          "type": "string",
+          "format": "date",
+          "default": "2024-03-01"
+        },
+        "dates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DateAlias"
+          }
+        },
+        "by_name": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/CalendarDate"
+          }
+        }
+      }
+    }
+  }
+}

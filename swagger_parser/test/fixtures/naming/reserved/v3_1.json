@@ -1,0 +1,342 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Protected names",
+    "version": "1"
+  },
+  "paths": {
+    "/reserved": {
+      "get": {
+        "operationId": "fromJson2",
+        "tags": [
+          "Station"
+        ],
+        "responses": {
+          "200": {
+            "description": "Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reserved/{class}": {
+      "post": {
+        "operationId": "fromJson",
+        "tags": [
+          "Station"
+        ],
+        "responses": {
+          "200": {
+            "description": "Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "options2",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "options",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "extra2",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "extra",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cancelToken",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "class2",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "class",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Station"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/alias": {
+      "get": {
+        "operationId": "fetch-json",
+        "tags": [
+          "Station"
+        ],
+        "responses": {
+          "200": {
+            "description": "Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/alias-two": {
+      "get": {
+        "operationId": "fetch_json",
+        "tags": [
+          "Station"
+        ],
+        "responses": {
+          "200": {
+            "description": "Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Response2": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "String2": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "String": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "Dio": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "JsonKey": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "class": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "Api": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "StationClient": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "Response": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "Station": {
+        "type": "object",
+        "required": [
+          "class2",
+          "class",
+          "fromJson2",
+          "fromJson",
+          "toJson",
+          "hashCode",
+          "copyWith2",
+          "copyWith",
+          "toMap2",
+          "toMap",
+          "user-id",
+          "user_id",
+          "response",
+          "text",
+          "status"
+        ],
+        "properties": {
+          "class2": {
+            "type": "string"
+          },
+          "class": {
+            "type": "string"
+          },
+          "fromJson2": {
+            "type": "string"
+          },
+          "fromJson": {
+            "type": "string"
+          },
+          "toJson": {
+            "type": "string"
+          },
+          "hashCode": {
+            "type": "string"
+          },
+          "copyWith2": {
+            "type": "string"
+          },
+          "copyWith": {
+            "type": "string"
+          },
+          "toMap2": {
+            "type": "string"
+          },
+          "toMap": {
+            "type": "string"
+          },
+          "user-id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "response": {
+            "$ref": "#/components/schemas/Response"
+          },
+          "text": {
+            "$ref": "#/components/schemas/String"
+          },
+          "status": {
+            "$ref": "#/components/schemas/Status"
+          }
+        }
+      },
+      "Status": {
+        "type": "string",
+        "enum": [
+          "first",
+          "second",
+          "third",
+          "fourth"
+        ],
+        "x-enumNames": [
+          "values2",
+          "values",
+          "class",
+          "fromJson"
+        ]
+      }
+    }
+  }
+}

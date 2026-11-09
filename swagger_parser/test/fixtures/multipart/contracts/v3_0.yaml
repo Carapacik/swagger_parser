@@ -1,0 +1,593 @@
+"openapi": "3.0.4"
+"info":
+  "title": "Multipart contracts"
+  "version": "1"
+"paths":
+  "/native":
+    "post":
+      "operationId": "uploadNative"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "required":
+                - "photo"
+                - "label"
+              "properties":
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+                  "description": "Upload bytes."
+                "label":
+                  "type": "string"
+                  "description": "Required label."
+                "note":
+                  "type": "string"
+                  "description": "Optional note."
+      "responses":
+        "204":
+          "description": "Saved."
+  "/single":
+    "post":
+      "operationId": "uploadSingle"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "required":
+                - "label"
+              "properties":
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+                  "description": "Upload bytes."
+                "label":
+                  "type": "string"
+                  "description": "Required label."
+                "note":
+                  "type": "string"
+                  "description": "Optional note."
+      "responses":
+        "204":
+          "description": "Saved."
+  "/escaped":
+    "post":
+      "operationId": "uploadEscaped"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "required":
+                - "photo$main"
+              "properties":
+                "photo$main":
+                  "type": "string"
+                  "format": "binary"
+                "class":
+                  "type": "string"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/form":
+    "post":
+      "operationId": "nativeForm"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "application/x-www-form-urlencoded":
+            "schema":
+              "type": "object"
+              "required":
+                - "name"
+              "properties":
+                "name":
+                  "type": "string"
+                "note":
+                  "type": "string"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/form-list":
+    "post":
+      "operationId": "formList"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "application/x-www-form-urlencoded":
+            "schema":
+              "type": "object"
+              "required":
+                - "tags"
+              "properties":
+                "tags":
+                  "type": "array"
+                  "items":
+                    "type": "string"
+                "note":
+                  "type": "string"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/enums":
+    "post":
+      "operationId": "optionalEnums"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "mode":
+                  "type": "string"
+                  "enum":
+                    - "ready"
+                    - ""
+                    - null
+                  "nullable": true
+                "code":
+                  "type": "integer"
+                  "enum":
+                    - 1
+                    - 2
+                    - null
+                  "nullable": true
+      "responses":
+        "204":
+          "description": "Saved."
+  "/nulls":
+    "post":
+      "operationId": "nullableParts"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "required":
+                - "requiredText"
+                - "requiredFile"
+              "properties":
+                "requiredText":
+                  "type": "string"
+                  "nullable": true
+                "optionalText":
+                  "type": "string"
+                  "nullable": true
+                "requiredFile":
+                  "type": "string"
+                  "format": "binary"
+                  "nullable": true
+                "optionalFile":
+                  "type": "string"
+                  "format": "binary"
+                  "nullable": true
+      "responses":
+        "204":
+          "description": "Saved."
+  "/null-lists":
+    "post":
+      "operationId": "nullableLists"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "required":
+                - "files"
+                - "texts"
+              "properties":
+                "files":
+                  "type": "array"
+                  "items":
+                    "type": "string"
+                    "format": "binary"
+                    "nullable": true
+                  "nullable": true
+                "texts":
+                  "type": "array"
+                  "items":
+                    "type": "string"
+                    "nullable": true
+                  "nullable": true
+                "csv":
+                  "type": "array"
+                  "items":
+                    "type": "string"
+                    "nullable": true
+                  "nullable": true
+            "encoding":
+              "csv":
+                "style": "form"
+                "explode": false
+      "responses":
+        "204":
+          "description": "Saved."
+  "/json-parts":
+    "post":
+      "operationId": "jsonParts"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "required":
+                - "requiredJson"
+                - "values"
+              "properties":
+                "requiredJson":
+                  "type": "string"
+                  "nullable": true
+                "optionalJson":
+                  "type": "string"
+                  "nullable": true
+                "values":
+                  "type": "array"
+                  "items":
+                    "type": "string"
+                    "nullable": true
+                  "nullable": true
+            "encoding":
+              "requiredJson":
+                "contentType": "application/json"
+              "optionalJson":
+                "contentType": "application/json"
+              "values":
+                "contentType": "application/json"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/optional-json-part":
+    "post":
+      "operationId": "optionalJsonPart"
+      "requestBody":
+        "required": false
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "value":
+                  "type": "string"
+                  "nullable": true
+            "encoding":
+              "value":
+                "contentType": "application/json"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/optional-fields":
+    "post":
+      "operationId": "optionalFields"
+      "requestBody":
+        "required": false
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "required":
+                - "caption"
+              "properties":
+                "caption":
+                  "type": "string"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/referenced":
+    "post":
+      "operationId": "uploadReferenced"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "$ref": "#/components/schemas/Upload"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/inline":
+    "post":
+      "operationId": "uploadInline"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "required":
+                - "label"
+              "properties":
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+                  "description": "Upload bytes."
+                "label":
+                  "type": "string"
+                  "description": "Required label."
+                "note":
+                  "type": "string"
+                  "description": "Optional note."
+      "responses":
+        "204":
+          "description": "Saved."
+  "/json":
+    "post":
+      "operationId": "echoUpload"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/Upload"
+      "responses":
+        "200":
+          "description": "Echo."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Upload"
+  "/files":
+    "post":
+      "operationId": "uploadFiles"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "required":
+                - "files"
+                - "tags"
+              "properties":
+                "files":
+                  "type": "array"
+                  "items":
+                    "type": "string"
+                    "format": "binary"
+                "tags":
+                  "type": "array"
+                  "items":
+                    "type": "string"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/objects":
+    "post":
+      "operationId": "uploadObjects"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "required":
+                - "photo"
+                - "metadata"
+                - "nested"
+                - "inlineObject"
+                - "external"
+              "properties":
+                "photo":
+                  "type": "string"
+                  "format": "binary"
+                "metadata":
+                  "$ref": "#/components/schemas/Metadata"
+                "nested":
+                  "type": "array"
+                  "items":
+                    "type": "array"
+                    "items":
+                      "type": "integer"
+                "inlineObject":
+                  "type": "object"
+                  "required":
+                    - "code"
+                  "properties":
+                    "code":
+                      "type": "integer"
+                "external":
+                  "$ref": "v3_0_external.yaml#/components/schemas/ExternalMetadata"
+            "encoding":
+              "photo":
+                "contentType": "image/png"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/empty":
+    "post":
+      "operationId": "rawEmpty"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "$ref": "#/components/schemas/Empty"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/closed":
+    "post":
+      "operationId": "rawClosed"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "$ref": "#/components/schemas/Closed"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/dynamic":
+    "post":
+      "operationId": "rawDynamic"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "$ref": "#/components/schemas/Dynamic"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/array":
+    "post":
+      "operationId": "rawArray"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "$ref": "#/components/schemas/Array"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/optional":
+    "post":
+      "operationId": "rawOptional"
+      "requestBody":
+        "required": false
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "$ref": "#/components/schemas/Optional"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/external-empty":
+    "post":
+      "operationId": "rawExternalEmpty"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "$ref": "#/components/schemas/ExternalEmpty"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/inline-empty":
+    "post":
+      "operationId": "rawInlineEmpty"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/composed":
+    "post":
+      "operationId": "uploadComposed"
+      "requestBody":
+        "required": true
+        "description": "Upload fields."
+        "content":
+          "multipart/form-data":
+            "schema":
+              "$ref": "#/components/schemas/ComposedUpload"
+      "responses":
+        "204":
+          "description": "Saved."
+  "/none":
+    "post":
+      "operationId": "noBody"
+      "responses":
+        "204":
+          "description": "Saved."
+"components":
+  "schemas":
+    "Metadata":
+      "type": "object"
+      "required":
+        - "title"
+        - "details"
+      "properties":
+        "title":
+          "type": "string"
+        "details":
+          "type": "object"
+          "required":
+            - "count"
+          "properties":
+            "count":
+              "type": "integer"
+    "Upload":
+      "type": "object"
+      "required":
+        - "label"
+      "properties":
+        "photo":
+          "type": "string"
+          "format": "binary"
+          "description": "Upload bytes."
+        "label":
+          "type": "string"
+          "description": "Required label."
+        "note":
+          "type": "string"
+          "description": "Optional note."
+    "Empty":
+      "type": "object"
+    "Closed":
+      "type": "object"
+      "additionalProperties": false
+    "Dynamic":
+      "type": "object"
+      "additionalProperties":
+        "type": "integer"
+    "Array":
+      "type": "array"
+      "items":
+        "type": "object"
+        "required":
+          - "value"
+        "properties":
+          "value":
+            "type": "integer"
+    "Optional":
+      "type": "object"
+    "ExternalEmpty":
+      "$ref": "v3_0_external.yaml#/components/schemas/Empty"
+    "ComposedUpload":
+      "allOf":
+        -
+          "$ref": "#/components/schemas/Upload"
+        -
+          "type": "object"
+          "required":
+            - "caption"
+          "properties":
+            "caption":
+              "type": "string"

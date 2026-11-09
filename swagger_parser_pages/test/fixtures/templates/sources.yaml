@@ -1,0 +1,22 @@
+overrides:
+  models: |
+    // Custom model output.
+    {{defaultSource}}
+  client: |
+    {{defaultSource}}
+    abstract final class {{library.clientName}}Routes {
+    {{#library.operations}}
+      static const {{name}} = {{pathLiteral}};
+    {{/library.operations}}
+    }
+files:
+  - output: helpers/page.dart
+    source: |
+      class Page<T> {
+        const Page({required this.items});
+        final List<T> items;
+      }
+  - output: helpers/internal.dart
+    export: false
+    source: |
+      const internalValue = 1;

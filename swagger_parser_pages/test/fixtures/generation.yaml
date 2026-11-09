@@ -1,0 +1,15 @@
+swagger_parser:
+  schema_path: ignored.yaml
+  output_directory: lib/generated
+  parse:
+    capture_source_locations: true
+  normalize:
+    explicit_parameter_serialization: true
+  generation:
+    root_api_class_name: TransitApi
+    file_suffix: .api
+    api_metadata: generate
+    generate_docs: false
+    operation_filters:
+      include_paths:
+        - /stations/**

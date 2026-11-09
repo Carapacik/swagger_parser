@@ -1,0 +1,7 @@
+"schema_path": "v3_2.yaml"
+"generation":
+  "exclude_parameters":
+    -
+      "name": "x"
+      "in": "query"
+      "tag": "x"

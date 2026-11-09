@@ -1,0 +1,408 @@
+{
+  "info": {
+    "title": "Fixed discriminator",
+    "version": "1"
+  },
+  "paths": {},
+  "openapi": "3.0.4",
+  "components": {
+    "schemas": {
+      "RailStop": {
+        "type": "object",
+        "required": [
+          "kind",
+          "platform"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "rail"
+            ]
+          },
+          "platform": {
+            "type": "integer"
+          }
+        },
+        "default": {
+          "kind": "rail",
+          "platform": 4
+        }
+      },
+      "BusStop": {
+        "type": "object",
+        "required": [
+          "kind",
+          "platform"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "bus"
+            ]
+          },
+          "platform": {
+            "type": "integer"
+          }
+        }
+      },
+      "AliasStop": {
+        "type": "object",
+        "required": [
+          "kind",
+          "platform"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "rail",
+              "train"
+            ]
+          },
+          "platform": {
+            "type": "integer"
+          }
+        }
+      },
+      "OptionalStop": {
+        "type": "object",
+        "required": [
+          "platform"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "optional"
+            ]
+          },
+          "platform": {
+            "type": "integer"
+          }
+        }
+      },
+      "Unmarked": {
+        "type": "object",
+        "required": [
+          "kind",
+          "platform"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "unmarked"
+            ]
+          },
+          "platform": {
+            "type": "integer"
+          }
+        }
+      },
+      "LooseStop": {
+        "type": "object",
+        "required": [
+          "kind",
+          "platform"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "platform": {
+            "type": "integer"
+          }
+        },
+        "discriminator": {
+          "propertyName": "kind"
+        }
+      },
+      "Base": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "kind"
+        },
+        "required": [
+          "kind"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string"
+          }
+        }
+      },
+      "Inherited": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Base"
+          },
+          {
+            "type": "object",
+            "required": [
+              "kind",
+              "platform"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "inherited"
+                ]
+              },
+              "platform": {
+                "type": "integer"
+              }
+            }
+          }
+        ]
+      },
+      "Kind": {
+        "type": "string",
+        "enum": [
+          "wrapped"
+        ]
+      },
+      "KindAlias": {
+        "$ref": "#/components/schemas/Kind"
+      },
+      "Wrapped": {
+        "type": "object",
+        "required": [
+          "kind",
+          "platform"
+        ],
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/KindAlias"
+          },
+          "platform": {
+            "type": "integer"
+          }
+        },
+        "discriminator": {
+          "propertyName": "kind"
+        }
+      },
+      "Closed": {
+        "type": "object",
+        "required": [
+          "kind",
+          "platform"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "closed"
+            ]
+          },
+          "platform": {
+            "type": "integer"
+          }
+        },
+        "discriminator": {
+          "propertyName": "kind"
+        },
+        "additionalProperties": false
+      },
+      "TagOnly": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "kind"
+        },
+        "required": [
+          "kind"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "only"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReservedTag": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "class"
+        },
+        "required": [
+          "class"
+        ],
+        "properties": {
+          "class": {
+            "type": "string",
+            "enum": [
+              "rail$stop"
+            ]
+          }
+        }
+      },
+      "Envelope": {
+        "type": "object",
+        "properties": {
+          "stop": {
+            "$ref": "#/components/schemas/RailStop"
+          }
+        }
+      },
+      "NullableStop": {
+        "type": "object",
+        "required": [
+          "kind",
+          "platform"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "nullable",
+              null
+            ],
+            "nullable": true
+          },
+          "platform": {
+            "type": "integer"
+          }
+        },
+        "discriminator": {
+          "propertyName": "kind"
+        }
+      },
+      "Stop": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/RailStop"
+          },
+          {
+            "$ref": "#/components/schemas/BusStop"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "rail": "#/components/schemas/RailStop",
+            "bus": "#/components/schemas/BusStop"
+          }
+        }
+      },
+      "Aliases": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/AliasStop"
+          },
+          {
+            "$ref": "#/components/schemas/OptionalStop"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "rail": "#/components/schemas/AliasStop",
+            "train": "#/components/schemas/AliasStop",
+            "optional": "#/components/schemas/OptionalStop"
+          }
+        }
+      },
+      "Untagged": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Unmarked"
+          },
+          {
+            "type": "object",
+            "required": [
+              "kind",
+              "platform"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "other"
+                ]
+              },
+              "platform": {
+                "type": "integer"
+              }
+            }
+          }
+        ]
+      },
+      "AnyStop": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Inherited"
+          },
+          {
+            "$ref": "#/components/schemas/Wrapped"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "inherited": "#/components/schemas/Inherited",
+            "wrapped": "#/components/schemas/Wrapped"
+          }
+        }
+      },
+      "TypedRailStop": {
+        "type": "object",
+        "required": [
+          "type",
+          "kind"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "rail"
+            ]
+          },
+          "kind": {
+            "type": "string"
+          }
+        }
+      },
+      "TypedBusStop": {
+        "type": "object",
+        "required": [
+          "type",
+          "kind"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "bus"
+            ]
+          },
+          "kind": {
+            "type": "string"
+          }
+        }
+      },
+      "TypedStop": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/TypedRailStop"
+          },
+          {
+            "$ref": "#/components/schemas/TypedBusStop"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "rail": "#/components/schemas/TypedRailStop",
+            "bus": "#/components/schemas/TypedBusStop"
+          }
+        }
+      }
+    }
+  }
+}

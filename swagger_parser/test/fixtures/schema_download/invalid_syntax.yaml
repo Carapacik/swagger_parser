@@ -1,0 +1,6 @@
+schema_url: https://example.com/openapi.yaml
+schema_download:
+  credentials:
+    - origin: https://example.com
+      headers:
+        Authorization: [syntax-secret

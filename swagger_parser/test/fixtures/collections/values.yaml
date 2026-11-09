@@ -1,0 +1,55 @@
+chains:
+  root:
+    name: "root"
+    children:
+      next:
+        name: "child"
+        meta:
+          code: 7
+rows:
+  - r:
+      name: "root"
+      children:
+        next:
+          name: "child"
+          meta:
+            code: 7
+deep:
+  - r:
+      - name: "root"
+        children:
+          next:
+            name: "child"
+            meta:
+              code: 7
+strings:
+  errors:
+    - "one"
+    - "two"
+untyped:
+  n: 1
+  text: "a"
+  null: null
+  list:
+    - 1
+    - ok: true
+free_values:
+  obj:
+    nested:
+      - 1
+      - 2
+nullable_map: null
+nullable_lists:
+  absent: null
+  present:
+    - "yes"
+nullable_items:
+  values:
+    - null
+    - "yes"
+first:
+  left: "a"
+  extra: "kept"
+second:
+  right: 2
+  extra: 3

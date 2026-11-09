@@ -1,0 +1,5 @@
+---
+inputs:
+  missing:
+    generation:
+      http_client: dio

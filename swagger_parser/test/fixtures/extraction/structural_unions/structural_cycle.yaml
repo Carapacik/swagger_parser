@@ -1,0 +1,14 @@
+openapi: 3.1.2
+info:
+  title: Same-value recursion
+  version: '1'
+components:
+  schemas:
+    Cycle:
+      oneOf:
+        - $ref: '#/components/schemas/Link'
+        - type: string
+    Link:
+      anyOf:
+        - $ref: '#/components/schemas/Cycle'
+        - type: integer

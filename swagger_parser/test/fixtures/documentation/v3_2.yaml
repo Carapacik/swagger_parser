@@ -1,0 +1,187 @@
+openapi: "3.2.1"
+info:
+  title: "Docs"
+  version: "1"
+paths:
+  "/stations":
+    get:
+      operationId: "getStation"
+      summary: "Get summary."
+      description: "Get description."
+      deprecated: true
+      parameters:
+        - "$ref": "#/components/parameters/Limit"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Station"
+    post:
+      operationId: "saveStation"
+      summary: "Save summary only."
+      responses:
+        "204":
+          description: "Saved"
+      requestBody:
+        required: true
+        description: "Station payload."
+        content:
+          "application/json":
+            schema:
+              "$ref": "#/components/schemas/Station"
+  "/form":
+    post:
+      operationId: "sendForm"
+      description: "Send description only."
+      responses:
+        "204":
+          description: "Sent"
+      requestBody:
+        required: true
+        content:
+          "application/x-www-form-urlencoded":
+            schema:
+              type: "object"
+              properties:
+                label:
+                  type: "string"
+                  description: "Form label."
+                  deprecated: true
+components:
+  schemas:
+    Station:
+      type: "object"
+      summary: "Station summary."
+      description: |-
+        Station description.
+
+        Keep $value, "quotes", \paths, */ and Привет.
+      deprecated: true
+      required:
+        - "id"
+        - "kind"
+      properties:
+        id:
+          type: "string"
+          description: "Station identifier."
+          deprecated: true
+        kind:
+          type: "string"
+          enum:
+            - "rail"
+          description: "Wire kind."
+        stops:
+          type: "array"
+          description: "Ordered stops."
+          items:
+            type: "string"
+            description: "One stop."
+        state:
+          "$ref": "#/components/schemas/Status"
+          description: "Local reference description."
+        count:
+          type: "integer"
+          default: 1
+          description: "Count default."
+    Status:
+      type: "string"
+      enum:
+        - "active"
+        - "closed"
+      description: "Status description."
+      deprecated: true
+    Code:
+      type: "string"
+      description: "Code description."
+      deprecated: true
+    Base:
+      type: "object"
+      required:
+        - "base_id"
+      properties:
+        base_id:
+          type: "string"
+          description: "Inherited identifier."
+          deprecated: true
+    Extended:
+      description: "Extended description."
+      allOf:
+        - "$ref": "#/components/schemas/Base"
+        - type: "object"
+          properties:
+            note:
+              type: "string"
+              description: "Local note."
+    SummaryOnly:
+      type: "object"
+      summary: "Summary without description."
+      properties:
+        value:
+          type: "string"
+    Undocumented:
+      type: "object"
+      properties:
+        value:
+          type: "string"
+    Stop:
+      oneOf:
+        - "$ref": "#/components/schemas/Rail"
+        - "$ref": "#/components/schemas/Bus"
+      description: "Stop description."
+      deprecated: true
+      discriminator:
+        propertyName: "type"
+        mapping:
+          rail: "#/components/schemas/Rail"
+          bus: "#/components/schemas/Bus"
+    Rail:
+      type: "object"
+      description: "Rail description."
+      required:
+        - "type"
+        - "platform"
+      properties:
+        type:
+          type: "string"
+          enum:
+            - "rail"
+          description: "Rail type."
+          deprecated: true
+        platform:
+          type: "integer"
+          description: "Rail platform."
+          deprecated: true
+    Bus:
+      type: "object"
+      description: "Bus description."
+      required:
+        - "type"
+        - "route"
+      properties:
+        type:
+          type: "string"
+          enum:
+            - "bus"
+        route:
+          type: "string"
+          description: "Bus route."
+    Choice:
+      description: "Choice description."
+      deprecated: true
+      oneOf:
+        - type: "integer"
+        - type: "string"
+  parameters:
+    Limit:
+      name: "limit"
+      in: "query"
+      description: |-
+        Maximum stations.
+
+        Keep $limit and \literal.
+      deprecated: true
+      schema:
+        type: "integer"
+        default: 25

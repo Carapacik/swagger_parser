@@ -1,0 +1,17 @@
+openapi: 3.1.2
+info:
+  title: Invalid mapping
+  version: '1'
+components:
+  schemas:
+    Union:
+      oneOf:
+        - $ref: '#/components/schemas/Listed'
+      discriminator:
+        propertyName: kind
+        mapping:
+          'bad/~': Other
+    Listed:
+      type: object
+    Other:
+      type: object

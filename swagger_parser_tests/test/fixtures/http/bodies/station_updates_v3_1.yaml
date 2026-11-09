@@ -1,0 +1,76 @@
+openapi: 3.1.2
+info:
+  title: Station updates
+  version: '1'
+paths:
+  /stations/{ids}:
+    delete:
+      operationId: removeStations
+      parameters:
+        - name: ids
+          in: path
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: X-Station-Ids
+          in: header
+          schema:
+            type: array
+            items:
+              type: integer
+          style: simple
+          explode: true
+        - name: X-Flags
+          in: header
+          required: true
+          schema:
+            type: array
+            items:
+              type: boolean
+      responses:
+        '204':
+          description: Complete
+  /stations:
+    put:
+      operationId: replaceStation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Update"
+      responses:
+        '204':
+          description: Complete
+    patch:
+      operationId: renameStation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Update"
+      responses:
+        '204':
+          description: Complete
+    delete:
+      operationId: clearStations
+      responses:
+        '204':
+          description: Complete
+    post:
+      operationId: refreshStations
+      responses:
+        '204':
+          description: Complete
+components:
+  schemas:
+    Update:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name

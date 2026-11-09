@@ -1,0 +1,18 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Reference contracts",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "A": {
+        "$ref": "#/components/schemas/B"
+      },
+      "B": {
+        "$ref": "#/components/schemas/A"
+      }
+    }
+  }
+}

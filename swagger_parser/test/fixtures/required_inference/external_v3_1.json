@@ -1,0 +1,22 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "External fields",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Nullable": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "Default": {
+        "type": "string",
+        "default": "Outside"
+      }
+    }
+  }
+}

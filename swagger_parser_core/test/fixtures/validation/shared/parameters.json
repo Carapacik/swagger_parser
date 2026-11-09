@@ -1,0 +1,9 @@
+{
+  "alias": {"$ref": "#/id"},
+  "id": {"name": "id", "in": "path", "required": true, "schema": {"type": "string"}},
+  "station": {"name": "station", "in": "path", "required": true, "schema": {"type": "string"}},
+  "filter": {"name": "id", "in": "query", "schema": {"type": "string"}},
+  "optional": {"name": "id", "in": "path", "required": false, "schema": {"type": "string"}},
+  "unnamed": {"in": "path", "required": true, "schema": {"type": "string"}},
+  "loop": {"$ref": "#/loop"}
+}

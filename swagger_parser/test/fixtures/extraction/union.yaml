@@ -1,0 +1,10 @@
+openapi: 3.1.2
+info:
+  title: Unions
+  version: '1'
+components:
+  schemas:
+    Union:
+      oneOf:
+        - type: string
+        - type: integer

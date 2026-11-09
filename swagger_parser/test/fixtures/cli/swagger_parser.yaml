@@ -1,0 +1,14 @@
+input: specs/mounted.yaml
+output: generated
+parse:
+  max_depth: 100
+  capture_source_locations: true
+  unknown_fields: preserve
+normalize:
+  explicit_parameter_serialization: true
+generation:
+  http_client: http
+  response_mode: all_statuses
+  generate_docs: false
+  stream_binary_responses: true
+  page_width: 100

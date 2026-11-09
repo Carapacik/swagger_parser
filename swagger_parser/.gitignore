@@ -1,9 +1,0 @@
-.dart_tool/
-.packages
-build/
-pubspec.lock
-.idea
-swagger_parser.yaml
-!example/swagger_parser.yaml
-**/generated_files/**
-test_project/

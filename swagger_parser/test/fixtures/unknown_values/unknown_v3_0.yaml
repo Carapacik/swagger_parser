@@ -1,0 +1,153 @@
+openapi: "3.0.4"
+info:
+  title: "Unknown values"
+  version: "1"
+paths:
+  /status:
+    get:
+      operationId: "getStatus"
+      responses:
+        "200":
+          description: "Result"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Status"
+  /stop:
+    get:
+      operationId: "getStop"
+      responses:
+        "200":
+          description: "Result"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stop"
+  /envelope:
+    post:
+      operationId: "saveEnvelope"
+      responses:
+        "200":
+          description: "Result"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Envelope"
+components:
+  schemas:
+    Status:
+      type: "string"
+      enum:
+        - "active"
+        - "disabled"
+      default: "active"
+    NumericStatus:
+      type: "integer"
+      enum:
+        - 1
+        - 2
+    Fraction:
+      type: "number"
+      enum:
+        - 1.5
+    Flag:
+      type: "boolean"
+      enum:
+        - true
+    Collision:
+      type: "string"
+      enum:
+        - "known"
+    CollisionValue:
+      type: "object"
+    CollisionKnown:
+      type: "object"
+    CollisionUnknown:
+      type: "object"
+    Stop:
+      oneOf:
+        -
+          $ref: "#/components/schemas/Rail"
+        -
+          $ref: "#/components/schemas/Bus"
+        -
+          $ref: "#/components/schemas/Alias"
+      discriminator:
+        propertyName: "kind"
+        mapping:
+          Rail: "#/components/schemas/Rail"
+          Bus: "#/components/schemas/Bus"
+          Alias: "#/components/schemas/Alias"
+          Train: "#/components/schemas/Alias"
+    Rail:
+      type: "object"
+      required:
+        - "kind"
+        - "platform"
+      properties:
+        kind:
+          type: "string"
+          enum:
+            - "Rail"
+        platform:
+          type: "integer"
+    Bus:
+      type: "object"
+      required:
+        - "kind"
+        - "platform"
+      properties:
+        kind:
+          type: "string"
+          enum:
+            - "Bus"
+        platform:
+          type: "integer"
+    Alias:
+      type: "object"
+      required:
+        - "kind"
+        - "platform"
+      properties:
+        kind:
+          type: "string"
+          enum:
+            - "Alias"
+            - "Train"
+        platform:
+          type: "integer"
+    Envelope:
+      type: "object"
+      required:
+        - "status"
+        - "stop"
+        - "numeric"
+        - "flag"
+        - "fraction"
+      properties:
+        status:
+          $ref: "#/components/schemas/Status"
+        stop:
+          $ref: "#/components/schemas/Stop"
+        numeric:
+          $ref: "#/components/schemas/NumericStatus"
+        flag:
+          $ref: "#/components/schemas/Flag"
+        fraction:
+          $ref: "#/components/schemas/Fraction"
+        history:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Status"
+        by_name:
+          type: "object"
+          additionalProperties:
+            $ref: "#/components/schemas/Status"
+        fallback:
+          $ref: "#/components/schemas/Status"

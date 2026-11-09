@@ -1,0 +1,200 @@
+"swagger": "2.0"
+"info":
+  "title": "Parameter defaults"
+  "version": "1"
+"paths":
+  "/native/{id}":
+    "get":
+      "operationId": "getNative"
+      "parameters":
+        -
+          "name": "id"
+          "in": "path"
+          "required": true
+          "type": "string"
+          "default": "ignored"
+        -
+          "name": "limit"
+          "in": "query"
+          "required": false
+          "type": "integer"
+          "default": 25
+      "responses":
+        "200":
+          "description": "Result"
+          "schema":
+            "$ref": "#/definitions/Station"
+  "/stations":
+    "get":
+      "operationId": "getStations"
+      "parameters":
+        -
+          "name": "requiredLimit"
+          "in": "query"
+          "required": true
+          "type": "integer"
+          "default": 9
+        -
+          "name": "limit"
+          "in": "query"
+          "required": false
+          "type": "integer"
+          "default": 25
+        -
+          "name": "archived"
+          "in": "query"
+          "required": false
+          "type": "boolean"
+          "default": false
+        -
+          "name": "label"
+          "in": "query"
+          "required": false
+          "type": "string"
+          "default": "North $1"
+        -
+          "name": "status"
+          "in": "query"
+          "required": false
+          "type": "string"
+          "enum":
+            - "active"
+            - "paused"
+          "default": "active"
+        -
+          "name": "tags"
+          "in": "query"
+          "required": false
+          "type": "array"
+          "items":
+            "type": "string"
+          "default":
+            - "north"
+            - "west"
+          "collectionFormat": "multi"
+        -
+          "name": "X-Region"
+          "in": "header"
+          "required": false
+          "type": "string"
+          "default": "west"
+        -
+          "name": "stationId"
+          "in": "query"
+          "required": false
+          "type": "string"
+          "format": "station-id"
+          "default": "unknown"
+      "responses":
+        "200":
+          "description": "Result"
+          "schema":
+            "$ref": "#/definitions/Station"
+  "/submitForm":
+    "post":
+      "operationId": "submitForm"
+      "responses":
+        "200":
+          "description": "Result"
+          "schema":
+            "$ref": "#/definitions/Station"
+      "consumes":
+        - "application/x-www-form-urlencoded"
+      "parameters":
+        -
+          "name": "token"
+          "in": "formData"
+          "required": true
+          "type": "string"
+          "default": "ignored"
+        -
+          "name": "count"
+          "in": "formData"
+          "required": false
+          "type": "integer"
+          "default": 3
+        -
+          "name": "enabled"
+          "in": "formData"
+          "required": false
+          "type": "boolean"
+          "default": false
+        -
+          "name": "label"
+          "in": "formData"
+          "required": false
+          "type": "string"
+          "default": "default label"
+  "/upload":
+    "post":
+      "operationId": "upload"
+      "responses":
+        "200":
+          "description": "Result"
+          "schema":
+            "$ref": "#/definitions/Station"
+      "consumes":
+        - "multipart/form-data"
+      "parameters":
+        -
+          "name": "token"
+          "in": "formData"
+          "required": true
+          "type": "string"
+          "default": "ignored"
+        -
+          "name": "count"
+          "in": "formData"
+          "required": false
+          "type": "integer"
+          "default": 3
+        -
+          "name": "enabled"
+          "in": "formData"
+          "required": false
+          "type": "boolean"
+          "default": false
+        -
+          "name": "label"
+          "in": "formData"
+          "required": false
+          "type": "string"
+          "default": "default label"
+        -
+          "name": "file"
+          "in": "formData"
+          "required": true
+          "type": "file"
+  "/create":
+    "post":
+      "operationId": "createStation"
+      "responses":
+        "200":
+          "description": "Result"
+          "schema":
+            "$ref": "#/definitions/Station"
+      "parameters":
+        -
+          "name": "body"
+          "in": "body"
+          "required": false
+          "schema":
+            "$ref": "#/definitions/CreateStation"
+"definitions":
+  "Station":
+    "type": "object"
+    "required":
+      - "name"
+    "properties":
+      "name":
+        "type": "string"
+  "CreateStation":
+    "type": "object"
+    "default":
+      "name": "Root"
+    "properties":
+      "name":
+        "type": "string"
+        "default": "Unnamed"
+"produces":
+  - "application/json"

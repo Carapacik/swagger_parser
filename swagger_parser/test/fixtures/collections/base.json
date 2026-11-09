@@ -1,0 +1,15 @@
+{
+  "defs": {
+    "Meta/Value~": {
+      "type": "object",
+      "required": [
+        "code"
+      ],
+      "properties": {
+        "code": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

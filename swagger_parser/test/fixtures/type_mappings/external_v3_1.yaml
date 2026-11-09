@@ -1,0 +1,9 @@
+openapi: "3.1.2"
+info:
+  title: "External types"
+  version: "1"
+paths: {}
+components:
+  schemas:
+    StationId:
+      type: "string"

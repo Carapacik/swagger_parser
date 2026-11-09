@@ -1,0 +1,8 @@
+---
+schema_url: https://example.com/openapi.json
+schema_download:
+  credentials:
+  - origin: https://EXAMPLE.com:443/
+    headers:
+      Authorization:
+        env: SCHEMA_AUTHORIZATION

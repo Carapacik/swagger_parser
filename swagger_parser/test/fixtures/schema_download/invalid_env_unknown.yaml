@@ -1,0 +1,9 @@
+---
+schema_url: https://example.com/schema.json
+schema_download:
+  credentials:
+  - origin: http://127.0.0.1:PORT_A
+    headers:
+      Authorization:
+        env: TOKEN
+        prefix: 'Bearer '

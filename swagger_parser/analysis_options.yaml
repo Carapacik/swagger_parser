@@ -1,6 +1,0 @@
-include: package:carapacik_lints/core.yaml
-analyzer:
-  exclude:
-    - 'test/e2e/tests/**'
-formatter:
-  page_width: 80

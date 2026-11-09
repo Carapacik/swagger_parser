@@ -1,0 +1,218 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Contacts",
+    "version": "1"
+  },
+  "components": {
+    "schemas": {
+      "ById": {
+        "allOf": [
+          {
+            "$ref": "./structural_identity.json#identity"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "parent": {
+                "$ref": "#/components/schemas/Choice"
+              }
+            }
+          }
+        ]
+      },
+      "ByEmail": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "pattern": "@"
+          }
+        }
+      },
+      "Choice": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ById"
+          },
+          {
+            "$ref": "#/components/schemas/ByEmail"
+          }
+        ]
+      },
+      "Contact": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ById"
+          },
+          {
+            "$ref": "#/components/schemas/ByEmail"
+          }
+        ]
+      },
+      "Envelope": {
+        "type": "object",
+        "required": [
+          "contacts"
+        ],
+        "properties": {
+          "contacts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Contact"
+            }
+          }
+        }
+      },
+      "NumericChoice": {
+        "oneOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "number"
+          }
+        ]
+      },
+      "NumericViews": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "State": {
+        "oneOf": [
+          {
+            "type": "string",
+            "const": "ready"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "busy",
+              "done"
+            ]
+          }
+        ]
+      },
+      "ListChoice": {
+        "oneOf": [
+          {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "integer"
+            }
+          },
+          {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "Bounded": {
+        "type": "number",
+        "maximum": 25,
+        "anyOf": [
+          {
+            "type": "number",
+            "exclusiveMinimum": 10
+          },
+          {
+            "type": "integer",
+            "minimum": 20
+          }
+        ]
+      },
+      "Lookup": {
+        "anyOf": [
+          {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer"
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Positive": {
+        "allOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "integer",
+            "minimum": 1
+          }
+        ]
+      },
+      "PositiveOrZero": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Positive"
+          },
+          {
+            "type": "integer",
+            "const": 0
+          }
+        ]
+      },
+      "Identified": {
+        "type": "object",
+        "required": [
+          "site"
+        ],
+        "properties": {
+          "site": {
+            "type": "string"
+          }
+        },
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "alias"
+            ],
+            "properties": {
+              "alias": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

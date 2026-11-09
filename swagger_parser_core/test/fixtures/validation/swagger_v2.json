@@ -1,0 +1,8 @@
+{
+  "swagger": "2.0",
+  "info": {"title": "Pets", "version": "1"},
+  "paths": {
+    "/pets/{name}": {"$ref": "../references/paths.yaml#/pets"},
+    "/list": {"get": {"operationId": "listPets", "responses": {"200": {"description": "Pet list"}}}}
+  }
+}

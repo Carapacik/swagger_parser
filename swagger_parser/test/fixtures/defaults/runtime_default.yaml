@@ -1,0 +1,14 @@
+openapi: "3.1.2"
+info:
+  title: Invalid
+  version: "1"
+paths: {}
+components:
+  schemas:
+    Invalid:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+          default: "2026-11-06T00:00:00Z"

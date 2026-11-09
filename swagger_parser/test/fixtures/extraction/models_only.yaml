@@ -1,0 +1,20 @@
+openapi: 3.1.2
+info:
+  title: Models
+  version: '1'
+components:
+  schemas:
+    Reading:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type:
+            - number
+            - 'null'
+        unit:
+          type: string
+    ReadingAlias:
+      $ref: '#/components/schemas/Reading'
+    Anything: true

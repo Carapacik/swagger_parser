@@ -1,0 +1,14 @@
+swagger: "2.0"
+info:
+  title: "Mapped object API"
+  version: "1"
+paths: {}
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+definitions:
+  Target:
+    type: "array"
+    items:
+      type: "string"

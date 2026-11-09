@@ -1,0 +1,213 @@
+---
+openapi: 3.0.4
+info:
+  title: Directional mappings
+  version: '1'
+paths:
+  "/station":
+    post:
+      operationId: echoStation
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Station"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Station"
+  "/envelope":
+    post:
+      operationId: echoEnvelope
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Envelope"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Envelope"
+components:
+  schemas:
+    Station:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        secret:
+          type: string
+          writeOnly: true
+    Partial:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        secret:
+          type: string
+          writeOnly: true
+    InboundOnly:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        secret:
+          type: string
+          writeOnly: true
+    Preferences:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+        id:
+          type: string
+          readOnly: true
+      default:
+        name: North
+      nullable: true
+    Label:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      properties:
+        name:
+          type: string
+    Same:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+          readOnly: true
+    Envelope:
+      type: object
+      additionalProperties: false
+      required:
+      - station
+      - stations
+      - byName
+      - label
+      - same
+      - partial
+      properties:
+        station:
+          "$ref": "#/components/schemas/Station"
+        stations:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Station"
+        byName:
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/Station"
+        label:
+          "$ref": "#/components/schemas/Label"
+        same:
+          "$ref": "#/components/schemas/Same"
+        partial:
+          "$ref": "#/components/schemas/Partial"
+    Settings:
+      type: object
+      additionalProperties: false
+      properties:
+        preferences:
+          "$ref": "#/components/schemas/Preferences"
+    LabelBox:
+      type: object
+      required:
+      - label
+      properties:
+        label:
+          "$ref": "#/components/schemas/Label"
+    Alias:
+      "$ref": "#/components/schemas/Label"
+    AliasBox:
+      type: object
+      additionalProperties: false
+      required:
+      - alias
+      properties:
+        alias:
+          "$ref": "#/components/schemas/Alias"
+    InboundBox:
+      type: object
+      additionalProperties: false
+      required:
+      - station
+      properties:
+        station:
+          "$ref": "#/components/schemas/InboundOnly"
+    Composed:
+      allOf:
+      - "$ref": "#/components/schemas/LabelBox"
+      - type: object
+        properties:
+          note:
+            type: string
+    Node:
+      type: object
+      additionalProperties: false
+      required:
+      - station
+      - children
+      properties:
+        station:
+          "$ref": "#/components/schemas/Station"
+        children:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Node"
+    TicketId:
+      allOf:
+      - type: string
+      - format: directional-id
+    CodeBox:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      properties:
+        id:
+          "$ref": "#/components/schemas/TicketId"
+    Choice:
+      oneOf:
+      - "$ref": "#/components/schemas/Station"
+      - type: string

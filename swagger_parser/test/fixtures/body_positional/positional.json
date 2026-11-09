@@ -1,0 +1,6 @@
+{
+  "schema_path": "open_api_v3_2.yaml",
+  "generation": {
+    "body_positional": true
+  }
+}

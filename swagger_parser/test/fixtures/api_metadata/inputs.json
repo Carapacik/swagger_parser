@@ -1,0 +1,25 @@
+{
+  "swagger_parser": {
+    "output_directory": "generated",
+    "generation": {
+      "api_metadata": "generate_and_attach"
+    },
+    "inputs": {
+      "first": {
+        "schema_path": "v3_2.json"
+      },
+      "second": {
+        "schema_path": "v3_2.yaml",
+        "generation": {
+          "api_metadata": "generate"
+        }
+      },
+      "third": {
+        "schema_path": "v3_2.json",
+        "generation": {
+          "api_metadata": "none"
+        }
+      }
+    }
+  }
+}

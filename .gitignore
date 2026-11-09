@@ -1,2 +1,14 @@
-.vscode
+.dart_tool/
+.packages
+build/
+coverage/
+.DS_Store
 .idea/
+docs/
+*.iml
+*.g.dart
+*.freezed.dart
+*.mapper.dart
+*.mocks.dart
+/pubspec.lock
+/swagger_parser_tests/test/generated_*/

@@ -1,0 +1,163 @@
+swagger: "2.0"
+info:
+  title: "Collections and composition"
+  version: "1"
+paths:
+  "/pets":
+    post:
+      operationId: "savePet"
+      responses:
+        "200":
+          description: "Result"
+          schema:
+            "$ref": "#/definitions/Pet"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            "$ref": "#/definitions/Pet"
+definitions:
+  Main:
+    allOf:
+      - "$ref": "sub/branches.yaml#/defs/Left"
+      - "$ref": "sub/branches.yaml#/defs/Right"
+      - type: "object"
+        required:
+          - "prop_main"
+          - "count"
+          - "snake-key"
+          - "snake_key"
+        properties:
+          prop_main:
+            type: "string"
+          count:
+            type: "integer"
+            maximum: 10
+          "snake-key":
+            type: "string"
+          snake_key:
+            type: "string"
+  Event:
+    allOf:
+      - type: "object"
+        required:
+          - "id"
+        properties:
+          id:
+            type: "string"
+      - type: "object"
+        required:
+          - "at"
+        properties:
+          at:
+            type: "string"
+  Tracker:
+    allOf:
+      - type: "object"
+        required:
+          - "id"
+        properties:
+          id:
+            type: "string"
+      - type: "object"
+        required:
+          - "events"
+        properties:
+          events:
+            type: "array"
+            items:
+              "$ref": "#/definitions/Event"
+  Pet:
+    allOf:
+      - type: "object"
+        required:
+          - "name"
+        properties:
+          name:
+            type: "string"
+      - type: "object"
+        required:
+          - "trackers"
+        properties:
+          trackers:
+            type: "array"
+            items:
+              "$ref": "#/definitions/Tracker"
+  DisplayImage:
+    allOf:
+      - "$ref": "base.yaml#/defs/Image~1Source~0"
+  ImageUse:
+    type: "object"
+    required:
+      - "image"
+    properties:
+      image:
+        allOf:
+          - "$ref": "#/definitions/DisplayImage"
+  Recursive:
+    type: "object"
+    required:
+      - "id"
+    properties:
+      id:
+        type: "string"
+      children:
+        type: "array"
+        items:
+          "$ref": "#/definitions/Recursive"
+  NullableIntersection:
+    allOf:
+      - type: "string"
+        "x-nullable": true
+      - type: "string"
+  NullableBoth:
+    allOf:
+      - type: "string"
+        "x-nullable": true
+      - type: "string"
+        "x-nullable": true
+  Repeated:
+    allOf:
+      - type: "object"
+        required:
+          - "code"
+        properties:
+          code:
+            type: "string"
+            minLength: 2
+          rating:
+            type: "number"
+      - type: "object"
+        required:
+          - "rating"
+        properties:
+          code:
+            type: "string"
+            minLength: 2
+          rating:
+            type: "integer"
+  ImageFragment:
+    allOf:
+      - "$ref": "#/definitions/DisplayImage"
+      - "x-nullable": true
+  ScalarDefaults:
+    allOf:
+      - type: "object"
+        properties:
+          limit:
+            type: "integer"
+            minimum: 1
+            default: 5
+      - type: "object"
+        properties:
+          limit:
+            type: "integer"
+            maximum: 10
+            default: 5
+      - type: "object"
+        properties:
+          limit:
+            type: "integer"
+            multipleOf: 1
+            default: 5

@@ -1,0 +1,24 @@
+openapi: 3.2.1
+info:
+  title: Readings
+  version: '1'
+components:
+  schemas:
+    Readings:
+      type: object
+      properties:
+        latest:
+          oneOf:
+            - type: string
+              const: idle
+            - type: integer
+              minimum: 0
+        history:
+          anyOf:
+            - type: array
+              uniqueItems: true
+              items:
+                type: integer
+            - type: array
+              items:
+                type: number

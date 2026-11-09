@@ -1,0 +1,14 @@
+/// A page of typed results.
+class Page<T> {
+  /// Stores page metadata and results.
+  const Page({required this.page, required this.pageSize, required this.results});
+
+  /// Page number from the response.
+  final num page;
+
+  /// Page capacity from the response.
+  final num pageSize;
+
+  /// Results in response order.
+  final List<T> results;
+}

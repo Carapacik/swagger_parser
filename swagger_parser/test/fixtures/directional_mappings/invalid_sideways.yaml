@@ -1,0 +1,13 @@
+---
+swagger_parser:
+  schema_path: directional_v3_2.yaml
+  generation:
+    type_mappings:
+    - schema: "#/components/schemas/Station"
+      direction: sideways
+      dart_type: CreateStation
+      import: package:swagger_parser_tests/directional_types.dart
+      codec:
+        import: package:swagger_parser_tests/directional_codecs.dart
+        from_json: createStationFromJson
+        to_json: createStationToJson

@@ -1,0 +1,23 @@
+{
+  "openapi": "3.2.1",
+  "$self": "./routes.json",
+  "info": {"title": "Station library", "version": "1"},
+  "paths": {
+    "/internal": {"get": {"operationId": "checkHealth"}}
+  },
+  "components": {
+    "pathItems": {
+      "Station": {
+        "$ref": "paths.yaml#/Station",
+        "post": {
+          "operationId": "writeStation",
+          "parameters": [{"$ref": "parameters.json#/id"}]
+        }
+      },
+      "Hook": {"post": {"operationId": "sendReport"}}
+    },
+    "callbacks": {
+      "Alarm": {"{$request.body#/url}": {"$ref": "./routes.json#/components/pathItems/Hook"}}
+    }
+  }
+}

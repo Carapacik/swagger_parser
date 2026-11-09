@@ -1,0 +1,206 @@
+info:
+  title: "Fixed discriminator"
+  version: "1"
+paths: {}
+swagger: "2.0"
+definitions:
+  RailStop:
+    type: "object"
+    required:
+      - "kind"
+      - "platform"
+    properties:
+      kind:
+        type: "string"
+        enum:
+          - "rail"
+      platform:
+        type: "integer"
+    discriminator: "kind"
+    default:
+      kind: "rail"
+      platform: 4
+  BusStop:
+    type: "object"
+    required:
+      - "kind"
+      - "platform"
+    properties:
+      kind:
+        type: "string"
+        enum:
+          - "bus"
+      platform:
+        type: "integer"
+    discriminator: "kind"
+  AliasStop:
+    type: "object"
+    required:
+      - "kind"
+      - "platform"
+    properties:
+      kind:
+        type: "string"
+        enum:
+          - "rail"
+          - "train"
+      platform:
+        type: "integer"
+    discriminator: "kind"
+  OptionalStop:
+    type: "object"
+    required:
+      - "platform"
+    properties:
+      kind:
+        type: "string"
+        enum:
+          - "optional"
+      platform:
+        type: "integer"
+    discriminator: "kind"
+  Unmarked:
+    type: "object"
+    required:
+      - "kind"
+      - "platform"
+    properties:
+      kind:
+        type: "string"
+        enum:
+          - "unmarked"
+      platform:
+        type: "integer"
+  LooseStop:
+    type: "object"
+    required:
+      - "kind"
+      - "platform"
+    properties:
+      kind:
+        type: "string"
+      platform:
+        type: "integer"
+    discriminator: "kind"
+  Base:
+    type: "object"
+    discriminator: "kind"
+    required:
+      - "kind"
+    properties:
+      kind:
+        type: "string"
+  Inherited:
+    allOf:
+      -
+        $ref: "#/definitions/Base"
+      -
+        type: "object"
+        required:
+          - "kind"
+          - "platform"
+        properties:
+          kind:
+            type: "string"
+            enum:
+              - "inherited"
+          platform:
+            type: "integer"
+  Kind:
+    type: "string"
+    enum:
+      - "wrapped"
+  KindAlias:
+    $ref: "#/definitions/Kind"
+  Wrapped:
+    type: "object"
+    required:
+      - "kind"
+      - "platform"
+    properties:
+      kind:
+        $ref: "#/definitions/KindAlias"
+      platform:
+        type: "integer"
+    discriminator: "kind"
+  Closed:
+    type: "object"
+    required:
+      - "kind"
+      - "platform"
+    properties:
+      kind:
+        type: "string"
+        enum:
+          - "closed"
+      platform:
+        type: "integer"
+    discriminator: "kind"
+    additionalProperties: false
+  TagOnly:
+    type: "object"
+    discriminator: "kind"
+    required:
+      - "kind"
+    properties:
+      kind:
+        type: "string"
+        enum:
+          - "only"
+    additionalProperties: false
+  ReservedTag:
+    type: "object"
+    discriminator: "class"
+    required:
+      - "class"
+    properties:
+      class:
+        type: "string"
+        enum:
+          - "rail$stop"
+  Envelope:
+    type: "object"
+    properties:
+      stop:
+        $ref: "#/definitions/RailStop"
+  NullableStop:
+    type: "object"
+    required:
+      - "kind"
+      - "platform"
+    properties:
+      kind:
+        type: "string"
+        enum:
+          - "nullable"
+          - null
+        x-nullable: true
+      platform:
+        type: "integer"
+    discriminator: "kind"
+  TypedRailStop:
+    type: "object"
+    required:
+      - "type"
+      - "kind"
+    properties:
+      type:
+        type: "string"
+        enum:
+          - "rail"
+      kind:
+        type: "string"
+    discriminator: "type"
+  TypedBusStop:
+    type: "object"
+    required:
+      - "type"
+      - "kind"
+    properties:
+      type:
+        type: "string"
+        enum:
+          - "bus"
+      kind:
+        type: "string"
+    discriminator: "type"

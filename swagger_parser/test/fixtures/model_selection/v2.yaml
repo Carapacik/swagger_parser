@@ -1,0 +1,220 @@
+"swagger": "2.0"
+"info":
+  "title": "Model selection"
+  "version": "1"
+"paths":
+  "/stations/{id}":
+    "parameters":
+      - "name": "id"
+        "in": "path"
+        "required": true
+        "type": "string"
+      - "name": "debug"
+        "in": "query"
+        "required": false
+        "type": "string"
+        "enum":
+          - "on"
+          - "off"
+        "default": "off"
+    "get":
+      "operationId": "getStation"
+      "tags":
+        - "Stations"
+      "parameters":
+        - "$ref": "header_v2.yaml"
+        - "name": "debug"
+          "in": "header"
+          "required": false
+          "type": "string"
+        - "name": "limit"
+          "in": "query"
+          "required": false
+          "type": "integer"
+          "default": 25
+      "responses":
+        "200":
+          "description": "Result"
+          "schema":
+            "$ref": "#/definitions/Station"
+        "404":
+          "description": "Result"
+          "schema":
+            "$ref": "#/definitions/Problem"
+  "/stations":
+    "post":
+      "operationId": "postStation"
+      "tags":
+        - "Stations"
+      "responses":
+        "201":
+          "description": "Result"
+          "schema":
+            "$ref": "#/definitions/Station"
+      "parameters":
+        - "name": "body"
+          "in": "body"
+          "required": true
+          "schema":
+            "$ref": "#/definitions/Station"
+  "/other":
+    "get":
+      "operationId": "getOther"
+      "parameters":
+        - "name": "debug"
+          "in": "query"
+          "required": false
+          "type": "string"
+      "responses":
+        "204":
+          "description": "Empty"
+  "/only/{key}":
+    "get":
+      "operationId": "onlyParameters"
+      "tags":
+        - "Stations"
+      "parameters":
+        - "name": "key"
+          "in": "path"
+          "required": true
+          "type": "string"
+        - "name": "query"
+          "in": "query"
+          "type": "array"
+          "collectionFormat": "multi"
+          "items":
+            "type": "string"
+            "enum":
+              - "one"
+              - "two"
+        - "name": "header"
+          "in": "header"
+          "type": "array"
+          "collectionFormat": "csv"
+          "items":
+            "type": "string"
+            "enum":
+              - "one"
+              - "two"
+      "responses":
+        "204":
+          "description": "Done"
+"definitions":
+  "Station":
+    "type": "object"
+    "required":
+      - "name"
+    "properties":
+      "name":
+        "type": "string"
+      "id":
+        "type": "string"
+        "readOnly": true
+      "status":
+        "$ref": "#/definitions/Status"
+      "tree":
+        "$ref": "#/definitions/Tree"
+      "details":
+        "type": "object"
+        "additionalProperties":
+          "$ref": "#/definitions/Detail"
+      "graph":
+        "$ref": "#/definitions/GraphAlias"
+  "Status":
+    "type": "string"
+    "enum":
+      - "active"
+      - "paused"
+    "default": "active"
+  "Tree":
+    "type": "object"
+    "properties":
+      "children":
+        "type": "array"
+        "items":
+          "$ref": "#/definitions/Tree"
+  "Detail":
+    "type": "object"
+    "properties":
+      "count":
+        "type": "integer"
+  "Problem":
+    "type": "object"
+    "required":
+      - "message"
+    "properties":
+      "message":
+        "type": "string"
+  "AuditRecord":
+    "type": "object"
+    "properties":
+      "detail":
+        "$ref": "#/definitions/AuditDetail"
+  "AuditDetail":
+    "type": "object"
+    "properties":
+      "value":
+        "type": "integer"
+  "KeptAlias":
+    "$ref": "#/definitions/AuditRecord"
+  "UnusedA":
+    "type": "object"
+    "properties":
+      "next":
+        "$ref": "#/definitions/UnusedB"
+  "UnusedB":
+    "type": "object"
+    "properties":
+      "next":
+        "$ref": "#/definitions/UnusedA"
+  "UnusedAlias":
+    "$ref": "#/definitions/UnusedA"
+  "GraphAlias":
+    "$ref": "#/definitions/DeepGraph"
+  "DeepGraph":
+    "type": "object"
+    "required":
+      - "nested"
+      - "left"
+      - "right"
+    "properties":
+      "nested":
+        "type": "object"
+        "required":
+          - "second"
+        "properties":
+          "second":
+            "type": "array"
+            "items":
+              "type": "object"
+              "required":
+                - "third"
+              "properties":
+                "third":
+                  "type": "object"
+                  "required":
+                    - "state"
+                  "properties":
+                    "state":
+                      "type": "string"
+                      "enum":
+                        - "active"
+                        - "paused"
+                    "shared":
+                      "$ref": "#/definitions/DeepShared"
+      "left": &sharedChild
+        "$ref": "#/definitions/DeepShared"
+      "right": *sharedChild
+  "DeepShared":
+    "type": "object"
+    "required":
+      - "value"
+    "properties":
+      "value":
+        "type": "string"
+      "next":
+        "$ref": "#/definitions/GraphAlias"
+"produces":
+  - "application/json"
+"consumes":
+  - "application/json"

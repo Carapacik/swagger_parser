@@ -1,0 +1,9 @@
+openapi: 3.2.1
+info:
+  title: External reference
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    Station:
+      $ref: https://example.invalid/station.yaml

@@ -1,0 +1,56 @@
+openapi: 3.1.2
+info:
+  title: Event batches
+  version: '1'
+components:
+  schemas:
+    Alerts:
+      $ref: ./contains_batch.yaml
+    Tags:
+      $id: ./tags
+      $ref: ./contains_batch.yaml
+      $defs:
+        Tag:
+          $dynamicAnchor: event
+          const: red
+    Readings:
+      type: array
+      items:
+        type: number
+      contains:
+        minimum: 0
+      oneOf:
+        - type: array
+          contains:
+            type: integer
+          maxContains: 1
+        - type: array
+          contains:
+            exclusiveMinimum: 5
+          minContains: 2
+    Limits:
+      anyOf:
+        - contains:
+            const: hit
+        - minContains: 3
+          maxContains: 0
+        - contains: true
+          minContains: 0
+        - contains: false
+        - contains: true
+          maxContains: 0
+        - contains:
+            const: hit
+          minContains: 0
+          maxContains: 0
+        - allOf:
+            - contains:
+                const: hit
+            - minContains: 3
+    Tree:
+      anyOf:
+        - type: string
+          contains: false
+        - type: array
+          contains:
+            $ref: '#/components/schemas/Tree'

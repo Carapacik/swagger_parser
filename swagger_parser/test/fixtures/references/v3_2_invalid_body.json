@@ -1,0 +1,23 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "Reference contracts",
+    "version": "1"
+  },
+  "paths": {
+    "/invalid": {
+      "post": {
+        "operationId": "invalidBody",
+        "responses": {
+          "204": {
+            "description": "No body."
+          }
+        },
+        "requestBody": {
+          "description": "Missing content.",
+          "required": true
+        }
+      }
+    }
+  }
+}

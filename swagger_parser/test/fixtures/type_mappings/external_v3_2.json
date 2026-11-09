@@ -1,0 +1,15 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "External types",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "StationId": {
+        "type": "string"
+      }
+    }
+  }
+}

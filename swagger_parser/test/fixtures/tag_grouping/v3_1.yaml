@@ -1,0 +1,141 @@
+openapi: "3.1.2"
+info:
+  title: "Tag grouping"
+  version: "1.0.0"
+paths:
+  "/stations/{id}":
+    get:
+      operationId: "get-station"
+      tags:
+        - "station"
+        - "Secondary"
+      responses:
+        "200":
+          description: "Found"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+  "/trips":
+    get:
+      operationId: "trips"
+      tags:
+        - "Trips"
+      responses:
+        "200":
+          description: "Found"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/codes/{code}":
+    get:
+      operationId: "get_station"
+      tags:
+        - "Station"
+      responses:
+        "200":
+          description: "Found"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Lookup"
+      parameters:
+        - name: "code"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+  "/info-one":
+    get:
+      operationId: "infoOne"
+      tags:
+        - "station-info"
+      responses:
+        "200":
+          description: "Found"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/info-two":
+    get:
+      operationId: "infoTwo"
+      tags:
+        - "station_info"
+      responses:
+        "200":
+          description: "Found"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/internal":
+    get:
+      operationId: "internal"
+      tags:
+        - "InternalStations"
+      responses:
+        "200":
+          description: "Found"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/public":
+    get:
+      operationId: "publicStations"
+      tags:
+        - "PublicStations"
+      responses:
+        "200":
+          description: "Found"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/health":
+    get:
+      operationId: "health"
+      tags: []
+      responses:
+        "200":
+          description: "Found"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/tagged-api":
+    get:
+      operationId: "taggedApi"
+      tags:
+        - "Api"
+      responses:
+        "200":
+          description: "Found"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+components:
+  schemas:
+    Station:
+      type: "object"
+      required:
+        - "name"
+      properties:
+        name:
+          type: "string"
+    Lookup:
+      type: "object"
+      required:
+        - "code"
+      properties:
+        code:
+          type: "integer"

@@ -1,0 +1,6 @@
+{
+  "input": "v3_2.yaml",
+  "generation": {
+    "infer_missing_required": "true"
+  }
+}

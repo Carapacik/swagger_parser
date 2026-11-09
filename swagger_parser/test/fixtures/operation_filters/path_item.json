@@ -1,0 +1,24 @@
+{
+  "get": {
+    "operationId": "externalRoute",
+    "tags": [
+      "External",
+      "Public"
+    ],
+    "responses": {
+      "200": {
+        "description": "OK"
+      }
+    }
+  },
+  "parameters": [
+    {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

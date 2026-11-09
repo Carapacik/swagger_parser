@@ -1,0 +1,13 @@
+openapi: 3.1.2
+info:
+  title: Unsupported checks
+  version: '1'
+components:
+  schemas:
+    Filter:
+      anyOf:
+        - type: string
+        - type: array
+          contains:
+            not:
+              type: string

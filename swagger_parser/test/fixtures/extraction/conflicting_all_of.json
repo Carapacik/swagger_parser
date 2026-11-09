@@ -1,0 +1,8 @@
+{
+  "openapi": "3.1.2",
+  "info": {"title": "Conflicting fields", "version": "1"},
+  "components": {"schemas": {"Reading": {"allOf": [
+    {"type": "object", "properties": {"kind": {"type": "string"}}},
+    {"type": "object", "properties": {"kind": {"type": "integer"}}}
+  ]}}}
+}

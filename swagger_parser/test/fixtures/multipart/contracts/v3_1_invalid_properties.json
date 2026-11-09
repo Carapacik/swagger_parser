@@ -1,0 +1,16 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Multipart contracts",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Invalid": {
+        "type": "object",
+        "properties": []
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "output_directory": "out",
+  "parse": {
+    "max_depth": 64,
+    "capture_source_locations": true
+  },
+  "normalize": {
+    "explicit_parameter_serialization": true
+  },
+  "generation": {
+    "http_client": "http",
+    "serializer": "plain",
+    "generate_docs": false,
+    "page_width": 90,
+    "operation_filters": {
+      "include_paths": [
+        "/stations/**"
+      ],
+      "exclude_tags": [
+        "Internal"
+      ]
+    }
+  },
+  "inputs": {
+    "one": {
+      "schema_path": "stations_v3_0.json",
+      "generation": {
+        "operation_filters": {
+          "include_paths": []
+        }
+      }
+    }
+  }
+}

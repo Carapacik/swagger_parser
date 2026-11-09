@@ -1,0 +1,9 @@
+{
+  "swagger_parser": {
+    "schema_path": "stations_v2_0.yaml",
+    "output_directory": "single",
+    "generation": {
+      "http_client": "dio"
+    }
+  }
+}

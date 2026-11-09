@@ -1,0 +1,123 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Collections and composition",
+    "version": "1"
+  },
+  "paths": {},
+  "definitions": {
+    "Conflict": {
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "value"
+          ],
+          "properties": {
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "value"
+          ],
+          "properties": {
+            "value": {
+              "type": "integer"
+            }
+          }
+        }
+      ]
+    },
+    "NumberConflict": {
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "value"
+          ],
+          "properties": {
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "value"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            }
+          }
+        }
+      ]
+    },
+    "ExternalConflict": {
+      "allOf": [
+        {
+          "$ref": "sub/branches.json#/defs/Left"
+        },
+        {
+          "type": "object",
+          "required": [
+            "count"
+          ],
+          "properties": {
+            "count": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "A": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/B"
+        },
+        {
+          "type": "object",
+          "required": [
+            "a"
+          ],
+          "properties": {
+            "a": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "B": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/A"
+        },
+        {
+          "type": "object",
+          "required": [
+            "b"
+          ],
+          "properties": {
+            "b": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "ExternalCycle": {
+      "allOf": [
+        {
+          "$ref": "sub/branches.json#/defs/Cycle"
+        }
+      ]
+    }
+  }
+}

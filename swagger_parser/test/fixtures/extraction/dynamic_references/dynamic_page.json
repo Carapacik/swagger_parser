@@ -1,0 +1,24 @@
+{
+  "$id": "./resources/page",
+  "type": "object",
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "$dynamicRef": "#pageItem"
+      }
+    },
+    "next": {
+      "$ref": "#"
+    }
+  },
+  "$defs": {
+    "Item": {
+      "$dynamicAnchor": "pageItem",
+      "type": "integer"
+    }
+  }
+}

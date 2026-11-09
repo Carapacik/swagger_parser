@@ -1,0 +1,192 @@
+---
+swagger: '2.0'
+info:
+  title: Operation filters
+  version: '1'
+paths:
+  "/trips":
+    get:
+      operationId: getTrips
+      responses:
+        '200':
+          description: Result
+          schema:
+            "$ref": "#/definitions/Station"
+      tags:
+      - Trips
+  "/stations":
+    get:
+      operationId: listStations
+      responses:
+        '200':
+          description: Result
+          schema:
+            "$ref": "#/definitions/Station"
+      tags:
+      - Stations
+      - Public
+    post:
+      operationId: createStation
+      responses:
+        '200':
+          description: Result
+          schema:
+            type: object
+            required:
+            - secret
+            properties:
+              secret:
+                type: string
+      tags:
+      - Internal
+      - Public
+  "/stations/{id}":
+    get:
+      operationId: getStation
+      responses:
+        '200':
+          description: Result
+          schema:
+            "$ref": "#/definitions/Station"
+      tags:
+      - Stations
+      - Public
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  "/stations/{id}/history":
+    get:
+      operationId: getHistory
+      responses:
+        '200':
+          description: Result
+          schema:
+            "$ref": "#/definitions/Station"
+      tags:
+      - Public
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  "/stations/{id}/history/{entry}":
+    get:
+      operationId: getEntry
+      responses:
+        '200':
+          description: Result
+      tags:
+      - Public
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+      - name: entry
+        in: path
+        required: true
+        type: string
+  "/stations/private":
+    get:
+      operationId: getPrivate
+      responses:
+        '200':
+          description: Result
+          schema:
+            "$ref": "#/definitions/Secret"
+      tags:
+      - Internal
+      - Public
+  "/stations2":
+    get:
+      operationId: getOther
+      responses:
+        '200':
+          description: Result
+      tags:
+      - Public
+  "/Stations":
+    get:
+      operationId: getUpper
+      responses:
+        '200':
+          description: Result
+      tags:
+      - public
+  "/health":
+    get:
+      operationId: getHealth
+      responses:
+        '200':
+          description: Result
+  "/metrics":
+    get:
+      operationId: getMetrics
+      responses:
+        '200':
+          description: Result
+      tags: []
+  "/reports/v1.0+stats":
+    get:
+      operationId: getLiteral
+      responses:
+        '200':
+          description: Result
+      tags:
+      - Reports
+  "/reports/v1X0stats":
+    get:
+      operationId: getSimilar
+      responses:
+        '200':
+          description: Result
+      tags:
+      - Reports
+  "/":
+    get:
+      operationId: getRoot
+      responses:
+        '200':
+          description: Result
+host: example.com
+schemes:
+- https
+produces:
+- application/json
+definitions:
+  Station:
+    type: object
+    additionalProperties: false
+    required:
+    - name
+    - status
+    properties:
+      name:
+        type: string
+      status:
+        "$ref": "#/definitions/Status"
+  Status:
+    type: string
+    enum:
+    - active
+    - paused
+  Secret:
+    type: object
+    properties:
+      token:
+        type: string
+  Unused:
+    type: object
+    properties:
+      detail:
+        type: object
+        properties:
+          count:
+            type: integer
+  UnusedEnum:
+    type: string
+    enum:
+    - first
+    - second

@@ -1,0 +1,19 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Operation filters",
+    "version": "1"
+  },
+  "paths": {
+    "/mounted/{id}": {
+      "$ref": "path_item_v2_0.json"
+    }
+  },
+  "host": "example.com",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ]
+}

@@ -1,0 +1,11 @@
+openapi: 3.2.1
+info:
+  title: Missing path parameter
+  version: 1.0.0
+paths:
+  /stations/{id}:
+    get:
+      operationId: getStation
+      responses:
+        '204':
+          description: No station.

@@ -1,0 +1,48 @@
+openapi: 3.2.1
+info:
+  title: Station reports
+  version: '1'
+paths:
+  /reports:
+    query:
+      parameters:
+        - name: filter
+          in: querystring
+          content:
+            application/json:
+              schema:
+                type: object
+        - name: preferences
+          in: cookie
+          style: cookie
+          schema:
+            type: object
+      responses:
+        '200':
+          content:
+            text/event-stream:
+              itemSchema:
+                type: string
+    additionalOperations:
+      REPORT:
+        parameters:
+          - name: session
+            in: cookie
+            schema:
+              type: string
+          - name: sort
+            in: query
+            style: form
+            explode: false
+            schema:
+              type: array
+              items:
+                type: string
+          - name: X-Trace
+            in: header
+            explode: true
+            schema:
+              type: string
+        responses:
+          '204':
+            description: Report queued

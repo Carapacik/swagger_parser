@@ -1,0 +1,134 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Path metadata",
+    "version": "1"
+  },
+  "security": [
+    {
+      "token": []
+    }
+  ],
+  "paths": {
+    "/items/{id}": {
+      "x-label": "metadata",
+      "x-config": {
+        "enabled": true,
+        "count": 2
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "id",
+          "in": "header",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "operationId": "readItems",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://operation.test"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "saveItems",
+        "security": [],
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        }
+      },
+      "servers": [
+        {
+          "url": "https://path.test"
+        }
+      ]
+    },
+    "/root": {
+      "get": {
+        "operationId": "readRoot",
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        }
+      }
+    },
+    "/alternative": {
+      "get": {
+        "operationId": "readAlternative",
+        "security": [
+          {
+            "token": []
+          },
+          {
+            "other": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        }
+      }
+    },
+    "/remote/{id}": {
+      "$ref": "v3_0_paths.json#/paths/~1remote~1%7Bid%7D"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://root.test"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "token": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Token"
+      },
+      "other": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "key"
+      }
+    }
+  }
+}

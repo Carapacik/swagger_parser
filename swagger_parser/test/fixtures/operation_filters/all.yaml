@@ -1,0 +1,8 @@
+---
+input: routes_v3_2.yaml
+generation:
+  operation_filters:
+    include_paths:
+    exclude_paths: []
+    include_tags:
+    exclude_tags: []

@@ -1,0 +1,15 @@
+"swagger": "2.0"
+"info":
+  "title": "Enum contracts"
+  "version": "1"
+"paths": {}
+"consumes":
+  - "application/json"
+"produces":
+  - "application/json"
+"definitions":
+  "Invalid":
+    "type": "object"
+    "enum":
+      - "north"
+      - "south"

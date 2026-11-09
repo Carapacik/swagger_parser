@@ -1,0 +1,433 @@
+cases:
+  - name: generates plain models and retrofit clients
+    config: configs/plain_retrofit.yaml
+    output: out
+    expected:
+      v2_0_json:
+        - expected/models/plain
+        - expected/clients/retrofit
+        - expected/api/retrofit/v2_0
+      v2_0_yaml:
+        - expected/models/plain
+        - expected/clients/retrofit
+        - expected/api/retrofit/v2_0
+      v3_0_json:
+        - expected/models/plain
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_0
+      v3_0_yaml:
+        - expected/models/plain
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_0
+      v3_1_json:
+        - expected/models/plain
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_1
+      v3_1_yaml:
+        - expected/models/plain
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_1
+      v3_2_json:
+        - expected/models/plain
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_2
+      v3_2_yaml:
+        - expected/models/plain
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_2
+  - name: generates plain models and dio clients
+    config: configs/plain_dio.json
+    output: out
+    expected:
+      v2_0_json:
+        - expected/models/plain
+        - expected/clients/dio
+        - expected/api/dio/v2_0
+      v2_0_yaml:
+        - expected/models/plain
+        - expected/clients/dio
+        - expected/api/dio/v2_0
+      v3_0_json:
+        - expected/models/plain
+        - expected/clients/dio
+        - expected/api/dio/v3_0
+      v3_0_yaml:
+        - expected/models/plain
+        - expected/clients/dio
+        - expected/api/dio/v3_0
+      v3_1_json:
+        - expected/models/plain
+        - expected/clients/dio
+        - expected/api/dio/v3_1
+      v3_1_yaml:
+        - expected/models/plain
+        - expected/clients/dio
+        - expected/api/dio/v3_1
+      v3_2_json:
+        - expected/models/plain
+        - expected/clients/dio
+        - expected/api/dio/v3_2
+      v3_2_yaml:
+        - expected/models/plain
+        - expected/clients/dio
+        - expected/api/dio/v3_2
+  - name: generates plain models and http clients
+    config: configs/plain_http.yaml
+    output: out
+    expected:
+      v2_0_json:
+        - expected/models/plain
+        - expected/clients/http
+        - expected/api/http/v2_0
+      v2_0_yaml:
+        - expected/models/plain
+        - expected/clients/http
+        - expected/api/http/v2_0
+      v3_0_json:
+        - expected/models/plain
+        - expected/clients/http
+        - expected/api/http/v3_0
+      v3_0_yaml:
+        - expected/models/plain
+        - expected/clients/http
+        - expected/api/http/v3_0
+      v3_1_json:
+        - expected/models/plain
+        - expected/clients/http
+        - expected/api/http/v3_1
+      v3_1_yaml:
+        - expected/models/plain
+        - expected/clients/http
+        - expected/api/http/v3_1
+      v3_2_json:
+        - expected/models/plain
+        - expected/clients/http
+        - expected/api/http/v3_2
+      v3_2_yaml:
+        - expected/models/plain
+        - expected/clients/http
+        - expected/api/http/v3_2
+  - name: generates json_serializable models and retrofit clients
+    config: configs/json_serializable_retrofit.json
+    output: out
+    expected:
+      v2_0_json:
+        - expected/models/json_serializable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v2_0
+      v2_0_yaml:
+        - expected/models/json_serializable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v2_0
+      v3_0_json:
+        - expected/models/json_serializable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_0
+      v3_0_yaml:
+        - expected/models/json_serializable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_0
+      v3_1_json:
+        - expected/models/json_serializable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_1
+      v3_1_yaml:
+        - expected/models/json_serializable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_1
+      v3_2_json:
+        - expected/models/json_serializable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_2
+      v3_2_yaml:
+        - expected/models/json_serializable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_2
+  - name: generates json_serializable models and dio clients
+    config: configs/json_serializable_dio.yaml
+    output: out
+    expected:
+      v2_0_json:
+        - expected/models/json_serializable
+        - expected/clients/dio
+        - expected/api/dio/v2_0
+      v2_0_yaml:
+        - expected/models/json_serializable
+        - expected/clients/dio
+        - expected/api/dio/v2_0
+      v3_0_json:
+        - expected/models/json_serializable
+        - expected/clients/dio
+        - expected/api/dio/v3_0
+      v3_0_yaml:
+        - expected/models/json_serializable
+        - expected/clients/dio
+        - expected/api/dio/v3_0
+      v3_1_json:
+        - expected/models/json_serializable
+        - expected/clients/dio
+        - expected/api/dio/v3_1
+      v3_1_yaml:
+        - expected/models/json_serializable
+        - expected/clients/dio
+        - expected/api/dio/v3_1
+      v3_2_json:
+        - expected/models/json_serializable
+        - expected/clients/dio
+        - expected/api/dio/v3_2
+      v3_2_yaml:
+        - expected/models/json_serializable
+        - expected/clients/dio
+        - expected/api/dio/v3_2
+  - name: generates json_serializable models and http clients
+    config: configs/json_serializable_http.json
+    output: out
+    expected:
+      v2_0_json:
+        - expected/models/json_serializable
+        - expected/clients/http
+        - expected/api/http/v2_0
+      v2_0_yaml:
+        - expected/models/json_serializable
+        - expected/clients/http
+        - expected/api/http/v2_0
+      v3_0_json:
+        - expected/models/json_serializable
+        - expected/clients/http
+        - expected/api/http/v3_0
+      v3_0_yaml:
+        - expected/models/json_serializable
+        - expected/clients/http
+        - expected/api/http/v3_0
+      v3_1_json:
+        - expected/models/json_serializable
+        - expected/clients/http
+        - expected/api/http/v3_1
+      v3_1_yaml:
+        - expected/models/json_serializable
+        - expected/clients/http
+        - expected/api/http/v3_1
+      v3_2_json:
+        - expected/models/json_serializable
+        - expected/clients/http
+        - expected/api/http/v3_2
+      v3_2_yaml:
+        - expected/models/json_serializable
+        - expected/clients/http
+        - expected/api/http/v3_2
+  - name: generates freezed models and retrofit clients
+    config: configs/freezed_retrofit.yaml
+    output: out
+    expected:
+      v2_0_json:
+        - expected/models/freezed
+        - expected/clients/retrofit
+        - expected/api/retrofit/v2_0
+      v2_0_yaml:
+        - expected/models/freezed
+        - expected/clients/retrofit
+        - expected/api/retrofit/v2_0
+      v3_0_json:
+        - expected/models/freezed
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_0
+      v3_0_yaml:
+        - expected/models/freezed
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_0
+      v3_1_json:
+        - expected/models/freezed
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_1
+      v3_1_yaml:
+        - expected/models/freezed
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_1
+      v3_2_json:
+        - expected/models/freezed
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_2
+      v3_2_yaml:
+        - expected/models/freezed
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_2
+  - name: generates freezed models and dio clients
+    config: configs/freezed_dio.json
+    output: out
+    expected:
+      v2_0_json:
+        - expected/models/freezed
+        - expected/clients/dio
+        - expected/api/dio/v2_0
+      v2_0_yaml:
+        - expected/models/freezed
+        - expected/clients/dio
+        - expected/api/dio/v2_0
+      v3_0_json:
+        - expected/models/freezed
+        - expected/clients/dio
+        - expected/api/dio/v3_0
+      v3_0_yaml:
+        - expected/models/freezed
+        - expected/clients/dio
+        - expected/api/dio/v3_0
+      v3_1_json:
+        - expected/models/freezed
+        - expected/clients/dio
+        - expected/api/dio/v3_1
+      v3_1_yaml:
+        - expected/models/freezed
+        - expected/clients/dio
+        - expected/api/dio/v3_1
+      v3_2_json:
+        - expected/models/freezed
+        - expected/clients/dio
+        - expected/api/dio/v3_2
+      v3_2_yaml:
+        - expected/models/freezed
+        - expected/clients/dio
+        - expected/api/dio/v3_2
+  - name: generates freezed models and http clients
+    config: configs/freezed_http.yaml
+    output: out
+    expected:
+      v2_0_json:
+        - expected/models/freezed
+        - expected/clients/http
+        - expected/api/http/v2_0
+      v2_0_yaml:
+        - expected/models/freezed
+        - expected/clients/http
+        - expected/api/http/v2_0
+      v3_0_json:
+        - expected/models/freezed
+        - expected/clients/http
+        - expected/api/http/v3_0
+      v3_0_yaml:
+        - expected/models/freezed
+        - expected/clients/http
+        - expected/api/http/v3_0
+      v3_1_json:
+        - expected/models/freezed
+        - expected/clients/http
+        - expected/api/http/v3_1
+      v3_1_yaml:
+        - expected/models/freezed
+        - expected/clients/http
+        - expected/api/http/v3_1
+      v3_2_json:
+        - expected/models/freezed
+        - expected/clients/http
+        - expected/api/http/v3_2
+      v3_2_yaml:
+        - expected/models/freezed
+        - expected/clients/http
+        - expected/api/http/v3_2
+  - name: generates dart_mappable models and retrofit clients
+    config: configs/dart_mappable_retrofit.json
+    output: out
+    expected:
+      v2_0_json:
+        - expected/models/dart_mappable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v2_0
+      v2_0_yaml:
+        - expected/models/dart_mappable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v2_0
+      v3_0_json:
+        - expected/models/dart_mappable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_0
+      v3_0_yaml:
+        - expected/models/dart_mappable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_0
+      v3_1_json:
+        - expected/models/dart_mappable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_1
+      v3_1_yaml:
+        - expected/models/dart_mappable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_1
+      v3_2_json:
+        - expected/models/dart_mappable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_2
+      v3_2_yaml:
+        - expected/models/dart_mappable
+        - expected/clients/retrofit
+        - expected/api/retrofit/v3_2
+  - name: generates dart_mappable models and dio clients
+    config: configs/dart_mappable_dio.yaml
+    output: out
+    expected:
+      v2_0_json:
+        - expected/models/dart_mappable
+        - expected/clients/dio
+        - expected/api/dio/v2_0
+      v2_0_yaml:
+        - expected/models/dart_mappable
+        - expected/clients/dio
+        - expected/api/dio/v2_0
+      v3_0_json:
+        - expected/models/dart_mappable
+        - expected/clients/dio
+        - expected/api/dio/v3_0
+      v3_0_yaml:
+        - expected/models/dart_mappable
+        - expected/clients/dio
+        - expected/api/dio/v3_0
+      v3_1_json:
+        - expected/models/dart_mappable
+        - expected/clients/dio
+        - expected/api/dio/v3_1
+      v3_1_yaml:
+        - expected/models/dart_mappable
+        - expected/clients/dio
+        - expected/api/dio/v3_1
+      v3_2_json:
+        - expected/models/dart_mappable
+        - expected/clients/dio
+        - expected/api/dio/v3_2
+      v3_2_yaml:
+        - expected/models/dart_mappable
+        - expected/clients/dio
+        - expected/api/dio/v3_2
+  - name: generates dart_mappable models and http clients
+    config: configs/dart_mappable_http.json
+    output: out
+    expected:
+      v2_0_json:
+        - expected/models/dart_mappable
+        - expected/clients/http
+        - expected/api/http/v2_0
+      v2_0_yaml:
+        - expected/models/dart_mappable
+        - expected/clients/http
+        - expected/api/http/v2_0
+      v3_0_json:
+        - expected/models/dart_mappable
+        - expected/clients/http
+        - expected/api/http/v3_0
+      v3_0_yaml:
+        - expected/models/dart_mappable
+        - expected/clients/http
+        - expected/api/http/v3_0
+      v3_1_json:
+        - expected/models/dart_mappable
+        - expected/clients/http
+        - expected/api/http/v3_1
+      v3_1_yaml:
+        - expected/models/dart_mappable
+        - expected/clients/http
+        - expected/api/http/v3_1
+      v3_2_json:
+        - expected/models/dart_mappable
+        - expected/clients/http
+        - expected/api/http/v3_2
+      v3_2_yaml:
+        - expected/models/dart_mappable
+        - expected/clients/http
+        - expected/api/http/v3_2

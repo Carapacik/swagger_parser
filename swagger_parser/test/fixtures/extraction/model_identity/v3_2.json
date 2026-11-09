@@ -1,0 +1,623 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "Model identity",
+    "version": "1"
+  },
+  "paths": {
+    "/trips/shared": {
+      "get": {
+        "tags": [
+          "Trips"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Shared"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "firstShared"
+      }
+    },
+    "/stations/shared": {
+      "get": {
+        "tags": [
+          "Stations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Shared"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "secondShared"
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "token",
+                    "data"
+                  ],
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "id"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "user_name",
+                  "password"
+                ],
+                "properties": {
+                  "user_name": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/other-login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "token",
+                    "data"
+                  ],
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "id"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "loginAlt",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "token"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/a/{b}/c/{d}/{e}": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "code"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "active"
+                ],
+                "properties": {
+                  "active": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "b",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "d",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "e",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "204": {
+            "description": "Result"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "count"
+                ],
+                "properties": {
+                  "count": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "b",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "d",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "e",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/nearby": {
+      "get": {
+        "tags": [
+          "Geo"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "locations"
+                  ],
+                  "properties": {
+                    "locations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "label",
+                          "coordinates"
+                        ],
+                        "properties": {
+                          "label": {
+                            "type": "string"
+                          },
+                          "coordinates": {
+                            "$ref": "#/components/schemas/Coordinates"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "nearby"
+      }
+    },
+    "/cases": {
+      "get": {
+        "tags": [
+          "Trips"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaseModel"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getCases"
+      }
+    },
+    "/enums": {
+      "get": {
+        "tags": [
+          "Trips"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnumUse"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getEnums"
+      }
+    },
+    "/merged": {
+      "get": {
+        "tags": [
+          "Trips"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Merged"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getMerged"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Station": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "Depot": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "Shared": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "station",
+          "again",
+          "depot"
+        ],
+        "properties": {
+          "station": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "again": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "depot": {
+            "$ref": "#/components/schemas/Depot"
+          }
+        }
+      },
+      "Coordinates": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "properties": {
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          }
+        }
+      },
+      "Type": {
+        "type": "string",
+        "enum": [
+          "left",
+          "same"
+        ]
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "right",
+          "same"
+        ]
+      },
+      "EnumUse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "first",
+          "second",
+          "again"
+        ],
+        "properties": {
+          "first": {
+            "$ref": "#/components/schemas/Type"
+          },
+          "second": {
+            "$ref": "#/components/schemas/type"
+          },
+          "again": {
+            "$ref": "#/components/schemas/Type"
+          }
+        }
+      },
+      "LoginResponse200": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reserved"
+        ],
+        "properties": {
+          "reserved": {
+            "type": "integer"
+          }
+        }
+      },
+      "CaseModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "Station",
+          "station",
+          "Code",
+          "code",
+          "nested"
+        ],
+        "properties": {
+          "Station": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "station": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "Code": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "nested": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "Station",
+              "station",
+              "x-name"
+            ],
+            "properties": {
+              "Station": {
+                "type": "string"
+              },
+              "station": {
+                "type": "string"
+              },
+              "x-name": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "example": {
+          "Station": {
+            "id": "UP"
+          },
+          "station": {
+            "id": "down"
+          },
+          "Code": "UP",
+          "code": "down",
+          "nested": {
+            "Station": "UP",
+            "station": "down",
+            "x-name": "quoted"
+          }
+        }
+      },
+      "Merged": {
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "count",
+              "snake-key"
+            ],
+            "properties": {
+              "count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "snake-key": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "count",
+              "snake_key"
+            ],
+            "properties": {
+              "count": {
+                "type": "integer",
+                "maximum": 10
+              },
+              "snake_key": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

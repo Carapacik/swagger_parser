@@ -1,0 +1,490 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "Station transport",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://stations.example"
+    }
+  ],
+  "security": [
+    {
+      "token": []
+    }
+  ],
+  "paths": {
+    "/search": {
+      "query": {
+        "operationId": "search",
+        "servers": [
+          {
+            "url": "https://search.example"
+          }
+        ],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Search"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Search result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Search"
+                }
+              }
+            }
+          }
+        }
+      },
+      "head": {
+        "operationId": "ping",
+        "responses": {
+          "204": {
+            "description": "Ready"
+          }
+        }
+      },
+      "options": {
+        "operationId": "capabilities",
+        "responses": {
+          "204": {
+            "description": "Supported methods"
+          }
+        }
+      },
+      "trace": {
+        "operationId": "traceCall",
+        "responses": {
+          "204": {
+            "description": "Traced"
+          }
+        }
+      },
+      "additionalOperations": {
+        "Report": {
+          "operationId": "report",
+          "responses": {
+            "200": {
+              "description": "Counts",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/filter": {
+      "get": {
+        "operationId": "filter",
+        "parameters": [
+          {
+            "name": "area",
+            "in": "query",
+            "style": "pipeDelimited",
+            "explode": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "style": "spaceDelimited",
+            "explode": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "session",
+            "in": "cookie",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Accepted"
+          }
+        }
+      }
+    },
+    "/parameters/{term}": {
+      "get": {
+        "operationId": "readParameters",
+        "parameters": [
+          {
+            "name": "term",
+            "in": "path",
+            "required": true,
+            "allowReserved": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "allowReserved": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "detail",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Search"
+                }
+              }
+            }
+          },
+          {
+            "name": "flags",
+            "in": "cookie",
+            "style": "cookie",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "mode",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "by-name",
+                "by-id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Accepted"
+          }
+        }
+      }
+    },
+    "/encoded-query": {
+      "get": {
+        "operationId": "encodedQuery",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "querystring",
+            "content": {
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "term": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Accepted"
+          }
+        }
+      }
+    },
+    "/combined": {
+      "get": {
+        "operationId": "combined",
+        "tags": [
+          "Filters"
+        ],
+        "parameters": [
+          {
+            "name": "first",
+            "in": "query",
+            "allowReserved": true,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "second",
+            "in": "query",
+            "style": "deepObject",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Applied"
+          }
+        }
+      }
+    },
+    "/raw": {
+      "get": {
+        "operationId": "rawQuery",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "querystring",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Accepted"
+          }
+        }
+      }
+    },
+    "/photos": {
+      "post": {
+        "operationId": "upload",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "photo"
+                ],
+                "properties": {
+                  "photo": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "label": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "photo": {
+                  "contentType": "image/png",
+                  "headers": {
+                    "X-Source": {
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Uploaded"
+          }
+        }
+      }
+    },
+    "/form": {
+      "post": {
+        "operationId": "sendForm",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "station"
+                ],
+                "properties": {
+                  "station": {
+                    "type": "string"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Saved"
+          }
+        }
+      }
+    },
+    "/bytes": {
+      "put": {
+        "operationId": "echoBytes",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/octet-stream": {}
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Uploaded bytes",
+            "content": {
+              "application/octet-stream": {}
+            }
+          }
+        }
+      }
+    },
+    "/events": {
+      "get": {
+        "operationId": "events",
+        "responses": {
+          "200": {
+            "description": "Station events",
+            "content": {
+              "text/event-stream": {
+                "itemSchema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Missing station",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Search"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Offline"
+          }
+        }
+      }
+    },
+    "/records": {
+      "get": {
+        "operationId": "records",
+        "summary": "Read stations.",
+        "description": "One station per line.\nThe stream uses UTF-8.",
+        "deprecated": true,
+        "responses": {
+          "200": {
+            "description": "Station records",
+            "content": {
+              "application/x-ndjson": {
+                "itemSchema": {
+                  "$ref": "#/components/schemas/Search"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Missing station",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Search"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Search": {
+        "type": "object",
+        "required": [
+          "term"
+        ],
+        "properties": {
+          "term": {
+            "type": "string"
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "retry": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "token": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Token"
+      }
+    }
+  }
+}

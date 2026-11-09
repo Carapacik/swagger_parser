@@ -1,0 +1,85 @@
+openapi: "3.2.1"
+info:
+  title: "Collections and composition"
+  version: "1"
+paths: {}
+components:
+  schemas:
+    Conflict:
+      allOf:
+        - type: "object"
+          required:
+            - "value"
+          properties:
+            value:
+              type: "string"
+        - type: "object"
+          required:
+            - "value"
+          properties:
+            value:
+              type: "integer"
+    NumberConflict:
+      allOf:
+        - type: "object"
+          required:
+            - "value"
+          properties:
+            value:
+              type: "string"
+        - type: "object"
+          required:
+            - "value"
+          properties:
+            value:
+              type: "number"
+    ExternalConflict:
+      allOf:
+        - "$ref": "sub/branches.yaml#/defs/Left"
+        - type: "object"
+          required:
+            - "count"
+          properties:
+            count:
+              type: "string"
+    A:
+      allOf:
+        - "$ref": "#/components/schemas/B"
+        - type: "object"
+          required:
+            - "a"
+          properties:
+            a:
+              type: "string"
+    B:
+      allOf:
+        - "$ref": "#/components/schemas/A"
+        - type: "object"
+          required:
+            - "b"
+          properties:
+            b:
+              type: "string"
+    ExternalCycle:
+      allOf:
+        - "$ref": "sub/branches.yaml#/defs/Cycle"
+    ScalarUnionConflict:
+      allOf:
+        - type: "object"
+          required:
+            - "value"
+          properties:
+            value:
+              type:
+                - "string"
+                - "number"
+              minLength: 1
+        - type: "object"
+          required:
+            - "value"
+          properties:
+            value:
+              type:
+                - "string"
+                - "number"
+              minimum: 1

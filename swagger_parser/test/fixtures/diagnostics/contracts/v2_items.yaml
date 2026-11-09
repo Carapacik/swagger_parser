@@ -1,0 +1,9 @@
+"swagger": "2.0"
+"info":
+  "title": "Malformed schema"
+  "version": "1"
+"paths": {}
+"definitions":
+  "Invalid":
+    "type": "array"
+    "items": false

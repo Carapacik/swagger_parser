@@ -1,0 +1,87 @@
+openapi: 3.0.4
+info:
+  title: Station selectors
+  version: '1'
+paths:
+  /packed/s{simple}/l{label}/m{matrix}:
+    get:
+      operationId: packed
+      parameters:
+        - name: simple
+          in: path
+          style: simple
+          required: true
+          schema:
+            $ref: '#/components/schemas/Selector'
+        - name: label
+          in: path
+          style: label
+          required: true
+          schema:
+            $ref: '#/components/schemas/Selector'
+        - name: matrix
+          in: path
+          style: matrix
+          required: true
+          schema:
+            $ref: '#/components/schemas/Selector'
+        - name: X-Modes
+          in: header
+          style: simple
+          schema:
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/Mode'
+      responses:
+        '204':
+          description: Complete
+  /expanded/s{simple}/l{label}/m{matrix}:
+    get:
+      operationId: expanded
+      parameters:
+        - name: simple
+          in: path
+          style: simple
+          explode: true
+          required: true
+          schema:
+            $ref: '#/components/schemas/Selector'
+        - name: label
+          in: path
+          style: label
+          explode: true
+          required: true
+          schema:
+            $ref: '#/components/schemas/Selector'
+        - name: matrix
+          in: path
+          style: matrix
+          explode: true
+          required: true
+          schema:
+            $ref: '#/components/schemas/Selector'
+        - name: X-Modes
+          in: header
+          style: simple
+          explode: true
+          schema:
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/Mode'
+      responses:
+        '204':
+          description: Complete
+components:
+  schemas:
+    Selector:
+      type: object
+      properties:
+        stop-id:
+          type: string
+        active:
+          type: boolean
+    Mode:
+      type: string
+      enum:
+        - east-bound
+        - west

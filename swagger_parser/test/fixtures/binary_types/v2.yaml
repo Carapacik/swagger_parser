@@ -1,0 +1,71 @@
+swagger: "2.0"
+info:
+  title: "V1 regressions"
+  version: "1"
+paths:
+  "/download":
+    get:
+      operationId: "download"
+      responses:
+        "200":
+          description: "Result"
+          schema:
+            "$ref": "#/definitions/BinaryAlias"
+      produces:
+        - "application/octet-stream"
+  "/files":
+    get:
+      operationId: "listFiles"
+      responses:
+        "200":
+          description: "Result"
+          schema:
+            "$ref": "#/definitions/FileInfoList"
+      produces:
+        - "application/json"
+  "/file-id":
+    get:
+      operationId: "fileId"
+      responses:
+        "200":
+          description: "Result"
+          schema:
+            "$ref": "#/definitions/ScalarFileAlias"
+      produces:
+        - "application/json"
+  "/upload":
+    post:
+      operationId: "upload"
+      responses:
+        "204":
+          description: "Saved"
+      consumes:
+        - "multipart/form-data"
+      parameters:
+        - in: "formData"
+          name: "file"
+          type: "file"
+          required: true
+definitions:
+  Binary:
+    type: "string"
+    format: "binary"
+  BinaryAlias:
+    "$ref": "#/definitions/Binary"
+  FileInfo:
+    type: "object"
+    required:
+      - "file_name"
+    properties:
+      file_name:
+        type: "string"
+  FileInfoAlias:
+    "$ref": "#/definitions/FileInfo"
+  FileInfoList:
+    type: "array"
+    items:
+      "$ref": "#/definitions/FileInfoAlias"
+  ScalarFileId:
+    type: "string"
+  ScalarFileAlias:
+    "$ref": "#/definitions/ScalarFileId"

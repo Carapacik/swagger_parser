@@ -1,0 +1,101 @@
+openapi: "3.1.2"
+info:
+  title: "Collections and composition"
+  version: "1"
+paths: {}
+components:
+  schemas:
+    ServiceStatusChain:
+      "$ref": "sub/status.yaml#/definitions/ServiceStatusChain"
+    CollectionRoot:
+      type: "object"
+      required:
+        - "chains"
+        - "rows"
+        - "deep"
+        - "strings"
+        - "untyped"
+        - "free_values"
+        - "nullable_map"
+        - "nullable_lists"
+        - "nullable_items"
+        - "first"
+        - "second"
+      properties:
+        chains:
+          type: "object"
+          additionalProperties:
+            "$ref": "#/components/schemas/ServiceStatusChain"
+        rows:
+          type: "array"
+          items:
+            type: "object"
+            additionalProperties:
+              "$ref": "#/components/schemas/ServiceStatusChain"
+        deep:
+          type: "array"
+          items:
+            type: "object"
+            additionalProperties:
+              type: "array"
+              items:
+                "$ref": "#/components/schemas/ServiceStatusChain"
+        strings:
+          type: "object"
+          additionalProperties:
+            type: "array"
+            items:
+              type: "string"
+        untyped:
+          type: "object"
+          additionalProperties: {}
+        free_values:
+          type: "object"
+          additionalProperties:
+            type: "object"
+        nullable_map:
+          type:
+            - "object"
+            - "null"
+          additionalProperties:
+            type: "array"
+            items:
+              type: "string"
+        nullable_lists:
+          type: "object"
+          additionalProperties:
+            type:
+              - "array"
+              - "null"
+            items:
+              type: "string"
+        nullable_items:
+          type: "object"
+          additionalProperties:
+            type: "array"
+            items:
+              type:
+                - "string"
+                - "null"
+        first:
+          "$ref": "#/components/schemas/Collision-Value"
+        second:
+          "$ref": "#/components/schemas/Collision_Value"
+    "Collision-Value":
+      type: "object"
+      required:
+        - "left"
+      properties:
+        left:
+          type: "string"
+      additionalProperties:
+        type: "string"
+    Collision_Value:
+      type: "object"
+      required:
+        - "right"
+      properties:
+        right:
+          type: "integer"
+      additionalProperties:
+        type: "integer"

@@ -1,0 +1,3 @@
+"schema_path": "../extraction/untyped_response.yaml"
+"generation":
+  "original_http_response": true

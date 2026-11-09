@@ -1,0 +1,2 @@
+parse:
+  capture_source_locations: false

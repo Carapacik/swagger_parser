@@ -1,0 +1,7 @@
+schema_path: naming_v3_2.yaml
+generation:
+  naming:
+    replace_rules:
+      - target: parameters
+        pattern: x
+        replacement: y

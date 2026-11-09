@@ -1,0 +1,540 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "Enum contracts",
+    "version": "1"
+  },
+  "paths": {
+    "/envelope": {
+      "post": {
+        "operationId": "echoEnvelope",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Envelope"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/code": {
+      "post": {
+        "operationId": "echoCode",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Code"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Code"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/codes": {
+      "post": {
+        "operationId": "echoCodes",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Code"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Code"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/external": {
+      "post": {
+        "operationId": "echoExternal",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalCode"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalCode"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/parameters/{code}": {
+      "get": {
+        "operationId": "parameters",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Code"
+            }
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Mode"
+            }
+          },
+          {
+            "name": "X-Flag",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Flag"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Code"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/form": {
+      "post": {
+        "operationId": "sendForm",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "code",
+                  "mode",
+                  "flag"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "enum": [
+                      0,
+                      1,
+                      2
+                    ]
+                  },
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "north-bound",
+                      "south",
+                      ""
+                    ]
+                  },
+                  "flag": {
+                    "type": "boolean",
+                    "enum": [
+                      true
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Code"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/multipart": {
+      "post": {
+        "operationId": "sendMultipart",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "code",
+                  "mode",
+                  "flag",
+                  "jsonMode"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "enum": [
+                      0,
+                      1,
+                      2
+                    ]
+                  },
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "north-bound",
+                      "south",
+                      ""
+                    ]
+                  },
+                  "flag": {
+                    "type": "boolean",
+                    "enum": [
+                      true
+                    ]
+                  },
+                  "jsonMode": {
+                    "type": "string",
+                    "enum": [
+                      "north-bound",
+                      "south"
+                    ]
+                  }
+                }
+              },
+              "encoding": {
+                "jsonMode": {
+                  "contentType": "application/json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Code"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Code": {
+        "type": "integer",
+        "enum": [
+          0,
+          1,
+          2
+        ]
+      },
+      "Mode": {
+        "type": "string",
+        "enum": [
+          "north-bound",
+          "south",
+          ""
+        ]
+      },
+      "Flag": {
+        "type": "boolean",
+        "enum": [
+          true
+        ]
+      },
+      "CodeAlias": {
+        "$ref": "#/components/schemas/Code"
+      },
+      "ExternalCode": {
+        "$ref": "v3_2_external.json#/components/schemas/RemoteCode"
+      },
+      "Text": {
+        "type": "string",
+        "enum": [
+          "",
+          "empty",
+          "null",
+          "0",
+          "line\n\"\\$"
+        ]
+      },
+      "NullableText": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "",
+          "empty",
+          "null",
+          null
+        ]
+      },
+      "NullableCode": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "enum": [
+          0,
+          2,
+          null
+        ]
+      },
+      "InferredText": {
+        "enum": [
+          "a\n\"\\$",
+          "b"
+        ]
+      },
+      "InferredCode": {
+        "enum": [
+          1,
+          2
+        ]
+      },
+      "NarrowCode": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Code"
+          },
+          {
+            "type": "integer",
+            "enum": [
+              1,
+              2
+            ]
+          }
+        ]
+      },
+      "NarrowText": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/InferredText"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "a\n\"\\$"
+            ]
+          }
+        ]
+      },
+      "Mixed": {
+        "type": [
+          "string",
+          "number",
+          "boolean",
+          "null"
+        ],
+        "enum": [
+          "0",
+          0,
+          "null",
+          null,
+          false,
+          true,
+          1.0e+3,
+          1.25,
+          "",
+          "line\n\"\\$"
+        ]
+      },
+      "Envelope": {
+        "type": "object",
+        "required": [
+          "code",
+          "mode",
+          "flag",
+          "alias",
+          "external",
+          "text",
+          "nullableText",
+          "nullableCode",
+          "inferred",
+          "narrowCode",
+          "narrowText",
+          "inlineCode",
+          "inlineMode",
+          "codes",
+          "inlineCodes",
+          "byName",
+          "mixed",
+          "integral"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/Code"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/Mode"
+          },
+          "flag": {
+            "$ref": "#/components/schemas/Flag"
+          },
+          "alias": {
+            "$ref": "#/components/schemas/CodeAlias"
+          },
+          "external": {
+            "$ref": "#/components/schemas/ExternalCode"
+          },
+          "text": {
+            "$ref": "#/components/schemas/Text"
+          },
+          "nullableText": {
+            "$ref": "#/components/schemas/NullableText"
+          },
+          "nullableCode": {
+            "$ref": "#/components/schemas/NullableCode"
+          },
+          "inferred": {
+            "$ref": "#/components/schemas/InferredCode"
+          },
+          "narrowCode": {
+            "$ref": "#/components/schemas/NarrowCode"
+          },
+          "narrowText": {
+            "$ref": "#/components/schemas/NarrowText"
+          },
+          "inlineCode": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2
+            ]
+          },
+          "inlineMode": {
+            "type": "string",
+            "enum": [
+              "north-bound",
+              "south",
+              ""
+            ]
+          },
+          "codes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Code"
+            }
+          },
+          "inlineCodes": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            }
+          },
+          "byName": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Mode"
+            }
+          },
+          "mixed": {
+            "$ref": "#/components/schemas/Mixed"
+          },
+          "integral": {
+            "$ref": "#/components/schemas/IntegralCode"
+          }
+        }
+      },
+      "ImpossibleCode": {
+        "allOf": [
+          {
+            "type": "integer",
+            "enum": [
+              1
+            ]
+          },
+          {
+            "type": "integer",
+            "enum": [
+              2
+            ]
+          }
+        ]
+      },
+      "IntegralCode": {
+        "type": "integer",
+        "enum": [
+          1.0e+3
+        ]
+      }
+    }
+  }
+}

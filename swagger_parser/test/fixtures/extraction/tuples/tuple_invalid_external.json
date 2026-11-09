@@ -1,0 +1,14 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Invalid tuple",
+    "version": "1"
+  },
+  "components": {
+    "schemas": {
+      "Reading": {
+        "$ref": "./tuple_invalid_positions.yaml"
+      }
+    }
+  }
+}

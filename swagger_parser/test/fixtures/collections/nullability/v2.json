@@ -1,0 +1,284 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Nullable collections",
+    "version": "1"
+  },
+  "paths": {
+    "/collections": {
+      "post": {
+        "operationId": "echoCollections",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "schema": {
+              "$ref": "#/definitions/NullableCollections"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NullableCollections"
+            }
+          }
+        ]
+      }
+    },
+    "/FreeObject": {
+      "get": {
+        "operationId": "getFreeObject",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "schema": {
+              "$ref": "#/definitions/FreeObject"
+            }
+          }
+        }
+      }
+    },
+    "/ClosedObject": {
+      "get": {
+        "operationId": "getClosedObject",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "schema": {
+              "$ref": "#/definitions/ClosedObject"
+            }
+          }
+        }
+      }
+    },
+    "/SingleObject": {
+      "get": {
+        "operationId": "getSingleObject",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "schema": {
+              "$ref": "#/definitions/SingleObject"
+            }
+          }
+        }
+      }
+    },
+    "/Gender": {
+      "get": {
+        "operationId": "getGender",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "schema": {
+              "$ref": "#/definitions/Gender"
+            }
+          }
+        }
+      }
+    },
+    "/Criteria": {
+      "get": {
+        "operationId": "getCriteria",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "schema": {
+              "$ref": "#/definitions/Criteria"
+            }
+          }
+        }
+      }
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "NullableText": {
+      "type": "string",
+      "x-nullable": true
+    },
+    "Criteria": {
+      "type": "object",
+      "required": [
+        "code"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        }
+      },
+      "x-nullable": true
+    },
+    "Gender": {
+      "type": "string",
+      "enum": [
+        "female",
+        "male",
+        null
+      ],
+      "x-nullable": true
+    },
+    "NullableCollections": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "listRequiredRequired",
+        "mapRequiredRequired",
+        "listRequiredNullable",
+        "mapRequiredNullable",
+        "listNullableRequired",
+        "mapNullableRequired",
+        "listNullableNullable",
+        "mapNullableNullable",
+        "refs",
+        "nested",
+        "criteria",
+        "gender"
+      ],
+      "properties": {
+        "listRequiredRequired": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mapRequiredRequired": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "listRequiredNullable": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "x-nullable": true
+          }
+        },
+        "mapRequiredNullable": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "x-nullable": true
+          }
+        },
+        "listNullableRequired": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-nullable": true
+        },
+        "mapNullableRequired": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-nullable": true
+        },
+        "listNullableNullable": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "x-nullable": true
+          },
+          "x-nullable": true
+        },
+        "mapNullableNullable": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "x-nullable": true
+          },
+          "x-nullable": true
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NullableText"
+          }
+        },
+        "nested": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "x-nullable": true
+              },
+              "x-nullable": true
+            },
+            "x-nullable": true
+          },
+          "x-nullable": true
+        },
+        "criteria": {
+          "$ref": "#/definitions/Criteria"
+        },
+        "gender": {
+          "description": "Selected gender.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/Gender"
+            }
+          ]
+        },
+        "optionalCriteria": {
+          "$ref": "#/definitions/Criteria"
+        },
+        "optionalList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "empty": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "filled": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "a"
+          ]
+        }
+      }
+    },
+    "FreeObject": {
+      "type": "object"
+    },
+    "ClosedObject": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "SingleObject": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

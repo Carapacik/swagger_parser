@@ -1,0 +1,16 @@
+"swagger": "2.0"
+"info":
+  "title": "Reference contracts"
+  "version": "1"
+"paths":
+  "/invalid":
+    "post":
+      "operationId": "invalidBody"
+      "responses":
+        "204":
+          "description": "No body."
+      "parameters":
+        -
+          "name": "body"
+          "in": "body"
+          "required": true

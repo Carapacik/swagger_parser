@@ -1,0 +1,319 @@
+openapi: "3.0.4"
+info:
+  title: "Union titles"
+  version: "1"
+paths: {}
+components:
+  schemas:
+    Identifier:
+      title: "Do not rename the union"
+      oneOf:
+        -
+          title: "External code"
+          type: "string"
+        -
+          title: "Internal id"
+          type: "integer"
+    Stop:
+      oneOf:
+        -
+          type: "object"
+          required:
+            - "platform"
+          properties:
+            platform:
+              type: "integer"
+          title: "Rail"
+        -
+          type: "object"
+          required:
+            - "route"
+          properties:
+            route:
+              type: "string"
+          title: "Bus"
+    Contact:
+      anyOf:
+        -
+          type: "object"
+          required:
+            - "id"
+          properties:
+            id:
+              type: "string"
+          title: "By id"
+        -
+          type: "object"
+          required:
+            - "email"
+          properties:
+            email:
+              type: "string"
+          title: "By email"
+    RailStop:
+      type: "object"
+      required:
+        - "platform"
+      properties:
+        platform:
+          type: "integer"
+      title: "Rail station"
+    BusStop:
+      type: "object"
+      required:
+        - "route"
+      properties:
+        route:
+          type: "string"
+      title: "Bus station"
+    NamedStop:
+      oneOf:
+        -
+          $ref: "#/components/schemas/RailStop"
+        -
+          $ref: "#/components/schemas/BusStop"
+    NamedContact:
+      anyOf:
+        -
+          $ref: "#/components/schemas/RailStop"
+        -
+          $ref: "#/components/schemas/BusStop"
+    State:
+      oneOf:
+        -
+          type: "object"
+          required:
+            - "uptime"
+            - "kind"
+          properties:
+            uptime:
+              type: "integer"
+            kind:
+              type: "string"
+              enum:
+                - "online"
+          title: "Online"
+        -
+          type: "object"
+          required:
+            - "delay"
+            - "kind"
+          properties:
+            delay:
+              type: "integer"
+            kind:
+              type: "string"
+              enum:
+                - "offline"
+          title: "Offline"
+      discriminator:
+        propertyName: "kind"
+        mapping:
+          online: "#/components/schemas/State/oneOf/0"
+          offline: "#/components/schemas/State/oneOf/1"
+    TaggedAny:
+      anyOf:
+        -
+          type: "object"
+          required:
+            - "count"
+            - "kind"
+          properties:
+            count:
+              type: "integer"
+            kind:
+              type: "string"
+              enum:
+                - "ready"
+          title: "Ready"
+        -
+          type: "object"
+          required:
+            - "count"
+            - "kind"
+          properties:
+            count:
+              type: "integer"
+            kind:
+              type: "string"
+              enum:
+                - "busy"
+          title: "Busy"
+      discriminator:
+        propertyName: "kind"
+        mapping:
+          ready: "#/components/schemas/TaggedAny/anyOf/0"
+          busy: "#/components/schemas/TaggedAny/anyOf/1"
+    Status:
+      oneOf:
+        -
+          type: "string"
+          enum:
+            - "on"
+          title: "Enabled"
+        -
+          type: "string"
+          enum:
+            - "off"
+          title: "Disabled"
+    StatusViews:
+      anyOf:
+        -
+          type: "string"
+          enum:
+            - "on"
+          title: "Enabled"
+        -
+          type: "string"
+          enum:
+            - "off"
+          title: "Disabled"
+    Repeated:
+      anyOf:
+        -
+          title: "Same name"
+          type: "string"
+        -
+          title: "Same-name"
+          type: "integer"
+        -
+          title: "  "
+          type: "boolean"
+        -
+          title: "!!!"
+          type: "array"
+          items:
+            type: "string"
+    Choices:
+      oneOf:
+        -
+          title: "Same name"
+          type: "string"
+        -
+          title: "Same-name"
+          type: "integer"
+    GlobalChoiceBranch:
+      type: "object"
+    GlobalChoice:
+      oneOf:
+        -
+          title: "Branch"
+          type: "string"
+        -
+          title: "Other"
+          type: "integer"
+    Words:
+      anyOf:
+        -
+          title: "class"
+          type: "string"
+        -
+          title: "123 id"
+          type: "integer"
+    Fallback:
+      oneOf:
+        -
+          type: "string"
+        -
+          type: "integer"
+    Merged:
+      type: "object"
+      required:
+        - "trace"
+      properties:
+        trace:
+          type: "string"
+      oneOf:
+        -
+          type: "object"
+          required:
+            - "uptime"
+            - "kind"
+          properties:
+            uptime:
+              type: "integer"
+            kind:
+              type: "string"
+              enum:
+                - "online"
+          title: "Online"
+        -
+          type: "object"
+          required:
+            - "delay"
+            - "kind"
+          properties:
+            delay:
+              type: "integer"
+            kind:
+              type: "string"
+              enum:
+                - "offline"
+          title: "Offline"
+      discriminator:
+        propertyName: "kind"
+        mapping:
+          online: "#/components/schemas/Merged/oneOf/0"
+          offline: "#/components/schemas/Merged/oneOf/1"
+    Base:
+      type: "object"
+      required:
+        - "base"
+      properties:
+        base:
+          type: "string"
+    Composed:
+      oneOf:
+        -
+          title: "Rail"
+          allOf:
+            -
+              $ref: "#/components/schemas/Base"
+            -
+              type: "object"
+              required:
+                - "platform"
+              properties:
+                platform:
+                  type: "integer"
+        -
+          title: "Bus"
+          allOf:
+            -
+              $ref: "#/components/schemas/Base"
+            -
+              type: "object"
+              required:
+                - "route"
+              properties:
+                route:
+                  type: "string"
+    Directional:
+      oneOf:
+        -
+          type: "object"
+          required:
+            - "id"
+            - "kind"
+          properties:
+            id:
+              type: "integer"
+              readOnly: true
+            kind:
+              type: "string"
+              enum:
+                - "created"
+          title: "Created"
+        -
+          type: "object"
+          required:
+            - "count"
+            - "kind"
+          properties:
+            count:
+              type: "integer"
+            kind:
+              type: "string"
+              enum:
+                - "deleted"
+          title: "Deleted"

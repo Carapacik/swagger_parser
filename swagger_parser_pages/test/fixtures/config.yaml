@@ -1,0 +1,13 @@
+swagger_parser:
+  generation:
+    http_client: dio
+    serializer: plain
+    # Keep the user template.
+    templates:
+      models: templates/model.mustache
+    operation_filters:
+      include_tags:
+        - Stations
+  parse:
+    unknown_fields: reject
+    max_depth: 64

@@ -1,0 +1,225 @@
+swagger: '2.0'
+info:
+  title: Pets
+  version: '1.0'
+  description: Pet API
+  termsOfService: https://example.com/terms
+  contact:
+    name: Support
+    url: 'https://example.com'
+    email: 'help@example.com'
+  license:
+    name: MIT
+    url: 'https://example.com/license'
+host: api.example.com
+basePath: /v1
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+tags:
+  - name: pets
+    description: Pet operations
+    externalDocs:
+      url: 'https://example.com/pets'
+externalDocs:
+  url: 'https://example.com/docs'
+  description: Docs
+x-config:
+  enabled: true
+  values:
+    - null
+    - 1
+    - text
+paths:
+  x-owner: team
+  /pets/{id}:
+    parameters:
+      - $ref: '#/parameters/Id'
+    get:
+      tags:
+        - pets
+      summary: Get a pet
+      operationId: getPet
+      description: Find a pet by ID
+      deprecated: false
+      schemes:
+        - https
+      consumes: []
+      produces:
+        - application/json
+      security: []
+      parameters:
+        - name: fields
+          in: query
+          type: array
+          items:
+            type: string
+            enum:
+              - name
+              - id
+          collectionFormat: multi
+          allowEmptyValue: true
+          required: false
+          default:
+            - name
+      responses:
+        x-cache: false
+        '200':
+          description: Pet
+          schema:
+            $ref: '#/definitions/Pet'
+          headers:
+            X-Rate-Limit:
+              type: integer
+              minimum: 0
+              description: Requests left
+          examples:
+            application/json:
+              id: 1
+              name: Cat
+        default:
+          $ref: '#/responses/Error'
+  /pets:
+    post:
+      parameters:
+        - name: pet
+          in: body
+          required: true
+          description: Pet input
+          schema:
+            $ref: '#/definitions/Pet'
+      responses:
+        '201':
+          description: Created
+  /upload:
+    post:
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: file
+          in: formData
+          type: file
+          required: true
+      responses:
+        '200':
+          description: File
+          schema:
+            type: file
+  /events:
+    get:
+      produces:
+        - text/event-stream
+      responses:
+        '200':
+          description: Events
+          schema:
+            type: string
+  /external:
+    $ref: './paths.yaml#/pets'
+parameters:
+  Id:
+    name: id
+    in: path
+    required: true
+    type: integer
+    format: int64
+responses:
+  Error:
+    description: Error
+    schema:
+      type: string
+definitions:
+  Pet:
+    type: object
+    title: Pet
+    description: Pet data
+    required:
+      - id
+    discriminator: kind
+    minProperties: 1
+    maxProperties: 10
+    additionalProperties: false
+    xml:
+      name: pet
+      namespace: 'https://example.com/xml'
+      prefix: p
+      attribute: false
+      wrapped: false
+    externalDocs:
+      url: 'https://example.com/pet'
+    example: null
+    x-model:
+      nested:
+        - a
+        - b
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+        minimum: 0
+        exclusiveMinimum: false
+      name:
+        type:
+          - string
+          - 'null'
+        default: null
+        enum:
+          - null
+          - Cat
+        minLength: 1
+        maxLength: 50
+        pattern: '.*'
+      score:
+        type: number
+        multipleOf: 0.5
+        maximum: 10
+        exclusiveMaximum: true
+      children:
+        type: array
+        items:
+          $ref: '#/definitions/Pet'
+        minItems: 0
+        maxItems: 10
+        uniqueItems: true
+      labels:
+        type: object
+        additionalProperties:
+          type: string
+      tuple:
+        type: array
+        items:
+          - type: string
+          - type: integer
+  ExtendedPet:
+    allOf:
+      - $ref: '#/definitions/Pet'
+      - type: object
+        properties:
+          active:
+            type: boolean
+  x-schema:
+    type: boolean
+securityDefinitions:
+  basicAuth:
+    type: basic
+    description: Basic auth
+  apiKey:
+    type: apiKey
+    name: X-Api-Key
+    in: header
+  oauth:
+    type: oauth2
+    flow: accessCode
+    authorizationUrl: https://example.com/authorize
+    tokenUrl: https://example.com/token
+    scopes:
+      read: Read pets
+      x-scope: Extra scope
+security:
+  - apiKey: []
+  - oauth:
+      - read

@@ -1,0 +1,52 @@
+openapi: 3.2.1
+info:
+  title: Station filters
+  version: '1'
+paths:
+  /stations:
+    get:
+      operationId: search
+      parameters:
+        - name: filter
+          in: query
+          style: form
+          explode: false
+          required: true
+          schema:
+            $ref: '#/components/schemas/Filter'
+        - name: by
+          in: query
+          schema:
+            $ref: '#/components/schemas/Filter'
+        - name: flags
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: object
+            additionalProperties:
+              type: boolean
+        - name: meta
+          in: query
+          style: deepObject
+          explode: true
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Complete
+components:
+  schemas:
+    Filter:
+      type: object
+      properties:
+        id:
+          type: integer
+        active:
+          type: boolean

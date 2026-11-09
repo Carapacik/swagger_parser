@@ -1,0 +1,16 @@
+"openapi": "3.0.4"
+"info":
+  "title": "Multipart contracts"
+  "version": "1"
+"paths": {}
+"components":
+  "schemas":
+    "ExternalMetadata":
+      "type": "object"
+      "required":
+        - "source"
+      "properties":
+        "source":
+          "type": "string"
+    "Empty":
+      "type": "object"

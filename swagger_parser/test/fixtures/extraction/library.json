@@ -1,0 +1,22 @@
+{
+  "openapi": "3.1.2",
+  "info": {"title": "Station library", "version": "1"},
+  "components": {
+    "pathItems": {
+      "Nested": {
+        "get": {
+          "parameters": [{"name": "d", "in": "path", "required": true, "schema": {"type": "integer"}}],
+          "responses": {
+            "200": {"description": "Station", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Station"}}}},
+            "default": {"description": "Unexpected response"}
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Station": {"type": "object", "properties": {"parent": {"$ref": "#/components/schemas/Station"}}},
+      "Archive": {"type": ["object", "null"]},
+      "Unrelated": {"type": "string"}
+    }
+  }
+}

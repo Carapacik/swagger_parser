@@ -1,0 +1,66 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Station filters",
+    "version": "1"
+  },
+  "paths": {
+    "/stations": {
+      "get": {
+        "operationId": "filterStations",
+        "parameters": [
+          {
+            "name": "line",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "zone",
+            "in": "query",
+            "style": "spaceDelimited",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "style": "pipeDelimited",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "boolean"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No stations"
+          }
+        }
+      }
+    }
+  }
+}

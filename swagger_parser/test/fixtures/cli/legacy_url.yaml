@@ -1,0 +1,3 @@
+swagger_parser:
+  schema_url: http://127.0.0.1:PORT/latest
+  output_directory: generated

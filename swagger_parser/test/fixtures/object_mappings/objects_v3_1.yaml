@@ -1,0 +1,270 @@
+openapi: "3.1.2"
+info:
+  title: "Mapped object API"
+  version: "1"
+paths:
+  "/point":
+    post:
+      operationId: "echoPoint"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/GeoPoint"
+      responses:
+        "200":
+          description: "Value."
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/GeoPoint"
+  "/station":
+    get:
+      operationId: "getStation"
+      responses:
+        "200":
+          description: "Value."
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/search":
+    get:
+      operationId: "search"
+      parameters:
+        -
+          name: "point"
+          in: "query"
+          required: true
+          style: "deepObject"
+          explode: true
+          schema:
+            $ref: "#/components/schemas/AllOfPoint"
+      responses:
+        "200":
+          description: "Value."
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/GeoPoint"
+components:
+  schemas:
+    GeoPoint:
+      type: "object"
+      required:
+        - "latitude"
+        - "longitude"
+      properties:
+        latitude:
+          type: "number"
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: "number"
+          minimum: -180
+          maximum: 180
+      additionalProperties: false
+      default:
+        latitude: 0
+        longitude: 0
+    NullablePoint:
+      type:
+        - "object"
+        - "null"
+      required:
+        - "latitude"
+        - "longitude"
+      properties:
+        latitude:
+          type: "number"
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: "number"
+          minimum: -180
+          maximum: 180
+      additionalProperties: false
+      default:
+        latitude: 0
+        longitude: 0
+    OptionalPoint:
+      type:
+        - "object"
+        - "null"
+      required:
+        - "latitude"
+        - "longitude"
+      properties:
+        latitude:
+          type: "number"
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: "number"
+          minimum: -180
+          maximum: 180
+      additionalProperties: false
+    StationId:
+      type: "string"
+      default: "unknown"
+    NullableId:
+      type:
+        - "string"
+        - "null"
+      default: "unknown"
+    NullId:
+      type:
+        - "string"
+        - "null"
+      default: null
+    PlainId:
+      type: "string"
+    AllOfPoint:
+      type: "object"
+      allOf:
+        -
+          type: "object"
+          required:
+            - "latitude"
+          properties:
+            latitude:
+              type: "number"
+        -
+          type: "object"
+          required:
+            - "longitude"
+          properties:
+            longitude:
+              type: "number"
+    Station:
+      type: "object"
+      required:
+        - "requiredPoint"
+        - "requiredId"
+      properties:
+        requiredPoint:
+          $ref: "#/components/schemas/GeoPoint"
+        requiredId:
+          $ref: "#/components/schemas/StationId"
+        id:
+          $ref: "#/components/schemas/StationId"
+        nullableId:
+          $ref: "#/components/schemas/NullableId"
+        nullId:
+          $ref: "#/components/schemas/NullId"
+        location:
+          $ref: "#/components/schemas/NullablePoint"
+        optionalLocation:
+          $ref: "#/components/schemas/OptionalPoint"
+        plainId:
+          $ref: "#/components/schemas/PlainId"
+        points:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/GeoPoint"
+          default:
+            -
+              latitude: 0
+              longitude: 0
+            -
+              latitude: 1
+              longitude: 2
+        byName:
+          type: "object"
+          additionalProperties:
+            $ref: "#/components/schemas/GeoPoint"
+          default:
+            origin:
+              latitude: 0
+              longitude: 0
+        allOfPoint:
+          $ref: "#/components/schemas/AllOfPoint"
+      additionalProperties: false
+    Dashboard:
+      type: "object"
+      properties:
+        station:
+          allOf:
+            -
+              $ref: "#/components/schemas/Station"
+          default:
+            requiredPoint:
+              latitude: 0
+              longitude: 0
+            requiredId: "unknown"
+            points:
+              -
+                latitude: 0
+                longitude: 0
+      additionalProperties: false
+    Envelope:
+      type: "object"
+      required:
+        - "point"
+      properties:
+        point:
+          $ref: "#/components/schemas/GeoPoint"
+      additionalProperties: false
+    Holder:
+      type: "object"
+      required:
+        - "envelope"
+      properties:
+        envelope:
+          $ref: "#/components/schemas/Envelope"
+      additionalProperties: false
+    Place:
+      oneOf:
+        -
+          $ref: "#/components/schemas/OptionalPoint"
+        -
+          type: "string"
+    AnyPlace:
+      anyOf:
+        -
+          $ref: "#/components/schemas/GeoPoint"
+        -
+          type: "string"
+    TaggedPlace:
+      oneOf:
+        -
+          $ref: "#/components/schemas/TaggedPoint"
+        -
+          $ref: "#/components/schemas/Label"
+      discriminator:
+        propertyName: "kind"
+        mapping:
+          point: "#/components/schemas/TaggedPoint"
+          label: "#/components/schemas/Label"
+    Label:
+      type: "object"
+      required:
+        - "kind"
+        - "text"
+      properties:
+        kind:
+          type: "string"
+          enum:
+            - "label"
+        text:
+          type: "string"
+      additionalProperties: false
+    TaggedPoint:
+      type:
+        - "object"
+        - "null"
+      required:
+        - "kind"
+        - "latitude"
+        - "longitude"
+      properties:
+        kind:
+          type: "string"
+          enum:
+            - "point"
+        latitude:
+          type: "number"
+        longitude:
+          type: "number"
+      additionalProperties: false

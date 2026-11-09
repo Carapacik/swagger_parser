@@ -1,0 +1,319 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Subscriptions",
+    "version": "1",
+    "contact": {
+      "name": "Support",
+      "email": "help@example.com"
+    },
+    "license": {
+      "name": "Apache-2.0"
+    }
+  },
+  "externalDocs": {
+    "url": "/guide"
+  },
+  "servers": [
+    {
+      "url": "https://{region}.example.com",
+      "variables": {
+        "region": {
+          "default": "eu",
+          "enum": [
+            "eu",
+            "us"
+          ]
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "events",
+      "externalDocs": {
+        "url": "/events"
+      }
+    }
+  ],
+  "security": [
+    {
+      "oauth": [
+        "read"
+      ]
+    },
+    {}
+  ],
+  "paths": {
+    "x-group": "events",
+    "/events/{id}": {
+      "$ref": "./paths.yaml#/events",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "style": "simple",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "trace": {
+        "responses": {
+          "default": {
+            "description": "Trace"
+          }
+        }
+      },
+      "post": {
+        "operationId": "listen",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/cursor"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Upload"
+        },
+        "responses": {
+          "200": {
+            "description": "Event stream",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "links": {
+              "next": {
+                "$ref": "#/components/links/next"
+              }
+            }
+          },
+          "4XX": {
+            "$ref": "#/components/responses/Error"
+          },
+          "x-policy": {
+            "retry": false
+          }
+        },
+        "callbacks": {
+          "notify": {
+            "$ref": "#/components/callbacks/notify"
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Event": {
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "nullable": true,
+            "default": null,
+            "example": null
+          },
+          "parent": {
+            "$ref": "#/components/schemas/Event",
+            "description": "ignored"
+          },
+          "peers": {
+            "type": "array",
+            "items": {
+              "$ref": "./peers.yaml#/Peer"
+            }
+          }
+        },
+        "additionalProperties": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "message": "./event.yaml"
+          }
+        },
+        "xml": {
+          "name": "event",
+          "wrapped": false
+        },
+        "x-data": {
+          "flags": [
+            1,
+            null
+          ]
+        }
+      },
+      "x-closed": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Event"
+          }
+        ],
+        "additionalProperties": false,
+        "anyOf": [
+          {
+            "type": "object"
+          }
+        ],
+        "not": {
+          "type": "number"
+        }
+      }
+    },
+    "parameters": {
+      "cursor": {
+        "name": "cursor",
+        "in": "cookie",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "headers": {
+      "RequestId": {
+        "style": "simple",
+        "schema": {
+          "type": "string"
+        },
+        "example": "abc"
+      }
+    },
+    "responses": {
+      "Error": {
+        "description": "Error"
+      }
+    },
+    "requestBodies": {
+      "Upload": {
+        "required": true,
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            },
+            "encoding": {
+              "file": {
+                "contentType": "application/pdf",
+                "headers": {
+                  "X-File": {
+                    "$ref": "#/components/headers/RequestId"
+                  }
+                }
+              }
+            },
+            "examples": {
+              "sample": {
+                "$ref": "#/components/examples/File"
+              }
+            }
+          }
+        }
+      }
+    },
+    "examples": {
+      "File": {
+        "summary": "Sample",
+        "value": null
+      }
+    },
+    "links": {
+      "next": {
+        "operationRef": "#/paths/~1events~1%7Bid%7D/post",
+        "parameters": {
+          "id": "$response.header.X-Request-Id"
+        },
+        "requestBody": null,
+        "server": {
+          "url": "/v1"
+        }
+      }
+    },
+    "callbacks": {
+      "notify": {
+        "{$request.body#/url}": {
+          "post": {
+            "responses": {
+              "204": {
+                "description": "Delivered"
+              }
+            }
+          }
+        },
+        "x-owner": "events"
+      }
+    },
+    "securitySchemes": {
+      "cookie": {
+        "type": "apiKey",
+        "name": "key",
+        "in": "cookie"
+      },
+      "http": {
+        "type": "http",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      },
+      "discovery": {
+        "type": "openIdConnect",
+        "openIdConnectUrl": "/.well-known/openid-configuration"
+      },
+      "oauth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "/auth",
+            "scopes": {
+              "read": "Read events"
+            }
+          },
+          "password": {
+            "tokenUrl": "/token",
+            "scopes": {}
+          },
+          "clientCredentials": {
+            "tokenUrl": "/token",
+            "scopes": {}
+          },
+          "authorizationCode": {
+            "authorizationUrl": "/auth",
+            "tokenUrl": "/token",
+            "refreshUrl": "/refresh",
+            "scopes": {}
+          }
+        }
+      }
+    }
+  }
+}

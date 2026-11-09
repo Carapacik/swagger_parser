@@ -1,0 +1,17 @@
+{
+  "output_directory": "out",
+  "generation": {
+    "apply_parameter_defaults": true
+  },
+  "inputs": {
+    "enabled": {
+      "schema_path": "v3_2.yaml"
+    },
+    "disabled": {
+      "schema_path": "v2.json",
+      "generation": {
+        "apply_parameter_defaults": false
+      }
+    }
+  }
+}

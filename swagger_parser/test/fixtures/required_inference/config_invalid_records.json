@@ -1,0 +1,6 @@
+{
+  "input": "v3_2.yaml",
+  "generation": {
+    "use_presence_records": "true"
+  }
+}

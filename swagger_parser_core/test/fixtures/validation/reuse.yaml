@@ -1,0 +1,17 @@
+openapi: 3.2.1
+info:
+  title: Station aliases
+  version: '1'
+paths:
+  /primary/{id}:
+    $ref: 'shared/paths.yaml#/ById'
+  /secondary/{code}:
+    $ref: 'shared/paths.yaml#/ById'
+  /subscriptions:
+    post:
+      callbacks:
+        alarm:
+          $ref: 'shared/library.json#/components/callbacks/Alarm'
+webhooks:
+  alarm:
+    $ref: 'shared/library.json#/components/pathItems/Hook'

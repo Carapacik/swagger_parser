@@ -1,0 +1,22 @@
+{
+  "schema_path": "entry.json",
+  "output_directory": "out",
+  "generation": {
+    "http_client": "http",
+    "templates": {
+      "stations/models/stations_page.dart": "stations_page.mustache",
+      "exports": "exports.mustache",
+      "files": [
+        {
+          "template": "page.mustache",
+          "output": "helpers/page.dart"
+        },
+        {
+          "template": "internal.mustache",
+          "output": "helpers/internal.dart",
+          "export": false
+        }
+      ]
+    }
+  }
+}

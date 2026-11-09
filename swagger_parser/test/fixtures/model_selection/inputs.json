@@ -1,0 +1,41 @@
+{
+  "generation": {
+    "exclude_parameters": [
+      {
+        "name": "x-trace-id",
+        "in": "header"
+      },
+      {
+        "name": "debug",
+        "in": "query",
+        "paths": [
+          "/stations/**"
+        ],
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "name": "session",
+        "in": "cookie"
+      }
+    ],
+    "prune_unused_models": true,
+    "keep_models": [
+      "#/components/schemas/AuditRecord"
+    ]
+  },
+  "inputs": {
+    "inherited": {
+      "schema_path": "v3_2.yaml"
+    },
+    "override": {
+      "schema_path": "v2.json",
+      "generation": {
+        "exclude_parameters": [],
+        "prune_unused_models": false,
+        "keep_models": []
+      }
+    }
+  }
+}

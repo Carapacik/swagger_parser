@@ -1,0 +1,13 @@
+openapi: 3.0.4
+info:
+  title: Station search
+  version: '1'
+paths:
+  /search:
+    get:
+      operationId: queryStations
+      responses:
+        '200':
+          description: Search results
+  /stations/{id}:
+    $ref: 'shared/library.json#/components/pathItems/Station'

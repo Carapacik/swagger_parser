@@ -1,0 +1,304 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Nullable collections",
+    "version": "1"
+  },
+  "paths": {
+    "/collections": {
+      "post": {
+        "operationId": "echoCollections",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NullableCollections"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NullableCollections"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/FreeObject": {
+      "get": {
+        "operationId": "getFreeObject",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreeObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ClosedObject": {
+      "get": {
+        "operationId": "getClosedObject",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClosedObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SingleObject": {
+      "get": {
+        "operationId": "getSingleObject",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SingleObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Gender": {
+      "get": {
+        "operationId": "getGender",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Gender"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Criteria": {
+      "get": {
+        "operationId": "getCriteria",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Criteria"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NullableText": {
+        "type": "string",
+        "nullable": true
+      },
+      "Criteria": {
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        },
+        "nullable": true
+      },
+      "Gender": {
+        "type": "string",
+        "enum": [
+          "female",
+          "male",
+          null
+        ],
+        "nullable": true
+      },
+      "NullableCollections": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "listRequiredRequired",
+          "mapRequiredRequired",
+          "listRequiredNullable",
+          "mapRequiredNullable",
+          "listNullableRequired",
+          "mapNullableRequired",
+          "listNullableNullable",
+          "mapNullableNullable",
+          "refs",
+          "nested",
+          "criteria",
+          "gender"
+        ],
+        "properties": {
+          "listRequiredRequired": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mapRequiredRequired": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "listRequiredNullable": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "mapRequiredNullable": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "listNullableRequired": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "mapNullableRequired": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "listNullableNullable": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "nullable": true
+            },
+            "nullable": true
+          },
+          "mapNullableNullable": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "nullable": true
+            },
+            "nullable": true
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NullableText"
+            }
+          },
+          "nested": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "nullable": true
+              },
+              "nullable": true
+            },
+            "nullable": true
+          },
+          "criteria": {
+            "$ref": "#/components/schemas/Criteria"
+          },
+          "gender": {
+            "description": "Selected gender.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Gender"
+              }
+            ]
+          },
+          "optionalCriteria": {
+            "$ref": "#/components/schemas/Criteria"
+          },
+          "optionalList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "empty": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "filled": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [
+              "a"
+            ]
+          }
+        }
+      },
+      "FreeObject": {
+        "type": "object"
+      },
+      "ClosedObject": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "SingleObject": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

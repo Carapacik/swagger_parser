@@ -1,0 +1,249 @@
+{
+  "openapi": "3.2.1",
+  "$self": "./events.yaml",
+  "info": {
+    "title": "Station events",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "name": "production",
+      "url": "https://stations.example.org"
+    }
+  ],
+  "tags": [
+    {
+      "name": "stations",
+      "kind": "nav"
+    },
+    {
+      "name": "readings",
+      "summary": "Sensor readings",
+      "parent": "stations",
+      "kind": "nav"
+    }
+  ],
+  "paths": {
+    "/readings": {
+      "query": {
+        "operationId": "findReadings",
+        "tags": [
+          "readings"
+        ],
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "querystring",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "station": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "station": "north"
+            }
+          },
+          {
+            "name": "preferences",
+            "in": "cookie",
+            "style": "cookie",
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "summary": "Reading stream",
+            "content": {
+              "text/event-stream": {
+                "$ref": "#/components/mediaTypes/EventStream",
+                "description": "Live station readings"
+              }
+            },
+            "headers": {
+              "X-Station": {
+                "content": {
+                  "text/plain": {
+                    "$ref": "#/components/mediaTypes/StationName"
+                  }
+                },
+                "example": "north"
+              }
+            }
+          }
+        }
+      },
+      "additionalOperations": {
+        "REPORT": {
+          "operationId": "exportReadings",
+          "requestBody": {
+            "content": {
+              "multipart/mixed": {
+                "schema": {
+                  "type": "array"
+                },
+                "prefixEncoding": [
+                  {
+                    "contentType": "application/json"
+                  }
+                ],
+                "itemEncoding": {
+                  "contentType": "multipart/form-data",
+                  "encoding": {
+                    "reading": {
+                      "contentType": "application/json"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "204": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "mediaTypes": {
+      "EventStream": {
+        "itemSchema": {
+          "$ref": "#/components/schemas/Event"
+        },
+        "examples": {
+          "sample": {
+            "$ref": "#/components/examples/Reading"
+          }
+        }
+      },
+      "StationName": {
+        "schema": {
+          "type": "string"
+        }
+      },
+      "LiveReadings": {
+        "$ref": "#/components/mediaTypes/EventStream"
+      }
+    },
+    "schemas": {
+      "Event": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string",
+            "contentMediaType": "application/json",
+            "contentSchema": {
+              "$ref": "#/components/schemas/Reading"
+            }
+          }
+        }
+      },
+      "Reading": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Temperature"
+          },
+          {
+            "$ref": "#/components/schemas/OtherReading"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "temperature": "#/components/schemas/Temperature"
+          },
+          "defaultMapping": "#/components/schemas/OtherReading"
+        }
+      },
+      "Temperature": {
+        "type": "object",
+        "required": [
+          "kind",
+          "degrees"
+        ],
+        "properties": {
+          "kind": {
+            "const": "temperature"
+          },
+          "degrees": {
+            "type": "number",
+            "xml": {
+              "nodeType": "attribute",
+              "name": "degrees"
+            }
+          }
+        }
+      },
+      "OtherReading": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "not": {
+              "const": "temperature"
+            }
+          }
+        }
+      },
+      "VendorReading": {
+        "$schema": "https://stations.example.org/dialects/reading",
+        "unitCode": "cel"
+      }
+    },
+    "examples": {
+      "Reading": {
+        "dataValue": {
+          "event": "update",
+          "data": "{\"degrees\":8}"
+        },
+        "serializedValue": "event: update\ndata: {\"degrees\":8}\n"
+      },
+      "Empty": {
+        "dataValue": null,
+        "externalValue": "./examples/empty.txt"
+      }
+    },
+    "securitySchemes": {
+      "device": {
+        "type": "oauth2",
+        "description": "Station terminal login",
+        "deprecated": false,
+        "oauth2MetadataUrl": "https://auth.example.org/.well-known/oauth-authorization-server",
+        "flows": {
+          "deviceAuthorization": {
+            "deviceAuthorizationUrl": "https://auth.example.org/device",
+            "tokenUrl": "https://auth.example.org/token",
+            "scopes": {
+              "read": "Read station events"
+            }
+          }
+        }
+      },
+      "oldKey": {
+        "type": "apiKey",
+        "name": "X-Key",
+        "in": "header",
+        "deprecated": true
+      }
+    }
+  },
+  "security": [
+    {
+      "device": [
+        "read"
+      ]
+    }
+  ],
+  "x-owner": "telemetry"
+}

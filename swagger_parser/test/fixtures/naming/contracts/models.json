@@ -1,0 +1,47 @@
+{
+  "int": {
+    "value": "int"
+  },
+  "double": {
+    "value": "double"
+  },
+  "num": {
+    "value": "num"
+  },
+  "bool": {
+    "value": "bool"
+  },
+  "dynamic": {
+    "value": "dynamic"
+  },
+  "void": {
+    "value": "void"
+  },
+  "null": {
+    "value": "null"
+  },
+  "Options": {
+    "value": "Options"
+  },
+  "Response": {
+    "value": "Response"
+  },
+  "Headers": {
+    "value": "Headers"
+  },
+  "RequestOptions": {
+    "value": "RequestOptions"
+  },
+  "UserJWTPair": {
+    "value": "UserJWTPair"
+  },
+  "lowercase": {
+    "value": "lowercase"
+  },
+  "Already": {
+    "value": "Already"
+  },
+  "AlreadyDto": {
+    "value": "AlreadyDto"
+  }
+}

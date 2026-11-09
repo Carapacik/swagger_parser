@@ -2,8 +2,9 @@
 
 We commit to publishing security updates for the version of swagger_parser currently on the main branch.
 
-## Latest supported version
-[![pub version](https://img.shields.io/pub/v/swagger_parser?logo=dart)](https://pub.dev/packages/swagger_parser)
+## Supported versions
+
+Minimum supported version: **2.0.0**.
 
 ## Reporting a Vulnerability
 

@@ -1,0 +1,121 @@
+"openapi": "3.0.4"
+"info":
+  "title": "Reference contracts"
+  "version": "1"
+"paths":
+  "/shared/~item":
+    "get":
+      "operationId": "sharedItem"
+      "responses":
+        "200":
+          "description": "Shared response"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/ExternalObject"
+"components":
+  "schemas":
+    "ExternalDate":
+      "type": "string"
+      "format": "date"
+    "ExternalTimestamp":
+      "type": "string"
+      "format": "date-time"
+    "Credentials":
+      "type": "object"
+      "required":
+        - "login"
+        - "password"
+      "properties":
+        "login":
+          "type": "string"
+        "password":
+          "type": "string"
+    "ExternalObject":
+      "type": "object"
+      "required":
+        - "external"
+      "properties":
+        "external":
+          "type": "string"
+    "Problem":
+      "type": "object"
+      "required":
+        - "message"
+      "properties":
+        "message":
+          "type": "string"
+  "parameters":
+    "Tag":
+      "name": "tag"
+      "in": "query"
+      "required": false
+      "schema":
+        "type": "array"
+        "items":
+          "type": "string"
+        "default":
+          - "north"
+          - "south"
+      "description": "Repeated station tags."
+      "style": "form"
+      "explode": true
+    "Limit":
+      "name": "limit"
+      "in": "query"
+      "required": false
+      "schema":
+        "type": "integer"
+        "format": "int32"
+        "default": 7
+      "description": "Operation limit."
+    "HeaderLimit":
+      "name": "limit"
+      "in": "header"
+      "required": false
+      "schema":
+        "type": "integer"
+        "default": 9
+      "description": "Header limit."
+    "Id":
+      "name": "id"
+      "in": "path"
+      "required": true
+      "schema":
+        "type": "string"
+      "description": "Station key."
+  "responses":
+    "Problem":
+      "description": "Shared error."
+      "content":
+        "application/json":
+          "schema":
+            "$ref": "#/components/schemas/Problem"
+    "ExternalObject":
+      "description": "Shared response"
+      "content":
+        "application/json":
+          "schema":
+            "$ref": "#/components/schemas/ExternalObject"
+  "requestBodies":
+    "CredentialsBody":
+      "description": "Shared credentials."
+      "required": true
+      "content":
+        "application/json":
+          "schema":
+            "$ref": "#/components/schemas/Credentials"
+    "FormBody":
+      "description": "Shared form fields."
+      "required": true
+      "content":
+        "application/x-www-form-urlencoded":
+          "schema":
+            "$ref": "#/components/schemas/Credentials"
+    "formBody":
+      "description": "Shared multipart fields."
+      "required": true
+      "content":
+        "multipart/form-data":
+          "schema":
+            "$ref": "#/components/schemas/Credentials"

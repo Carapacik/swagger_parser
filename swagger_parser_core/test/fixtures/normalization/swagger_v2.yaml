@@ -1,0 +1,57 @@
+swagger: '2.0'
+info:
+  title: Station search
+  version: '1'
+paths:
+  /stations/{ids}:
+    parameters:
+      - name: ids
+        in: path
+        required: true
+        type: array
+        items:
+          type: integer
+    get:
+      parameters:
+        - $ref: '#/parameters/Tags'
+        - name: fields
+          in: query
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+        - name: limit
+          in: query
+          type: integer
+      responses:
+        '200':
+          description: Stations
+          headers:
+            X-Ids:
+              type: array
+              items:
+                type: integer
+    post:
+      parameters:
+        - name: stations
+          in: body
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '204':
+          description: Updated
+parameters:
+  Tags:
+    name: tag
+    in: query
+    type: array
+    items:
+      type: string
+x-sample:
+  name: flags
+  in: query
+  type: array
+  items:
+    type: string

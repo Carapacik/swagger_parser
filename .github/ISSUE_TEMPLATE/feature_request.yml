@@ -1,31 +1,42 @@
 name: Feature request
-description: Suggest a new idea for Swagger parser.
+description: Propose a new or improved capability.
+labels:
+  - enhancement
 body:
   - type: markdown
     attributes:
-      value: |
-        Thank you for using Swagger parser!
+      value: Write a short English title that names the requested capability. Omit type prefixes.
+  - type: dropdown
+    id: packages
+    attributes:
+      label: Affected packages
+      multiple: true
+      options:
+        - swagger_parser
+        - swagger_parser_core
+        - swagger_parser_templates
+        - swagger_parser_pages
   - type: textarea
+    id: use_case
     attributes:
       label: Use case
-      description: |
-        Please tell us the problem you are running into that led to you wanting
-        a new feature.
-
-        Is your feature request related to a problem? Please give a clear and
-        concise description of what the problem is.
-
-        Describe the alternative solutions you've considered.
+      description: Describe the task and the current limitation.
     validations:
       required: true
   - type: textarea
+    id: proposal
     attributes:
-      label: Proposal
-      description: |
-        Briefly but precisely describe what you would like Swagger Parser to be able to do.
-
-        Consider attaching something showing what you are imagining:
-         * OpenApi definition snippets
-         * code samples
+      label: Proposed behavior
+      description: Describe the result you need. Include an example API or generated code.
     validations:
       required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: OpenAPI input
+      description: Include a JSON or YAML example when the proposal depends on a schema.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: Describe any workaround and its limitations.

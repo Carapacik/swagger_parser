@@ -1,0 +1,66 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Station filters",
+    "version": "1"
+  },
+  "paths": {
+    "/stations": {
+      "get": {
+        "operationId": "filterStations",
+        "parameters": [
+          {
+            "name": "line",
+            "in": "query",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "zone",
+            "in": "query",
+            "collectionFormat": "ssv",
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "collectionFormat": "pipes",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "collectionFormat": "multi",
+            "type": "array",
+            "items": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "stop",
+            "in": "query",
+            "collectionFormat": "tsv",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No stations"
+          }
+        }
+      }
+    }
+  }
+}

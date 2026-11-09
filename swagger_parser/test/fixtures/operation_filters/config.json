@@ -1,0 +1,19 @@
+{
+  "input": "routes_v3_2.yaml",
+  "generation": {
+    "operation_filters": {
+      "include_paths": [
+        "/stations/**"
+      ],
+      "exclude_paths": [
+        "/stations/private"
+      ],
+      "include_tags": [
+        "Public"
+      ],
+      "exclude_tags": [
+        "Internal"
+      ]
+    }
+  }
+}

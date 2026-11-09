@@ -1,0 +1,39 @@
+{
+  "defs": {
+    "Base/Node~": {
+      "type": "object",
+      "required": [
+        "prop_a",
+        "count"
+      ],
+      "properties": {
+        "prop_a": {
+          "type": "string"
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "Image/Source~": {
+      "type": "object",
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "Cycle": {
+      "allOf": [
+        {
+          "$ref": "sub/branches.json#/defs/Cycle"
+        }
+      ]
+    }
+  }
+}

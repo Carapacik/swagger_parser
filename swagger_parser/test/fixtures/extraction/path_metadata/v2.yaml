@@ -1,0 +1,71 @@
+"swagger": "2.0"
+"info":
+  "title": "Path metadata"
+  "version": "1"
+"security":
+  - "token": []
+"paths":
+  "/items/{id}":
+    "x-label": "metadata"
+    "x-config":
+      "enabled": true
+      "count": 2
+    "parameters":
+      - "name": "id"
+        "in": "path"
+        "required": true
+        "type": "string"
+      - "name": "limit"
+        "in": "query"
+        "required": false
+        "type": "string"
+      - "name": "id"
+        "in": "header"
+        "required": false
+        "type": "string"
+    "get":
+      "operationId": "readItems"
+      "parameters":
+        - "name": "limit"
+          "in": "query"
+          "required": true
+          "type": "integer"
+      "responses":
+        "204":
+          "description": "Done"
+    "post":
+      "operationId": "saveItems"
+      "security": []
+      "responses":
+        "204":
+          "description": "Done"
+  "/root":
+    "get":
+      "operationId": "readRoot"
+      "responses":
+        "204":
+          "description": "Done"
+  "/alternative":
+    "get":
+      "operationId": "readAlternative"
+      "security":
+        - "token": []
+        - "other": []
+      "responses":
+        "204":
+          "description": "Done"
+  "/remote/{id}":
+    "$ref": "v2_paths.yaml#/paths/~1remote~1%7Bid%7D"
+"host": "root.test"
+"basePath": "/api"
+"schemes":
+  - "https"
+"securityDefinitions":
+  "token":
+    "type": "apiKey"
+    "in": "header"
+    "name": "X-Token"
+  "other":
+    "type": "apiKey"
+    "in": "query"
+    "name": "key"

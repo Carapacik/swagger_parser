@@ -1,0 +1,381 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Station DTO review",
+    "version": "1"
+  },
+  "paths": {
+    "/stations": {
+      "patch": {
+        "tags": [
+          "Stations"
+        ],
+        "operationId": "patchStation",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StationPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Station",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/departures": {
+      "put": {
+        "tags": [
+          "Departures"
+        ],
+        "operationId": "putDepartures",
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Departure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/schedule": {
+      "get": {
+        "tags": [
+          "Departures"
+        ],
+        "operationId": "getSchedule",
+        "responses": {
+          "200": {
+            "description": "Schedule",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Schedule"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "StationState": {
+        "type": "string",
+        "enum": [
+          "in-service",
+          "out-of-service"
+        ]
+      },
+      "PlatformCode": {
+        "type": "integer",
+        "enum": [
+          1,
+          2
+        ]
+      },
+      "Platform": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "number"
+        ],
+        "properties": {
+          "number": {
+            "type": "integer"
+          }
+        }
+      },
+      "Station": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "station_id",
+          "state",
+          "platforms"
+        ],
+        "properties": {
+          "station_id": {
+            "type": "string"
+          },
+          "state": {
+            "$ref": "#/components/schemas/StationState"
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Platform"
+            }
+          },
+          "directory": {
+            "$ref": "#/components/schemas/PlatformDirectory"
+          },
+          "slot": {
+            "$ref": "#/components/schemas/StationSlot"
+          },
+          "schedule": {
+            "$ref": "#/components/schemas/Schedule"
+          }
+        }
+      },
+      "DepartureStamp": {
+        "allOf": [
+          {
+            "type": "string"
+          },
+          {
+            "format": "date-time"
+          }
+        ]
+      },
+      "Schedule": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "serviceDay",
+          "departure",
+          "attachment"
+        ],
+        "properties": {
+          "serviceDay": {
+            "type": "string",
+            "format": "date"
+          },
+          "departure": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "attachment": {
+            "type": "string",
+            "format": "byte"
+          },
+          "encoded": {
+            "type": "string",
+            "contentEncoding": "base64"
+          }
+        }
+      },
+      "StationSlot": {
+        "type": "array",
+        "minItems": 1,
+        "prefixItems": [
+          {
+            "type": "string"
+          },
+          {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        ],
+        "items": {
+          "type": "boolean"
+        }
+      },
+      "PlatformDirectory": {
+        "type": "object",
+        "required": [
+          "station-id"
+        ],
+        "properties": {
+          "station-id": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": {
+          "$ref": "#/components/schemas/Platform"
+        }
+      },
+      "StationPatch": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schedule": {
+            "$ref": "#/components/schemas/Schedule"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "platform": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Platform"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "labels": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "sequence": {
+            "type": "integer"
+          }
+        }
+      },
+      "RailStop": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "track"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "rail-stop"
+            ]
+          },
+          "track": {
+            "type": "string"
+          }
+        }
+      },
+      "BusStop": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "bay"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "bus-stop",
+              "shuttle"
+            ]
+          },
+          "bay": {
+            "type": "integer"
+          }
+        }
+      },
+      "Stop": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/RailStop"
+          },
+          {
+            "$ref": "#/components/schemas/BusStop"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "rail-stop": "#/components/schemas/RailStop",
+            "shuttle": "#/components/schemas/BusStop",
+            "bus-stop": "#/components/schemas/BusStop"
+          }
+        }
+      },
+      "ExactReading": {
+        "oneOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      },
+      "Reading": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      },
+      "Identity": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "NamedIdentity": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Identity"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "generation": {
+    "infer_missing_required": true
+  },
+  "inputs": {
+    "first": {
+      "input": "v3_2.yaml",
+      "generation": {
+        "infer_missing_required": false,
+        "use_presence_records": true
+      }
+    },
+    "second": {
+      "input": "v3_2.yaml"
+    }
+  }
+}

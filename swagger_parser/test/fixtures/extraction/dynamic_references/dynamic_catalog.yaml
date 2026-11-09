@@ -1,0 +1,12 @@
+openapi: 3.1.2
+info:
+  title: Labelled packets
+  version: '1'
+components:
+  schemas:
+    Envelope:
+      $ref: ./dynamic_packet.yaml
+    LabelItem:
+      $dynamicAnchor: item
+      type: string
+      pattern: '^x'

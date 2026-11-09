@@ -1,0 +1,15 @@
+"openapi": "3.2.1"
+"info":
+  "title": "Reference contracts"
+  "version": "1"
+"paths":
+  "/invalid":
+    "get":
+      "operationId": "invalid"
+      "responses":
+        "200":
+          "$ref": "#/components/responses/A"
+"components":
+  "schemas": {}
+  "parameters": {}
+  "responses": {}

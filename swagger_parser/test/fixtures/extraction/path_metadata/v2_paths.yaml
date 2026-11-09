@@ -1,0 +1,35 @@
+"paths":
+  "/remote/{id}":
+    "x-label": "metadata"
+    "x-config":
+      "enabled": true
+      "count": 2
+    "parameters":
+      - "name": "id"
+        "in": "path"
+        "required": true
+        "type": "string"
+      - "name": "limit"
+        "in": "query"
+        "required": false
+        "type": "string"
+      - "name": "id"
+        "in": "header"
+        "required": false
+        "type": "string"
+    "get":
+      "operationId": "readRemote"
+      "parameters":
+        - "name": "limit"
+          "in": "query"
+          "required": true
+          "type": "integer"
+      "responses":
+        "204":
+          "description": "Done"
+    "post":
+      "operationId": "saveRemote"
+      "security": []
+      "responses":
+        "204":
+          "description": "Done"

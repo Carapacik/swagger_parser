@@ -1,0 +1,3 @@
+inputs:
+  first:
+    schema_path: first.yaml

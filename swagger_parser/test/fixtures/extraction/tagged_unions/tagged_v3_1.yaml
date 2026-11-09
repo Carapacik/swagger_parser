@@ -1,0 +1,33 @@
+openapi: 3.1.2
+info:
+  title: Sensor states
+  version: '1'
+components:
+  schemas:
+    State:
+      oneOf:
+      - "$ref": "./tagged_sensor.json#sensor"
+      - type: object
+        required:
+        - kind
+        - code
+        properties:
+          kind:
+            const: offline
+          code:
+            type: integer
+      discriminator:
+        propertyName: kind
+        mapping:
+          sensor.v1: './tagged_sensor.json#/components/schemas/SensorAlias'
+          offline: "#/components/schemas/State/oneOf/1"
+    Envelope:
+      type: object
+      properties:
+        value:
+          anyOf:
+          - "$ref": "./tagged_sensor.json#sensor"
+          discriminator:
+            propertyName: kind
+            mapping:
+              sensor.v1: "./tagged_sensor.json#sensor"

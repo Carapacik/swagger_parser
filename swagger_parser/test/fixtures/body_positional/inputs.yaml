@@ -1,0 +1,10 @@
+output_directory: "out"
+generation:
+  body_positional: true
+inputs:
+  positional:
+    schema_path: "open_api_v3_2.yaml"
+  named:
+    schema_path: "open_api_v3_2.json"
+    generation:
+      body_positional: false

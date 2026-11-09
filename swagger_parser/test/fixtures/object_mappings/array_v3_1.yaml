@@ -1,0 +1,11 @@
+openapi: "3.1.2"
+info:
+  title: "Mapped object API"
+  version: "1"
+paths: {}
+components:
+  schemas:
+    Target:
+      type: "array"
+      items:
+        type: "string"

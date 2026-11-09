@@ -1,33 +1,217 @@
-name: tests
+name: Tests
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    types: [opened, reopened, review_requested]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  test:
-    name: "Tests"
+  quality:
+    name: Format and analyze · Dart ${{ matrix.sdk }}
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./swagger_parser
     strategy:
+      fail-fast: false
       matrix:
-        sdk:
-          - stable
+        sdk: [stable]
     steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: dart-lang/setup-dart@v1.8.1
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Install Dart
+        uses: dart-lang/setup-dart@v1
         with:
-          sdk: "${{ matrix.sdk }}"
+          sdk: ${{ matrix.sdk }}
       - name: Install dependencies
         run: dart pub get
-      - name: Format
-        run: dart format --set-exit-if-changed -o none lib/
-      - name: Analyze
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed swagger_parser swagger_parser_core swagger_parser_templates swagger_parser_tests swagger_parser_pages
+      - name: Build generated sources
+        run: dart run build_runner build
+        working-directory: swagger_parser_tests
+      - name: Analyze workspace
         run: dart analyze
-      - name: Run tests
-        run: dart run test
+
+  core_vm:
+    name: Core · VM · Dart ${{ matrix.sdk }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: ['3.13.7', stable]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Install Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.sdk }}
+      - name: Install dependencies
+        run: dart pub get
+      - name: Test on VM
+        run: dart test
+        working-directory: swagger_parser_core
+
+  generator_vm:
+    name: Generator · VM · Dart ${{ matrix.sdk }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: ['3.13.7', stable]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Install Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.sdk }}
+      - name: Install dependencies
+        run: dart pub get
+      - name: Check TLS test tools
+        run: openssl version
+      - name: Test generated files without builders
+        run: dart test test/e2e
+        working-directory: swagger_parser
+      - name: Test on VM
+        run: dart test --exclude-tags=e2e
+        working-directory: swagger_parser
+
+  templates_vm:
+    name: Templates · VM · Dart ${{ matrix.sdk }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: ['3.13.7', stable]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Install Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.sdk }}
+      - name: Install dependencies
+        run: dart pub get
+      - name: Test on VM
+        run: dart test
+        working-directory: swagger_parser_templates
+
+  pages_vm:
+    name: Pages · VM · Dart ${{ matrix.sdk }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: ['3.13.7', stable]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Install Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.sdk }}
+      - name: Install dependencies
+        run: dart pub get
+      - name: Test on VM
+        run: dart test
+        working-directory: swagger_parser_pages
+
+  libraries_chrome:
+    name: Libraries · Chrome · Dart ${{ matrix.sdk }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: [stable]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Install Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.sdk }}
+      - name: Install dependencies
+        run: dart pub get
+      - name: Check Chrome
+        run: google-chrome --version
+      - name: Test core in Chrome
+        run: dart test --platform chrome
+        working-directory: swagger_parser_core
+      - name: Test generator in Chrome
+        run: dart test --platform chrome
+        working-directory: swagger_parser
+      - name: Test templates in Chrome
+        run: dart test --platform chrome
+        working-directory: swagger_parser_templates
+
+  pages_chrome:
+    name: Pages · Chrome · Dart ${{ matrix.sdk }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: [stable]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Install Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.sdk }}
+      - name: Install dependencies
+        run: dart pub get
+      - name: Check Chrome
+        run: google-chrome --version
+      - name: Build browser test assets
+        run: dart run tool/build.dart
+        working-directory: swagger_parser_pages
+      - name: Test editor in Chrome
+        run: dart test --platform chrome test/app_test.dart
+        working-directory: swagger_parser_pages
+
+  generated_code:
+    name: Generated code · Dart stable
+    runs-on: ubuntu-latest
+    env:
+      SWAGGER_PARSER_TEST_CHROME: 'true'
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Install Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - name: Install dependencies
+        run: dart pub get
+      - name: Check Chrome
+        run: google-chrome --version
+      - name: Build and test generated code on VM and Chrome
+        run: |
+          dart run build_runner build
+          dart test --concurrency=1
+        working-directory: swagger_parser_tests
+
+  tests_passed:
+    name: Tests passed
+    if: always()
+    needs:
+      - quality
+      - core_vm
+      - generator_vm
+      - templates_vm
+      - pages_vm
+      - libraries_chrome
+      - pages_chrome
+      - generated_code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require successful checks
+        env:
+          NEEDS_JSON: ${{ toJSON(needs) }}
+        run: jq -e 'all(.[]; .result == "success")' <<< "$NEEDS_JSON"

@@ -1,0 +1,199 @@
+---
+swagger: '2.0'
+info:
+  title: Directional mappings
+  version: '1'
+paths:
+  "/station":
+    post:
+      operationId: echoStation
+      responses:
+        '200':
+          description: Result
+          schema:
+            "$ref": "#/definitions/Station"
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          "$ref": "#/definitions/Station"
+  "/envelope":
+    post:
+      operationId: echoEnvelope
+      responses:
+        '200':
+          description: Result
+          schema:
+            "$ref": "#/definitions/Envelope"
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          "$ref": "#/definitions/Envelope"
+consumes:
+- application/json
+produces:
+- application/json
+definitions:
+  Station:
+    type: object
+    additionalProperties: false
+    required:
+    - id
+    - name
+    properties:
+      id:
+        type: string
+        readOnly: true
+      name:
+        type: string
+  Partial:
+    type: object
+    additionalProperties: false
+    required:
+    - id
+    - name
+    properties:
+      id:
+        type: string
+        readOnly: true
+      name:
+        type: string
+  InboundOnly:
+    type: object
+    additionalProperties: false
+    required:
+    - id
+    - name
+    properties:
+      id:
+        type: string
+        readOnly: true
+      name:
+        type: string
+  Preferences:
+    type: object
+    additionalProperties: false
+    required:
+    - name
+    properties:
+      name:
+        type: string
+        minLength: 1
+      id:
+        type: string
+        readOnly: true
+    default:
+      name: North
+    x-nullable: true
+  Label:
+    type: object
+    additionalProperties: false
+    required:
+    - name
+    properties:
+      name:
+        type: string
+  Same:
+    type: object
+    additionalProperties: false
+    required:
+    - name
+    properties:
+      name:
+        type: string
+      id:
+        type: string
+        readOnly: true
+  Envelope:
+    type: object
+    additionalProperties: false
+    required:
+    - station
+    - stations
+    - byName
+    - label
+    - same
+    - partial
+    properties:
+      station:
+        "$ref": "#/definitions/Station"
+      stations:
+        type: array
+        items:
+          "$ref": "#/definitions/Station"
+      byName:
+        type: object
+        additionalProperties:
+          "$ref": "#/definitions/Station"
+      label:
+        "$ref": "#/definitions/Label"
+      same:
+        "$ref": "#/definitions/Same"
+      partial:
+        "$ref": "#/definitions/Partial"
+  Settings:
+    type: object
+    additionalProperties: false
+    properties:
+      preferences:
+        "$ref": "#/definitions/Preferences"
+  LabelBox:
+    type: object
+    required:
+    - label
+    properties:
+      label:
+        "$ref": "#/definitions/Label"
+  Alias:
+    "$ref": "#/definitions/Label"
+  AliasBox:
+    type: object
+    additionalProperties: false
+    required:
+    - alias
+    properties:
+      alias:
+        "$ref": "#/definitions/Alias"
+  InboundBox:
+    type: object
+    additionalProperties: false
+    required:
+    - station
+    properties:
+      station:
+        "$ref": "#/definitions/InboundOnly"
+  Composed:
+    allOf:
+    - "$ref": "#/definitions/LabelBox"
+    - type: object
+      properties:
+        note:
+          type: string
+  Node:
+    type: object
+    additionalProperties: false
+    required:
+    - station
+    - children
+    properties:
+      station:
+        "$ref": "#/definitions/Station"
+      children:
+        type: array
+        items:
+          "$ref": "#/definitions/Node"
+  TicketId:
+    allOf:
+    - type: string
+    - format: directional-id
+  CodeBox:
+    type: object
+    additionalProperties: false
+    required:
+    - id
+    properties:
+      id:
+        "$ref": "#/definitions/TicketId"

@@ -1,0 +1,137 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Station access",
+    "version": "1",
+    "summary": "Station API",
+    "description": "Read station data.",
+    "termsOfService": "https://example.org/terms",
+    "contact": {
+      "name": "API team",
+      "url": "https://example.org/contact",
+      "email": "api@example.org"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://example.org/license"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{region}.example.org/{version}",
+      "description": "Regional service",
+      "variables": {
+        "region": {
+          "default": "eu",
+          "enum": [
+            "eu",
+            "us"
+          ],
+          "description": "Service region"
+        },
+        "version": {
+          "default": "v1",
+          "description": "API version"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "stations",
+      "description": "Station operations",
+      "externalDocs": {
+        "url": "https://example.org/stations",
+        "description": "Station guide"
+      }
+    }
+  ],
+  "externalDocs": {
+    "url": "https://example.org/guide",
+    "description": "API guide"
+  },
+  "paths": {},
+  "components": {
+    "securitySchemes": {
+      "queryKey": {
+        "type": "apiKey",
+        "name": "access_key",
+        "in": "query",
+        "description": "Query key"
+      },
+      "headerKey": {
+        "type": "apiKey",
+        "name": "X-API-Key",
+        "in": "header"
+      },
+      "cookieKey": {
+        "type": "apiKey",
+        "name": "session",
+        "in": "cookie"
+      },
+      "bearer": {
+        "type": "http",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT",
+        "description": "Access token"
+      },
+      "basic": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "oauth": {
+        "type": "oauth2",
+        "description": "Scoped access",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://example.org/authorize",
+            "refreshUrl": "https://example.org/refresh",
+            "scopes": {
+              "stations:read": "Read stations"
+            }
+          },
+          "password": {
+            "tokenUrl": "https://example.org/password",
+            "scopes": {}
+          },
+          "clientCredentials": {
+            "tokenUrl": "https://example.org/token",
+            "scopes": {
+              "stations:read": "Read stations"
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "https://example.org/authorize",
+            "tokenUrl": "https://example.org/token",
+            "refreshUrl": "https://example.org/refresh",
+            "scopes": {
+              "stations:read": "Read stations",
+              "stations:write": "Update stations"
+            }
+          }
+        }
+      },
+      "discovery": {
+        "type": "openIdConnect",
+        "openIdConnectUrl": "https://example.org/.well-known/openid-configuration",
+        "description": "Identity discovery"
+      },
+      "certificate": {
+        "type": "mutualTLS",
+        "description": "Client certificate"
+      }
+    }
+  },
+  "security": [
+    {
+      "oauth": [
+        "stations:read"
+      ],
+      "headerKey": []
+    },
+    {
+      "certificate": []
+    },
+    {}
+  ]
+}

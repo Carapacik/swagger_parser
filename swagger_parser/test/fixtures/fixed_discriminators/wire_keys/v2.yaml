@@ -1,0 +1,68 @@
+swagger: "2.0"
+info:
+  title: "V1 regressions"
+  version: "1"
+paths: {}
+definitions:
+  Stop:
+    type: "object"
+    discriminator: "kind"
+    required:
+      - "kind"
+    properties:
+      kind:
+        type: "string"
+  Rail:
+    allOf:
+      - "$ref": "#/definitions/Stop"
+      - type: "object"
+        required:
+          - "kind"
+          - "is_active"
+          - "class"
+          - "file_name"
+        properties:
+          kind:
+            type: "string"
+            enum:
+              - "Rail"
+          is_active:
+            type: "boolean"
+          class:
+            type: "string"
+          file_name:
+            type: "string"
+  Bus:
+    allOf:
+      - "$ref": "#/definitions/Stop"
+      - type: "object"
+        required:
+          - "kind"
+          - "is_active"
+          - "switch"
+        properties:
+          kind:
+            type: "string"
+            enum:
+              - "Bus"
+          is_active:
+            type: "boolean"
+          switch:
+            type: "integer"
+  Container:
+    type: "object"
+    required:
+      - "entry"
+      - "entries"
+      - "by_name"
+    properties:
+      entry:
+        "$ref": "#/definitions/Stop"
+      entries:
+        type: "array"
+        items:
+          "$ref": "#/definitions/Stop"
+      by_name:
+        type: "object"
+        additionalProperties:
+          "$ref": "#/definitions/Stop"

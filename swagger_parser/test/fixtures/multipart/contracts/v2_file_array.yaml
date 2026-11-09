@@ -1,0 +1,23 @@
+"swagger": "2.0"
+"info":
+  "title": "Multipart contracts"
+  "version": "1"
+"paths":
+  "/invalid":
+    "post":
+      "operationId": "invalidFiles"
+      "consumes":
+        - "multipart/form-data"
+      "parameters":
+        -
+          "name": "files"
+          "in": "formData"
+          "required": true
+          "type": "array"
+          "items":
+            "type": "file"
+          "collectionFormat": "multi"
+      "responses":
+        "204":
+          "description": "Saved."
+"definitions": {}

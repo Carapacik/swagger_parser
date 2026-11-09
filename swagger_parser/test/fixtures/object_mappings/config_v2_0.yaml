@@ -1,0 +1,156 @@
+swagger_parser:
+  input: "objects_v2_0.yaml"
+  generation:
+    type_mappings:
+      -
+        schema: "#/definitions/GeoPoint"
+        dart_type: "GeoPoint"
+        import: "package:swagger_parser_tests/object_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/object_codecs.dart"
+          from_json: "geoPointFromJson"
+          to_json: "geoPointToJson"
+        defaults:
+          -
+            value:
+              latitude: 0
+              longitude: 0
+            import: "package:swagger_parser_tests/object_defaults.dart"
+            constant: "origin"
+          -
+            value:
+              latitude: 1
+              longitude: 2
+            import: "package:swagger_parser_tests/object_defaults.dart"
+            constant: "east"
+      -
+        schema: "#/definitions/NullablePoint"
+        dart_type: "GeoPoint"
+        import: "package:swagger_parser_tests/object_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/object_codecs.dart"
+          from_json: "geoPointFromJson"
+          to_json: "geoPointToJson"
+        defaults:
+          -
+            value:
+              latitude: 0
+              longitude: 0
+            import: "package:swagger_parser_tests/object_defaults.dart"
+            constant: "origin"
+          -
+            value:
+              latitude: 1
+              longitude: 2
+            import: "package:swagger_parser_tests/object_defaults.dart"
+            constant: "east"
+      -
+        schema: "#/definitions/OptionalPoint"
+        dart_type: "GeoPoint"
+        import: "package:swagger_parser_tests/object_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/object_codecs.dart"
+          from_json: "geoPointFromJson"
+          to_json: "geoPointToJson"
+        defaults:
+          -
+            value:
+              latitude: 0
+              longitude: 0
+            import: "package:swagger_parser_tests/object_defaults.dart"
+            constant: "origin"
+          -
+            value:
+              latitude: 1
+              longitude: 2
+            import: "package:swagger_parser_tests/object_defaults.dart"
+            constant: "east"
+      -
+        schema: "#/definitions/AllOfPoint"
+        dart_type: "GeoPoint"
+        import: "package:swagger_parser_tests/object_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/object_codecs.dart"
+          from_json: "geoPointFromJson"
+          to_json: "geoPointToJson"
+        defaults:
+          -
+            value:
+              latitude: 0
+              longitude: 0
+            import: "package:swagger_parser_tests/object_defaults.dart"
+            constant: "origin"
+          -
+            value:
+              latitude: 1
+              longitude: 2
+            import: "package:swagger_parser_tests/object_defaults.dart"
+            constant: "east"
+      -
+        schema: "#/definitions/StationId"
+        dart_type: "StationId"
+        import: "package:swagger_parser_tests/object_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/object_codecs.dart"
+          from_json: "stationIdFromJson"
+          to_json: "stationIdToJson"
+        defaults:
+          -
+            value: "unknown"
+            import: "package:swagger_parser_tests/object_defaults.dart"
+            constant: "unknownStationId"
+      -
+        schema: "#/definitions/NullableId"
+        dart_type: "StationId"
+        import: "package:swagger_parser_tests/object_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/object_codecs.dart"
+          from_json: "stationIdFromJson"
+          to_json: "stationIdToJson"
+        defaults:
+          -
+            value: "unknown"
+            import: "package:swagger_parser_tests/object_defaults.dart"
+            constant: "unknownStationId"
+      -
+        schema: "#/definitions/NullId"
+        dart_type: "StationId"
+        import: "package:swagger_parser_tests/object_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/object_codecs.dart"
+          from_json: "stationIdFromJson"
+          to_json: "stationIdToJson"
+        defaults:
+          -
+            value: "unknown"
+            import: "package:swagger_parser_tests/object_defaults.dart"
+            constant: "unknownStationId"
+      -
+        schema: "#/definitions/PlainId"
+        dart_type: "StationId"
+        import: "package:swagger_parser_tests/object_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/object_codecs.dart"
+          from_json: "stationIdFromJson"
+          to_json: "stationIdToJson"
+        defaults:
+          -
+            value: "unknown"
+            import: "package:swagger_parser_tests/object_defaults.dart"
+            constant: "unknownStationId"
+      -
+        schema: "#/definitions/Envelope"
+        dart_type: "Envelope"
+        import: "package:swagger_parser_tests/object_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/object_codecs.dart"
+          from_json: "envelopeFromJson"
+          to_json: "envelopeToJson"
+      -
+        schema: "#/definitions/TaggedPoint"
+        dart_type: "TaggedCoordinate"
+        import: "package:swagger_parser_tests/object_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/object_codecs.dart"
+          from_json: "taggedFromJson"
+          to_json: "taggedToJson"

@@ -1,0 +1,33 @@
+openapi: 3.2.1
+info:
+  title: Mounted operations
+  version: '1'
+paths:
+  /a/{b}/c/{d}/{e}:
+    $ref: 'library.json#/components/pathItems/Nested'
+    parameters:
+      - name: b
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: d
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: e
+        in: path
+        required: true
+        schema:
+          type: string
+  /stations:
+    get:
+      operationId: listStations
+      responses:
+        '204':
+          description: No stations
+components:
+  schemas:
+    Archived:
+      $ref: 'library.json#/components/schemas/Archive'

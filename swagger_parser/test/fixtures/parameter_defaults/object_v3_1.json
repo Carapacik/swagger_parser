@@ -1,0 +1,166 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Parameter defaults",
+    "version": "1"
+  },
+  "paths": {
+    "/filter": {
+      "get": {
+        "operationId": "filter",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Filter"
+            },
+            "style": "deepObject",
+            "explode": true
+          },
+          {
+            "name": "items",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Item"
+                  },
+                  "default": []
+                }
+              }
+            }
+          },
+          {
+            "name": "byName",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/Item"
+                  },
+                  "default": {}
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batches": {
+      "get": {
+        "operationId": "batches",
+        "tags": [
+          "Batch"
+        ],
+        "parameters": [
+          {
+            "name": "values",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Item"
+                    }
+                  },
+                  "default": [
+                    []
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Station": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateStation": {
+        "type": "object",
+        "default": {
+          "name": "Root"
+        },
+        "properties": {
+          "name": {
+            "type": "string",
+            "default": "Unnamed"
+          }
+        }
+      },
+      "Filter": {
+        "type": "object",
+        "required": [
+          "city"
+        ],
+        "properties": {
+          "city": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "default": {
+          "city": "North",
+          "limit": 5
+        }
+      },
+      "Item": {
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

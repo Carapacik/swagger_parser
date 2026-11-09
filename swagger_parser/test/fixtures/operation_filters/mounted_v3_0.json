@@ -1,0 +1,17 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Operation filters",
+    "version": "1"
+  },
+  "paths": {
+    "/mounted/{id}": {
+      "$ref": "path_item.json"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://example.com"
+    }
+  ]
+}

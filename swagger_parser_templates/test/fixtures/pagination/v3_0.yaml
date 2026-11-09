@@ -1,0 +1,43 @@
+openapi: "3.0.4"
+info:
+  title: Stations
+  version: "1"
+paths:
+  /stations:
+    get:
+      operationId: getStations
+      tags:
+        - Stations
+      responses:
+        "200":
+          description: A page of stations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StationsPage"
+components:
+  schemas:
+    Station:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+      properties:
+        id:
+          type: string
+    StationsPage:
+      type: object
+      additionalProperties: false
+      required:
+        - page
+        - pageSize
+        - results
+      properties:
+        page:
+          type: number
+        pageSize:
+          type: number
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Station"

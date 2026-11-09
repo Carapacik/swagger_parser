@@ -1,0 +1,11 @@
+"openapi": "3.1.2"
+"info":
+  "title": "Malformed schema"
+  "version": "1"
+"paths": {}
+"components":
+  "schemas":
+    "Invalid":
+      "type": "object"
+      "properties":
+        "bad": "string"

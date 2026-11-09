@@ -1,0 +1,53 @@
+openapi: 3.1.2
+info:
+  title: Station events
+  version: '1'
+paths:
+  /stations/{id}:
+    $ref: '#/components/pathItems/Station'
+webhooks:
+  update:
+    post:
+      parameters:
+        - name: session
+          in: cookie
+          schema: true
+      responses:
+        '204':
+          description: Received
+components:
+  pathItems:
+    Station:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      get:
+        parameters:
+          - name: tags
+            in: query
+            style: pipeDelimited
+            schema:
+              type: array
+              items:
+                type: string
+        responses:
+          '200':
+            description: Station
+  parameters:
+    Filter:
+      name: filter
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        type: object
+  examples:
+    Input:
+      value:
+        parameters:
+          - name: sample
+            in: query
+            schema: true

@@ -1,0 +1,19 @@
+---
+get:
+  operationId: getStation
+  summary: Get a station.
+  tags:
+  - Stations
+  parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      type: string
+  responses:
+    '200':
+      description: Station
+      content:
+        application/json:
+          schema:
+            "$ref": openapi.json#/components/schemas/Station

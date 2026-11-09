@@ -1,0 +1,92 @@
+"swagger": "2.0"
+"info":
+  "title": "Response decoding"
+  "version": "1"
+"produces":
+  - "application/json"
+"paths":
+  "/station/{scenario}":
+    "get":
+      "operationId": "getStation"
+      "parameters":
+        -
+          "name": "scenario"
+          "in": "path"
+          "required": true
+          "type": "string"
+      "responses":
+        "200":
+          "description": "Result"
+          "schema":
+            "$ref": "#/definitions/Station"
+        "400":
+          "description": "Result"
+          "schema":
+            "$ref": "#/definitions/Problem"
+  "/states":
+    "get":
+      "operationId": "getStates"
+      "responses":
+        "200":
+          "description": "Result"
+          "schema":
+            "type": "array"
+            "items":
+              "$ref": "#/definitions/State"
+  "/nullable":
+    "get":
+      "operationId": "getNullable"
+      "responses":
+        "200":
+          "description": "Result"
+          "schema":
+            "type": "string"
+            "x-nullable": true
+  "/empty":
+    "get":
+      "operationId": "getEmpty"
+      "responses":
+        "204":
+          "description": "No content"
+  "/state":
+    "get":
+      "operationId": "getState"
+      "responses":
+        "200":
+          "description": "Result"
+          "schema":
+            "$ref": "#/definitions/State"
+  "/nullableStates":
+    "get":
+      "operationId": "getNullableStates"
+      "responses":
+        "200":
+          "description": "Result"
+          "schema":
+            "type": "array"
+            "x-nullable": true
+            "items":
+              "$ref": "#/definitions/State"
+"definitions":
+  "Station":
+    "type": "object"
+    "required":
+      - "name"
+      - "state"
+    "properties":
+      "name":
+        "type": "string"
+      "state":
+        "$ref": "#/definitions/State"
+  "State":
+    "type": "string"
+    "enum":
+      - "active"
+      - "paused"
+  "Problem":
+    "type": "object"
+    "required":
+      - "message"
+    "properties":
+      "message":
+        "type": "string"

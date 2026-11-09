@@ -1,0 +1,310 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Unknown values",
+    "version": "1"
+  },
+  "paths": {
+    "/status": {
+      "get": {
+        "operationId": "getStatus",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "schema": {
+              "$ref": "#/definitions/Status"
+            }
+          }
+        }
+      }
+    },
+    "/stop": {
+      "get": {
+        "operationId": "getStop",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "schema": {
+              "$ref": "#/definitions/Stop"
+            }
+          }
+        }
+      }
+    },
+    "/envelope": {
+      "post": {
+        "operationId": "saveEnvelope",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "schema": {
+              "$ref": "#/definitions/Envelope"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Envelope"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "Status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "disabled"
+      ],
+      "default": "active"
+    },
+    "NumericStatus": {
+      "type": "integer",
+      "enum": [
+        1,
+        2
+      ]
+    },
+    "Fraction": {
+      "type": "number",
+      "enum": [
+        1.5
+      ]
+    },
+    "Flag": {
+      "type": "boolean",
+      "enum": [
+        true
+      ]
+    },
+    "Collision": {
+      "type": "string",
+      "enum": [
+        "known"
+      ]
+    },
+    "CollisionValue": {
+      "type": "object"
+    },
+    "CollisionKnown": {
+      "type": "object"
+    },
+    "CollisionUnknown": {
+      "type": "object"
+    },
+    "Stop": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string"
+        }
+      },
+      "discriminator": "kind"
+    },
+    "Rail": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Stop"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "platform"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "Rail"
+              ]
+            },
+            "platform": {
+              "type": "integer"
+            }
+          }
+        }
+      ]
+    },
+    "Bus": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Stop"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "platform"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "Bus"
+              ]
+            },
+            "platform": {
+              "type": "integer"
+            }
+          }
+        }
+      ]
+    },
+    "Alias": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Stop"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "platform"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "Alias",
+                "Train"
+              ]
+            },
+            "platform": {
+              "type": "integer"
+            }
+          }
+        }
+      ]
+    },
+    "Middle": {
+      "discriminator": "kind",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Stop"
+        },
+        {
+          "type": "object",
+          "required": [
+            "label"
+          ],
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "Leaf": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Middle"
+        },
+        {
+          "type": "object",
+          "required": [
+            "level"
+          ],
+          "properties": {
+            "level": {
+              "type": "integer"
+            }
+          }
+        }
+      ]
+    },
+    "Entity": {
+      "type": "object",
+      "discriminator": "kind",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string"
+        }
+      }
+    },
+    "Entry": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Entity"
+        },
+        {
+          "type": "object",
+          "required": [
+            "id",
+            "name"
+          ],
+          "properties": {
+            "id": {
+              "type": "integer",
+              "readOnly": true
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "Envelope": {
+      "type": "object",
+      "required": [
+        "status",
+        "stop",
+        "numeric",
+        "flag",
+        "fraction"
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/Status"
+        },
+        "stop": {
+          "$ref": "#/definitions/Stop"
+        },
+        "numeric": {
+          "$ref": "#/definitions/NumericStatus"
+        },
+        "flag": {
+          "$ref": "#/definitions/Flag"
+        },
+        "fraction": {
+          "$ref": "#/definitions/Fraction"
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Status"
+          }
+        },
+        "by_name": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/Status"
+          }
+        },
+        "fallback": {
+          "$ref": "#/definitions/Status"
+        }
+      }
+    }
+  }
+}

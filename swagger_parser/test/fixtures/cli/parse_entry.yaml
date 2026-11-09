@@ -1,0 +1,9 @@
+openapi: 3.0.4
+info:
+  title: Stations
+  version: '1'
+paths: {}
+components:
+  schemas:
+    Station:
+      $ref: 'parse_library.json#/components/schemas/Station'

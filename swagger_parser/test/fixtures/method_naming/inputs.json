@@ -1,0 +1,16 @@
+{
+  "generation": {
+    "use_path_for_method_names": true
+  },
+  "inputs": {
+    "inherited": {
+      "schema_path": "v3_2.yaml"
+    },
+    "override": {
+      "schema_path": "v2.json",
+      "generation": {
+        "use_path_for_method_names": false
+      }
+    }
+  }
+}

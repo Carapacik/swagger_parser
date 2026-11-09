@@ -1,0 +1,356 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Multipart contracts",
+    "version": "1"
+  },
+  "paths": {
+    "/native": {
+      "post": {
+        "operationId": "uploadNative",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "photo",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "description": "Upload bytes."
+          },
+          {
+            "name": "label",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "Required label."
+          },
+          {
+            "name": "note",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": "Optional note."
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Saved."
+          }
+        }
+      }
+    },
+    "/single": {
+      "post": {
+        "operationId": "uploadSingle",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "photo",
+            "in": "formData",
+            "required": false,
+            "type": "file",
+            "description": "Upload bytes."
+          },
+          {
+            "name": "label",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "Required label."
+          },
+          {
+            "name": "note",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": "Optional note."
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Saved."
+          }
+        }
+      }
+    },
+    "/escaped": {
+      "post": {
+        "operationId": "uploadEscaped",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "photo$main",
+            "in": "formData",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "name": "class",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Saved."
+          }
+        }
+      }
+    },
+    "/form": {
+      "post": {
+        "operationId": "nativeForm",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "note",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Saved."
+          }
+        }
+      }
+    },
+    "/form-list": {
+      "post": {
+        "operationId": "formList",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "tags",
+            "in": "formData",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "note",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Saved."
+          }
+        }
+      }
+    },
+    "/enums": {
+      "post": {
+        "operationId": "optionalEnums",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ready",
+              "",
+              null
+            ],
+            "x-nullable": true
+          },
+          {
+            "name": "code",
+            "in": "formData",
+            "required": false,
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              null
+            ],
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Saved."
+          }
+        }
+      }
+    },
+    "/nulls": {
+      "post": {
+        "operationId": "nullableParts",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "requiredText",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "x-nullable": true
+          },
+          {
+            "name": "optionalText",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "x-nullable": true
+          },
+          {
+            "name": "requiredFile",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "x-nullable": true
+          },
+          {
+            "name": "optionalFile",
+            "in": "formData",
+            "required": false,
+            "type": "file",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Saved."
+          }
+        }
+      }
+    },
+    "/referenced": {
+      "post": {
+        "operationId": "uploadReferenced",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/Photo"
+          },
+          {
+            "$ref": "#/parameters/Label"
+          },
+          {
+            "$ref": "#/parameters/Note"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Saved."
+          }
+        }
+      }
+    },
+    "/inline": {
+      "post": {
+        "operationId": "uploadInline",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "photo",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "description": "Upload bytes."
+          },
+          {
+            "name": "label",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "Required label."
+          },
+          {
+            "name": "note",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": "Optional note."
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Saved."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Metadata": {
+      "type": "object",
+      "required": [
+        "title",
+        "details"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "details": {
+          "type": "object",
+          "required": [
+            "count"
+          ],
+          "properties": {
+            "count": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "Photo": {
+      "name": "photo",
+      "in": "formData",
+      "required": true,
+      "type": "file",
+      "description": "Upload bytes."
+    },
+    "Label": {
+      "name": "label",
+      "in": "formData",
+      "required": true,
+      "type": "string",
+      "description": "Required label."
+    },
+    "Note": {
+      "name": "note",
+      "in": "formData",
+      "required": false,
+      "type": "string",
+      "description": "Optional note."
+    }
+  }
+}

@@ -1,0 +1,134 @@
+"openapi": "3.2.1"
+"info":
+  "title": "Method names"
+  "version": "1"
+"paths":
+  "/stations/{id}":
+    "get":
+      "operationId": "lookupStation"
+      "parameters":
+        -
+          "name": "id"
+          "in": "path"
+          "required": true
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Station"
+        "404":
+          "description": "Missing"
+  "/a/{b}/c/{d}/{e}":
+    "get":
+      "operationId": "lookupNested"
+      "parameters":
+        -
+          "name": "b"
+          "in": "path"
+          "required": true
+          "schema":
+            "type": "string"
+        -
+          "name": "d"
+          "in": "path"
+          "required": true
+          "schema":
+            "type": "string"
+        -
+          "name": "e"
+          "in": "path"
+          "required": true
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "type": "string"
+  "/health":
+    "get":
+      "parameters": []
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "type": "string"
+  "/station-list":
+    "get":
+      "operationId": "lookup-list"
+      "parameters": []
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "type": "string"
+  "/station_list":
+    "get":
+      "operationId": "lookup_list"
+      "parameters": []
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "type": "string"
+  "/inline":
+    "post":
+      "operationId": "createInline"
+      "parameters": []
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "required":
+                  - "name"
+                "properties":
+                  "name":
+                    "type": "string"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "required":
+                - "name"
+              "properties":
+                "name":
+                  "type": "string"
+  "/mounted/{id}":
+    "$ref": "path_item.yaml"
+  "/unicode":
+    "get":
+      "operationId": "НайтиСтанцию"
+      "parameters": []
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "type": "string"
+"components":
+  "schemas":
+    "Station":
+      "type": "object"
+      "required":
+        - "name"
+      "properties":
+        "name":
+          "type": "string"

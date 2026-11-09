@@ -1,0 +1,10 @@
+{
+  "swagger_parser": {
+    "schema_path": "unknown_v3_2.yaml",
+    "output_directory": "output",
+    "generation": {
+      "unknown_enum_values": "preserve",
+      "unknown_discriminator_values": "preserve"
+    }
+  }
+}

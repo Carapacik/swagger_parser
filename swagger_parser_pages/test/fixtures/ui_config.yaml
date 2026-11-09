@@ -1,0 +1,9 @@
+swagger_parser:
+  generation:
+    http_client: dio
+    serializer: freezed
+    root_api_class_name: TransitApi
+    generate_docs: false
+    # Keep this setting.
+    keep_models:
+      - '#/components/schemas/Station'

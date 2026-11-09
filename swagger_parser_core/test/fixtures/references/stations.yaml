@@ -1,0 +1,62 @@
+openapi: 3.2.1
+$self: ../api/stations.yaml
+info:
+  title: Stations
+  version: '1'
+paths:
+  /stations/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: getStation
+      responses:
+        '200':
+          content:
+            application/json:
+              $ref: '#/components/mediaTypes/Station'
+          links:
+            next:
+              operationRef: '#/paths/~1stations~1%7Bid%7D/get'
+  /archive:
+    $ref: './parts/routes.json#/components/pathItems/Archive'
+components:
+  mediaTypes:
+    Station:
+      schema:
+        $ref: 'schemas/station'
+      example:
+        $ref: 'https://invalid.example/example'
+  schemas:
+    Station:
+      $id: schemas/station
+      $dynamicAnchor: node
+      type: object
+      $defs:
+        'level /~':
+          type: integer
+      properties:
+        level:
+          $ref: '#/$defs/level%20~1~0'
+        children:
+          type: array
+          items:
+            $dynamicRef: '#node'
+        reading:
+          $ref: '../models/reading.json#reading'
+    DetailedStation:
+      $id: schemas/detailed
+      $dynamicAnchor: node
+      $ref: station
+    Vendor:
+      $schema: https://stations.example/dialect
+      $ref: 'https://invalid.example/opaque'
+  examples:
+    Trace:
+      dataValue:
+        $ref: 'https://invalid.example/data'
+x-meta:
+  $ref: 'https://invalid.example/extension'

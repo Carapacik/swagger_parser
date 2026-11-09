@@ -1,0 +1,14 @@
+openapi: "3.2.1"
+info:
+  title: "External fields"
+  version: "1"
+paths: {}
+components:
+  schemas:
+    Nullable:
+      type:
+        - "string"
+        - "null"
+    Default:
+      type: "string"
+      default: "Outside"

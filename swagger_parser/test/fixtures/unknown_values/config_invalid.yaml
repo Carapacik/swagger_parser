@@ -1,0 +1,4 @@
+swagger_parser:
+  schema_path: "unknown_v3_2.yaml"
+  generation:
+    unknown_enum_values: "fallback"

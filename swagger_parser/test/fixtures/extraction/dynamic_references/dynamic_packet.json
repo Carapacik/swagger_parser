@@ -1,0 +1,36 @@
+{
+  "$id": "./resources/packet",
+  "anyOf": [
+    {
+      "type": "array",
+      "items": {
+        "$dynamicRef": "#item"
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "next"
+      ],
+      "properties": {
+        "next": {
+          "$ref": "#"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "DefaultItem": {
+      "$dynamicAnchor": "item",
+      "$anchor": "fixed",
+      "type": "integer"
+    },
+    "Disabled": false,
+    "Flags": {
+      "type": "array",
+      "items": {
+        "type": "boolean"
+      }
+    }
+  }
+}

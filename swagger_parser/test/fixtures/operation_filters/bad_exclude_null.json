@@ -1,0 +1,8 @@
+{
+  "input": "routes_v3_2.yaml",
+  "generation": {
+    "operation_filters": {
+      "exclude_tags": null
+    }
+  }
+}

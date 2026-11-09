@@ -1,0 +1,47 @@
+{
+  "defs": {
+    "Left": {
+      "allOf": [
+        {
+          "$ref": "../base.json#/defs/Base~1Node~0"
+        },
+        {
+          "type": "object",
+          "required": [
+            "prop_b"
+          ],
+          "properties": {
+            "prop_b": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "Right": {
+      "allOf": [
+        {
+          "$ref": "../base.json#/defs/Base~1Node~0"
+        },
+        {
+          "type": "object",
+          "required": [
+            "prop_c"
+          ],
+          "properties": {
+            "prop_c": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "Cycle": {
+      "allOf": [
+        {
+          "$ref": "../base.json#/defs/Cycle"
+        }
+      ]
+    }
+  }
+}

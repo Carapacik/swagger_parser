@@ -1,0 +1,54 @@
+openapi: 3.2.1
+info:
+  title: Station search
+  version: '1'
+paths:
+  /stations:
+    get:
+      operationId: listStations
+      parameters:
+        - in: query
+          name: filter
+          style: deepObject
+          schema:
+            "$ref": "#/components/schemas/StationFilter"
+        - in: query
+          name: scores
+          style: deepObject
+          explode: false
+          required: true
+          schema:
+            type: object
+            additionalProperties:
+              type: integer
+      responses:
+        '204':
+          description: No matches
+  /search:
+    get:
+      operationId: search
+      parameters:
+        - in: query
+          name: options
+          style: deepObject
+          explode: true
+          schema:
+            type: object
+            properties:
+              distance:
+                type: number
+      responses:
+        '204':
+          description: No matches
+components:
+  schemas:
+    StationFilter:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        active:
+          type: boolean
+        line-code:
+          type: integer

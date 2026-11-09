@@ -1,0 +1,14 @@
+openapi: 3.1.2
+info:
+  title: Response ranges
+  version: '1'
+paths:
+  /check:
+    get:
+      responses:
+        default:
+          description: Other status
+        4XX:
+          description: Client error
+        '404':
+          description: Missing

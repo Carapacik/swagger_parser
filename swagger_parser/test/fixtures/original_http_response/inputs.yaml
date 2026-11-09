@@ -1,0 +1,10 @@
+"output_directory": "out"
+"generation":
+  "original_http_response": true
+"inputs":
+  "wrapped":
+    "schema_path": "../extraction/untyped_response.yaml"
+  "plain":
+    "schema_path": "../extraction/untyped_response.json"
+    "generation":
+      "original_http_response": false

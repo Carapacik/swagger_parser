@@ -1,0 +1,62 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Parameter defaults",
+    "version": "1"
+  },
+  "paths": {
+    "/invalid": {
+      "get": {
+        "operationId": "invalid",
+        "parameters": [
+          {
+            "name": "time",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "valid"
+            ],
+            "default": "unknown"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Result",
+            "schema": {
+              "$ref": "#/definitions/Station"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Station": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateStation": {
+      "type": "object",
+      "default": {
+        "name": "Root"
+      },
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "Unnamed"
+        }
+      }
+    }
+  },
+  "produces": [
+    "application/json"
+  ]
+}

@@ -1,0 +1,307 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Station lookup",
+    "version": "1"
+  },
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/stations/{id}": {
+      "get": {
+        "operationId": "getStation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/RequestId"
+          },
+          {
+            "$ref": "#/parameters/Revision"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Station",
+            "schema": {
+              "$ref": "#/definitions/Station"
+            }
+          }
+        }
+      }
+    },
+    "/station": {
+      "parameters": [
+        {
+          "name": "x-request-id",
+          "in": "header",
+          "type": "integer"
+        }
+      ],
+      "get": {
+        "operationId": "lookupStation",
+        "parameters": [
+          {
+            "$ref": "#/parameters/RequestId"
+          },
+          {
+            "$ref": "#/parameters/Revision"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "ServerError",
+            "schema": {
+              "$ref": "#/definitions/ServerError"
+            }
+          },
+          "202": {
+            "description": "Ticket",
+            "schema": {
+              "$ref": "#/definitions/Ticket"
+            }
+          },
+          "404": {
+            "description": "Problem",
+            "schema": {
+              "$ref": "#/definitions/Problem"
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "201": {
+            "description": "CreatedStation",
+            "schema": {
+              "$ref": "#/definitions/CreatedStation"
+            }
+          },
+          "400": {
+            "description": "ValidationError",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "200": {
+            "description": "Station",
+            "schema": {
+              "$ref": "#/definitions/Station"
+            }
+          }
+        }
+      }
+    },
+    "/invalid": {
+      "get": {
+        "operationId": "invalid",
+        "responses": {
+          "400": {
+            "description": "ValidationError",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        }
+      }
+    },
+    "/empty": {
+      "get": {
+        "operationId": "empty",
+        "responses": {
+          "204": {
+            "description": "No content"
+          }
+        }
+      }
+    },
+    "/created": {
+      "get": {
+        "operationId": "created",
+        "responses": {
+          "201": {
+            "description": "Result.",
+            "schema": {
+              "$ref": "#/definitions/CreatedStation"
+            }
+          }
+        }
+      }
+    },
+    "/listed": {
+      "get": {
+        "operationId": "listed",
+        "responses": {
+          "204": {
+            "description": "Result."
+          },
+          "200": {
+            "description": "Result.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Station"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/no-content": {
+      "get": {
+        "operationId": "noContent",
+        "responses": {
+          "200": {
+            "description": "Result."
+          }
+        }
+      }
+    },
+    "/unconstrained": {
+      "get": {
+        "operationId": "unconstrained",
+        "responses": {
+          "200": {
+            "description": "Result.",
+            "schema": {}
+          }
+        }
+      }
+    },
+    "/multi-status": {
+      "get": {
+        "operationId": "multiStatus",
+        "responses": {
+          "207": {
+            "description": "Result.",
+            "schema": {
+              "type": "object",
+              "required": [
+                "state"
+              ],
+              "properties": {
+                "state": {
+                  "type": "string",
+                  "enum": [
+                    "accepted",
+                    "partial"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/late-success": {
+      "get": {
+        "operationId": "lateSuccess",
+        "responses": {
+          "500": {
+            "description": "Result.",
+            "schema": {
+              "$ref": "#/definitions/ServerError"
+            }
+          },
+          "299": {
+            "description": "Result.",
+            "schema": {
+              "$ref": "#/definitions/CreatedStation"
+            }
+          },
+          "226": {
+            "description": "Result.",
+            "schema": {
+              "$ref": "#/definitions/Ticket"
+            }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "RequestId": {
+      "name": "X-Request-ID",
+      "in": "header",
+      "required": true,
+      "type": "string"
+    },
+    "Revision": {
+      "name": "X-Revision",
+      "in": "header",
+      "type": "integer"
+    }
+  },
+  "definitions": {
+    "Station": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Ticket": {
+      "type": "object",
+      "required": [
+        "token"
+      ],
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "Problem": {
+      "type": "object",
+      "required": [
+        "detail"
+      ],
+      "properties": {
+        "detail": {
+          "type": "string"
+        }
+      }
+    },
+    "CreatedStation": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "ValidationError": {
+      "type": "object",
+      "required": [
+        "field"
+      ],
+      "properties": {
+        "field": {
+          "type": "string"
+        }
+      }
+    },
+    "ServerError": {
+      "type": "object",
+      "required": [
+        "requestId"
+      ],
+      "properties": {
+        "requestId": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

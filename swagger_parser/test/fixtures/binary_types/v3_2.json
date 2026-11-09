@@ -1,0 +1,125 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "V1 regressions",
+    "version": "1"
+  },
+  "paths": {
+    "/download": {
+      "get": {
+        "operationId": "download",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/BinaryAlias"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/files": {
+      "get": {
+        "operationId": "listFiles",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileInfoList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/file-id": {
+      "get": {
+        "operationId": "fileId",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScalarFileAlias"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/upload": {
+      "post": {
+        "operationId": "upload",
+        "responses": {
+          "204": {
+            "description": "Saved"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "file"
+                ],
+                "properties": {
+                  "file": {
+                    "$ref": "#/components/schemas/BinaryAlias"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Binary": {
+        "type": "string",
+        "format": "binary"
+      },
+      "BinaryAlias": {
+        "$ref": "#/components/schemas/Binary"
+      },
+      "FileInfo": {
+        "type": "object",
+        "required": [
+          "file_name"
+        ],
+        "properties": {
+          "file_name": {
+            "type": "string"
+          }
+        }
+      },
+      "FileInfoAlias": {
+        "$ref": "#/components/schemas/FileInfo"
+      },
+      "FileInfoList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/FileInfoAlias"
+        }
+      },
+      "ScalarFileId": {
+        "type": "string"
+      },
+      "ScalarFileAlias": {
+        "$ref": "#/components/schemas/ScalarFileId"
+      }
+    }
+  }
+}

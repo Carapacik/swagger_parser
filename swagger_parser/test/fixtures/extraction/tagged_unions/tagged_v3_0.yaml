@@ -1,0 +1,83 @@
+openapi: 3.0.4
+info:
+  title: Station readings
+  version: '1'
+paths: {}
+components:
+  schemas:
+    Reading:
+      oneOf:
+      - "$ref": "#/components/schemas/Thermal"
+      - "$ref": "#/components/schemas/Probe"
+      discriminator:
+        propertyName: reading-kind
+        mapping:
+          temperature: Thermal
+          air/backup~: "#/components/schemas/Thermal"
+    ReportedReading:
+      anyOf:
+      - "$ref": "#/components/schemas/Thermal"
+      - "$ref": "#/components/schemas/Probe"
+      discriminator:
+        propertyName: reading-kind
+        mapping:
+          temperature: Thermal
+          Thermal: Probe
+    Sample:
+      type: object
+      required:
+      - station
+      - reading-kind
+      properties:
+        station:
+          type: string
+        reading-kind:
+          type: string
+    Thermal:
+      allOf:
+      - "$ref": "#/components/schemas/Sample"
+      - type: object
+        required:
+        - degrees
+        properties:
+          degrees:
+            type: number
+          reading-kind:
+            type: string
+            enum:
+            - Thermal
+            - temperature
+            - air/backup~
+    Probe:
+      allOf:
+      - "$ref": "#/components/schemas/Sample"
+      - type: object
+        properties:
+          readings:
+            type: array
+            items:
+              "$ref": "#/components/schemas/Reading"
+    Batch:
+      type: object
+      required:
+      - latest
+      properties:
+        latest:
+          "$ref": "#/components/schemas/Reading"
+        history:
+          type: array
+          items:
+            "$ref": "#/components/schemas/ReportedReading"
+    Recorded:
+      anyOf:
+      - "$ref": "#/components/schemas/Thermal"
+      - "$ref": "#/components/schemas/Probe"
+      allOf:
+      - type: object
+        required:
+        - serial
+        properties:
+          serial:
+            type: integer
+      discriminator:
+        propertyName: reading-kind

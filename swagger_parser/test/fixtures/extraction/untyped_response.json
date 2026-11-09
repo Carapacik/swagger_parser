@@ -1,0 +1,184 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "Untyped responses",
+    "version": "1"
+  },
+  "paths": {
+    "/json": {
+      "get": {
+        "operationId": "json",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/emptySchema": {
+      "get": {
+        "operationId": "emptySchema",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jsonSuffix": {
+      "get": {
+        "operationId": "jsonSuffix",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/problem+json": {}
+            }
+          }
+        }
+      }
+    },
+    "/text": {
+      "get": {
+        "operationId": "text",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        }
+      }
+    },
+    "/bytes": {
+      "get": {
+        "operationId": "bytes",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/octet-stream": {}
+            }
+          }
+        }
+      }
+    },
+    "/absent": {
+      "get": {
+        "operationId": "absent",
+        "responses": {
+          "200": {
+            "description": "Result"
+          }
+        }
+      }
+    },
+    "/noContent": {
+      "get": {
+        "operationId": "noContent",
+        "responses": {
+          "204": {
+            "description": "Result"
+          }
+        }
+      }
+    },
+    "/onlyError": {
+      "get": {
+        "operationId": "onlyError",
+        "responses": {
+          "400": {
+            "description": "Result"
+          }
+        }
+      }
+    },
+    "/station": {
+      "get": {
+        "operationId": "station",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events": {
+      "get": {
+        "operationId": "events",
+        "responses": {
+          "200": {
+            "description": "Stream",
+            "content": {
+              "text/event-stream": {}
+            }
+          }
+        }
+      }
+    },
+    "/records": {
+      "get": {
+        "operationId": "records",
+        "responses": {
+          "200": {
+            "description": "Stream",
+            "content": {
+              "application/jsonl": {
+                "itemSchema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Station": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "HttpResponse": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "Response": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

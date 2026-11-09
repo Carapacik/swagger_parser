@@ -1,0 +1,164 @@
+{
+  "openapi": "3.1.2",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "info": {
+    "title": "Pet events \uD83D\uDC36",
+    "summary": "Notifications for subscribers",
+    "version": "1",
+    "license": {
+      "name": "Apache License",
+      "identifier": "Apache-2.0"
+    }
+  },
+  "webhooks": {
+    "petEvent": {
+      "$ref": "#/components/pathItems/Event"
+    }
+  },
+  "components": {
+    "pathItems": {
+      "Event": {
+        "post": {
+          "operationId": "notify",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event",
+                  "description": "Delivered event"
+                }
+              }
+            }
+          },
+          "responses": {
+            "202": {
+              "$ref": "#/components/responses/Accepted",
+              "summary": "Accepted",
+              "description": "Queued event",
+              "x-source": "example"
+            }
+          }
+        },
+        "trace": {}
+      }
+    },
+    "responses": {
+      "Accepted": {
+        "description": "Queued"
+      }
+    },
+    "schemas": {
+      "Event": {
+        "$schema": "https://spec.openapis.org/oas/3.1/dialect/base",
+        "$id": "https://example.org/event",
+        "$dynamicAnchor": "event",
+        "type": [
+          "object",
+          "null"
+        ],
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string",
+            "default": null,
+            "examples": [
+              "Pet"
+            ]
+          },
+          "nested": {
+            "$dynamicRef": "#event",
+            "maxProperties": 5
+          },
+          "levels": {
+            "type": "array",
+            "prefixItems": [
+              true,
+              {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            ],
+            "items": false,
+            "contains": {
+              "const": null
+            },
+            "minContains": 0,
+            "unevaluatedItems": false
+          }
+        },
+        "$defs": {
+          "opt": {
+            "if": {
+              "type": "string"
+            },
+            "then": {
+              "minLength": 1
+            },
+            "else": false
+          }
+        },
+        "dependentRequired": {
+          "name": [
+            "levels"
+          ]
+        },
+        "dependentSchemas": {
+          "name": true
+        },
+        "patternProperties": {
+          "^x-": true
+        },
+        "propertyNames": {
+          "type": "string"
+        },
+        "unevaluatedProperties": false,
+        "customKeyword": {
+          "payload": [
+            1,
+            null
+          ]
+        }
+      },
+      "Envelope": {
+        "$id": "https://example.org/envelope",
+        "example": [
+          null
+        ],
+        "xml": false,
+        "properties": {
+          "opaque": {
+            "$id": "other",
+            "$schema": "https://example.org/custom",
+            "items": [
+              1,
+              2
+            ]
+          }
+        },
+        "$defs": {
+          "Nested": {
+            "$id": "nested",
+            "$schema": "https://spec.openapis.org/oas/3.1/dialect/base",
+            "xml": {
+              "wrapped": true
+            },
+            "items": true
+          }
+        }
+      },
+      "Anything": true,
+      "Nothing": false
+    },
+    "securitySchemes": {
+      "cert": {
+        "type": "mutualTLS",
+        "description": "Client certificate"
+      }
+    }
+  },
+  "security": [
+    {
+      "cert": []
+    }
+  ]
+}

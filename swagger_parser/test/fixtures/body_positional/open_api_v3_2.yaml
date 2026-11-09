@@ -1,0 +1,198 @@
+openapi: "3.2.1"
+info:
+  title: "Body arguments"
+  version: "1"
+paths:
+  "/stations/{id}":
+    put:
+      operationId: "updateStation"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/Station"
+      responses:
+        "200":
+          description: "Station"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "locale"
+          in: "query"
+          schema:
+            type: "string"
+        - name: "X-Revision"
+          in: "header"
+          schema:
+            type: "integer"
+  "/required-nullable":
+    post:
+      operationId: "requiredNullable"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type:
+                - "string"
+                - "null"
+      responses:
+        "200":
+          description: "Station"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/optional":
+    post:
+      operationId: "optionalBody"
+      requestBody:
+        required: false
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/Station"
+      responses:
+        "200":
+          description: "Station"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/optional-nullable":
+    post:
+      operationId: "optionalNullable"
+      requestBody:
+        required: false
+        content:
+          "application/json":
+            schema:
+              type:
+                - "string"
+                - "null"
+      responses:
+        "200":
+          description: "Station"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/only-null":
+    post:
+      operationId: "onlyNull"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: "null"
+      responses:
+        "200":
+          description: "Station"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/form":
+    post:
+      operationId: "submitForm"
+      requestBody:
+        required: true
+        content:
+          "application/x-www-form-urlencoded":
+            schema:
+              type: "object"
+              required:
+                - "station"
+              properties:
+                station:
+                  type: "string"
+                body:
+                  type: "string"
+      responses:
+        "200":
+          description: "Station"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/multipart":
+    post:
+      operationId: "upload"
+      requestBody:
+        required: true
+        content:
+          "multipart/form-data":
+            schema:
+              type: "object"
+              required:
+                - "file"
+              properties:
+                file:
+                  type: "string"
+                  format: "binary"
+      responses:
+        "200":
+          description: "Station"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/raw":
+    post:
+      operationId: "rawBody"
+      requestBody:
+        required: true
+        content:
+          "application/octet-stream":
+            schema:
+              type: "string"
+              format: "binary"
+      responses:
+        "200":
+          description: "Station"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/list":
+    post:
+      operationId: "listBody"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: "array"
+              items:
+                $ref: "#/components/schemas/Station"
+      responses:
+        "200":
+          description: "Station"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/empty":
+    get:
+      operationId: "empty"
+      responses:
+        "204":
+          description: "Empty"
+components:
+  schemas:
+    Station:
+      type: "object"
+      required:
+        - "name"
+      properties:
+        name:
+          type: "string"

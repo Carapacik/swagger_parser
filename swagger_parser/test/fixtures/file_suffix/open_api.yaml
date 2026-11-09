@@ -1,0 +1,129 @@
+"openapi": "3.2.1"
+"info":
+  "title": "File suffix"
+  "version": "1"
+"paths":
+  "/stations":
+    "get":
+      "operationId": "getStation"
+      "tags":
+        - "Stations"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Station"
+        "404":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Problem"
+    "post":
+      "operationId": "postStation"
+      "tags":
+        - "Stations"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Station"
+        "404":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Problem"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/Station"
+  "/trips":
+    "get":
+      "operationId": "getTrip"
+      "tags":
+        - "Trips"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Station"
+        "404":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Problem"
+"components":
+  "schemas":
+    "Station":
+      "type": "object"
+      "required":
+        - "name"
+        - "address"
+        - "status"
+      "properties":
+        "name":
+          "type": "string"
+        "address":
+          "type": "object"
+          "required":
+            - "city"
+          "properties":
+            "city":
+              "type": "string"
+        "status":
+          "type": "string"
+          "enum":
+            - "active"
+            - "closed"
+        "vehicle":
+          "$ref": "#/components/schemas/Vehicle"
+    "Problem":
+      "type": "object"
+      "required":
+        - "message"
+      "properties":
+        "message":
+          "type": "string"
+    "Vehicle":
+      "oneOf":
+        -
+          "$ref": "#/components/schemas/Rail"
+        -
+          "$ref": "#/components/schemas/Bus"
+      "discriminator":
+        "propertyName": "kind"
+        "mapping":
+          "rail": "#/components/schemas/Rail"
+          "bus": "#/components/schemas/Bus"
+    "Rail":
+      "type": "object"
+      "required":
+        - "kind"
+        - "platform"
+      "properties":
+        "kind":
+          "type": "string"
+          "const": "rail"
+        "platform":
+          "type": "integer"
+    "Bus":
+      "type": "object"
+      "required":
+        - "kind"
+        - "route"
+      "properties":
+        "kind":
+          "type": "string"
+          "const": "bus"
+        "route":
+          "type": "string"

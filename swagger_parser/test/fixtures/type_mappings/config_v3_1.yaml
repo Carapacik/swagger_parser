@@ -1,0 +1,64 @@
+swagger_parser:
+  input: "mapped_v3_1.yaml"
+  generation:
+    type_mappings:
+      -
+        schema: "#/components/schemas/StationId"
+        dart_type: "StationId"
+        import: "package:swagger_parser_tests/custom_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/custom_codecs.dart"
+          from_json: "stationIdFromJson"
+          to_json: "stationIdToJson"
+      -
+        type: "string"
+        format: "station-id"
+        dart_type: "ExternalId"
+        import: "package:swagger_parser_tests/custom_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/custom_codecs.dart"
+          from_json: "externalIdFromJson"
+          to_json: "externalIdToJson"
+      -
+        type: "integer"
+        format: "count"
+        dart_type: "Count"
+        import: "package:swagger_parser_tests/custom_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/custom_codecs.dart"
+          from_json: "countFromJson"
+          to_json: "countToJson"
+      -
+        type: "number"
+        format: "ratio"
+        dart_type: "Ratio"
+        import: "package:swagger_parser_tests/custom_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/custom_codecs.dart"
+          from_json: "ratioFromJson"
+          to_json: "ratioToJson"
+      -
+        type: "boolean"
+        format: "enabled"
+        dart_type: "Enabled"
+        import: "package:swagger_parser_tests/custom_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/custom_codecs.dart"
+          from_json: "enabledFromJson"
+          to_json: "enabledToJson"
+      -
+        type: "string"
+        format: "date"
+        dart_type: "CalendarDate"
+        import: "package:swagger_parser_tests/custom_types.dart"
+        codec:
+          import: "package:swagger_parser_tests/custom_codecs.dart"
+          from_json: "calendarDateFromJson"
+          to_json: "calendarDateToJson"
+      - schema: '#/components/schemas/WireId'
+        dart_type: StationId
+        import: package:swagger_parser_tests/custom_types.dart
+        codec:
+          import: package:swagger_parser_tests/custom_codecs.dart
+          from_json: wireIdFromJson
+          to_json: wireIdToJson

@@ -1,0 +1,9 @@
+get:
+  operationId: "mountedOperation"
+  tags:
+    - "Station"
+  externalDocs:
+    url: "https://example.test/mounted"
+  responses:
+    "204":
+      description: "Done"

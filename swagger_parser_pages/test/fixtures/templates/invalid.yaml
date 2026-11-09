@@ -1,0 +1,30 @@
+unknown_option:
+  other: true
+invalid_override:
+  overrides:
+    models: 1
+invalid_files:
+  files: false
+invalid_export:
+  files:
+    - output: helper.dart
+      source: const value = 1;
+      export: 1
+unknown_selector:
+  overrides:
+    missing: '{{defaultSource}}'
+invalid_mustache:
+  overrides:
+    models: '{{#missing}}'
+conflicting_output:
+  files:
+    - output: api.dart
+      source: const value = 1;
+unsafe_path:
+  files:
+    - output: ../helper.dart
+      source: const value = 1;
+build_output:
+  files:
+    - output: helper.g.dart
+      source: const value = 1;

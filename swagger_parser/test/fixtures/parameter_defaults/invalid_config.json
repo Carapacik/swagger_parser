@@ -1,0 +1,6 @@
+{
+  "schema_path": "v3_2.yaml",
+  "generation": {
+    "apply_parameter_defaults": "yes"
+  }
+}

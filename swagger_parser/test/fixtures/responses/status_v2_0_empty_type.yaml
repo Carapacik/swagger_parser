@@ -1,0 +1,12 @@
+"swagger": "2.0"
+"info":
+  "title": "Station lookup"
+  "version": "1"
+"paths":
+  "/invalid":
+    "get":
+      "responses":
+        "200":
+          "description": "Result."
+          "schema":
+            "type": ""

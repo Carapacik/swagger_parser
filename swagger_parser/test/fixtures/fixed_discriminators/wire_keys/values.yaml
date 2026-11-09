@@ -1,0 +1,23 @@
+entry:
+  kind: "Rail"
+  is_active: true
+  class: "first"
+  file_name: "north.bin"
+entries:
+  - kind: "Rail"
+    is_active: true
+    class: "first"
+    file_name: "north.bin"
+  - kind: "Bus"
+    is_active: false
+    switch: 7
+by_name:
+  rail:
+    kind: "Rail"
+    is_active: true
+    class: "first"
+    file_name: "north.bin"
+  bus:
+    kind: "Bus"
+    is_active: false
+    switch: 7

@@ -1,0 +1,301 @@
+"openapi": "3.1.2"
+"info":
+  "title": "Union contracts"
+  "version": "1"
+"paths":
+  "/ChoiceUnion":
+    "post":
+      "operationId": "echoChoiceUnion"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/ChoiceUnion"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/ChoiceUnion"
+  "/Envelope":
+    "post":
+      "operationId": "echoEnvelope"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/Envelope"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Envelope"
+  "/Fruit":
+    "post":
+      "operationId": "echoFruit"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/Fruit"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Fruit"
+  "/EmptyChoice":
+    "post":
+      "operationId": "echoEmptyChoice"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/EmptyChoice"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/EmptyChoice"
+  "/ScalarChoice":
+    "post":
+      "operationId": "echoScalarChoice"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/ScalarChoice"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/ScalarChoice"
+  "/NullableHolder":
+    "post":
+      "operationId": "echoNullableHolder"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/NullableHolder"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/NullableHolder"
+"components":
+  "schemas":
+    "ChoiceUnion":
+      "oneOf":
+        - "$ref": "#/components/schemas/ItemA"
+        - "$ref": "#/components/schemas/ItemB"
+      "discriminator":
+        "propertyName": "type"
+        "mapping":
+          "class": "#/components/schemas/ItemA"
+          "class_": "#/components/schemas/ItemB"
+          "typo": "#/components/schemas/Missing"
+    "OtherChoice":
+      "oneOf":
+        - "$ref": "#/components/schemas/ItemA"
+        - "$ref": "#/components/schemas/ItemC"
+      "discriminator":
+        "propertyName": "type"
+        "mapping":
+          "class": "#/components/schemas/ItemA"
+          "int": "#/components/schemas/ItemC"
+    "OffsetTime":
+      "type": "string"
+      "format": "date-time"
+    "ItemA":
+      "type": "object"
+      "required":
+        - "type"
+        - "class"
+        - "snake_case"
+        - "$value"
+        - "quote'key"
+        - "stamp"
+      "properties":
+        "type":
+          "type": "string"
+          "enum":
+            - "class"
+        "class":
+          "type": "string"
+          "description": "ItemA at /ChoiceUnion"
+          "example": "ItemA"
+        "snake_case":
+          "type": "string"
+        "$value":
+          "type": "string"
+        "quote'key":
+          "type": "string"
+        "stamp":
+          "$ref": "#/components/schemas/OffsetTime"
+        "child":
+          "$ref": "#/components/schemas/ChoiceUnion"
+    "ItemB":
+      "type": "object"
+      "required":
+        - "type"
+        - "class"
+        - "snake_case"
+        - "$value"
+        - "quote'key"
+        - "stamp"
+      "properties":
+        "type":
+          "type": "string"
+          "enum":
+            - "class_"
+        "class":
+          "type": "string"
+          "description": "ItemA at /ChoiceUnion"
+          "example": "ItemA"
+        "snake_case":
+          "type": "string"
+        "$value":
+          "type": "string"
+        "quote'key":
+          "type": "string"
+        "stamp":
+          "$ref": "#/components/schemas/OffsetTime"
+        "child":
+          "$ref": "#/components/schemas/ChoiceUnion"
+    "ItemC":
+      "type": "object"
+      "required":
+        - "type"
+        - "class"
+        - "snake_case"
+        - "$value"
+        - "quote'key"
+        - "stamp"
+      "properties":
+        "type":
+          "type": "string"
+          "enum":
+            - "int"
+        "class":
+          "type": "string"
+          "description": "ItemA at /ChoiceUnion"
+          "example": "ItemA"
+        "snake_case":
+          "type": "string"
+        "$value":
+          "type": "string"
+        "quote'key":
+          "type": "string"
+        "stamp":
+          "$ref": "#/components/schemas/OffsetTime"
+        "child":
+          "$ref": "#/components/schemas/ChoiceUnion"
+    "Envelope":
+      "type": "object"
+      "required":
+        - "named"
+        - "inline"
+        - "byName"
+        - "other"
+      "properties":
+        "named":
+          "$ref": "#/components/schemas/ChoiceUnion"
+        "inline":
+          "type": "array"
+          "items":
+            "oneOf":
+              - "$ref": "#/components/schemas/ItemA"
+              - "$ref": "#/components/schemas/ItemB"
+            "discriminator":
+              "propertyName": "type"
+              "mapping":
+                "class": "#/components/schemas/ItemA"
+                "class_": "#/components/schemas/ItemB"
+        "byName":
+          "type": "object"
+          "additionalProperties":
+            "$ref": "#/components/schemas/ChoiceUnion"
+        "other":
+          "$ref": "#/components/schemas/OtherChoice"
+    "NullableChoice":
+      "oneOf":
+        - "$ref": "#/components/schemas/ChoiceUnion"
+        - "type": "null"
+    "NullableHolder":
+      "type": "object"
+      "required":
+        - "requiredChoice"
+      "properties":
+        "requiredChoice":
+          "$ref": "#/components/schemas/NullableChoice"
+        "optionalChoice":
+          "$ref": "#/components/schemas/NullableChoice"
+    "Fruit":
+      "type": "object"
+      "required":
+        - "color"
+      "properties":
+        "color":
+          "type": "string"
+      "anyOf":
+        - "title": "Red"
+          "type": "object"
+          "required":
+            - "red"
+          "properties":
+            "red":
+              "type": "boolean"
+        - "title": "Sweet"
+          "type": "object"
+          "required":
+            - "sweet"
+          "properties":
+            "sweet":
+              "type": "boolean"
+    "EmptyChoice":
+      "oneOf":
+        - "title": "Empty"
+          "type": "object"
+          "additionalProperties": false
+        - "title": "Named"
+          "type": "object"
+          "required":
+            - "name"
+          "additionalProperties": false
+          "properties":
+            "name":
+              "type": "string"
+    "ScalarChoice":
+      "oneOf":
+        - "title": "Text"
+          "type": "string"
+        - "title": "Number"
+          "type": "integer"
+    "Ambiguous":
+      "oneOf":
+        - "type": "number"
+        - "type": "integer"
+    "Contradictory":
+      "type": "integer"
+      "oneOf":
+        - "const": "0"
+          "title": "Zero"
+        - "const": "1"
+          "title": "One"

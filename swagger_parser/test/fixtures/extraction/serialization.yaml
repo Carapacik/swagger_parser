@@ -1,0 +1,68 @@
+openapi: 3.1.2
+info:
+  title: Serialization
+  version: '1'
+components:
+  schemas:
+    State:
+      type: string
+      enum:
+        - on-line
+        - off-line
+    Node:
+      type: object
+      required:
+        - station-id
+        - state
+        - reading
+      properties:
+        station-id:
+          type: integer
+        station_id:
+          type: string
+        state:
+          $ref: '#/components/schemas/State'
+        reading:
+          type:
+            - number
+            - 'null'
+        bool:
+          type: boolean
+        unset:
+          type: 'null'
+        note:
+          type:
+            - string
+            - 'null'
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/Node'
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+        'price$':
+          type: number
+    Reading:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+        - type: object
+          properties:
+            value:
+              type: number
+    Readings:
+      type: array
+      items:
+        $ref: '#/components/schemas/Reading'
+    Closed:
+      type: object
+      additionalProperties: false
+      properties:
+        code:
+          type: integer

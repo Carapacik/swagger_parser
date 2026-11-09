@@ -1,0 +1,66 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Nullable collections",
+    "version": "1"
+  },
+  "paths": {
+    "/kept": {
+      "get": {
+        "operationId": "kept",
+        "parameters": [
+          {
+            "name": "absent",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "optional",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "required",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        }
+      }
+    },
+    "/skipped": {
+      "get": {
+        "operationId": "skipped",
+        "parameters": [
+          {
+            "name": "value",
+            "in": "query",
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+"openapi": "3.0.4"
+"info":
+  "title": "Enum contracts"
+  "version": "1"
+"paths": {}
+"components":
+  "schemas":
+    "Invalid":
+      "$ref": "v3_0_external.yaml#/components/schemas/Missing"

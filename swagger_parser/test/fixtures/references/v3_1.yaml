@@ -1,0 +1,437 @@
+"openapi": "3.1.2"
+"info":
+  "title": "Reference contracts"
+  "version": "1"
+"paths":
+  "/stations/{id}":
+    "parameters":
+      -
+        "$ref": "#/components/parameters/IdAlias"
+      -
+        "$ref": "#/components/parameters/PathLimit"
+    "get":
+      "operationId": "lookup"
+      "parameters":
+        -
+          "$ref": "#/components/parameters/LimitAlias"
+          "description": "Local limit."
+          "summary": "Ignored parameter summary."
+          "required": true
+        -
+          "$ref": "#/components/parameters/TagAlias"
+        -
+          "$ref": "v3_1_targets.yaml#/components/parameters/HeaderLimit"
+          "description": ""
+        -
+          "name": "query"
+          "in": "query"
+          "required": false
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "$ref": "#/components/responses/ItemAlias"
+          "description": "Local item."
+          "summary": "Ignored response summary."
+        "400":
+          "$ref": "#/components/responses/Error"
+    "x-note":
+      "text": "Not an operation."
+  "/inline/{id}":
+    "get":
+      "operationId": "inlineLookup"
+      "parameters":
+        -
+          "name": "id"
+          "in": "path"
+          "required": true
+          "schema":
+            "type": "string"
+          "description": "Station key."
+        -
+          "name": "limit"
+          "in": "query"
+          "required": false
+          "schema":
+            "type": "integer"
+            "format": "int32"
+            "default": 7
+          "description": "Local limit."
+        -
+          "name": "tag"
+          "in": "query"
+          "required": false
+          "schema":
+            "type": "array"
+            "items":
+              "type": "string"
+            "default":
+              - "north"
+              - "south"
+          "description": "Repeated station tags."
+          "style": "form"
+          "explode": true
+        -
+          "$ref": "v3_1_targets.yaml#/components/parameters/HeaderLimit"
+          "description": ""
+        -
+          "name": "query"
+          "in": "query"
+          "required": false
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "$ref": "#/components/responses/ItemAlias"
+  "/login":
+    "post":
+      "operationId": "login"
+      "requestBody":
+        "$ref": "#/components/requestBodies/CredentialsBody"
+        "description": "Local credentials."
+        "required": false
+        "summary": "Ignored body summary."
+      "responses":
+        "200":
+          "$ref": "v3_1_targets.yaml#/components/responses/ExternalObject"
+  "/stations":
+    "get":
+      "operationId": "listStations"
+      "responses":
+        "200":
+          "$ref": "#/components/responses/List"
+  "/failure":
+    "get":
+      "operationId": "failure"
+      "responses":
+        "400":
+          "$ref": "#/components/responses/Error"
+  "/accepted":
+    "get":
+      "operationId": "accepted"
+      "responses":
+        "202":
+          "$ref": "#/components/responses/Encoded%52esponse"
+  "/scalar":
+    "get":
+      "operationId": "scalar"
+      "responses":
+        "200":
+          "description": "Shared response"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/TimestampChain"
+  "/typed":
+    "get":
+      "operationId": "typed"
+      "responses":
+        "200":
+          "description": "Shared response"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Station"
+                "type": "object"
+  "/aliases":
+    "post":
+      "operationId": "aliases"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/AliasUse"
+      "responses":
+        "200":
+          "description": "Shared response"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/AliasUse"
+  "/form":
+    "post":
+      "operationId": "submitForm"
+      "requestBody":
+        "$ref": "v3_1_targets.yaml#/components/requestBodies/FormBody"
+      "responses":
+        "200":
+          "$ref": "v3_1_targets.yaml#/components/responses/ExternalObject"
+  "/multipart":
+    "post":
+      "operationId": "submitMultipart"
+      "requestBody":
+        "$ref": "v3_1_targets.yaml#/components/requestBodies/formBody"
+      "responses":
+        "200":
+          "$ref": "v3_1_targets.yaml#/components/responses/ExternalObject"
+  "/escaped":
+    "get":
+      "operationId": "escapedResponse"
+      "responses":
+        "200":
+          "$ref": "v3_1_targets.yaml#/paths/~1shared~1~0item/get/responses/200"
+"components":
+  "schemas":
+    "Station":
+      "type": "object"
+      "required":
+        - "upper_code"
+      "properties":
+        "upper_code":
+          "type": "integer"
+    "station":
+      "type": "object"
+      "required":
+        - "lower_code"
+      "properties":
+        "lower_code":
+          "type": "string"
+    "DateTime":
+      "type": "string"
+      "format": "date-time"
+    "CalendarDate":
+      "type": "string"
+      "format": "date"
+    "Timestamp":
+      "$ref": "#/components/schemas/DateTime"
+    "TimestampChain":
+      "$ref": "#/components/schemas/Timestamp"
+    "ExternalDateAlias":
+      "$ref": "v3_1_targets.yaml#/components/schemas/ExternalDate"
+    "ExternalTimestampAlias":
+      "$ref": "v3_1_targets.yaml#/components/schemas/ExternalTimestamp"
+    "Count":
+      "type": "integer"
+      "minimum": 1
+      "maximum": 9
+    "CountAlias":
+      "$ref": "#/components/schemas/Count"
+    "FreeValue": {}
+    "String":
+      "type": "string"
+    "Object": {}
+    "List":
+      "type": "array"
+      "items":
+        "type": "integer"
+    "Map":
+      "type": "object"
+      "additionalProperties":
+        "type": "integer"
+    "Uri":
+      "type": "string"
+      "format": "uri"
+    "StationAlias":
+      "$ref": "#/components/schemas/Station"
+    "StationAliasChain":
+      "$ref": "#/components/schemas/StationAlias"
+    "StationList":
+      "type": "array"
+      "items":
+        "$ref": "#/components/schemas/StationAliasChain"
+    "StationListAlias":
+      "$ref": "#/components/schemas/StationList"
+    "StationMap":
+      "type": "object"
+      "additionalProperties":
+        "$ref": "#/components/schemas/StationAliasChain"
+    "StationMapAlias":
+      "$ref": "#/components/schemas/StationMap"
+    "CredentialsAlias":
+      "$ref": "v3_1_targets.yaml#/components/schemas/Credentials"
+    "LowerStation":
+      "allOf":
+        -
+          "$ref": "#/components/schemas/station"
+        -
+          "type": "object"
+          "required":
+            - "height"
+          "properties":
+            "height":
+              "type": "integer"
+    "EscapedTargets":
+      "type": "object"
+      "required":
+        - "Escaped/Model~name"
+        - "Encoded Model"
+      "properties":
+        "Escaped/Model~name":
+          "type": "object"
+          "required":
+            - "value"
+          "properties":
+            "value":
+              "type": "string"
+        "Encoded Model":
+          "type": "object"
+          "required":
+            - "encoded"
+          "properties":
+            "encoded":
+              "type": "string"
+    "ReferenceUse":
+      "type": "object"
+      "required":
+        - "upper"
+        - "lower"
+        - "sibling"
+        - "external"
+        - "escaped"
+        - "encoded"
+        - "query"
+        - "in"
+        - "camel"
+        - "pascal"
+        - "flat"
+      "properties":
+        "upper":
+          "$ref": "#/components/schemas/Station"
+        "lower":
+          "$ref": "#/components/schemas/station"
+        "sibling":
+          "$ref": "#/components/schemas/Station"
+          "type": "object"
+          "required":
+            - "label"
+          "properties":
+            "label":
+              "type": "string"
+              "minLength": 2
+        "external":
+          "$ref": "v3_1_targets.yaml#/components/schemas/ExternalObject"
+          "type": "object"
+        "escaped":
+          "$ref": "#/components/schemas/EscapedTargets/properties/Escaped~1Model~0name"
+        "encoded":
+          "$ref": "#/components/schemas/EscapedTargets/properties/Encoded%20Model"
+        "query":
+          "type": "string"
+        "in":
+          "type": "string"
+        "camel":
+          "$ref": "#/components/schemas/stationInfo"
+        "pascal":
+          "$ref": "#/components/schemas/StationInfo"
+        "flat":
+          "$ref": "#/components/schemas/stationinfo"
+    "ScalarUse":
+      "type": "object"
+      "required":
+        - "date"
+        - "timestamp"
+        - "externalDate"
+        - "externalTimestamp"
+        - "count"
+        - "free"
+        - "string"
+        - "object"
+        - "list"
+        - "map"
+        - "uri"
+      "properties":
+        "date":
+          "$ref": "#/components/schemas/CalendarDate"
+        "timestamp":
+          "$ref": "#/components/schemas/TimestampChain"
+        "externalDate":
+          "$ref": "#/components/schemas/ExternalDateAlias"
+        "externalTimestamp":
+          "$ref": "#/components/schemas/ExternalTimestampAlias"
+        "count":
+          "$ref": "#/components/schemas/CountAlias"
+        "free":
+          "$ref": "#/components/schemas/FreeValue"
+        "string":
+          "$ref": "#/components/schemas/String"
+        "object":
+          "$ref": "#/components/schemas/Object"
+        "list":
+          "$ref": "#/components/schemas/List"
+        "map":
+          "$ref": "#/components/schemas/Map"
+        "uri":
+          "$ref": "#/components/schemas/Uri"
+    "AliasUse":
+      "type": "object"
+      "required":
+        - "station"
+        - "stations"
+        - "byKey"
+        - "credentials"
+      "properties":
+        "station":
+          "$ref": "#/components/schemas/StationAliasChain"
+        "stations":
+          "$ref": "#/components/schemas/StationListAlias"
+        "byKey":
+          "$ref": "#/components/schemas/StationMapAlias"
+        "credentials":
+          "$ref": "#/components/schemas/CredentialsAlias"
+    "stationInfo":
+      "type": "object"
+      "required":
+        - "camel_code"
+      "properties":
+        "camel_code":
+          "type": "string"
+    "StationInfo":
+      "type": "object"
+      "required":
+        - "pascal_code"
+      "properties":
+        "pascal_code":
+          "type": "string"
+    "stationinfo":
+      "type": "object"
+      "required":
+        - "flat_code"
+      "properties":
+        "flat_code":
+          "type": "string"
+  "parameters":
+    "PathLimit":
+      "name": "limit"
+      "in": "query"
+      "required": false
+      "schema":
+        "type": "integer"
+        "default": 2
+      "description": "Path limit."
+    "LimitAlias":
+      "$ref": "v3_1_targets.yaml#/components/parameters/Limit"
+      "description": "Alias limit."
+    "TagAlias":
+      "$ref": "v3_1_targets.yaml#/components/parameters/Tag"
+    "IdAlias":
+      "$ref": "v3_1_targets.yaml#/components/parameters/Id"
+  "responses":
+    "Station":
+      "description": "Item response."
+      "content":
+        "application/json":
+          "schema":
+            "$ref": "#/components/schemas/Station"
+    "ItemAlias":
+      "$ref": "#/components/responses/Station"
+      "description": "Alias item."
+    "List":
+      "description": "Shared response"
+      "content":
+        "application/json":
+          "schema":
+            "type": "array"
+            "items":
+              "$ref": "#/components/schemas/StationAliasChain"
+    "Error":
+      "$ref": "v3_1_targets.yaml#/components/responses/Problem"
+    "EncodedResponse":
+      "description": "Shared response"
+      "content":
+        "application/json":
+          "schema":
+            "$ref": "#/components/schemas/Station"
+  "requestBodies":
+    "CredentialsBody":
+      "$ref": "v3_1_targets.yaml#/components/requestBodies/CredentialsBody"

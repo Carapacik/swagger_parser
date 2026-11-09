@@ -1,0 +1,18 @@
+"swagger": "2.0"
+"info":
+  "title": "Reference contracts"
+  "version": "1"
+"paths":
+  "/invalid":
+    "get":
+      "operationId": "invalid"
+      "responses":
+        "200":
+          "$ref": "#/paths/~1invalid/get/responses/200"
+"consumes":
+  - "application/json"
+"produces":
+  - "application/json"
+"definitions": {}
+"parameters": {}
+"responses": {}

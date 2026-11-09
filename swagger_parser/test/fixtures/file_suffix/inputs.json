@@ -1,0 +1,22 @@
+{
+  "generation": {
+    "file_suffix": "_generated"
+  },
+  "inputs": {
+    "inherited": {
+      "schema_path": "open_api.yaml"
+    },
+    "dotted": {
+      "schema_path": "open_api.json",
+      "generation": {
+        "file_suffix": ".generated"
+      }
+    },
+    "empty": {
+      "schema_path": "open_api.yaml",
+      "generation": {
+        "file_suffix": ""
+      }
+    }
+  }
+}

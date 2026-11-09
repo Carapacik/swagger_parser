@@ -1,0 +1,30 @@
+openapi: 3.2.1
+$self: ./catalog.yaml
+info:
+  title: Stations
+  version: '1'
+paths:
+  /stations/{id}:
+    $ref: '#/components/pathItems/Station'
+    get:
+      operationId: readStation
+  /reports/{code}:
+    $ref: 'shared/paths.yaml#/ById'
+    parameters:
+      - name: code
+        in: path
+        required: true
+        schema:
+          type: string
+  /hidden/{id}:
+    $ref: 'shared/paths.yaml#/Hidden'
+  /health:
+    get:
+      operationId: checkHealth
+components:
+  pathItems:
+    Station:
+      $ref: 'shared/library.json#/components/pathItems/Station'
+    Unused:
+      post:
+        operationId: checkHealth

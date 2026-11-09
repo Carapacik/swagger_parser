@@ -1,0 +1,12 @@
+"openapi": "3.2.1"
+"info":
+  "title": "Enum contracts"
+  "version": "1"
+"paths": {}
+"components":
+  "schemas":
+    "RemoteCode":
+      "type": "integer"
+      "enum":
+        - 2
+        - 7

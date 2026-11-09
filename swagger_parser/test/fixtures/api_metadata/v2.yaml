@@ -1,0 +1,129 @@
+swagger: "2.0"
+info:
+  title: "Transit '$api'\nAPI"
+  version: "2026.11+$build"
+produces:
+  - "application/json"
+paths:
+  "/stations/{id}":
+    get:
+      operationId: "get-station"
+      tags:
+        - "station"
+        - "Secondary"
+        - "Quoted '$tag'"
+      responses:
+        "200":
+          description: "Found"
+          schema:
+            $ref: "#/definitions/Station"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          type: "string"
+      externalDocs:
+        url: "https://example.test/docs?q=$id&name='station'"
+      summary: "Find a station"
+      description: "Read station details."
+  "/trips":
+    get:
+      operationId: "trips"
+      tags:
+        - "Trips"
+      responses:
+        "200":
+          description: "Found"
+          schema:
+            $ref: "#/definitions/Station"
+  "/codes/{code}":
+    get:
+      operationId: "get_station"
+      tags:
+        - "Station"
+      responses:
+        "200":
+          description: "Found"
+          schema:
+            $ref: "#/definitions/Lookup"
+      parameters:
+        - name: "code"
+          in: "path"
+          required: true
+          type: "integer"
+  "/info-one":
+    get:
+      operationId: "infoOne"
+      tags:
+        - "station-info"
+      responses:
+        "200":
+          description: "Found"
+          schema:
+            $ref: "#/definitions/Station"
+      deprecated: true
+  "/info-two":
+    get:
+      operationId: "infoTwo"
+      tags:
+        - "station_info"
+      responses:
+        "200":
+          description: "Found"
+          schema:
+            $ref: "#/definitions/Station"
+  "/internal":
+    get:
+      operationId: "internal"
+      tags:
+        - "InternalStations"
+      responses:
+        "200":
+          description: "Found"
+          schema:
+            $ref: "#/definitions/Station"
+  "/public":
+    get:
+      operationId: "publicStations"
+      tags:
+        - "PublicStations"
+      responses:
+        "200":
+          description: "Found"
+          schema:
+            $ref: "#/definitions/Station"
+  "/health":
+    get:
+      tags: []
+      responses:
+        "200":
+          description: "Found"
+          schema:
+            $ref: "#/definitions/Station"
+  "/tagged-api":
+    get:
+      operationId: "taggedApi"
+      tags:
+        - "Api"
+      responses:
+        "200":
+          description: "Found"
+          schema:
+            $ref: "#/definitions/Station"
+  "/mounted":
+    $ref: "path_item.yaml"
+definitions:
+  Station:
+    type: "object"
+    required:
+      - "name"
+    properties:
+      name:
+        type: "string"
+  Lookup:
+    type: "object"
+    required:
+      - "code"
+    properties:
+      code:
+        type: "integer"

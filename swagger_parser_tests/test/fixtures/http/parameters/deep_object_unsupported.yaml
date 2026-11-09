@@ -1,0 +1,79 @@
+openapi: 3.1.2
+info:
+  title: Unsupported filters
+  version: '1'
+paths:
+  /array:
+    get:
+      operationId: skipArray
+      parameters:
+        - in: query
+          name: filter
+          style: deepObject
+          explode: true
+          schema:
+            type: object
+            properties:
+              items:
+                type: array
+                items:
+                  type: string
+      responses:
+        '204':
+          description: No matches
+  /nested:
+    get:
+      operationId: skipNested
+      parameters:
+        - in: query
+          name: filter
+          style: deepObject
+          explode: true
+          schema:
+            type: object
+            additionalProperties:
+              type: object
+      responses:
+        '204':
+          description: No matches
+  /implicit:
+    get:
+      operationId: skipImplicit
+      parameters:
+        - in: query
+          name: filter
+          style: deepObject
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              name:
+                type: string
+              active:
+                type: boolean
+              line-code:
+                type: integer
+      responses:
+        '204':
+          description: No matches
+  /false:
+    get:
+      operationId: skipFalse
+      parameters:
+        - in: query
+          name: filter
+          style: deepObject
+          explode: false
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              name:
+                type: string
+              active:
+                type: boolean
+              line-code:
+                type: integer
+      responses:
+        '204':
+          description: No matches

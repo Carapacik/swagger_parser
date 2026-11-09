@@ -1,0 +1,6 @@
+schema_path: naming_v3_2.yaml
+generation:
+  naming:
+    replace_rules:
+      - target: models
+        pattern: x

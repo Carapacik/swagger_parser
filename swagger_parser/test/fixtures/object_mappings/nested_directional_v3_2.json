@@ -1,0 +1,26 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "Mapped object API",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Target": {
+        "type": "object",
+        "properties": {
+          "inner": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

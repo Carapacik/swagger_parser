@@ -1,0 +1,8 @@
+{
+  "inputs": {
+    "one": {
+      "input": "stations_v3_0.json",
+      "schema_path": "stations_v2_0.yaml"
+    }
+  }
+}

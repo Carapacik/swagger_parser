@@ -1,0 +1,8 @@
+---
+schema_url: https://example.com/schema.json
+schema_download:
+  credentials:
+  - origin: https://EXAMPLE.com:443
+    headers: {}
+  - origin: https://example.com
+    headers: {}

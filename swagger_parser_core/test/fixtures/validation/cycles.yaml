@@ -1,0 +1,11 @@
+openapi: 3.1.2
+info:
+  title: Trees
+  version: '1'
+paths:
+  /tree:
+    $ref: 'shared/paths.yaml#/Recursive'
+  /tree/{id}:
+    get:
+      parameters:
+        - $ref: 'shared/parameters.json#/loop'

@@ -1,0 +1,24 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Operation filters",
+    "version": "1"
+  },
+  "paths": {
+    "/stations/{id}": {
+      "get": {
+        "operationId": "invalidRoute",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://example.com"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+openapi: 3.1.2
+info:
+  title: Cyclic choice
+  version: '1'
+components:
+  schemas:
+    Choice:
+      $id: ./cycle
+      $dynamicAnchor: cycle
+      anyOf:
+        - $dynamicRef: '#cycle'
+        - type: string

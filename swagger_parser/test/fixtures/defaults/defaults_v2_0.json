@@ -1,0 +1,370 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Defaults",
+    "version": "1"
+  },
+  "paths": {
+    "/options": {
+      "patch": {
+        "operationId": "saveOptions",
+        "responses": {
+          "200": {
+            "description": "Options",
+            "schema": {
+              "$ref": "#/definitions/Options"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Options"
+            }
+          }
+        ]
+      },
+      "get": {
+        "operationId": "getOptions",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "default": 20
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Options",
+            "schema": {
+              "$ref": "#/definitions/Options"
+            }
+          }
+        }
+      }
+    },
+    "/changes": {
+      "patch": {
+        "operationId": "patchChanges",
+        "responses": {
+          "204": {
+            "description": "Updated"
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PatchChanges"
+            }
+          }
+        ]
+      }
+    },
+    "/envelope": {
+      "patch": {
+        "operationId": "patchEnvelope",
+        "responses": {
+          "204": {
+            "description": "Updated"
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PatchEnvelope"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "Status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "active"
+      ],
+      "default": "new"
+    },
+    "Profile": {
+      "type": "object",
+      "required": [
+        "label"
+      ],
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/Status"
+        }
+      }
+    },
+    "Alias": {
+      "type": "integer",
+      "default": 3
+    },
+    "Options": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "required_name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "default": "ignored"
+        },
+        "required_name": {
+          "type": "string",
+          "default": "ignored",
+          "x-nullable": true
+        },
+        "limit": {
+          "type": "integer",
+          "default": 20
+        },
+        "inherited": {
+          "allOf": [
+            {
+              "type": "integer",
+              "default": 2
+            },
+            {
+              "type": "integer",
+              "default": 2
+            }
+          ]
+        },
+        "name": {
+          "type": "string",
+          "default": "North",
+          "x-nullable": true
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "one"
+          ]
+        },
+        "empty": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "default": []
+        },
+        "weights": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          },
+          "default": {
+            "east": 1.5
+          }
+        },
+        "status": {
+          "$ref": "#/definitions/Status"
+        },
+        "profile": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Profile"
+            }
+          ],
+          "default": {
+            "label": "Main",
+            "status": "active"
+          }
+        },
+        "count": {
+          "$ref": "#/definitions/Alias"
+        },
+        "server_id": {
+          "type": "string",
+          "readOnly": true,
+          "default": "server"
+        },
+        "secret": {
+          "type": "string",
+          "default": "secret"
+        },
+        "note": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "nil": {
+          "type": "string",
+          "x-nullable": true,
+          "default": null
+        }
+      }
+    },
+    "NullableLabel": {
+      "type": "string",
+      "x-nullable": true
+    },
+    "NumberStatus": {
+      "type": "integer",
+      "enum": [
+        0,
+        1
+      ],
+      "default": 0
+    },
+    "PatchNested": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inner_value": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "notesPresent": {
+          "type": "boolean"
+        }
+      }
+    },
+    "PatchChanges": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "notes": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "notesPresent": {
+          "type": "boolean"
+        },
+        "display-name": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "alias": {
+          "$ref": "#/definitions/NullableLabel"
+        },
+        "nested": {
+          "$ref": "#/definitions/PatchNested"
+        },
+        "copyWith": {
+          "type": "string"
+        }
+      }
+    },
+    "PatchEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "required_note"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "default": "ignored"
+        },
+        "required_note": {
+          "type": "string",
+          "x-nullable": true,
+          "default": "ignored"
+        },
+        "changes": {
+          "$ref": "#/definitions/PatchChanges"
+        },
+        "default_label": {
+          "type": "string",
+          "x-nullable": true,
+          "default": "North"
+        },
+        "default_count": {
+          "type": "integer",
+          "default": 0
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "CollectionDefaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "empty": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "default": [
+            [],
+            [
+              1
+            ]
+          ]
+        },
+        "groups": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "default": {
+            "east": [
+              "a"
+            ]
+          }
+        },
+        "empty_map": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "default": {}
+        },
+        "status": {
+          "$ref": "#/definitions/Status"
+        },
+        "rank": {
+          "$ref": "#/definitions/NumberStatus"
+        }
+      }
+    }
+  }
+}

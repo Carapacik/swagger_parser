@@ -1,0 +1,81 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Batch selectors",
+    "version": "1"
+  },
+  "paths": {
+    "/batch/{regions}/{zones}/{modes}": {
+      "get": {
+        "operationId": "batch",
+        "parameters": [
+          {
+            "name": "regions",
+            "in": "path",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "ssv"
+          },
+          {
+            "name": "X-Regions",
+            "in": "header",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "ssv"
+          },
+          {
+            "name": "zones",
+            "in": "path",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "tsv"
+          },
+          {
+            "name": "X-Zones",
+            "in": "header",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "tsv"
+          },
+          {
+            "name": "modes",
+            "in": "path",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "pipes"
+          },
+          {
+            "name": "X-Modes",
+            "in": "header",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "pipes"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Complete"
+          }
+        }
+      }
+    }
+  }
+}

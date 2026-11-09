@@ -1,0 +1,4 @@
+---
+inputs:
+  "../escape":
+    schema_path: stations_v2_0.yaml

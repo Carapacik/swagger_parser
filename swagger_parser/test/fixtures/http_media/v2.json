@@ -1,0 +1,140 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Request media",
+    "version": "1"
+  },
+  "paths": {
+    "/sendJson": {
+      "post": {
+        "operationId": "sendJson",
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        },
+        "parameters": [
+          {
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ]
+      }
+    },
+    "/sendPatch": {
+      "post": {
+        "operationId": "sendPatch",
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        },
+        "parameters": [
+          {
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "consumes": [
+          "application/json-patch+json"
+        ]
+      }
+    },
+    "/sendVendor": {
+      "post": {
+        "operationId": "sendVendor",
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        },
+        "parameters": [
+          {
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "consumes": [
+          "application/vnd.example+json"
+        ]
+      }
+    },
+    "/sendMixed": {
+      "post": {
+        "operationId": "sendMixed",
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        },
+        "parameters": [
+          {
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded",
+          "application/json"
+        ]
+      }
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "TokenObtainPair": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "TokenRefresh": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

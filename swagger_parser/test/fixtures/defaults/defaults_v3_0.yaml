@@ -1,0 +1,291 @@
+openapi: "3.0.4"
+info:
+  title: Defaults
+  version: "1"
+paths:
+  "/options":
+    patch:
+      operationId: saveOptions
+      responses:
+        "200":
+          description: Options
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Options"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/Options"
+    get:
+      operationId: getOptions
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: Options
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Options"
+  "/changes":
+    "patch":
+      "operationId": "patchChanges"
+      "responses":
+        "204":
+          "description": "Updated"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/PatchChanges"
+  "/envelope":
+    "patch":
+      "operationId": "patchEnvelope"
+      "responses":
+        "204":
+          "description": "Updated"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/PatchEnvelope"
+components:
+  schemas:
+    Status:
+      type: string
+      enum:
+        - new
+        - active
+      default: new
+    Profile:
+      type: object
+      required:
+        - label
+      properties:
+        label:
+          type: string
+        status:
+          $ref: "#/components/schemas/Status"
+    Alias:
+      type: integer
+      default: 3
+    Options:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - required_name
+      properties:
+        id:
+          type: string
+          default: ignored
+        required_name:
+          type: string
+          nullable: true
+          default: ignored
+        limit:
+          type: integer
+          default: 20
+        inherited:
+          allOf:
+            - type: integer
+              default: 2
+            - type: integer
+              default: 2
+        name:
+          type: string
+          nullable: true
+          default: North
+        enabled:
+          type: boolean
+          default: false
+        tags:
+          type: array
+          items:
+            type: string
+          default:
+            - one
+        empty:
+          type: array
+          items:
+            type: integer
+          default: []
+        weights:
+          type: object
+          additionalProperties:
+            type: number
+          default:
+            east: 1.5
+        status:
+          $ref: "#/components/schemas/Status"
+        profile:
+          allOf:
+            - $ref: "#/components/schemas/Profile"
+          default:
+            label: Main
+            status: active
+        count:
+          $ref: "#/components/schemas/Alias"
+        server_id:
+          type: string
+          readOnly: true
+          default: server
+        secret:
+          type: string
+          writeOnly: true
+          default: secret
+        note:
+          type: string
+          nullable: true
+        nil:
+          type: string
+          nullable: true
+          default: null
+    Rail:
+      type: object
+      required:
+        - kind
+      properties:
+        kind:
+          type: string
+          enum:
+            - rail
+        name:
+          type: string
+          nullable: true
+          default: Rail
+        limit:
+          type: integer
+          default: 5
+    Bus:
+      type: object
+      required:
+        - kind
+      properties:
+        kind:
+          type: string
+          enum:
+            - bus
+        name:
+          type: string
+          nullable: true
+          default: Bus
+        limit:
+          type: integer
+          default: 10
+    Stop:
+      oneOf:
+        - $ref: "#/components/schemas/Rail"
+        - $ref: "#/components/schemas/Bus"
+      discriminator:
+        propertyName: kind
+        mapping:
+          rail: "#/components/schemas/Rail"
+          bus: "#/components/schemas/Bus"
+    "NullableLabel":
+      "type": "string"
+      "nullable": true
+    "NumberStatus":
+      "type": "integer"
+      "enum":
+        - 0
+        - 1
+      "default": 0
+    "PatchNested":
+      "type": "object"
+      "additionalProperties": false
+      "properties":
+        "inner_value":
+          "type": "string"
+          "nullable": true
+        "notesPresent":
+          "type": "boolean"
+    "PatchChanges":
+      "type": "object"
+      "additionalProperties": false
+      "properties":
+        "notes":
+          "type": "string"
+          "nullable": true
+        "notesPresent":
+          "type": "boolean"
+        "display-name":
+          "type": "string"
+          "nullable": true
+        "alias":
+          "$ref": "#/components/schemas/NullableLabel"
+        "nested":
+          "$ref": "#/components/schemas/PatchNested"
+        "copyWith":
+          "type": "string"
+    "PatchEnvelope":
+      "type": "object"
+      "additionalProperties": false
+      "required":
+        - "id"
+        - "required_note"
+      "properties":
+        "id":
+          "type": "string"
+          "default": "ignored"
+        "required_note":
+          "type": "string"
+          "nullable": true
+          "default": "ignored"
+        "changes":
+          "$ref": "#/components/schemas/PatchChanges"
+        "default_label":
+          "type": "string"
+          "nullable": true
+          "default": "North"
+        "default_count":
+          "type": "integer"
+          "default": 0
+        "enabled":
+          "type": "boolean"
+          "default": false
+    "CollectionDefaults":
+      "type": "object"
+      "additionalProperties": false
+      "properties":
+        "empty":
+          "type": "array"
+          "items":
+            "type": "string"
+          "default": []
+        "rows":
+          "type": "array"
+          "items":
+            "type": "array"
+            "items":
+              "type": "integer"
+          "default":
+            - []
+            - - 1
+        "groups":
+          "type": "object"
+          "additionalProperties":
+            "type": "array"
+            "items":
+              "type": "string"
+          "default":
+            "east":
+              - "a"
+        "empty_map":
+          "type": "object"
+          "additionalProperties":
+            "type": "integer"
+          "default": {}
+        "status":
+          "$ref": "#/components/schemas/Status"
+        "rank":
+          "$ref": "#/components/schemas/NumberStatus"

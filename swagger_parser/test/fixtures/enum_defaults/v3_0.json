@@ -1,0 +1,339 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Enum defaults",
+    "version": "1"
+  },
+  "paths": {
+    "/defaults": {
+      "get": {
+        "operationId": "getDefaults",
+        "parameters": [
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Unit"
+            }
+          },
+          {
+            "name": "composed",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/UnitAlias"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Sort"
+            }
+          },
+          {
+            "name": "protected",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ProtectedSort"
+            }
+          },
+          {
+            "name": "inlineState",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "paused"
+              ],
+              "x-enum-varnames": [
+                "LEGACY_READY",
+                "LEGACY_PAUSED"
+              ],
+              "default": "success"
+            }
+          },
+          {
+            "name": "numeric",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Numeric"
+            }
+          },
+          {
+            "name": "special",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Special"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        }
+      }
+    },
+    "/form": {
+      "post": {
+        "operationId": "submitForm",
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "$ref": "#/components/schemas/Unit"
+                  },
+                  "composed": {
+                    "$ref": "#/components/schemas/UnitAlias"
+                  },
+                  "sort": {
+                    "$ref": "#/components/schemas/Sort"
+                  },
+                  "protected": {
+                    "$ref": "#/components/schemas/ProtectedSort"
+                  },
+                  "inlineState": {
+                    "type": "string",
+                    "enum": [
+                      "success",
+                      "paused"
+                    ],
+                    "x-enum-varnames": [
+                      "LEGACY_READY",
+                      "LEGACY_PAUSED"
+                    ],
+                    "default": "success"
+                  },
+                  "numeric": {
+                    "$ref": "#/components/schemas/Numeric"
+                  },
+                  "special": {
+                    "$ref": "#/components/schemas/Special"
+                  },
+                  "nullable": {
+                    "$ref": "#/components/schemas/Nullable"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/settings": {
+      "post": {
+        "operationId": "saveSettings",
+        "description": "Save settings.\nKeep enum wire values.",
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Settings"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/multipart": {
+      "post": {
+        "operationId": "submitMultipart",
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "$ref": "#/components/schemas/Unit"
+                  },
+                  "composed": {
+                    "$ref": "#/components/schemas/UnitAlias"
+                  },
+                  "sort": {
+                    "$ref": "#/components/schemas/Sort"
+                  },
+                  "protected": {
+                    "$ref": "#/components/schemas/ProtectedSort"
+                  },
+                  "inlineState": {
+                    "type": "string",
+                    "enum": [
+                      "success",
+                      "paused"
+                    ],
+                    "x-enum-varnames": [
+                      "LEGACY_READY",
+                      "LEGACY_PAUSED"
+                    ],
+                    "default": "success"
+                  },
+                  "numeric": {
+                    "$ref": "#/components/schemas/Numeric"
+                  },
+                  "special": {
+                    "$ref": "#/components/schemas/Special"
+                  },
+                  "nullable": {
+                    "$ref": "#/components/schemas/Nullable"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Unit": {
+        "type": "string",
+        "enum": [
+          "celsius",
+          "fahrenheit"
+        ],
+        "default": "celsius"
+      },
+      "Sort": {
+        "type": "string",
+        "enum": [
+          "asc",
+          "desc",
+          "DEFAULT"
+        ],
+        "default": "asc"
+      },
+      "Phase": {
+        "type": "string",
+        "enum": [
+          "success",
+          "paused"
+        ],
+        "x-enum-varnames": [
+          "LEGACY_READY",
+          "LEGACY_PAUSED"
+        ],
+        "default": "success"
+      },
+      "Numeric": {
+        "type": "integer",
+        "enum": [
+          0,
+          5
+        ],
+        "x-enumNames": [
+          "LEGACY_ZERO",
+          "LEGACY_HIGH"
+        ],
+        "default": 5
+      },
+      "Special": {
+        "type": "string",
+        "enum": [
+          "quote'\"\\$line\nnext",
+          "plain"
+        ],
+        "default": "quote'\"\\$line\nnext"
+      },
+      "Nullable": {
+        "type": "string",
+        "enum": [
+          "available",
+          null
+        ],
+        "default": null,
+        "nullable": true
+      },
+      "UnitAlias": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Unit"
+          }
+        ]
+      },
+      "ProtectedSort": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Sort"
+          }
+        ],
+        "default": "DEFAULT"
+      },
+      "Settings": {
+        "description": "Settings body.\nKeep enum wire values.",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "unit": {
+            "$ref": "#/components/schemas/Unit"
+          },
+          "composed": {
+            "$ref": "#/components/schemas/UnitAlias"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/Sort"
+          },
+          "protected": {
+            "$ref": "#/components/schemas/ProtectedSort"
+          },
+          "inlineState": {
+            "type": "string",
+            "enum": [
+              "success",
+              "paused"
+            ],
+            "x-enum-varnames": [
+              "LEGACY_READY",
+              "LEGACY_PAUSED"
+            ],
+            "default": "success"
+          },
+          "numeric": {
+            "$ref": "#/components/schemas/Numeric"
+          },
+          "special": {
+            "$ref": "#/components/schemas/Special"
+          },
+          "nullable": {
+            "$ref": "#/components/schemas/Nullable"
+          }
+        }
+      }
+    }
+  }
+}

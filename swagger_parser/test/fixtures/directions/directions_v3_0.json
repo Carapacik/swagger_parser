@@ -1,0 +1,1002 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Directions",
+    "version": "1"
+  },
+  "paths": {
+    "/stations": {
+      "patch": {
+        "operationId": "saveStation",
+        "tags": [
+          "Stations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Station"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/original": {
+      "get": {
+        "operationId": "getOriginal",
+        "tags": [
+          "Stations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StationRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/literal": {
+      "get": {
+        "operationId": "getLiteral",
+        "tags": [
+          "Stations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Station_Request"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reserved/Dio": {
+      "get": {
+        "operationId": "getDio",
+        "tags": [
+          "Reserved"
+        ],
+        "parameters": [
+          {
+            "name": "class",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dio",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "http",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "convert",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "options",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "data",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dio"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reserved/Options": {
+      "get": {
+        "operationId": "getOptions",
+        "tags": [
+          "Reserved"
+        ],
+        "parameters": [
+          {
+            "name": "class",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dio",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "http",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "convert",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "options",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "data",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Options"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reserved/Future": {
+      "get": {
+        "operationId": "getFuture",
+        "tags": [
+          "Reserved"
+        ],
+        "parameters": [
+          {
+            "name": "class",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dio",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "http",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "convert",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "options",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "data",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Future"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reserved/RestApi": {
+      "get": {
+        "operationId": "getRestApi",
+        "tags": [
+          "Reserved"
+        ],
+        "parameters": [
+          {
+            "name": "class",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dio",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "http",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "convert",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "options",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "data",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Station": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "access_code"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "access_code": {
+            "type": "string",
+            "writeOnly": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "profile": {
+            "$ref": "#/components/schemas/Profile"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Station"
+            }
+          }
+        }
+      },
+      "StationRequest": {
+        "type": "object",
+        "required": [
+          "marker"
+        ],
+        "properties": {
+          "marker": {
+            "type": "string"
+          }
+        }
+      },
+      "Station_Request": {
+        "type": "object",
+        "required": [
+          "literal"
+        ],
+        "properties": {
+          "literal": {
+            "type": "string"
+          }
+        }
+      },
+      "Profile": {
+        "type": "object",
+        "required": [
+          "server_stamp",
+          "label"
+        ],
+        "properties": {
+          "server_stamp": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "Envelope": {
+        "type": "object",
+        "required": [
+          "station",
+          "untouched"
+        ],
+        "properties": {
+          "station": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "untouched": {
+            "$ref": "#/components/schemas/StationRequest"
+          }
+        }
+      },
+      "Catalog": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Station"
+        }
+      },
+      "Index": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/Station"
+        }
+      },
+      "StationAlias": {
+        "$ref": "#/components/schemas/Station"
+      },
+      "Shared": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "Closed": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Composed": {
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "readOnly": true
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "id"
+            ]
+          }
+        ]
+      },
+      "ReadField": {
+        "type": "string",
+        "readOnly": true
+      },
+      "Referenced": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ReadField"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Dio": {
+        "type": "object",
+        "required": [
+          "class",
+          "fromJson",
+          "new",
+          "data"
+        ],
+        "properties": {
+          "class": {
+            "type": "string"
+          },
+          "fromJson": {
+            "type": "string"
+          },
+          "new": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          }
+        }
+      },
+      "Options": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "Future": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "RestApi": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "ReservedWords": {
+        "type": "object",
+        "required": [
+          "abstract",
+          "as",
+          "assert",
+          "async",
+          "augment",
+          "await",
+          "base",
+          "break",
+          "case",
+          "catch",
+          "class",
+          "const",
+          "continue",
+          "covariant",
+          "default",
+          "deferred",
+          "do",
+          "dynamic",
+          "else",
+          "enum",
+          "export",
+          "extends",
+          "extension",
+          "external",
+          "factory",
+          "false",
+          "final",
+          "finally",
+          "for",
+          "Function",
+          "get",
+          "hide",
+          "if",
+          "implements",
+          "import",
+          "in",
+          "inout",
+          "interface",
+          "is",
+          "late",
+          "library",
+          "mixin",
+          "native",
+          "new",
+          "null",
+          "of",
+          "on",
+          "operator",
+          "out",
+          "part",
+          "patch",
+          "required",
+          "rethrow",
+          "return",
+          "sealed",
+          "set",
+          "show",
+          "source",
+          "static",
+          "super",
+          "switch",
+          "sync",
+          "this",
+          "throw",
+          "true",
+          "try",
+          "typedef",
+          "var",
+          "void",
+          "when",
+          "while",
+          "with",
+          "yield"
+        ],
+        "properties": {
+          "abstract": {
+            "type": "string"
+          },
+          "as": {
+            "type": "string"
+          },
+          "assert": {
+            "type": "string"
+          },
+          "async": {
+            "type": "string"
+          },
+          "augment": {
+            "type": "string"
+          },
+          "await": {
+            "type": "string"
+          },
+          "base": {
+            "type": "string"
+          },
+          "break": {
+            "type": "string"
+          },
+          "case": {
+            "type": "string"
+          },
+          "catch": {
+            "type": "string"
+          },
+          "class": {
+            "type": "string"
+          },
+          "const": {
+            "type": "string"
+          },
+          "continue": {
+            "type": "string"
+          },
+          "covariant": {
+            "type": "string"
+          },
+          "default": {
+            "type": "string"
+          },
+          "deferred": {
+            "type": "string"
+          },
+          "do": {
+            "type": "string"
+          },
+          "dynamic": {
+            "type": "string"
+          },
+          "else": {
+            "type": "string"
+          },
+          "enum": {
+            "type": "string"
+          },
+          "export": {
+            "type": "string"
+          },
+          "extends": {
+            "type": "string"
+          },
+          "extension": {
+            "type": "string"
+          },
+          "external": {
+            "type": "string"
+          },
+          "factory": {
+            "type": "string"
+          },
+          "false": {
+            "type": "string"
+          },
+          "final": {
+            "type": "string"
+          },
+          "finally": {
+            "type": "string"
+          },
+          "for": {
+            "type": "string"
+          },
+          "Function": {
+            "type": "string"
+          },
+          "get": {
+            "type": "string"
+          },
+          "hide": {
+            "type": "string"
+          },
+          "if": {
+            "type": "string"
+          },
+          "implements": {
+            "type": "string"
+          },
+          "import": {
+            "type": "string"
+          },
+          "in": {
+            "type": "string"
+          },
+          "inout": {
+            "type": "string"
+          },
+          "interface": {
+            "type": "string"
+          },
+          "is": {
+            "type": "string"
+          },
+          "late": {
+            "type": "string"
+          },
+          "library": {
+            "type": "string"
+          },
+          "mixin": {
+            "type": "string"
+          },
+          "native": {
+            "type": "string"
+          },
+          "new": {
+            "type": "string"
+          },
+          "null": {
+            "type": "string"
+          },
+          "of": {
+            "type": "string"
+          },
+          "on": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "string"
+          },
+          "out": {
+            "type": "string"
+          },
+          "part": {
+            "type": "string"
+          },
+          "patch": {
+            "type": "string"
+          },
+          "required": {
+            "type": "string"
+          },
+          "rethrow": {
+            "type": "string"
+          },
+          "return": {
+            "type": "string"
+          },
+          "sealed": {
+            "type": "string"
+          },
+          "set": {
+            "type": "string"
+          },
+          "show": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "static": {
+            "type": "string"
+          },
+          "super": {
+            "type": "string"
+          },
+          "switch": {
+            "type": "string"
+          },
+          "sync": {
+            "type": "string"
+          },
+          "this": {
+            "type": "string"
+          },
+          "throw": {
+            "type": "string"
+          },
+          "true": {
+            "type": "string"
+          },
+          "try": {
+            "type": "string"
+          },
+          "typedef": {
+            "type": "string"
+          },
+          "var": {
+            "type": "string"
+          },
+          "void": {
+            "type": "string"
+          },
+          "when": {
+            "type": "string"
+          },
+          "while": {
+            "type": "string"
+          },
+          "with": {
+            "type": "string"
+          },
+          "yield": {
+            "type": "string"
+          }
+        }
+      },
+      "Cat": {
+        "type": "object",
+        "required": [
+          "kind",
+          "id",
+          "secret"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "cat"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "readOnly": true
+          },
+          "secret": {
+            "type": "string",
+            "writeOnly": true
+          }
+        }
+      },
+      "Dog": {
+        "type": "object",
+        "required": [
+          "kind",
+          "bark"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "dog"
+            ]
+          },
+          "bark": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Animal": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat"
+          },
+          {
+            "$ref": "#/components/schemas/Dog"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "cat": "#/components/schemas/Cat",
+            "dog": "#/components/schemas/Dog"
+          }
+        }
+      },
+      "Rail": {
+        "type": "object",
+        "required": [
+          "kind",
+          "rail"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "rail"
+            ],
+            "readOnly": true
+          },
+          "rail": {
+            "type": "string"
+          }
+        }
+      },
+      "Bus": {
+        "type": "object",
+        "required": [
+          "kind",
+          "bus"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "bus"
+            ],
+            "readOnly": true
+          },
+          "bus": {
+            "type": "string"
+          }
+        }
+      },
+      "Route": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Rail"
+          },
+          {
+            "$ref": "#/components/schemas/Bus"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "rail": "#/components/schemas/Rail",
+            "bus": "#/components/schemas/Bus"
+          }
+        }
+      },
+      "Choice": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Cat"
+          },
+          {
+            "$ref": "#/components/schemas/Dog"
+          }
+        ]
+      },
+      "Views": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Cat"
+          },
+          {
+            "$ref": "#/components/schemas/Dog"
+          }
+        ]
+      }
+    }
+  }
+}

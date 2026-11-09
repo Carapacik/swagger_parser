@@ -1,0 +1,26 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Entry types",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "StationId": {
+        "type": "string"
+      },
+      "Record": {
+        "type": "object",
+        "properties": {
+          "local": {
+            "$ref": "#/components/schemas/StationId"
+          },
+          "external": {
+            "$ref": "external_v3_0.json#/components/schemas/StationId"
+          }
+        }
+      }
+    }
+  }
+}

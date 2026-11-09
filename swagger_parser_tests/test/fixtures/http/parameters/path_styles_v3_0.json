@@ -1,0 +1,89 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Station selectors",
+    "version": "1"
+  },
+  "paths": {
+    "/select/line{line-id}{group}/area{zones}{tracks}/point{label}{sector}": {
+      "get": {
+        "operationId": "selectStations",
+        "parameters": [
+          {
+            "name": "line-id",
+            "in": "path",
+            "required": true,
+            "style": "matrix",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "group",
+            "in": "path",
+            "required": true,
+            "style": "matrix",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "name": "zones",
+            "in": "path",
+            "required": true,
+            "style": "label",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "tracks",
+            "in": "path",
+            "required": true,
+            "style": "label",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "name": "label",
+            "in": "path",
+            "required": true,
+            "style": "label",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sector",
+            "in": "path",
+            "required": true,
+            "style": "matrix",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Complete"
+          }
+        }
+      }
+    }
+  }
+}

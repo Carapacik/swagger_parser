@@ -1,0 +1,22 @@
+openapi: 3.1.2
+info:
+  title: Station filters
+  version: '1'
+paths:
+  /stations:
+    get:
+      parameters:
+        - in: query
+          name: filter
+          style: deepObject
+          explode: true
+          schema:
+            type: object
+            properties:
+              ids:
+                type: array
+                items:
+                  type: string
+      responses:
+        '204':
+          description: Empty result

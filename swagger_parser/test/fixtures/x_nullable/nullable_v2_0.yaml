@@ -1,0 +1,106 @@
+swagger: "2.0"
+info:
+  title: "Nullable fields"
+  version: "1"
+paths: {}
+definitions:
+  Station:
+    type: "object"
+    required:
+      - "id"
+    properties:
+      id:
+        type: "string"
+  NullableStation:
+    type: "object"
+    x-nullable: true
+    required:
+      - "id"
+    properties:
+      id:
+        type: "string"
+  Payload:
+    type: "object"
+    required:
+      - "name"
+      - "strict"
+      - "absent"
+      - "station"
+      - "original"
+      - "narrowed"
+      - "inherited"
+      - "list"
+      - "items"
+      - "choice"
+      - "closed_choice"
+      - "composed"
+      - "nullable_composed"
+      - "counts"
+    properties:
+      name:
+        type: "string"
+        x-nullable: true
+      strict:
+        type: "string"
+        x-nullable: false
+      absent:
+        type: "string"
+      note:
+        type: "string"
+        x-nullable: true
+      label:
+        type: "string"
+        x-nullable: true
+        default: "North"
+      optional_strict:
+        type: "string"
+        x-nullable: false
+      station:
+        $ref: "#/definitions/Station"
+        x-nullable: true
+      original:
+        $ref: "#/definitions/Station"
+      narrowed:
+        $ref: "#/definitions/NullableStation"
+        x-nullable: false
+      inherited:
+        $ref: "#/definitions/NullableStation"
+      list:
+        type: "array"
+        x-nullable: true
+        items:
+          type: "string"
+      items:
+        type: "array"
+        items:
+          type: "string"
+          x-nullable: true
+      choice:
+        type: "string"
+        x-nullable: true
+        enum:
+          - "north"
+          - null
+      closed_choice:
+        type: "string"
+        x-nullable: true
+        enum:
+          - "north"
+          - "south"
+      composed:
+        type: "object"
+        x-nullable: true
+        allOf:
+          -
+            $ref: "#/definitions/Station"
+      nullable_composed:
+        type: "object"
+        x-nullable: true
+        allOf:
+          -
+            $ref: "#/definitions/NullableStation"
+      counts:
+        type: "object"
+        additionalProperties:
+          type: "integer"
+          x-nullable: true

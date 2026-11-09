@@ -1,96 +1,53 @@
-name: Report a bug
-description: |
-  You found a bug in Swagger parser resulting in wrong outputs or with swagger parser not working properly
+name: Bug report
+description: Report incorrect behavior or generated code.
+labels:
+  - bug
 body:
   - type: markdown
     attributes:
-      value: |
-        Thank you for using Swagger parser!
+      value: Write a short English title that describes the failure. Omit type prefixes.
+  - type: dropdown
+    id: packages
+    attributes:
+      label: Affected packages
+      multiple: true
+      options:
+        - swagger_parser
+        - swagger_parser_core
+        - swagger_parser_templates
+        - swagger_parser_pages
+    validations:
+      required: true
   - type: textarea
+    id: versions
+    attributes:
+      label: Environment
+      description: Include package versions, Dart or Flutter version, and OS or browser. For generated code, include the HTTP and serializer packages.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
     attributes:
       label: Steps to reproduce
-      description: Please tell us exactly how to reproduce the problem you are running into.
-      placeholder: |
-        1. ...
-        2. ...
-        3. ...
+      description: List the steps and commands. Include the config or API call.
     validations:
       required: true
   - type: textarea
+    id: input
     attributes:
-      label: Expected results
-      description: Please tell us what is expected to happen.
+      label: OpenAPI input
+      description: Paste a minimal JSON or YAML document, or attach the files. Include external references needed to reproduce the failure.
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      description: Describe the expected behavior or show the expected code.
     validations:
       required: true
   - type: textarea
+    id: actual
     attributes:
-      label: Actual results
-      description: Please tell us what is actually happening.
-    validations:
-      required: true
-  - type: textarea
-    attributes:
-      label: Your OpenApi snippet
-      description: Please provide your OpenApi definition snippet that showcases the problem.
-    validations:
-      required: true
-  - type: textarea
-    attributes:
-      label: Code sample
-      description: |
-        Please create a minimal reproducible sample that shows the problem
-        and attach it below between the lines with the backticks.
-      value: |
-        <details><summary>Code sample</summary>
-
-        ```dart
-        [Paste your code here]
-        ```
-
-        </details>
-    validations:
-      required: false
-  - type: textarea
-    attributes:
-      label: Logs
-      description: |
-        Include the full logs of the commands you are running between the lines
-        with the backticks below. If you are running any `flutter` commands,
-        please include the output of running them with `--verbose`; for example,
-        the output of running `flutter --verbose create foo`.
-
-        If the logs are too large to be uploaded to GitHub, you may upload
-        them as a `txt` file or use online tools like https://pastebin.com to
-        share it.
-
-        Note: Please do not upload screenshots of text. Instead, use code blocks
-        or the above mentioned ways to upload logs.
-      value: |
-        <details><summary>Logs</summary>
-
-        ```console
-        [Paste your logs here]
-        ```
-
-        </details>
-  - type: textarea
-    attributes:
-      label: Dart version and used packages versions
-      description: |
-        Please provide the dart version you are using. You may need to also provide your versions of retrofit and json_serializable package versions.
-      value: |
-        <details><summary>Dart version</summary>
-
-        ```console
-        [Paste your output here]
-        ```
-
-        </details><details><summary>Packages version</summary>
-
-        ```console
-        [Paste your output here]
-        ```
-
-        </details>
+      label: Actual result
+      description: Include the error, relevant logs, or generated code. Use code blocks for text output.
     validations:
       required: true

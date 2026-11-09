@@ -1,0 +1,681 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Reference contracts",
+    "version": "1"
+  },
+  "paths": {
+    "/stations/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/IdAlias"
+        },
+        {
+          "$ref": "#/parameters/PathLimit"
+        }
+      ],
+      "get": {
+        "operationId": "lookup",
+        "parameters": [
+          {
+            "$ref": "#/parameters/LimitAlias",
+            "description": "Local limit.",
+            "summary": "Ignored parameter summary.",
+            "required": true
+          },
+          {
+            "$ref": "v2_targets.json#/parameters/Tag"
+          },
+          {
+            "$ref": "v2_targets.json#/parameters/HeaderLimit",
+            "description": ""
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/ItemAlias",
+            "description": "Local item.",
+            "summary": "Ignored response summary."
+          },
+          "400": {
+            "$ref": "#/responses/Error"
+          }
+        }
+      },
+      "x-note": {
+        "text": "Not an operation."
+      }
+    },
+    "/inline/{id}": {
+      "get": {
+        "operationId": "inlineLookup",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Station key."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 7,
+            "description": "Operation limit."
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [
+              "north",
+              "south"
+            ],
+            "description": "Repeated station tags.",
+            "collectionFormat": "multi"
+          },
+          {
+            "$ref": "v2_targets.json#/parameters/HeaderLimit"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/ItemAlias"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "operationId": "login",
+        "parameters": [
+          {
+            "$ref": "v2_targets.json#/parameters/CredentialsBody"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "v2_targets.json#/responses/ExternalObject"
+          }
+        }
+      }
+    },
+    "/stations": {
+      "get": {
+        "operationId": "listStations",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/List"
+          }
+        }
+      }
+    },
+    "/failure": {
+      "get": {
+        "operationId": "failure",
+        "responses": {
+          "400": {
+            "$ref": "v2_targets.json#/responses/Problem"
+          }
+        }
+      }
+    },
+    "/accepted": {
+      "get": {
+        "operationId": "accepted",
+        "responses": {
+          "202": {
+            "$ref": "#/responses/Encoded%52esponse"
+          }
+        }
+      }
+    },
+    "/scalar": {
+      "get": {
+        "operationId": "scalar",
+        "responses": {
+          "200": {
+            "description": "Shared response",
+            "schema": {
+              "$ref": "#/definitions/TimestampChain"
+            }
+          }
+        }
+      }
+    },
+    "/typed": {
+      "get": {
+        "operationId": "typed",
+        "responses": {
+          "200": {
+            "description": "Shared response",
+            "schema": {
+              "$ref": "#/definitions/Station",
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/aliases": {
+      "post": {
+        "operationId": "aliases",
+        "parameters": [
+          {
+            "name": "aliases",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AliasUse"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Shared response",
+            "schema": {
+              "$ref": "#/definitions/AliasUse"
+            }
+          }
+        }
+      }
+    },
+    "/form": {
+      "post": {
+        "operationId": "submitForm",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "$ref": "v2_targets.json#/parameters/LoginField"
+          },
+          {
+            "$ref": "v2_targets.json#/parameters/PasswordField"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "v2_targets.json#/responses/ExternalObject"
+          }
+        }
+      }
+    },
+    "/multipart": {
+      "post": {
+        "operationId": "submitMultipart",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "$ref": "v2_targets.json#/parameters/LoginField"
+          },
+          {
+            "$ref": "v2_targets.json#/parameters/PasswordField"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "v2_targets.json#/responses/ExternalObject"
+          }
+        }
+      }
+    },
+    "/escaped": {
+      "get": {
+        "operationId": "escapedResponse",
+        "responses": {
+          "200": {
+            "$ref": "v2_targets.json#/paths/~1shared~1~0item/get/responses/200"
+          }
+        }
+      }
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "Station": {
+      "type": "object",
+      "required": [
+        "upper_code"
+      ],
+      "properties": {
+        "upper_code": {
+          "type": "integer"
+        }
+      }
+    },
+    "station": {
+      "type": "object",
+      "required": [
+        "lower_code"
+      ],
+      "properties": {
+        "lower_code": {
+          "type": "string"
+        }
+      }
+    },
+    "DateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "CalendarDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "Timestamp": {
+      "$ref": "#/definitions/DateTime"
+    },
+    "TimestampChain": {
+      "$ref": "#/definitions/Timestamp"
+    },
+    "ExternalDateAlias": {
+      "$ref": "v2_targets.json#/definitions/ExternalDate"
+    },
+    "ExternalTimestampAlias": {
+      "$ref": "v2_targets.json#/definitions/ExternalTimestamp"
+    },
+    "Count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9
+    },
+    "CountAlias": {
+      "$ref": "#/definitions/Count"
+    },
+    "FreeValue": {},
+    "String": {
+      "type": "string"
+    },
+    "Object": {},
+    "List": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "Map": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer"
+      }
+    },
+    "Uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "StationAlias": {
+      "$ref": "#/definitions/Station"
+    },
+    "StationAliasChain": {
+      "$ref": "#/definitions/StationAlias"
+    },
+    "StationList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/StationAliasChain"
+      }
+    },
+    "StationListAlias": {
+      "$ref": "#/definitions/StationList"
+    },
+    "StationMap": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/StationAliasChain"
+      }
+    },
+    "StationMapAlias": {
+      "$ref": "#/definitions/StationMap"
+    },
+    "CredentialsAlias": {
+      "$ref": "v2_targets.json#/definitions/Credentials"
+    },
+    "LowerStation": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/station"
+        },
+        {
+          "type": "object",
+          "required": [
+            "height"
+          ],
+          "properties": {
+            "height": {
+              "type": "integer"
+            }
+          }
+        }
+      ]
+    },
+    "EscapedTargets": {
+      "type": "object",
+      "required": [
+        "Escaped/Model~name",
+        "Encoded Model"
+      ],
+      "properties": {
+        "Escaped/Model~name": {
+          "type": "object",
+          "required": [
+            "value"
+          ],
+          "properties": {
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "Encoded Model": {
+          "type": "object",
+          "required": [
+            "encoded"
+          ],
+          "properties": {
+            "encoded": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "ReferenceUse": {
+      "type": "object",
+      "required": [
+        "upper",
+        "lower",
+        "sibling",
+        "external",
+        "escaped",
+        "encoded",
+        "query",
+        "in",
+        "camel",
+        "pascal",
+        "flat"
+      ],
+      "properties": {
+        "upper": {
+          "$ref": "#/definitions/Station"
+        },
+        "lower": {
+          "$ref": "#/definitions/station"
+        },
+        "sibling": {
+          "$ref": "#/definitions/Station",
+          "type": "object"
+        },
+        "external": {
+          "$ref": "v2_targets.json#/definitions/ExternalObject",
+          "type": "object"
+        },
+        "escaped": {
+          "$ref": "#/definitions/EscapedTargets/properties/Escaped~1Model~0name"
+        },
+        "encoded": {
+          "$ref": "#/definitions/EscapedTargets/properties/Encoded%20Model"
+        },
+        "query": {
+          "type": "string"
+        },
+        "in": {
+          "type": "string"
+        },
+        "camel": {
+          "$ref": "#/definitions/stationInfo"
+        },
+        "pascal": {
+          "$ref": "#/definitions/StationInfo"
+        },
+        "flat": {
+          "$ref": "#/definitions/stationinfo"
+        }
+      }
+    },
+    "ScalarUse": {
+      "type": "object",
+      "required": [
+        "date",
+        "timestamp",
+        "externalDate",
+        "externalTimestamp",
+        "count",
+        "free",
+        "string",
+        "object",
+        "list",
+        "map",
+        "uri"
+      ],
+      "properties": {
+        "date": {
+          "$ref": "#/definitions/CalendarDate"
+        },
+        "timestamp": {
+          "$ref": "#/definitions/TimestampChain"
+        },
+        "externalDate": {
+          "$ref": "#/definitions/ExternalDateAlias"
+        },
+        "externalTimestamp": {
+          "$ref": "#/definitions/ExternalTimestampAlias"
+        },
+        "count": {
+          "$ref": "#/definitions/CountAlias"
+        },
+        "free": {
+          "$ref": "#/definitions/FreeValue"
+        },
+        "string": {
+          "$ref": "#/definitions/String"
+        },
+        "object": {
+          "$ref": "#/definitions/Object"
+        },
+        "list": {
+          "$ref": "#/definitions/List"
+        },
+        "map": {
+          "$ref": "#/definitions/Map"
+        },
+        "uri": {
+          "$ref": "#/definitions/Uri"
+        }
+      }
+    },
+    "AliasUse": {
+      "type": "object",
+      "required": [
+        "station",
+        "stations",
+        "byKey",
+        "credentials"
+      ],
+      "properties": {
+        "station": {
+          "$ref": "#/definitions/StationAliasChain"
+        },
+        "stations": {
+          "$ref": "#/definitions/StationListAlias"
+        },
+        "byKey": {
+          "$ref": "#/definitions/StationMapAlias"
+        },
+        "credentials": {
+          "$ref": "#/definitions/CredentialsAlias"
+        }
+      }
+    },
+    "Credentials": {
+      "type": "object",
+      "required": [
+        "login",
+        "password"
+      ],
+      "properties": {
+        "login": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Problem": {
+      "type": "object",
+      "required": [
+        "message"
+      ],
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "stationInfo": {
+      "type": "object",
+      "required": [
+        "camel_code"
+      ],
+      "properties": {
+        "camel_code": {
+          "type": "string"
+        }
+      }
+    },
+    "StationInfo": {
+      "type": "object",
+      "required": [
+        "pascal_code"
+      ],
+      "properties": {
+        "pascal_code": {
+          "type": "string"
+        }
+      }
+    },
+    "stationinfo": {
+      "type": "object",
+      "required": [
+        "flat_code"
+      ],
+      "properties": {
+        "flat_code": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "parameters": {
+    "PathLimit": {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "type": "integer",
+      "default": 2,
+      "description": "Path limit."
+    },
+    "LimitAlias": {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "type": "integer",
+      "format": "int32",
+      "default": 7,
+      "description": "Operation limit."
+    },
+    "TagAlias": {
+      "name": "tag",
+      "in": "query",
+      "required": false,
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "north",
+        "south"
+      ],
+      "description": "Repeated station tags.",
+      "collectionFormat": "multi"
+    },
+    "IdAlias": {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "Station key."
+    },
+    "CredentialsBody": {
+      "description": "Shared credentials.",
+      "required": true,
+      "name": "credentials",
+      "in": "body",
+      "schema": {
+        "$ref": "#/definitions/Credentials"
+      }
+    }
+  },
+  "responses": {
+    "Station": {
+      "description": "Item response.",
+      "schema": {
+        "$ref": "#/definitions/Station"
+      }
+    },
+    "ItemAlias": {
+      "description": "Item response.",
+      "schema": {
+        "$ref": "#/definitions/Station"
+      }
+    },
+    "List": {
+      "description": "Shared response",
+      "schema": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/StationAliasChain"
+        }
+      }
+    },
+    "Error": {
+      "description": "Shared error.",
+      "schema": {
+        "$ref": "#/definitions/Problem"
+      }
+    },
+    "EncodedResponse": {
+      "description": "Shared response",
+      "schema": {
+        "$ref": "#/definitions/Station"
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "V1 regressions",
+    "version": "1"
+  },
+  "paths": {},
+  "definitions": {
+    "Int64": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "IntAlias": {
+      "$ref": "#/definitions/Int64"
+    },
+    "DecimalId": {
+      "type": "string"
+    },
+    "Numbers": {
+      "type": "object",
+      "required": [
+        "value",
+        "alias",
+        "values",
+        "exact"
+      ],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "alias": {
+          "$ref": "#/definitions/IntAlias"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "exact": {
+          "$ref": "#/definitions/DecimalId"
+        }
+      }
+    }
+  }
+}

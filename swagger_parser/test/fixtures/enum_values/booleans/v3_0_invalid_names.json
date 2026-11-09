@@ -1,0 +1,22 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Boolean enums",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Flag": {
+        "type": "boolean",
+        "enum": [
+          true,
+          false
+        ],
+        "x-enumNames": [
+          "one"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,315 @@
+"openapi": "3.1.2"
+"info":
+  "title": "Nullable collections"
+  "version": "1"
+"paths":
+  "/collections":
+    "post":
+      "operationId": "echoCollections"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/NullableCollections"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/NullableCollections"
+  "/FreeObject":
+    "get":
+      "operationId": "getFreeObject"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/FreeObject"
+  "/ClosedObject":
+    "get":
+      "operationId": "getClosedObject"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/ClosedObject"
+  "/SingleObject":
+    "get":
+      "operationId": "getSingleObject"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/SingleObject"
+  "/Gender":
+    "get":
+      "operationId": "getGender"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Gender"
+  "/Criteria":
+    "get":
+      "operationId": "getCriteria"
+      "responses":
+        "200":
+          "description": "Result"
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Criteria"
+"components":
+  "schemas":
+    "NullableText":
+      "type":
+        - "string"
+        - "null"
+    "Criteria":
+      "type":
+        - "object"
+        - "null"
+      "required":
+        - "code"
+      "additionalProperties": false
+      "properties":
+        "code":
+          "type": "string"
+    "Gender":
+      "type":
+        - "string"
+        - "null"
+      "enum":
+        - "female"
+        - "male"
+        - null
+    "NullableCollections":
+      "type": "object"
+      "additionalProperties": false
+      "required":
+        - "listRequiredRequired"
+        - "mapRequiredRequired"
+        - "listRequiredNullable"
+        - "mapRequiredNullable"
+        - "listNullableRequired"
+        - "mapNullableRequired"
+        - "listNullableNullable"
+        - "mapNullableNullable"
+        - "refs"
+        - "nested"
+        - "criteria"
+        - "gender"
+      "properties":
+        "listRequiredRequired":
+          "type": "array"
+          "items":
+            "type": "string"
+        "mapRequiredRequired":
+          "type": "object"
+          "additionalProperties":
+            "type": "string"
+        "listRequiredNullable":
+          "type": "array"
+          "items":
+            "type":
+              - "string"
+              - "null"
+        "mapRequiredNullable":
+          "type": "object"
+          "additionalProperties":
+            "type":
+              - "string"
+              - "null"
+        "listNullableRequired":
+          "type":
+            - "array"
+            - "null"
+          "items":
+            "type": "string"
+        "mapNullableRequired":
+          "type":
+            - "object"
+            - "null"
+          "additionalProperties":
+            "type": "string"
+        "listNullableNullable":
+          "type":
+            - "array"
+            - "null"
+          "items":
+            "type":
+              - "string"
+              - "null"
+        "mapNullableNullable":
+          "type":
+            - "object"
+            - "null"
+          "additionalProperties":
+            "type":
+              - "string"
+              - "null"
+        "refs":
+          "type": "array"
+          "items":
+            "$ref": "#/components/schemas/NullableText"
+        "nested":
+          "type":
+            - "array"
+            - "null"
+          "items":
+            "type":
+              - "object"
+              - "null"
+            "additionalProperties":
+              "type":
+                - "array"
+                - "null"
+              "items":
+                "type":
+                  - "string"
+                  - "null"
+        "criteria":
+          "$ref": "#/components/schemas/Criteria"
+        "gender":
+          "description": "Selected gender."
+          "allOf":
+            - "$ref": "#/components/schemas/Gender"
+        "optionalCriteria":
+          "$ref": "#/components/schemas/Criteria"
+        "optionalList":
+          "type": "array"
+          "items":
+            "type": "string"
+        "empty":
+          "type": "array"
+          "items":
+            "type": "string"
+          "default": []
+        "filled":
+          "type": "array"
+          "items":
+            "type": "string"
+          "default":
+            - "a"
+    "FreeObject":
+      "type": "object"
+    "ClosedObject":
+      "type": "object"
+      "additionalProperties": false
+    "SingleObject":
+      "type": "object"
+      "required":
+        - "name"
+      "additionalProperties": false
+      "properties":
+        "name":
+          "type": "string"
+    "ReverseTypes":
+      "type": "object"
+      "required":
+        - "text"
+        - "at"
+        - "state"
+        - "number"
+      "properties":
+        "text":
+          "type":
+            - "null"
+            - "string"
+        "at":
+          "type":
+            - "null"
+            - "string"
+          "format": "date-time"
+        "state":
+          "type":
+            - "null"
+            - "string"
+          "enum":
+            - "01"
+            - "null"
+            - null
+        "number":
+          "type":
+            - "null"
+            - "integer"
+          "enum":
+            - 0
+            - 1
+            - null
+    "AnyofLast":
+      "anyOf":
+        - "type": "string"
+          "format": "date-time"
+        - "type": "null"
+    "AnyofFirst":
+      "anyOf":
+        - "type": "null"
+        - "type": "string"
+          "format": "date-time"
+    "OneofLast":
+      "oneOf":
+        - "type": "string"
+          "format": "date-time"
+        - "type": "null"
+    "OneofFirst":
+      "oneOf":
+        - "type": "null"
+        - "type": "string"
+          "format": "date-time"
+    "ComposedLists":
+      "type": "object"
+      "required":
+        - "first"
+        - "last"
+      "properties":
+        "first":
+          "items":
+            "anyOf":
+              - "type": "integer"
+                "maximum": 5
+              - "type": "null"
+          "anyOf":
+            - "type": "null"
+            - "type": "array"
+              "items":
+                "anyOf":
+                  - "type": "integer"
+                    "minimum": 1
+                  - "type": "null"
+        "last":
+          "items":
+            "anyOf":
+              - "type": "integer"
+                "maximum": 5
+              - "type": "null"
+          "anyOf":
+            - "type": "array"
+              "items":
+                "anyOf":
+                  - "type": "integer"
+                    "minimum": 1
+                  - "type": "null"
+            - "type": "null"
+    "OverlappingNull":
+      "oneOf":
+        - "type":
+            - "string"
+            - "null"
+        - "type": "null"
+    "OverlappingAnyNull":
+      "anyOf":
+        - "type":
+            - "string"
+            - "null"
+        - "type": "null"

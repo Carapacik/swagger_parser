@@ -1,0 +1,72 @@
+swagger: '2.0'
+info:
+  title: Station updates
+  version: '1'
+consumes:
+  - application/json
+paths:
+  /stations/{ids}:
+    delete:
+      operationId: removeStations
+      parameters:
+        - name: ids
+          in: path
+          required: true
+          type: array
+          items:
+            type: string
+        - name: X-Station-Ids
+          in: header
+          type: array
+          items:
+            type: integer
+        - name: X-Flags
+          in: header
+          required: true
+          type: array
+          items:
+            type: boolean
+      responses:
+        '204':
+          description: Complete
+  /stations:
+    put:
+      operationId: replaceStation
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Update"
+      responses:
+        '204':
+          description: Complete
+    patch:
+      operationId: renameStation
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Update"
+      responses:
+        '204':
+          description: Complete
+    delete:
+      operationId: clearStations
+      responses:
+        '204':
+          description: Complete
+    post:
+      operationId: refreshStations
+      responses:
+        '204':
+          description: Complete
+definitions:
+  Update:
+    type: object
+    properties:
+      name:
+        type: string
+    required:
+      - name

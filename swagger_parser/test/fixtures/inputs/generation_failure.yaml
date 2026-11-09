@@ -1,0 +1,43 @@
+---
+swagger_parser:
+  output_directory: out
+  parse:
+    max_depth: 64
+    capture_source_locations: true
+  normalize:
+    explicit_parameter_serialization: true
+  generation:
+    http_client: http
+    serializer: plain
+    generate_docs: false
+    page_width: 90
+    operation_filters:
+      include_paths:
+      - "/stations/**"
+      exclude_tags:
+      - Internal
+  inputs:
+    legacy:
+      schema_path: stations_v2_0.yaml
+      generation:
+        http_client: retrofit
+        generate_docs: true
+    current:
+      input: stations_v3_0.json
+      parse:
+        capture_source_locations: false
+      normalize:
+        explicit_parameter_serialization: false
+      generation:
+        http_client: dio
+        operation_filters:
+          include_paths:
+          exclude_tags: []
+    modern:
+      schema_path: stations_v3_1.yaml
+    latest:
+      schema_path: invalid.yaml
+      output: custom/latest
+      generation:
+        serializer: json_serializable
+        root_api_class_name: LatestApi

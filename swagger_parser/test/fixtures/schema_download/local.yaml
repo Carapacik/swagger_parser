@@ -1,0 +1,11 @@
+---
+output_directory: out
+schema_download:
+  credentials:
+  - origin: http://127.0.0.1:PORT_A
+    headers:
+      Authorization:
+        env: SCHEMA_AUTHORIZATION
+      X-Schema-Key: literal-source-key
+      Cookie: session=source-cookie
+schema_path: local_entry.EXT

@@ -1,0 +1,11 @@
+{
+  "input": "routes_v3_2.yaml",
+  "generation": {
+    "operation_filters": {
+      "include_paths": null,
+      "exclude_paths": [],
+      "include_tags": null,
+      "exclude_tags": []
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Required inference",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Invalid": {
+        "type": "object",
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "Station lookup",
+    "version": "1"
+  },
+  "paths": {
+    "/invalid": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": ""
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

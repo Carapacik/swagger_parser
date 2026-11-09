@@ -1,0 +1,331 @@
+openapi: "3.0.4"
+info:
+  title: "Required inference"
+  version: "1"
+paths:
+  "/station":
+    get:
+      operationId: "getStation"
+      parameters:
+        - name: "filter"
+          in: "query"
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Found"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+    post:
+      operationId: "updateStation"
+      responses:
+        "200":
+          description: "Found"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+      requestBody:
+        required: false
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/Station"
+components:
+  schemas:
+    Text:
+      type: "string"
+    NullableText:
+      type: "string"
+      nullable: true
+    Count:
+      type: "integer"
+      default: 5
+    Station:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+          nullable: true
+        enabled:
+          type: "boolean"
+          default: true
+        refValue:
+          $ref: "#/components/schemas/Text"
+        refNullable:
+          $ref: "#/components/schemas/NullableText"
+        refDefault:
+          $ref: "#/components/schemas/Count"
+        unknown: {}
+        externalNullable:
+          $ref: "external_v3_0.yaml#/components/schemas/Nullable"
+        externalDefault:
+          $ref: "external_v3_0.yaml#/components/schemas/Default"
+    Empty:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+          nullable: true
+        enabled:
+          type: "boolean"
+          default: true
+        refValue:
+          $ref: "#/components/schemas/Text"
+        refNullable:
+          $ref: "#/components/schemas/NullableText"
+        refDefault:
+          $ref: "#/components/schemas/Count"
+        unknown: {}
+        externalNullable:
+          $ref: "external_v3_0.yaml#/components/schemas/Nullable"
+        externalDefault:
+          $ref: "external_v3_0.yaml#/components/schemas/Default"
+    Partial:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+          nullable: true
+        enabled:
+          type: "boolean"
+          default: true
+        refValue:
+          $ref: "#/components/schemas/Text"
+        refNullable:
+          $ref: "#/components/schemas/NullableText"
+        refDefault:
+          $ref: "#/components/schemas/Count"
+        unknown: {}
+        externalNullable:
+          $ref: "external_v3_0.yaml#/components/schemas/Nullable"
+        externalDefault:
+          $ref: "external_v3_0.yaml#/components/schemas/Default"
+      required:
+        - "name"
+    Base:
+      type: "object"
+      properties:
+        base:
+          type: "string"
+    AllMissing:
+      allOf:
+        - type: "object"
+          properties:
+            first:
+              type: "string"
+        - type: "object"
+          properties:
+            second:
+              type: "integer"
+    AllEmpty:
+      allOf:
+        - $ref: "#/components/schemas/Base"
+        - type: "object"
+          properties:
+            extra:
+              type: "string"
+    AllPartial:
+      allOf:
+        - type: "object"
+          properties:
+            first:
+              type: "string"
+          required:
+            - "first"
+        - type: "object"
+          properties:
+            second:
+              type: "integer"
+    AllParentEmpty:
+      allOf:
+        - $ref: "#/components/schemas/Base"
+        - type: "object"
+          properties:
+            extra:
+              type: "string"
+    Nested:
+      type: "object"
+      properties:
+        child:
+          $ref: "#/components/schemas/Empty"
+    Directional:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          readOnly: true
+        name:
+          type: "string"
+          nullable: true
+        secret:
+          type: "string"
+          writeOnly: true
+    ExplicitChoice:
+      type: "object"
+      required:
+        - "tag"
+      properties:
+        tag:
+          type: "string"
+      oneOf:
+        - type: "object"
+          properties:
+            a:
+              type: "string"
+        - type: "object"
+          properties:
+            b:
+              type: "string"
+    Choice:
+      oneOf:
+        - type: "object"
+          properties:
+            a:
+              type: "string"
+        - type: "object"
+          properties:
+            b:
+              type: "string"
+    Mixed:
+      anyOf:
+        - type: "object"
+          properties:
+            a:
+              type: "string"
+        - type: "object"
+          properties:
+            b:
+              type: "string"
+    UnionField:
+      type: "object"
+      properties:
+        value:
+          anyOf:
+            - type: "string"
+            - type: "string"
+              nullable: true
+    "RequiredChild":
+      "type": "object"
+      "required":
+        - "value"
+      "properties":
+        "value":
+          "type": "string"
+    "SiblingMissing":
+      "type": "object"
+      "additionalProperties": false
+      "properties":
+        "composed":
+          "allOf":
+            - "$ref": "#/components/schemas/RequiredChild"
+        "plain":
+          "type": "boolean"
+        "Code":
+          "type": "string"
+        "code":
+          "type": "string"
+        "nullable_id":
+          "type": "string"
+          "nullable": true
+        "nullable_ref":
+          "$ref": "#/components/schemas/NullableText"
+        "enabled":
+          "type": "boolean"
+          "default": true
+        "ref_default":
+          "$ref": "#/components/schemas/Count"
+        "required_default":
+          "type": "integer"
+          "default": 7
+    "SiblingDirect":
+      "type": "object"
+      "additionalProperties": false
+      "properties":
+        "composed":
+          "$ref": "#/components/schemas/RequiredChild"
+        "plain":
+          "type": "boolean"
+        "Code":
+          "type": "string"
+        "code":
+          "type": "string"
+        "nullable_id":
+          "type": "string"
+          "nullable": true
+        "nullable_ref":
+          "$ref": "#/components/schemas/NullableText"
+        "enabled":
+          "type": "boolean"
+          "default": true
+        "ref_default":
+          "$ref": "#/components/schemas/Count"
+        "required_default":
+          "type": "integer"
+          "default": 7
+    "SiblingExplicit":
+      "type": "object"
+      "additionalProperties": false
+      "properties":
+        "composed":
+          "allOf":
+            - "$ref": "#/components/schemas/RequiredChild"
+        "plain":
+          "type": "boolean"
+        "Code":
+          "type": "string"
+        "code":
+          "type": "string"
+        "nullable_id":
+          "type": "string"
+          "nullable": true
+        "nullable_ref":
+          "$ref": "#/components/schemas/NullableText"
+        "enabled":
+          "type": "boolean"
+          "default": true
+        "ref_default":
+          "$ref": "#/components/schemas/Count"
+        "required_default":
+          "type": "integer"
+          "default": 7
+      "required":
+        - "nullable_id"
+        - "Code"
+        - "required_default"
+    "SiblingReduced":
+      "type": "object"
+      "additionalProperties": false
+      "properties":
+        "composed":
+          "allOf":
+            - "$ref": "#/components/schemas/RequiredChild"
+        "plain":
+          "type": "boolean"
+        "Code":
+          "type": "string"
+        "code":
+          "type": "string"
+        "nullable_id":
+          "type": "string"
+          "nullable": true
+        "nullable_ref":
+          "$ref": "#/components/schemas/NullableText"
+        "enabled":
+          "type": "boolean"
+          "default": true
+        "ref_default":
+          "$ref": "#/components/schemas/Count"
+        "required_default":
+          "type": "integer"
+          "default": 7
+      "required":
+        - "nullable_id"

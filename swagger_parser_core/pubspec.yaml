@@ -1,0 +1,15 @@
+name: swagger_parser_core
+description: Typed Swagger and OpenAPI models with JSON/YAML parsing, validation, and reference resolution for swagger_parser.
+version: 1.0.0
+repository: https://github.com/Carapacik/swagger_parser/tree/main/swagger_parser_core
+issue_tracker: https://github.com/Carapacik/swagger_parser/issues
+resolution: workspace
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  source_span: ^1.10.2
+  yaml: ^3.1.4
+
+dev_dependencies:
+  test: ^1.33.0

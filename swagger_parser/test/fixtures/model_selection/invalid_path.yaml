@@ -1,0 +1,6 @@
+"schema_path": "v3_2.yaml"
+"generation":
+  "exclude_parameters":
+    -
+      "name": "id"
+      "in": "path"

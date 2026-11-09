@@ -1,0 +1,16 @@
+{
+  "generation": {
+    "generate_validators": true
+  },
+  "inputs": {
+    "first": {
+      "schema_path": "v3_1.yaml",
+      "generation": {
+        "generate_validators": false
+      }
+    },
+    "second": {
+      "schema_path": "v3_2.yaml"
+    }
+  }
+}

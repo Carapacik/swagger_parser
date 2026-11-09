@@ -1,0 +1,547 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Name and wire contracts",
+    "version": "1"
+  },
+  "paths": {
+    "/UserJWTPair/$route/{id}": {
+      "post": {
+        "operationId": "sendCollisions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "idQuery",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "type_",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x_api_key",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "filters[name]",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "filters[nested][name]",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "value2",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "$header",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WireDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wire DTO",
+            "schema": {
+              "$ref": "#/definitions/WireDto"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "int": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "double": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "num": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "bool": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "dynamic": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "void": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "null": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "Options": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "Response": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "Headers": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "RequestOptions": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "UserJWTPair": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "lowercase": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "Already": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "AlreadyDto": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "Words": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "$unknown",
+        "index",
+        "name",
+        "values",
+        "runtimeType",
+        "100Continue",
+        "404NotFound",
+        "two words",
+        "-id",
+        "id",
+        "line\n\"\\$quote"
+      ],
+      "default": "unknown"
+    },
+    "Signed": {
+      "type": "integer",
+      "enum": [
+        1,
+        -1,
+        0
+      ],
+      "default": -1
+    },
+    "WireDto": {
+      "type": "object",
+      "required": [
+        "with space",
+        "dot.name",
+        "comma,name",
+        "hash#name",
+        "at@name",
+        "hashCode",
+        "runtimeType",
+        "toString",
+        "imageURL",
+        "snake_case",
+        "class",
+        "x-api-key",
+        "x_api_key",
+        "What's New",
+        "What\u2019s New",
+        "back\\slash",
+        "quote\"key",
+        "$money",
+        "filters[name]",
+        "1name",
+        "integer",
+        "number",
+        "free",
+        "word",
+        "signed"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "with space": {
+          "type": "string"
+        },
+        "dot.name": {
+          "type": "string"
+        },
+        "comma,name": {
+          "type": "string"
+        },
+        "hash#name": {
+          "type": "string"
+        },
+        "at@name": {
+          "type": "string"
+        },
+        "hashCode": {
+          "type": "string"
+        },
+        "runtimeType": {
+          "type": "string"
+        },
+        "toString": {
+          "type": "string"
+        },
+        "imageURL": {
+          "type": "string"
+        },
+        "snake_case": {
+          "type": "string"
+        },
+        "class": {
+          "type": "string"
+        },
+        "x-api-key": {
+          "type": "string"
+        },
+        "x_api_key": {
+          "type": "string"
+        },
+        "What's New": {
+          "type": "string"
+        },
+        "What\u2019s New": {
+          "type": "string"
+        },
+        "back\\slash": {
+          "type": "string"
+        },
+        "quote\"key": {
+          "type": "string"
+        },
+        "$money": {
+          "type": "string"
+        },
+        "filters[name]": {
+          "type": "string"
+        },
+        "1name": {
+          "type": "string"
+        },
+        "integer": {
+          "type": "integer"
+        },
+        "number": {
+          "type": "number"
+        },
+        "free": {},
+        "word": {
+          "$ref": "#/definitions/Words"
+        },
+        "signed": {
+          "$ref": "#/definitions/Signed"
+        }
+      }
+    },
+    "AllModels": {
+      "type": "object",
+      "required": [
+        "int",
+        "double",
+        "num",
+        "bool",
+        "dynamic",
+        "void",
+        "null",
+        "Options",
+        "Response",
+        "Headers",
+        "RequestOptions",
+        "UserJWTPair",
+        "lowercase",
+        "Already",
+        "AlreadyDto"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "int": {
+          "$ref": "#/definitions/int"
+        },
+        "double": {
+          "$ref": "#/definitions/double"
+        },
+        "num": {
+          "$ref": "#/definitions/num"
+        },
+        "bool": {
+          "$ref": "#/definitions/bool"
+        },
+        "dynamic": {
+          "$ref": "#/definitions/dynamic"
+        },
+        "void": {
+          "$ref": "#/definitions/void"
+        },
+        "null": {
+          "$ref": "#/definitions/null"
+        },
+        "Options": {
+          "$ref": "#/definitions/Options"
+        },
+        "Response": {
+          "$ref": "#/definitions/Response"
+        },
+        "Headers": {
+          "$ref": "#/definitions/Headers"
+        },
+        "RequestOptions": {
+          "$ref": "#/definitions/RequestOptions"
+        },
+        "UserJWTPair": {
+          "$ref": "#/definitions/UserJWTPair"
+        },
+        "lowercase": {
+          "$ref": "#/definitions/lowercase"
+        },
+        "Already": {
+          "$ref": "#/definitions/Already"
+        },
+        "AlreadyDto": {
+          "$ref": "#/definitions/AlreadyDto"
+        }
+      }
+    },
+    "ParentOne": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "a",
+            "b"
+          ]
+        }
+      }
+    },
+    "ParentTwo": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "x",
+            "y"
+          ]
+        }
+      }
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ]
+}

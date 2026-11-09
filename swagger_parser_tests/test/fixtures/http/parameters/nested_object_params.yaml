@@ -1,0 +1,46 @@
+openapi: 3.2.1
+info:
+  title: Nested selectors
+  version: '1'
+paths:
+  /stations/{selector}:
+    get:
+      parameters:
+        - name: selector
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Selector'
+      responses:
+        '204':
+          description: Complete
+  /stations:
+    get:
+      parameters:
+        - name: X-Selector
+          in: header
+          schema:
+            $ref: '#/components/schemas/Selector'
+      responses:
+        '204':
+          description: Complete
+  /filter:
+    get:
+      parameters:
+        - name: selector
+          in: query
+          style: form
+          schema:
+            $ref: '#/components/schemas/Selector'
+      responses:
+        '204':
+          description: Complete
+components:
+  schemas:
+    Selector:
+      type: object
+      properties:
+        stationIds:
+          type: array
+          items:
+            type: integer

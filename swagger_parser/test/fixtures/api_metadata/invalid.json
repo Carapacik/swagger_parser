@@ -1,0 +1,8 @@
+{
+  "swagger_parser": {
+    "schema_path": "v3_2.json",
+    "generation": {
+      "api_metadata": "unknown"
+    }
+  }
+}

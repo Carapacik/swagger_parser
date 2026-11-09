@@ -1,0 +1,33 @@
+{
+  "with space": "with space",
+  "dot.name": "dot.name",
+  "comma,name": "comma,name",
+  "hash#name": "hash#name",
+  "at@name": "at@name",
+  "hashCode": "hashCode",
+  "runtimeType": "runtimeType",
+  "toString": "toString",
+  "imageURL": "imageURL",
+  "snake_case": "snake_case",
+  "class": "class",
+  "x-api-key": "x-api-key",
+  "x_api_key": "x_api_key",
+  "What's New": "What's New",
+  "What’s New": "What’s New",
+  "back\\slash": "back\\slash",
+  "quote\"key": "quote\"key",
+  "$money": "$money",
+  "filters[name]": "filters[name]",
+  "1name": "1name",
+  "integer": 12,
+  "number": 1.5,
+  "free": {
+    "nested": [
+      null,
+      true,
+      "Ж"
+    ]
+  },
+  "word": "unknown",
+  "signed": -1
+}

@@ -1,0 +1,44 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Sensor",
+    "version": "1"
+  },
+  "components": {
+    "schemas": {
+      "Sensor": {
+        "$anchor": "sensor",
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "kind"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "kind": {
+                "const": "sensor.v1"
+              },
+              "id": {
+                "type": "integer"
+              }
+            }
+          }
+        ]
+      },
+      "SensorAlias": {
+        "$ref": "#sensor"
+      }
+    }
+  }
+}

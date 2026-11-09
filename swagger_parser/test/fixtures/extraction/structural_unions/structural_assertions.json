@@ -1,0 +1,60 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Structural assertions",
+    "version": "1"
+  },
+  "components": {
+    "schemas": {
+      "BigInt": {
+        "type": "string"
+      },
+      "ListViews": {
+        "anyOf": [
+          {
+            "type": "array",
+            "uniqueItems": true
+          },
+          {
+            "type": "array",
+            "uniqueItems": false
+          }
+        ]
+      },
+      "Price": {
+        "oneOf": [
+          {
+            "type": "number",
+            "multipleOf": 0.1
+          },
+          {
+            "type": "number",
+            "multipleOf": 0.25
+          }
+        ]
+      },
+      "Steps": {
+        "anyOf": [
+          {
+            "type": "number",
+            "multipleOf": 0.00000025
+          },
+          {
+            "type": "integer",
+            "multipleOf": 3
+          }
+        ]
+      },
+      "Applicable": {
+        "anyOf": [
+          {
+            "multipleOf": 2
+          },
+          {
+            "uniqueItems": true
+          }
+        ]
+      }
+    }
+  }
+}

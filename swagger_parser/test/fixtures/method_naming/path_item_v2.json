@@ -1,0 +1,21 @@
+{
+  "get": {
+    "operationId": "externalLookup",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Result",
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

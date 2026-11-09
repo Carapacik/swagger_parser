@@ -1,0 +1,102 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "V1 regressions",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Stop": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Rail"
+          },
+          {
+            "$ref": "#/components/schemas/Bus"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "Rail": "#/components/schemas/Rail",
+            "Bus": "#/components/schemas/Bus"
+          }
+        }
+      },
+      "Rail": {
+        "type": "object",
+        "required": [
+          "kind",
+          "is_active",
+          "class",
+          "file_name"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "Rail"
+            ]
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "class": {
+            "type": "string"
+          },
+          "file_name": {
+            "type": "string"
+          }
+        }
+      },
+      "Bus": {
+        "type": "object",
+        "required": [
+          "kind",
+          "is_active",
+          "switch"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "Bus"
+            ]
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "switch": {
+            "type": "integer"
+          }
+        }
+      },
+      "Container": {
+        "type": "object",
+        "required": [
+          "entry",
+          "entries",
+          "by_name"
+        ],
+        "properties": {
+          "entry": {
+            "$ref": "#/components/schemas/Stop"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Stop"
+            }
+          },
+          "by_name": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Stop"
+            }
+          }
+        }
+      }
+    }
+  }
+}

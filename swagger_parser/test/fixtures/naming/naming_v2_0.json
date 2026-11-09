@@ -1,0 +1,187 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Naming",
+    "version": "1"
+  },
+  "paths": {
+    "/stations/{station_id}": {
+      "get": {
+        "operationId": "lookupStation",
+        "tags": [
+          "InternalStations"
+        ],
+        "parameters": [
+          {
+            "name": "station_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "schema": {
+              "$ref": "#/definitions/AbobaDto"
+            }
+          },
+          "204": {
+            "description": "Response"
+          },
+          "404": {
+            "description": "Response",
+            "schema": {
+              "$ref": "#/definitions/ProblemDto"
+            }
+          }
+        }
+      }
+    },
+    "/other": {
+      "get": {
+        "operationId": "lookupStationOther",
+        "tags": [
+          "PublicStations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "schema": {
+              "$ref": "#/definitions/AbobaDto"
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health",
+        "responses": {
+          "204": {
+            "description": "Response"
+          }
+        }
+      }
+    },
+    "/a/{b}/c/{d}/{e}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "b",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "d",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "e",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Response"
+          }
+        }
+      }
+    }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "AbobaDto": {
+      "type": "object",
+      "required": [
+        "station_name",
+        "status",
+        "checkpoint"
+      ],
+      "properties": {
+        "station_name": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/StatusDto"
+        },
+        "checkpoint": {
+          "type": "object",
+          "required": [
+            "station_code"
+          ],
+          "properties": {
+            "station_code": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "StatusDto": {
+      "type": "string",
+      "enum": [
+        "status_active",
+        "status_disabled",
+        "status_values",
+        "status_fromJson"
+      ]
+    },
+    "ProblemDto": {
+      "type": "object",
+      "required": [
+        "message"
+      ],
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "kUserStatus": {
+      "type": "string",
+      "enum": [
+        "status_active"
+      ]
+    },
+    "XMLHttpRequest": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "XmlHttpRequest": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "_private": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "class": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

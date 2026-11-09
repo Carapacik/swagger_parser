@@ -1,0 +1,17 @@
+{
+  "swagger": "2.0",
+  "info": {"title": "Upload", "version": "1"},
+  "consumes": ["application/json"],
+  "paths": {
+    "/photos": {
+      "post": {
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {"in": "formData", "name": "photo", "required": true, "type": "file"},
+          {"in": "formData", "name": "tag", "type": "array", "items": {"type": "string"}, "collectionFormat": "multi"}
+        ],
+        "responses": {"204": {"description": "Saved"}}
+      }
+    }
+  }
+}

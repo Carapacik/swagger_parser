@@ -1,0 +1,114 @@
+"openapi": "3.0.4"
+"info":
+  "title": "Request media"
+  "version": "1"
+"paths":
+  "/sendJson":
+    "post":
+      "operationId": "sendJson"
+      "responses":
+        "204":
+          "description": "Done"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/User"
+  "/sendPatch":
+    "post":
+      "operationId": "sendPatch"
+      "responses":
+        "204":
+          "description": "Done"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json-patch+json":
+            "schema":
+              "$ref": "#/components/schemas/User"
+  "/sendVendor":
+    "post":
+      "operationId": "sendVendor"
+      "responses":
+        "204":
+          "description": "Done"
+      "requestBody":
+        "required": true
+        "content":
+          "application/vnd.example+json":
+            "schema":
+              "$ref": "#/components/schemas/User"
+  "/sendMixed":
+    "post":
+      "operationId": "sendMixed"
+      "responses":
+        "204":
+          "description": "Done"
+      "requestBody":
+        "required": true
+        "content":
+          "application/x-www-form-urlencoded":
+            "schema":
+              "$ref": "#/components/schemas/TokenObtainPair"
+          "multipart/form-data":
+            "schema":
+              "$ref": "#/components/schemas/TokenRefresh"
+          "application/json":
+            "schema":
+              "type": "array"
+              "items":
+                "$ref": "#/components/schemas/User"
+  "/cookies":
+    "get":
+      "operationId": "cookies"
+      "parameters":
+        - "name": "scalar"
+          "in": "cookie"
+          "required": true
+          "schema":
+            "type": "string"
+        - "name": "array"
+          "in": "cookie"
+          "required": true
+          "style": "form"
+          "explode": false
+          "schema":
+            "type": "array"
+            "items":
+              "type": "string"
+        - "name": "object"
+          "in": "cookie"
+          "required": true
+          "style": "form"
+          "explode": false
+          "schema":
+            "type": "object"
+            "additionalProperties":
+              "type": "string"
+      "responses":
+        "204":
+          "description": "Done"
+"components":
+  "schemas":
+    "User":
+      "type": "object"
+      "required":
+        - "value"
+      "properties":
+        "value":
+          "type": "string"
+    "TokenObtainPair":
+      "type": "object"
+      "required":
+        - "value"
+      "properties":
+        "value":
+          "type": "string"
+    "TokenRefresh":
+      "type": "object"
+      "required":
+        - "value"
+      "properties":
+        "value":
+          "type": "string"

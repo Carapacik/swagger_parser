@@ -1,0 +1,6 @@
+{
+  "input": "specs/mounted.yaml",
+  "generation": {
+    "httpClient": "htp"
+  }
+}

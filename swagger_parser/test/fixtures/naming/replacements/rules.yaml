@@ -1,0 +1,11 @@
+swagger_parser:
+  schema_path: "../../schema_graphs/large_cycle/graph.yaml"
+  generation:
+    naming:
+      replace_rules:
+        - target: "models"
+          pattern: "^Node\\."
+          replacement: "Item"
+        - target: "models"
+          pattern: "Dto$"
+          replacement: ""

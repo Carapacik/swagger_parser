@@ -1,0 +1,15 @@
+openapi: 3.0.4
+info:
+  title: Unsupported array assertion
+  version: '1'
+paths: {}
+components:
+  schemas:
+    Batch:
+      anyOf:
+        - type: array
+          items:
+            type: string
+          contains:
+            type: string
+        - type: string

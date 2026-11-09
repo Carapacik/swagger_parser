@@ -1,0 +1,27 @@
+{
+  "code": 1,
+  "mode": "north-bound",
+  "flag": true,
+  "alias": 2,
+  "external": 7,
+  "text": "",
+  "nullableText": null,
+  "nullableCode": null,
+  "inferred": 2,
+  "narrowCode": 2,
+  "narrowText": "a\n\"\\$",
+  "inlineCode": 1,
+  "inlineMode": "south",
+  "codes": [
+    0,
+    2
+  ],
+  "inlineCodes": [
+    2,
+    1
+  ],
+  "byName": {
+    "east": "north-bound"
+  },
+  "integral": 1000.0
+}

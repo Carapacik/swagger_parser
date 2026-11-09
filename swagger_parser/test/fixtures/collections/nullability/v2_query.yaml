@@ -1,0 +1,38 @@
+"swagger": "2.0"
+"info":
+  "title": "Nullable collections"
+  "version": "1"
+"paths":
+  "/kept":
+    "get":
+      "operationId": "kept"
+      "parameters":
+        - "name": "absent"
+          "in": "query"
+          "type": "string"
+        - "name": "optional"
+          "in": "query"
+          "required": false
+          "type": "string"
+        - "name": "required"
+          "in": "query"
+          "required": true
+          "type": "string"
+      "responses":
+        "204":
+          "description": "Done"
+  "/skipped":
+    "get":
+      "operationId": "skipped"
+      "parameters":
+        - "name": "value"
+          "in": "query"
+          "type": "string"
+          "x-nullable": true
+      "responses":
+        "204":
+          "description": "Done"
+"consumes":
+  - "application/json"
+"produces":
+  - "application/json"

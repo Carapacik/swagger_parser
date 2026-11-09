@@ -1,0 +1,95 @@
+openapi: 3.2.1
+info:
+  title: Sensor readings
+  version: '1'
+components:
+  schemas:
+    Reading:
+      type: array
+      minItems: 1
+      prefixItems:
+        - type: string
+        - type:
+            - integer
+            - 'null'
+      items:
+        type: boolean
+    Pair:
+      allOf:
+        - $ref: '#/components/schemas/Reading'
+        - minItems: 2
+          maxItems: 2
+    Verified:
+      $ref: '#/components/schemas/Reading'
+      minItems: 2
+      prefixItems:
+        - const: sensor
+      items:
+        type:
+          - integer
+          - 'null'
+    Envelope:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          minItems: 1
+          prefixItems:
+            - $ref: '#/components/schemas/Reading'
+            - type: object
+              required:
+                - unit
+              properties:
+                unit:
+                  type: string
+          items: false
+    Loose:
+      prefixItems:
+        - true
+    Limited:
+      type: array
+      prefixItems:
+        - type: string
+        - false
+      items: true
+    Maybe:
+      type:
+        - array
+        - 'null'
+      minItems: 1
+      prefixItems:
+        - type: boolean
+      items: true
+    Choice:
+      oneOf:
+        - $ref: '#/components/schemas/Reading'
+        - type: array
+          minItems: 1
+          prefixItems:
+            - type: integer
+          items: false
+    Views:
+      anyOf:
+        - $ref: '#/components/schemas/Reading'
+        - type: array
+          prefixItems:
+            - type: string
+          contains:
+            const: sensor
+    Node:
+      $id: ./node
+      $dynamicAnchor: node
+      type: array
+      minItems: 1
+      prefixItems:
+        - type: string
+        - $dynamicRef: '#node'
+      items: false
+    Leaf:
+      $id: ./leaf
+      $dynamicAnchor: node
+      anyOf:
+        - $ref: ./node
+        - type: boolean

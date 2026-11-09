@@ -1,0 +1,4 @@
+# Check generated files with consumer type rules.
+analyzer:
+  language:
+    strict-casts: true

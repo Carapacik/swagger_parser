@@ -1,0 +1,23 @@
+import '../../helpers/page.dart';
+import 'station.dart';
+
+/// A page of stations.
+class StationsPage extends Page<Station> {
+  /// Stores page metadata and stations.
+  const StationsPage({required super.page, required super.pageSize, required super.results});
+
+  /// Reads page metadata and stations.
+  factory StationsPage.fromJson(Map<String, Object?> json) => StationsPage(
+    page: json['page'] as num,
+    pageSize: json['pageSize'] as num,
+    results: (json['results'] as List<Object?>)
+      .map((item) => Station.fromJson(item as Map<String, Object?>)).toList(),
+  );
+
+  /// Writes page metadata and stations.
+  Map<String, Object?> toJson() => {
+    'page': page,
+    'pageSize': pageSize,
+    'results': results.map((item) => item.toJson()).toList(),
+  };
+}

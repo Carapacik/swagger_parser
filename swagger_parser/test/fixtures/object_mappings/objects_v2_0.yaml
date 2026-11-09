@@ -1,0 +1,220 @@
+swagger: "2.0"
+info:
+  title: "Mapped object API"
+  version: "1"
+paths:
+  "/point":
+    post:
+      operationId: "echoPoint"
+      parameters:
+        -
+          name: "body"
+          in: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/GeoPoint"
+      responses:
+        "200":
+          description: "Value."
+          schema:
+            $ref: "#/definitions/GeoPoint"
+  "/station":
+    get:
+      operationId: "getStation"
+      responses:
+        "200":
+          description: "Value."
+          schema:
+            $ref: "#/definitions/Station"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+definitions:
+  GeoPoint:
+    type: "object"
+    required:
+      - "latitude"
+      - "longitude"
+    properties:
+      latitude:
+        type: "number"
+        minimum: -90
+        maximum: 90
+      longitude:
+        type: "number"
+        minimum: -180
+        maximum: 180
+    additionalProperties: false
+    default:
+      latitude: 0
+      longitude: 0
+  NullablePoint:
+    type: "object"
+    required:
+      - "latitude"
+      - "longitude"
+    properties:
+      latitude:
+        type: "number"
+        minimum: -90
+        maximum: 90
+      longitude:
+        type: "number"
+        minimum: -180
+        maximum: 180
+    additionalProperties: false
+    x-nullable: true
+    default:
+      latitude: 0
+      longitude: 0
+  OptionalPoint:
+    type: "object"
+    required:
+      - "latitude"
+      - "longitude"
+    properties:
+      latitude:
+        type: "number"
+        minimum: -90
+        maximum: 90
+      longitude:
+        type: "number"
+        minimum: -180
+        maximum: 180
+    additionalProperties: false
+    x-nullable: true
+  StationId:
+    type: "string"
+    default: "unknown"
+  NullableId:
+    type: "string"
+    x-nullable: true
+    default: "unknown"
+  NullId:
+    type: "string"
+    x-nullable: true
+    default: null
+  PlainId:
+    type: "string"
+  AllOfPoint:
+    type: "object"
+    allOf:
+      -
+        type: "object"
+        required:
+          - "latitude"
+        properties:
+          latitude:
+            type: "number"
+      -
+        type: "object"
+        required:
+          - "longitude"
+        properties:
+          longitude:
+            type: "number"
+  Station:
+    type: "object"
+    required:
+      - "requiredPoint"
+      - "requiredId"
+    properties:
+      requiredPoint:
+        $ref: "#/definitions/GeoPoint"
+      requiredId:
+        $ref: "#/definitions/StationId"
+      id:
+        $ref: "#/definitions/StationId"
+      nullableId:
+        $ref: "#/definitions/NullableId"
+      nullId:
+        $ref: "#/definitions/NullId"
+      location:
+        $ref: "#/definitions/NullablePoint"
+      optionalLocation:
+        $ref: "#/definitions/OptionalPoint"
+      plainId:
+        $ref: "#/definitions/PlainId"
+      points:
+        type: "array"
+        items:
+          $ref: "#/definitions/GeoPoint"
+        default:
+          -
+            latitude: 0
+            longitude: 0
+          -
+            latitude: 1
+            longitude: 2
+      byName:
+        type: "object"
+        additionalProperties:
+          $ref: "#/definitions/GeoPoint"
+        default:
+          origin:
+            latitude: 0
+            longitude: 0
+      allOfPoint:
+        $ref: "#/definitions/AllOfPoint"
+    additionalProperties: false
+  Dashboard:
+    type: "object"
+    properties:
+      station:
+        allOf:
+          -
+            $ref: "#/definitions/Station"
+        default:
+          requiredPoint:
+            latitude: 0
+            longitude: 0
+          requiredId: "unknown"
+          points:
+            -
+              latitude: 0
+              longitude: 0
+    additionalProperties: false
+  Envelope:
+    type: "object"
+    required:
+      - "point"
+    properties:
+      point:
+        $ref: "#/definitions/GeoPoint"
+    additionalProperties: false
+  Holder:
+    type: "object"
+    required:
+      - "envelope"
+    properties:
+      envelope:
+        $ref: "#/definitions/Envelope"
+    additionalProperties: false
+  TaggedPlace:
+    type: "object"
+    discriminator: "kind"
+    required:
+      - "kind"
+    properties:
+      kind:
+        type: "string"
+  TaggedPoint:
+    type: "object"
+    required:
+      - "kind"
+      - "latitude"
+      - "longitude"
+    properties:
+      kind:
+        type: "string"
+        enum:
+          - "TaggedPoint"
+      latitude:
+        type: "number"
+      longitude:
+        type: "number"
+    additionalProperties: false
+    allOf:
+      -
+        $ref: "#/definitions/TaggedPlace"

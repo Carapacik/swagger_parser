@@ -1,0 +1,37 @@
+{
+  "schema_path": "naming_v3_2.yaml",
+  "generation": {
+    "root_api_class_name": "TransitApi",
+    "fallback_client_name": "CommonClient",
+    "naming": {
+      "preserve_schema_casing": true,
+      "replace_rules": [
+        {
+          "target": "models",
+          "pattern": "Dto$",
+          "replacement": ""
+        },
+        {
+          "target": "models",
+          "pattern": "^Aboba$",
+          "replacement": "Station"
+        },
+        {
+          "target": "clients",
+          "pattern": "^(Internal|Public)",
+          "replacement": ""
+        },
+        {
+          "target": "methods",
+          "pattern": "^lookup",
+          "replacement": "get"
+        },
+        {
+          "target": "enum_values",
+          "pattern": "^status_",
+          "replacement": ""
+        }
+      ]
+    }
+  }
+}

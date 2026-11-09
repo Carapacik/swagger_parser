@@ -1,0 +1,23 @@
+---
+openapi: 3.2.1
+info:
+  title: Authenticated schema
+  version: '1'
+paths:
+  "/stations":
+    get:
+      operationId: listStations
+      responses:
+        '200':
+          description: Station
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Station"
+components:
+  schemas:
+    Station:
+      type: object
+      properties:
+        id:
+          type: string

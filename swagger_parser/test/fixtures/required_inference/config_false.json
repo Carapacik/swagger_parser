@@ -1,0 +1,7 @@
+{
+  "input": "v3_2.yaml",
+  "generation": {
+    "infer_missing_required": false,
+    "use_presence_records": true
+  }
+}

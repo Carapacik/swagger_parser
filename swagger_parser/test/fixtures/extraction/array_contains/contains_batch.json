@@ -1,0 +1,40 @@
+{
+  "$id": "./resources/batch",
+  "anyOf": [
+    {
+      "type": "array",
+      "contains": {
+        "$dynamicRef": "#event"
+      },
+      "minContains": 2.0,
+      "maxContains": 3
+    },
+    {
+      "type": "array",
+      "contains": false,
+      "minContains": 0,
+      "maxContains": 0
+    }
+  ],
+  "$defs": {
+    "Event": {
+      "$dynamicAnchor": "event",
+      "type": "object",
+      "required": [
+        "code"
+      ],
+      "properties": {
+        "code": {
+          "const": "alert"
+        },
+        "details": {
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  }
+}

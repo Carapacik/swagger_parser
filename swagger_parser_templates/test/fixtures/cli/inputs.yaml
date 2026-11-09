@@ -1,0 +1,16 @@
+---
+output_directory: "../batch"
+generation:
+  http_client: http
+  templates:
+    api: templates/api.mustache
+    models: templates/model.mustache
+inputs:
+  first:
+    schema_path: entry.yaml
+  second:
+    input: entry.yaml
+    generation:
+      root_api_class_name: CustomApi
+      templates:
+        models: templates/child.mustache

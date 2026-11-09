@@ -1,0 +1,7 @@
+{
+  "schema_path": "v3_2.json",
+  "output_directory": "out",
+  "generation": {
+    "http_client": "dio"
+  }
+}

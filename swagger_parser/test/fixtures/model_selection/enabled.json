@@ -1,0 +1,29 @@
+{
+  "schema_path": "v3_2.yaml",
+  "generation": {
+    "exclude_parameters": [
+      {
+        "name": "x-trace-id",
+        "in": "header"
+      },
+      {
+        "name": "debug",
+        "in": "query",
+        "paths": [
+          "/stations/**"
+        ],
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "name": "session",
+        "in": "cookie"
+      }
+    ],
+    "prune_unused_models": true,
+    "keep_models": [
+      "#/components/schemas/AuditRecord"
+    ]
+  }
+}

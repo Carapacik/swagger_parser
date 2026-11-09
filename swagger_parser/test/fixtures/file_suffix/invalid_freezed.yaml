@@ -1,0 +1,3 @@
+"schema_path": "open_api.yaml"
+"generation":
+  "file_suffix": ".freezed"

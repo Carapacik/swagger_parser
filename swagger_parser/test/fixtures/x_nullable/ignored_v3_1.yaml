@@ -1,0 +1,15 @@
+openapi: "3.1.2"
+info:
+  title: "Nullable fields"
+  version: "1"
+paths: {}
+components:
+  schemas:
+    Example:
+      type: "object"
+      required:
+        - "name"
+      properties:
+        name:
+          type: "string"
+          x-nullable: true

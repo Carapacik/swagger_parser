@@ -1,0 +1,341 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Collections and composition",
+    "version": "1"
+  },
+  "paths": {
+    "/pets": {
+      "post": {
+        "operationId": "savePet",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pet"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Main": {
+        "allOf": [
+          {
+            "$ref": "sub/branches.json#/defs/Left"
+          },
+          {
+            "$ref": "sub/branches.json#/defs/Right"
+          },
+          {
+            "type": "object",
+            "required": [
+              "prop_main",
+              "count",
+              "snake-key",
+              "snake_key"
+            ],
+            "properties": {
+              "prop_main": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer",
+                "maximum": 10
+              },
+              "snake-key": {
+                "type": "string"
+              },
+              "snake_key": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Event": {
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "at"
+            ],
+            "properties": {
+              "at": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Tracker": {
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "events"
+            ],
+            "properties": {
+              "events": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Pet": {
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "trackers"
+            ],
+            "properties": {
+              "trackers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Tracker"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "DisplayImage": {
+        "allOf": [
+          {
+            "$ref": "base.json#/defs/Image~1Source~0"
+          }
+        ]
+      },
+      "ImageUse": {
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "properties": {
+          "image": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DisplayImage"
+              }
+            ]
+          }
+        }
+      },
+      "Recursive": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Recursive"
+            }
+          }
+        }
+      },
+      "NullableIntersection": {
+        "allOf": [
+          {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "NullableBoth": {
+        "allOf": [
+          {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        ]
+      },
+      "Repeated": {
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "code"
+            ],
+            "properties": {
+              "code": {
+                "type": "string",
+                "minLength": 2
+              },
+              "rating": {
+                "type": "number"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "rating"
+            ],
+            "properties": {
+              "code": {
+                "type": "string",
+                "minLength": 2
+              },
+              "rating": {
+                "type": "integer"
+              }
+            }
+          }
+        ]
+      },
+      "OneBranch": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/DisplayImage"
+          }
+        ]
+      },
+      "AnyBranch": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/DisplayImage"
+          }
+        ]
+      },
+      "ImageFragment": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DisplayImage"
+          },
+          {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        ]
+      },
+      "ScalarDefaults": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "limit": {
+                "type": "integer",
+                "minimum": 1,
+                "default": 5
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "limit": {
+                "type": "integer",
+                "maximum": 10,
+                "default": 5
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "limit": {
+                "type": "integer",
+                "multipleOf": 1,
+                "default": 5
+              }
+            }
+          }
+        ]
+      },
+      "OneNullable": {
+        "oneOf": [
+          {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        ]
+      },
+      "AnyNullable": {
+        "anyOf": [
+          {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "swagger_parser": {
+    "schema_path": "directional_v2_0.yaml",
+    "generation": {
+      "type_mappings": [
+        {
+          "schema": "#/definitions/Station",
+          "direction": "request",
+          "dart_type": "CreateStation",
+          "import": "package:swagger_parser_tests/directional_types.dart",
+          "codec": {
+            "import": "package:swagger_parser_tests/directional_codecs.dart",
+            "from_json": "createStationV2FromJson",
+            "to_json": "createStationV2ToJson"
+          }
+        },
+        {
+          "schema": "#/definitions/Station",
+          "direction": "response",
+          "dart_type": "Station",
+          "import": "package:swagger_parser_tests/directional_types.dart",
+          "codec": {
+            "import": "package:swagger_parser_tests/directional_codecs.dart",
+            "from_json": "stationFromJson",
+            "to_json": "stationToJson"
+          }
+        },
+        {
+          "schema": "#/definitions/Partial",
+          "direction": "request",
+          "dart_type": "CreateStation",
+          "import": "package:swagger_parser_tests/directional_types.dart",
+          "codec": {
+            "import": "package:swagger_parser_tests/directional_codecs.dart",
+            "from_json": "createStationV2FromJson",
+            "to_json": "createStationV2ToJson"
+          }
+        },
+        {
+          "schema": "#/definitions/InboundOnly",
+          "direction": "response",
+          "dart_type": "Station",
+          "import": "package:swagger_parser_tests/directional_types.dart",
+          "codec": {
+            "import": "package:swagger_parser_tests/directional_codecs.dart",
+            "from_json": "stationFromJson",
+            "to_json": "stationToJson"
+          }
+        },
+        {
+          "schema": "#/definitions/Preferences",
+          "direction": "request",
+          "dart_type": "PreferenceDraft",
+          "import": "package:swagger_parser_tests/directional_types.dart",
+          "codec": {
+            "import": "package:swagger_parser_tests/directional_codecs.dart",
+            "from_json": "preferenceDraftFromJson",
+            "to_json": "preferenceDraftToJson"
+          },
+          "defaults": [
+            {
+              "value": {
+                "name": "North"
+              },
+              "import": "package:swagger_parser_tests/directional_types.dart",
+              "constant": "defaultDraft"
+            }
+          ]
+        },
+        {
+          "schema": "#/definitions/Preferences",
+          "direction": "response",
+          "dart_type": "PreferenceView",
+          "import": "package:swagger_parser_tests/directional_types.dart",
+          "codec": {
+            "import": "package:swagger_parser_tests/directional_codecs.dart",
+            "from_json": "preferenceViewFromJson",
+            "to_json": "preferenceViewToJson"
+          },
+          "defaults": [
+            {
+              "value": {
+                "name": "North"
+              },
+              "import": "package:swagger_parser_tests/directional_types.dart",
+              "constant": "defaultView"
+            }
+          ]
+        },
+        {
+          "schema": "#/definitions/Label",
+          "direction": "both",
+          "dart_type": "Label",
+          "import": "package:swagger_parser_tests/directional_types.dart",
+          "codec": {
+            "import": "package:swagger_parser_tests/directional_codecs.dart",
+            "from_json": "labelFromJson",
+            "to_json": "labelToJson"
+          }
+        },
+        {
+          "schema": "#/definitions/Label",
+          "direction": "request",
+          "dart_type": "DraftLabel",
+          "import": "package:swagger_parser_tests/directional_types.dart",
+          "codec": {
+            "import": "package:swagger_parser_tests/directional_codecs.dart",
+            "from_json": "draftLabelFromJson",
+            "to_json": "draftLabelToJson"
+          }
+        },
+        {
+          "schema": "#/definitions/Same",
+          "direction": "request",
+          "dart_type": "SharedType",
+          "import": "package:swagger_parser_tests/directional_types.dart",
+          "codec": {
+            "import": "package:swagger_parser_tests/directional_codecs.dart",
+            "from_json": "sharedRequestFromJson",
+            "to_json": "sharedRequestToJson"
+          }
+        },
+        {
+          "schema": "#/definitions/Same",
+          "direction": "response",
+          "dart_type": "SharedType",
+          "import": "package:swagger_parser_tests/directional_types.dart",
+          "codec": {
+            "import": "package:swagger_parser_tests/directional_codecs.dart",
+            "from_json": "sharedResponseFromJson",
+            "to_json": "sharedResponseToJson"
+          }
+        },
+        {
+          "type": "string",
+          "format": "directional-id",
+          "direction": "both",
+          "dart_type": "Label",
+          "import": "package:swagger_parser_tests/directional_types.dart",
+          "codec": {
+            "import": "package:swagger_parser_tests/directional_codecs.dart",
+            "from_json": "labelIdFromJson",
+            "to_json": "labelIdToJson"
+          }
+        },
+        {
+          "type": "string",
+          "format": "directional-id",
+          "direction": "request",
+          "dart_type": "DraftLabel",
+          "import": "package:swagger_parser_tests/directional_types.dart",
+          "codec": {
+            "import": "package:swagger_parser_tests/directional_codecs.dart",
+            "from_json": "draftIdFromJson",
+            "to_json": "draftIdToJson"
+          }
+        }
+      ]
+    }
+  }
+}

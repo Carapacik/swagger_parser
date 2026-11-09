@@ -1,0 +1,132 @@
+swagger: "2.0"
+info:
+  title: "Enum names"
+  version: "1"
+paths: {}
+definitions:
+  Status:
+    type: "integer"
+    enum:
+      - 0
+      - 1
+      - 2
+    x-enumNames:
+      - "Pending"
+      - "Active"
+      - "Disabled"
+  Mode:
+    type: "string"
+    enum:
+      - "q"
+      - "r"
+      - "s"
+    x-enum-varnames:
+      - "QUEUED"
+      - "RUNNING"
+      - "STOPPED"
+  Priority:
+    type: "integer"
+    enum:
+      - 10
+      - 20
+    x-enumNames:
+      - "PreferredLow"
+      - "PreferredHigh"
+    x-enum-varnames:
+      - "IgnoredLow"
+      - "IgnoredHigh"
+  IgnoredLabels:
+    type: "string"
+    enum:
+      - "ok"
+    x-enumNames:
+      - "Selected"
+    x-enum-varnames: null
+  Fallback:
+    type: "integer"
+    enum:
+      - 0
+      - 1
+  Special:
+    type: "string"
+    enum:
+      - "a"
+      - "b"
+      - "c"
+      - "d"
+      - "e"
+      - "line\n\"$quote"
+    x-enumNames:
+      - "default"
+      - "values"
+      - "in-progress"
+      - "in_progress"
+      - "123START"
+      - " spaced name "
+  Replacement:
+    type: "string"
+    enum:
+      - "wire"
+    x-enumNames:
+      - "LEGACY_READY"
+  Flag:
+    type: "boolean"
+    enum:
+      - true
+      - false
+    x-enum-varnames:
+      - "Enabled"
+      - "Disabled"
+  Fraction:
+    type: "number"
+    enum:
+      - 1.5
+      - 2.5
+    x-enumNames:
+      - "Low"
+      - "High"
+  NullableChoice:
+    type: "string"
+    enum:
+      - "first"
+      - null
+      - "last"
+    x-enumNames:
+      - "First"
+      - "NullSlot"
+      - "Last"
+    x-nullable: true
+  Envelope:
+    type: "object"
+    required:
+      - "status"
+      - "mode"
+      - "priority"
+      - "ignoredLabels"
+      - "fallback"
+      - "special"
+      - "replacement"
+      - "flag"
+      - "fraction"
+      - "nullableChoice"
+    properties:
+      status:
+        $ref: "#/definitions/Status"
+      mode:
+        $ref: "#/definitions/Mode"
+      priority:
+        $ref: "#/definitions/Priority"
+      ignoredLabels:
+        $ref: "#/definitions/IgnoredLabels"
+      fallback:
+        $ref: "#/definitions/Fallback"
+      special:
+        $ref: "#/definitions/Special"
+      replacement:
+        $ref: "#/definitions/Replacement"
+      flag:
+        $ref: "#/definitions/Flag"
+      fraction:
+        $ref: "#/definitions/Fraction"
+      nullableChoice:
+        $ref: "#/definitions/NullableChoice"

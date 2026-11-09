@@ -1,0 +1,229 @@
+openapi: "3.0.4"
+info:
+  title: "Custom scalar API"
+  version: "1.0.0"
+paths:
+  "/stations/{id}":
+    get:
+      operationId: "getStation"
+      parameters:
+        -
+          name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "station-id"
+        -
+          name: "X-Station"
+          in: "header"
+          required: true
+          schema:
+            type: "string"
+            format: "station-id"
+        -
+          name: "ids"
+          in: "query"
+          required: true
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              format: "station-id"
+      responses:
+        "200":
+          description: "Value."
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Station"
+  "/id":
+    post:
+      operationId: "echoId"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/StationId"
+      responses:
+        "200":
+          description: "Value."
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/StationId"
+  "/ticket":
+    get:
+      operationId: "getTicket"
+      responses:
+        "200":
+          description: "Value."
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ticket"
+  "/form":
+    post:
+      operationId: "sendForm"
+      requestBody:
+        required: true
+        content:
+          "application/x-www-form-urlencoded":
+            schema:
+              type: "object"
+              required:
+                - "code"
+              properties:
+                code:
+                  type: "string"
+                  format: "station-id"
+      responses:
+        "200":
+          description: "ID."
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/StationId"
+  "/multipart":
+    post:
+      operationId: "sendMultipart"
+      requestBody:
+        required: true
+        content:
+          "multipart/form-data":
+            schema:
+              type: "object"
+              required:
+                - "code"
+              properties:
+                code:
+                  type: "string"
+                  format: "station-id"
+      responses:
+        "200":
+          description: "ID."
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/StationId"
+  "/text":
+    post:
+      operationId: "echoText"
+      requestBody:
+        required: true
+        content:
+          "text/plain":
+            schema:
+              $ref: "#/components/schemas/StationId"
+      responses:
+        "200":
+          description: "ID."
+          content:
+            "text/plain":
+              schema:
+                $ref: "#/components/schemas/StationId"
+components:
+  schemas:
+    StationId:
+      type: "string"
+      format: "station-id"
+      minLength: 1
+    SecondaryId:
+      type: "string"
+      format: "station-id"
+    Count:
+      type: "integer"
+      format: "count"
+    Ratio:
+      type: "number"
+      format: "ratio"
+    Enabled:
+      type: "boolean"
+      format: "enabled"
+    Station:
+      type: "object"
+      required:
+        - "id"
+        - "count"
+        - "ratio"
+        - "enabled"
+        - "aliases"
+        - "byName"
+        - "date"
+        - "wireId"
+      properties:
+        id:
+          $ref: "#/components/schemas/StationId"
+        count:
+          $ref: "#/components/schemas/Count"
+        ratio:
+          $ref: "#/components/schemas/Ratio"
+        enabled:
+          $ref: "#/components/schemas/Enabled"
+        aliases:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/StationId"
+        byName:
+          type: "object"
+          additionalProperties:
+            $ref: "#/components/schemas/SecondaryId"
+        date:
+          type: "string"
+          format: "date"
+        note:
+          type: "string"
+          format: "station-id"
+          nullable: true
+        optionalId:
+          $ref: "#/components/schemas/StationId"
+        wireId:
+          $ref: "#/components/schemas/WireId"
+      additionalProperties: false
+    Ticket:
+      type: "object"
+      required:
+        - "id"
+      properties:
+        id:
+          $ref: "#/components/schemas/StationId"
+      additionalProperties: false
+    Defaulted:
+      type: "string"
+      default: "ready"
+    BadObject:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+    Choice:
+      oneOf:
+        -
+          title: "Id"
+          $ref: "#/components/schemas/StationId"
+        -
+          title: "Count"
+          $ref: "#/components/schemas/Count"
+    WireId:
+      type: "string"
+      pattern: "^wire:"
+    Tagged:
+      type: "object"
+      discriminator:
+        propertyName: "kind"
+      required:
+        - "kind"
+      properties:
+        kind:
+          type: "string"
+          format: "station-id"
+          enum:
+            - "stop"
+      additionalProperties: false
+    AnyChoice:
+      anyOf:
+        -
+          $ref: "#/components/schemas/StationId"
+        -
+          $ref: "#/components/schemas/Count"

@@ -1,0 +1,72 @@
+openapi: 3.1.2
+info:
+  title: Client groups
+  version: '1'
+paths:
+  /:
+    $ref: '#/components/pathItems/Status'
+  /{tenant}/status:
+    parameters:
+      - name: tenant
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Status'
+  /v1/stations:
+    $ref: '#/components/pathItems/Status'
+  /v1/users:
+    $ref: '#/components/pathItems/Status'
+  /work-orders:
+    $ref: '#/components/pathItems/Status'
+  /work_orders:
+    $ref: '#/components/pathItems/Status'
+  /versions:
+    get:
+      tags:
+        - Api
+      responses:
+        '200':
+          $ref: '#/components/responses/Status'
+  /users:
+    get:
+      tags:
+        - Station
+        - Admin
+      responses:
+        '200':
+          $ref: '#/components/responses/Status'
+  /import:
+    post:
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Status'
+components:
+  pathItems:
+    Status:
+      get:
+        responses:
+          '200':
+            $ref: '#/components/responses/Status'
+  responses:
+    Status:
+      description: Service status
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Status'
+  schemas:
+    Status:
+      type: object
+      properties:
+        ready:
+          type: boolean

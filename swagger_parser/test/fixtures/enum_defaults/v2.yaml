@@ -1,0 +1,323 @@
+"swagger": "2.0"
+"info":
+  "title": "Enum defaults"
+  "version": "1"
+"paths":
+  "/defaults":
+    "get":
+      "operationId": "getDefaults"
+      "parameters":
+        - "$ref": "#/parameters/UnitParameter"
+        - "name": "composed"
+          "in": "query"
+          "type": "string"
+          "enum":
+            - "celsius"
+            - "fahrenheit"
+          "default": "celsius"
+        - "name": "sort"
+          "in": "query"
+          "type": "string"
+          "enum":
+            - "asc"
+            - "desc"
+            - "DEFAULT"
+          "default": "asc"
+        - "name": "protected"
+          "in": "query"
+          "type": "string"
+          "enum":
+            - "asc"
+            - "desc"
+            - "DEFAULT"
+          "default": "DEFAULT"
+        - "name": "inlineState"
+          "in": "query"
+          "type": "string"
+          "enum":
+            - "success"
+            - "paused"
+          "x-enum-varnames":
+            - "LEGACY_READY"
+            - "LEGACY_PAUSED"
+          "default": "success"
+        - "name": "numeric"
+          "in": "query"
+          "type": "integer"
+          "enum":
+            - 0
+            - 5
+          "x-enumNames":
+            - "LEGACY_ZERO"
+            - "LEGACY_HIGH"
+          "default": 5
+        - "name": "special"
+          "in": "query"
+          "type": "string"
+          "enum":
+            - "quote'\"\\$line\nnext"
+            - "plain"
+          "default": "quote'\"\\$line\nnext"
+      "responses":
+        "204":
+          "description": "Done"
+  "/form":
+    "post":
+      "operationId": "submitForm"
+      "responses":
+        "204":
+          "description": "Done"
+      "consumes":
+        - "application/x-www-form-urlencoded"
+      "parameters":
+        - "name": "token"
+          "in": "formData"
+          "type": "string"
+          "required": true
+        - "name": "unit"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "celsius"
+            - "fahrenheit"
+          "default": "celsius"
+        - "name": "composed"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "celsius"
+            - "fahrenheit"
+          "default": "celsius"
+        - "name": "sort"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "asc"
+            - "desc"
+            - "DEFAULT"
+          "default": "asc"
+        - "name": "protected"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "asc"
+            - "desc"
+            - "DEFAULT"
+          "default": "DEFAULT"
+        - "name": "inlineState"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "success"
+            - "paused"
+          "x-enum-varnames":
+            - "LEGACY_READY"
+            - "LEGACY_PAUSED"
+          "default": "success"
+        - "name": "numeric"
+          "in": "formData"
+          "type": "integer"
+          "enum":
+            - 0
+            - 5
+          "x-enumNames":
+            - "LEGACY_ZERO"
+            - "LEGACY_HIGH"
+          "default": 5
+        - "name": "special"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "quote'\"\\$line\nnext"
+            - "plain"
+          "default": "quote'\"\\$line\nnext"
+        - "name": "nullable"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "available"
+            - null
+          "default": null
+          "x-nullable": true
+  "/settings":
+    "post":
+      "operationId": "saveSettings"
+      "description": "Save settings.\nKeep enum wire values."
+      "responses":
+        "204":
+          "description": "Done"
+      "parameters":
+        - "name": "body"
+          "in": "body"
+          "required": true
+          "schema":
+            "$ref": "#/definitions/Settings"
+  "/multipart":
+    "post":
+      "operationId": "submitMultipart"
+      "responses":
+        "204":
+          "description": "Done"
+      "consumes":
+        - "multipart/form-data"
+      "parameters":
+        - "name": "token"
+          "in": "formData"
+          "type": "string"
+          "required": true
+        - "name": "unit"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "celsius"
+            - "fahrenheit"
+          "default": "celsius"
+        - "name": "composed"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "celsius"
+            - "fahrenheit"
+          "default": "celsius"
+        - "name": "sort"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "asc"
+            - "desc"
+            - "DEFAULT"
+          "default": "asc"
+        - "name": "protected"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "asc"
+            - "desc"
+            - "DEFAULT"
+          "default": "DEFAULT"
+        - "name": "inlineState"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "success"
+            - "paused"
+          "x-enum-varnames":
+            - "LEGACY_READY"
+            - "LEGACY_PAUSED"
+          "default": "success"
+        - "name": "numeric"
+          "in": "formData"
+          "type": "integer"
+          "enum":
+            - 0
+            - 5
+          "x-enumNames":
+            - "LEGACY_ZERO"
+            - "LEGACY_HIGH"
+          "default": 5
+        - "name": "special"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "quote'\"\\$line\nnext"
+            - "plain"
+          "default": "quote'\"\\$line\nnext"
+        - "name": "nullable"
+          "in": "formData"
+          "type": "string"
+          "enum":
+            - "available"
+            - null
+          "default": null
+          "x-nullable": true
+"parameters":
+  "UnitParameter":
+    "name": "unit"
+    "in": "query"
+    "type": "string"
+    "enum":
+      - "celsius"
+      - "fahrenheit"
+    "default": "celsius"
+"consumes":
+  - "application/json"
+"definitions":
+  "Unit":
+    "type": "string"
+    "enum":
+      - "celsius"
+      - "fahrenheit"
+    "default": "celsius"
+  "Sort":
+    "type": "string"
+    "enum":
+      - "asc"
+      - "desc"
+      - "DEFAULT"
+    "default": "asc"
+  "Phase":
+    "type": "string"
+    "enum":
+      - "success"
+      - "paused"
+    "x-enum-varnames":
+      - "LEGACY_READY"
+      - "LEGACY_PAUSED"
+    "default": "success"
+  "Numeric":
+    "type": "integer"
+    "enum":
+      - 0
+      - 5
+    "x-enumNames":
+      - "LEGACY_ZERO"
+      - "LEGACY_HIGH"
+    "default": 5
+  "Special":
+    "type": "string"
+    "enum":
+      - "quote'\"\\$line\nnext"
+      - "plain"
+    "default": "quote'\"\\$line\nnext"
+  "Nullable":
+    "type": "string"
+    "enum":
+      - "available"
+      - null
+    "default": null
+    "x-nullable": true
+  "UnitAlias":
+    "allOf":
+      - "$ref": "#/definitions/Unit"
+  "ProtectedSort":
+    "allOf":
+      - "$ref": "#/definitions/Sort"
+    "default": "DEFAULT"
+  "Settings":
+    "description": "Settings body.\nKeep enum wire values."
+    "type": "object"
+    "additionalProperties": false
+    "properties":
+      "unit":
+        "$ref": "#/definitions/Unit"
+      "composed":
+        "$ref": "#/definitions/UnitAlias"
+      "sort":
+        "$ref": "#/definitions/Sort"
+      "protected":
+        "$ref": "#/definitions/ProtectedSort"
+      "inlineState":
+        "type": "string"
+        "enum":
+          - "success"
+          - "paused"
+        "x-enum-varnames":
+          - "LEGACY_READY"
+          - "LEGACY_PAUSED"
+        "default": "success"
+      "numeric":
+        "$ref": "#/definitions/Numeric"
+      "special":
+        "$ref": "#/definitions/Special"
+      "nullable":
+        "$ref": "#/definitions/Nullable"

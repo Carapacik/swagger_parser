@@ -1,0 +1,13 @@
+name: swagger_parser_workspace
+publish_to: none
+environment:
+  sdk: ^3.13.0
+workspace:
+  - swagger_parser
+  - swagger_parser_core
+  - swagger_parser_pages
+  - swagger_parser_templates
+  - swagger_parser_tests
+
+dev_dependencies:
+  carapacik_lints: ^3.13.1

@@ -1,0 +1,72 @@
+openapi: 3.2.1
+info:
+  title: Station uploads
+  version: '1'
+servers:
+  - url: /default
+security:
+  - token: []
+paths:
+  /uploads:
+    servers:
+      - url: /uploads
+    additionalOperations:
+      Report:
+        security: []
+        requestBody:
+          content:
+            multipart/form-data:
+              schema:
+                type: object
+              encoding:
+                photo:
+                  contentType: image/png
+                  headers:
+                    X-Id:
+                      schema:
+                        type: integer
+        callbacks:
+          done:
+            $ref: '#/components/callbacks/Done'
+        responses:
+          '200':
+            description: Events
+            content:
+              text/event-stream:
+                itemSchema:
+                  type: string
+    query:
+      servers:
+        - url: /search
+      parameters:
+        - name: filter
+          in: querystring
+          content:
+            application/json:
+              schema:
+                type: string
+      responses:
+        '204':
+          description: Empty
+webhooks:
+  changed:
+    post:
+      responses:
+        '204':
+          description: Recorded
+components:
+  securitySchemes:
+    token:
+      type: apiKey
+      in: header
+      name: X-Token
+  callbacks:
+    Done:
+      '{$request.body#/url}':
+        post:
+          callbacks:
+            again:
+              $ref: '#/components/callbacks/Done'
+          responses:
+            '204':
+              description: Recorded

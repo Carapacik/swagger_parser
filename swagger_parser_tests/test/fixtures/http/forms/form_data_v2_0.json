@@ -1,0 +1,65 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Station forms",
+    "version": "1"
+  },
+  "paths": {
+    "/photos": {
+      "post": {
+        "operationId": "upload",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "photo",
+            "in": "formData",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "name": "label",
+            "in": "formData",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Uploaded"
+          }
+        }
+      }
+    },
+    "/form": {
+      "post": {
+        "operationId": "sendForm",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "station",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tags",
+            "in": "formData",
+            "type": "array",
+            "collectionFormat": "pipes",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Saved"
+          }
+        }
+      }
+    }
+  }
+}

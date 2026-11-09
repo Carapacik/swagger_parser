@@ -1,0 +1,59 @@
+"swagger": "2.0"
+"info":
+  "title": "Binary responses"
+  "version": "1"
+"paths":
+  "/pdf":
+    "get":
+      "operationId": "pdf"
+      "produces":
+        - "application/pdf"
+      "responses":
+        "200":
+          "description": "Result."
+          "schema":
+            "type": "file"
+        "204":
+          "description": "No content."
+  "/spreadsheet":
+    "get":
+      "operationId": "spreadsheet"
+      "produces":
+        - "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      "responses":
+        "200":
+          "description": "Result."
+          "schema":
+            "type": "file"
+        "204":
+          "description": "No content."
+  "/bytes":
+    "get":
+      "operationId": "bytes"
+      "produces":
+        - "application/octet-stream"
+      "responses":
+        "200":
+          "description": "Result."
+          "schema":
+            "type": "file"
+        "204":
+          "description": "No content."
+  "/metadata":
+    "get":
+      "operationId": "metadata"
+      "produces":
+        - "application/json"
+      "responses":
+        "200":
+          "description": "Result."
+          "schema":
+            "$ref": "#/definitions/Problem"
+"definitions":
+  "Problem":
+    "type": "object"
+    "required":
+      - "message"
+    "properties":
+      "message":
+        "type": "string"

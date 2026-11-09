@@ -1,0 +1,76 @@
+swagger: '2.0'
+info:
+  title: Stations
+  version: '1'
+consumes:
+  - application/json
+host: stations.example
+basePath: /v1
+schemes:
+  - https
+produces:
+  - application/json
+paths:
+  /stations:
+    post:
+      parameters:
+        - name: station
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Station'
+      responses:
+        '201':
+          description: Station created
+          schema:
+            $ref: '#/definitions/Station'
+          headers:
+            Location:
+              type: string
+        '400':
+          description: Invalid station
+          schema:
+            $ref: '#/definitions/Problem'
+  /stations/{id}:
+    parameters:
+      - $ref: '#/parameters/StationId'
+    get:
+      parameters:
+        - name: tag
+          in: query
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+      responses:
+        '200':
+          description: Station found
+          schema:
+            $ref: '#/definitions/Station'
+        '404':
+          description: Station missing
+          schema:
+            $ref: '#/definitions/Problem'
+parameters:
+  StationId:
+    name: id
+    in: path
+    required: true
+    type: string
+definitions:
+  Station:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: string
+      parent:
+        $ref: '#/definitions/Station'
+  Problem:
+    type: object
+    properties:
+      detail:
+        type: string
+  Unused:
+    type: integer

@@ -1,0 +1,17 @@
+{
+  "overrides": {
+    "models": "// Custom model output.\n{{defaultSource}}\n",
+    "client": "{{defaultSource}}\nabstract final class {{library.clientName}}Routes {\n{{#library.operations}}\n  static const {{name}} = {{pathLiteral}};\n{{/library.operations}}\n}\n"
+  },
+  "files": [
+    {
+      "output": "helpers/page.dart",
+      "source": "class Page<T> {\n  const Page({required this.items});\n  final List<T> items;\n}\n"
+    },
+    {
+      "output": "helpers/internal.dart",
+      "export": false,
+      "source": "const internalValue = 1;\n"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+name: Question
+description: Ask about usage or supported behavior.
+labels:
+  - question
+body:
+  - type: markdown
+    attributes:
+      value: Write a short English title that identifies the question. Omit type prefixes.
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: State what you need to understand or accomplish.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Include the package name and version, relevant config, schema, or code.
+  - type: textarea
+    id: attempts
+    attributes:
+      label: What you tried
+      description: Describe the steps you tried and the result.

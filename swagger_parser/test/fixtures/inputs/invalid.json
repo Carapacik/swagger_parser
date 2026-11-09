@@ -1,0 +1,18 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "Invalid",
+    "version": "1"
+  },
+  "paths": {
+    "/broken/{id}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}

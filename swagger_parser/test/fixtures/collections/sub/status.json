@@ -1,0 +1,24 @@
+{
+  "definitions": {
+    "ServiceStatusChain": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "children": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/ServiceStatusChain"
+          }
+        },
+        "meta": {
+          "$ref": "../base.json#/defs/Meta~1Value~0"
+        }
+      }
+    }
+  }
+}

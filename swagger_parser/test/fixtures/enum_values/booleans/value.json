@@ -1,0 +1,22 @@
+{
+  "enabled": true,
+  "reversed": false,
+  "inferred": true,
+  "nullable": null,
+  "notNullable": true,
+  "flags": [
+    true,
+    false
+  ],
+  "byName": {
+    "a": true,
+    "b": false
+  },
+  "named": false,
+  "onlyTrue": true,
+  "onlyFalse": false,
+  "namedCases": true,
+  "varNames": false,
+  "bothNames": true,
+  "mixed": "unknown"
+}

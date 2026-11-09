@@ -1,0 +1,445 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Required inference",
+    "version": "1"
+  },
+  "paths": {
+    "/station": {
+      "get": {
+        "operationId": "getStation",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found",
+            "schema": {
+              "$ref": "#/definitions/Station"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "updateStation",
+        "responses": {
+          "200": {
+            "description": "Found",
+            "schema": {
+              "$ref": "#/definitions/Station"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Station"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "definitions": {
+    "Text": {
+      "type": "string"
+    },
+    "NullableText": {
+      "type": "string",
+      "x-nullable": true
+    },
+    "Count": {
+      "type": "integer",
+      "default": 5
+    },
+    "Station": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "refValue": {
+          "$ref": "#/definitions/Text"
+        },
+        "refNullable": {
+          "$ref": "#/definitions/NullableText"
+        },
+        "refDefault": {
+          "$ref": "#/definitions/Count"
+        },
+        "unknown": {},
+        "externalNullable": {
+          "$ref": "external_v2.json#/definitions/Nullable"
+        },
+        "externalDefault": {
+          "$ref": "external_v2.json#/definitions/Default"
+        }
+      }
+    },
+    "Empty": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "refValue": {
+          "$ref": "#/definitions/Text"
+        },
+        "refNullable": {
+          "$ref": "#/definitions/NullableText"
+        },
+        "refDefault": {
+          "$ref": "#/definitions/Count"
+        },
+        "unknown": {},
+        "externalNullable": {
+          "$ref": "external_v2.json#/definitions/Nullable"
+        },
+        "externalDefault": {
+          "$ref": "external_v2.json#/definitions/Default"
+        }
+      }
+    },
+    "Partial": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "refValue": {
+          "$ref": "#/definitions/Text"
+        },
+        "refNullable": {
+          "$ref": "#/definitions/NullableText"
+        },
+        "refDefault": {
+          "$ref": "#/definitions/Count"
+        },
+        "unknown": {},
+        "externalNullable": {
+          "$ref": "external_v2.json#/definitions/Nullable"
+        },
+        "externalDefault": {
+          "$ref": "external_v2.json#/definitions/Default"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "Base": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "type": "string"
+        }
+      }
+    },
+    "AllMissing": {
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "first": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "second": {
+              "type": "integer"
+            }
+          }
+        }
+      ]
+    },
+    "AllEmpty": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "extra": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "AllPartial": {
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "first": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "first"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "second": {
+              "type": "integer"
+            }
+          }
+        }
+      ]
+    },
+    "AllParentEmpty": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "extra": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "Nested": {
+      "type": "object",
+      "properties": {
+        "child": {
+          "$ref": "#/definitions/Empty"
+        }
+      }
+    },
+    "Directional": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "x-nullable": true
+        }
+      }
+    },
+    "RequiredChild": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "SiblingMissing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "composed": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/RequiredChild"
+            }
+          ]
+        },
+        "plain": {
+          "type": "boolean"
+        },
+        "Code": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "nullable_id": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "nullable_ref": {
+          "$ref": "#/definitions/NullableText"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ref_default": {
+          "$ref": "#/definitions/Count"
+        },
+        "required_default": {
+          "type": "integer",
+          "default": 7
+        }
+      }
+    },
+    "SiblingDirect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "composed": {
+          "$ref": "#/definitions/RequiredChild"
+        },
+        "plain": {
+          "type": "boolean"
+        },
+        "Code": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "nullable_id": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "nullable_ref": {
+          "$ref": "#/definitions/NullableText"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ref_default": {
+          "$ref": "#/definitions/Count"
+        },
+        "required_default": {
+          "type": "integer",
+          "default": 7
+        }
+      }
+    },
+    "SiblingExplicit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "composed": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/RequiredChild"
+            }
+          ]
+        },
+        "plain": {
+          "type": "boolean"
+        },
+        "Code": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "nullable_id": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "nullable_ref": {
+          "$ref": "#/definitions/NullableText"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ref_default": {
+          "$ref": "#/definitions/Count"
+        },
+        "required_default": {
+          "type": "integer",
+          "default": 7
+        }
+      },
+      "required": [
+        "nullable_id",
+        "Code",
+        "required_default"
+      ]
+    },
+    "SiblingReduced": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "composed": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/RequiredChild"
+            }
+          ]
+        },
+        "plain": {
+          "type": "boolean"
+        },
+        "Code": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "nullable_id": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "nullable_ref": {
+          "$ref": "#/definitions/NullableText"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ref_default": {
+          "$ref": "#/definitions/Count"
+        },
+        "required_default": {
+          "type": "integer",
+          "default": 7
+        }
+      },
+      "required": [
+        "nullable_id"
+      ]
+    }
+  }
+}

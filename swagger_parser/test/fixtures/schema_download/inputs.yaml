@@ -1,0 +1,25 @@
+---
+output_directory: batch
+schema_download:
+  credentials:
+  - origin: http://127.0.0.1:PORT_A
+    headers:
+      Authorization:
+        env: SCHEMA_AUTHORIZATION
+      X-Schema-Key: literal-source-key
+      Cookie: session=source-cookie
+inputs:
+  inherited:
+    schema_url: http://127.0.0.1:PORT_A/plain.EXT
+  replaced:
+    schema_url: http://127.0.0.1:PORT_A/plain.EXT
+    schema_download:
+      credentials:
+      - origin: http://127.0.0.1:PORT_A
+        headers:
+          Authorization:
+            env: CHILD_AUTHORIZATION
+  cleared:
+    schema_url: http://127.0.0.1:PORT_A/plain.EXT
+    schema_download:
+      credentials: []

@@ -1,0 +1,24 @@
+openapi: "3.2.1"
+info:
+  title: "Invalid discriminator default"
+  version: "1"
+paths: {}
+components:
+  schemas:
+    Item:
+      type: "object"
+      discriminator:
+        propertyName: "kind"
+      required:
+        - "kind"
+      properties:
+        kind:
+          type: "string"
+          const: "item"
+      default:
+        kind: "other"
+    Holder:
+      type: "object"
+      properties:
+        item:
+          $ref: "#/components/schemas/Item"

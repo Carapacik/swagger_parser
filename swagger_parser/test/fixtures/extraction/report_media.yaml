@@ -1,0 +1,21 @@
+openapi: 3.1.2
+info:
+  title: Reports
+  version: '1'
+paths:
+  /report:
+    get:
+      operationId: getReport
+      responses:
+        '200':
+          description: Report
+          content:
+            application/pdf: {}
+            application/json:
+              schema:
+                type: integer
+        '404':
+          description: No report
+          content:
+            text/plain: {}
+            application/pdf: {}

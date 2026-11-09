@@ -1,0 +1,21 @@
+{
+  "openapi": "3.2.1",
+  "$self": "../../canonical/routes.json",
+  "info": {"title": "Archive", "version": "1"},
+  "components": {
+    "pathItems": {
+      "Archive": {
+        "get": {
+          "operationId": "readArchive",
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {"schema": {"$ref": "../api/models/reading.json#reading"}}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

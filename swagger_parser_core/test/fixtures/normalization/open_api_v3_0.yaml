@@ -1,0 +1,75 @@
+openapi: 3.0.3
+info:
+  title: Station uploads
+  version: '1'
+paths:
+  /stations/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        style: matrix
+        schema:
+          type: string
+    post:
+      parameters:
+        - name: tags
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: grouped
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - $ref: 'shared.yaml#/Trace'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+            encoding:
+              file:
+                contentType: application/octet-stream
+      responses:
+        '204':
+          description: Uploaded
+          headers:
+            X-Count:
+              schema:
+                type: integer
+components:
+  parameters:
+    Filter:
+      name: filter
+      in: query
+      style: deepObject
+      schema:
+        type: object
+    Payload:
+      name: payload
+      in: query
+      content:
+        application/json:
+          schema:
+            type: object
+  callbacks:
+    Notify:
+      '{$request.body#/url}':
+        post:
+          parameters:
+            - name: X-Trace
+              in: header
+              schema:
+                type: string
+          responses:
+            '204':
+              description: Received

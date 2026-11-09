@@ -1,0 +1,11 @@
+{
+  "schema_url": "https://example.com/schema.json",
+  "schema_download": {
+    "credentials": [
+      {
+        "origin": "https://*.example.com",
+        "headers": {}
+      }
+    ]
+  }
+}

@@ -1,0 +1,476 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Enum contracts",
+    "version": "1"
+  },
+  "paths": {
+    "/envelope": {
+      "post": {
+        "operationId": "echoEnvelope",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Envelope"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "schema": {
+              "$ref": "#/definitions/Envelope"
+            }
+          }
+        }
+      }
+    },
+    "/code": {
+      "post": {
+        "operationId": "echoCode",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Code"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "schema": {
+              "$ref": "#/definitions/Code"
+            }
+          }
+        }
+      }
+    },
+    "/codes": {
+      "post": {
+        "operationId": "echoCodes",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Code"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Code"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/external": {
+      "post": {
+        "operationId": "echoExternal",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ExternalCode"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "schema": {
+              "$ref": "#/definitions/ExternalCode"
+            }
+          }
+        }
+      }
+    },
+    "/parameters/{code}": {
+      "get": {
+        "operationId": "parameters",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "north-bound",
+              "south",
+              ""
+            ]
+          },
+          {
+            "name": "X-Flag",
+            "in": "header",
+            "required": true,
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "schema": {
+              "$ref": "#/definitions/Code"
+            }
+          }
+        }
+      }
+    },
+    "/form": {
+      "post": {
+        "operationId": "sendForm",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "formData",
+            "required": true,
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "mode",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "north-bound",
+              "south",
+              ""
+            ]
+          },
+          {
+            "name": "flag",
+            "in": "formData",
+            "required": true,
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "schema": {
+              "$ref": "#/definitions/Code"
+            }
+          }
+        }
+      }
+    },
+    "/multipart": {
+      "post": {
+        "operationId": "sendMultipart",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "formData",
+            "required": true,
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "mode",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "north-bound",
+              "south",
+              ""
+            ]
+          },
+          {
+            "name": "flag",
+            "in": "formData",
+            "required": true,
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Echo value.",
+            "schema": {
+              "$ref": "#/definitions/Code"
+            }
+          }
+        }
+      }
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "Code": {
+      "type": "integer",
+      "enum": [
+        0,
+        1,
+        2
+      ]
+    },
+    "Mode": {
+      "type": "string",
+      "enum": [
+        "north-bound",
+        "south",
+        ""
+      ]
+    },
+    "Flag": {
+      "type": "boolean",
+      "enum": [
+        true
+      ]
+    },
+    "CodeAlias": {
+      "$ref": "#/definitions/Code"
+    },
+    "ExternalCode": {
+      "$ref": "v2_external.json#/definitions/RemoteCode"
+    },
+    "Text": {
+      "type": "string",
+      "enum": [
+        "",
+        "empty",
+        "null",
+        "0",
+        "line\n\"\\$"
+      ]
+    },
+    "NullableText": {
+      "type": "string",
+      "x-nullable": true,
+      "enum": [
+        "",
+        "empty",
+        "null",
+        null
+      ]
+    },
+    "NullableCode": {
+      "type": "integer",
+      "x-nullable": true,
+      "enum": [
+        0,
+        2,
+        null
+      ]
+    },
+    "InferredText": {
+      "enum": [
+        "a\n\"\\$",
+        "b"
+      ]
+    },
+    "InferredCode": {
+      "enum": [
+        1,
+        2
+      ]
+    },
+    "NarrowCode": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Code"
+        },
+        {
+          "type": "integer",
+          "enum": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    "NarrowText": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/InferredText"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "a\n\"\\$"
+          ]
+        }
+      ]
+    },
+    "Envelope": {
+      "type": "object",
+      "required": [
+        "code",
+        "mode",
+        "flag",
+        "alias",
+        "external",
+        "text",
+        "nullableText",
+        "nullableCode",
+        "inferred",
+        "narrowCode",
+        "narrowText",
+        "inlineCode",
+        "inlineMode",
+        "codes",
+        "inlineCodes",
+        "byName",
+        "integral"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/definitions/Code"
+        },
+        "mode": {
+          "$ref": "#/definitions/Mode"
+        },
+        "flag": {
+          "$ref": "#/definitions/Flag"
+        },
+        "alias": {
+          "$ref": "#/definitions/CodeAlias"
+        },
+        "external": {
+          "$ref": "#/definitions/ExternalCode"
+        },
+        "text": {
+          "$ref": "#/definitions/Text"
+        },
+        "nullableText": {
+          "$ref": "#/definitions/NullableText"
+        },
+        "nullableCode": {
+          "$ref": "#/definitions/NullableCode"
+        },
+        "inferred": {
+          "$ref": "#/definitions/InferredCode"
+        },
+        "narrowCode": {
+          "$ref": "#/definitions/NarrowCode"
+        },
+        "narrowText": {
+          "$ref": "#/definitions/NarrowText"
+        },
+        "inlineCode": {
+          "type": "integer",
+          "enum": [
+            0,
+            1,
+            2
+          ]
+        },
+        "inlineMode": {
+          "type": "string",
+          "enum": [
+            "north-bound",
+            "south",
+            ""
+          ]
+        },
+        "codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Code"
+          }
+        },
+        "inlineCodes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2
+            ]
+          }
+        },
+        "byName": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/Mode"
+          }
+        },
+        "integral": {
+          "$ref": "#/definitions/IntegralCode"
+        }
+      }
+    },
+    "ImpossibleCode": {
+      "allOf": [
+        {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        {
+          "type": "integer",
+          "enum": [
+            2
+          ]
+        }
+      ]
+    },
+    "IntegralCode": {
+      "type": "integer",
+      "enum": [
+        1.0e+3
+      ]
+    }
+  }
+}

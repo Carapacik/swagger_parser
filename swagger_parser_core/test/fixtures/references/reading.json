@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example/reading",
+  "$anchor": "reading",
+  "type": "object",
+  "properties": {
+    "previous": {"$ref": "#reading"},
+    "station": {"$ref": "https://stations.example/deploy/api/schemas/station"}
+  }
+}

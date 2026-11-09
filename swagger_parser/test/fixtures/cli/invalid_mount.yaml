@@ -1,0 +1,7 @@
+openapi: 3.2.1
+info:
+  title: Missing path parameter
+  version: '1'
+paths:
+  /stations/{station}/{d}:
+    $ref: 'library.json#/components/pathItems/Nested'

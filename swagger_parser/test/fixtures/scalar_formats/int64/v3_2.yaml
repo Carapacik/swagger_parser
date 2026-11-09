@@ -1,0 +1,34 @@
+openapi: "3.2.1"
+info:
+  title: "V1 regressions"
+  version: "1"
+paths: {}
+components:
+  schemas:
+    Int64:
+      type: "integer"
+      format: "int64"
+    IntAlias:
+      "$ref": "#/components/schemas/Int64"
+    DecimalId:
+      type: "string"
+    Numbers:
+      type: "object"
+      required:
+        - "value"
+        - "alias"
+        - "values"
+        - "exact"
+      properties:
+        value:
+          type: "integer"
+          format: "int64"
+        alias:
+          "$ref": "#/components/schemas/IntAlias"
+        values:
+          type: "array"
+          items:
+            type: "integer"
+            format: "int64"
+        exact:
+          "$ref": "#/components/schemas/DecimalId"

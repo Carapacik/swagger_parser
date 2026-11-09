@@ -1,0 +1,67 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "Parameter defaults",
+    "version": "1"
+  },
+  "paths": {
+    "/invalid": {
+      "get": {
+        "operationId": "invalid",
+        "parameters": [
+          {
+            "name": "time",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "valid"
+              ],
+              "default": "unknown"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Station": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateStation": {
+        "type": "object",
+        "default": {
+          "name": "Root"
+        },
+        "properties": {
+          "name": {
+            "type": "string",
+            "default": "Unnamed"
+          }
+        }
+      }
+    }
+  }
+}

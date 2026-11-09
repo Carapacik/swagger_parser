@@ -1,0 +1,8 @@
+swagger: "2.0"
+info:
+  title: "External types"
+  version: "1"
+paths: {}
+definitions:
+  StationId:
+    type: "string"

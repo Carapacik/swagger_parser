@@ -1,24 +1,7 @@
-# Web interface for swagger_parser
+# swagger_parser_pages
 
-[https://carapacik.github.io/swagger_parser](https://carapacik.github.io/swagger_parser)
+Browser app built with Dart and Jaspr. Generate Dart code from OpenAPI JSON or
+YAML, edit config, apply custom templates, and download a ZIP. Runs locally in
+the browser. External references are not supported.
 
-The application generates Dart and Kotlin clients entirely in the browser. Its
-configuration form mirrors every `SWPConfig` generation option.
-
-## Development
-
-```sh
-flutter pub get
-flutter analyze
-flutter test
-flutter run -d chrome
-```
-
-Create the same WebAssembly release used by GitHub Pages:
-
-```sh
-flutter build web --wasm --release --base-href /swagger_parser/
-```
-
-Application code follows the standard Flutter package layout: `lib/main.dart`
-is the bootstrap entry point and implementation details live under `lib/src/`.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for checks.

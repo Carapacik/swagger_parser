@@ -1,0 +1,51 @@
+Station:
+  parameters:
+    - $ref: 'parameters.json#/alias'
+  get:
+    operationId: checkHealth
+  query:
+    operationId: queryStations
+Broken:
+  parameters:
+    - $ref: 'parameters.json#/alias'
+  get:
+    operationId: getStation
+  additionalOperations:
+    REPORT:
+      operationId: sendReport
+      parameters:
+        - $ref: 'parameters.json#/station'
+        - name: station
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: X-Request-ID
+          in: header
+          schema:
+            type: string
+        - name: x-request-id
+          in: header
+          schema:
+            type: string
+ById:
+  parameters:
+    - $ref: 'parameters.json#/id'
+  get:
+    operationId: readById
+Recursive:
+  $ref: '#/RecursiveAlias'
+  get:
+    operationId: readTree
+    callbacks:
+      tree:
+        '{$request.body#/url}':
+          $ref: '#/Recursive'
+RecursiveAlias:
+  $ref: '#/Recursive'
+  post:
+    operationId: writeTree
+Hidden: {}
+StationGroup:
+  parameters:
+    - $ref: 'parameters.json#/id'

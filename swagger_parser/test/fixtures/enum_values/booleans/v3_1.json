@@ -1,0 +1,298 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Boolean enums",
+    "version": "1"
+  },
+  "paths": {
+    "/settings": {
+      "get": {
+        "operationId": "getSettings",
+        "responses": {
+          "200": {
+            "description": "Settings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Settings"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "enabled",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "enum": [
+                true,
+                false
+              ],
+              "default": true
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Flag": {
+        "type": "boolean",
+        "enum": [
+          true,
+          false
+        ]
+      },
+      "NullableFlag": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "enum": [
+          true,
+          false,
+          null
+        ]
+      },
+      "Settings": {
+        "type": "object",
+        "required": [
+          "enabled",
+          "reversed",
+          "inferred",
+          "nullable",
+          "notNullable",
+          "flags",
+          "byName",
+          "named",
+          "onlyTrue",
+          "onlyFalse",
+          "namedCases",
+          "varNames",
+          "bothNames",
+          "mixed",
+          "constTrue",
+          "constFalse"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "enum": [
+              true,
+              false
+            ]
+          },
+          "reversed": {
+            "type": "boolean",
+            "enum": [
+              false,
+              true
+            ]
+          },
+          "inferred": {
+            "enum": [
+              true,
+              false
+            ]
+          },
+          "nullable": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "enum": [
+              true,
+              false,
+              null
+            ]
+          },
+          "notNullable": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "enum": [
+              true,
+              false
+            ]
+          },
+          "optional": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "enum": [
+              true,
+              false,
+              null
+            ]
+          },
+          "defaulted": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "enum": [
+              true,
+              false,
+              null
+            ],
+            "default": false
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "boolean",
+              "enum": [
+                true,
+                false
+              ]
+            }
+          },
+          "byName": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "boolean",
+              "enum": [
+                true,
+                false
+              ]
+            }
+          },
+          "named": {
+            "$ref": "#/components/schemas/Flag"
+          },
+          "onlyTrue": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "onlyFalse": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "namedCases": {
+            "type": "boolean",
+            "enum": [
+              true,
+              false
+            ],
+            "x-enumNames": [
+              "enabled",
+              "disabled"
+            ]
+          },
+          "varNames": {
+            "type": "boolean",
+            "enum": [
+              true,
+              false
+            ],
+            "x-enum-varnames": [
+              "on",
+              "off"
+            ]
+          },
+          "bothNames": {
+            "type": "boolean",
+            "enum": [
+              true,
+              false
+            ],
+            "x-enumNames": [
+              "yes",
+              "no"
+            ],
+            "x-enum-varnames": [
+              "on",
+              "off"
+            ]
+          },
+          "mixed": {
+            "enum": [
+              true,
+              false,
+              "unknown"
+            ]
+          },
+          "constTrue": {
+            "type": "boolean",
+            "enum": [
+              true,
+              false
+            ],
+            "const": true
+          },
+          "constFalse": {
+            "type": "boolean",
+            "enum": [
+              true,
+              false
+            ],
+            "const": false
+          }
+        }
+      },
+      "TrueOrNull": {
+        "oneOf": [
+          {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "AnyBoolean": {
+        "anyOf": [
+          {
+            "type": "boolean",
+            "enum": [
+              true,
+              false
+            ]
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "OneBoolean": {
+        "oneOf": [
+          {
+            "type": "boolean",
+            "enum": [
+              true,
+              false
+            ]
+          },
+          {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        ]
+      },
+      "ConstChoice": {
+        "oneOf": [
+          {
+            "const": true
+          },
+          {
+            "const": false
+          }
+        ]
+      }
+    }
+  }
+}

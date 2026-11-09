@@ -1,0 +1,32 @@
+openapi: 3.2.1
+info:
+  title: Extensible events
+  version: '1'
+components:
+  schemas:
+    Event:
+      anyOf:
+      - "$ref": "#/components/schemas/Start"
+      - "$ref": "#/components/schemas/Other"
+      discriminator:
+        propertyName: kind
+        mapping:
+          begin: Start
+        defaultMapping: Other
+    Start:
+      allOf:
+        - type: object
+          required:
+            - kind
+          properties:
+            kind:
+              const: begin
+        - type: object
+          required:
+            - time
+          properties:
+            time:
+              type: integer
+    Other:
+      type: object
+      additionalProperties: true

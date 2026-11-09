@@ -1,0 +1,53 @@
+openapi: 3.2.1
+info:
+  title: Stations
+  version: '1'
+tags:
+  - name: stations
+    parent: devices
+  - name: devices
+    parent: stations
+  - name: readings
+    parent: instruments
+  - name: stations
+paths:
+  /stations/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getStation
+    query:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+  /stations/{name}:
+    additionalOperations:
+      REPORT:
+        operationId: getStation
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: string
+
+  /sensors/{sensor}:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer

@@ -1,0 +1,17 @@
+---
+swagger: '2.0'
+info:
+  title: Operation filters
+  version: '1'
+paths:
+  "/stations/{id}":
+    get:
+      operationId: invalidRoute
+      responses:
+        '200':
+          description: OK
+host: example.com
+schemes:
+- https
+produces:
+- application/json

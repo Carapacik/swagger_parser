@@ -1,0 +1,8 @@
+{
+  "name": "X-Trace-Id",
+  "in": "header",
+  "required": true,
+  "schema": {
+    "type": "string"
+  }
+}

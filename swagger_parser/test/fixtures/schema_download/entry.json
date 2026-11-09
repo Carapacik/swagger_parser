@@ -1,0 +1,39 @@
+{
+  "openapi": "3.2.1",
+  "info": {
+    "title": "Authenticated schema",
+    "version": "1"
+  },
+  "paths": {
+    "/stations": {
+      "get": {
+        "operationId": "listStations",
+        "responses": {
+          "200": {
+            "description": "Station",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Station"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Station": {
+        "$ref": "models/station.EXT"
+      },
+      "External": {
+        "$ref": "http://127.0.0.1:PORT_B/shared.EXT"
+      },
+      "Redirected": {
+        "$ref": "http://127.0.0.1:PORT_A/cross-ref.EXT"
+      }
+    }
+  }
+}

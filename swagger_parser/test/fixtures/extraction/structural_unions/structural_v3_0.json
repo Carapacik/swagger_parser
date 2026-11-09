@@ -1,0 +1,26 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Measurements",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Measurement": {
+        "anyOf": [
+          {
+            "type": "number",
+            "minimum": 5,
+            "exclusiveMinimum": true,
+            "multipleOf": 0.5
+          },
+          {
+            "type": "string",
+            "nullable": true
+          }
+        ]
+      }
+    }
+  }
+}

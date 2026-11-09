@@ -1,0 +1,17 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Invalid authentication",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "securitySchemes": {
+      "basic": {
+        "type": "http",
+        "scheme": "basic",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

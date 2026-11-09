@@ -1,0 +1,25 @@
+---
+openapi: 3.2.1
+info:
+  title: Batch stations
+  version: '1'
+paths:
+  "/stations/{id}":
+    "$ref": paths.json
+components:
+  schemas:
+    Station:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      properties:
+        id:
+          type: string
+    Unused:
+      type: object
+      properties:
+        note:
+          type: string
+servers:
+- url: https://example.test

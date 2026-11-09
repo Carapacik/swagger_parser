@@ -1,0 +1,293 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Custom scalar API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/stations/{id}": {
+      "get": {
+        "operationId": "getStation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "station-id"
+          },
+          {
+            "name": "X-Station",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "format": "station-id"
+          },
+          {
+            "name": "ids",
+            "in": "query",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "station-id"
+            },
+            "collectionFormat": "csv"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Value.",
+            "schema": {
+              "$ref": "#/definitions/Station"
+            }
+          }
+        }
+      }
+    },
+    "/id": {
+      "post": {
+        "operationId": "echoId",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StationId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Value.",
+            "schema": {
+              "$ref": "#/definitions/StationId"
+            }
+          }
+        }
+      }
+    },
+    "/ticket": {
+      "get": {
+        "operationId": "getTicket",
+        "responses": {
+          "200": {
+            "description": "Value.",
+            "schema": {
+              "$ref": "#/definitions/Ticket"
+            }
+          }
+        }
+      }
+    },
+    "/form": {
+      "post": {
+        "operationId": "sendForm",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "format": "station-id"
+          }
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "responses": {
+          "200": {
+            "description": "ID.",
+            "schema": {
+              "$ref": "#/definitions/StationId"
+            }
+          }
+        }
+      }
+    },
+    "/multipart": {
+      "post": {
+        "operationId": "sendMultipart",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "format": "station-id"
+          }
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "responses": {
+          "200": {
+            "description": "ID.",
+            "schema": {
+              "$ref": "#/definitions/StationId"
+            }
+          }
+        }
+      }
+    },
+    "/text": {
+      "post": {
+        "operationId": "echoText",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StationId"
+            }
+          }
+        ],
+        "consumes": [
+          "text/plain"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "ID.",
+            "schema": {
+              "$ref": "#/definitions/StationId"
+            }
+          }
+        }
+      }
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "StationId": {
+      "type": "string",
+      "format": "station-id",
+      "minLength": 1
+    },
+    "SecondaryId": {
+      "type": "string",
+      "format": "station-id"
+    },
+    "Count": {
+      "type": "integer",
+      "format": "count"
+    },
+    "Ratio": {
+      "type": "number",
+      "format": "ratio"
+    },
+    "Enabled": {
+      "type": "boolean",
+      "format": "enabled"
+    },
+    "Station": {
+      "type": "object",
+      "required": [
+        "id",
+        "count",
+        "ratio",
+        "enabled",
+        "aliases",
+        "byName",
+        "date",
+        "wireId"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/StationId"
+        },
+        "count": {
+          "$ref": "#/definitions/Count"
+        },
+        "ratio": {
+          "$ref": "#/definitions/Ratio"
+        },
+        "enabled": {
+          "$ref": "#/definitions/Enabled"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StationId"
+          }
+        },
+        "byName": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/SecondaryId"
+          }
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "note": {
+          "type": "string",
+          "format": "station-id",
+          "x-nullable": true
+        },
+        "optionalId": {
+          "$ref": "#/definitions/StationId"
+        },
+        "wireId": {
+          "$ref": "#/definitions/WireId"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Ticket": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/StationId"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Defaulted": {
+      "type": "string",
+      "default": "ready"
+    },
+    "BadObject": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "WireId": {
+      "type": "string",
+      "pattern": "^wire:"
+    },
+    "Tagged": {
+      "type": "object",
+      "discriminator": "kind",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "format": "station-id",
+          "enum": [
+            "stop"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

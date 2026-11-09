@@ -1,0 +1,9 @@
+---
+output_directory: remote_out
+generation:
+  http_client: http
+inputs:
+  first:
+    schema_url: http://127.0.0.1:PORT/first/openapi.json
+  second:
+    schema_url: http://127.0.0.1:PORT/second/openapi.json

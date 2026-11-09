@@ -1,0 +1,22 @@
+{
+  "openapi": "3.2.1",
+  "info": {"title": "Station reports", "version": "1"},
+  "paths": {
+    "/baseline": {"get": {"operationId": "getStation"}},
+    "/stations/{station}": {"$ref": "shared/paths.yaml#/Broken"},
+    "/audit/{id}": {
+      "parameters": [{"$ref": "shared/parameters.json#/filter"}],
+      "post": {}
+    },
+    "/groups/{id}/{region}": {"$ref": "shared/paths.yaml#/StationGroup"},
+    "/unnamed/{id}": {
+      "get": {"parameters": [{"$ref": "shared/parameters.json#/unnamed"}]}
+    },
+    "/optional/{id}": {
+      "get": {"parameters": [{"$ref": "shared/parameters.json#/optional"}]}
+    }
+  },
+  "webhooks": {
+    "report": {"$ref": "shared/library.json#/components/pathItems/Hook"}
+  }
+}

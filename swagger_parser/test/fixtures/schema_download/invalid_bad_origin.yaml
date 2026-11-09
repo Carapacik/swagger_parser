@@ -1,0 +1,6 @@
+---
+schema_url: https://example.com/schema.json
+schema_download:
+  credentials:
+  - origin: https://user:origin-secret@example.com/path
+    headers: {}

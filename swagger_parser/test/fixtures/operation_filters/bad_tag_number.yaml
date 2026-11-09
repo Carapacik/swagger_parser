@@ -1,0 +1,6 @@
+---
+input: routes_v3_2.yaml
+generation:
+  operation_filters:
+    include_tags:
+    - 1
