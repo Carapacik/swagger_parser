@@ -58,7 +58,6 @@ void main() {
                       serializer: serializer,
                       httpClient: backend,
                       usePresenceRecords: records,
-                      inferMissingRequired: false,
                     ),
                   );
               expect(result.diagnostics, isEmpty);

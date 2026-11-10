@@ -105,3 +105,12 @@ aliases, enums, allOf, an inline object, nullable fields, defaults, collections,
 and an unused named DTO. Expected files include the facade, exports, clients,
 models, support code, and part directives. Builder-generated parts are absent.
 Only the facade differs by schema version. JSON and YAML share expected files.
+
+Four focused groups add 14 outputs from paired JSON and block YAML:
+
+- `reference_annotations` reuses types through annotation-only `allOf` properties.
+- `enum_members` preserves negative numeric names and removes duplicate values.
+- `required_inference` checks optional fields by default and explicit inference.
+- `bodyless_success` checks nullable payloads and bodyless dispatch in all three clients.
+
+These inputs match the generator and compiled-consumer regression fixtures.

@@ -1,0 +1,20 @@
+openapi: 3.0.0
+info:
+  title: Example
+  version: '1.0'
+paths: {}
+components:
+  schemas:
+    Doors:
+      type: number
+      enum:
+        - -1
+        - 0
+        - 1
+        - 2
+    Sound:
+      type: string
+      enum:
+        - SQUEAK
+        - NOISE
+        - SQUEAK

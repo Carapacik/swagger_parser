@@ -550,6 +550,7 @@ bool _usesRetrofit(
           (_hasScalarCodec(body.type) ||
               body.fields.any((f) => _hasScalarCodec(f.type)))) ||
       op.variants.isNotEmpty ||
+      op.emptySuccessStatuses.isNotEmpty ||
       (body != null && !form && body.mediaType != 'application/json') ||
       op.parameters.any(
         (p) =>
@@ -1007,10 +1008,10 @@ cb.Method _directMethod(
                 if (wrapped)
                   DartTypeReference(
                     symbol: wrapper,
-                    typeArguments: [op.response],
+                    typeArguments: [op.returnType],
                   )
                 else
-                  op.response,
+                  op.returnType,
               ],
             ),
             qualified: qualified,
@@ -1209,7 +1210,10 @@ cb.Method _directMethod(
       : checks.isNotEmpty
       ? checks.join(' || ')
       : op.status != null
-      ? '$status == ${op.status}'
+      ? [
+          '$status == ${op.status}',
+          for (final code in op.emptySuccessStatuses) '$status == $code',
+        ].join(' || ')
       : null;
   if (!packageHttp) {
     final contentType = payload == null
@@ -1337,6 +1341,24 @@ cb.Method _directMethod(
     }
     m.body = cb.Code(body.toString());
     return;
+  }
+  if (op.emptySuccessStatuses.isNotEmpty) {
+    final String empty = op.emptySuccessStatuses
+        .map((code) => 'response.statusCode == $code')
+        .join(' || ');
+    body.write('if ($empty) {');
+    if (streamed && !(packageHttp && wrapped && !_returnsStream(op))) {
+      body.write('await $source.drain<void>();');
+    }
+    if (stream) {
+      body.write('return;');
+    } else {
+      final value = _returnsStream(op) ? 'const Stream.empty()' : 'null';
+      body.write(
+        'return ${wrapped ? _wrapResponse(wrapper, value, packageHttp: packageHttp, streamed: _returnsStream(op)) : value};',
+      );
+    }
+    body.write('}');
   }
   String value = _readPayload(
     json,

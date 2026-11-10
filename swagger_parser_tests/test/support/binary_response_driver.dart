@@ -14,8 +14,10 @@ String binaryResponseDriver(
   String read(String method, String variant) => all
       ? '(await client.$method() as api.${variant}200).value'
       : wrapped
-      ? '(await client.$method()).data${backend == HttpClientBackend.dio ? '!' : ''}'
-      : '${stream ? '' : 'await '}client.$method()';
+      ? '(await client.$method()).data${!stream || backend == HttpClientBackend.dio ? '!' : ''}'
+      : stream
+      ? 'client.$method()'
+      : '(await client.$method())!';
   return '''
 import 'dart:async';
 ${all && version != 'v2' ? "import 'dart:convert';" : ''}
@@ -51,7 +53,12 @@ void main() {
   test('keeps an empty binary response distinct from a bodyless status', () async {
     probe.bytes = [];
     expect(await drainPdf(), isEmpty);
-    ${all ? "probe.status = 204; expect(await client.pdf(), isA<api.Pdf204>());" : ''}
+    probe.status = 204;
+    ${all
+      ? "expect(await client.pdf(), isA<api.Pdf204>());"
+      : stream
+      ? 'expect(await (await pdf()).toList(), isEmpty);'
+      : 'expect(${wrapped ? "(await client.pdf()).data" : "await client.pdf()"}, isNull);'}
   });
   test('preserves byte order across non-UTF8 chunks', () async {
     final bytes = payloads['bytes']!;

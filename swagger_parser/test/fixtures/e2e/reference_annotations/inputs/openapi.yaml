@@ -1,0 +1,33 @@
+openapi: 3.0.0
+info:
+  title: Example
+  version: '1.0'
+paths: {}
+components:
+  schemas:
+    Status:
+      type: string
+      enum:
+        - OPEN
+        - CLOSED
+    Bar:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+    Foo:
+      type: object
+      properties:
+        status:
+          description: Current status.
+          allOf:
+            - $ref: '#/components/schemas/Status'
+        bar:
+          description: The bar.
+          allOf:
+            - $ref: '#/components/schemas/Bar'
+      required:
+        - status
+        - bar

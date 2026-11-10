@@ -37,6 +37,7 @@ void main() {
     expect(config.value('root_api_class_name'), 'Api');
     expect(config.value('page_width'), 80);
     expect(config.value('generate_docs'), isTrue);
+    expect(config.value('infer_missing_required'), isFalse);
     expect(config.parseConfig.maxDepth, 128);
     expect(config.parseConfig.captureSourceLocations, isTrue);
     expect(config.parseConfig.unknownFields, UnknownFieldPolicy.preserve);

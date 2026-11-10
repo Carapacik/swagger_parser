@@ -206,7 +206,7 @@ void main() {
     );
     expect(
       statuses['default_client/api_client.dart'],
-      contains('Future<Station> lookupStation('),
+      contains('Future<Station?> lookupStation('),
     );
     expect(
       all.keys,
@@ -599,7 +599,7 @@ Future<void> main() async {
   assert(probe.request.headers['X-Revision'] == 'default');
   dio.options.headers.remove('X-Revision');
   final typed = all.ApiClient(dio);
-  assert((await lookup.lookupStation(xRequestId: 'first')).name == 'central');
+  assert((await lookup.lookupStation(xRequestId: 'first'))!.name == 'central');
   assert((await typed.getStation(id: 'north', xRequestId: 'typed') as all.GetStation200).value.name == 'central');
   probe.status = 204;
   probe.body = '';

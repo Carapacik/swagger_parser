@@ -1,0 +1,17 @@
+cases:
+  - name: generates required inference with default settings
+    config: configs/default.yaml
+    output: out
+    expected:
+      json:
+        - expected/default
+      yaml:
+        - expected/default
+  - name: generates required inference with inferred settings
+    config: configs/inferred.yaml
+    output: out
+    expected:
+      json:
+        - expected/inferred
+      yaml:
+        - expected/inferred

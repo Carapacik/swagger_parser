@@ -55,7 +55,6 @@ void main() {
                   config: GenerationConfig(
                     serializer: serializer,
                     httpClient: backend,
-                    inferMissingRequired: false,
                   ),
                 );
             expect(result.diagnostics, isEmpty);

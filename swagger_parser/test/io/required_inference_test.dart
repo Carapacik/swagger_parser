@@ -215,13 +215,13 @@ void main() {
   });
 
   test('loads defaults and per-input overrides from JSON and YAML', () async {
-    expect(const GenerationConfig().inferMissingRequired, true);
+    expect(const GenerationConfig().inferMissingRequired, false);
     expect(const GenerationConfig().usePresenceRecords, false);
     for (final ext in ['json', 'yaml']) {
       final CliConfig defaults = await CliConfig.load(
         configPath: 'test/fixtures/required_inference/config_default.$ext',
       );
-      expect(defaults.generation.inferMissingRequired, true);
+      expect(defaults.generation.inferMissingRequired, false);
       expect(defaults.generation.usePresenceRecords, false);
       final CliConfig disabled = await CliConfig.load(
         configPath: 'test/fixtures/required_inference/config_false.$ext',

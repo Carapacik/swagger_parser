@@ -31,7 +31,6 @@ void main() {
                 source,
                 config: GenerationConfig(
                   usePresenceRecords: true,
-                  inferMissingRequired: false,
                   serializer: serializer,
                 ),
               );
@@ -105,7 +104,6 @@ void main() {
       for (final HttpClientBackend transport in HttpClientBackend.values) {
         final config = GenerationConfig(
           usePresenceRecords: true,
-          inferMissingRequired: false,
           rootApiClassName: 'TransitApi',
           serializer: serializer,
           httpClient: transport,
@@ -134,7 +132,6 @@ void main() {
               namingSource,
               config: GenerationConfig(
                 usePresenceRecords: true,
-                inferMissingRequired: false,
                 rootApiClassName: 'TransitApi',
                 fallbackClientName: 'CommonClient',
                 naming: _naming,
@@ -156,7 +153,6 @@ void main() {
               directionSource,
               config: GenerationConfig(
                 usePresenceRecords: true,
-                inferMissingRequired: false,
                 serializer: serializer,
                 httpClient: transport,
               ),
@@ -174,7 +170,6 @@ void main() {
               defaultSource,
               config: GenerationConfig(
                 usePresenceRecords: true,
-                inferMissingRequired: false,
                 serializer: serializer,
                 httpClient: transport,
               ),
@@ -203,7 +198,6 @@ void main() {
                   unknownSource,
                   config: GenerationConfig(
                     usePresenceRecords: true,
-                    inferMissingRequired: false,
                     serializer: serializer,
                     httpClient: transport,
                     unknownEnumValues: mode,
@@ -237,7 +231,6 @@ void main() {
                   titleSource,
                   config: GenerationConfig(
                     usePresenceRecords: true,
-                    inferMissingRequired: false,
                     serializer: serializer,
                   ),
                 );
@@ -257,7 +250,6 @@ void main() {
                   fixedSource,
                   config: GenerationConfig(
                     usePresenceRecords: true,
-                    inferMissingRequired: false,
                     serializer: serializer,
                     httpClient: transport,
                   ),
@@ -279,7 +271,6 @@ void main() {
                   source,
                   config: GenerationConfig(
                     usePresenceRecords: true,
-                    inferMissingRequired: false,
                     serializer: serializer,
                     httpClient: transport,
                     naming: const NamingConfig(
@@ -305,7 +296,6 @@ void main() {
                 nullableSource,
                 config: GenerationConfig(
                   usePresenceRecords: true,
-                  inferMissingRequired: false,
                   serializer: serializer,
                   httpClient: transport,
                 ),
@@ -319,7 +309,6 @@ void main() {
                 directionSource,
                 config: GenerationConfig(
                   usePresenceRecords: true,
-                  inferMissingRequired: false,
                   serializer: serializer,
                   httpClient: transport,
                   naming: const NamingConfig(

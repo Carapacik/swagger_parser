@@ -64,7 +64,6 @@ void main() {
                     httpClient: backend,
                     generateValidators: true,
                     applyParameterDefaults: true,
-                    inferMissingRequired: false,
                   ),
                 );
             expect(result.diagnostics, isEmpty);

@@ -89,6 +89,7 @@ extension on _Mapping {
           extra: op.extra,
           objectTypes: op.objectTypes,
           variants: op.variants,
+          emptySuccessStatuses: op.emptySuccessStatuses,
           parameters: [
             for (final p in op.parameters)
               DartClientParameter.at(

@@ -70,7 +70,6 @@ void main() {
                     responseMode: mode,
                     generateValidators: true,
                     applyParameterDefaults: true,
-                    inferMissingRequired: false,
                   ),
                 );
             expect(result.diagnostics, isEmpty);

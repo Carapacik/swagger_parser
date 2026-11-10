@@ -1,0 +1,26 @@
+openapi: 3.0.0
+info:
+  title: Example
+  version: '1.0'
+paths:
+  /message:
+    post:
+      operationId: sendMessage
+      responses:
+        '200':
+          description: Reply.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reply'
+        '204':
+          description: No reply.
+components:
+  schemas:
+    Reply:
+      type: object
+      properties:
+        text:
+          type: string
+      required:
+        - text

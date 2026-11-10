@@ -133,9 +133,9 @@ void main() {
             expect(results, contains('models.Station value'));
             expect(results, isNot(contains('LookupStation')));
           } else {
-            expect(client, contains("@Path('station_id')"));
-            expect(client, contains("'/stations/{station_id}'"));
-            expect(client, contains('Future<Station> getStation('));
+            expect(client, contains('Uri.encodeComponent(stationId)'));
+            expect(client, contains('"/stations/"'));
+            expect(client, contains('Future<Station?> getStation('));
             expect(
               files.keys.where((p) => p.endsWith('_results.dart')),
               isEmpty,

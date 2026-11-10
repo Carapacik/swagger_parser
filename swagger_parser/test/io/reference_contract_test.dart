@@ -175,7 +175,6 @@ void main() {
                   serializer: serializer,
                   generateValidators: true,
                   applyParameterDefaults: true,
-                  inferMissingRequired: false,
                 ),
               );
           expect(result.diagnostics, isEmpty);

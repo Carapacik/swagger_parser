@@ -393,7 +393,7 @@ void main() {
       expect(
         await file('lib/generated/stations/stations_client.dart')
             .readAsString(),
-        contains('Future<Station> getStation('),
+        contains('Future<Station?> getStation('),
       );
       expect(
         await file('lib/generated/default_client/common_client.dart')

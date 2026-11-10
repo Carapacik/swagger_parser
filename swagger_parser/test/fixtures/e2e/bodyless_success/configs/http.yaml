@@ -1,0 +1,9 @@
+swagger_parser:
+  output_directory: ../out
+  generation:
+    http_client: http
+  inputs:
+    json:
+      schema_path: ../inputs/openapi.json
+    yaml:
+      schema_path: ../inputs/openapi.yaml

@@ -1,0 +1,7 @@
+swagger_parser:
+  output_directory: ../out
+  inputs:
+    json:
+      schema_path: ../inputs/openapi.json
+    yaml:
+      schema_path: ../inputs/openapi.yaml

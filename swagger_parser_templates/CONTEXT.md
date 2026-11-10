@@ -39,12 +39,17 @@ Use that expression as a Dart argument default; do not replace explicit null.
 `options.bodyPositional` selects required positional body arguments. It defaults
 to false. Custom client templates must keep optional bodies and form fields named.
 
-`options.inferMissingRequired` defaults to true. Fields expose the effective
+`options.inferMissingRequired` defaults to false. Fields expose the effective
 `isRequired` value. Core schema objects stay unchanged.
 `options.usePresenceRecords` defaults to false. Use each field's `tracksPresence`
 value to select a record. Plain optional nullable fields omit null keys.
 
 Operations are already filtered. Models follow pruning and retention settings.
+An operation's `response` is its selected payload type for decoding.
+`returnType` is its public result type before Future or transport wrapping.
+`emptySuccessStatuses` lists declared exact 2xx statuses without content in
+first-success mode. Dispatch these statuses before decoding the payload.
+Buffered methods return null; streaming methods return an empty stream.
 Directional DTOs expose `ignoredWireKeys`. Omit these keys in both codecs,
 including additional properties. Types already use their request or response names.
 Fixed discriminator fields expose `isFixed`, `fixedValue`, and `fixedExpression`.

@@ -274,6 +274,14 @@ extension on _Mapping {
           path: op.path,
           status: all ? null : int.tryParse(payloads.keys.firstOrNull ?? ''),
           variants: variants,
+          emptySuccessStatuses: [
+            if (!all && result.symbol != 'void')
+              for (final code in codes)
+                if (code.startsWith('2') &&
+                    int.tryParse(code) != null &&
+                    op.responses[code]!.content.isEmpty)
+                  int.parse(code),
+          ],
           parameters: parameters,
           response: result,
           objectResponse: _objectDto(result),

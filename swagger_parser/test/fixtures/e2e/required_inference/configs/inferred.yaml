@@ -1,0 +1,9 @@
+swagger_parser:
+  output_directory: ../out
+  generation:
+    infer_missing_required: true
+  inputs:
+    json:
+      schema_path: ../inputs/openapi.json
+    yaml:
+      schema_path: ../inputs/openapi.yaml
