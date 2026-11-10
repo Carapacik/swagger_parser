@@ -34,6 +34,8 @@ const Set<String> _typeNames = {
   'Enum',
   'Function',
 };
+const _typeOnlyNames = {'part', 'type'};
+
 const _memberNames = {
   'fromJson',
   'toJson',
@@ -92,7 +94,6 @@ const _memberNames = {
   'of',
   'on',
   'operator',
-  'part',
   'required',
   'rethrow',
   'return',
@@ -107,7 +108,6 @@ const _memberNames = {
   'throw',
   'true',
   'try',
-  'type',
   'typedef',
   'var',
   'void',
@@ -135,7 +135,9 @@ String _identifier(
   var candidate = base;
   var suffix = 2;
   while (used.contains(candidate) ||
-      type && _memberNames.contains(candidate) ||
+      type &&
+          (_memberNames.contains(candidate) ||
+              _typeOnlyNames.contains(candidate)) ||
       suffixes.any((s) => used.contains('$candidate$s'))) {
     candidate = '$base${suffix++}';
   }

@@ -15,6 +15,45 @@ Map<String, Object?> _object(Object? value) => value! as Map<String, Object?>;
 
 void main() {
   for (final DtoSerializer serializer in DtoSerializer.values) {
+    test(
+      'reuses reference types with defaults and nullable metadata with ${serializer.name}',
+      () async {
+        Map<String, String>? baseline;
+        for (final format in ['json', 'yaml']) {
+          final mapper = _Mapper();
+          final GenerationResult result =
+              await SwaggerParserRunner(mapper: mapper).generate(
+                await _source('reference_metadata', format),
+                config: GenerationConfig(serializer: serializer),
+              );
+          expect(result.diagnostics, isEmpty);
+          final Map<String, String> files = {
+            for (final file in result.files) file.relativePath: file.content,
+          };
+          baseline ??= files;
+          expect(files, baseline);
+          expect(files.keys, isNot(contains('models/foo_language.dart')));
+          expect(files.keys, isNot(contains('models/foo_reason.dart')));
+          final DartDtoModel foo = mapper.model.libraries
+              .expand((l) => l.dtos)
+              .singleWhere((d) => d.name == 'Foo');
+          final DartFieldModel language = foo.fields.singleWhere(
+            (f) => f.name == 'language',
+          );
+          final DartFieldModel reason = foo.fields.singleWhere(
+            (f) => f.name == 'reason',
+          );
+          expect(language.type.symbol, 'Language');
+          expect(language.defaultExpression, 'Language.de');
+          expect(language.type.isNullable, isFalse);
+          expect(reason.type.symbol, 'Reason');
+          expect(reason.type.isNullable, isTrue);
+          expect(reason.acceptsNull, isFalse);
+          expect(mapper.snapshot(), mapper.before);
+        }
+      },
+    );
+
     test('reuses annotated reference types with ${serializer.name}', () async {
       Map<String, String>? baseline;
       for (final format in ['json', 'yaml']) {
@@ -112,6 +151,76 @@ void main() {
       },
     );
   }
+
+  test('rejects defaults outside the referenced enum', () async {
+    for (final Object? value in ['xx', 7, null]) {
+      final document = jsonDecode(
+        (await _source('reference_metadata', 'json')).content,
+      ) as Map<String, Object?>;
+      final Map<String, Object?> schemas = _object(
+        _object(document['components'])['schemas'],
+      );
+      final Map<String, Object?> properties = _object(
+        _object(schemas['Foo'])['properties'],
+      );
+      _object(properties['language'])['default'] = value;
+      await expectLater(
+        const SwaggerParserRunner().generate(
+          SchemaSource.json(jsonEncode(document)),
+        ),
+        throwsA(
+          isA<GenerationException>().having(
+            (e) => e.message,
+            'message',
+            contains(
+              value == null ? 'Null is not allowed' : 'Unknown enum value',
+            ),
+          ),
+        ),
+      );
+    }
+  });
+
+  test(
+    'keeps requiredness and reference nullability separate from metadata',
+    () async {
+      final document = jsonDecode(
+        (await _source('reference_metadata', 'json')).content,
+      ) as Map<String, Object?>;
+      final Map<String, Object?> schemas = _object(
+        _object(document['components'])['schemas'],
+      );
+      final Map<String, Object?> foo = _object(schemas['Foo']);
+      foo['required'] = ['language', 'reason'];
+      final mapper = _Mapper();
+      await SwaggerParserRunner(mapper: mapper)
+          .generate(SchemaSource.json(jsonEncode(document)));
+      final Iterable<DartFieldModel> fields = mapper.model.libraries
+          .expand((l) => l.dtos)
+          .singleWhere((d) => d.name == 'Foo')
+          .fields;
+      expect(
+        fields.every(
+          (f) => f.isRequired && !f.type.isNullable && !f.acceptsNull,
+        ),
+        isTrue,
+      );
+      expect(fields.every((f) => f.defaultValue == null), isTrue);
+
+      _object(schemas['Reason'])['nullable'] = true;
+      _object(schemas['Reason'])['enum'] = [0, 1, null];
+      await SwaggerParserRunner(mapper: mapper)
+          .generate(SchemaSource.json(jsonEncode(document)));
+      final DartFieldModel reason = mapper.model.libraries
+          .expand((l) => l.dtos)
+          .singleWhere((d) => d.name == 'Foo')
+          .fields
+          .singleWhere((f) => f.name == 'reason');
+      expect(reason.type.symbol, 'Reason');
+      expect(reason.type.isNullable, isTrue);
+      expect(reason.acceptsNull, isTrue);
+    },
+  );
 
   test(
     'keeps local allOf constraints instead of reusing the reference type',

@@ -442,6 +442,8 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
             'title',
             'summary',
             'description',
+            'default',
+            'nullable',
             'deprecated',
             'externalDocs',
             'example',

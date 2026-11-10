@@ -1,0 +1,28 @@
+openapi: 3.0.0
+info:
+  title: Example
+  version: '1.0'
+paths: {}
+components:
+  schemas:
+    Language:
+      type: string
+      enum:
+        - de
+        - en
+    Reason:
+      type: number
+      enum:
+        - 0
+        - 1
+    Foo:
+      type: object
+      properties:
+        language:
+          default: de
+          allOf:
+            - $ref: '#/components/schemas/Language'
+        reason:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Reason'

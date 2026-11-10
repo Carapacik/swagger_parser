@@ -15,11 +15,11 @@ void rejects(void Function() run) {
 
 void main() {
   const typed = TypedRailStop(kind:'express');
-  assert(typed.type2 == TypedRailStopType.rail && typed.kind == 'express');
+  assert(typed.type == TypedRailStopType.rail && typed.kind == 'express');
   assert(typed.toJson().length == 2);
   assert(typed.toJson()['type'] == 'rail' && typed.toJson()['kind'] == 'express');
   final decodedTyped = TypedRailStop.fromJson({'type':'rail','kind':'bus'});
-  assert(decodedTyped.kind == 'bus' && decodedTyped.type2 == TypedRailStopType.rail);
+  assert(decodedTyped.kind == 'bus' && decodedTyped.type == TypedRailStopType.rail);
   assert(decodedTyped.toJson()['kind'] == 'bus');
   rejects(() => TypedRailStop.fromJson({'kind':'rail'}));
   rejects(() => TypedRailStop.fromJson({'type':'bus','kind':'rail'}));
@@ -90,9 +90,9 @@ void main() {
 '''}
   ${serializer == DtoSerializer.freezed || serializer == DtoSerializer.dartMappable ? '''
   final changedKind = typed.copyWith(kind:'local');
-  assert(changedKind.kind == 'local' && changedKind.type2 == TypedRailStopType.rail);
+  assert(changedKind.kind == 'local' && changedKind.type == TypedRailStopType.rail);
   assert(changedKind.toJson()['type'] == 'rail' && changedKind.toJson()['kind'] == 'local');
-  rejects(() => (typed as dynamic).copyWith(type2: TypedRailStopType.rail));
+  rejects(() => (typed as dynamic).copyWith(type: TypedRailStopType.rail));
   final changed = rail.copyWith(platform:12);
   assert(changed.platform == 12 && changed.kind == RailStopKind.rail);
   rejects(() => (rail as dynamic).copyWith(kind: RailStopKind.rail));

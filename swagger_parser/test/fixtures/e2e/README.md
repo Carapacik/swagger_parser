@@ -114,3 +114,8 @@ Four focused groups add 14 outputs from paired JSON and block YAML:
 - `bodyless_success` checks nullable payloads and bodyless dispatch in all three clients.
 
 These inputs match the generator and compiled-consumer regression fixtures.
+
+Two more groups add eight outputs from paired JSON and block YAML:
+
+- `reference_metadata` retains referenced enum types and property defaults.
+- `contextual_identifiers` preserves `type` and `part` in models and all three clients.

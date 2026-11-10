@@ -19,6 +19,7 @@ extension on _Mapping {
     for (final TypeMapping rule in config.typeMappings) {
       if (!identifier.hasMatch(rule.dartType) ||
           _memberNames.contains(rule.dartType) ||
+          _typeOnlyNames.contains(rule.dartType) ||
           rule.dartType == config.rootApiClassName ||
           !identifier.hasMatch(rule.codec.fromJson) ||
           _memberNames.contains(rule.codec.fromJson) &&

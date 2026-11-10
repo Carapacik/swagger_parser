@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+* Fixes single-reference `allOf` properties with `default` or `nullable` losing
+  their referenced enum types ([#485](https://github.com/Carapacik/swagger_parser/issues/485)).
+* Preserves `type` and `part` as field, parameter, and method names
+  ([#486](https://github.com/Carapacik/swagger_parser/issues/486)).
+
 ## 2.0.1
 
 * Fixes single-reference `allOf` properties with descriptions generating duplicate models

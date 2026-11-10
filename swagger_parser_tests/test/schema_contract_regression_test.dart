@@ -9,6 +9,7 @@ import 'package:swagger_parser/swagger_parser.dart';
 import 'package:test/test.dart';
 
 import 'support/bodyless_success_driver.dart';
+import 'support/contextual_identifiers_driver.dart';
 import 'support/test_platforms.dart';
 
 Map<String, Object?> _object(Object? value) => value! as Map<String, Object?>;
@@ -60,6 +61,7 @@ void main() {
       final String prefix = serializer.name;
       for (final group in [
         'reference_annotations',
+        'reference_metadata',
         'enum_members',
         'required_inference',
       ]) {
@@ -77,11 +79,30 @@ void main() {
       await write('${prefix}_test.dart', '''
 import 'package:test/test.dart';
 import '${prefix}_reference_annotations/api.dart' as refs;
+import '${prefix}_reference_metadata/api.dart' as metadata;
 import '${prefix}_enum_members/api.dart' as enums;
 import '${prefix}_required_inference/api.dart' as optional;
 import '${prefix}_inferred/api.dart' as inferred;
 
 void main() {
+  test('uses enum defaults and rejects undeclared reference values', () {
+    final metadata.Foo value = metadata.Foo.fromJson({});
+    final metadata.Language language = value.language;
+    final metadata.Reason? reason = value.reason;
+    expect(language, metadata.Language.de);
+    expect(reason, isNull);
+    expect(value.toJson(), {'language': 'de'});
+    expect(metadata.Foo(language: metadata.Language.en, reason: metadata.Reason.field1).toJson(), {'language': 'en', 'reason': 1});
+    final json = {'language': 'en', 'reason': 0};
+    expect(metadata.Foo.fromJson(json).toJson(), json);
+    expect(() => metadata.Foo.fromJson({'language': 'xx'}), throwsA(anything));
+    expect(() => metadata.Foo.fromJson({'reason': 7}), throwsA(anything));
+  });
+  test('distinguishes absent fields from explicit null', () {
+    expect(metadata.Foo.fromJson({}).reason, isNull);
+    expect(() => metadata.Foo.fromJson({'language': null}), throwsA(anything));
+    expect(() => metadata.Foo.fromJson({'reason': null}), throwsA(anything));
+  });
   test('reuses referenced types and retains enum validation', () {
     final refs.Bar bar = refs.Bar(name: 'bar');
     final refs.Foo foo = refs.Foo(status: refs.Status.open, bar: bar);
@@ -114,6 +135,18 @@ void main() {
   });
 }
 ''');
+      for (final HttpClientBackend backend in HttpClientBackend.values) {
+        final folder = '${prefix}_${backend.name}_contextual';
+        await generate(
+          folder,
+          await source('contextual_identifiers'),
+          GenerationConfig(serializer: serializer, httpClient: backend),
+        );
+        await write(
+          '${folder}_test.dart',
+          contextualIdentifiersDriver(folder, backend),
+        );
+      }
     }
     for (final HttpClientBackend backend in HttpClientBackend.values) {
       for (final kind in ['json', 'text', 'bytes', 'stream']) {
