@@ -12,9 +12,10 @@ Each template receives `contractVersion` (1), `relativePath`, `kind`,
 The library contains the mapped DTOs, operations, results, facade fields,
 or exports for that file. Options use Dart names and enum values.
 Naming options are available as `options.fallbackClientName` and `options.naming`.
-Unknown-value policies use `options.unknownEnumValues` and
-`options.unknownDiscriminatorValues`. Open enums expose `openNames` with
-`values`, `known`, `unknown`, and `rawType`. Unions expose `unknownType`.
+Unknown-value policies use `options.unknownEnumValues`,
+`options.unknownDiscriminatorValues`, and `options.unmatchedUnionValues`. Open enums expose `openNames` with
+`values`, `known`, `unknown`, and `rawType`. Tagged and structural unions expose
+`unknownType`. It is null when fallback is disabled.
 Fields expose `discriminatorValues` for strict known-tag checks.
 Type rules are in `options.typeMappings`, including `direction`. Mapped types expose `scalarCodec`
 with import URIs, prefixes, function names, wire type, adapter, and predicate.

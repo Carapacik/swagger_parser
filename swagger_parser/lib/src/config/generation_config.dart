@@ -52,12 +52,12 @@ enum ApiMetadataMode() {
   generateAndAttach,
 }
 
-/// Handles unknown enum values or discriminator tags.
+/// Handles unknown enum values, discriminator tags, or unmatched unions.
 enum UnknownValueMode() {
   /// Reject unknown values. This is the default.
   reject,
 
-  /// Preserve the original scalar or JSON object.
+  /// Preserve the original JSON value.
   preserve,
 }
 
@@ -111,6 +111,11 @@ final class const GenerationConfig({
 
   /// Unknown discriminator tags. Defaults to [UnknownValueMode.reject].
   final UnknownValueMode unknownDiscriminatorValues = UnknownValueMode.reject,
+
+  /// Untagged oneOf and anyOf inputs with no matching branch.
+  /// Defaults to [UnknownValueMode.reject]. Preserve keeps an immutable JSON
+  /// snapshot. Common constraints and ambiguous oneOf inputs still fail.
+  final UnknownValueMode unmatchedUnionValues = UnknownValueMode.reject,
 
   /// Copy schema and operation text to Dartdoc. Defaults to true.
   /// Deprecation annotations do not depend on this option.

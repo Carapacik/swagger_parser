@@ -485,6 +485,10 @@ class _GeneratorEditorState() extends State<GeneratorEditor> {
                     'first_success': 'First success',
                     'all_statuses': 'All declared statuses',
                   }),
+                  _select('unmatched_union_values', 'Unmatched union values', {
+                    'reject': 'Reject',
+                    'preserve': 'Preserve JSON',
+                  }),
                   div(classes: 'field-row', [
                     _input('root_api_class_name', 'API class'),
                     _input('page_width', 'Line width', numeric: true),

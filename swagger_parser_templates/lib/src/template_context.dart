@@ -94,6 +94,7 @@ Map<String, Object?> _context(
     'responseMode': config.responseMode.name,
     'unknownEnumValues': config.unknownEnumValues.name,
     'unknownDiscriminatorValues': config.unknownDiscriminatorValues.name,
+    'unmatchedUnionValues': config.unmatchedUnionValues.name,
     'generateDocs': config.generateDocs,
     'bodyPositional': config.bodyPositional,
     'usePathForMethodNames': config.usePathForMethodNames,
@@ -226,6 +227,7 @@ Map<String, Object?> _context(
             'exclusive': u.exclusive,
             'commonMatcher': u.commonMatcher,
             'projectionMatcher': u.projectionMatcher,
+            'unknownType': u.unknownType,
             'branches': [
               for (final b in u.branches)
                 {

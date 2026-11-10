@@ -47,6 +47,7 @@ final class EditorConfig._(
     'http_client': _wire(_defaults.httpClient),
     'serializer': _wire(_defaults.serializer),
     'response_mode': _wire(_defaults.responseMode),
+    'unmatched_union_values': _wire(_defaults.unmatchedUnionValues),
     'page_width': _defaults.pageWidth,
     'generate_docs': _defaults.generateDocs,
     'infer_missing_required': _defaults.inferMissingRequired,
@@ -147,6 +148,7 @@ final class EditorConfig._(
       'http_client': HttpClientBackend.values,
       'serializer': DtoSerializer.values,
       'response_mode': ResponseMode.values,
+      'unmatched_union_values': UnknownValueMode.values,
     }.entries) {
       if (!entry.value.map(_wire).contains(value(entry.key))) {
         throw FormatException('Unknown ${entry.key}: ${value(entry.key)}.');

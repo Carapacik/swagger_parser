@@ -34,6 +34,7 @@ void main() {
     expect(config.value('serializer'), 'plain');
     expect(config.value('http_client'), 'retrofit');
     expect(config.value('response_mode'), 'first_success');
+    expect(config.value('unmatched_union_values'), 'reject');
     expect(config.value('root_api_class_name'), 'Api');
     expect(config.value('page_width'), 80);
     expect(config.value('generate_docs'), isTrue);
@@ -69,6 +70,26 @@ void main() {
       expect(changed.parseConfig.unknownFields, UnknownFieldPolicy.reject);
     },
   );
+
+  test('edits and validates unmatched union values', () {
+    final config = EditorConfig.defaults();
+    final EditorConfig changed = config.withValue(
+      'unmatched_union_values',
+      'preserve',
+    );
+    expect(
+      changed.pipelineConfig.generation.unmatchedUnionValues,
+      UnknownValueMode.preserve,
+    );
+    expect(
+      config.pipelineConfig.generation.unmatchedUnionValues,
+      UnknownValueMode.reject,
+    );
+    expect(
+      () => config.withValue('unmatched_union_values', 'fallback'),
+      throwsFormatException,
+    );
+  });
 
   test('loads bare config and adds missing generation settings', () {
     final config = EditorConfig.parse(

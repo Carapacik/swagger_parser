@@ -121,7 +121,10 @@ extension on _Mapping {
         branches,
         exclusive: exclusive,
         commonMatcher: common,
-        projectionMatcher: id.direction != null && !exclusive
+        projectionMatcher:
+            id.direction != null &&
+                (!exclusive ||
+                    config.unmatchedUnionValues == UnknownValueMode.preserve)
             ? _matcher(id)
             : null,
       ),

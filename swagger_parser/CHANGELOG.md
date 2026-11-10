@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Adds `unmatched_union_values` to preserve unmatched `oneOf` and `anyOf` values
+  as immutable JSON. Defaults to `reject`
+  ([#487](https://github.com/Carapacik/swagger_parser/issues/487)).
 * Fixes single-reference `allOf` properties with `default` or `nullable` losing
   their referenced enum types ([#485](https://github.com/Carapacik/swagger_parser/issues/485)).
 * Preserves `type` and `part` as field, parameter, and method names

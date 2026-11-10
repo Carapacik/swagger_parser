@@ -3,9 +3,30 @@ part of 'dart_code_builder.dart';
 void _addMatchers(
   cb.LibraryBuilder library,
   List<DartSchemaMatcher> rules,
-  Set<String> roots,
-) {
-  library.body.addAll(rules.map(_buildMatcher));
+  Set<String> roots, {
+  Set<String> projectionOnly = const {},
+}) {
+  final referenced = <String>{
+    for (final rule in rules) ...[
+      ...rule.properties.values,
+      ?rule.items,
+      ...rule.prefixItems,
+      ?rule.contains,
+      ?rule.additional,
+      ...rule.allOf,
+      ...rule.oneOf,
+      ...rule.anyOf,
+    ],
+  };
+  library.body.addAll(
+    rules
+        .where(
+          (rule) =>
+              !projectionOnly.contains(rule.name) ||
+              referenced.contains(rule.name),
+        )
+        .map(_buildMatcher),
+  );
   if (roots.isNotEmpty) {
     final Map<String, DartSchemaMatcher> byName = {
       for (final rule in rules) rule.name: rule,

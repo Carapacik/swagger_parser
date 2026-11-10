@@ -119,3 +119,10 @@ Two more groups add eight outputs from paired JSON and block YAML:
 
 - `reference_metadata` retains referenced enum types and property defaults.
 - `contextual_identifiers` preserves `type` and `part` in models and all three clients.
+
+`unmatched_unions` adds four outputs for reject and preserve. Its shared schema
+covers oneOf, anyOf, mixed histories, scalars, nested unions, common constraints,
+directional projections, helper collisions, and independent tagged dispatch.
+The two baselines share 14 identical files.
+The compiled-consumer suite combines compatible 3.0 schemas in its reject
+configuration. It keeps inference and transport settings separate.

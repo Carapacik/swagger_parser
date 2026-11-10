@@ -55,6 +55,7 @@ swagger_parser:
     original_http_response: false
     unknown_enum_values: reject
     unknown_discriminator_values: reject
+    unmatched_union_values: reject
     generate_docs: true
     api_metadata: none
     body_positional: false
@@ -1253,6 +1254,40 @@ Missing, null, or non-string tags still fail. Known tags with invalid bodies
 still fail. Untagged unions gain no fallback. OpenAPI 3.2 defaultMapping wins.
 Known discriminator enums stay strict even with unknown_enum_values: preserve.
 An ordinary kind field is independent when another field is the discriminator.
+
+### `generation.unmatched_union_values`
+
+Controls untagged `oneOf` and `anyOf` inputs with no matching branch.
+The default is `reject`.
+
+```yaml
+generation:
+  unmatched_union_values: preserve
+```
+
+With `preserve`, zero matches produce a generated `UnionUnknown` subtype.
+Its `rawJson` holds an immutable deep snapshot. `toJson()` returns a detached
+copy. The snapshot can contain any JSON value, including a scalar, array, or null.
+Generated helper names get numeric suffixes when a name is already used.
+
+| Matches | `oneOf` | `anyOf` |
+| --- | --- | --- |
+| Zero | Unknown subtype | Unknown subtype; all `hasX` are false and `asX` are null |
+| One | Typed variant | Wrapper with the matching view |
+| Multiple | Error | Wrapper with all matching views |
+
+Common constraints still apply. Request and response snapshots omit fields
+excluded by `readOnly` and `writeOnly`. Errors from a selected decoder still
+propagate. Nested branch predicates stay strict: an unmatched nested union can
+make its outer branch fail to match. Its own decoder can preserve the value.
+Explicit null follows the schema's null handling; an unmatched null can use
+fallback only when common constraints permit it. Missing required fields fail.
+
+Zero matches can indicate either a new variant or malformed data. This setting
+preserves both. A future value that matches an existing branch uses that branch.
+Explicit `validate()` calls still report schema violations in preserved values.
+Enum and discriminator policies stay independent. Tagged unions still use
+`unknown_discriminator_values` and OpenAPI 3.2 `defaultMapping`.
 
 ## Operation and model selection
 

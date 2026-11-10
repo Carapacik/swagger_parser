@@ -77,8 +77,8 @@ Object? _freezeUnknownJson(Object? value) => switch(value) {
   Map<String, Object?>() => Map<String, Object?>.unmodifiable(
     value.map((key, item) => MapEntry(key, _freezeUnknownJson(item)))),
   List<Object?>() => List<Object?>.unmodifiable(value.map(_freezeUnknownJson)),
-  null || String() || bool() || int() => value,
-  double() when value.isFinite => value,
+  null || String() || bool() => value,
+  num() when value.isFinite => value,
   _ => throw ArgumentError('Expected a JSON value.'),
 };
 ''');

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Exposes `unmatchedUnionValues` and structural union fallback names to templates.
+
 ## 1.0.1
 
 * Updates `swagger_parser` to 2.0.1 and defaults required-field inference to `false`.

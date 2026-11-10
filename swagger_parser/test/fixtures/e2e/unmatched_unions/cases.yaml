@@ -1,0 +1,21 @@
+cases:
+  - name: generates unmatched unions with reject settings
+    config: configs/reject.yaml
+    output: out
+    expected:
+      json:
+        - expected/shared
+        - expected/reject
+      yaml:
+        - expected/shared
+        - expected/reject
+  - name: generates unmatched unions with preserve settings
+    config: configs/preserve.yaml
+    output: out
+    expected:
+      json:
+        - expected/shared
+        - expected/preserve
+      yaml:
+        - expected/shared
+        - expected/preserve

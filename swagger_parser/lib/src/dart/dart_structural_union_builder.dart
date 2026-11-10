@@ -3,7 +3,11 @@ part of 'dart_code_builder.dart';
 extension on _JsonBuilder {
   Iterable<cb.Class> buildStructuralUnion(DartStructuralUnion union) sync* {
     final body = StringBuffer();
-    if (union.projectionMatcher case final projection?) {
+    final snapshot = union.projectionMatcher == null
+        ? 'json'
+        : '_project${union.projectionMatcher}(json)';
+    if (union.projectionMatcher case final projection?
+        when union.unknownType == null) {
       body.write(
         'if (!$projection(json)) { throw FormatException(${_literal('Invalid ${union.name} value.')}); }',
       );
@@ -18,11 +22,13 @@ extension on _JsonBuilder {
         for (final branch in union.branches)
           'if (${branch.matcher}(json)) ${_literal(branch.label)}',
       ];
-      body
-        ..write('final matches = <String>[${alternatives.join(',')}];')
-        ..write(
-          "if (matches.length != 1) { throw FormatException(${_literal('Expected exactly one ${union.name} variant. Matches: ')} + matches.toString()); }",
-        );
+      body.write('final matches = <String>[${alternatives.join(',')}];');
+      if (union.unknownType case final unknown?) {
+        body.write('if (matches.isEmpty) { return $unknown($snapshot); }');
+      }
+      body.write(
+        "if (matches.length != 1) { throw FormatException(${_literal('Expected exactly one ${union.name} variant. Matches: ')} + matches.toString()); }",
+      );
       for (final DartMatchBranch branch in union.branches) {
         final String value = _decode(branch.type, 'json');
         final String variant = branch.implementation!;
@@ -62,6 +68,9 @@ extension on _JsonBuilder {
           );
         }
       }
+      if (union.unknownType != null) {
+        yield _unknownStructuralUnion(union);
+      }
       return;
     }
 
@@ -71,12 +80,13 @@ extension on _JsonBuilder {
     for (final DartMatchBranch branch in union.branches) {
       body.write('final has${branch.label} = ${branch.matcher}(json);');
     }
+    final unmatched = union.unknownType == null
+        ? 'throw const FormatException(${_literal('No matching ${union.name} variant.')});'
+        : 'return ${union.unknownType}($snapshot);';
     body
+      ..write('if (!(${flags.join(' || ')})) { $unmatched }')
       ..write(
-        "if (!(${flags.join(' || ')})) { throw const FormatException(${_literal('No matching ${union.name} variant.')}); }",
-      )
-      ..write(
-        'return ${union.name}._(_copyJson(${union.projectionMatcher == null ? 'json' : '_project${union.projectionMatcher}(json)'}), ${flags.join(',')});',
+        'return ${union.name}._(_copyJson($snapshot), ${flags.join(',')});',
       );
     yield cb.Class((c) {
       c.name = union.name;
@@ -117,7 +127,54 @@ extension on _JsonBuilder {
       }
       c.methods.add(_toJson(_jsonValue, '_copyJson(_json)'));
     });
+    if (union.unknownType != null) {
+      yield _unknownStructuralUnion(union);
+    }
   }
+
+  cb.Class _unknownStructuralUnion(DartStructuralUnion union) => cb.Class((c) {
+    c
+      ..name = union.unknownType
+      ..modifier = cb.ClassModifier.final$;
+    if (union.exclusive) {
+      c.implements.add(cb.refer(union.name));
+      c.fields.add(_field('rawJson', _jsonValue));
+    } else {
+      c.extend = cb.refer(union.name);
+      c.methods.add(
+        cb.Method(
+          (m) => m
+            ..name = 'rawJson'
+            ..type = cb.MethodType.getter
+            ..returns = _jsonValue
+            ..lambda = true
+            ..body = const cb.Code('_json'),
+        ),
+      );
+    }
+    c.constructors.add(
+      cb.Constructor(
+        (ctor) => ctor
+          ..requiredParameters.add(
+            cb.Parameter(
+              (p) => p
+                ..name = 'json'
+                ..type = _jsonValue,
+            ),
+          )
+          ..initializers.add(
+            cb.Code(
+              union.exclusive
+                  ? 'rawJson = _freezeUnknownJson(json)'
+                  : 'super._(_freezeUnknownJson(json), ${union.branches.map((_) => 'false').join(', ')})',
+            ),
+          ),
+      ),
+    );
+    if (union.exclusive) {
+      c.methods.add(_toJson(_jsonValue, '_copyJson(rawJson)'));
+    }
+  });
 }
 
 cb.Method _copyJsonMethod() => cb.Method(
@@ -135,8 +192,8 @@ cb.Method _copyJsonMethod() => cb.Method(
 return switch (value) {
   Map<String, Object?> map => map.map((key, item) => MapEntry(key, _copyJson(item))),
   List<Object?> list => list.map(_copyJson).toList(),
-  null || bool() || String() || int() => value,
-  double() when value.isFinite => value,
+  null || bool() || String() => value,
+  num() when value.isFinite => value,
   _ => throw const FormatException('Expected a JSON value.'),
 };
 """),

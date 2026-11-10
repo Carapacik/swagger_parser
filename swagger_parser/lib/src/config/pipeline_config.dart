@@ -52,6 +52,7 @@ final class const PipelineConfig({
         'response_mode',
         'unknown_enum_values',
         'unknown_discriminator_values',
+        'unmatched_union_values',
         'stream_binary_responses',
         'decode_responses_in_background',
       });
@@ -146,6 +147,11 @@ final class const PipelineConfig({
           'unknown_discriminator_values',
           UnknownValueMode.values,
           gen.unknownDiscriminatorValues,
+        ),
+        unmatchedUnionValues: generation.choice(
+          'unmatched_union_values',
+          UnknownValueMode.values,
+          gen.unmatchedUnionValues,
         ),
         responseMode: generation.choice(
           'response_mode',

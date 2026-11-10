@@ -14,6 +14,9 @@ final class DartStructuralUnion(
 
   /// Root predicate used to project directional JSON snapshots.
   final String? projectionMatcher,
+
+  /// Fallback class for inputs with no matching branch, or null to reject.
+  final String? unknownType,
 }) {
   /// Copies the branches in schema order.
   this;

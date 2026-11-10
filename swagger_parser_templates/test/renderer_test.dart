@@ -313,6 +313,47 @@ void main() {
     );
   });
 
+  test('exposes structural union fallback names', () async {
+    final runner = SwaggerParserRunner(
+      generator: DartGenerator(
+        renderer: MustacheSourceRenderer({
+          'models':
+              '{{defaultSource}}\n'
+              '{{#library.structuralUnions}}'
+              '// fallback: {{name}} {{unknownType}}\n'
+              '{{/library.structuralUnions}}',
+        }),
+      ),
+    );
+    for (final UnknownValueMode mode in UnknownValueMode.values) {
+      final GenerationResult result = await runner.generate(
+        const SchemaSource.json('''
+      {
+        "openapi": "3.0.0",
+        "info": {"title": "Unions", "version": "1"},
+        "paths": {},
+        "components": {"schemas": {
+          "Choice": {"oneOf": [{"type": "string"}, {"type": "integer"}]},
+          "Views": {"anyOf": [{"type": "string"}, {"type": "integer"}]}
+        }}
+      }'''),
+        config: GenerationConfig(unmatchedUnionValues: mode),
+      );
+      expect(result.diagnostics, isEmpty);
+      final String output = result.files.map((f) => f.content).join();
+      for (final name in ['Choice', 'Views']) {
+        expect(
+          output,
+          contains(
+            mode == UnknownValueMode.preserve
+                ? '// fallback: $name ${name}Unknown'
+                : '// fallback: $name',
+          ),
+        );
+      }
+    }
+  });
+
   test('exposes naming options to templates', () {
     final generator = DartGenerator(
       renderer: MustacheSourceRenderer({
@@ -321,6 +362,7 @@ void main() {
             '// {{options.fallbackClientName}} '
             '{{options.naming.preserveSchemaCasing}}\n'
             '// {{options.unknownEnumValues}} {{options.unknownDiscriminatorValues}}\n'
+            '// unmatched: {{options.unmatchedUnionValues}}\n'
             '// bodyPositional: {{options.bodyPositional}}\n'
             '// pathNames: {{options.usePathForMethodNames}}\n'
             '// fileSuffix: {{options.fileSuffix}}\n'
@@ -339,6 +381,7 @@ void main() {
       model,
       config: const GenerationConfig(
         fallbackClientName: 'CommonClient',
+        unmatchedUnionValues: UnknownValueMode.preserve,
         fileSuffix: '_generated',
         pruneUnusedModels: true,
         keepModels: ['#/components/schemas/Station'],
@@ -368,6 +411,7 @@ void main() {
       contains('// applyParameterDefaults: true'),
     );
     expect(result.files.single.content, contains('// bodyPositional: true'));
+    expect(result.files.single.content, contains('// unmatched: preserve'));
     expect(result.files.single.content, contains('// pathNames: true'));
     expect(result.files.single.content, contains('// fileSuffix: _generated'));
     expect(

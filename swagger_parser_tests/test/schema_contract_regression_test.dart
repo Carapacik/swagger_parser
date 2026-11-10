@@ -9,13 +9,15 @@ import 'package:swagger_parser/swagger_parser.dart';
 import 'package:test/test.dart';
 
 import 'support/bodyless_success_driver.dart';
+import 'support/consumer_matrix.dart';
 import 'support/contextual_identifiers_driver.dart';
 import 'support/test_platforms.dart';
+import 'support/unmatched_unions_driver.dart';
 
 Map<String, Object?> _object(Object? value) => value! as Map<String, Object?>;
 
 void main() {
-  test('builds reference, enum, required, and bodyless response contracts', () async {
+  test('builds grouped model, union, and response contracts', () async {
     final Directory dir = await Directory('test')
         .createTemp('generated_schema_contracts_');
     addTearDown(() => dir.delete(recursive: true));
@@ -59,16 +61,66 @@ void main() {
     );
     for (final DtoSerializer serializer in DtoSerializer.values) {
       final String prefix = serializer.name;
-      for (final group in [
-        'reference_annotations',
-        'reference_metadata',
-        'enum_members',
-        'required_inference',
+      final document = jsonDecode(
+        (await source('unmatched_unions')).content,
+      ) as Map<String, Object?>;
+      final Map<String, Object?> schemas = _object(
+        _object(document['components'])['schemas'],
+      );
+      for (final (group, name) in [
+        ('reference_annotations', 'ReferenceModel'),
+        ('reference_metadata', 'MetadataModel'),
+        ('enum_members', ''),
+        ('required_inference', 'OptionalModel'),
       ]) {
+        final extra =
+            jsonDecode((await source(group)).content) as Map<String, Object?>;
+        expect(extra['openapi'], document['openapi']);
+        expect(extra['paths'], isEmpty);
+        final Map<String, Object?> additions = _object(
+          _object(extra['components'])['schemas'],
+        );
+        for (final MapEntry<String, Object?> entry in additions.entries) {
+          final String key = entry.key == 'Foo' ? name : entry.key;
+          expect(schemas.containsKey(key), isFalse);
+          schemas[key] = entry.value;
+        }
+      }
+      const mappings = [
+        TypeMapping(
+          schema: '#/components/schemas/Timestamp',
+          dartType: 'OffsetTimestamp',
+          importUrl: 'package:swagger_parser_tests/offset_timestamp.dart',
+          codec: TypeMappingCodec(
+            importUrl: 'package:swagger_parser_tests/offset_timestamp.dart',
+            fromJson: 'readOffsetTimestamp',
+            toJson: 'writeOffsetTimestamp',
+          ),
+        ),
+      ];
+      for (final UnknownValueMode mode in UnknownValueMode.values) {
+        final folder = '${prefix}_${mode.name}';
         await generate(
-          '${prefix}_$group',
-          await source(group),
-          GenerationConfig(serializer: serializer),
+          folder,
+          mode == UnknownValueMode.reject
+              ? SchemaSource.json(jsonEncode(document))
+              : await source('unmatched_unions'),
+          GenerationConfig(
+            serializer: serializer,
+            unmatchedUnionValues: mode,
+            generateValidators:
+                serializer == DtoSerializer.plain &&
+                mode == UnknownValueMode.preserve,
+            typeMappings: mappings,
+          ),
+        );
+        await write(
+          '${folder}_test.dart',
+          unmatchedUnionsDriver(
+            folder,
+            preserve: mode == UnknownValueMode.preserve,
+            validate: serializer == DtoSerializer.plain,
+          ),
         );
       }
       await generate(
@@ -78,58 +130,55 @@ void main() {
       );
       await write('${prefix}_test.dart', '''
 import 'package:test/test.dart';
-import '${prefix}_reference_annotations/api.dart' as refs;
-import '${prefix}_reference_metadata/api.dart' as metadata;
-import '${prefix}_enum_members/api.dart' as enums;
-import '${prefix}_required_inference/api.dart' as optional;
+import '${prefix}_reject/api.dart' as contracts;
 import '${prefix}_inferred/api.dart' as inferred;
 
 void main() {
   test('uses enum defaults and rejects undeclared reference values', () {
-    final metadata.Foo value = metadata.Foo.fromJson({});
-    final metadata.Language language = value.language;
-    final metadata.Reason? reason = value.reason;
-    expect(language, metadata.Language.de);
+    final contracts.MetadataModel value = contracts.MetadataModel.fromJson({});
+    final contracts.Language language = value.language;
+    final contracts.Reason? reason = value.reason;
+    expect(language, contracts.Language.de);
     expect(reason, isNull);
     expect(value.toJson(), {'language': 'de'});
-    expect(metadata.Foo(language: metadata.Language.en, reason: metadata.Reason.field1).toJson(), {'language': 'en', 'reason': 1});
+    expect(contracts.MetadataModel(language: contracts.Language.en, reason: contracts.Reason.field1).toJson(), {'language': 'en', 'reason': 1});
     final json = {'language': 'en', 'reason': 0};
-    expect(metadata.Foo.fromJson(json).toJson(), json);
-    expect(() => metadata.Foo.fromJson({'language': 'xx'}), throwsA(anything));
-    expect(() => metadata.Foo.fromJson({'reason': 7}), throwsA(anything));
+    expect(contracts.MetadataModel.fromJson(json).toJson(), json);
+    expect(() => contracts.MetadataModel.fromJson({'language': 'xx'}), throwsA(anything));
+    expect(() => contracts.MetadataModel.fromJson({'reason': 7}), throwsA(anything));
   });
   test('distinguishes absent fields from explicit null', () {
-    expect(metadata.Foo.fromJson({}).reason, isNull);
-    expect(() => metadata.Foo.fromJson({'language': null}), throwsA(anything));
-    expect(() => metadata.Foo.fromJson({'reason': null}), throwsA(anything));
+    expect(contracts.MetadataModel.fromJson({}).reason, isNull);
+    expect(() => contracts.MetadataModel.fromJson({'language': null}), throwsA(anything));
+    expect(() => contracts.MetadataModel.fromJson({'reason': null}), throwsA(anything));
   });
   test('reuses referenced types and retains enum validation', () {
-    final refs.Bar bar = refs.Bar(name: 'bar');
-    final refs.Foo foo = refs.Foo(status: refs.Status.open, bar: bar);
-    final refs.Status status = foo.status;
-    final refs.Bar reused = foo.bar;
-    expect(status, refs.Status.open);
+    final contracts.Bar bar = contracts.Bar(name: 'bar');
+    final contracts.ReferenceModel foo = contracts.ReferenceModel(status: contracts.Status.open, bar: bar);
+    final contracts.Status status = foo.status;
+    final contracts.Bar reused = foo.bar;
+    expect(status, contracts.Status.open);
     expect(identical(reused, bar), isTrue);
     final json = {'status': 'OPEN', 'bar': {'name': 'bar'}};
-    expect(refs.Foo.fromJson(json).toJson(), json);
-    expect(() => refs.Foo.fromJson({'status': 'INVALID', 'bar': {'name': 'bar'}}), throwsA(anything));
+    expect(contracts.ReferenceModel.fromJson(json).toJson(), json);
+    expect(() => contracts.ReferenceModel.fromJson({'status': 'INVALID', 'bar': {'name': 'bar'}}), throwsA(anything));
   });
   test('keeps signed enum names and round trips every unique member', () {
-    expect(enums.Doors.fieldMinus1.toJson(), -1);
-    expect(enums.Doors.field1.toJson(), 1);
-    expect(enums.Sound.values, [enums.Sound.squeak, enums.Sound.noise]);
-    for (final value in enums.Sound.values) {
-      expect(enums.Sound.fromJson(value.toJson()), value);
+    expect(contracts.Doors.fieldMinus1.toJson(), -1);
+    expect(contracts.Doors.field1.toJson(), 1);
+    expect(contracts.Sound.values, [contracts.Sound.squeak, contracts.Sound.noise]);
+    for (final value in contracts.Sound.values) {
+      expect(contracts.Sound.fromJson(value.toJson()), value);
     }
-    for (final value in enums.Doors.values) {
-      expect(enums.Doors.fromJson(value.toJson()), value);
+    for (final value in contracts.Doors.values) {
+      expect(contracts.Doors.fromJson(value.toJson()), value);
     }
   });
   test('accepts missing fields by default and retains inference as an option', () {
-    final value = optional.Foo.fromJson({});
+    final value = contracts.OptionalModel.fromJson({});
     expect(value.a, isNull);
     expect(value.b, isNull);
-    expect(optional.Foo().toJson(), <String, Object?>{});
+    expect(contracts.OptionalModel().toJson(), <String, Object?>{});
     expect(() => inferred.Foo.fromJson({}), throwsA(anything));
     expect(inferred.Foo(a: 'value', b: 1).toJson(), {'a': 'value', 'b': 1});
   });
@@ -189,11 +238,12 @@ void main() {
         }
       }
     }
+    final String entryPoint = await groupConsumerTests(dir);
     await dart(['run', 'build_runner', 'build']);
     await dart(['analyze', dir.path]);
-    await dart(['test', dir.path]);
+    await dart(['test', entryPoint]);
     if (runChromeTests) {
-      await dart(['test', '--platform=chrome', dir.path]);
+      await dart(['test', '--platform=chrome', entryPoint]);
     }
   });
 }

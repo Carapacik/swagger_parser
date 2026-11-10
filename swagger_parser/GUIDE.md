@@ -1026,12 +1026,13 @@ name validation. The rule does not simplify schemas with `allOf`.
 
 ### Unknown values
 
-The two policies are independent. Both default to `reject`.
+The three policies are independent. All default to `reject`.
 
 ```yaml
 generation:
   unknown_enum_values: preserve
   unknown_discriminator_values: preserve
+  unmatched_union_values: preserve
 ```
 
 With `unknown_enum_values: reject`, `Status` is an enum. With `preserve`,
@@ -1067,6 +1068,28 @@ final Stop stop = Stop.fromJson({'kind': 'Boat', 'decks': 2});
 assert(stop is StopUnknown);
 assert(stop.toJson()['decks'] == 2);
 ```
+
+Use `unmatched_union_values: preserve` for untagged unions. For example,
+`Message` can be a `oneOf` of a text message and an action with the value `ping`.
+An unmatched action can then remain in a history without failing the whole list:
+
+```dart
+final Message message = Message.fromJson({'action': 'pong'});
+assert(message is MessageUnknown);
+assert(message.toJson() is Map<String, Object?>);
+```
+
+An unknown subtype stores immutable JSON in `rawJson`. Its `toJson()` returns a
+detached copy. `oneOf` still rejects multiple matches. An `anyOf` unknown subtype
+has no matching views: all `hasX` flags are false and all `asX` getters are null.
+Known `anyOf` values retain every matching view, including a matching null value.
+Common constraints, required keys, and selected decoder errors still apply.
+Directional snapshots omit excluded request or response fields.
+
+This option cannot distinguish a future variant from malformed input. It also
+cannot detect a new variant that already matches an existing branch. Nested
+predicates stay strict. Preserving a nested value does not make an outer branch
+match. See [unmatched union values](CONFIGURATION.md#generationunmatched_union_values).
 
 The contract is shared by plain, json_serializable, Freezed, and dart_mappable.
 Preserved enums and fallback dispatch use shared codecs. Known DTOs still use

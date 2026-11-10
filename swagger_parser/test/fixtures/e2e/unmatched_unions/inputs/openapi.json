@@ -1,0 +1,288 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Unmatched unions",
+    "version": "1.0"
+  },
+  "paths": {
+    "/messages": {
+      "post": {
+        "operationId": "exchange",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DirectionalMessage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message views.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DirectionalViews"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserMessage": {
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "Ping": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "ping"
+            ]
+          }
+        }
+      },
+      "Message": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/UserMessage"
+          },
+          {
+            "$ref": "#/components/schemas/Ping"
+          }
+        ]
+      },
+      "Views": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/UserMessage"
+          },
+          {
+            "$ref": "#/components/schemas/Ping"
+          }
+        ]
+      },
+      "History": {
+        "type": "object",
+        "required": [
+          "messages"
+        ],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/UserMessage"
+                },
+                {
+                  "$ref": "#/components/schemas/Ping"
+                }
+              ]
+            }
+          },
+          "views": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Views"
+            }
+          },
+          "message": {
+            "$ref": "#/components/schemas/Message"
+          },
+          "view": {
+            "$ref": "#/components/schemas/Views"
+          }
+        }
+      },
+      "DirectionalMessage": {
+        "type": "object",
+        "required": [
+          "context"
+        ],
+        "properties": {
+          "context": {
+            "type": "string",
+            "minLength": 1
+          },
+          "server": {
+            "type": "string",
+            "readOnly": true
+          },
+          "secret": {
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/UserMessage"
+          },
+          {
+            "$ref": "#/components/schemas/Ping"
+          }
+        ]
+      },
+      "DirectionalViews": {
+        "type": "object",
+        "required": [
+          "context"
+        ],
+        "properties": {
+          "context": {
+            "type": "string",
+            "minLength": 1
+          },
+          "server": {
+            "type": "string",
+            "readOnly": true
+          },
+          "secret": {
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/UserMessage"
+          },
+          {
+            "$ref": "#/components/schemas/Ping"
+          }
+        ]
+      },
+      "Envelope": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "$ref": "#/components/schemas/Message"
+          }
+        }
+      },
+      "Nested": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Envelope"
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      },
+      "Scalar": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      },
+      "ScalarViews": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      },
+      "NullableViews": {
+        "anyOf": [
+          {
+            "type": "string",
+            "nullable": true
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      },
+      "Timestamp": {
+        "type": "string"
+      },
+      "CodecMessage": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Timestamp"
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      },
+      "CodecViews": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Timestamp"
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      },
+      "MessageUnknown": {
+        "type": "object",
+        "properties": {
+          "reserved": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Tagged": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/TaggedPing"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "ping": "#/components/schemas/TaggedPing"
+          }
+        }
+      },
+      "TaggedPing": {
+        "type": "object",
+        "required": [
+          "kind",
+          "action"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "ping"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

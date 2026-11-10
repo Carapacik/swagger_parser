@@ -44,5 +44,18 @@ extension on _Mapping {
         );
       }
     }
+    if (config.unmatchedUnionValues == UnknownValueMode.preserve) {
+      for (var i = 0; i < structuralUnions.length; i++) {
+        final DartStructuralUnion model = structuralUnions[i];
+        structuralUnions[i] = DartStructuralUnion(
+          model.name,
+          model.branches,
+          exclusive: model.exclusive,
+          commonMatcher: model.commonMatcher,
+          projectionMatcher: model.projectionMatcher,
+          unknownType: allocate('${model.name}Unknown'),
+        );
+      }
+    }
   }
 }

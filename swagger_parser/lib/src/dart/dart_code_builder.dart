@@ -166,13 +166,29 @@ final class const DefaultDartCodeBuilder() implements DartCodeBuilder {
             if (tuple.project) tuple.matcher,
           for (final union in model.structuralUnions) ?union.projectionMatcher,
         },
+        projectionOnly:
+            {
+              for (final union in model.structuralUnions)
+                if (union.unknownType != null) ?union.projectionMatcher,
+            }.difference({
+              ...model.validators.values,
+              for (final tuple in model.tuples) tuple.matcher,
+              for (final union in model.structuralUnions) ...[
+                ?union.commonMatcher,
+                for (final branch in union.branches) branch.matcher,
+                if (union.unknownType == null) ?union.projectionMatcher,
+              ],
+            }),
       );
       library.body.addAll([
-        if (model.unions.any((u) => u.unknownType != null))
+        if (model.unions.any((u) => u.unknownType != null) ||
+            model.structuralUnions.any((u) => u.unknownType != null))
           _freezeUnknownJson(),
         if (model.unions.any((u) => u.unknownType != null) ||
             model.tuples.isNotEmpty ||
-            model.structuralUnions.any((union) => !union.exclusive))
+            model.structuralUnions.any(
+              (union) => !union.exclusive || union.unknownType != null,
+            ))
           _copyJsonMethod(),
         if (json.usesIntegerReader) _integerReader(),
       ]);

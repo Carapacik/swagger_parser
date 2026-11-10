@@ -202,6 +202,7 @@ void main() {
                     httpClient: transport,
                     unknownEnumValues: mode,
                     unknownDiscriminatorValues: mode,
+                    unmatchedUnionValues: UnknownValueMode.preserve,
                   ),
                 );
             expect(result.diagnostics, isEmpty);
