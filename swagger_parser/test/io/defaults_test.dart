@@ -81,7 +81,6 @@ void main() {
                     config: GenerationConfig(
                       serializer: serializer,
                       usePresenceRecords: records,
-                      inferMissingRequired: false,
                     ),
                   );
               expect(result.diagnostics, isEmpty);

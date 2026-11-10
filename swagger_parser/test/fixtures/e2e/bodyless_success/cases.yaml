@@ -1,0 +1,25 @@
+cases:
+  - name: generates bodyless success with retrofit settings
+    config: configs/retrofit.yaml
+    output: out
+    expected:
+      json:
+        - expected/retrofit
+      yaml:
+        - expected/retrofit
+  - name: generates bodyless success with dio settings
+    config: configs/dio.yaml
+    output: out
+    expected:
+      json:
+        - expected/dio
+      yaml:
+        - expected/dio
+  - name: generates bodyless success with http settings
+    config: configs/http.yaml
+    output: out
+    expected:
+      json:
+        - expected/http
+      yaml:
+        - expected/http

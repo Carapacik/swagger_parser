@@ -1,0 +1,9 @@
+cases:
+  - name: generates enum members with default settings
+    config: configs/default.yaml
+    output: out
+    expected:
+      json:
+        - expected/default
+      yaml:
+        - expected/default

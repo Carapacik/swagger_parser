@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.0.1
+
+* Fixes single-reference `allOf` properties with descriptions generating duplicate models
+  and losing enum types ([#479](https://github.com/Carapacik/swagger_parser/issues/479)).
+* Fixes negative numeric enum names losing their sign
+  ([#480](https://github.com/Carapacik/swagger_parser/issues/480)).
+* Fixes duplicate enum values generating distinct members for the same JSON value
+  ([#481](https://github.com/Carapacik/swagger_parser/issues/481)).
+* Defaults `infer_missing_required` to `false`. Set it to `true` to infer required
+  non-nullable fields without defaults when `required` is absent
+  ([#482](https://github.com/Carapacik/swagger_parser/issues/482)).
+* Fixes `first_success` decoding declared bodyless success responses as payloads.
+  Buffered return types become nullable when a bodyless success is declared.
+  Handle `null` after regenerating affected clients
+  ([#483](https://github.com/Carapacik/swagger_parser/issues/483)).
+* Adds regression tests, generated-file e2e cases, runnable examples, and public API documentation.
+
 ## 2.0.0
 
 * Rebuilds parsing in `swagger_parser_core` for Swagger 2.0 and OpenAPI 3.0–3.2.

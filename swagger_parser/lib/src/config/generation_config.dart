@@ -33,6 +33,7 @@ enum DtoSerializer() {
 /// Selects the HTTP response API.
 enum ResponseMode() {
   /// Return the payload for the lowest declared exact 2xx status.
+  /// Declared bodyless successes return null or an empty stream.
   firstSuccess,
 
   /// Return a sealed variant for each declared response.
@@ -135,8 +136,8 @@ final class const GenerationConfig({
   final bool applyParameterDefaults = false,
 
   /// Infers non-nullable fields without defaults when required is absent.
-  /// Defaults to true. Explicit required lists, including empty lists, win.
-  final bool inferMissingRequired = true,
+  /// Defaults to false. Explicit required lists, including empty lists, win.
+  final bool inferMissingRequired = false,
 
   /// Generates explicit DTO validation with field paths. Defaults to false.
   /// Unsupported assertions fail generation. Encoding errors propagate.

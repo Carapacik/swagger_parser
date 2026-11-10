@@ -48,7 +48,6 @@ Future<List<GeneratedFile>> _generatePair(String stem) async {
     final GenerationResult result = await const SwaggerParserRunner().generate(
       await fixtureSource('$stem.$extension'),
       loader: fixtureLoader,
-      config: const GenerationConfig(inferMissingRequired: false),
     );
     return result.files;
   }
@@ -165,7 +164,6 @@ void main() {
     final GenerationResult result = await const SwaggerParserRunner().generate(
       await fixtureSource('mounted.yaml'),
       loader: fixtureLoader,
-      config: const GenerationConfig(inferMissingRequired: false),
     );
     await _runGenerated(result.files, """
 import 'models.dart';

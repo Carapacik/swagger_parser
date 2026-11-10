@@ -432,6 +432,25 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
     if (_customType(id) case final type?) {
       return type;
     }
+    if (!names.containsKey(id) &&
+        !_namedSchema.hasMatch(id.pointer) &&
+        schema.allOf.length == 1 &&
+        schema.allOf.single.reference != null &&
+        schema.rawFields.keys.every(
+          const {
+            'allOf',
+            'title',
+            'summary',
+            'description',
+            'deprecated',
+            'externalDocs',
+            'example',
+            'examples',
+            r'$comment',
+          }.contains,
+        )) {
+      return _type(schema.allOf.single, hint);
+    }
     if (names.containsKey(id) ||
         _namedSchema.hasMatch(id.pointer) ||
         _hasObjectShape(schema) ||
@@ -525,6 +544,7 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
       };
       final List<String>? labels = _enumNames(schema, cases);
       final entries = <String, Object>{};
+      final seen = <Object>{};
       for (final (int position, Object? value) in cases.indexed) {
         if (value == null) {
           continue;
@@ -539,14 +559,20 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
             field: 'enum/$position',
           );
         }
-        entries[_identifier(
-              _replaceName(
-                labels?[position] ?? value.toString(),
-                NamingTarget.enumValues,
-              ),
-              used,
-            )] =
-            value;
+        if (!seen.add(value)) {
+          continue;
+        }
+        String candidate = _replaceName(
+          labels?[position] ?? value.toString(),
+          NamingTarget.enumValues,
+        );
+        if (labels == null &&
+            value is num &&
+            value < 0 &&
+            candidate == value.toString()) {
+          candidate = 'fieldMinus${value.abs()}'.replaceAll('.', 'Point');
+        }
+        entries[_identifier(candidate, used)] = value;
       }
       if (entries.isEmpty) {
         _fail(id, 'Expected a non-null enum value.');

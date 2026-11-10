@@ -34,8 +34,8 @@ void main() {
     probe.respond(299, {'id': 'last'});
     expect((await statuses.lateSuccess() as all.LateSuccess299).value.id, 'last');
     probe.respond(200, {'name': 'selected'});
-    final first.Station station = await client.lookupStation(xRequestId: 'test');
-    expect(station.name, 'selected');
+    final first.Station? station = await client.lookupStation(xRequestId: 'test');
+    expect(station!.name, 'selected');
   });
   test('returns a distinct typed variant for each declared status', () async {
     String read(all.LookupStationResult result) => switch (result) {
@@ -79,15 +79,31 @@ void main() {
   });
   test('distinguishes a 200 list from a bodyless 204', () async {
     probe.respond(200, [{'name': 'north'}, {'name': 'south'}]);
-    final List<first.Station> value = await client.listed();
-    expect(value.map((s) => s.name), ['north', 'south']);
+    final List<first.Station>? value = await client.listed();
+    expect(value!.map((s) => s.name), ['north', 'south']);
     expect((await statuses.listed() as all.Listed200).value.map((s) => s.name), ['north', 'south']);
     probe.respond(200, []);
     expect(await client.listed(), isEmpty);
     expect((await statuses.listed() as all.Listed200).value, isEmpty);
     probe.respond(204, null);
     expect(await statuses.listed(), isA<all.Listed204>());
-    await expectLater(client.listed(), throwsA(anything));
+    expect(await client.listed(), isNull);
+  });
+  test('returns null for declared bodyless success before decoding the payload', () async {
+    for (final withOptions in [false, true]) {
+      final options = withOptions ? ${http ? 'first.HttpRequestOptions()' : 'dio.Options()'} : null;
+      probe.respond(204, null);
+      final Future<first.Station?> result = client.lookupStation(xRequestId: 'test', options: options);
+      expect(await result, isNull);
+      probe.respond(200, {'name': 'reply'});
+      expect((await client.lookupStation(xRequestId: 'test', options: options))!.name, 'reply');
+      for (final body in ['', 'null', '{', '{}']) {
+        probe.body = body;
+        await expectLater(client.lookupStation(xRequestId: 'test', options: options), throwsA(anything));
+      }
+      probe.respond(204, null);
+      await expectLater(client.getStation(id: 'test', xRequestId: 'test', options: options), throwsA(anything));
+    }
   });
   test('uses void for bodyless 200 and only 204 responses', () async {
     probe.respond(200, null);

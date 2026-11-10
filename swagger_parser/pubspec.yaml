@@ -1,6 +1,6 @@
 name: swagger_parser
 description: Generate Dart models and HTTP clients from Swagger and OpenAPI. Supports Retrofit, Dio, and package:http.
-version: 2.0.0
+version: 2.0.1
 repository: https://github.com/Carapacik/swagger_parser/tree/main/swagger_parser
 issue_tracker: https://github.com/Carapacik/swagger_parser/issues
 resolution: workspace
@@ -16,7 +16,7 @@ dependencies:
   dart_style: ^3.1.13
   path: ^1.9.1
   pub_semver: ^2.2.1
-  swagger_parser_core: ^1.0.0
+  swagger_parser_core: ^1.0.1
   yaml: ^3.1.4
 
 dev_dependencies:

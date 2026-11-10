@@ -79,6 +79,13 @@ void main() {
                 );
                 expect(ops['multiStatus']!.status, 207);
                 expect(ops['listed']!.response.symbol, 'List');
+                for (final name in ['lookupStation', 'listed']) {
+                  expect(ops[name]!.emptySuccessStatuses, [204]);
+                  expect(ops[name]!.returnType.isNullable, isTrue);
+                  expect(ops[name]!.response.isNullable, isFalse);
+                }
+                expect(ops['created']!.emptySuccessStatuses, isEmpty);
+                expect(ops['created']!.returnType.isNullable, isFalse);
                 expect(
                   ops['listed']!.response.typeArguments.single.symbol,
                   'Station',
@@ -95,6 +102,10 @@ void main() {
                   ('Object', true),
                 );
               } else {
+                expect(
+                  ops.values.every((op) => op.emptySuccessStatuses.isEmpty),
+                  isTrue,
+                );
                 expect(ops['lookupStation']!.variants.keys, [
                   '200',
                   '201',

@@ -63,7 +63,6 @@ void main() {
                 ),
                 config: GenerationConfig(
                   usePresenceRecords: true,
-                  inferMissingRequired: false,
                   serializer: serializer,
                   httpClient: backend,
                   responseMode: mode,

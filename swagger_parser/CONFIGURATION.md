@@ -60,7 +60,7 @@ swagger_parser:
     body_positional: false
     use_path_for_method_names: false
     apply_parameter_defaults: false
-    infer_missing_required: true
+    infer_missing_required: false
     use_presence_records: false
     generate_validators: false
     stream_binary_responses: false
@@ -657,7 +657,7 @@ generation:
 Default. Prefer operationId.
 
 ```dart
-Future<Station> lookupStation({required String id});
+Future<Station?> lookupStation({required String id});
 ```
 
 ```yaml
@@ -767,8 +767,13 @@ An undescribed status fails. No separate application exception API is added.
 In first_success, only 201 selects its payload. Only 204, only 400, or no exact
 2xx gives `Future<void>`. Declared untyped JSON gives `Object?`. Native Retrofit
 keeps the caller's Dio status policy. Direct methods check the selected declared
-status when available. A selected Station cannot also decode Ticket or an empty
-204. Use all_statuses for different shapes. Response mode also affects pruning.
+status when available. A selected Station cannot also decode Ticket.
+A declared bodyless success returns null without decoding its body. The
+buffered return type becomes nullable; streaming methods return an empty stream.
+The selected payload keeps its schema codec, so an invalid or missing 200 body
+still fails. Such Retrofit methods use the direct Dio implementation for both
+ordinary calls and calls with Options. Use all_statuses for different payload
+shapes. Response mode also affects pruning.
 
 ### `generation.original_http_response`
 
@@ -1090,7 +1095,7 @@ generation:
   infer_missing_required: true
 ```
 
-Default. Infer non-null fields without defaults.
+Opt in to infer non-null fields without defaults.
 
 ```dart
 Station({required String id, String? name, bool enabled = true});
@@ -1101,7 +1106,7 @@ generation:
   infer_missing_required: false
 ```
 
-Use only explicit required declarations.
+Default. Use only explicit required declarations.
 
 ```dart
 Station({String? id, String? name, bool enabled = true});

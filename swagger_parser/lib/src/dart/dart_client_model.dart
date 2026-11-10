@@ -56,7 +56,7 @@ final class DartClientOperation({
   /// Selected success status in first-success mode, if present.
   required final int? status,
 
-  /// Public return type before Future wrapping.
+  /// Selected payload type. Bodyless statuses do not change its codec.
   required final DartTypeReference response,
 
   /// Whether the factory accepts a JSON object.
@@ -93,12 +93,35 @@ final class DartClientOperation({
   /// DTOs with a JSON object factory.
   final Set<String> objectTypes = const {},
   Map<String, DartStatusVariant> variants = const {},
+  Iterable<int> emptySuccessStatuses = const [],
 }) {
   /// Copies parameters in declaration order.
   this;
 
   /// Result variants for status-specific responses.
   final Map<String, DartStatusVariant> variants = Map.unmodifiable(variants);
+
+  /// Declared exact 2xx statuses without content in first-success mode.
+  /// Empty by default. Buffered methods return null for these statuses.
+  /// Streaming methods return an empty stream.
+  final List<int> emptySuccessStatuses = List.unmodifiable(
+    emptySuccessStatuses,
+  );
+
+  /// Public result type before Future or transport-response wrapping.
+  /// Buffered payloads become nullable when a success status has no content.
+  DartTypeReference get returnType =>
+      emptySuccessStatuses.isEmpty ||
+          response.isNullable ||
+          const {'void', 'Null', 'Stream'}.contains(response.symbol)
+      ? response
+      : DartTypeReference(
+          symbol: response.symbol,
+          importUrl: response.importUrl,
+          scalarCodec: response.scalarCodec,
+          typeArguments: response.typeArguments,
+          isNullable: true,
+        );
 
   /// Path, query, and header parameters.
   final List<DartClientParameter> parameters = List.unmodifiable(parameters);

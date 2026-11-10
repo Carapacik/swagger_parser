@@ -134,21 +134,21 @@ void main() {
     );
     expect(
       generator.generate(model).files.single.content,
-      contains('// true false'),
+      contains('// false false'),
     );
     expect(
       generator
           .generate(
             model,
             config: const GenerationConfig(
-              inferMissingRequired: false,
+              inferMissingRequired: true,
               usePresenceRecords: true,
             ),
           )
           .files
           .single
           .content,
-      contains('// false true'),
+      contains('// true true'),
     );
   });
 
