@@ -34,8 +34,11 @@ abstract base class _FixedObject({
   Map<String, JsonValue> extensions = const {},
   Map<String, JsonValue> extraFields = const {},
 }) with OpenApiV32Object {
+  /// Specification extensions keyed by their `x-` names. Defaults to empty.
   @override
   final Map<String, JsonValue> extensions = Map.unmodifiable(extensions);
+
+  /// Unrecognized fields retained for JSON export. Defaults to empty.
   @override
   final Map<String, JsonValue> extraFields = Map.unmodifiable(extraFields);
 }

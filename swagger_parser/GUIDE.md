@@ -1317,8 +1317,7 @@ state. Their result must be transferable between isolates.
 ## Run
 
 ```sh
-dart run example/generate_dto.dart test/fixtures/extraction/open_api_v3_2.yaml
-dart run example/parse_file.dart path/to/swagger.yaml
+dart run example/swagger_parser_example.dart
 dart test
 ```
 

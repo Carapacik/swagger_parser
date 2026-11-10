@@ -1018,27 +1018,25 @@ dependency_overrides:
       final ProcessResult generated = await run([]);
       expect(generated.exitCode, 0, reason: generated.stderr.toString());
       expect(file('lib/generated/api.dart').existsSync(), isTrue);
-      for (final (example, args) in [
+      for (final (example, output) in [
         (
-          'example/parse_file.dart',
-          ['test/fixtures/extraction/open_api_v3_2.yaml'],
+          'example/swagger_parser_example.dart',
+          'stations/stations_client.dart',
         ),
         (
-          'example/generate_dto.dart',
-          ['test/fixtures/extraction/open_api_v3_2.json'],
+          '../swagger_parser_core/example/swagger_parser_core_example.dart',
+          '"swagger": "2.0"',
         ),
-        ('../swagger_parser_core/example/parse_v2.dart', <String>[]),
       ]) {
         final ProcessResult result = await Process.run(
           Platform.resolvedExecutable,
           [
             '--packages=${(await Isolate.packageConfig)!.toFilePath()}',
             example,
-            ...args,
           ],
         );
         expect(result.exitCode, 0, reason: '$example: ${result.stderr}');
-        expect(result.stdout.toString(), isNotEmpty);
+        expect(result.stdout.toString(), contains(output));
       }
     },
   );
