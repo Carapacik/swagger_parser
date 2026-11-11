@@ -1,7 +1,10 @@
 part of 'dart_code_builder.dart';
 
 extension on _JsonBuilder {
-  Iterable<cb.Class> buildStructuralUnion(DartStructuralUnion union) sync* {
+  Iterable<cb.Class> buildStructuralUnion(
+    DartStructuralUnion union, {
+    bool freezed = false,
+  }) sync* {
     final body = StringBuffer();
     final snapshot = union.projectionMatcher == null
         ? 'json'
@@ -69,7 +72,7 @@ extension on _JsonBuilder {
         }
       }
       if (union.unknownType != null) {
-        yield _unknownStructuralUnion(union);
+        yield _unknownStructuralUnion(union, freezed: freezed);
       }
       return;
     }
@@ -128,11 +131,14 @@ extension on _JsonBuilder {
       c.methods.add(_toJson(_jsonValue, '_copyJson(_json)'));
     });
     if (union.unknownType != null) {
-      yield _unknownStructuralUnion(union);
+      yield _unknownStructuralUnion(union, freezed: freezed);
     }
   }
 
-  cb.Class _unknownStructuralUnion(DartStructuralUnion union) => cb.Class((c) {
+  cb.Class _unknownStructuralUnion(
+    DartStructuralUnion union, {
+    bool freezed = false,
+  }) => cb.Class((c) {
     c
       ..name = union.unknownType
       ..modifier = cb.ClassModifier.final$;
@@ -141,16 +147,57 @@ extension on _JsonBuilder {
       c.fields.add(_field('rawJson', _jsonValue));
     } else {
       c.extend = cb.refer(union.name);
-      c.methods.add(
-        cb.Method(
-          (m) => m
-            ..name = 'rawJson'
-            ..type = cb.MethodType.getter
-            ..returns = _jsonValue
+      if (freezed) {
+        c.fields.add(_field('rawJson', _jsonValue));
+      } else {
+        c.methods.add(
+          cb.Method(
+            (m) => m
+              ..name = 'rawJson'
+              ..type = cb.MethodType.getter
+              ..returns = _jsonValue
+              ..lambda = true
+              ..body = const cb.Code('_json'),
+          ),
+        );
+      }
+    }
+    if (freezed && !union.exclusive) {
+      // Freezed compares declared fields. Share the frozen snapshot with the base.
+      c.constructors.addAll([
+        cb.Constructor(
+          (ctor) => ctor
+            ..factory = true
+            ..requiredParameters.add(
+              cb.Parameter(
+                (p) => p
+                  ..name = 'json'
+                  ..type = _jsonValue,
+              ),
+            )
             ..lambda = true
-            ..body = const cb.Code('_json'),
+            ..body = cb.Code(
+              '${union.unknownType}._(_freezeUnknownJson(json))',
+            ),
         ),
-      );
+        cb.Constructor(
+          (ctor) => ctor
+            ..name = '_'
+            ..requiredParameters.add(
+              cb.Parameter(
+                (p) => p
+                  ..name = 'rawJson'
+                  ..toThis = true,
+              ),
+            )
+            ..initializers.add(
+              cb.Code(
+                'super._(rawJson, ${union.branches.map((_) => 'false').join(', ')})',
+              ),
+            ),
+        ),
+      ]);
+      return;
     }
     c.constructors.add(
       cb.Constructor(

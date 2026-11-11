@@ -11,7 +11,9 @@ import 'package:test/test.dart';
 import 'support/bodyless_success_driver.dart';
 import 'support/consumer_matrix.dart';
 import 'support/contextual_identifiers_driver.dart';
+import 'support/freezed_models_driver.dart';
 import 'support/test_platforms.dart';
+import 'support/union_equality_driver.dart';
 import 'support/unmatched_unions_driver.dart';
 
 Map<String, Object?> _object(Object? value) => value! as Map<String, Object?>;
@@ -72,6 +74,7 @@ void main() {
         ('reference_metadata', 'MetadataModel'),
         ('enum_members', ''),
         ('required_inference', 'OptionalModel'),
+        ('union_equality', 'UnionHolder'),
       ]) {
         final extra =
             jsonDecode((await source(group)).content) as Map<String, Object?>;
@@ -123,6 +126,13 @@ void main() {
           ),
         );
       }
+      await write(
+        '${prefix}_equality_test.dart',
+        unionEqualityDriver(
+          '${prefix}_reject',
+          freezed: serializer == DtoSerializer.freezed,
+        ),
+      );
       await generate(
         '${prefix}_inferred',
         await source('required_inference'),
@@ -197,6 +207,24 @@ void main() {
         );
       }
     }
+    await generate(
+      'freezed_models',
+      await const FileSchemaSourceLoader().loadPath(
+        '../swagger_parser/test/fixtures/e2e/union_equality/inputs/models.json',
+      ),
+      const GenerationConfig(
+        serializer: DtoSerializer.freezed,
+        httpClient: HttpClientBackend.dio,
+        responseMode: ResponseMode.allStatuses,
+        unknownEnumValues: UnknownValueMode.preserve,
+        unknownDiscriminatorValues: UnknownValueMode.preserve,
+        unmatchedUnionValues: UnknownValueMode.preserve,
+      ),
+    );
+    await write(
+      'freezed_models_test.dart',
+      freezedModelsDriver('freezed_models'),
+    );
     for (final HttpClientBackend backend in HttpClientBackend.values) {
       for (final kind in ['json', 'text', 'bytes', 'stream']) {
         for (final original in [false, true]) {

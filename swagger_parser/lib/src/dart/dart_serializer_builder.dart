@@ -51,8 +51,18 @@ final class _SerializerBuilder(
 
   void addDirectives(cb.LibraryBuilder library, String path) {
     final bool hasObjects = dtos.values.any((dto) => dto.json);
+    final bool hasFreezedModels =
+        serializer == DtoSerializer.freezed &&
+        (model.dtos.isNotEmpty ||
+            model.values.isNotEmpty ||
+            model.tuples.isNotEmpty ||
+            model.structuralUnions.isNotEmpty ||
+            model.unions.any((u) => u.unknownType != null) ||
+            model.enums.any((e) => e.openNames != null) ||
+            model.results.isNotEmpty);
     if (serializer == DtoSerializer.plain ||
         (!hasObjects &&
+            !hasFreezedModels &&
             nativeEnums.isEmpty &&
             (serializer != DtoSerializer.dartMappable || !hasMappableEnums))) {
       return;
@@ -68,14 +78,30 @@ final class _SerializerBuilder(
     };
     library.directives.addAll([
       cb.Directive.import('package:$package/$package.dart'),
-      if (serializer == DtoSerializer.freezed && hasObjects)
-        cb.Directive.part('$stem.freezed.dart'),
-      cb.Directive.part(
-        serializer == DtoSerializer.dartMappable
-            ? '$stem.mapper.dart'
-            : '$stem.g.dart',
-      ),
+      if (hasFreezedModels) cb.Directive.part('$stem.freezed.dart'),
+      if (hasObjects ||
+          nativeEnums.isNotEmpty ||
+          serializer == DtoSerializer.dartMappable)
+        cb.Directive.part(
+          serializer == DtoSerializer.dartMappable
+              ? '$stem.mapper.dart'
+              : '$stem.g.dart',
+        ),
     ]);
+  }
+
+  cb.Class freezedClass(cb.Class declaration, {bool copyWith = true}) {
+    if (serializer != DtoSerializer.freezed) {
+      return declaration;
+    }
+    return declaration.rebuild((c) {
+      c.annotations.add(
+        cb.refer(
+          'Freezed(fromJson: false, toJson: false${copyWith ? '' : ', copyWith: false'})',
+        ),
+      );
+      c.mixins.add(cb.refer('_\$${declaration.name}'));
+    });
   }
 
   cb.Class buildUnion(DartUnionModel union) {
@@ -118,12 +144,12 @@ final class _SerializerBuilder(
     }
     final String name = union.name;
     final String key = _literal(union.propertyName);
-    final frozen = serializer == DtoSerializer.freezed;
+    final useFreezed = serializer == DtoSerializer.freezed;
     return cb.Class((c) {
       c
         ..name = name
         ..sealed = true;
-      if (frozen) {
+      if (useFreezed) {
         c.annotations.add(
           cb.refer('Freezed(unionKey: $key, fromJson: true, toJson: false)'),
         );
@@ -229,10 +255,10 @@ final class _SerializerBuilder(
   cb.Spec annotatedDto(DartDtoModel dto, List<String> interfaces) {
     final declaration = cb.Class((c) {
       final String name = dto.name;
-      final frozen = serializer == DtoSerializer.freezed;
+      final useFreezed = serializer == DtoSerializer.freezed;
       c.name = name;
       c.implements.addAll(interfaces.map(cb.refer));
-      if (frozen) {
+      if (useFreezed) {
         c.annotations.add(cb.refer('Freezed(fromJson: false, toJson: false)'));
         c.mixins.add(cb.refer('_\$$name'));
       }
@@ -471,7 +497,7 @@ final class _SerializerBuilder(
 
   cb.Spec buildEnum(DartEnumModel model) {
     if (model.openNames != null) {
-      return _openEnum(model);
+      return _openEnum(model, freezed: serializer == DtoSerializer.freezed);
     }
     final cb.Enum plain = json.buildEnum(model);
     if (serializer == DtoSerializer.dartMappable) {

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+* Uses Freezed for all data model classes when selected, including value wrappers,
+  `oneOf` variants, `anyOf` models, tuples, unknown values, and typed HTTP results.
+  Fixes value equality for primitive union variants
+  ([#488](https://github.com/Carapacik/swagger_parser/issues/488)).
+
 ## 2.1.0
 
 * Adds `unmatched_union_values` to preserve unmatched `oneOf` and `anyOf` values

@@ -1,6 +1,6 @@
 part of 'dart_code_builder.dart';
 
-cb.Code _openEnum(DartEnumModel model) {
+cb.Code _openEnum(DartEnumModel model, {bool freezed = false}) {
   final DartOpenEnumNames names = model.openNames!;
   final String type = names.rawType;
   final Set<String> types = model.types.isEmpty
@@ -35,31 +35,39 @@ sealed class ${model.name} {
   }
   $type toJson();
 }
-final class ${names.known} extends ${model.name} {
+${freezed ? '@Freezed(fromJson: false, toJson: false)' : ''}
+final class ${names.known} extends ${model.name}${freezed ? ' with _\$${names.known}' : ''} {
   const ${names.known}(this.value);
   final ${names.values} value;
   @override
   $type toJson() => value.value;
+  ${freezed ? '' : '''
   @override
   bool operator ==(Object other) => other is ${names.known} && other.value == value;
   @override
   int get hashCode => Object.hash(${names.known}, value);
+'''}
 }
-final class ${names.unknown} extends ${model.name} {
+${freezed ? '@Freezed(fromJson: false, toJson: false)' : ''}
+final class ${names.unknown} extends ${model.name}${freezed ? ' with _\$${names.unknown}' : ''} {
   const ${names.unknown}(this.rawValue);
   final $type rawValue;
   @override
   $type toJson() => rawValue;
+  ${freezed ? '' : '''
   @override
   bool operator ==(Object other) => other is ${names.unknown} && other.rawValue == rawValue;
   @override
   int get hashCode => Object.hash(${names.unknown}, rawValue);
+'''}
 }
 ''');
 }
 
-cb.Code _unknownUnion(DartUnionModel model) => cb.Code('''
-final class ${model.unknownType} implements ${model.name} {
+cb.Code _unknownUnion(DartUnionModel model, {bool freezed = false}) =>
+    cb.Code('''
+${freezed ? '@Freezed(fromJson: false, toJson: false, copyWith: false)' : ''}
+final class ${model.unknownType}${freezed ? ' with _\$${model.unknownType}' : ''} implements ${model.name} {
   ${model.unknownType}(Map<String, Object?> json)
       : rawJson = _freezeUnknownJson(json) as Map<String, Object?> {
     if (json[${_literal(model.propertyName)}] is! String) {

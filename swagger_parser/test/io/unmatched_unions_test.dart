@@ -67,7 +67,11 @@ void main() {
             if (mode == UnknownValueMode.preserve) {
               expect(
                 source,
-                contains('class MessageUnknown2 implements Message'),
+                matches(
+                  serializer == DtoSerializer.freezed
+                      ? r'class MessageUnknown2\s+with _\$MessageUnknown2\s+implements Message'
+                      : 'class MessageUnknown2 implements Message',
+                ),
               );
               expect(source, contains('class ViewsUnknown extends Views'));
               expect(source, contains('if (matches.isEmpty)'));

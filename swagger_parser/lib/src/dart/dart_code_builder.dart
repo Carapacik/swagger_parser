@@ -110,12 +110,10 @@ final class const DefaultDartCodeBuilder() implements DartCodeBuilder {
       if (model.facade case final facade?) {
         _buildFacade(library, facade, httpClient);
       }
-      final packages = _SerializerBuilder(serializer, json, model);
-      if (model.dtos.any((dto) => dto.json) || model.enums.isNotEmpty) {
-        packages.addDirectives(library, model.relativePath);
-      }
+      final packages = _SerializerBuilder(serializer, json, model)
+        ..addDirectives(library, model.relativePath);
       if (model.results.isNotEmpty) {
-        _buildStatusResults(library, model);
+        _buildStatusResults(library, model, packages);
       }
       if (model.operations.isNotEmpty) {
         _buildHttpClient(
@@ -131,7 +129,14 @@ final class const DefaultDartCodeBuilder() implements DartCodeBuilder {
         ..addAll(model.enums.map(packages.buildEnum))
         ..addAll(model.unions.map(packages.buildUnion))
         ..addAll(
-          model.unions.where((u) => u.unknownType != null).map(_unknownUnion),
+          model.unions
+              .where((u) => u.unknownType != null)
+              .map(
+                (u) => _unknownUnion(
+                  u,
+                  freezed: serializer == DtoSerializer.freezed,
+                ),
+              ),
         )
         ..addAll(
           model.dtos.map(
@@ -142,17 +147,44 @@ final class const DefaultDartCodeBuilder() implements DartCodeBuilder {
               DtoSerializer.dartMappable when dto.json => packages.mappedDto(
                 _buildDto(dto, json, interfaces[dto.name] ?? const []),
               ),
-              _ => _buildDto(dto, json, interfaces[dto.name] ?? const []),
+              _ => packages.freezedClass(
+                _buildDto(dto, json, interfaces[dto.name] ?? const []),
+              ),
             },
           ),
         )
         ..addAll(
           model.values.map(
-            (v) => json.buildValue(v, interfaces[v.name] ?? const []),
+            (v) => packages.freezedClass(
+              json.buildValue(v, interfaces[v.name] ?? const []),
+            ),
           ),
         )
-        ..addAll(model.tuples.map(json.buildTuple))
-        ..addAll(model.structuralUnions.expand(json.buildStructuralUnion));
+        ..addAll(
+          model.tuples.map(
+            (tuple) =>
+                packages.freezedClass(json.buildTuple(tuple), copyWith: false),
+          ),
+        )
+        ..addAll(
+          model.structuralUnions.expand(
+            (union) => json
+                .buildStructuralUnion(
+                  union,
+                  freezed: serializer == DtoSerializer.freezed,
+                )
+                .map(
+                  (declaration) => declaration.sealed
+                      ? declaration
+                      : packages.freezedClass(
+                          declaration,
+                          copyWith:
+                              union.exclusive &&
+                              declaration.name != union.unknownType,
+                        ),
+                ),
+          ),
+        );
       if (serializer == DtoSerializer.dartMappable) {
         packages.addMappers(library, model);
       }

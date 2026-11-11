@@ -800,6 +800,13 @@ inside lists and maps.
 For dart_mappable object DTOs, `toJson()` and `toMap()` return maps.
 Use `jsonEncode(dto)` for JSON text. Freezed DTOs use native Dart 3.13 primary
 constructors and final fields. Supplied lists and maps retain their mutability.
+With `serializer: freezed`, all concrete data model classes use Freezed for
+value equality, hash codes, and string representations. This includes value
+wrappers, union variants, `anyOf` models, tuples, unknown values, and typed HTTP
+results. Freezed supplies `copyWith` for models with public data constructors.
+Snapshot models (`anyOf`, tuples, and unknown union values) disable `copyWith`
+to retain validation and defensive copying. Sealed dispatch bases, Dart enums,
+HTTP clients, and service helpers keep their existing Dart declarations.
 Untagged unions use the same schema checks with each serializer.
 
 - Objects have final fields, a const constructor, `fromJson`, and `toJson`.

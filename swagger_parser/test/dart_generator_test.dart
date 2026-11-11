@@ -2,6 +2,20 @@ import 'package:swagger_parser/swagger_parser.dart';
 import 'package:test/test.dart';
 
 void main() {
+  test('uses Freezed for data models without JSON codecs', () {
+    final GenerationResult result = const DartGenerator().generate(
+      DartGenerationModel(libraries: [_userLibrary()]),
+      config: const GenerationConfig(serializer: DtoSerializer.freezed),
+    );
+    final String source = result.files.single.content;
+    expect(source, contains('@Freezed(fromJson: false, toJson: false)'));
+    expect(source, contains(r'class User with _$User'));
+    expect(source, contains("part 'user.freezed.dart'"));
+    expect(source, isNot(contains("part 'user.g.dart'")));
+    expect(source, isNot(contains('fromJson(')));
+    expect(source, isNot(contains('toJson(')));
+  });
+
   test('renders required, nullable and optional fields as formatted Dart', () {
     final GenerationResult result = const DartGenerator().generate(
       DartGenerationModel(libraries: [_userLibrary()]),

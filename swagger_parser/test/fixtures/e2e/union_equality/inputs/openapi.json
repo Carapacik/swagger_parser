@@ -1,0 +1,120 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Union value equality",
+    "version": "1.0"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Toggles": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Foo": {
+        "type": "object",
+        "properties": {
+          "flag": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/components/schemas/Toggles"
+              }
+            ]
+          }
+        }
+      },
+      "ScalarChoice": {
+        "oneOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          }
+        ]
+      },
+      "NullableChoice": {
+        "oneOf": [
+          {
+            "type": "string",
+            "nullable": true
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      },
+      "NamedBoolean": {
+        "type": "boolean"
+      },
+      "NamedChoice": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/NamedBoolean"
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      },
+      "CollectionChoice": {
+        "oneOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          {
+            "type": "boolean"
+          }
+        ]
+      },
+      "MapChoice": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "type": "boolean"
+          }
+        ]
+      },
+      "OtherChoice": {
+        "oneOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      },
+      "DeepCollectionEquality": {
+        "type": "string"
+      }
+    }
+  }
+}

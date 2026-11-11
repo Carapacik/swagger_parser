@@ -1,0 +1,17 @@
+cases:
+  - name: generates value equality for Freezed union wrappers
+    config: configs/freezed.yaml
+    output: out
+    expected:
+      json:
+        - expected/freezed
+      yaml:
+        - expected/freezed
+  - name: generates Freezed models with preserved unknown values
+    config: configs/models.yaml
+    output: out
+    expected:
+      json:
+        - expected/models
+      yaml:
+        - expected/models

@@ -126,3 +126,11 @@ directional projections, helper collisions, and independent tagged dispatch.
 The two baselines share 14 identical files.
 The compiled-consumer suite combines compatible 3.0 schemas in its reject
 configuration. It keeps inference and transport settings separate.
+
+`union_equality` adds four outputs from paired JSON and block YAML. The 3.0
+schema covers the reported primitive union shape, scalar aliases, nullable
+values, nested collections, and a helper name collision. The 3.1 schema adds
+tuples, anyOf, preserved unknown values, open enums, and typed HTTP results.
+Freezed supplies model behavior while custom codecs retain wire validation.
+The 3.0 consumer checks share the existing reject configuration for all four
+serializers. The 3.1 preserve configuration has separate consumer checks.
