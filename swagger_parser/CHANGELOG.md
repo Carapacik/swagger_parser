@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.1.0
 
 * Adds `unmatched_union_values` to preserve unmatched `oneOf` and `anyOf` values
   as immutable JSON. Defaults to `reject`

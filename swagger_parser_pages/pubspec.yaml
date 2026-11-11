@@ -10,8 +10,8 @@ dependencies:
   archive: ^4.6.0
   web: ^1.1.1
   jaspr: ^0.23.5
-  swagger_parser: ^2.0.1
-  swagger_parser_templates: ^1.0.1
+  swagger_parser: ^2.1.0
+  swagger_parser_templates: ^1.1.0
   yaml: ^3.1.4
   yaml_edit: ^2.2.4
 

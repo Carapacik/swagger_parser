@@ -708,7 +708,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.16.2
   retrofit_generator: ^10.3.3
-  swagger_parser: ^2.0.1
+  swagger_parser: ^2.1.0
 ```
 
 #### json_serializable
@@ -725,7 +725,7 @@ dev_dependencies:
   build_runner: ^2.16.2
   json_serializable: ^6.15.2
   retrofit_generator: ^10.3.3
-  swagger_parser: ^2.0.1
+  swagger_parser: ^2.1.0
 ```
 
 #### Freezed
@@ -744,7 +744,7 @@ dev_dependencies:
   freezed: ^4.0.3
   json_serializable: ^6.15.2
   retrofit_generator: ^10.3.3
-  swagger_parser: ^2.0.1
+  swagger_parser: ^2.1.0
 ```
 
 #### dart_mappable
@@ -761,7 +761,7 @@ dev_dependencies:
   build_runner: ^2.16.2
   dart_mappable_builder: ^4.10.0
   retrofit_generator: ^10.3.3
-  swagger_parser: ^2.0.1
+  swagger_parser: ^2.1.0
 ```
 
 For standalone Dio, remove `retrofit` and `retrofit_generator`.
