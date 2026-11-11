@@ -15,8 +15,8 @@ Supports all four serializers and three HTTP clients. Runs on VM and web.
 
 ```yaml
 dev_dependencies:
-  swagger_parser: ^2.1.0
-  swagger_parser_templates: ^1.1.0
+  swagger_parser: ^2.1.1
+  swagger_parser_templates: ^1.1.1
 ```
 
 Run `dart pub get`. Core is a transitive dependency. For runtime generation,

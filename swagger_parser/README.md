@@ -39,7 +39,7 @@ dev_dependencies:
   freezed: ^4.0.3
   json_serializable: ^6.15.2
   retrofit_generator: ^10.3.3
-  swagger_parser: ^2.1.0
+  swagger_parser: ^2.1.1
 ```
 
 Install only the packages for your chosen client and serializer.
