@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1
+
+* Updates the minimum `swagger_parser` version to 2.1.1.
+* Adds pub.dev topics, documentation links, and the project icon.
+
 ## 1.1.0
 
 * Updates the minimum `swagger_parser` version to 2.1.0.

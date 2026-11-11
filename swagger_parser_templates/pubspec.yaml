@@ -3,6 +3,16 @@ description: Custom Mustache templates, helper files, and a template CLI for swa
 version: 1.1.0
 repository: https://github.com/Carapacik/swagger_parser/tree/main/swagger_parser_templates
 issue_tracker: https://github.com/Carapacik/swagger_parser/issues
+documentation: https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser_templates/README.md
+topics:
+  - openapi
+  - swagger
+  - codegen
+  - templates
+  - mustache
+screenshots:
+  - description: Swagger Parser icon from the web interface.
+    path: assets/icon.png
 resolution: workspace
 environment:
   sdk: ^3.13.0

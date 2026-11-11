@@ -3,6 +3,16 @@ description: Typed Swagger and OpenAPI models with JSON/YAML parsing, validation
 version: 1.0.1
 repository: https://github.com/Carapacik/swagger_parser/tree/main/swagger_parser_core
 issue_tracker: https://github.com/Carapacik/swagger_parser/issues
+documentation: https://github.com/Carapacik/swagger_parser/blob/main/swagger_parser_core/GUIDE.md
+topics:
+  - openapi
+  - swagger
+  - parser
+  - json
+  - yaml
+screenshots:
+  - description: Swagger Parser icon from the web interface.
+    path: assets/icon.png
 resolution: workspace
 environment:
   sdk: ^3.13.0

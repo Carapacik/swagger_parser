@@ -1,11 +1,13 @@
 # Changelog
 
-## Unreleased
+## 2.1.1
 
 * Uses Freezed for all data model classes when selected, including value wrappers,
   `oneOf` variants, `anyOf` models, tuples, unknown values, and typed HTTP results.
   Fixes value equality for primitive union variants
   ([#488](https://github.com/Carapacik/swagger_parser/issues/488)).
+* Updates the minimum `swagger_parser_core` version to 1.0.2.
+* Adds pub.dev topics, documentation links, and the project icon.
 
 ## 2.1.0
 
