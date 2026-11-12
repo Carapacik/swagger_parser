@@ -1221,6 +1221,42 @@ Preserve adds StatusKnown, StatusValue, and StatusUnknown. HTTP return types
 remain Status. Unknown scalars must match the schema type. Nullability and
 discriminator policies are separate. Custom mappings keep their own checks.
 
+### `x-enum-metadata`
+
+OpenAPI schemas can attach typed metadata to string or integer enum members with
+the version 1 `x-enum-metadata` extension. It generates an enhanced Dart enum;
+each constant carries its exact wire value and metadata. No generation option is
+needed.
+
+```yaml
+type: integer
+enum:
+  - 101
+x-enumNames:
+  - firstKind
+x-enum-metadata:
+  version: 1
+  fields:
+    category:
+      type: string
+    order:
+      type: integer
+  values:
+    "101":
+      category: sample-a
+      order: 10
+```
+
+This produces `SampleCode.firstKind(101, category: 'sample-a', order: 10)`.
+JSON contains only the integer or exact string wire value. Metadata is not
+serialized. Plain, json_serializable, Freezed, and dart_mappable generate real
+Dart enums. Known string values such as `"0007"` and `"7"` remain distinct.
+
+Unknown IDs fail in non-nullable fields and non-nullable collection elements.
+Nullable fields and nullable collection elements decode unknown IDs as `null` in
+all four serializers. Setting `unknown_enum_values: preserve` does not create
+wrappers for metadata enums.
+
 ### `generation.unknown_discriminator_values`
 
 Stop has known rail and bus tags in its kind field.

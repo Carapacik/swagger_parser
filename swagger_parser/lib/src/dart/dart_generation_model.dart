@@ -301,6 +301,9 @@ final class DartTypeReference({
 
   /// Whether the type permits null.
   final bool isNullable = false,
+
+  /// True for a wire enum carrying x-enum-metadata.
+  final bool isMetadataEnum = false,
   Iterable<DartTypeReference> typeArguments = const [],
 }) {
   /// Records the type name, import, nullability, and type arguments.
@@ -323,6 +326,13 @@ final class DartEnumModel(
 
   /// Declared non-null JSON types for unknown values.
   final Set<String> types = const {},
+
+  /// Metadata field types and rows keyed by exact serialized enum value.
+  final Map<String, String> metadataFields = const {},
+  final Map<String, Map<String, Object>> metadataValues = const {},
+
+  /// Whether this enum came from an x-enum-metadata extension.
+  final bool hasMetadata = false,
 }) {
   /// Copies values in declaration order.
   this;

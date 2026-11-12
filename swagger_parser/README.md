@@ -14,7 +14,8 @@ Generate Dart models and HTTP clients from OpenAPI JSON or YAML.
 - Swagger 2.0 and OpenAPI 3.0.x, 3.1.x, and 3.2.x.
 - Plain JSON codecs, json_serializable, Freezed, or dart_mappable.
 - Retrofit + Dio, standalone Dio, or package:http clients.
-- References, allOf, oneOf, anyOf, enums, and request/response models.
+- References, allOf, oneOf, enums, and request/response models. Enhanced enums use
+  the [`x-enum-metadata` extension](CONFIGURATION.md#x-enum-metadata).
 - Forms, multipart uploads, binary responses, SSE, and JSON Lines.
 - Local files, authenticated schema URLs, and multiple inputs.
 - CLI and in-memory generation for Dart VM and web.

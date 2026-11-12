@@ -36,10 +36,16 @@ final class _SerializerBuilder(
     }
   }
 
-  final bool hasMappableEnums = model.enums.any((e) => e.openNames == null);
+  final bool hasMappableEnums = model.enums.any(
+    (e) => e.openNames == null && !e.hasMetadata,
+  );
+  final bool hasMetadataMappableEnums =
+      serializer == DtoSerializer.dartMappable &&
+      model.enums.any((e) => e.hasMetadata);
   final Set<String> nativeEnums = {
     for (final e in model.enums)
       if (e.openNames == null &&
+          !e.hasMetadata &&
           e.values.values.every((v) => v is String || v is int))
         e.name,
   };
@@ -64,7 +70,8 @@ final class _SerializerBuilder(
         (!hasObjects &&
             !hasFreezedModels &&
             nativeEnums.isEmpty &&
-            (serializer != DtoSerializer.dartMappable || !hasMappableEnums))) {
+            (serializer != DtoSerializer.dartMappable ||
+                (!hasMappableEnums && !hasMetadataMappableEnums)))) {
       return;
     }
     final String stem = path
@@ -81,7 +88,7 @@ final class _SerializerBuilder(
       if (hasFreezedModels) cb.Directive.part('$stem.freezed.dart'),
       if (hasObjects ||
           nativeEnums.isNotEmpty ||
-          serializer == DtoSerializer.dartMappable)
+          (serializer == DtoSerializer.dartMappable && hasMappableEnums))
         cb.Directive.part(
           serializer == DtoSerializer.dartMappable
               ? '$stem.mapper.dart'
@@ -487,20 +494,25 @@ final class _SerializerBuilder(
         : declaration;
   }
 
-  bool _nativeJson(DartTypeReference type) => switch (type.symbol) {
-    'List' || 'Map' => _nativeJson(type.typeArguments.last),
-    'String' || 'bool' || 'num' || 'Object' => true,
-    _ =>
-      nativeEnums.contains(type.symbol) ||
-          json.objectTypes.contains(type.symbol),
-  };
+  bool _nativeJson(DartTypeReference type) {
+    if (type.isMetadataEnum) {
+      return false;
+    }
+    return switch (type.symbol) {
+      'List' || 'Map' => _nativeJson(type.typeArguments.last),
+      'String' || 'bool' || 'num' || 'Object' => true,
+      _ =>
+        nativeEnums.contains(type.symbol) ||
+            json.objectTypes.contains(type.symbol),
+    };
+  }
 
   cb.Spec buildEnum(DartEnumModel model) {
     if (model.openNames != null) {
       return _openEnum(model, freezed: serializer == DtoSerializer.freezed);
     }
     final cb.Enum plain = json.buildEnum(model);
-    if (serializer == DtoSerializer.dartMappable) {
+    if (serializer == DtoSerializer.dartMappable && !model.hasMetadata) {
       return plain.rebuild((e) {
         e.annotations.add(cb.refer('MappableEnum()'));
         e.values.replace(
@@ -517,7 +529,9 @@ final class _SerializerBuilder(
     if (serializer != DtoSerializer.plain && nativeEnums.contains(model.name)) {
       return plain.rebuild((e) {
         e.annotations.add(
-          cb.refer("JsonEnum(alwaysCreate: true, valueField: 'value')"),
+          cb.refer(
+            "JsonEnum(alwaysCreate: true, valueField: '${model.hasMetadata ? 'wireValue' : 'value'}')",
+          ),
         );
         final map = '_\$${model.name}EnumMap';
         e.constructors.replace(
@@ -536,6 +550,38 @@ final class _SerializerBuilder(
     }
     return plain;
   }
+
+  cb.Spec buildMetadataEnumMapper(DartEnumModel model) => cb.Code('''
+class ${model.name}Mapper extends EnumMapper<${model.name}> {
+  ${model.name}Mapper._();
+
+  static ${model.name}Mapper? _instance;
+  static ${model.name}Mapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = ${model.name}Mapper._());
+    }
+    return _instance!;
+  }
+
+  static ${model.name} fromValue(dynamic value) {
+    ensureInitialized();
+    return MapperContainer.globals.fromValue(value);
+  }
+
+  @override
+  ${model.name} decode(dynamic value) => ${model.name}.fromJson(value);
+
+  @override
+  dynamic encode(${model.name} self) => self.wireValue;
+}
+
+extension ${model.name}MapperExtension on ${model.name} {
+  dynamic toValue() {
+    ${model.name}Mapper.ensureInitialized();
+    return MapperContainer.globals.toValue<${model.name}>(this);
+  }
+}
+''');
 
   cb.Parameter _arg(String name, cb.Reference type) => cb.Parameter(
     (p) => p

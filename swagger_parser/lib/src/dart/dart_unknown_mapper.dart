@@ -12,6 +12,9 @@ extension on _Mapping {
     if (config.unknownEnumValues == UnknownValueMode.preserve) {
       for (var i = 0; i < enums.length; i++) {
         final DartEnumModel model = enums[i];
+        if (model.hasMetadata) {
+          continue;
+        }
         final String rawType = switch (model.types.toList()) {
           ['string'] => 'String',
           ['integer'] => 'int',

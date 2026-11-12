@@ -550,6 +550,7 @@ DartTypeReference _wireType(DartTypeReference type) {
     scalarCodec: type.scalarCodec,
     isNullable: type.isNullable,
     typeArguments: type.typeArguments.map(_wireType),
+    isMetadataEnum: type.isMetadataEnum,
   );
 }
 

@@ -154,6 +154,7 @@ DartTypeReference _formNonNull(DartTypeReference type) => DartTypeReference(
   importUrl: type.importUrl,
   scalarCodec: type.scalarCodec,
   typeArguments: type.typeArguments,
+  isMetadataEnum: type.isMetadataEnum,
 );
 
 String _multipartField(

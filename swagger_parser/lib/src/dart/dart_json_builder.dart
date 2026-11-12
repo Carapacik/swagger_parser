@@ -10,6 +10,7 @@ final class _JsonBuilder(
   final Set<String> wrappedTypes, {
   required final bool matchIntegers,
   final Set<String> qualified = const {},
+  final Set<String> metadataEnums = const {},
 }) {
   bool usesIntegerReader = false;
   void addParameters(DartDtoModel dto, cb.ConstructorBuilder constructor) {
@@ -229,30 +230,124 @@ final class _JsonBuilder(
     );
   }
 
-  cb.Enum buildEnum(DartEnumModel model) => cb.Enum(
-    (e) => e
-      ..name = model.name
-      ..values.addAll(
-        model.values.entries.map(
-          (entry) => cb.EnumValue(
-            (v) => v
-              ..name = entry.key
-              ..arguments.add(
-                cb.CodeExpression(cb.Code(_literal(entry.value))),
+  cb.Enum buildEnum(DartEnumModel model) => model.hasMetadata
+      ? _buildEnhancedEnum(model)
+      : cb.Enum(
+          (e) => e
+            ..name = model.name
+            ..values.addAll(
+              model.values.entries.map(
+                (entry) => cb.EnumValue(
+                  (v) => v
+                    ..name = entry.key
+                    ..arguments.add(
+                      cb.CodeExpression(cb.Code(_literal(entry.value))),
+                    ),
+                ),
+              ),
+            )
+            ..fields.add(_field('value', cb.refer('Object')))
+            ..constructors.addAll([
+              _valueConstructor,
+              _fromJson(
+                _jsonValue,
+                "return values.firstWhere((item) => item.value == json, orElse: () => throw FormatException(${_literal('Unknown ${model.name} value.')}, json));",
+              ),
+            ])
+            ..methods.add(_toJson(cb.refer('Object'), 'value')),
+        );
+
+  cb.Enum _buildEnhancedEnum(DartEnumModel model) {
+    final scalarType = model.values.values.first is int ? 'int' : 'String';
+    final cb.Reference wireType = cb.refer(scalarType);
+    return cb.Enum((e) {
+      e
+        ..name = model.name
+        ..values.addAll(
+          model.values.entries.map((entry) {
+            final String wire = _literal(entry.value);
+            final Map<String, Object> metadata =
+                model.metadataValues[entry.value.toString()]!;
+            final String arguments = [
+              wire,
+              for (final String field in model.metadataFields.keys)
+                '$field: ${_literal(metadata[field])}',
+            ].join(', ');
+            return cb.EnumValue(
+              (v) => v
+                ..name = entry.key
+                ..arguments.add(cb.CodeExpression(cb.Code(arguments))),
+            );
+          }),
+        )
+        ..fields.add(_field('wireValue', wireType))
+        ..fields.addAll(
+          model.metadataFields.entries.map(
+            (entry) => _field(
+              entry.key,
+              cb.refer(entry.value == 'integer' ? 'int' : 'String'),
+            ),
+          ),
+        )
+        ..constructors.add(
+          cb.Constructor((c) {
+            c
+              ..constant = true
+              ..requiredParameters.add(
+                cb.Parameter(
+                  (p) => p
+                    ..name = 'wireValue'
+                    ..toThis = true
+                    ..type = wireType,
+                ),
+              )
+              ..optionalParameters.addAll(
+                model.metadataFields.entries.map(
+                  (entry) => cb.Parameter(
+                    (p) => p
+                      ..name = entry.key
+                      ..named = true
+                      ..required = true
+                      ..toThis = true
+                      ..type = cb.refer(
+                        entry.value == 'integer' ? 'int' : 'String',
+                      ),
+                  ),
+                ),
+              );
+          }),
+        )
+        ..constructors.add(
+          _fromJson(
+            _jsonValue,
+            'if (json is! $scalarType) { throw ArgumentError.value(json, ${_literal(model.name)}); } '
+            'return values.firstWhere((item) => item.wireValue == json, orElse: () => throw ArgumentError.value(json, ${_literal(model.name)}));',
+          ),
+        )
+        ..methods.add(_toJson(wireType, 'wireValue'))
+        ..methods.add(
+          cb.Method(
+            (m) => m
+              ..name = 'tryFromJson'
+              ..static = true
+              ..returns = cb.refer('${model.name}?')
+              ..requiredParameters.add(
+                cb.Parameter(
+                  (p) => p
+                    ..name = 'json'
+                    ..type = _jsonValue,
+                ),
+              )
+              ..body = cb.Code(
+                'if (json is! $scalarType) return null; '
+                'for (final value in values) { '
+                'if (value.wireValue == json) return value; } '
+                'return null;',
               ),
           ),
-        ),
-      )
-      ..fields.add(_field('value', cb.refer('Object')))
-      ..constructors.addAll([
-        _valueConstructor,
-        _fromJson(
-          _jsonValue,
-          "return values.firstWhere((item) => item.value == json, orElse: () => throw FormatException(${_literal('Unknown ${model.name} value.')}, json));",
-        ),
-      ])
-      ..methods.add(_toJson(cb.refer('Object'), 'value')),
-  );
+        );
+    });
+  }
 
   String _decode(DartTypeReference type, String value, {bool? nullable}) {
     final bool permitsNull = nullable ?? type.isNullable;
@@ -285,6 +380,10 @@ final class _JsonBuilder(
     final String name = qualified.contains(type.symbol)
         ? 'models.${type.symbol}'
         : type.symbol;
+    final enumDecoder =
+        type.isMetadataEnum || metadataEnums.contains(type.symbol)
+        ? (permitsNull ? 'tryFromJson' : 'fromJson')
+        : 'fromJson';
     final String read = switch (type.symbol) {
       'DateTime' => 'DateTime.parse($value as String).toUtc()',
       'List' =>
@@ -293,7 +392,7 @@ final class _JsonBuilder(
         "($value as Map<String, Object?>).map((key, item) => MapEntry(key, ${_decode(type.typeArguments.last, 'item')}))",
       _ when objectTypes.contains(type.symbol) =>
         '$name.fromJson($value as Map<String, Object?>)',
-      _ => '$name.fromJson($value)',
+      _ => '$name.$enumDecoder($value)',
     };
     return permitsNull && type.symbol != 'Null'
         ? '$value == null ? null : $read'

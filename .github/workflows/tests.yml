@@ -31,6 +31,9 @@ jobs:
         run: dart pub get
       - name: Check formatting
         run: dart format --output=none --set-exit-if-changed swagger_parser swagger_parser_core swagger_parser_templates swagger_parser_tests swagger_parser_pages
+      - name: Generate serializer consumer fixtures
+        run: bash tool/generate_metadata_fixtures.sh
+        working-directory: swagger_parser_tests
       - name: Build generated sources
         run: dart run build_runner build
         working-directory: swagger_parser_tests
@@ -191,6 +194,9 @@ jobs:
         run: dart pub get
       - name: Check Chrome
         run: google-chrome --version
+      - name: Generate enum metadata fixtures
+        run: bash tool/generate_metadata_fixtures.sh
+        working-directory: swagger_parser_tests
       - name: Build and test generated code on VM and Chrome
         run: |
           dart run build_runner build

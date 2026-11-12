@@ -169,6 +169,16 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
   final values = <DartValueModel>[];
   final tuples = <DartTupleModel>[];
   final declared = <_SchemaUse>{};
+  final enumMetadataMatches = <_SchemaUse, bool>{};
+
+  late final bool hasEnumMetadata = api.schemas.values.any(
+    (schema) => switch (schema.definition.value) {
+      final Map<String, Object?> fields => fields.containsKey(
+        'x-enum-metadata',
+      ),
+      _ => false,
+    },
+  );
   final clientFolders = <String, String>{};
   final diagnostics = <Diagnostic>[];
 
@@ -339,6 +349,15 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
       _fail(id, r'Missing resolved $dynamicRef.', field: r'$dynamicRef');
     }
     final Map<String, Object?> fields = id.fields;
+    if (hasEnumMetadata &&
+        fields.containsKey('x-enum-metadata') &&
+        (fields['enum'] is! List<Object?> && !fields.containsKey('const'))) {
+      _fail(
+        id,
+        'x-enum-metadata requires an enum schema.',
+        field: 'x-enum-metadata',
+      );
+    }
     if (id.dialect case final dialect?
         when SchemaDialect.identify(dialect, id.family) ==
             SchemaDialect.unknown) {
@@ -432,6 +451,12 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
     if (_customType(id) case final type?) {
       return type;
     }
+    final DartTypeReference? unwrapped = hasEnumMetadata
+        ? _nullableEnumType(schema, hint)
+        : null;
+    if (unwrapped != null) {
+      return unwrapped;
+    }
     if (!names.containsKey(id) &&
         !_namedSchema.hasMatch(id.pointer) &&
         schema.allOf.length == 1 &&
@@ -461,7 +486,12 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
         (_cases(schema) != null && !_isFullBooleanEnum(schema))) {
       final String name = _name(id, hint);
       _declare(id);
-      return DartTypeReference(symbol: name, isNullable: _nullable(id));
+      return DartTypeReference(
+        symbol: name,
+        isNullable: _nullable(id),
+        isMetadataEnum:
+            hasEnumMetadata && schema.rawFields.containsKey('x-enum-metadata'),
+      );
     }
     if (schema.reference case final target?) {
       _checkRef(schema);
@@ -490,7 +520,245 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
       scalarCodec: type.scalarCodec,
       typeArguments: type.typeArguments,
       isNullable: _nullable(schema),
+      isMetadataEnum: type.isMetadataEnum,
     );
+  }
+
+  DartTypeReference? _nullableEnumType(_SchemaUse schema, String hint) {
+    final _SchemaUse? target = _nullableReferenceTarget(schema);
+    if (target == null) {
+      return null;
+    }
+    final DartTypeReference type = _type(target, hint);
+    return DartTypeReference(
+      symbol: type.symbol,
+      importUrl: type.importUrl,
+      scalarCodec: type.scalarCodec,
+      typeArguments: type.typeArguments,
+      isNullable: true,
+      isMetadataEnum: type.isMetadataEnum,
+    );
+  }
+
+  _SchemaUse? _nullableReferenceTarget(_SchemaUse schema) {
+    if (schema.swaggerNullable == false ||
+        schema.allOf.isNotEmpty ||
+        (schema.oneOf.isNotEmpty && schema.anyOf.isNotEmpty)) {
+      return null;
+    }
+    final List<_SchemaUse> branches = schema.oneOf.isNotEmpty
+        ? schema.oneOf
+        : schema.anyOf;
+    if (branches.length != 2) {
+      return null;
+    }
+    final List<_SchemaUse> references = branches
+        .where((branch) => branch.reference != null)
+        .toList();
+    final List<_SchemaUse> nulls = branches.where(_isNullAlternative).toList();
+    if (references.length != 1 || nulls.length != 1) {
+      return null;
+    }
+    final _SchemaUse? target = references.single.reference;
+    return target != null && _containsEnumMetadata(target) ? target : null;
+  }
+
+  bool _isNullAlternative(_SchemaUse schema) {
+    if (schema.reference != null ||
+        schema.allOf.isNotEmpty ||
+        schema.anyOf.isNotEmpty ||
+        schema.oneOf.isNotEmpty) {
+      return false;
+    }
+    if (_cases(schema) case final cases?) {
+      return cases.length == 1 && cases.single == null;
+    }
+    return schema.types.length == 1 && schema.types.contains('null');
+  }
+
+  bool _containsEnumMetadata(_SchemaUse schema) =>
+      enumMetadataMatches[schema] ??= _scanEnumMetadata(schema);
+
+  bool _scanEnumMetadata(_SchemaUse schema) {
+    final pending = <_SchemaUse>[schema];
+    final visited = <_SchemaUse>{};
+    var found = false;
+    while (pending.isNotEmpty) {
+      final _SchemaUse current = pending.removeLast();
+      if (!visited.add(current)) {
+        continue;
+      }
+      final bool? known = enumMetadataMatches[current];
+      if (known != null) {
+        found = found || known;
+        continue;
+      }
+      if (current.rawFields.containsKey('x-enum-metadata')) {
+        found = true;
+        continue;
+      }
+      final _SchemaUse? reference = current.reference;
+      if (reference != null) {
+        pending.add(reference);
+      }
+      pending
+        ..addAll(current.allOf)
+        ..addAll(current.oneOf)
+        ..addAll(current.anyOf);
+    }
+    enumMetadataMatches[schema] = found;
+    return found;
+  }
+
+  void _preflightEnumMetadata(_SchemaUse id, _SchemaUse schema) {
+    final bool hasExtension = schema.rawFields.containsKey('x-enum-metadata');
+    if ((schema.allOf.isNotEmpty || _hasAlternatives(schema)) &&
+        (_nullableReferenceTarget(schema) == null || hasExtension) &&
+        _containsEnumMetadata(schema)) {
+      _fail(
+        id,
+        'x-enum-metadata is not supported on composed schemas.',
+        field: 'x-enum-metadata',
+      );
+    }
+    if (!hasExtension) {
+      return;
+    }
+    if (schema.rawFields['x-enum-metadata'] is! Map) {
+      _fail(id, 'x-enum-metadata must be an object.', field: 'x-enum-metadata');
+    }
+    if (_isFullBooleanEnum(schema)) {
+      _fail(
+        id,
+        'x-enum-metadata supports only string and integer enums.',
+        field: 'x-enum-metadata',
+      );
+    }
+  }
+
+  (Map<String, String>, Map<String, Map<String, Object>>) _enumMetadata(
+    _SchemaUse id,
+    List<Object?> cases,
+    List<String>? labels,
+    Map<String, Object> entries,
+  ) {
+    final Object? raw = id.fields['x-enum-metadata'];
+    if (!id.fields.containsKey('x-enum-metadata')) {
+      return (<String, String>{}, <String, Map<String, Object>>{});
+    }
+    Never invalid(String why) =>
+        _fail(id, 'Invalid x-enum-metadata: $why.', field: 'x-enum-metadata');
+    if (raw is! Map<String, Object?> ||
+        raw.length != 3 ||
+        raw['version'] != 1 ||
+        raw['fields'] is! Map ||
+        raw['values'] is! Map) {
+      invalid('expected exactly version 1, fields, and values');
+    }
+    final Map<String, Object?> metadata = raw;
+    final Set<String> declaredTypes = id.types
+        .where((t) => t != 'null')
+        .toSet();
+    final List<Object?> nonNullCases = cases
+        .where((value) => value != null)
+        .toList();
+    final bool inferredString =
+        declaredTypes.isEmpty &&
+        nonNullCases.isNotEmpty &&
+        nonNullCases.every((v) => v is String);
+    final bool inferredInteger =
+        declaredTypes.isEmpty &&
+        nonNullCases.isNotEmpty &&
+        nonNullCases.every((v) => v is int);
+    if ((!inferredString &&
+            !inferredInteger &&
+            (declaredTypes.difference({'string', 'integer'}).isNotEmpty ||
+                declaredTypes.length != 1)) ||
+        (declaredTypes.isEmpty && !inferredString && !inferredInteger)) {
+      invalid('only string and integer enums are supported');
+    }
+    final definitions = metadata['fields']! as Map<dynamic, dynamic>;
+    final rows = metadata['values']! as Map<dynamic, dynamic>;
+    final types = <String, String>{};
+    final generatedMembers = <String>{
+      'name',
+      'index',
+      'hashCode',
+      'toString',
+      'noSuchMethod',
+      'runtimeType',
+      'rawValue',
+      'copyWith',
+      'wireValue',
+      'tryFromJson',
+      'fromJson',
+      'toJson',
+      'json',
+      'values',
+      'value',
+      'byName',
+      ..._memberNames,
+    };
+    for (final MapEntry<dynamic, dynamic> entry in definitions.entries) {
+      final Object? rawField = entry.key;
+      final Object? definition = entry.value;
+      if (rawField is! String ||
+          !RegExp(r'^[a-z][A-Za-z0-9]*$').hasMatch(rawField) ||
+          definition is! Map ||
+          definition.length != 1 ||
+          !definition.containsKey('type') ||
+          !const {'string', 'integer'}.contains(definition['type'])) {
+        invalid('unsupported field definition $rawField');
+      }
+      final String field = rawField;
+      final String protected = _identifier(field, <String>{});
+      final List<String> rawLabels =
+          labels ?? cases.map((value) => value.toString()).toList();
+      final bool collidesWithMember = rawLabels.any((label) {
+        final String converted = _identifierBase(label);
+        final finalName = converted.isEmpty ? 'empty' : converted;
+        return field == finalName ||
+            field ==
+                'value${finalName[0].toUpperCase()}${finalName.substring(1)}';
+      });
+      if (protected != field ||
+          generatedMembers.contains(field) ||
+          collidesWithMember ||
+          entries.keys.any((n) => _identifierBase(n) == field) ||
+          types.containsKey(field)) {
+        invalid('unsupported field name $field');
+      }
+      types[field] = definition['type'] as String;
+    }
+    final expected = <String>{
+      for (final v in cases.where((v) => v != null)) v.toString(),
+    };
+    if (rows.keys.any((k) => k is! String || !expected.contains(k)) ||
+        rows.length != expected.length ||
+        !expected.every(rows.containsKey)) {
+      invalid('values must be keyed by each exact enum wire value');
+    }
+    final result = <String, Map<String, Object>>{};
+    for (final wire in expected) {
+      final Object? rawRow = rows[wire];
+      if (rawRow is! Map ||
+          rawRow.length != types.length ||
+          !types.keys.every(rawRow.containsKey)) {
+        invalid('row $wire must define every field exactly once');
+      }
+      final Map<dynamic, dynamic> row = rawRow;
+      final values = <String, Object>{};
+      for (final MapEntry<String, String> field in types.entries) {
+        final Object? value = row[field.key];
+        if ((field.value == 'string' && value is! String) ||
+            (field.value == 'integer' && value is! int)) {
+          invalid('invalid ${field.value} for $wire.${field.key}');
+        }
+        values[field.key] = value!;
+      }
+      result[wire] = values;
+    }
+    return (types, result);
   }
 
   bool _hasObjectShape(_SchemaUse schema) =>
@@ -516,12 +784,25 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
   }
 
   void _declare(_SchemaUse id) {
-    if (_customType(id) != null || !declared.add(id)) {
+    if (_customType(id) != null) {
+      if (hasEnumMetadata && _containsEnumMetadata(_schema(id))) {
+        _fail(
+          id,
+          'x-enum-metadata is not supported with custom type mappings.',
+          field: 'x-enum-metadata',
+        );
+      }
+      return;
+    }
+    if (!declared.add(id)) {
       return;
     }
     final _SchemaUse schema = _schema(id);
     final String name = names[id]!;
     final _SchemaUse? tuple = _tupleSource(id);
+    if (hasEnumMetadata) {
+      _preflightEnumMetadata(id, schema);
+    }
     if (schema.reference != null && tuple == null) {
       _checkRef(schema);
       _nullable(id);
@@ -537,6 +818,10 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
     } else if (_cases(schema) case final cases?) {
       final Set<String> used = {
         ..._memberNames,
+        if (schema.fields.containsKey('x-enum-metadata')) ...{
+          'wireValue',
+          'tryFromJson',
+        },
         'values',
         'index',
         'name',
@@ -553,6 +838,16 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
         }
         if (value is! String && value is! num && value is! bool) {
           _fail(id, 'Enum values must be JSON scalars.');
+        }
+        if (hasEnumMetadata &&
+            schema.fields.containsKey('x-enum-metadata') &&
+            schema.types.contains('integer') &&
+            value is! int) {
+          _fail(
+            id,
+            'Integer enum values must be integers.',
+            field: 'enum/$position',
+          );
         }
         if (!_allowsScalar(schema.types, value)) {
           _fail(
@@ -579,11 +874,20 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
       if (entries.isEmpty) {
         _fail(id, 'Expected a non-null enum value.');
       }
+      final (Map<String, String>, Map<String, Map<String, Object>>) metadata =
+          hasEnumMetadata
+          ? _enumMetadata(id, cases, labels, entries)
+          : (<String, String>{}, <String, Map<String, Object>>{});
       enums.add(
         DartEnumModel(
           name,
           entries,
           types: Set.unmodifiable(schema.types.difference({'null'})),
+          metadataFields: metadata.$1,
+          metadataValues: metadata.$2,
+          hasMetadata:
+              hasEnumMetadata &&
+              schema.rawFields.containsKey('x-enum-metadata'),
         ),
       );
     } else if (tuple != null) {

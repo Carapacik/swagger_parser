@@ -1,0 +1,157 @@
+openapi: 3.1.0
+info:
+  title: Synthetic enum fixture
+  version: '1'
+paths: {}
+components:
+  schemas:
+    SampleCode:
+      type: integer
+      enum:
+        - 101
+        - 202
+      x-enumNames:
+        - firstKind
+        - secondKind
+      x-enum-metadata:
+        version: 1
+        fields:
+          category:
+            type: string
+          order:
+            type: integer
+        values:
+          "101":
+            category: sample-a
+            order: 10
+          "202":
+            category: sample-b
+            order: 20
+    StringCode:
+      type: string
+      enum:
+        - '0007'
+        - '7'
+      x-enumNames:
+        - padded
+        - plain
+      x-enum-metadata:
+        version: 1
+        fields:
+          label:
+            type: string
+        values:
+          '0007':
+            label: padded-sample
+          '7':
+            label: plain-sample
+    WideSampleCode:
+      type: integer
+      enum:
+        - 303
+      x-enum-metadata:
+        version: 1
+        fields:
+          property0:
+            type: integer
+          property1:
+            type: integer
+          property2:
+            type: integer
+          property3:
+            type: integer
+          property4:
+            type: integer
+          property5:
+            type: integer
+          property6:
+            type: integer
+          property7:
+            type: integer
+          property8:
+            type: integer
+          property9:
+            type: integer
+          property10:
+            type: integer
+          property11:
+            type: integer
+          property12:
+            type: integer
+          property13:
+            type: integer
+          property14:
+            type: integer
+          property15:
+            type: integer
+          property16:
+            type: integer
+          property17:
+            type: integer
+          property18:
+            type: integer
+        values:
+          "303":
+            property0: 0
+            property1: 1
+            property2: 2
+            property3: 3
+            property4: 4
+            property5: 5
+            property6: 6
+            property7: 7
+            property8: 8
+            property9: 9
+            property10: 10
+            property11: 11
+            property12: 12
+            property13: 13
+            property14: 14
+            property15: 15
+            property16: 16
+            property17: 17
+            property18: 18
+    SampleCodeList:
+      type: object
+      properties:
+        sampleCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SampleCode'
+      required:
+        - sampleCodes
+    SampleRecord:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/SampleCode'
+        stringCode:
+          $ref: '#/components/schemas/StringCode'
+        optionalCode:
+          anyOf:
+            - $ref: '#/components/schemas/SampleCode'
+            - type: 'null'
+        nullableCodes:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/SampleCode'
+              - type: 'null'
+        nestedNullableCodes:
+          type: array
+          items:
+            type: array
+            items:
+              anyOf:
+                - $ref: '#/components/schemas/SampleCode'
+                - type: 'null'
+        nullableCodeMap:
+          type: object
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/SampleCode'
+              - type: 'null'
+      required:
+        - code
+        - stringCode
+        - optionalCode
