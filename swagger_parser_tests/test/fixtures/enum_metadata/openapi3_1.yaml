@@ -45,6 +45,24 @@ components:
             label: padded-sample
           '7':
             label: plain-sample
+    BoolCode:
+      type: boolean
+      enum: [true, false]
+      x-enumNames: [enabled, disabled]
+      x-enum-metadata:
+        version: 1
+        fields:
+          weight:
+            type: number
+          selectable:
+            type: boolean
+        values:
+          'true':
+            weight: 1
+            selectable: true
+          'false':
+            weight: 1.5
+            selectable: false
     WideSampleCode:
       type: integer
       enum:

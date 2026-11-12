@@ -1,8 +1,8 @@
 # Changelog
 
 ## Unreleased
-* Adds version 1 `x-enum-metadata` support with typed enhanced enums and exact
-  wire-value codecs for all four serializers.
+* Adds version 1 `x-enum-metadata` support with string, integer, number, and
+  boolean metadata fields plus string, integer, and boolean enum wire values.
 
 * Uses Freezed for all data model classes when selected, including value wrappers,
   `oneOf` variants, `anyOf` models, tuples, unknown values, and typed HTTP results.

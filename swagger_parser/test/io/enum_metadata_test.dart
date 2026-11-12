@@ -308,11 +308,6 @@ void main() {
       (schema) =>
           (schema['x-enum-metadata']! as Map<String, Object?>)['extra'] = true,
       (schema) =>
-          ((schema['x-enum-metadata']! as Map<String, Object?>)['fields']!
-              as Map<String, Object?>)['rank'] = {
-            'type': 'number',
-          },
-      (schema) =>
           ((schema['x-enum-metadata']! as Map<String, Object?>)['values']!
                   as Map<String, Object?>)
               .remove('OLD'),
@@ -345,47 +340,115 @@ void main() {
       throwsA(anything),
     );
   });
-
-  test(
-    'rejects null, boolean, and unsupported custom-mapped metadata',
-    () async {
-      final nullExtension = _valid()..['x-enum-metadata'] = null;
-      await expectLater(_generate(nullExtension), throwsA(anything));
+  test('rejects lossy integer-to-double metadata and coercions', () async {
+    for (final Object value in ['1.5', true, 9007199254740992]) {
       await expectLater(
         _generate({
           'type': 'boolean',
           'enum': [true, false],
           'x-enum-metadata': {
             'version': 1,
-            'fields': <String, Object?>{},
+            'fields': {
+              'weight': {'type': 'number'},
+            },
             'values': {
-              'true': <String, Object?>{},
-              'false': <String, Object?>{},
+              'true': {'weight': value},
+              'false': {'weight': 1.5},
             },
           },
         }),
         throwsA(anything),
       );
-      await expectLater(
-        _generate(
-          _valid(),
-          typeMappings: [
-            TypeMapping(
-              dartType: 'MappedStatus',
-              importUrl: 'package:example/mapped_status.dart',
-              schema: '#/components/schemas/Status',
-              codec: TypeMappingCodec(
-                importUrl: 'package:example/mapped_status_codec.dart',
-                fromJson: 'mappedStatusFromJson',
-                toJson: 'mappedStatusToJson',
-              ),
+    }
+    await expectLater(
+      _generate(
+        _valid(),
+        typeMappings: [
+          TypeMapping(
+            schema: '#/components/schemas/Status',
+            dartType: 'CustomStatus',
+            importUrl: 'package:app/status.dart',
+            codec: TypeMappingCodec(
+              importUrl: 'package:app/codec.dart',
+              fromJson: 'readStatus',
+              toJson: 'writeStatus',
             ),
-          ],
-        ),
-        throwsA(anything),
-      );
-    },
-  );
+          ),
+        ],
+      ),
+      throwsA(anything),
+    );
+  });
+
+  test('preserves inline boolean enum metadata', () async {
+    final metadataEnum = {
+      'type': 'boolean',
+      'enum': [true, false],
+      'x-enum-metadata': {
+        'version': 1,
+        'fields': {
+          'label': {'type': 'string'},
+        },
+        'values': {
+          'true': {'label': 'yes'},
+          'false': {'label': 'no'},
+        },
+      },
+    };
+    final result = await _generateDocument({
+      'openapi': '3.0.3',
+      'info': {'title': 'Inline enum metadata', 'version': '1'},
+      'paths': <String, Object?>{},
+      'components': {
+        'schemas': {
+          'Holder': {
+            'type': 'object',
+            'properties': {
+              'flag': metadataEnum,
+              'flags': {'type': 'array', 'items': metadataEnum},
+            },
+          },
+        },
+      },
+    });
+    final source = result.files.map((file) => file.content).join('\n');
+    expect(result.diagnostics, isEmpty);
+    expect(source, contains('enum HolderFlag'));
+    expect(source, contains('final String label;'));
+    expect(source, contains('List<HolderFlagsItem>'));
+  });
+
+  test('supports boolean enum values and primitive metadata fields', () async {
+    final result = await _generate({
+      'type': 'boolean',
+      'enum': [true, false],
+      'x-enumNames': ['enabled', 'disabled'],
+      'x-enum-metadata': {
+        'version': 1,
+        'fields': {
+          'weight': {'type': 'number'},
+          'active': {'type': 'boolean'},
+        },
+        'values': {
+          'true': {'weight': 1, 'active': true},
+          'false': {'weight': 1.5, 'active': false},
+        },
+      },
+    });
+    final source = result.files.map((file) => file.content).join('\n');
+    expect(result.diagnostics, isEmpty);
+    expect(source, contains('enabled(true, weight: 1.0, active: true)'));
+    expect(source, contains('final double weight;'));
+    expect(source, contains('final bool active;'));
+    await expectLater(
+      _generate({
+        'type': 'number',
+        'enum': [1, 2],
+        'x-enum-metadata': _valid()['x-enum-metadata'],
+      }),
+      throwsA(anything),
+    );
+  });
 
   test('infers nullable untyped scalar from non-null enum cases', () async {
     final result = await _generate({

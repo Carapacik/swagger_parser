@@ -258,7 +258,11 @@ final class _JsonBuilder(
         );
 
   cb.Enum _buildEnhancedEnum(DartEnumModel model) {
-    final scalarType = model.values.values.first is int ? 'int' : 'String';
+    final String scalarType = switch (model.values.values.first) {
+      final bool _ => 'bool',
+      final int _ => 'int',
+      _ => 'String',
+    };
     final cb.Reference wireType = cb.refer(scalarType);
     return cb.Enum((e) {
       e
@@ -285,7 +289,12 @@ final class _JsonBuilder(
           model.metadataFields.entries.map(
             (entry) => _field(
               entry.key,
-              cb.refer(entry.value == 'integer' ? 'int' : 'String'),
+              cb.refer(switch (entry.value) {
+                'integer' => 'int',
+                'number' => 'double',
+                'boolean' => 'bool',
+                _ => 'String',
+              }),
             ),
           ),
         )
@@ -309,9 +318,12 @@ final class _JsonBuilder(
                       ..named = true
                       ..required = true
                       ..toThis = true
-                      ..type = cb.refer(
-                        entry.value == 'integer' ? 'int' : 'String',
-                      ),
+                      ..type = cb.refer(switch (entry.value) {
+                        'integer' => 'int',
+                        'number' => 'double',
+                        'boolean' => 'bool',
+                        _ => 'String',
+                      }),
                   ),
                 ),
               );

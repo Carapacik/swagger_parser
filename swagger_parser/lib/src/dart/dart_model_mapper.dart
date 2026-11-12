@@ -483,7 +483,10 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
         _hasObjectShape(schema) ||
         _tupleSource(schema) != null ||
         _hasAlternatives(schema) ||
-        (_cases(schema) != null && !_isFullBooleanEnum(schema))) {
+        (_cases(schema) != null &&
+            (!_isFullBooleanEnum(schema) ||
+                (hasEnumMetadata &&
+                    schema.rawFields.containsKey('x-enum-metadata'))))) {
       final String name = _name(id, hint);
       _declare(id);
       return DartTypeReference(
@@ -627,13 +630,6 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
     if (schema.rawFields['x-enum-metadata'] is! Map) {
       _fail(id, 'x-enum-metadata must be an object.', field: 'x-enum-metadata');
     }
-    if (_isFullBooleanEnum(schema)) {
-      _fail(
-        id,
-        'x-enum-metadata supports only string and integer enums.',
-        field: 'x-enum-metadata',
-      );
-    }
   }
 
   (Map<String, String>, Map<String, Map<String, Object>>) _enumMetadata(
@@ -670,12 +666,24 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
         declaredTypes.isEmpty &&
         nonNullCases.isNotEmpty &&
         nonNullCases.every((v) => v is int);
+    final bool inferredBoolean =
+        declaredTypes.isEmpty &&
+        nonNullCases.isNotEmpty &&
+        nonNullCases.every((v) => v is bool);
     if ((!inferredString &&
             !inferredInteger &&
-            (declaredTypes.difference({'string', 'integer'}).isNotEmpty ||
+            !inferredBoolean &&
+            (declaredTypes.difference({
+                  'string',
+                  'integer',
+                  'boolean',
+                }).isNotEmpty ||
                 declaredTypes.length != 1)) ||
-        (declaredTypes.isEmpty && !inferredString && !inferredInteger)) {
-      invalid('only string and integer enums are supported');
+        (declaredTypes.isEmpty &&
+            !inferredString &&
+            !inferredInteger &&
+            !inferredBoolean)) {
+      invalid('only string, integer, and boolean enums are supported');
     }
     final definitions = metadata['fields']! as Map<dynamic, dynamic>;
     final rows = metadata['values']! as Map<dynamic, dynamic>;
@@ -707,7 +715,12 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
           definition is! Map ||
           definition.length != 1 ||
           !definition.containsKey('type') ||
-          !const {'string', 'integer'}.contains(definition['type'])) {
+          !const {
+            'string',
+            'integer',
+            'number',
+            'boolean',
+          }.contains(definition['type'])) {
         invalid('unsupported field definition $rawField');
       }
       final String field = rawField;
@@ -751,10 +764,24 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
       for (final MapEntry<String, String> field in types.entries) {
         final Object? value = row[field.key];
         if ((field.value == 'string' && value is! String) ||
-            (field.value == 'integer' && value is! int)) {
+            (field.value == 'integer' && value is! int) ||
+            (field.value == 'boolean' && value is! bool) ||
+            (field.value == 'number' && value is! num)) {
           invalid('invalid ${field.value} for $wire.${field.key}');
         }
-        values[field.key] = value!;
+        if (field.value == 'number') {
+          final number = value! as num;
+          if (!number.isFinite ||
+              !number.toDouble().isFinite ||
+              (number is int && number.abs() > 9007199254740991)) {
+            invalid(
+              'expected a finite, exactly representable double for $wire.${field.key}',
+            );
+          }
+          values[field.key] = number.toDouble();
+        } else {
+          values[field.key] = value!;
+        }
       }
       result[wire] = values;
     }
@@ -813,7 +840,8 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
       } else {
         _union(id, name);
       }
-    } else if (_isFullBooleanEnum(schema)) {
+    } else if (_isFullBooleanEnum(schema) &&
+        !schema.fields.containsKey('x-enum-metadata')) {
       values.add(DartValueModel(name, _booleanType(schema)));
     } else if (_cases(schema) case final cases?) {
       final Set<String> used = {
@@ -835,6 +863,15 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
       for (final (int position, Object? value) in cases.indexed) {
         if (value == null) {
           continue;
+        }
+        if (hasEnumMetadata &&
+            schema.fields.containsKey('x-enum-metadata') &&
+            schema.types.contains('number')) {
+          _fail(
+            id,
+            'Number enum wire values are not supported with x-enum-metadata.',
+            field: 'enum/$position',
+          );
         }
         if (value is! String && value is! num && value is! bool) {
           _fail(id, 'Enum values must be JSON scalars.');
@@ -936,7 +973,8 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
   }
 
   DartTypeReference _valueType(_SchemaUse id, String name) {
-    if (_isFullBooleanEnum(id)) {
+    if (_isFullBooleanEnum(id) &&
+        !(hasEnumMetadata && id.rawFields.containsKey('x-enum-metadata'))) {
       return _booleanType(id);
     }
     if (id.definition.value == false) {

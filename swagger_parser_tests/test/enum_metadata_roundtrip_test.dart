@@ -1,4 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart' as mappable;
+import 'package:swagger_parser_tests/enhanced_enum_dartMappable/models/bool_code.dart'
+    as mapped;
 import 'package:swagger_parser_tests/enhanced_enum_dartMappable/models/sample_code.dart'
     as mapped;
 import 'package:swagger_parser_tests/enhanced_enum_dartMappable/models/sample_code_list.dart'
@@ -9,11 +11,15 @@ import 'package:swagger_parser_tests/enhanced_enum_dartMappable/models/string_co
     as mapped;
 import 'package:swagger_parser_tests/enhanced_enum_dartMappable/models/wide_sample_code.dart'
     as mapped;
+import 'package:swagger_parser_tests/enhanced_enum_freezed/models/bool_code.dart'
+    as freezed;
 import 'package:swagger_parser_tests/enhanced_enum_freezed/models/sample_code.dart';
 import 'package:swagger_parser_tests/enhanced_enum_freezed/models/sample_code_list.dart';
 import 'package:swagger_parser_tests/enhanced_enum_freezed/models/sample_record.dart';
 import 'package:swagger_parser_tests/enhanced_enum_freezed/models/string_code.dart';
 import 'package:swagger_parser_tests/enhanced_enum_freezed/models/wide_sample_code.dart';
+import 'package:swagger_parser_tests/enhanced_enum_jsonSerializable/models/bool_code.dart'
+    as json_serializable;
 import 'package:swagger_parser_tests/enhanced_enum_jsonSerializable/models/sample_code.dart'
     as json_serializable;
 import 'package:swagger_parser_tests/enhanced_enum_jsonSerializable/models/sample_code_list.dart'
@@ -24,6 +30,8 @@ import 'package:swagger_parser_tests/enhanced_enum_jsonSerializable/models/strin
     as json_serializable;
 import 'package:swagger_parser_tests/enhanced_enum_jsonSerializable/models/wide_sample_code.dart'
     as json_serializable;
+import 'package:swagger_parser_tests/enhanced_enum_plain/models/bool_code.dart'
+    as plain;
 import 'package:swagger_parser_tests/enhanced_enum_plain/models/sample_code.dart'
     as plain;
 import 'package:swagger_parser_tests/enhanced_enum_plain/models/sample_code_list.dart'
@@ -263,6 +271,32 @@ void main() {
       'known': 101,
       'unknown': null,
     });
+  });
+
+  test('boolean wire values and typed metadata round-trip', () {
+    final freezedValue = freezed.BoolCode.fromJson(true);
+    expect(freezedValue, freezed.BoolCode.enabled);
+    expect(freezedValue.weight, 1.0);
+    expect(freezedValue.selectable, isTrue);
+    expect(freezedValue.toJson(), isTrue);
+    expect(() => freezed.BoolCode.fromJson('true'), throwsA(anything));
+    expect(() => freezed.BoolCode.fromJson(1), throwsA(anything));
+    expect(freezed.BoolCode.fromJson(false), freezed.BoolCode.disabled);
+
+    final plainValue = plain.BoolCode.fromJson(true);
+    expect(plainValue.weight, 1.0);
+    expect(plainValue.toJson(), isTrue);
+    expect(() => plain.BoolCode.fromJson('true'), throwsA(anything));
+
+    final jsonValue = json_serializable.BoolCode.fromJson(true);
+    expect(jsonValue.selectable, isTrue);
+    expect(jsonValue.toJson(), isTrue);
+    expect(() => json_serializable.BoolCode.fromJson(1), throwsA(anything));
+
+    final mappedValue = mapped.BoolCode.fromJson(true);
+    expect(mappedValue.weight, 1.0);
+    expect(mappedValue.toJson(), isTrue);
+    expect(() => mapped.BoolCode.fromJson('true'), throwsA(anything));
   });
 
   test('integer enum codecs reject non-integer numeric IDs', () {
