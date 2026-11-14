@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+* Fixes inline `anyOf` and `oneOf` unions of one type and `null` generating a union
+  class. They now generate the nullable type, keep references typed, and accept
+  constant defaults and `propertyNames` on the referenced object
+  ([#489](https://github.com/Carapacik/swagger_parser/issues/489),
+  [#491](https://github.com/Carapacik/swagger_parser/issues/491)).
+
 ## 2.1.1
 
 * Uses Freezed for all data model classes when selected, including value wrappers,

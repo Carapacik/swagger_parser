@@ -1,0 +1,191 @@
+{
+  "openapi": "3.2.0",
+  "info": {
+    "title": "Nullable unions",
+    "version": "1"
+  },
+  "paths": {
+    "/holder": {
+      "get": {
+        "operationId": "getHolder",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Holder"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Card": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Reach": {
+        "type": "object",
+        "required": [
+          "exclusions"
+        ],
+        "properties": {
+          "exclusions": {
+            "type": "object",
+            "propertyNames": {
+              "enum": [
+                "a",
+                "b"
+              ]
+            },
+            "additionalProperties": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "Holder": {
+        "type": "object",
+        "required": [
+          "anyCard",
+          "oneCard",
+          "text"
+        ],
+        "properties": {
+          "anyCard": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Card"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "oneCard": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Card"
+              }
+            ]
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "archived": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": false
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "none"
+          },
+          "cleared": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Card"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "reach": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Reach"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "choice": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Card"
+              },
+              {
+                "$ref": "#/components/schemas/Other"
+              }
+            ]
+          },
+          "triple": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "Other": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

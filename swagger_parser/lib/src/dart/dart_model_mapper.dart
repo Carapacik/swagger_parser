@@ -386,6 +386,61 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
     return id;
   }
 
+  /// Returns the member that is not `null` when [id] is an inline union of
+  /// exactly that member and `null`.
+  ///
+  /// Such a union means "this value or null". It maps to a nullable Dart type,
+  /// not to a union class. Named schemas, discriminated unions, and unions with
+  /// other validation keywords keep their union class.
+  _SchemaUse? _nullableMember(_SchemaUse id) {
+    final _SchemaUse schema = _schema(id);
+    if (names.containsKey(id) ||
+        _namedSchema.hasMatch(id.pointer) ||
+        schema.reference != null ||
+        schema.allOf.isNotEmpty ||
+        (schema.oneOf.isNotEmpty && schema.anyOf.isNotEmpty) ||
+        schema.raw.discriminator != null ||
+        !schema.rawFields.keys.every(
+          (key) => _unionAnnotations.contains(key) || key.startsWith('x-'),
+        )) {
+      return null;
+    }
+    final List<_SchemaUse> members = schema.anyOf.isNotEmpty
+        ? schema.anyOf
+        : schema.oneOf;
+    if (members.length != 2) {
+      return null;
+    }
+    bool isNull(_SchemaUse member) {
+      final _SchemaUse target = _schema(_concrete(member));
+      final List<Object?>? cases = _cases(target);
+      return target.reference == null &&
+          target.allOf.isEmpty &&
+          target.properties.isEmpty &&
+          !_hasAlternatives(target) &&
+          (cases == null
+              ? target.types.length == 1 && target.types.contains('null')
+              : cases.length == 1 &&
+                    cases.single == null &&
+                    (target.types.isEmpty || target.types.contains('null')));
+    }
+
+    final bool first = isNull(members.first);
+    final bool second = isNull(members.last);
+    if (first == second) {
+      return null;
+    }
+    return first ? members.last : members.first;
+  }
+
+  DartTypeReference _nullableType(DartTypeReference type) => DartTypeReference(
+    symbol: type.symbol,
+    importUrl: type.importUrl,
+    scalarCodec: type.scalarCodec,
+    typeArguments: type.typeArguments,
+    isNullable: true,
+  );
+
   bool _nullable(_SchemaUse id, [Set<_SchemaUse>? visited]) {
     final _SchemaUse schema = _schema(id);
     if (schema.swaggerNullable == false) {
@@ -406,6 +461,9 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
             concrete.allOf.every((part) => _nullable(part, {...?visited}));
       }
       return _nullable(target, visited);
+    }
+    if (_nullableMember(id) != null) {
+      return true;
     }
     if (_hasAlternatives(schema) || schema.definition.value == false) {
       return false;
@@ -431,6 +489,9 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
     }
     if (_customType(id) case final type?) {
       return type;
+    }
+    if (_nullableMember(id) case final member?) {
+      return _nullableType(_type(member, hint));
     }
     if (!names.containsKey(id) &&
         !_namedSchema.hasMatch(id.pointer) &&
@@ -800,4 +861,18 @@ const _dartScalars = {
   'number': 'num',
   'boolean': 'bool',
   'string': 'String',
+};
+
+const _unionAnnotations = {
+  'anyOf',
+  'oneOf',
+  'title',
+  'description',
+  'default',
+  'example',
+  'examples',
+  'deprecated',
+  'readOnly',
+  'writeOnly',
+  r'$comment',
 };
