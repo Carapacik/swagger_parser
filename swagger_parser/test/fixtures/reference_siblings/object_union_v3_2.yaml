@@ -1,0 +1,53 @@
+openapi: 3.2.0
+info:
+  title: Reference siblings
+  version: '1'
+paths:
+  /frame:
+    get:
+      operationId: getFrame
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema: &id001
+                type: object
+                $ref: '#/components/schemas/Frame'
+  /object:
+    get:
+      operationId: getObject
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/A'
+components:
+  schemas:
+    A:
+      type: object
+      required:
+      - channel
+      properties:
+        channel:
+          type: string
+    B:
+      type: object
+      required:
+      - reason
+      properties:
+        reason:
+          type: string
+    Frame:
+      anyOf:
+      - $ref: '#/components/schemas/A'
+      - $ref: '#/components/schemas/B'
+    Envelope:
+      type: object
+      required:
+      - frame
+      properties:
+        frame: *id001

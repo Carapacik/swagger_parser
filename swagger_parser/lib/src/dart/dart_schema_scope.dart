@@ -261,7 +261,7 @@ final class _SchemaUse(
     if (target == null) {
       return false;
     }
-    final Set<String> targetTypes = index.schemas[target]!.types;
+    final Set<String> targetTypes = _declaredTypes(target, {});
     return (raw.reference != null && _dynamicTarget != null) ||
         rawFields.keys.any((key) {
           if (key == 'type') {
@@ -269,6 +269,46 @@ final class _SchemaUse(
           }
           return _referenceShapeKeywords.contains(key);
         });
+  }
+
+  /// Returns the JSON types that a schema accepts, when its keywords state them.
+  ///
+  /// A schema without `type` takes the types of its `anyOf` or `oneOf` members.
+  /// The result is empty when any member leaves its type open.
+  Set<String> _declaredTypes(
+    ReferenceLocation location,
+    Set<ReferenceLocation> visited,
+  ) {
+    final ApiSchema schema = index.schemas[location]!;
+    if (schema.types.isNotEmpty) {
+      return schema.types;
+    }
+    final List<ReferenceLocation> members = schema.anyOf.isNotEmpty
+        ? schema.anyOf
+        : schema.oneOf;
+    if (members.isEmpty ||
+        (schema.anyOf.isNotEmpty && schema.oneOf.isNotEmpty) ||
+        schema.allOf.isNotEmpty ||
+        schema.reference != null ||
+        schema.dynamicReference != null ||
+        !visited.add(location)) {
+      return const {};
+    }
+    final types = <String>{};
+    for (final member in members) {
+      final ApiSchema target = index.schemas[member]!;
+      final Set<String> memberTypes = _declaredTypes(
+        target.reference == null || target.dynamicReference != null
+            ? member
+            : target.reference!,
+        {...visited},
+      );
+      if (memberTypes.isEmpty) {
+        return const {};
+      }
+      types.addAll(memberTypes);
+    }
+    return types;
   }
 
   late final _SchemaUse? reference = switch (raw.reference ?? _dynamicTarget) {
