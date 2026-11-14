@@ -1830,7 +1830,8 @@ source validation, add removed operations, or restore pruned models.
 
 A valid config does not guarantee that every schema shape is supported.
 Generation diagnostics still identify unsupported operations or models.
-Explicitly nullable query schemas skip their operation with a diagnostic.
+Required or path parameters with a nullable schema skip their operation with a
+diagnostic. Optional parameters with a nullable schema stay optional arguments.
 No additional config switch changes that policy.
 
 ## Dart API

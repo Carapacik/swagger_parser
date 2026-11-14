@@ -42,7 +42,8 @@
             "name": "value",
             "in": "query",
             "type": "string",
-            "x-nullable": true
+            "x-nullable": true,
+            "required": true
           }
         ],
         "responses": {

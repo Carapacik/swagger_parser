@@ -1,0 +1,98 @@
+openapi: 3.1.2
+info:
+  title: Nullable parameters
+  version: '1'
+paths:
+  /search:
+    get:
+      operationId: search
+      parameters:
+      - name: q
+        in: query
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+      - name: since
+        in: query
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+      - name: tags
+        in: query
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+      - name: kinds
+        in: query
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              enum:
+              - a
+              - b
+          - type: 'null'
+      - name: X-Trace
+        in: header
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+      - name: X-Ids
+        in: header
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+      - name: page
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses: &id001
+        '204':
+          description: Done
+  /items/{id}:
+    get:
+      operationId: item
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: q
+        in: query
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+      responses: *id001
+  /strict:
+    get:
+      operationId: strict
+      parameters:
+      - name: must
+        in: query
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+      responses: *id001

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+* Fixes operations with an optional query or header parameter whose schema allows `null`
+  being skipped with a successful exit code. The argument is optional and `null` omits the
+  parameter. Required and path parameters that allow `null` are still skipped with a
+  diagnostic ([#493](https://github.com/Carapacik/swagger_parser/issues/493)).
 * Fixes inline `anyOf` and `oneOf` unions of one type and `null` generating a union
   class. They now generate the nullable type, keep references typed, and accept
   constant defaults and `propertyNames` on the referenced object

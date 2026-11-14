@@ -378,9 +378,10 @@ A required JSON object uses `@Body()`. Optional bodies and other JSON
 shapes use Dio directly. Omit an optional body to send no payload. If the
 schema also permits null, pass `sendNullBody: true` to send JSON `null`.
 
-Explicitly nullable query schemas skip the operation with a source diagnostic.
-Optional non-null query schemas generate optional arguments; null omits the
-parameter. No config changes this rule.
+Required or path parameters with a nullable schema skip the operation with a
+source diagnostic. They cannot send `null`. Optional query and header
+parameters generate optional arguments even when the schema permits `null`;
+null omits the parameter. No config changes this rule.
 
 ### Per-call settings
 

@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 void main() {
   for (final version in ['v2', 'v3_0', 'v3_1', 'v3_2']) {
     test(
-      '$version keeps nullable query exclusion and optional flags',
+      '$version skips a required nullable query and keeps optional flags',
       () async {
         for (final ext in ['json', 'yaml']) {
           final SchemaSource source = await const FileSchemaSourceLoader()

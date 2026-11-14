@@ -366,15 +366,28 @@ extension on _Mapping {
       return null;
     }
     final ParameterSerialization wire = parameter.serialization;
-    final DartTypeReference type = _wireType(
+    final DartTypeReference declaredType = _wireType(
       _type(
         index.use(id, const {}, _Direction.request),
         '${_operationNameCandidate(op)}_${parameter.name}',
       ),
     );
-    if (type.isNullable) {
+    // A required or path parameter cannot send `null`. An optional parameter
+    // sends nothing when it is `null`, so its schema may allow `null`. The
+    // generated argument is already nullable, and the guard promotes it.
+    if (declaredType.isNullable &&
+        (parameter.isRequired ||
+            location == DartClientParameterLocation.path)) {
       return null;
     }
+    final type = declaredType.isNullable
+        ? DartTypeReference(
+            symbol: declaredType.symbol,
+            importUrl: declaredType.importUrl,
+            scalarCodec: declaredType.scalarCodec,
+            typeArguments: declaredType.typeArguments,
+          )
+        : declaredType;
     const scalars = {'String', 'int', 'num', 'bool'};
     bool scalarItem(DartTypeReference item) {
       final String symbol = _unwrappedParameterType(item).symbol;
