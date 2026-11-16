@@ -4,7 +4,8 @@
 
 * Fixes a `type` beside a `$ref` to an untyped `anyOf` or `oneOf` of objects failing with
   "Expected object branches in allOf". The `type` no longer creates an intersection when
-  every member type is allowed by it. A `type` that narrows the union still does
+  every member type is allowed by it, including through reference chains and nested unions.
+  A `type` that narrows the union still creates an intersection
   ([#492](https://github.com/Carapacik/swagger_parser/issues/492)).
 
 ## 2.1.1

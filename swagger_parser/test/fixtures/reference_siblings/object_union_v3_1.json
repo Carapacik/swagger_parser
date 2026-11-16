@@ -40,6 +40,60 @@
           }
         }
       }
+    },
+    "/alias": {
+      "get": {
+        "operationId": "getAlias",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/FrameAliasChain"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exclusive": {
+      "get": {
+        "operationId": "getExclusive",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/ExclusiveAlias"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/nested": {
+      "get": {
+        "operationId": "getNested",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/NestedFrame"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -69,24 +123,80 @@
       "Frame": {
         "anyOf": [
           {
-            "$ref": "#/components/schemas/A"
+            "$ref": "#/components/schemas/AAliasChain"
           },
           {
-            "$ref": "#/components/schemas/B"
+            "$ref": "#/components/schemas/BAlias"
           }
         ]
       },
       "Envelope": {
         "type": "object",
         "required": [
-          "frame"
+          "frame",
+          "alias",
+          "exclusive",
+          "nested"
         ],
         "properties": {
           "frame": {
             "type": "object",
             "$ref": "#/components/schemas/Frame"
+          },
+          "alias": {
+            "type": "object",
+            "$ref": "#/components/schemas/FrameAliasChain"
+          },
+          "exclusive": {
+            "type": "object",
+            "$ref": "#/components/schemas/ExclusiveAlias"
+          },
+          "nested": {
+            "type": "object",
+            "$ref": "#/components/schemas/NestedFrame"
           }
         }
+      },
+      "AAlias": {
+        "$ref": "#/components/schemas/A"
+      },
+      "AAliasChain": {
+        "$ref": "#/components/schemas/AAlias"
+      },
+      "BAlias": {
+        "$ref": "#/components/schemas/B"
+      },
+      "FrameAlias": {
+        "$ref": "#/components/schemas/Frame"
+      },
+      "FrameAliasChain": {
+        "$ref": "#/components/schemas/FrameAlias"
+      },
+      "ExclusiveFrame": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/AAliasChain"
+          },
+          {
+            "$ref": "#/components/schemas/BAlias"
+          }
+        ]
+      },
+      "ExclusiveAlias": {
+        "$ref": "#/components/schemas/ExclusiveFrame"
+      },
+      "NestedFrame": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/FrameAliasChain"
+          },
+          {
+            "$ref": "#/components/schemas/ExclusiveAlias"
+          },
+          {
+            "$ref": "#/components/schemas/Frame"
+          }
+        ]
       }
     }
   }

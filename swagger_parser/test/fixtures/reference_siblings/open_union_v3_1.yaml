@@ -1,0 +1,41 @@
+openapi: "3.1.2"
+info:
+  title: Reference siblings
+  version: "1"
+paths:
+  /frame:
+    get:
+      operationId: getFrame
+      responses:
+        "200":
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/FrameAliasChain"
+components:
+  schemas:
+    A:
+      type: object
+      required:
+        - channel
+      properties:
+        channel:
+          type: string
+    Frame:
+      anyOf:
+        - $ref: "#/components/schemas/A"
+        - {}
+    Envelope:
+      type: object
+      required:
+        - frame
+      properties:
+        frame:
+          type: object
+          $ref: "#/components/schemas/FrameAliasChain"
+    FrameAlias:
+      $ref: "#/components/schemas/Frame"
+    FrameAliasChain:
+      $ref: "#/components/schemas/FrameAlias"

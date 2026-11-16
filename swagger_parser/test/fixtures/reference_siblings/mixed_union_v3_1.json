@@ -15,7 +15,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "$ref": "#/components/schemas/Frame"
+                  "$ref": "#/components/schemas/FrameAliasChain"
                 }
               }
             }
@@ -66,9 +66,15 @@
         "properties": {
           "frame": {
             "type": "object",
-            "$ref": "#/components/schemas/Frame"
+            "$ref": "#/components/schemas/FrameAliasChain"
           }
         }
+      },
+      "FrameAlias": {
+        "$ref": "#/components/schemas/Frame"
+      },
+      "FrameAliasChain": {
+        "$ref": "#/components/schemas/FrameAlias"
       }
     }
   }

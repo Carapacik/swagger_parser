@@ -40,9 +40,18 @@ void main() {
           // It does not wrap the union in a generated object.
           final String envelope = files['models/envelope.dart']!;
           expect(envelope, contains('Frame frame'));
+          expect(envelope, contains('FrameAliasChain alias'));
+          expect(envelope, contains('ExclusiveAlias exclusive'));
+          expect(envelope, contains('NestedFrame nested'));
           expect(files.keys, contains('default_client/models/frame.dart'));
           final String client = files['default_client/api_client.dart']!;
           expect(client, contains('Future<models.Frame> getFrame('));
+          expect(client, contains('Future<models.FrameAliasChain> getAlias('));
+          expect(
+            client,
+            contains('Future<models.ExclusiveAlias> getExclusive('),
+          );
+          expect(client, contains('Future<models.NestedFrame> getNested('));
           // A sibling `type: object` beside an object reference stays valid.
           expect(client, contains('Future<A> getObject('));
         }
@@ -64,5 +73,25 @@ void main() {
         );
       }
     });
+
+    for (final kind in ['open', 'cyclic']) {
+      test(
+        '$version does not infer a matching type from a $kind union',
+        () async {
+          for (final format in ['json', 'yaml']) {
+            await expectLater(
+              _generate('${kind}_union_$version.$format', DtoSerializer.plain),
+              throwsA(
+                isA<GenerationException>().having(
+                  (e) => e.diagnostics.single.code,
+                  'code',
+                  'unsupportedDartSchema',
+                ),
+              ),
+            );
+          }
+        },
+      );
+    }
   }
 }

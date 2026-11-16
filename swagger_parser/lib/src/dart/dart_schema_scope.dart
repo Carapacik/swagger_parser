@@ -271,38 +271,44 @@ final class _SchemaUse(
         });
   }
 
-  /// Returns the JSON types that a schema accepts, when its keywords state them.
+  /// Returns an upper bound for the JSON types that a schema accepts.
   ///
-  /// A schema without `type` takes the types of its `anyOf` or `oneOf` members.
-  /// The result is empty when any member leaves its type open.
+  /// Follows references and combines `anyOf` or `oneOf` member types.
+  /// An empty result means that the bound is unknown.
   Set<String> _declaredTypes(
     ReferenceLocation location,
     Set<ReferenceLocation> visited,
   ) {
     final ApiSchema schema = index.schemas[location]!;
+    if (!visited.add(location)) {
+      return const {};
+    }
+    final ReferenceLocation? reference = schema.reference;
+    if (reference != null &&
+        (schema.family == OpenApiFamily.swaggerV2 ||
+            schema.family == OpenApiFamily.v30)) {
+      return _declaredTypes(reference, visited);
+    }
     if (schema.types.isNotEmpty) {
       return schema.types;
+    }
+    if (schema.dynamicReference != null) {
+      return const {};
+    }
+    if (reference != null) {
+      return _declaredTypes(reference, visited);
     }
     final List<ReferenceLocation> members = schema.anyOf.isNotEmpty
         ? schema.anyOf
         : schema.oneOf;
     if (members.isEmpty ||
         (schema.anyOf.isNotEmpty && schema.oneOf.isNotEmpty) ||
-        schema.allOf.isNotEmpty ||
-        schema.reference != null ||
-        schema.dynamicReference != null ||
-        !visited.add(location)) {
+        schema.allOf.isNotEmpty) {
       return const {};
     }
     final types = <String>{};
     for (final member in members) {
-      final ApiSchema target = index.schemas[member]!;
-      final Set<String> memberTypes = _declaredTypes(
-        target.reference == null || target.dynamicReference != null
-            ? member
-            : target.reference!,
-        {...visited},
-      );
+      final Set<String> memberTypes = _declaredTypes(member, {...visited});
       if (memberTypes.isEmpty) {
         return const {};
       }
