@@ -523,6 +523,10 @@ class _GeneratorEditorState() extends State<GeneratorEditor> {
                         'Use positional body arguments',
                       ),
                       _toggle(
+                        'include_null_parameters',
+                        'Include null query and header parameters',
+                      ),
+                      _toggle(
                         'apply_parameter_defaults',
                         'Apply parameter defaults',
                       ),

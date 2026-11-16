@@ -100,6 +100,7 @@ Map<String, Object?> _context(
     'usePathForMethodNames': config.usePathForMethodNames,
     'originalHttpResponse': config.originalHttpResponse,
     'applyParameterDefaults': config.applyParameterDefaults,
+    'includeNullParameters': config.includeNullParameters,
     'inferMissingRequired': config.inferMissingRequired,
     'usePresenceRecords': config.usePresenceRecords,
     'generateValidators': config.generateValidators,

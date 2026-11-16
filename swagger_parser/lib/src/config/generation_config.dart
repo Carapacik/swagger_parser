@@ -140,6 +140,11 @@ final class const GenerationConfig({
   /// Required arguments, whole bodies, and DTO defaults are unchanged.
   final bool applyParameterDefaults = false,
 
+  /// Includes null query and header arguments. Defaults to false.
+  /// Queries use a key without a value. Headers use the string `null`.
+  /// Body, form, cookie, and path serialization are unchanged.
+  final bool includeNullParameters = false,
+
   /// Infers non-nullable fields without defaults when required is absent.
   /// Defaults to false. Explicit required lists, including empty lists, win.
   final bool inferMissingRequired = false,

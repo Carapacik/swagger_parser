@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 void main() {
   for (final version in ['v2', 'v3_0', 'v3_1', 'v3_2']) {
     test(
-      '$version keeps nullable query exclusion and optional flags',
+      '$version generates nullable queries and preserves required arguments',
       () async {
         for (final ext in ['json', 'yaml']) {
           final SchemaSource source = await const FileSchemaSourceLoader()
@@ -22,24 +22,15 @@ void main() {
                   source,
                   config: GenerationConfig(httpClient: backend),
                 );
-            expect(result.diagnostics, hasLength(1));
-            final Diagnostic diagnostic = result.diagnostics.single;
-            expect(
-              diagnostic.message,
-              contains('Unsupported query parameter: value'),
-            );
-            expect(diagnostic.sourceUri, source.uri);
-            expect(
-              diagnostic.documentPath,
-              contains('/paths/~1skipped/get/parameters/0'),
-            );
+            expect(result.diagnostics, isEmpty);
             final String client = result.files
                 .singleWhere(
                   (f) => f.relativePath == 'default_client/api_client.dart',
                 )
                 .content;
             expect(client, contains(' kept('));
-            expect(client, isNot(contains(' skipped(')));
+            expect(client, contains(' skipped('));
+            expect(client, contains('String? value'));
             expect(client, contains('String? absent'));
             expect(client, contains('String? optional'));
             expect(client, contains('required String required2'));

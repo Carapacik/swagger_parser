@@ -331,6 +331,9 @@ extension on _Mapping {
                     '${_operationNameCandidate(op)}_${parameter.name}',
                   ))
           : DartTypeReference(symbol: 'String');
+      if (location == DartClientParameterLocation.path && type.isNullable) {
+        return null;
+      }
       return DartClientParameter.at(
         name: _identifier(parameter.name, arguments),
         documentation: _parameterDocumentation(parameter),
@@ -372,7 +375,9 @@ extension on _Mapping {
         '${_operationNameCandidate(op)}_${parameter.name}',
       ),
     );
-    if (type.isNullable) {
+    if (type.isNullable &&
+        !query &&
+        location != DartClientParameterLocation.header) {
       return null;
     }
     const scalars = {'String', 'int', 'num', 'bool'};

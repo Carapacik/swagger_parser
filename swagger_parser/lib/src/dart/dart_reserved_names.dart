@@ -25,6 +25,7 @@ const clientTypeNames = {
   'DioMediaType',
   'CancelToken',
   'CancelRequest',
+  'PreventNullToAbsent',
   'HttpRequestOptions',
   'HttpResponse',
   'Response',

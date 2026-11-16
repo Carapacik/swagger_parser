@@ -1,0 +1,318 @@
+openapi: '3.1.2'
+info:
+  title: Null parameters
+  version: '1'
+paths:
+  /query:
+    get:
+      operationId: sendQuery
+      parameters:
+        - name: requiredQuery
+          in: query
+          required: true
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+        - name: count
+          in: query
+          required: false
+          schema:
+            type:
+              - integer
+              - 'null'
+        - name: flag
+          in: query
+          required: false
+          schema:
+            type:
+              - boolean
+              - 'null'
+        - name: label
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: false
+          schema:
+            type:
+              - array
+              - 'null'
+            items:
+              type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 7
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+  /headers:
+    get:
+      operationId: sendHeaders
+      parameters:
+        - name: X-Required
+          in: header
+          required: true
+          schema:
+            type:
+              - string
+              - 'null'
+        - name: X-Optional
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: X-Tags
+          in: header
+          required: false
+          schema:
+            type:
+              - array
+              - 'null'
+            items:
+              type: string
+        - name: X-Mode
+          in: header
+          schema:
+            anyOf:
+              - $ref: '#/components/schemas/Mode'
+              - type: 'null'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+  /objects:
+    get:
+      operationId: sendObjects
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            type:
+              - object
+              - 'null'
+            additionalProperties:
+              type: string
+        - name: reserved
+          in: query
+          required: false
+          schema:
+            type:
+              - string
+              - 'null'
+          allowReserved: true
+        - name: joined
+          in: query
+          required: false
+          schema:
+            type:
+              - array
+              - 'null'
+            items:
+              type: string
+          style: pipeDelimited
+          explode: false
+        - name: json
+          in: query
+          content:
+            application/json:
+              schema:
+                type:
+                  - string
+                  - 'null'
+        - name: mode
+          in: query
+          schema:
+            anyOf:
+              - $ref: '#/components/schemas/Mode'
+              - type: 'null'
+        - name: modes
+          in: query
+          schema:
+            type:
+              - array
+              - 'null'
+            items:
+              $ref: '#/components/schemas/Mode'
+        - name: dto
+          in: query
+          style: deepObject
+          explode: true
+          schema:
+            anyOf:
+              - $ref: '#/components/schemas/Filter'
+              - type: 'null'
+        - name: reservedMode
+          in: query
+          allowReserved: true
+          schema:
+            anyOf:
+              - $ref: '#/components/schemas/Mode'
+              - type: 'null'
+        - name: encoded
+          in: query
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type:
+                  - object
+                  - 'null'
+                additionalProperties:
+                  type: string
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+  /body:
+    post:
+      operationId: sendBody
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payload'
+  /form:
+    post:
+      operationId: sendForm
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - token
+              properties:
+                token:
+                  type: string
+                value:
+                  type: string
+  /reserved-name:
+    get:
+      operationId: reservedName
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreventNullToAbsent'
+  /multipart:
+    post:
+      operationId: sendMultipart
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - token
+              properties:
+                token:
+                  type: string
+                value:
+                  type: string
+components:
+  schemas:
+    Result:
+      type: object
+      required:
+        - ok
+      properties:
+        ok:
+          type: boolean
+    Payload:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type:
+            - string
+            - 'null'
+    Mode:
+      type: string
+      enum:
+        - a
+        - b
+    Filter:
+      type: object
+      required:
+        - key
+        - value
+      properties:
+        key:
+          type: string
+        value:
+          type:
+            - integer
+            - 'null'
+    PreventNullToAbsent:
+      type: object
+      required:
+        - ok
+      properties:
+        ok:
+          type: boolean

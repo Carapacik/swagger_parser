@@ -1,0 +1,7 @@
+{
+  "output_directory": "out",
+  "generation": {
+    "include_null_parameters": "yes"
+  },
+  "schema_path": "v3_1.yaml"
+}

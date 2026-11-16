@@ -56,6 +56,7 @@ final class EditorConfig._(
     'prune_unused_models': _defaults.pruneUnusedModels,
     'body_positional': _defaults.bodyPositional,
     'apply_parameter_defaults': _defaults.applyParameterDefaults,
+    'include_null_parameters': _defaults.includeNullParameters,
     'original_http_response': _defaults.originalHttpResponse,
   });
 
