@@ -1,0 +1,108 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Unsupported null parameter locations",
+    "version": "1"
+  },
+  "paths": {
+    "/path/{value}": {
+      "get": {
+        "operationId": "pathCase",
+        "parameters": [
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        }
+      }
+    },
+    "/cookie": {
+      "get": {
+        "operationId": "cookieCase",
+        "parameters": [
+          {
+            "name": "value",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        }
+      }
+    },
+    "/items": {
+      "get": {
+        "operationId": "itemsCase",
+        "parameters": [
+          {
+            "name": "value",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        }
+      }
+    },
+    "/content/{value}": {
+      "get": {
+        "operationId": "contentPath",
+        "parameters": [
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Done"
+          }
+        }
+      }
+    }
+  }
+}

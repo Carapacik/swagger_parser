@@ -43,6 +43,7 @@ final class const DefaultDartCodeBuilder() implements DartCodeBuilder {
     DtoSerializer serializer = DtoSerializer.plain,
     HttpClientBackend httpClient = HttpClientBackend.retrofit,
     bool bodyPositional = false,
+    bool includeNullParameters = false,
     bool originalHttpResponse = false,
     bool decodeResponsesInBackground = false,
   }) {
@@ -121,6 +122,7 @@ final class const DefaultDartCodeBuilder() implements DartCodeBuilder {
           model,
           httpClient,
           bodyPositional: bodyPositional,
+          includeNullParameters: includeNullParameters,
           decodeResponsesInBackground: decodeResponsesInBackground,
           originalHttpResponse: originalHttpResponse,
         );

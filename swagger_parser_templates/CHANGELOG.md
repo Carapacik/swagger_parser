@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Exposes `includeNullParameters` in the template options context.
+
 ## 1.1.1
 
 * Updates the minimum `swagger_parser` version to 2.1.1.

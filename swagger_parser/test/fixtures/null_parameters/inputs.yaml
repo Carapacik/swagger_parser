@@ -1,0 +1,10 @@
+output_directory: out
+generation:
+  include_null_parameters: true
+inputs:
+  enabled:
+    schema_path: v3_1.yaml
+  disabled:
+    schema_path: v3_2.json
+    generation:
+      include_null_parameters: false

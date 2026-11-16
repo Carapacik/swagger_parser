@@ -369,6 +369,7 @@ void main() {
             '// originalHttpResponse: {{options.originalHttpResponse}}\n'
             '// decodeResponsesInBackground: {{options.decodeResponsesInBackground}}\n'
             '// applyParameterDefaults: {{options.applyParameterDefaults}}\n'
+            '// includeNullParameters: {{options.includeNullParameters}}\n'
             '// prune: {{options.pruneUnusedModels}}\n'
             '{{#options.keepModels}}// keep: {{.}}\n{{/options.keepModels}}\n'
             '{{#options.excludeParameters}}// exclude: {{name}} {{location}}\n{{/options.excludeParameters}}\n'
@@ -393,6 +394,7 @@ void main() {
         originalHttpResponse: true,
         decodeResponsesInBackground: true,
         applyParameterDefaults: true,
+        includeNullParameters: true,
         unknownEnumValues: UnknownValueMode.preserve,
         naming: NamingConfig(
           preserveSchemaCasing: true,
@@ -411,6 +413,10 @@ void main() {
       contains('// applyParameterDefaults: true'),
     );
     expect(result.files.single.content, contains('// bodyPositional: true'));
+    expect(
+      result.files.single.content,
+      contains('// includeNullParameters: true'),
+    );
     expect(result.files.single.content, contains('// unmatched: preserve'));
     expect(result.files.single.content, contains('// pathNames: true'));
     expect(result.files.single.content, contains('// fileSuffix: _generated'));

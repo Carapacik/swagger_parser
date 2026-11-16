@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+* Adds `include_null_parameters`, which defaults to `false`. Nullable query and header
+  parameters no longer skip their operation. The enabled mode sends null queries as bare keys
+  and null headers as the string `null` across all HTTP clients.
+* Maps inline unions of one value type and `null` to nullable Dart types. Preserves constant
+  defaults, referenced objects, and exclusive `oneOf` matching.
 * Fixes a `type` beside a `$ref` to an untyped `anyOf` or `oneOf` of objects failing with
   "Expected object branches in allOf". The `type` no longer creates an intersection when
   every member type is allowed by it, including through reference chains and nested unions.

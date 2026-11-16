@@ -5,6 +5,7 @@ void _buildHttpClient(
   DartLibraryModel model,
   HttpClientBackend backend, {
   bool bodyPositional = false,
+  bool includeNullParameters = false,
   bool originalHttpResponse = false,
   bool decodeResponsesInBackground = false,
 }) {
@@ -48,7 +49,12 @@ void _buildHttpClient(
       ? const {}
       : model.operations
             .where(
-              (op) => _usesRetrofit(op, model.clientName, hasHeader: hasHeader),
+              (op) => _usesRetrofit(
+                op,
+                model.clientName,
+                hasHeader: hasHeader,
+                includeNullParameters: includeNullParameters,
+              ),
             )
             .toSet();
   final String part = model.relativePath
@@ -194,6 +200,8 @@ void _buildHttpClient(
           'RestApi',
           'Extras',
           'CancelRequest',
+          if (includeNullParameters && routes.any(_hasNullableParameters))
+            'PreventNullToAbsent',
           ...routes.map((op) => op.method).toSet(),
           'ParseErrorLogger',
           if (routes.any((op) => op.body?.fields.isEmpty ?? false)) ...[
@@ -237,7 +245,9 @@ void _buildHttpClient(
       if (packageHttp) {
         _httpConstructor(c);
         if (direct.any(_httpUsesQuery)) {
-          c.methods.add(_httpQuery());
+          c.methods.add(
+            _httpQuery(includeNullParameters: includeNullParameters),
+          );
         }
       }
       if (encodesForm && !packageHttp) {
@@ -380,13 +390,18 @@ void _buildHttpClient(
         }
         final cb.Method method = _withBodyPosition(
           routes.contains(op)
-              ? _retrofitMethod(op, originalHttpResponse: originalHttpResponse)
+              ? _retrofitMethod(
+                  op,
+                  originalHttpResponse: originalHttpResponse,
+                  includeNullParameters: includeNullParameters,
+                )
               : _directMethod(
                   op,
                   qualified,
                   decodeInBackground: background(op),
                   operationMetadata: metadata(op),
                   packageHttp: packageHttp,
+                  includeNullParameters: includeNullParameters,
                   responseWrapper: originalHttpResponse
                       ? (backend == HttpClientBackend.dio
                             ? 'Response'
@@ -404,6 +419,7 @@ void _buildHttpClient(
                 operationMetadata: metadata(op),
                 packageHttp: false,
                 nativeRetrofit: true,
+                includeNullParameters: includeNullParameters,
                 decodeInBackground: background(op),
                 responseWrapper: originalHttpResponse ? 'HttpResponse' : null,
               ),
@@ -465,7 +481,11 @@ void _buildHttpClient(
           );
         for (final op in routes) {
           final cb.Method method = _withBodyPosition(
-            _retrofitMethod(op, originalHttpResponse: originalHttpResponse),
+            _retrofitMethod(
+              op,
+              originalHttpResponse: originalHttpResponse,
+              includeNullParameters: includeNullParameters,
+            ),
             bodyPositional,
           );
           final String args = [
@@ -527,6 +547,7 @@ bool _usesRetrofit(
   DartClientOperation op,
   String clientName, {
   required bool hasHeader,
+  bool includeNullParameters = false,
 }) {
   bool conflicts(String name) =>
       name == clientName ||
@@ -534,6 +555,16 @@ bool _usesRetrofit(
       (hasHeader && name == 'Header');
   final DartClientBody? body = op.body;
   final bool form = body != null && _annotatedForm(body);
+  if (includeNullParameters &&
+      _hasNullableParameters(op) &&
+      (body != null ||
+          op.parameters.any(
+            (p) =>
+                p.location == DartClientParameterLocation.header &&
+                (!p.isRequired || p.type.isNullable),
+          ))) {
+    return false;
+  }
   if (!const {
         'GET',
         'POST',
@@ -559,7 +590,9 @@ bool _usesRetrofit(
             _hasScalarCodec(p.type) ||
             p.type.typeArguments.any(_needsParameterCodec) ||
             p.allowReserved ||
-            p.type.isNullable ||
+            (p.type.isNullable &&
+                (p.location != DartClientParameterLocation.query ||
+                    p.objectShape != null)) ||
             p.location == DartClientParameterLocation.cookie ||
             p.location == DartClientParameterLocation.querystring ||
             (p.objectShape != null &&
@@ -732,14 +765,24 @@ Iterable<cb.Parameter> _callParameters(
   );
 }
 
+bool _hasNullableParameters(DartClientOperation op) => op.parameters.any(
+  (p) =>
+      (p.location == DartClientParameterLocation.query ||
+          p.location == DartClientParameterLocation.header) &&
+      (!p.isRequired || p.type.isNullable),
+);
+
 cb.Method _retrofitMethod(
   DartClientOperation op, {
   bool originalHttpResponse = false,
+  bool includeNullParameters = false,
 }) => cb.Method(
   (m) => m
     ..name = op.name
     ..annotations.add(cb.refer(op.method).call([cb.literalString(op.path)]))
     ..annotations.addAll([
+      if (includeNullParameters && _hasNullableParameters(op))
+        cb.refer('PreventNullToAbsent').call([]),
       if (op.body?.mediaType == 'multipart/form-data')
         cb.refer('MultiPart').call([])
       else if (op.body?.mediaType == 'application/x-www-form-urlencoded')
@@ -816,7 +859,7 @@ bool _mapNeedsJson(DartTypeReference type) =>
 String _objectJson(DartClientParameter p) =>
     p.type.symbol == 'Map' && !_mapNeedsJson(p.type)
     ? p.name
-    : _encode(p.type, p.name);
+    : _encode(_parameterValueType(p.type), p.name);
 
 String _objectArgument(DartClientParameter p) {
   final String json = _objectJson(p);
@@ -962,6 +1005,7 @@ cb.Method _directMethod(
   Set<String> qualified, {
   required bool packageHttp,
   bool nativeRetrofit = false,
+  bool includeNullParameters = false,
   bool decodeInBackground = false,
   String? operationMetadata,
   String? responseWrapper,
@@ -1072,19 +1116,30 @@ cb.Method _directMethod(
   String? rawQuery;
   final reservedQuery = <String>[];
   for (final DartClientParameter p in op.parameters) {
+    final bool nullable = !p.isRequired || p.type.isNullable;
+    final bool parameterNull =
+        p.location == DartClientParameterLocation.query ||
+        p.location == DartClientParameterLocation.header;
+    final bool keepNull = includeNullParameters && parameterNull;
+    final guard = nullable && !keepNull ? 'if (${p.name} != null) ' : '';
+    String withNull(String value) => keepNull && nullable
+        ? '${p.name} == null ? ${p.location == DartClientParameterLocation.header ? "'null'" : 'null'} : $value'
+        : value;
     if (p.contentType != null) {
       final String name = p.name;
       final String media = p.contentType!;
+      final DartTypeReference wireType = parameterNull
+          ? _parameterValueType(p.type)
+          : p.type;
       final String value;
       if (_jsonMedia(media)) {
-        value = _jsonArgument(p.type, name);
+        value = _jsonArgument(wireType, name);
       } else if (media == 'application/x-www-form-urlencoded') {
-        final String data = _encode(p.type, name);
+        final String data = _encode(wireType, name);
         value = packageHttp ? '_httpQuery($data)' : '_encodedForm($data)';
       } else {
         value = name;
       }
-      final guard = p.isRequired ? '' : 'if ($name != null) ';
       switch (p.location) {
         case DartClientParameterLocation.querystring:
           final encoded = _jsonMedia(media)
@@ -1094,9 +1149,9 @@ cb.Method _directMethod(
         case DartClientParameterLocation.path:
           pathValues[p.wireName] = 'Uri.encodeComponent($value)';
         case DartClientParameterLocation.query:
-          query.add('$guard${_literal(p.wireName)}: $value');
+          query.add('$guard${_literal(p.wireName)}: ${withNull(value)}');
         case DartClientParameterLocation.header:
-          headers.add('$guard${_literal(p.wireName)}: $value');
+          headers.add('$guard${_literal(p.wireName)}: ${withNull(value)}');
         case DartClientParameterLocation.cookie:
           cookies.add(
             '$guard${_literal('${Uri.encodeComponent(p.wireName)}=')} + Uri.encodeComponent($value)',
@@ -1105,8 +1160,11 @@ cb.Method _directMethod(
     } else if (p.allowReserved &&
         p.location == DartClientParameterLocation.query) {
       final String expression = _reservedQueryArgument(p);
-      final guard = p.isRequired ? '' : 'if (${p.name} != null) ';
-      reservedQuery.add('$guard...$expression');
+      reservedQuery.add(
+        keepNull && nullable
+            ? 'if (${p.name} == null) ${_literal(Uri.encodeQueryComponent(p.wireName))} else ...$expression'
+            : '$guard...$expression',
+      );
     } else if (p.location == DartClientParameterLocation.cookie) {
       cookies.add(_cookieArgument(p));
     } else if (p.isPath) {
@@ -1125,7 +1183,6 @@ cb.Method _directMethod(
         pathValues[p.wireName] = expression;
       }
     } else {
-      final guard = p.isRequired ? '' : 'if (${p.name} != null) ';
       if (hasFormQuery &&
           p.location == DartClientParameterLocation.query &&
           p.objectShape != null) {
@@ -1138,8 +1195,14 @@ cb.Method _directMethod(
             : ', format: ListFormat.${p.queryListFormat!.name}';
         final call =
             '_addQueryObject(queryParameters, $key, ${_objectJson(p)}, explode: ${p.explode}$bracketed$format);';
+        final nullCall =
+            'if (queryParameters.containsKey($key)) { '
+            'throw ArgumentError(${_literal('Duplicate query key "${p.wireName}" in parameter "${p.wireName}".')}); '
+            '} queryParameters[$key] = null;';
         objectCalls.add(
-          p.isRequired ? call : 'if (${p.name} != null) { $call }',
+          !nullable
+              ? call
+              : 'if (${p.name} != null) { $call }${keepNull ? ' else { $nullCall }' : ''}',
         );
         continue;
       }
@@ -1152,7 +1215,9 @@ cb.Method _directMethod(
       } else if (nativeRetrofit && p.type.symbol == 'List') {
         value = p.name;
       } else if (p.type.symbol != 'List') {
-        value = p.scalarCodec ? _encode(p.type, p.name) : p.name;
+        value = p.scalarCodec
+            ? _encode(_parameterValueType(p.type), p.name)
+            : p.name;
       } else if (p.queryListFormat == DartQueryListFormat.tsv) {
         // Dio's tsv format inserts a literal backslash and t.
         value = "${_parameterWire(p.type, p.name)}.join('\\t')";
@@ -1163,7 +1228,7 @@ cb.Method _directMethod(
             ? _httpList(_parameterWire(p.type, p.name), format)
             : 'ListParam(${_parameterWire(p.type, p.name)}, ListFormat.${format.name})';
       }
-      final entry = '$guard${_literal(p.wireName)}: $value';
+      final entry = '$guard${_literal(p.wireName)}: ${withNull(value)}';
       if (p.location == DartClientParameterLocation.header) {
         headers.add(entry);
       } else {
@@ -1251,6 +1316,7 @@ cb.Method _directMethod(
       queryMap,
       headers,
       accepted,
+      includeNullParameters: includeNullParameters,
       originalHttpResponse: wrapped,
     );
     if (wrapped && !_returnsStream(op)) {

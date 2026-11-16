@@ -61,6 +61,7 @@ swagger_parser:
     body_positional: false
     use_path_for_method_names: false
     apply_parameter_defaults: false
+    include_null_parameters: false
     infer_missing_required: false
     use_presence_records: false
     generate_validators: false
@@ -869,11 +870,39 @@ Use the default when the caller omits the argument.
 // No argument: limit=25.
 ```
 
-Explicit `limit: null` omits the entry in both modes. Required parameters,
+Explicit `limit: null` follows `include_null_parameters` in both modes. Required parameters,
 whole bodies, and DTO defaults keep their rules. Enum defaults use wire values.
 Empty collection defaults use `const []` or `const {}`; their wire form depends
 on parameter serialization. No empty item is invented. Unsupported constants
 fail when applied. Excluded parameters are not restored.
+
+### `generation.include_null_parameters`
+
+Controls null query and header arguments for Retrofit, Dio, and package:http.
+The default is `false`.
+
+```yaml
+generation:
+  include_null_parameters: true
+```
+
+| Argument value | `false` | `true` |
+| --- | --- | --- |
+| Null query `filter` | Omit the entry. | Send `?filter`, without `=`. |
+| Null header `X-Filter` | Omit the header. | Send the string `null`. |
+| Non-null value | Use the parameter serialization rules. | Use the same rules. |
+
+The policy applies to required and optional arguments. A required nullable
+parameter still requires a Dart argument. Without a configured default, an
+omitted optional argument has the same behavior as explicit null.
+`apply_parameter_defaults` still controls defaults for omitted arguments.
+Values such as `0`, `false`, an empty string, and lists keep their normal encoding.
+
+The setting does not change bodies, form fields, multipart parts, cookies,
+path parameters, or null collection items. Nullable path parameters remain
+unsupported. Retrofit uses `PreventNullToAbsent` when its scope is suitable.
+Methods that need header normalization or independent body handling use the
+generated Dio request implementation.
 
 ### `generation.stream_binary_responses`
 
@@ -1830,8 +1859,8 @@ source validation, add removed operations, or restore pruned models.
 
 A valid config does not guarantee that every schema shape is supported.
 Generation diagnostics still identify unsupported operations or models.
-Explicitly nullable query schemas skip their operation with a diagnostic.
-No additional config switch changes that policy.
+Nullable query and header arguments follow `include_null_parameters`.
+Unsupported parameter shapes still produce operation diagnostics.
 
 ## Dart API
 

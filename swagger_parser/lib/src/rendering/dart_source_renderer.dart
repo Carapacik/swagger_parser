@@ -46,6 +46,7 @@ class const DartSourceRenderer({
         httpClient: config.httpClient,
         serializer: config.serializer,
         bodyPositional: config.bodyPositional,
+        includeNullParameters: config.includeNullParameters,
         decodeResponsesInBackground: config.decodeResponsesInBackground,
         originalHttpResponse:
             config.originalHttpResponse &&

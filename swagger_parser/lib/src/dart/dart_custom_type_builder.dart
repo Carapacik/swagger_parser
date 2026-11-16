@@ -7,7 +7,18 @@ String _bodyWire(DartTypeReference type, String value) =>
     _hasScalarCodec(type) ? '(${_encode(type, value)})' : value;
 
 String _parameterWire(DartTypeReference type, String value) =>
-    _needsParameterCodec(type) ? '(${_encode(type, value)})' : value;
+    _needsParameterCodec(type)
+    ? '(${_encode(_parameterValueType(type), value)})'
+    : value;
+
+// Parameter entries handle null before encoding their value.
+DartTypeReference _parameterValueType(DartTypeReference type) =>
+    DartTypeReference(
+      symbol: type.symbol,
+      importUrl: type.importUrl,
+      scalarCodec: type.scalarCodec,
+      typeArguments: type.typeArguments,
+    );
 
 bool _needsParameterCodec(DartTypeReference type) =>
     type.scalarCodec != null ||

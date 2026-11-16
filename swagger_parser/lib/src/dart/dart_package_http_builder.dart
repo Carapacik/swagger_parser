@@ -78,19 +78,41 @@ void _httpConstructor(cb.ClassBuilder client) {
   );
 }
 
-cb.Method _httpQuery() => cb.Method(
-  (m) => m
-    ..name = '_httpQuery'
-    ..static = true
-    ..returns = cb.refer('String')
-    ..requiredParameters.add(
-      cb.Parameter(
-        (p) => p
-          ..name = 'fields'
-          ..type = cb.refer('Map<String, Object?>'),
-      ),
-    )
-    ..body = const cb.Code(r'''
+cb.Method _httpQuery({bool includeNullParameters = false}) {
+  final visit = includeNullParameters
+      ? '''
+fields.forEach((key, value) {
+  if (bareNullKeys.contains(key) && value == null) {
+    entries.add(Uri.encodeQueryComponent(key));
+  } else {
+    add(key, value);
+  }
+});'''
+      : 'fields.forEach(add);';
+  return cb.Method(
+    (m) => m
+      ..name = '_httpQuery'
+      ..static = true
+      ..returns = cb.refer('String')
+      ..requiredParameters.add(
+        cb.Parameter(
+          (p) => p
+            ..name = 'fields'
+            ..type = cb.refer('Map<String, Object?>'),
+        ),
+      )
+      ..optionalParameters.addAll([
+        if (includeNullParameters)
+          cb.Parameter(
+            (p) => p
+              ..name = 'bareNullKeys'
+              ..named = true
+              ..type = cb.refer('Set<String>')
+              ..defaultTo = const cb.Code('const {}'),
+          ),
+      ])
+      ..body = cb.Code(
+        r'''
 final entries = <String>[];
 void add(String key, Object? value) {
   if (value is Iterable) {
@@ -101,10 +123,12 @@ void add(String key, Object? value) {
     entries.add(Uri.encodeQueryComponent(key) + '=' + Uri.encodeQueryComponent(value?.toString() ?? ''));
   }
 }
-fields.forEach(add);
-return entries.join('&');
-'''),
-);
+'''
+        '$visit\n'
+        "return entries.join('&');\n",
+      ),
+  );
+}
 
 void _sendHttpRequest(
   StringBuffer code,
@@ -114,6 +138,7 @@ void _sendHttpRequest(
   List<String> headers,
   String? accepted, {
   bool originalHttpResponse = false,
+  bool includeNullParameters = false,
 }) {
   code
     ..write(
@@ -121,8 +146,19 @@ void _sendHttpRequest(
     )
     ..write('var _url = Uri.parse(_base + ($path));');
   if (query.isNotEmpty) {
+    final List<String> nullKeys = [
+      if (includeNullParameters)
+        for (final p in op.parameters)
+          if (p.location == DartClientParameterLocation.query &&
+              !p.allowReserved &&
+              (!p.isRequired || p.type.isNullable))
+            'if (${p.name} == null) ${_literal(p.wireName)}',
+    ];
+    final nulls = nullKeys.isEmpty
+        ? ''
+        : ', bareNullKeys: {${nullKeys.join(', ')}}';
     code.write(
-      "final _query = _httpQuery($query); if (_query.isNotEmpty) { _url = _url.replace(query: [_url.query, _query].where((s) => s.isNotEmpty).join('&')); }",
+      "final _query = _httpQuery($query$nulls); if (_query.isNotEmpty) { _url = _url.replace(query: [_url.query, _query].where((s) => s.isNotEmpty).join('&')); }",
     );
   }
   final abort =

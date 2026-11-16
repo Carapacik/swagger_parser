@@ -39,9 +39,23 @@ void main() {
     expect(config.value('page_width'), 80);
     expect(config.value('generate_docs'), isTrue);
     expect(config.value('infer_missing_required'), isFalse);
+    expect(config.value('include_null_parameters'), isFalse);
     expect(config.parseConfig.maxDepth, 128);
     expect(config.parseConfig.captureSourceLocations, isTrue);
     expect(config.parseConfig.unknownFields, UnknownFieldPolicy.preserve);
+  });
+
+  test('edits null parameter inclusion without enabling defaults', () {
+    final EditorConfig config = EditorConfig.defaults().withValue(
+      'include_null_parameters',
+      true,
+    );
+    expect(config.pipelineConfig.generation.includeNullParameters, isTrue);
+    expect(config.pipelineConfig.generation.applyParameterDefaults, isFalse);
+    expect(
+      EditorConfig.parse(config.yaml).value('include_null_parameters'),
+      isTrue,
+    );
   });
 
   test(

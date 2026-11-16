@@ -378,9 +378,10 @@ A required JSON object uses `@Body()`. Optional bodies and other JSON
 shapes use Dio directly. Omit an optional body to send no payload. If the
 schema also permits null, pass `sendNullBody: true` to send JSON `null`.
 
-Explicitly nullable query schemas skip the operation with a source diagnostic.
-Optional non-null query schemas generate optional arguments; null omits the
-parameter. No config changes this rule.
+Nullable query and header schemas generate nullable Dart arguments. Null values
+are omitted by default. Set `generation.include_null_parameters: true` to send
+a null query as a bare key and a null header as the string `null`. This applies
+to required and optional arguments. Body and form serialization are unchanged.
 
 ### Per-call settings
 

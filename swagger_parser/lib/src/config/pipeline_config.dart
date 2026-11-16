@@ -44,6 +44,7 @@ final class const PipelineConfig({
         'use_path_for_method_names',
         'original_http_response',
         'apply_parameter_defaults',
+        'include_null_parameters',
         'infer_missing_required',
         'use_presence_records',
         'generate_validators',
@@ -107,6 +108,9 @@ final class const PipelineConfig({
             gen.usePathForMethodNames,
         bodyPositional:
             generation.get<bool>('body_positional') ?? gen.bodyPositional,
+        includeNullParameters:
+            generation.get<bool>('include_null_parameters') ??
+            gen.includeNullParameters,
         applyParameterDefaults:
             generation.get<bool>('apply_parameter_defaults') ??
             gen.applyParameterDefaults,

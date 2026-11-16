@@ -432,5 +432,5 @@ String _reservedQueryArgument(DartClientParameter p) {
     };
     return "[if ($name.isNotEmpty) $key + $name.map((item) => ${encode(_parameterWire(p.type.typeArguments.single, 'item'))}).join('$sep')]";
   }
-  return '[$key + ${encode(p.scalarCodec ? '(${_encode(p.type, name)})' : name)}]';
+  return '[$key + ${encode(_parameterWire(p.type, name))}]';
 }
