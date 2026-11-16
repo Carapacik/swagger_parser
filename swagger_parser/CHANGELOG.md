@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+* Fixes `spaceDelimited` and `pipeDelimited` query arrays with `explode: true` skipping their
+  operation. Array serialization ignores `explode`, so both styles now keep the space and pipe
+  separators that the form field mapping already used.
+
 ## 2.2.0
 
 * Adds `include_null_parameters`, which defaults to `false`. Nullable query and header

@@ -440,9 +440,9 @@ extension on _Mapping {
           ('multi', _, _) || (null, 'form', true) => DartQueryListFormat.multi,
           ('csv', _, _) || (null, 'form', false) => DartQueryListFormat.csv,
           ('ssv', _, _) ||
-          (null, 'spaceDelimited', false) => DartQueryListFormat.ssv,
+          (null, 'spaceDelimited', _) => DartQueryListFormat.ssv,
           ('pipes', _, _) ||
-          (null, 'pipeDelimited', false) => DartQueryListFormat.pipes,
+          (null, 'pipeDelimited', _) => DartQueryListFormat.pipes,
           ('tsv', _, _) => DartQueryListFormat.tsv,
           _ => null,
         };

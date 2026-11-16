@@ -1,0 +1,58 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Parameter styles",
+    "version": "1"
+  },
+  "paths": {
+    "/stations": {
+      "get": {
+        "tags": [
+          "Stations"
+        ],
+        "operationId": "getStations",
+        "parameters": [
+          {
+            "name": "regions",
+            "in": "query",
+            "style": "spaceDelimited",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "zones",
+            "in": "query",
+            "style": "pipeDelimited",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
