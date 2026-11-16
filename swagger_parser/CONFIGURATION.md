@@ -1221,6 +1221,49 @@ Preserve adds StatusKnown, StatusValue, and StatusUnknown. HTTP return types
 remain Status. Unknown scalars must match the schema type. Nullability and
 discriminator policies are separate. Custom mappings keep their own checks.
 
+### `x-enum-metadata`
+
+`x-enum-metadata` is a proposed, optional, nonstandard extension; FastAPI does not
+emit it by default. Backend schema customization is required to add it. The version
+1 extension attaches typed metadata to string, integer, or boolean enum members.
+Metadata fields may use `string`, `integer`, `number`, or `boolean`, mapped to Dart
+`String`, `int`, `double`, or `bool`. Fields are required and non-nullable; number
+values must be finite. Integer inputs larger than 9,007,199,254,740,991 are
+rejected to avoid losing precision when converted to `double`. Number-valued enum
+wire values are not supported. Use `x-enumNames` to choose readable Dart member
+names, especially for boolean enums.
+
+```yaml
+type: integer
+enum:
+  - 101
+x-enumNames:
+  - firstKind
+x-enum-metadata:
+  version: 1
+  fields:
+    category:
+      type: string
+    order:
+      type: integer
+  values:
+    "101":
+      category: sample-a
+      order: 10
+```
+
+This produces `SampleCode.firstKind(101, category: 'sample-a', order: 10)`.
+JSON contains only the integer, boolean, or exact string wire value. Metadata is
+not serialized. Plain, json_serializable, Freezed, and dart_mappable generate
+real Dart enums. Known string values such as `"0007"` and `"7"` remain distinct.
+Boolean wire values must be JSON booleans; strings such as `"true"` are not
+coerced.
+
+Unknown IDs fail in non-nullable fields and non-nullable collection elements.
+Nullable fields and nullable collection elements decode unknown IDs as `null` in
+all four serializers. Setting `unknown_enum_values: preserve` does not create
+wrappers for metadata enums.
+
 ### `generation.unknown_discriminator_values`
 
 Stop has known rail and bus tags in its kind field.

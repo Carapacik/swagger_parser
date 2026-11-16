@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+* Adds version 1 `x-enum-metadata` support with string, integer, number, and
+  boolean metadata fields plus string, integer, and boolean enum wire values.
 
 * Fixes a `type` beside a `$ref` to an untyped `anyOf` or `oneOf` of objects failing with
   "Expected object branches in allOf". The `type` no longer creates an intersection when

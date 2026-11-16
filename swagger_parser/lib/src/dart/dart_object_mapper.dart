@@ -117,6 +117,7 @@ extension on _Mapping {
                   scalarCodec: type.scalarCodec,
                   typeArguments: type.typeArguments,
                   isNullable: true,
+                  isMetadataEnum: type.isMetadataEnum,
                 ),
           isRequired: isRequired,
           defaultValue: defaultValue,

@@ -208,4 +208,5 @@ DartTypeReference _taggedMappedType(DartTypeReference type) =>
       importUrl: type.importUrl,
       scalarCodec: type.scalarCodec,
       typeArguments: type.typeArguments,
+      isMetadataEnum: type.isMetadataEnum,
     );

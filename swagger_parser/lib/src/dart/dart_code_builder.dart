@@ -68,6 +68,10 @@ final class const DefaultDartCodeBuilder() implements DartCodeBuilder {
           model.matchIntegers ||
           model.structuralUnions.isNotEmpty ||
           model.tuples.isNotEmpty,
+      metadataEnums: {
+        for (final DartEnumModel e in model.enums)
+          if (e.hasMetadata) e.name,
+      },
     );
     final interfaces = <String, List<String>>{};
     for (final DartUnionModel union in model.unions) {
@@ -127,6 +131,13 @@ final class const DefaultDartCodeBuilder() implements DartCodeBuilder {
       }
       library.body
         ..addAll(model.enums.map(packages.buildEnum))
+        ..addAll(
+          serializer == DtoSerializer.dartMappable
+              ? model.enums
+                    .where((e) => e.hasMetadata)
+                    .map(packages.buildMetadataEnumMapper)
+              : const <cb.Spec>[],
+        )
         ..addAll(model.unions.map(packages.buildUnion))
         ..addAll(
           model.unions

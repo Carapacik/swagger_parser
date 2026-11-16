@@ -349,6 +349,7 @@ final class _Extraction(final LocatedNode entry, final ReferenceGraph graph) {
           'x-nullable',
           'x-enumNames',
           'x-enum-varnames',
+          'x-enum-metadata',
           'items',
           'default',
           'enum',

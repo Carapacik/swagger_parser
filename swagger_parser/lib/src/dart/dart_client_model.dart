@@ -121,6 +121,7 @@ final class DartClientOperation({
           scalarCodec: response.scalarCodec,
           typeArguments: response.typeArguments,
           isNullable: true,
+          isMetadataEnum: response.isMetadataEnum,
         );
 
   /// Path, query, and header parameters.
