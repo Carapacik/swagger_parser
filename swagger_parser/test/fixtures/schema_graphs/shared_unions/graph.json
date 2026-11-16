@@ -1,0 +1,276 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Shared union graph",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Base": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "Layer0": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Base"
+          },
+          {
+            "$ref": "#/components/schemas/Base"
+          }
+        ]
+      },
+      "Layer1": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer0"
+          },
+          {
+            "$ref": "#/components/schemas/Layer0"
+          }
+        ]
+      },
+      "Layer2": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer1"
+          },
+          {
+            "$ref": "#/components/schemas/Layer1"
+          }
+        ]
+      },
+      "Layer3": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer2"
+          },
+          {
+            "$ref": "#/components/schemas/Layer2"
+          }
+        ]
+      },
+      "Layer4": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer3"
+          },
+          {
+            "$ref": "#/components/schemas/Layer3"
+          }
+        ]
+      },
+      "Layer5": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer4"
+          },
+          {
+            "$ref": "#/components/schemas/Layer4"
+          }
+        ]
+      },
+      "Layer6": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer5"
+          },
+          {
+            "$ref": "#/components/schemas/Layer5"
+          }
+        ]
+      },
+      "Layer7": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer6"
+          },
+          {
+            "$ref": "#/components/schemas/Layer6"
+          }
+        ]
+      },
+      "Layer8": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer7"
+          },
+          {
+            "$ref": "#/components/schemas/Layer7"
+          }
+        ]
+      },
+      "Layer9": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer8"
+          },
+          {
+            "$ref": "#/components/schemas/Layer8"
+          }
+        ]
+      },
+      "Layer10": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer9"
+          },
+          {
+            "$ref": "#/components/schemas/Layer9"
+          }
+        ]
+      },
+      "Layer11": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer10"
+          },
+          {
+            "$ref": "#/components/schemas/Layer10"
+          }
+        ]
+      },
+      "Layer12": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer11"
+          },
+          {
+            "$ref": "#/components/schemas/Layer11"
+          }
+        ]
+      },
+      "Layer13": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer12"
+          },
+          {
+            "$ref": "#/components/schemas/Layer12"
+          }
+        ]
+      },
+      "Layer14": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer13"
+          },
+          {
+            "$ref": "#/components/schemas/Layer13"
+          }
+        ]
+      },
+      "Layer15": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer14"
+          },
+          {
+            "$ref": "#/components/schemas/Layer14"
+          }
+        ]
+      },
+      "Layer16": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer15"
+          },
+          {
+            "$ref": "#/components/schemas/Layer15"
+          }
+        ]
+      },
+      "Layer17": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer16"
+          },
+          {
+            "$ref": "#/components/schemas/Layer16"
+          }
+        ]
+      },
+      "Layer18": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer17"
+          },
+          {
+            "$ref": "#/components/schemas/Layer17"
+          }
+        ]
+      },
+      "Layer19": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer18"
+          },
+          {
+            "$ref": "#/components/schemas/Layer18"
+          }
+        ]
+      },
+      "Layer20": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer19"
+          },
+          {
+            "$ref": "#/components/schemas/Layer19"
+          }
+        ]
+      },
+      "Layer21": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer20"
+          },
+          {
+            "$ref": "#/components/schemas/Layer20"
+          }
+        ]
+      },
+      "Layer22": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer21"
+          },
+          {
+            "$ref": "#/components/schemas/Layer21"
+          }
+        ]
+      },
+      "Layer23": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Layer22"
+          },
+          {
+            "$ref": "#/components/schemas/Layer22"
+          }
+        ]
+      },
+      "Envelope": {
+        "type": "object",
+        "required": [
+          "typed",
+          "untyped"
+        ],
+        "properties": {
+          "typed": {
+            "type": "object",
+            "$ref": "#/components/schemas/Layer23"
+          },
+          "untyped": {
+            "$ref": "#/components/schemas/Layer23"
+          }
+        }
+      }
+    }
+  }
+}

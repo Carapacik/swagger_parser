@@ -7,6 +7,7 @@
   every member type is allowed by it, including through reference chains and nested unions.
   A `type` that narrows the union still creates an intersection
   ([#492](https://github.com/Carapacik/swagger_parser/issues/492)).
+  Type inference reuses shared union branches instead of traversing them repeatedly.
 
 ## 2.1.1
 

@@ -58,6 +58,7 @@ final class _SchemaIndex(
 
   final dependencies = <ReferenceLocation, Set<String>>{};
   final uses = <ReferenceLocation, _ScopeCache>{};
+  final declaredTypeBounds = <ReferenceLocation, Set<String>>{};
   // Explicit rules can split equal JSON shapes.
   final mappedDirections = <ReferenceLocation>{};
   late final directions = _SchemaDirections(
@@ -261,10 +262,10 @@ final class _SchemaUse(
     if (target == null) {
       return false;
     }
-    final Set<String> targetTypes = _declaredTypes(target, {});
     return (raw.reference != null && _dynamicTarget != null) ||
         rawFields.keys.any((key) {
           if (key == 'type') {
+            final Set<String> targetTypes = _declaredTypes(target, {});
             return targetTypes.isEmpty || !types.containsAll(targetTypes);
           }
           return _referenceShapeKeywords.contains(key);
@@ -276,6 +277,22 @@ final class _SchemaUse(
   /// Follows references and combines `anyOf` or `oneOf` member types.
   /// An empty result means that the bound is unknown.
   Set<String> _declaredTypes(
+    ReferenceLocation location,
+    Set<ReferenceLocation> visited,
+  ) {
+    if (index.declaredTypeBounds[location] case final types?) {
+      return types;
+    }
+    final Set<String> types = _inferDeclaredTypes(location, visited);
+    // A cycle can make a bound unknown only for the current traversal.
+    // Cache proven bounds, which do not depend on that traversal or scope.
+    if (types.isNotEmpty) {
+      index.declaredTypeBounds[location] = types;
+    }
+    return types;
+  }
+
+  Set<String> _inferDeclaredTypes(
     ReferenceLocation location,
     Set<ReferenceLocation> visited,
   ) {
