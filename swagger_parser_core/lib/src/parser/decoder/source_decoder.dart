@@ -56,7 +56,12 @@ final class const SourceDecoder() {
       final YamlNode root = loadYamlNode(text, sourceUrl: source.uri);
       final locations = <String, SourceLocation>{};
       final active = Set<YamlNode>.identity();
-      Object? visit(YamlNode node, String path, int depth) {
+      Object? visit(
+        YamlNode node,
+        String path,
+        int depth, {
+        bool locate = true,
+      }) {
         final spans.SourceLocation position = node.span.start;
         final location = SourceLocation(
           line: position.line + 1,
@@ -75,20 +80,62 @@ final class const SourceDecoder() {
         if (!active.add(node)) {
           fail('Cyclic YAML aliases are not supported.');
         }
-        if (config.captureSourceLocations) {
+        if (config.captureSourceLocations && locate) {
           locations[path] = location;
         }
         try {
           if (node is YamlMap) {
             final result = <String, Object?>{};
+            final explicit = <String>{};
+            bool isMergeKey(YamlNode keyNode) =>
+                keyNode is YamlScalar &&
+                keyNode.value == '<<' &&
+                keyNode.style == ScalarStyle.PLAIN;
+            // A YAML merge key inserts the entries of a mapping, or of each
+            // mapping in a sequence, when the key is not already present.
+            void merge(YamlNode source) {
+              // The source keeps its own coordinates and is not visited twice
+              // under the target's pointer.
+              final Object? value = visit(
+                source,
+                path,
+                depth + 1,
+                locate: false,
+              );
+              final List<Map<String, Object?>> sources;
+              if (value is Map<String, Object?>) {
+                sources = [value];
+              } else if (value is List<Object?> &&
+                  value.every((item) => item is Map<String, Object?>)) {
+                sources = value.cast<Map<String, Object?>>();
+              } else {
+                fail('Expected a mapping for a merge key.');
+              }
+              for (final map in sources) {
+                for (final MapEntry<String, Object?> entry in map.entries) {
+                  result.putIfAbsent(entry.key, () => entry.value);
+                }
+              }
+            }
+
+            for (final MapEntry<dynamic, YamlNode> entry
+                in node.nodes.entries) {
+              final keyNode = entry.key as YamlNode;
+              if (isMergeKey(keyNode)) {
+                merge(entry.value);
+              }
+            }
             for (final MapEntry<dynamic, YamlNode> entry
                 in node.nodes.entries) {
               final keyNode = entry.key as YamlNode;
               final Object? key = keyNode.value;
+              if (isMergeKey(keyNode)) {
+                continue;
+              }
               if (key is! String) {
                 fail('Object keys must be strings.');
               }
-              if (result.containsKey(key)) {
+              if (!explicit.add(key)) {
                 fail('Duplicate object key: $key.');
               }
               result[key] = visit(
