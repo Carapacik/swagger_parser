@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.2.0
 
 * Adds `include_null_parameters`, which defaults to `false`. Nullable query and header
   parameters no longer skip their operation. The enabled mode sends null queries as bare keys
@@ -13,6 +13,8 @@
   A `type` that narrows the union still creates an intersection
   ([#492](https://github.com/Carapacik/swagger_parser/issues/492)).
   Type inference reuses shared union branches instead of traversing them repeatedly.
+* Updates the minimum `swagger_parser_core` version to 1.0.3.
+* Updates package styling.
 
 ## 2.1.1
 
