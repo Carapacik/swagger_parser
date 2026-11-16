@@ -58,6 +58,7 @@ final class _SchemaIndex(
 
   final dependencies = <ReferenceLocation, Set<String>>{};
   final uses = <ReferenceLocation, _ScopeCache>{};
+  final declaredTypeBounds = <ReferenceLocation, Set<String>>{};
   // Explicit rules can split equal JSON shapes.
   final mappedDirections = <ReferenceLocation>{};
   late final directions = _SchemaDirections(
@@ -261,14 +262,76 @@ final class _SchemaUse(
     if (target == null) {
       return false;
     }
-    final Set<String> targetTypes = index.schemas[target]!.types;
     return (raw.reference != null && _dynamicTarget != null) ||
         rawFields.keys.any((key) {
           if (key == 'type') {
+            final Set<String> targetTypes = _declaredTypes(target, {});
             return targetTypes.isEmpty || !types.containsAll(targetTypes);
           }
           return _referenceShapeKeywords.contains(key);
         });
+  }
+
+  /// Returns an upper bound for the JSON types that a schema accepts.
+  ///
+  /// Follows references and combines `anyOf` or `oneOf` member types.
+  /// An empty result means that the bound is unknown.
+  Set<String> _declaredTypes(
+    ReferenceLocation location,
+    Set<ReferenceLocation> visited,
+  ) {
+    if (index.declaredTypeBounds[location] case final types?) {
+      return types;
+    }
+    final Set<String> types = _inferDeclaredTypes(location, visited);
+    // A cycle can make a bound unknown only for the current traversal.
+    // Cache proven bounds, which do not depend on that traversal or scope.
+    if (types.isNotEmpty) {
+      index.declaredTypeBounds[location] = types;
+    }
+    return types;
+  }
+
+  Set<String> _inferDeclaredTypes(
+    ReferenceLocation location,
+    Set<ReferenceLocation> visited,
+  ) {
+    final ApiSchema schema = index.schemas[location]!;
+    if (!visited.add(location)) {
+      return const {};
+    }
+    final ReferenceLocation? reference = schema.reference;
+    if (reference != null &&
+        (schema.family == OpenApiFamily.swaggerV2 ||
+            schema.family == OpenApiFamily.v30)) {
+      return _declaredTypes(reference, visited);
+    }
+    if (schema.types.isNotEmpty) {
+      return schema.types;
+    }
+    if (schema.dynamicReference != null) {
+      return const {};
+    }
+    if (reference != null) {
+      return _declaredTypes(reference, visited);
+    }
+    final List<ReferenceLocation> members = schema.anyOf.isNotEmpty
+        ? schema.anyOf
+        : schema.oneOf;
+    if (members.isEmpty ||
+        (schema.anyOf.isNotEmpty && schema.oneOf.isNotEmpty) ||
+        schema.allOf.isNotEmpty) {
+      return const {};
+    }
+    final types = <String>{};
+    for (final member in members) {
+      final Set<String> memberTypes = _declaredTypes(member, {...visited});
+      if (memberTypes.isEmpty) {
+        return const {};
+      }
+      types.addAll(memberTypes);
+    }
+    return types;
   }
 
   late final _SchemaUse? reference = switch (raw.reference ?? _dynamicTarget) {

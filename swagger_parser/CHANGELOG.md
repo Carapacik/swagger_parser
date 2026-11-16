@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+* Fixes a `type` beside a `$ref` to an untyped `anyOf` or `oneOf` of objects failing with
+  "Expected object branches in allOf". The `type` no longer creates an intersection when
+  every member type is allowed by it, including through reference chains and nested unions.
+  A `type` that narrows the union still creates an intersection
+  ([#492](https://github.com/Carapacik/swagger_parser/issues/492)).
+  Type inference reuses shared union branches instead of traversing them repeatedly.
+
 ## 2.1.1
 
 * Uses Freezed for all data model classes when selected, including value wrappers,
