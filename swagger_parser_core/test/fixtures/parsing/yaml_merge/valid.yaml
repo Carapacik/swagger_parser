@@ -1,0 +1,64 @@
+openapi: 3.0.3
+info:
+  title: Merge keys
+  version: '1'
+paths: {}
+x-cases:
+  base: &base
+    type: object
+    properties:
+      name:
+        type: string
+      age:
+        type: integer
+  single:
+    <<: *base
+    description: merged
+  first: &first
+    type: string
+    description: first
+  second: &second
+    type: integer
+    description: second
+  sequence:
+    type: number
+    <<:
+      - *first
+      - *second
+  middle: &middle
+    <<: *base
+    description: middle
+  nested:
+    <<: *middle
+    title: leaf
+  quoted:
+    "<<":
+      field: value
+  singleQuoted:
+    '<<':
+      field: value
+  stringTagged:
+    !!str <<:
+      field: value
+  anchoredKey:
+    &merge <<: *base
+  aliasKey:
+    *merge : *base
+  anchoredStringKey:
+    &literal !!str <<:
+      field: value
+  aliasStringKey:
+    *literal :
+      field: value
+  nullable: &nullable
+    description: null
+  nullOverride:
+    <<: *first
+    description: null
+  nullWinner:
+    <<:
+      - *nullable
+      - *first
+  empty:
+    <<: []
+    type: string

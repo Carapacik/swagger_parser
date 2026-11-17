@@ -1,0 +1,7 @@
+openapi: 3.0.3
+info:
+  title: Merge keys
+  version: '1'
+paths: {}
+x-data: &cycle
+  <<: *cycle

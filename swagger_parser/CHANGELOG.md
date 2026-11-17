@@ -6,6 +6,8 @@
   `pipeDelimited` and `explode: true`. The default `reject` skips the operation.
   Select `join` to use the delimiter or `repeat` to repeat the parameter name.
   Both compatibility modes emit a warning.
+* Expands YAML merge keys (`<<`) before generation, so schemas built with an anchored mapping
+  keep their merged fields instead of mapping to an untyped value.
 
 ## 2.2.0
 
