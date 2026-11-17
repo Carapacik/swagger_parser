@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.0.4
 
 * Expands YAML merge keys (`<<`) with an anchored mapping or a sequence of mappings, following
   YAML 1.1 precedence. Merged entries fill a mapping without replacing its explicit keys, and a

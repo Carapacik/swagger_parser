@@ -17,7 +17,7 @@ Runs on VM and web. Does not generate Dart code.
 
 ```yaml
 dependencies:
-  swagger_parser_core: ^1.0.3
+  swagger_parser_core: ^1.0.4
 ```
 
 Run `dart pub get`.

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.3.0
 
 * Adds `delimited_query_array_explode` for query arrays with `spaceDelimited` or
   `pipeDelimited` and `explode: true`. The default `reject` skips the operation.
@@ -12,6 +12,7 @@
   when the schema declares `integer`.
 * Expands YAML merge keys (`<<`) before generation, so schemas built with an anchored mapping
   keep their merged fields instead of mapping to an untyped value.
+* Updates the minimum `swagger_parser_core` version to 1.0.4.
 
 ## 2.2.0
 

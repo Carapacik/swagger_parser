@@ -1,8 +1,9 @@
 # Changelog
 
-## Unreleased
+## 1.1.3
 
 * Exposes `delimitedQueryArrayExplode` in the template options context.
+* Updates the minimum `swagger_parser` version to 2.3.0.
 
 ## 1.1.2
 
