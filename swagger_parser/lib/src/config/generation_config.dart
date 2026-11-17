@@ -61,6 +61,19 @@ enum UnknownValueMode() {
   preserve,
 }
 
+/// Handles query arrays with a delimited style and explode set to true.
+/// OpenAPI does not define this combination.
+enum DelimitedQueryArrayExplodeMode() {
+  /// Skip the operation with a diagnostic. This is the default.
+  reject,
+
+  /// Join items with the style delimiter and emit a warning.
+  join,
+
+  /// Repeat the parameter name for each item and emit a warning.
+  repeat,
+}
+
 /// Generation options for generated Dart source.
 final class const GenerationConfig({
   /// Public facade class. Its snake_case name sets the entry filename.
@@ -144,6 +157,11 @@ final class const GenerationConfig({
   /// Queries use a key without a value. Headers use the string `null`.
   /// Body, form, cookie, and path serialization are unchanged.
   final bool includeNullParameters = false,
+
+  /// Handles spaceDelimited and pipeDelimited query arrays with explode true.
+  /// Defaults to reject. Other parameter styles and types are unchanged.
+  final DelimitedQueryArrayExplodeMode delimitedQueryArrayExplode =
+      DelimitedQueryArrayExplodeMode.reject,
 
   /// Infers non-nullable fields without defaults when required is absent.
   /// Defaults to false. Explicit required lists, including empty lists, win.

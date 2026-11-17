@@ -2,9 +2,10 @@
 
 ## Unreleased
 
-* Fixes `spaceDelimited` and `pipeDelimited` query arrays with `explode: true` skipping their
-  operation. Array serialization ignores `explode`, so both styles now keep the space and pipe
-  separators that the form field mapping already used.
+* Adds `delimited_query_array_explode` for query arrays with `spaceDelimited` or
+  `pipeDelimited` and `explode: true`. The default `reject` skips the operation.
+  Select `join` to use the delimiter or `repeat` to repeat the parameter name.
+  Both compatibility modes emit a warning.
 
 ## 2.2.0
 

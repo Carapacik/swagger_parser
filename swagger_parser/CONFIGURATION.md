@@ -62,6 +62,7 @@ swagger_parser:
     use_path_for_method_names: false
     apply_parameter_defaults: false
     include_null_parameters: false
+    delimited_query_array_explode: reject
     infer_missing_required: false
     use_presence_records: false
     generate_validators: false
@@ -875,6 +876,31 @@ whole bodies, and DTO defaults keep their rules. Enum defaults use wire values.
 Empty collection defaults use `const []` or `const {}`; their wire form depends
 on parameter serialization. No empty item is invented. Unsupported constants
 fail when applied. Excluded parameters are not restored.
+
+### `generation.delimited_query_array_explode`
+
+Controls query arrays that use `spaceDelimited` or `pipeDelimited` with
+`explode: true`. OpenAPI does not define this combination. The Swagger guide
+shows repeated parameter names. Select a mode that matches the server.
+
+```yaml
+generation:
+  delimited_query_array_explode: reject
+```
+
+| Mode | Behavior for `color: [red, blue]` |
+| --- | --- |
+| `reject` (default) | Skip the operation and report `unsupportedClientOperation`. |
+| `join` | Send `color=red%7Cblue` for pipe or `color=red%20blue` for space. |
+| `repeat` | Send `color=red&color=blue` for both styles. |
+
+The table shows percent-encoded URLs. Some transports encode a space as `+`.
+Both compatibility modes report `delimitedQueryArrayExplode` during generation.
+The setting applies to all HTTP clients. It does not change objects, other
+styles, Swagger 2.0 collection formats, or omitted/false `explode` values.
+
+See the [OpenAPI serialization table](https://spec.openapis.org/oas/v3.1.1.html#style-examples)
+and the [Swagger serialization guide](https://swagger.io/docs/specification/v3_0/serialization/).
 
 ### `generation.include_null_parameters`
 

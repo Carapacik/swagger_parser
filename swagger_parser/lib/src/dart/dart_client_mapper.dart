@@ -237,6 +237,30 @@ extension on _Mapping {
       if (parameters.length != effective.length) {
         continue;
       }
+      for (final (i, parameter) in effective.indexed) {
+        if (parameter.location == 'query' &&
+            parameters[i].type.symbol == 'List' &&
+            parameter.serialization.collectionFormat == null &&
+            parameter.serialization.explode == true &&
+            const {
+              'spaceDelimited',
+              'pipeDelimited',
+            }.contains(parameter.serialization.style)) {
+          diagnostics.add(
+            Diagnostic(
+              severity: DiagnosticSeverity.warning,
+              code: 'delimitedQueryArrayExplode',
+              message:
+                  'OpenAPI does not define '
+                  '${parameter.serialization.style} with explode true. '
+                  'Applied ${config.delimitedQueryArrayExplode.name} to '
+                  '${parameter.name} in ${op.method} ${op.path}.',
+              sourceUri: parameter.source.documentUri,
+              documentPath: parameter.source.pointer,
+            ),
+          );
+        }
+      }
       final String method = _identifier(
         _replaceName(_operationNameCandidate(op), NamingTarget.methods),
         methodNames,
@@ -440,9 +464,18 @@ extension on _Mapping {
           ('multi', _, _) || (null, 'form', true) => DartQueryListFormat.multi,
           ('csv', _, _) || (null, 'form', false) => DartQueryListFormat.csv,
           ('ssv', _, _) ||
-          (null, 'spaceDelimited', _) => DartQueryListFormat.ssv,
+          (null, 'spaceDelimited', false) => DartQueryListFormat.ssv,
           ('pipes', _, _) ||
-          (null, 'pipeDelimited', _) => DartQueryListFormat.pipes,
+          (null, 'pipeDelimited', false) => DartQueryListFormat.pipes,
+          (null, 'spaceDelimited' || 'pipeDelimited', true) => switch (config
+              .delimitedQueryArrayExplode) {
+            DelimitedQueryArrayExplodeMode.reject => null,
+            DelimitedQueryArrayExplodeMode.join =>
+              wire.style == 'spaceDelimited'
+                  ? DartQueryListFormat.ssv
+                  : DartQueryListFormat.pipes,
+            DelimitedQueryArrayExplodeMode.repeat => DartQueryListFormat.multi,
+          },
           ('tsv', _, _) => DartQueryListFormat.tsv,
           _ => null,
         };

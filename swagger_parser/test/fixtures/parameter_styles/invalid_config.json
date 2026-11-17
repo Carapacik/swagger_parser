@@ -1,0 +1,7 @@
+{
+  "schema_path": "styles.yaml",
+  "output_directory": "out",
+  "generation": {
+    "delimited_query_array_explode": "ignore"
+  }
+}

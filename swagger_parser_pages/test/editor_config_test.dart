@@ -40,9 +40,32 @@ void main() {
     expect(config.value('generate_docs'), isTrue);
     expect(config.value('infer_missing_required'), isFalse);
     expect(config.value('include_null_parameters'), isFalse);
+    expect(config.value('delimited_query_array_explode'), 'reject');
     expect(config.parseConfig.maxDepth, 128);
     expect(config.parseConfig.captureSourceLocations, isTrue);
     expect(config.parseConfig.unknownFields, UnknownFieldPolicy.preserve);
+  });
+
+  test('edits and validates delimited query array handling', () {
+    for (final DelimitedQueryArrayExplodeMode mode
+        in DelimitedQueryArrayExplodeMode.values) {
+      final EditorConfig config = EditorConfig.defaults().withValue(
+        'delimited_query_array_explode',
+        mode.name,
+      );
+      expect(config.pipelineConfig.generation.delimitedQueryArrayExplode, mode);
+      expect(
+        EditorConfig.parse(config.yaml).value('delimited_query_array_explode'),
+        mode.name,
+      );
+    }
+    expect(
+      () => EditorConfig.defaults().withValue(
+        'delimited_query_array_explode',
+        'ignore',
+      ),
+      throwsFormatException,
+    );
   });
 
   test('edits null parameter inclusion without enabling defaults', () {

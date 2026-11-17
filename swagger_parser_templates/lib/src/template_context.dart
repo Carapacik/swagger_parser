@@ -101,6 +101,7 @@ Map<String, Object?> _context(
     'originalHttpResponse': config.originalHttpResponse,
     'applyParameterDefaults': config.applyParameterDefaults,
     'includeNullParameters': config.includeNullParameters,
+    'delimitedQueryArrayExplode': config.delimitedQueryArrayExplode.name,
     'inferMissingRequired': config.inferMissingRequired,
     'usePresenceRecords': config.usePresenceRecords,
     'generateValidators': config.generateValidators,
