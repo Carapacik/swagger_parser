@@ -321,7 +321,7 @@ final class DartEnumModel(
   /// Helper declarations for preserved unknown values. Null keeps a Dart enum.
   final DartOpenEnumNames? openNames,
 
-  /// Declared non-null JSON types for unknown values.
+  /// Declared non-null JSON types for enum values.
   final Set<String> types = const {},
 }) {
   /// Copies values in declaration order.
@@ -329,6 +329,48 @@ final class DartEnumModel(
 
   /// JSON values keyed by Dart case name.
   final Map<String, Object> values = Map.unmodifiable(values);
+
+  /// Dart scalar type for the value field and the JSON result.
+  /// Uses the declared type, or infers a closed enum from its values.
+  /// Mixed scalar types use Object. Open enums retain their unknown-value type.
+  late final String valueType = _valueType();
+
+  String _valueType() {
+    if (openNames case final names?) {
+      return names.rawType;
+    }
+    if (types.isNotEmpty) {
+      if (types.every((type) => type == 'integer' || type == 'number')) {
+        return types.contains('number') ? 'num' : 'int';
+      }
+      return switch (types.toList()) {
+        ['string'] => 'String',
+        ['boolean'] => 'bool',
+        _ => 'Object',
+      };
+    }
+    if (values.isEmpty) {
+      return 'Object';
+    }
+    final Iterable<Object> items = values.values;
+    if (items.every((value) => value is String)) {
+      return 'String';
+    }
+    if (items.every((value) => value is bool)) {
+      return 'bool';
+    }
+    if (items.every(
+      (value) =>
+          value is num &&
+          value.isFinite &&
+          value == value.truncateToDouble() &&
+          value >= -9223372036854775808.0 &&
+          value < 9223372036854775808.0,
+    )) {
+      return 'int';
+    }
+    return items.every((value) => value is num) ? 'num' : 'Object';
+  }
 }
 
 /// Names and payload type for an enum with unknown values.

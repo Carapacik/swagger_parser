@@ -40,7 +40,8 @@ final class _SerializerBuilder(
   final Set<String> nativeEnums = {
     for (final e in model.enums)
       if (e.openNames == null &&
-          e.values.values.every((v) => v is String || v is int))
+          (e.valueType == 'int' ||
+              e.values.values.every((v) => v is String || v is int)))
         e.name,
   };
   final Map<String, DartDtoModel> dtos = {
@@ -507,7 +508,9 @@ final class _SerializerBuilder(
           plain.values.map(
             (v) => v.rebuild(
               (b) => b.annotations.add(
-                cb.refer('MappableValue(${_literal(model.values[v.name])})'),
+                cb.refer(
+                  'MappableValue(${_enumLiteral(model, model.values[v.name]!)})',
+                ),
               ),
             ),
           ),
@@ -531,7 +534,9 @@ final class _SerializerBuilder(
                 : ctor,
           ),
         );
-        e.methods.replace([json._toJson(cb.refer('Object'), '$map[this]!')]);
+        e.methods.replace([
+          json._toJson(cb.refer(model.valueType), '$map[this]!'),
+        ]);
       });
     }
     return plain;

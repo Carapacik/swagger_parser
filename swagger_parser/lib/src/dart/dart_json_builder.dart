@@ -2,6 +2,9 @@ part of 'dart_code_builder.dart';
 
 String _literal(Object? value) => jsonEncode(value).replaceAll(r'$', r'\$');
 
+String _enumLiteral(DartEnumModel model, Object value) =>
+    _literal(model.valueType == 'int' && value is num ? value.toInt() : value);
+
 final cb.Reference _jsonMap = cb.refer('Map<String, Object?>');
 final cb.Reference _jsonValue = cb.refer('Object?');
 
@@ -238,12 +241,12 @@ final class _JsonBuilder(
             (v) => v
               ..name = entry.key
               ..arguments.add(
-                cb.CodeExpression(cb.Code(_literal(entry.value))),
+                cb.CodeExpression(cb.Code(_enumLiteral(model, entry.value))),
               ),
           ),
         ),
       )
-      ..fields.add(_field('value', cb.refer('Object')))
+      ..fields.add(_field('value', cb.refer(model.valueType)))
       ..constructors.addAll([
         _valueConstructor,
         _fromJson(
@@ -251,7 +254,7 @@ final class _JsonBuilder(
           "return values.firstWhere((item) => item.value == json, orElse: () => throw FormatException(${_literal('Unknown ${model.name} value.')}, json));",
         ),
       ])
-      ..methods.add(_toJson(cb.refer('Object'), 'value')),
+      ..methods.add(_toJson(cb.refer(model.valueType), 'value')),
   );
 
   String _decode(DartTypeReference type, String value, {bool? nullable}) {

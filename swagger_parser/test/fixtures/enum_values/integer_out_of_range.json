@@ -1,0 +1,21 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Integer enum bounds",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Invalid": {
+        "type": "integer",
+        "enum": [
+          1e+30
+        ],
+        "x-enumNames": [
+          "huge"
+        ]
+      }
+    }
+  }
+}

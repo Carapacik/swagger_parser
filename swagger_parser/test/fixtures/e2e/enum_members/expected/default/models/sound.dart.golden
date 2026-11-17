@@ -13,7 +13,7 @@ enum Sound {
     );
   }
 
-  final Object value;
+  final String value;
 
-  Object toJson() => value;
+  String toJson() => value;
 }

@@ -968,13 +968,20 @@ wire strings. Raw binary HTTP responses use `List<int>`. Enable
 All four serializers reject unknown enum values by default. Use
 `unknown_enum_values: preserve` to retain unknown scalars and their JSON types.
 
-### Enum member names
+Enum `value` fields and `toJson()` results use `String`, `int`, `num`, or `bool`
+when the schema declares that scalar type. Closed enums without `type` infer
+it from their values. Mixed scalar types use `Object`. A nullable enum makes
+the containing value nullable; its non-null cases keep their scalar type.
+Preserved unknown values use the declared type. Without `type`, they use
+`Object` because an unknown scalar can have a different type.
 
 Enum codecs preserve JSON scalar types. OpenAPI 3.1/3.2 enum type lists can mix
 strings, numbers, booleans, and null. String `"null"` remains distinct from null.
 Conflicting enum values and declared types produce a source diagnostic.
 Form-urlencoded and multipart fields use scalar wire values. Explicit JSON
 part encoding retains JSON quotes for strings.
+
+### Enum member names
 
 The generator selects names in this order: `x-enumNames`, `x-enum-varnames`,
 then each enum value. It uses the first present extension as a complete list.

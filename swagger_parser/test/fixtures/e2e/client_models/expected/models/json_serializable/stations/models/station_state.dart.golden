@@ -14,7 +14,7 @@ enum StationState {
   factory StationState.fromJson(Object? json) =>
       $enumDecode(_$StationStateEnumMap, json);
 
-  final Object value;
+  final String value;
 
-  Object toJson() => _$StationStateEnumMap[this]!;
+  String toJson() => _$StationStateEnumMap[this]!;
 }

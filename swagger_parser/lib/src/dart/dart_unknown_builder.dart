@@ -27,11 +27,12 @@ sealed class ${model.name} {
   const ${model.name}();
   ${model.values.keys.map((key) => 'static const $key = ${names.known}(${names.values}.$key);').join()}
   factory ${model.name}.fromJson(Object? json) {
+    ${types.contains('integer') && !types.contains('number') ? 'if (json is double && json.isFinite && json == json.toInt()) { json = json.toInt(); }' : ''}
     if (!($check)) { throw ArgumentError.value(json, ${_literal(model.name)}); }
     for (final value in ${names.values}.values) {
       if (value.value == json) return ${names.known}(value);
     }
-    return ${names.unknown}(json);
+    return ${names.unknown}(${types.length == 1 ? 'json' : 'json as $type'});
   }
   $type toJson();
 }

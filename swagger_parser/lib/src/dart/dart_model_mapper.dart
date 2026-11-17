@@ -659,7 +659,23 @@ final class _Mapping(final ApiDefinition api, final GenerationConfig config) {
             candidate == value.toString()) {
           candidate = 'fieldMinus${value.abs()}'.replaceAll('.', 'Point');
         }
-        entries[_identifier(candidate, used)] = value;
+        Object wireValue = value;
+        if (schema.types.contains('integer') &&
+            !schema.types.contains('number') &&
+            value is double) {
+          final int integer = value.toInt();
+          if (integer != value ||
+              value < -9223372036854775808.0 ||
+              value >= 9223372036854775808.0) {
+            _fail(
+              id,
+              'Enum value cannot be represented as a Dart int.',
+              field: 'enum/$position',
+            );
+          }
+          wireValue = integer;
+        }
+        entries[_identifier(candidate, used)] = wireValue;
       }
       if (entries.isEmpty) {
         _fail(id, 'Expected a non-null enum value.');

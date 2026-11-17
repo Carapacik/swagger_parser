@@ -6,6 +6,10 @@
   `pipeDelimited` and `explode: true`. The default `reject` skips the operation.
   Select `join` to use the delimiter or `repeat` to repeat the parameter name.
   Both compatibility modes emit a warning.
+* Types enum `value` fields and `toJson()` results from their schema across all
+  serializers. Closed enums without a declared type infer it from their values.
+  Mixed scalar types retain `Object`. Integral numeric enum literals use `int`
+  when the schema declares `integer`.
 * Expands YAML merge keys (`<<`) before generation, so schemas built with an anchored mapping
   keep their merged fields instead of mapping to an untyped value.
 

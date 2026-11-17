@@ -1,0 +1,183 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Enum value types",
+    "version": "1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Role": {
+        "type": "string",
+        "enum": [
+          "admin",
+          "staff"
+        ],
+        "x-enumNames": [
+          "admin",
+          "staff"
+        ]
+      },
+      "Level": {
+        "type": "integer",
+        "enum": [
+          1,
+          2
+        ],
+        "x-enumNames": [
+          "low",
+          "high"
+        ]
+      },
+      "Integral": {
+        "type": "integer",
+        "enum": [
+          1000.0
+        ],
+        "x-enumNames": [
+          "thousand"
+        ]
+      },
+      "WholeNumber": {
+        "type": "number",
+        "enum": [
+          1,
+          2
+        ],
+        "x-enumNames": [
+          "low",
+          "high"
+        ]
+      },
+      "Fraction": {
+        "type": "number",
+        "enum": [
+          1,
+          2.5
+        ],
+        "x-enumNames": [
+          "low",
+          "high"
+        ]
+      },
+      "Flag": {
+        "type": "boolean",
+        "enum": [
+          false,
+          true
+        ],
+        "x-enumNames": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      "InferredText": {
+        "enum": [
+          "first",
+          "last"
+        ],
+        "x-enumNames": [
+          "first",
+          "last"
+        ]
+      },
+      "InferredInteger": {
+        "enum": [
+          1,
+          2
+        ],
+        "x-enumNames": [
+          "low",
+          "high"
+        ]
+      },
+      "InferredNumber": {
+        "enum": [
+          1,
+          2.5
+        ],
+        "x-enumNames": [
+          "low",
+          "high"
+        ]
+      },
+      "Mixed": {
+        "type": [
+          "string",
+          "integer"
+        ],
+        "enum": [
+          "one",
+          1
+        ],
+        "x-enumNames": [
+          "text",
+          "number"
+        ]
+      },
+      "Numeric": {
+        "type": [
+          "integer",
+          "number"
+        ],
+        "enum": [
+          1,
+          2.5
+        ],
+        "x-enumNames": [
+          "low",
+          "high"
+        ]
+      },
+      "Nullable": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "yes",
+          null
+        ],
+        "x-enumNames": [
+          "yes",
+          "absent"
+        ]
+      },
+      "Thing": {
+        "type": "object",
+        "required": [
+          "role",
+          "level",
+          "nullable"
+        ],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "staff"
+            ]
+          },
+          "level": {
+            "type": "integer",
+            "enum": [
+              1,
+              2
+            ]
+          },
+          "nullable": {
+            "$ref": "#/components/schemas/Nullable"
+          }
+        }
+      },
+      "InferredIntegral": {
+        "enum": [
+          1000.0
+        ],
+        "x-enumNames": [
+          "thousand"
+        ]
+      }
+    }
+  }
+}

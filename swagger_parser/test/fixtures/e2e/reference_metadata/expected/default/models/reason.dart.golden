@@ -13,7 +13,7 @@ enum Reason {
     );
   }
 
-  final Object value;
+  final num value;
 
-  Object toJson() => value;
+  num toJson() => value;
 }
