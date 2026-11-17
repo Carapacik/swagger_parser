@@ -1,0 +1,23 @@
+{
+  "output_directory": "out",
+  "generation": {
+    "delimited_query_array_explode": "join"
+  },
+  "inputs": {
+    "inherited": {
+      "schema_path": "styles.yaml"
+    },
+    "repeated": {
+      "schema_path": "styles.json",
+      "generation": {
+        "delimited_query_array_explode": "repeat"
+      }
+    },
+    "strict": {
+      "schema_path": "styles.yaml",
+      "generation": {
+        "delimited_query_array_explode": "reject"
+      }
+    }
+  }
+}

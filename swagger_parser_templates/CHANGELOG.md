@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Exposes `delimitedQueryArrayExplode` in the template options context.
+
 ## 1.1.2
 
 * Exposes `includeNullParameters` in the template options context.

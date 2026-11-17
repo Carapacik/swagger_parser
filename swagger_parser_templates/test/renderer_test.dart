@@ -370,6 +370,7 @@ void main() {
             '// decodeResponsesInBackground: {{options.decodeResponsesInBackground}}\n'
             '// applyParameterDefaults: {{options.applyParameterDefaults}}\n'
             '// includeNullParameters: {{options.includeNullParameters}}\n'
+            '// delimitedQueryArrayExplode: {{options.delimitedQueryArrayExplode}}\n'
             '// prune: {{options.pruneUnusedModels}}\n'
             '{{#options.keepModels}}// keep: {{.}}\n{{/options.keepModels}}\n'
             '{{#options.excludeParameters}}// exclude: {{name}} {{location}}\n{{/options.excludeParameters}}\n'
@@ -395,6 +396,7 @@ void main() {
         decodeResponsesInBackground: true,
         applyParameterDefaults: true,
         includeNullParameters: true,
+        delimitedQueryArrayExplode: DelimitedQueryArrayExplodeMode.join,
         unknownEnumValues: UnknownValueMode.preserve,
         naming: NamingConfig(
           preserveSchemaCasing: true,
@@ -416,6 +418,10 @@ void main() {
     expect(
       result.files.single.content,
       contains('// includeNullParameters: true'),
+    );
+    expect(
+      result.files.single.content,
+      contains('// delimitedQueryArrayExplode: join'),
     );
     expect(result.files.single.content, contains('// unmatched: preserve'));
     expect(result.files.single.content, contains('// pathNames: true'));

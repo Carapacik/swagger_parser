@@ -57,6 +57,9 @@ final class EditorConfig._(
     'body_positional': _defaults.bodyPositional,
     'apply_parameter_defaults': _defaults.applyParameterDefaults,
     'include_null_parameters': _defaults.includeNullParameters,
+    'delimited_query_array_explode': _wire(
+      _defaults.delimitedQueryArrayExplode,
+    ),
     'original_http_response': _defaults.originalHttpResponse,
   });
 
@@ -150,6 +153,7 @@ final class EditorConfig._(
       'serializer': DtoSerializer.values,
       'response_mode': ResponseMode.values,
       'unmatched_union_values': UnknownValueMode.values,
+      'delimited_query_array_explode': DelimitedQueryArrayExplodeMode.values,
     }.entries) {
       if (!entry.value.map(_wire).contains(value(entry.key))) {
         throw FormatException('Unknown ${entry.key}: ${value(entry.key)}.');

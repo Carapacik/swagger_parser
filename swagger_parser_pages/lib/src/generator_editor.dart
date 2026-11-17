@@ -526,6 +526,15 @@ class _GeneratorEditorState() extends State<GeneratorEditor> {
                         'include_null_parameters',
                         'Include null query and header parameters',
                       ),
+                      _select(
+                        'delimited_query_array_explode',
+                        'Delimited query arrays with explode true',
+                        const {
+                          'reject': 'Skip operation',
+                          'join': 'Join values',
+                          'repeat': 'Repeat parameter',
+                        },
+                      ),
                       _toggle(
                         'apply_parameter_defaults',
                         'Apply parameter defaults',

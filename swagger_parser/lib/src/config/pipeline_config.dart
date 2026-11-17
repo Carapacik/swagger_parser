@@ -45,6 +45,7 @@ final class const PipelineConfig({
         'original_http_response',
         'apply_parameter_defaults',
         'include_null_parameters',
+        'delimited_query_array_explode',
         'infer_missing_required',
         'use_presence_records',
         'generate_validators',
@@ -111,6 +112,11 @@ final class const PipelineConfig({
         includeNullParameters:
             generation.get<bool>('include_null_parameters') ??
             gen.includeNullParameters,
+        delimitedQueryArrayExplode: generation.choice(
+          'delimited_query_array_explode',
+          DelimitedQueryArrayExplodeMode.values,
+          gen.delimitedQueryArrayExplode,
+        ),
         applyParameterDefaults:
             generation.get<bool>('apply_parameter_defaults') ??
             gen.applyParameterDefaults,
