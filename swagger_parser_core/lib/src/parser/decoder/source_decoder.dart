@@ -13,6 +13,60 @@ part 'json_source_index.dart';
 String appendPointer(String path, String key) =>
     '$path/${key.replaceAll('~', '~0').replaceAll('/', '~1')}';
 
+bool _isYamlMergeKey(YamlNode node) {
+  if (node is! YamlScalar ||
+      node.value != '<<' ||
+      node.style != ScalarStyle.PLAIN) {
+    return false;
+  }
+  // YamlScalar drops explicit tags. Its span retains tags and anchors.
+  final String text = node.span.text;
+  var offset = 0;
+  bool whitespace(int unit) => const {9, 10, 13, 32}.contains(unit);
+  while (offset < text.length) {
+    final int unit = text.codeUnitAt(offset);
+    if (whitespace(unit)) {
+      offset++;
+    } else if (unit == 35) {
+      while (offset < text.length &&
+          text.codeUnitAt(offset) != 10 &&
+          text.codeUnitAt(offset) != 13) {
+        offset++;
+      }
+    } else if (unit == 38) {
+      while (offset < text.length && !whitespace(text.codeUnitAt(offset))) {
+        offset++;
+      }
+    } else {
+      return text.substring(offset) == '<<';
+    }
+  }
+  return false;
+}
+
+final class const _YamlValue(
+  final Object? value,
+  final SourceLocation location,
+) {
+  Object? toJson(String path, Map<String, SourceLocation>? locations) {
+    locations?[path] = location;
+    return switch (value) {
+      final Map<String, _YamlValue> fields => {
+        for (final entry in fields.entries)
+          entry.key: entry.value.toJson(
+            appendPointer(path, entry.key),
+            locations,
+          ),
+      },
+      final List<_YamlValue> items => [
+        for (var i = 0; i < items.length; i++)
+          items[i].toJson('$path/$i', locations),
+      ],
+      _ => value,
+    };
+  }
+}
+
 /// The decoded JSON value and its source positions.
 final class const DecodedDocument(
   /// The root value after JSON or YAML decoding.
@@ -54,14 +108,8 @@ final class const SourceDecoder() {
         }
       }
       final YamlNode root = loadYamlNode(text, sourceUrl: source.uri);
-      final locations = <String, SourceLocation>{};
       final active = Set<YamlNode>.identity();
-      Object? visit(
-        YamlNode node,
-        String path,
-        int depth, {
-        bool locate = true,
-      }) {
+      _YamlValue visit(YamlNode node, String path, int depth) {
         final spans.SourceLocation position = node.span.start;
         final location = SourceLocation(
           line: position.line + 1,
@@ -80,39 +128,28 @@ final class const SourceDecoder() {
         if (!active.add(node)) {
           fail('Cyclic YAML aliases are not supported.');
         }
-        if (config.captureSourceLocations && locate) {
-          locations[path] = location;
-        }
         try {
           if (node is YamlMap) {
-            final result = <String, Object?>{};
+            final result = <String, _YamlValue>{};
             final explicit = <String>{};
-            bool isMergeKey(YamlNode keyNode) =>
-                keyNode is YamlScalar &&
-                keyNode.value == '<<' &&
-                keyNode.style == ScalarStyle.PLAIN;
-            // A YAML merge key inserts the entries of a mapping, or of each
-            // mapping in a sequence, when the key is not already present.
             void merge(YamlNode source) {
-              // The source keeps its own coordinates and is not visited twice
-              // under the target's pointer.
-              final Object? value = visit(
-                source,
-                path,
-                depth + 1,
-                locate: false,
-              );
-              final List<Map<String, Object?>> sources;
-              if (value is Map<String, Object?>) {
+              final Object? value = visit(source, path, depth + 1).value;
+              final List<Map<String, _YamlValue>> sources;
+              if (value is Map<String, _YamlValue>) {
                 sources = [value];
-              } else if (value is List<Object?> &&
-                  value.every((item) => item is Map<String, Object?>)) {
-                sources = value.cast<Map<String, Object?>>();
+              } else if (value is List<_YamlValue> &&
+                  value.every(
+                    (item) => item.value is Map<String, _YamlValue>,
+                  )) {
+                sources = [
+                  for (final item in value)
+                    item.value! as Map<String, _YamlValue>,
+                ];
               } else {
                 fail('Expected a mapping for a merge key.');
               }
               for (final map in sources) {
-                for (final MapEntry<String, Object?> entry in map.entries) {
+                for (final MapEntry<String, _YamlValue> entry in map.entries) {
                   result.putIfAbsent(entry.key, () => entry.value);
                 }
               }
@@ -121,7 +158,7 @@ final class const SourceDecoder() {
             for (final MapEntry<dynamic, YamlNode> entry
                 in node.nodes.entries) {
               final keyNode = entry.key as YamlNode;
-              if (isMergeKey(keyNode)) {
+              if (_isYamlMergeKey(keyNode)) {
                 merge(entry.value);
               }
             }
@@ -129,7 +166,7 @@ final class const SourceDecoder() {
                 in node.nodes.entries) {
               final keyNode = entry.key as YamlNode;
               final Object? key = keyNode.value;
-              if (isMergeKey(keyNode)) {
+              if (_isYamlMergeKey(keyNode)) {
                 continue;
               }
               if (key is! String) {
@@ -144,20 +181,20 @@ final class const SourceDecoder() {
                 depth + 1,
               );
             }
-            return result;
+            return _YamlValue(result, location);
           }
           if (node is YamlList) {
-            return [
+            return _YamlValue([
               for (var i = 0; i < node.nodes.length; i++)
                 visit(node.nodes[i], '$path/$i', depth + 1),
-            ];
+            ], location);
           }
           final Object? value = node.value;
           if (value == null ||
               value is String ||
               value is bool ||
               (value is num && value.isFinite)) {
-            return value;
+            return _YamlValue(value, location);
           }
           fail('Expected a finite JSON value.');
         } finally {
@@ -165,7 +202,12 @@ final class const SourceDecoder() {
         }
       }
 
-      final Object? value = visit(root, '', 0);
+      final locations = <String, SourceLocation>{};
+      final Object? value = visit(
+        root,
+        '',
+        0,
+      ).toJson('', config.captureSourceLocations ? locations : null);
       return DecodedDocument(value, locations, source.uri);
     } on YamlException catch (error) {
       final spans.SourceLocation? position = error.span?.start;

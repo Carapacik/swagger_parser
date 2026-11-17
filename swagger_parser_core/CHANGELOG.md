@@ -4,7 +4,8 @@
 
 * Expands YAML merge keys (`<<`) with an anchored mapping or a sequence of mappings, following
   YAML 1.1 precedence. Merged entries fill a mapping without replacing its explicit keys, and a
-  quoted `"<<"` stays an ordinary key. Such documents previously parsed with the merge key kept
+  quoted `"<<"` or explicitly string-tagged key stays an ordinary key. Source locations follow
+  the selected fields after merging. Such documents previously parsed with the merge key kept
   as an unknown field, which generated a wrong model without a diagnostic.
 
 ## 1.0.3

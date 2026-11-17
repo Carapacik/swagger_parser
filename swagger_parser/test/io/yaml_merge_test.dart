@@ -20,7 +20,6 @@ void main() {
         .singleWhere((file) => file.relativePath.endsWith('station.dart'))
         .content
         .replaceAll(RegExp(r'\s+'), ' ');
-    // The merged properties are the model fields instead of an untyped value.
     expect(source, contains('required this.name'));
     expect(source, contains('final String name;'));
     expect(source, contains('final int? lineCode;'));

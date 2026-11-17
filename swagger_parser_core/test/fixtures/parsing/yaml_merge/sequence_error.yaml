@@ -1,0 +1,15 @@
+openapi: 3.0.3
+info:
+  title: Merge keys
+  version: '1'
+paths: {}
+x-first: &first
+  type: 123
+x-second: &second
+  type: string
+components:
+  schemas:
+    Merged:
+      <<:
+        - *first
+        - *second
