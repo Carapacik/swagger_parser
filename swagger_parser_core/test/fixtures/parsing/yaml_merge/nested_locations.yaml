@@ -1,0 +1,17 @@
+base: &base
+  a/b:
+    old~key: old
+first: &first
+  <<: *base
+  a/b:
+    new~key: winning
+second: &second
+  a/b:
+    new~key: losing
+target:
+  <<:
+    - *first
+    - *second
+override:
+  <<: *base
+  a/b: replacement

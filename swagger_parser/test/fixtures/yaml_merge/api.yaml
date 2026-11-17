@@ -1,0 +1,31 @@
+openapi: 3.0.3
+info:
+  title: Merge keys
+  version: '1'
+paths:
+  /stations:
+    get:
+      tags:
+        - Stations
+      operationId: listStations
+      responses:
+        '200':
+          description: Stations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Station'
+components:
+  schemas:
+    StationFields: &station_fields
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        lineCode:
+          type: integer
+    Station:
+      <<: *station_fields
+      description: A station.

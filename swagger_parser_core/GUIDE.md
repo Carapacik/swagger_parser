@@ -25,6 +25,12 @@ Supply UTF-8 bytes with or without a BOM. The decoder rejects malformed UTF-8.
 YAML keys must be strings. Quote numeric response codes, such as `'200'`.
 The parser rejects cyclic aliases and non-finite numbers.
 
+Plain YAML merge keys (`<<`) expand a mapping or a sequence of mappings before
+OpenAPI parsing. Explicit fields override merged fields. Earlier mappings in a
+merge sequence take precedence. Quoted keys and `!!str <<` remain string keys.
+Diagnostics for merged fields retain the coordinates of the selected values.
+Merge expansion remains subject to `max_depth` and alias-cycle checks.
+
 ## Swagger 2.0
 
 ```dart

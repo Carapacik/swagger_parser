@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+* Expands YAML merge keys (`<<`) before generation, so schemas built with an anchored mapping
+  keep their merged fields instead of mapping to an untyped value.
+
 ## 2.2.0
 
 * Adds `include_null_parameters`, which defaults to `false`. Nullable query and header
