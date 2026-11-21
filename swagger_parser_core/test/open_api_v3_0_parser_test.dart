@@ -229,6 +229,17 @@ void main() {
       'parameters',
       {
         'name': 'id',
+        'in': 'path',
+        'required': true,
+        'allowReserved': 'true',
+        'schema': {'type': 'string'},
+      },
+      '/allowReserved',
+    ),
+    (
+      'parameters',
+      {
+        'name': 'id',
         'in': 'query',
         'schema': <String, Object?>{},
         'content': <String, Object?>{},
@@ -257,7 +268,7 @@ void main() {
     ('headers', {'in': 'header', 'schema': <String, Object?>{}}, '/in'),
     (
       'headers',
-      {'allowReserved': false, 'schema': <String, Object?>{}},
+      {'allowReserved': 'false', 'schema': <String, Object?>{}},
       '/allowReserved',
     ),
     (

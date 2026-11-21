@@ -1,7 +1,9 @@
 import 'package:swagger_parser_core/src/model/json_value.dart';
 import 'package:swagger_parser_core/src/model/open_api_serialization.dart';
+import 'package:swagger_parser_core/src/model/open_api_version.dart';
 import 'package:swagger_parser_core/src/parser/decoder/source_decoder.dart';
 import 'package:swagger_parser_core/src/parser/object_reader.dart';
+import 'package:swagger_parser_core/src/parser/parameter_flags.dart';
 
 /// Named entries and specification extensions from a map.
 typedef ParsedEntries<T> = ({
@@ -37,7 +39,10 @@ mixin OpenApi3Reader {
         final Map<String, Object?> fields = objectFields(value, path);
         for (final String key in fields.keys) {
           if (!_componentName.hasMatch(key)) {
-            context.fail('Invalid component name.', appendPointer(path, key));
+            context.recover(
+              'Invalid component name.',
+              appendPointer(path, key),
+            );
           }
         }
         return context.map(fields, path, parse);
@@ -56,7 +61,19 @@ mixin OpenApi3Reader {
   /// Rejects an object that contains both named fields.
   void exclusiveFields(ObjectReader reader, String first, String second) {
     if (reader.fields.containsKey(first) && reader.fields.containsKey(second)) {
-      failField(reader, second, 'Use only one of $first and $second.');
+      final message = 'Use only one of $first and $second.';
+      if (const {
+        'examples',
+        'externalValue',
+        'dataValue',
+        'serializedValue',
+        'identifier',
+        'operationRef',
+      }.contains(second)) {
+        reader.discard(second, message);
+      } else {
+        failField(reader, second, message);
+      }
     }
   }
 
@@ -87,29 +104,45 @@ mixin OpenApi3Reader {
     return (entries: entries, extensions: extensions);
   }
 
+  /// Checks both boolean flags against the schema for [family].
+  void checkParameterFlags(
+    ObjectReader reader,
+    OpenApiFamily family, {
+    required bool header,
+  }) {
+    for (final key in const ['allowEmptyValue', 'allowReserved']) {
+      final String? message = parameterFlagError(
+        key,
+        reader.fields,
+        family,
+        header: header,
+      );
+      if (message != null) {
+        reader.discard(key, message);
+      }
+    }
+  }
+
   /// Checks parameter location and serialization fields.
-  void checkParameter(ObjectReader reader, {required bool header}) {
+  void checkParameter(
+    ObjectReader reader,
+    OpenApiFamily family, {
+    required bool header,
+  }) {
     final OpenApiParameterLocation location = header
         ? OpenApiParameterLocation.header
         : reader.required('in', enumOf(OpenApiParameterLocation.values));
     if (header) {
       for (final key in const ['name', 'in']) {
         if (reader.fields.containsKey(key)) {
-          failField(reader, key, 'Header objects cannot set $key.');
+          reader.discard(key, 'Header objects cannot set $key.');
         }
       }
     }
-    if (location == OpenApiParameterLocation.path &&
-        reader.fields['required'] != true) {
-      failField(reader, 'required', 'Path parameters require required: true.');
+    if (location == OpenApiParameterLocation.path) {
+      reader.requirePathParameter();
     }
-    if (location != OpenApiParameterLocation.query) {
-      for (final key in const ['allowEmptyValue', 'allowReserved']) {
-        if (reader.fields.containsKey(key)) {
-          failField(reader, key, '$key requires a query parameter.');
-        }
-      }
-    }
+    checkParameterFlags(reader, family, header: header);
     exclusiveFields(reader, 'schema', 'content');
     if (reader.fields.containsKey('content')) {
       final Map<String, Object?> content = objectFields(
@@ -119,15 +152,9 @@ mixin OpenApi3Reader {
       if (content.length != 1) {
         failField(reader, 'content', 'Expected one media type.');
       }
-      for (final key in const [
-        'style',
-        'explode',
-        'allowReserved',
-        'example',
-        'examples',
-      ]) {
+      for (final key in const ['style', 'explode', 'example', 'examples']) {
         if (reader.fields.containsKey(key)) {
-          failField(reader, key, '$key requires schema.');
+          reader.discard(key, '$key requires schema.');
         }
       }
     } else if (!reader.fields.containsKey('schema')) {

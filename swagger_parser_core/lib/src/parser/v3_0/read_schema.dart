@@ -148,11 +148,7 @@ extension _SchemaReader on OpenApiV30DocumentParser {
               OpenApiV30Type.object => value is Map<String, Object?>,
             };
       if (!matches) {
-        failField(
-          reader,
-          'default',
-          'Expected a default of the declared type.',
-        );
+        reader.discard('default', 'Expected a default of the declared type.');
       }
     }
     if (reader.fields['readOnly'] == true &&
@@ -179,13 +175,24 @@ extension _SchemaReader on OpenApiV30DocumentParser {
     for (final key in const ['enum', 'required', 'allOf', 'oneOf', 'anyOf']) {
       final Object? values = reader.fields[key];
       if (values is List<Object?> && values.isEmpty) {
-        failField(reader, key, 'Expected a nonempty array.');
+        if (key == 'required') {
+          context.recover(
+            'Expected a nonempty array.',
+            appendPointer(reader.path, key),
+          );
+        } else {
+          failField(reader, key, 'Expected a nonempty array.');
+        }
       }
     }
     final Object? required = reader.fields['required'];
     if (required is List<Object?> &&
         required.toSet().length != required.length) {
-      failField(reader, 'required', 'Expected unique property names.');
+      context.recover(
+        'Expected unique property names.',
+        appendPointer(reader.path, 'required'),
+      );
+      reader.fields['required'] = required.toSet().toList();
     }
   }
 }

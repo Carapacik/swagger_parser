@@ -41,12 +41,15 @@ final class const SwaggerParserRunner({
   /// Parses [source] and generates Dart files.
   /// [parseConfig] applies to the entry document and external references.
   ///
-  /// Throws [GenerationException] if validation or normalization fails.
+  /// Calls [onValidationWarning] as it finds recoverable validation errors.
+  /// The result also contains these warnings.
+  /// Throws if a required reference, wire type, or operation is ambiguous.
   Future<GenerationResult> generate(
     SchemaSource source, {
     GenerationConfig config = const GenerationConfig(),
     ParseConfig? parseConfig,
     DocumentLoader? loader,
+    void Function(Diagnostic)? onValidationWarning,
   }) async {
     final (
       OpenApiDocument document,
@@ -56,11 +59,13 @@ final class const SwaggerParserRunner({
       source,
       parseConfig,
       loader,
+      generating: true,
+      onValidationWarning: onValidationWarning,
     );
-    final ApiDefinition api = extractor.extract(document, references);
-    final DartGenerationModel model = mapper.map(api, config);
     final GenerationResult result;
     try {
+      final ApiDefinition api = extractor.extract(document, references);
+      final DartGenerationModel model = mapper.map(api, config);
       result = generator.generate(model, config: config);
     } on GenerationException catch (e) {
       throw GenerationException(
@@ -77,8 +82,7 @@ final class const SwaggerParserRunner({
   /// Validates the document and its resolved operations.
   /// [parseConfig] applies to the entry document and external references.
   ///
-  /// Returns diagnostics on success. Throws the same validation and reference
-  /// errors as [generate].
+  /// Returns diagnostics on success. Throws on validation or reference errors.
   Future<List<Diagnostic>> validate(
     SchemaSource source, {
     ParseConfig? parseConfig,
@@ -88,6 +92,7 @@ final class const SwaggerParserRunner({
       source,
       parseConfig,
       loader,
+      generating: false,
     );
     return diagnostics;
   }
@@ -95,13 +100,62 @@ final class const SwaggerParserRunner({
   Future<(OpenApiDocument, ReferenceGraph, List<Diagnostic>)> _validate(
     SchemaSource source,
     ParseConfig? parseConfig,
-    DocumentLoader? loader,
-  ) async {
-    OpenApiDocument document = parser.parse(source, config: parseConfig);
+    DocumentLoader? loader, {
+    required bool generating,
+    void Function(Diagnostic)? onValidationWarning,
+  }) async {
     final diagnostics = <Diagnostic>[];
+    final reported = <(String, Uri?, String?, String, DiagnosticSeverity)>{};
+    void record(Diagnostic d) {
+      if (!reported.add((
+        d.code,
+        d.sourceUri ?? source.uri,
+        d.documentPath,
+        d.message,
+        d.severity,
+      ))) {
+        return;
+      }
+      diagnostics.add(d);
+      if (d.severity == DiagnosticSeverity.warning) {
+        onValidationWarning?.call(d);
+      }
+    }
+
+    T read<T>(T Function() action) =>
+        withParseWarnings(generating ? record : null, action);
+    OpenApiDocument document = read(
+      () => parser.parse(source, config: parseConfig),
+    );
     void check(ValidationReport report) {
-      diagnostics.addAll(report.diagnostics);
-      if (report.hasErrors) {
+      var failed = false;
+      for (final Diagnostic d in report.diagnostics) {
+        final Uri? uri = d.sourceUri ?? source.uri;
+        final DiagnosticSeverity severity =
+            generating &&
+                d.severity == DiagnosticSeverity.error &&
+                const {
+                  'duplicateTag',
+                  'unknownTagParent',
+                  'cyclicTagParent',
+                  'duplicateOperationId',
+                  'optionalPathParameter',
+                }.contains(d.code)
+            ? DiagnosticSeverity.warning
+            : d.severity;
+        failed |= severity == DiagnosticSeverity.error;
+        record(
+          Diagnostic(
+            code: d.code,
+            message: d.message,
+            severity: severity,
+            sourceUri: uri,
+            documentPath: d.documentPath,
+            location: d.location,
+          ),
+        );
+      }
+      if (failed) {
         throw GenerationException(
           'OpenAPI document validation failed.',
           diagnostics: diagnostics,
@@ -111,7 +165,9 @@ final class const SwaggerParserRunner({
 
     check(validator.validate(document));
     if (normalizer case final normalizer?) {
-      final OpenApiDocument normalized = normalizer.normalize(document);
+      final OpenApiDocument normalized = read(
+        () => normalizer.normalize(document),
+      );
       if (identical(document, normalized) ||
           document.runtimeType != normalized.runtimeType ||
           document.version.family != normalized.version.family ||
@@ -123,11 +179,13 @@ final class const SwaggerParserRunner({
       document = normalized;
       check(validator.validate(document));
     }
-    final ReferenceGraph references = await resolver.resolve(
-      document,
-      sourceUri: source.uri,
-      config: parseConfig,
-      loader: loader,
+    final ReferenceGraph references = await read(
+      () => resolver.resolve(
+        document,
+        sourceUri: source.uri,
+        config: parseConfig,
+        loader: loader,
+      ),
     );
     check(resolvedValidator.validate(document, references));
     return (document, references, List<Diagnostic>.unmodifiable(diagnostics));

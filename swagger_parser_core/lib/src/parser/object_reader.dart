@@ -1,7 +1,9 @@
 import 'package:swagger_parser_core/src/config/parse_config.dart';
+import 'package:swagger_parser_core/src/diagnostics/diagnostic.dart';
 import 'package:swagger_parser_core/src/exceptions/open_api_exception.dart';
 import 'package:swagger_parser_core/src/model/json_value.dart';
 import 'package:swagger_parser_core/src/parser/decoder/source_decoder.dart';
+import 'package:swagger_parser_core/src/parser/parse_warnings.dart';
 
 /// Reads one value at a JSON Pointer.
 typedef ValueParser<T> = T Function(Object? value, String path);
@@ -51,21 +53,78 @@ final class ObjectReader(
   final extras = <String, JsonValue>{};
 
   /// Reads a required field or reports its missing key.
-  T required<T>(String key, ValueParser<T> parse) {
-    if (!fields.containsKey(key)) {
-      context.fail(
-        'Missing required field: $key.',
-        appendPointer(path, key),
-        parent: path,
-      );
+  T required<T>(String key, ValueParser<T> parse, {Object? fallback}) {
+    final String pointer = appendPointer(path, key);
+    try {
+      if (!fields.containsKey(key)) {
+        context.fail('Missing required field: $key.', pointer, parent: path);
+      }
+      return parse(fields[key], pointer);
+    } on SchemaParseException catch (error) {
+      if (fallback == null ||
+          parseWarningHandler == null ||
+          error.documentPath != pointer) {
+        rethrow;
+      }
+      context.recover(error.message, pointer, parent: path);
+      fields[key] = fallback;
+      return parse(fallback, pointer);
     }
-    return parse(fields[key], appendPointer(path, key));
   }
 
   /// Reads a field if present, including explicit null.
-  T? optional<T>(String key, ValueParser<T> parse) => fields.containsKey(key)
-      ? parse(fields[key], appendPointer(path, key))
-      : null;
+  T? optional<T>(String key, ValueParser<T> parse) {
+    if (!fields.containsKey(key)) {
+      return null;
+    }
+    final String pointer = appendPointer(path, key);
+    try {
+      return parse(fields[key], pointer);
+    } on SchemaParseException catch (error) {
+      if (parseWarningHandler == null ||
+          error.documentPath != pointer ||
+          !const {
+            'description',
+            'title',
+            'summary',
+            'deprecated',
+            'termsOfService',
+            'externalDocs',
+            'contact',
+            'license',
+            'example',
+            'examples',
+            'allowReserved',
+            'allowEmptyValue',
+            'bearerFormat',
+            'operationId',
+          }.contains(key)) {
+        rethrow;
+      }
+      discard(key, error.message);
+      return null;
+    }
+  }
+
+  /// Removes an inapplicable field during generation. Strict parsing fails.
+  void discard(String key, String message) {
+    context.recover(message, appendPointer(path, key), parent: path);
+    fields.remove(key);
+    extras.remove(key);
+  }
+
+  /// Restores the required flag implied by a path parameter.
+  void requirePathParameter() {
+    if (fields['required'] == true) {
+      return;
+    }
+    context.recover(
+      'Path parameters require required: true.',
+      appendPointer(path, 'required'),
+      parent: path,
+    );
+    fields['required'] = true;
+  }
 }
 
 /// Typed readers and diagnostics for one decoded document.
@@ -87,6 +146,24 @@ final class const ReadContext(
         documentPath: path,
         location: document.locations[path] ?? document.locations[parent],
       );
+
+  /// Reports a recoverable error or throws when strict parsing is active.
+  void recover(String message, String path, {String? parent}) {
+    final void Function(Diagnostic)? onWarning = parseWarningHandler;
+    if (onWarning == null) {
+      fail(message, path, parent: parent);
+    }
+    onWarning(
+      Diagnostic(
+        code: 'invalidField',
+        message: message,
+        severity: DiagnosticSeverity.warning,
+        sourceUri: document.sourceUri,
+        documentPath: path,
+        location: document.locations[path] ?? document.locations[parent],
+      ),
+    );
+  }
 
   /// Reads a string at the given pointer.
   String string(Object? value, String path) =>

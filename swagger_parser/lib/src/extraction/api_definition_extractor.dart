@@ -391,10 +391,16 @@ final class _Extraction(final LocatedNode entry, final ReferenceGraph graph) {
       name: header ?? fields['name']! as String,
       allowReserved:
           site.family != OpenApiFamily.swaggerV2 &&
+          schema != null &&
+          (location == 'query' ||
+              site.family == OpenApiFamily.v32 &&
+                  (location == 'path' ||
+                      location == 'cookie' &&
+                          (fields['style'] ?? 'form') == 'form')) &&
           fields['allowReserved'] == true,
       content: _content(site),
       location: location,
-      isRequired: fields['required'] == true,
+      isRequired: location == 'path' || fields['required'] == true,
       schema: schema,
       source: site.location,
       serialization: ParameterSerialization.effective(site.family, {

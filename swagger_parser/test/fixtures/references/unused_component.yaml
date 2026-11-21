@@ -1,0 +1,29 @@
+openapi: 3.0.4
+info:
+  title: Items
+  version: '1'
+paths:
+  /health:
+    get:
+      operationId: checkHealth
+      responses:
+        '204':
+          description: Healthy
+  /items:
+    get:
+      operationId: getItems
+      responses:
+        '200':
+          $ref: '#/components/responses/Items'
+components:
+  responses:
+    Items:
+      description: Item list
+  schemas:
+    Item:
+      type: object
+      properties:
+        name:
+          type: string
+    UnusedItem:
+      $ref: '#/components/schemas/Item'

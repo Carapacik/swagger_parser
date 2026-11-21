@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+* Checks `allowEmptyValue` and `allowReserved` against the official OpenAPI
+  3.0, 3.1, and 3.2 JSON Schemas. Preserves accepted boolean values on export.
+* Adds `withParseWarnings` to collect recoverable errors in a parse scope.
+  Parsing remains strict by default.
+
 ## 1.0.4
 
 * Expands YAML merge keys (`<<`) with an anchored mapping or a sequence of mappings, following

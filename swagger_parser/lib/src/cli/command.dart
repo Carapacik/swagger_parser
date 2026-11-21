@@ -77,6 +77,9 @@ Future<void> runSwaggerParserCli(
       config: config.schemaDownload,
       allowFiles: config.input.scheme == 'file',
     );
+    final reported = Set<Diagnostic>.identity();
+    void report(Iterable<Diagnostic> diagnostics) =>
+        _diagnostics(diagnostics.where(reported.add), prefix, loader.redact);
     try {
       final runner = SwaggerParserRunner(
         generator: DartGenerator(renderer: config.renderer),
@@ -112,9 +115,10 @@ Future<void> runSwaggerParserCli(
         source,
         loader: loader,
         config: config.generation,
+        onValidationWarning: (warning) => report([warning]),
         parseConfig: config.parse,
       );
-      _diagnostics(result.diagnostics, prefix, loader.redact);
+      report(result.diagnostics);
       if (result.diagnostics.any(
         (d) => d.severity == DiagnosticSeverity.error,
       )) {
@@ -124,7 +128,7 @@ Future<void> runSwaggerParserCli(
       }
     } on GenerationException catch (error) {
       stderr.writeln(loader.redact('$prefix${error.message}'));
-      _diagnostics(error.diagnostics, prefix, loader.redact);
+      report(error.diagnostics);
       failed = true;
     } on OpenApiException catch (error) {
       final code = error is ReferenceResolutionException
@@ -220,13 +224,17 @@ String _errorLocation(OpenApiException error, Uri input) {
 }
 
 void _diagnostics(
-  List<Diagnostic> diagnostics, [
+  Iterable<Diagnostic> diagnostics, [
   String prefix = '',
   String Function(String)? redact,
 ]) {
   for (final d in diagnostics) {
+    final SourceLocation? location = d.location;
+    final point = location == null
+        ? ''
+        : ':${location.line}:${location.column}';
     final message =
-        '$prefix${d.sourceUri ?? ''}${d.documentPath == null ? '' : '#${d.documentPath}'} ${d.severity.name} [${d.code}] ${d.message}';
+        '$prefix${d.sourceUri ?? ''}$point${d.documentPath == null ? '' : '#${d.documentPath}'} ${d.severity.name} [${d.code}] ${d.message}';
     stderr.writeln(redact == null ? message : redact(message));
   }
 }

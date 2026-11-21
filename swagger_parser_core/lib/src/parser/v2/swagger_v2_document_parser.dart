@@ -33,7 +33,11 @@ final class const SwaggerV2DocumentParser(
       'swagger',
     });
     final result = SwaggerV2Document(
-      info: reader.required('info', _info),
+      info: reader.required(
+        'info',
+        _info,
+        fallback: const {'title': '', 'version': ''},
+      ),
       paths: reader.required('paths', _paths),
       host: reader.optional('host', context.string),
       basePath: reader.optional('basePath', context.string),
@@ -125,8 +129,8 @@ final class const SwaggerV2DocumentParser(
       'license',
     });
     final result = SwaggerV2Info(
-      title: reader.required('title', context.string),
-      version: reader.required('version', context.string),
+      title: reader.required('title', context.string, fallback: ''),
+      version: reader.required('version', context.string, fallback: ''),
       description: reader.optional('description', context.string),
       termsOfService: reader.optional('termsOfService', context.string),
       contact: reader.optional('contact', _contact),
@@ -444,6 +448,17 @@ final class const SwaggerV2DocumentParser(
       'multipleOf',
       'default',
     });
+    if (reader.fields['in'] == 'path') {
+      reader.requirePathParameter();
+    }
+    if (reader.fields.containsKey('allowEmptyValue') &&
+        reader.fields['in'] != 'query' &&
+        reader.fields['in'] != 'formData') {
+      reader.discard(
+        'allowEmptyValue',
+        'allowEmptyValue is only valid for query or formData.',
+      );
+    }
     final result = SwaggerV2ValueParameter(
       name: reader.required('name', context.string),
       location: reader.required(
@@ -488,28 +503,12 @@ final class const SwaggerV2DocumentParser(
       path,
       allowFile: result.location == SwaggerV2ParameterLocation.formData,
     );
-    if (result.location == SwaggerV2ParameterLocation.path &&
-        result.isRequired != true) {
-      context.fail(
-        'Path parameters must be required.',
-        appendPointer(path, 'required'),
-        parent: path,
-      );
-    }
     if (result.collectionFormat == SwaggerV2CollectionFormat.multi &&
         result.location != SwaggerV2ParameterLocation.query &&
         result.location != SwaggerV2ParameterLocation.formData) {
       context.fail(
         'multi is only valid for query or formData.',
         appendPointer(path, 'collectionFormat'),
-      );
-    }
-    if (result.allowEmptyValue != null &&
-        result.location != SwaggerV2ParameterLocation.query &&
-        result.location != SwaggerV2ParameterLocation.formData) {
-      context.fail(
-        'allowEmptyValue is only valid for query or formData.',
-        appendPointer(path, 'allowEmptyValue'),
       );
     }
     return result;
@@ -523,7 +522,7 @@ final class const SwaggerV2DocumentParser(
       'examples',
     });
     final result = SwaggerV2Response(
-      description: reader.required('description', context.string),
+      description: reader.required('description', context.string, fallback: ''),
       schema: reader.optional(
         'schema',
         (value, path) => _schema(value, path, allowFile: true),
@@ -948,6 +947,13 @@ final class const SwaggerV2DocumentParser(
           ? reader.fields[key]
           : null;
       if (value is List<Object?> && value.isEmpty) {
+        if (key == 'required') {
+          context.recover(
+            'Expected a non-empty array.',
+            appendPointer(reader.path, key),
+          );
+          continue;
+        }
         context.fail(
           'Expected a non-empty array.',
           appendPointer(reader.path, key),

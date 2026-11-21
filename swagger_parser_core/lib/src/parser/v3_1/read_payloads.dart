@@ -17,7 +17,7 @@ extension _PayloadsReader on OpenApiV31DocumentParser {
       'examples',
       'content',
     });
-    checkParameter(reader, header: false);
+    checkParameter(reader, OpenApiFamily.v31, header: false);
     return OpenApiV31Parameter(
       name: reader.required('name', context.string),
       location: reader.required(
@@ -45,6 +45,8 @@ extension _PayloadsReader on OpenApiV31DocumentParser {
       'description',
       'required',
       'deprecated',
+      'allowEmptyValue',
+      'allowReserved',
       'style',
       'explode',
       'schema',
@@ -52,7 +54,7 @@ extension _PayloadsReader on OpenApiV31DocumentParser {
       'examples',
       'content',
     });
-    checkParameter(reader, header: true);
+    checkParameter(reader, OpenApiFamily.v31, header: true);
     return OpenApiV31Header(
       description: reader.optional('description', context.string),
       isRequired: reader.optional('required', context.boolean),
@@ -129,7 +131,7 @@ extension _PayloadsReader on OpenApiV31DocumentParser {
       'links',
     });
     return OpenApiV31Response(
-      description: reader.required('description', context.string),
+      description: reader.required('description', context.string, fallback: ''),
       headers: reader.optional('headers', mapOf(_refOr(_header))),
       content: reader.optional('content', mapOf(_mediaType)),
       links: reader.optional('links', mapOf(_refOr(_link))),

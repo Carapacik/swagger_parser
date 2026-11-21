@@ -59,7 +59,11 @@ final class const OpenApiV32DocumentParser._(
       jsonSchemaDialect: dialect,
       webhooks: reader.optional('webhooks', mapOf(_pathItem)),
       openapi: reader.required('openapi', context.string),
-      info: reader.required('info', _info),
+      info: reader.required(
+        'info',
+        _info,
+        fallback: const {'title': '', 'version': ''},
+      ),
       paths: reader.optional('paths', _paths),
       servers: reader.optional('servers', listOf(_server)),
       components: reader.optional('components', _components),

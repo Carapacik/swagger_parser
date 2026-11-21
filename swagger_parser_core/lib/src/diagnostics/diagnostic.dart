@@ -1,3 +1,5 @@
+import 'package:swagger_parser_core/src/source/source_location.dart';
+
 /// The effect of a diagnostic on processing.
 enum DiagnosticSeverity() {
   /// Reports information about processing.
@@ -26,6 +28,9 @@ final class const Diagnostic({
 
   /// JSON Pointer into the source document, when available.
   final String? documentPath,
+
+  /// Source coordinates when the decoder recorded a position.
+  final SourceLocation? location,
 }) {
   /// Records a message with its severity and source context.
   this;

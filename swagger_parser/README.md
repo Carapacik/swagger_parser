@@ -102,7 +102,12 @@ dart run swagger_parser --check -f config.yaml
 dart run swagger_parser -h
 ```
 
-`validate` checks the schema. `--check` compares generated files without writing.
+`validate` reports invalid fields with their source paths and exits with code 1.
+Generation prints recoverable validation warnings to stderr before it builds
+the client. For example, it ignores an inapplicable serialization flag and
+makes path parameters required. Warnings alone give exit code 0.
+Missing parameter definitions and unresolved references stop generation.
+`--check` uses the same warnings and compares generated files without writing.
 Use `-o` to override the output directory.
 
 ## Custom output and web

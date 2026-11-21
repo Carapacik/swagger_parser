@@ -160,20 +160,38 @@ void main() {
     }
   });
 
-  test('keeps legacy empty-required validation', () async {
-    for (final version in ['v2', 'v3_0']) {
-      for (final ext in ['json', 'yaml']) {
-        final SchemaSource source = await const FileSchemaSourceLoader()
-            .loadPath(
-              'test/fixtures/required_inference/${version}_invalid_empty.$ext',
-            );
-        await expectLater(
-          const SwaggerParserRunner().generate(source),
-          throwsA(isA<OpenApiException>()),
-        );
+  test(
+    'warns for an empty legacy required list and keeps properties optional',
+    () async {
+      for (final version in ['v2', 'v3_0']) {
+        for (final ext in ['json', 'yaml']) {
+          final SchemaSource
+          source = await const FileSchemaSourceLoader().loadPath(
+            'test/fixtures/required_inference/${version}_invalid_empty.$ext',
+          );
+          await expectLater(
+            const SwaggerParserRunner().validate(source),
+            throwsA(isA<OpenApiException>()),
+          );
+          const runner = SwaggerParserRunner(normalizer: OpenApiNormalizer());
+          final GenerationResult result = await runner.generate(
+            source,
+            config: const GenerationConfig(inferMissingRequired: true),
+          );
+          expect(
+            result.diagnostics.single.documentPath,
+            endsWith('/Invalid/required'),
+          );
+          expect(
+            result.files
+                .singleWhere((f) => f.relativePath.endsWith('invalid.dart'))
+                .content,
+            contains('String? name'),
+          );
+        }
       }
-    }
-  });
+    },
+  );
 
   test('rejects case-mismatched required names in closed objects', () async {
     for (final version in ['v2', 'v3_0', 'v3_1', 'v3_2']) {

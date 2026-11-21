@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+* Reports recoverable validation errors as warnings during generation and
+  `--check`. Warnings identify the affected field. The `validate` command
+  keeps strict validation.
+* Applies `allowReserved` only to query parameters in OpenAPI 3.0 and 3.1.
+  OpenAPI 3.2 also supports path and form-style cookie parameters.
+
 ## 2.3.0
 
 * Adds `delimited_query_array_explode` for query arrays with `spaceDelimited` or

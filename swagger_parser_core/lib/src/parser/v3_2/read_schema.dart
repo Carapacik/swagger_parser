@@ -210,8 +210,12 @@ extension _SchemaReader on OpenApiV32DocumentParser {
       return OpenApiV32SingleType(_type(value, path));
     }
     final List<OpenApiV32Type> types = context.list(value, path, _type);
-    if (types.isEmpty || types.toSet().length != types.length) {
+    if (types.isEmpty) {
       context.fail('Expected a nonempty array of distinct types.', path);
+    }
+    if (types.toSet().length != types.length) {
+      context.recover('Expected a nonempty array of distinct types.', path);
+      return OpenApiV32TypeSet(types.toSet().toList());
     }
     return OpenApiV32TypeSet(types);
   }
@@ -229,7 +233,8 @@ extension _SchemaReader on OpenApiV32DocumentParser {
   List<String> _uniqueStrings(Object? value, String path) {
     final List<String> names = context.list(value, path, context.string);
     if (names.toSet().length != names.length) {
-      context.fail('Expected unique strings.', path);
+      context.recover('Expected unique strings.', path);
+      return names.toSet().toList();
     }
     return names;
   }

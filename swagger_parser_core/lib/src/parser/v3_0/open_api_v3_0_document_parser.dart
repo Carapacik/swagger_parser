@@ -1,5 +1,6 @@
 import 'package:swagger_parser_core/src/model/json_value.dart';
 import 'package:swagger_parser_core/src/model/open_api_document.dart';
+import 'package:swagger_parser_core/src/model/open_api_version.dart';
 import 'package:swagger_parser_core/src/model/v3_0/open_api_v3_0_objects.dart';
 import 'package:swagger_parser_core/src/parser/decoder/source_decoder.dart';
 import 'package:swagger_parser_core/src/parser/object_reader.dart';
@@ -32,7 +33,11 @@ final class const OpenApiV30DocumentParser(@override final ReadContext context)
     });
     return OpenApiV30Document(
       openapi: reader.required('openapi', context.string),
-      info: reader.required('info', _info),
+      info: reader.required(
+        'info',
+        _info,
+        fallback: const {'title': '', 'version': ''},
+      ),
       paths: reader.required('paths', _paths),
       servers: reader.optional('servers', listOf(_server)),
       components: reader.optional('components', _components),

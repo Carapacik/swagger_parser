@@ -11,8 +11,8 @@ extension _MetadataReader on OpenApiV30DocumentParser {
       'license',
     });
     return OpenApiV30Info(
-      title: reader.required('title', context.string),
-      version: reader.required('version', context.string),
+      title: reader.required('title', context.string, fallback: ''),
+      version: reader.required('version', context.string, fallback: ''),
       description: reader.optional('description', context.string),
       termsOfService: reader.optional('termsOfService', context.string),
       contact: reader.optional('contact', _contact),
