@@ -228,17 +228,108 @@ extension on _Mapping {
         ),
       );
     }
-    if (_isSubset(a, b)) {
-      return left;
-    }
-    if (_isSubset(b, a)) {
-      return right;
+    if (a.types.contains('object') && b.types.contains('object')) {
+      final compared = <(_SchemaUse, _SchemaUse), bool>{};
+      if (_propertySubset(left, right, compared)) {
+        return left;
+      }
+      if (_propertySubset(right, left, compared)) {
+        return right;
+      }
+    } else {
+      if (_isScalarSubset(a, b)) {
+        return left;
+      }
+      if (_isScalarSubset(b, a)) {
+        return right;
+      }
     }
     _fail(owner, 'Conflicting allOf property: $property.');
   }
 
+  // Select a branch only when its values satisfy the other branch.
+  bool _propertySubset(
+    _SchemaUse narrow,
+    _SchemaUse wide,
+    Map<(_SchemaUse, _SchemaUse), bool> compared,
+  ) {
+    if (narrow == wide) {
+      return true;
+    }
+    final pair = (narrow, wide);
+    if (compared[pair] case final result?) {
+      return result;
+    }
+    // A recursive comparison alone cannot prove containment.
+    compared[pair] = false;
+    if (_customType(narrow) != null || _customType(wide) != null) {
+      return false;
+    }
+    if (narrow.reference != null || wide.reference != null) {
+      // A reference with siblings can impose local constraints.
+      if ((narrow.reference != null && narrow.rawFields.length != 1) ||
+          (wide.reference != null && wide.rawFields.length != 1)) {
+        return false;
+      }
+      return compared[pair] = _propertySubset(
+        narrow.reference ?? narrow,
+        wide.reference ?? wide,
+        compared,
+      );
+    }
+    if (!wide.types.contains('object')) {
+      return compared[pair] =
+          wide.definition.value != false && _isScalarSubset(narrow, wide);
+    }
+    if (!narrow.types.contains('object') ||
+        !wide.types.containsAll(narrow.types) ||
+        !narrow.requiredProperties.containsAll(wide.requiredProperties) ||
+        !narrow.raw.requiredProperties.containsAll(
+          wide.raw.requiredProperties.difference(wide.excludedProperties),
+        ) ||
+        !wide.fields.keys.every(
+          const {
+            'type',
+            'properties',
+            'required',
+            'additionalProperties',
+            'nullable',
+            'x-nullable',
+            'title',
+            'description',
+            'example',
+            'examples',
+            'readOnly',
+            'writeOnly',
+            'deprecated',
+            'default',
+          }.contains,
+        )) {
+      return false;
+    }
+    final Object? extra = wide.fields['additionalProperties'];
+    if (extra != null && extra is! bool) {
+      return false;
+    }
+    if (extra == false &&
+        (narrow.fields['additionalProperties'] != false ||
+            !narrow.properties.keys.every(wide.properties.containsKey))) {
+      return false;
+    }
+    for (final MapEntry<String, _SchemaUse> field in wide.properties.entries) {
+      final _SchemaUse? child = narrow.properties[field.key];
+      if (child == null && narrow.fields['additionalProperties'] == false) {
+        continue;
+      }
+      if (child == null || !_propertySubset(child, field.value, compared)) {
+        return false;
+      }
+    }
+    return compared[pair] = true;
+  }
+
   // A scalar enum or const can narrow a scalar field inherited through allOf.
-  bool _isSubset(_SchemaUse narrowId, _SchemaUse wideId) {
+  bool _isScalarSubset(_SchemaUse narrowId, _SchemaUse wideId) {
     final _SchemaUse narrow = _schema(narrowId);
     final _SchemaUse wide = _schema(wideId);
     if (wide.fields.keys.any(

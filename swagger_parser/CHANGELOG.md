@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Generates the narrower object type for compatible property declarations
+  in `allOf`, regardless of branch order.
+
 * Reports recoverable validation errors as warnings during generation and
   `--check`. Warnings identify the affected field. The `validate` command
   keeps strict validation.

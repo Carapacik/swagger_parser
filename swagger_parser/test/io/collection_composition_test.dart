@@ -30,6 +30,75 @@ Map<String, Object?> _schemas(Map<String, Object?> doc) =>
         as Map<String, Object?>;
 
 void main() {
+  group('object property narrowing', () {
+    late Map<String, Object?> document;
+    late Map<String, Object?> addressRequest;
+    late Map<String, Object?> building;
+    late Uri? uri;
+
+    setUp(() async {
+      final SchemaSource source = await _source(
+        'composition/all_of/object_narrowing.yaml',
+      );
+      document = const OpenApiParser().parse(source).toJson();
+      final Map<String, Object?> schemas = _schemas(document);
+      addressRequest = schemas['AddressRequest']! as Map<String, Object?>;
+      building = schemas['Building']! as Map<String, Object?>;
+      uri = source.uri;
+    });
+
+    Future<Map<String, String>> generate() =>
+        _generate(SchemaSource.json(jsonEncode(document), uri: uri));
+
+    for (final reversed in [false, true]) {
+      group(reversed ? 'narrower branch first' : 'wider branch first', () {
+        setUp(() {
+          if (reversed) {
+            final branches = building['allOf']! as List<Object?>;
+            building['allOf'] = branches.reversed.toList();
+          }
+        });
+
+        test(
+          'uses Address for Building and AddressRequest for BuildingRequest',
+          () async {
+            final Map<String, String> files = await generate();
+            expect(
+              files['default_client/models/building.dart'],
+              contains('final Address address;'),
+            );
+            expect(
+              files['default_client/models/building_request.dart'],
+              contains('final AddressRequest address;'),
+            );
+          },
+        );
+
+        final Matcher conflict = throwsA(
+          isA<GenerationException>().having(
+            (e) => e.diagnostics.single.message,
+            'diagnostic',
+            'Conflicting allOf property: address.',
+          ),
+        );
+
+        test(
+          'rejects a required property forbidden by a closed branch',
+          () async {
+            addressRequest['additionalProperties'] = false;
+            await expectLater(generate(), conflict);
+          },
+        );
+
+        test('rejects incompatible types for a shared property', () async {
+          final properties =
+              addressRequest['properties']! as Map<String, Object?>;
+          (properties['street']! as Map<String, Object?>)['type'] = 'integer';
+          await expectLater(generate(), conflict);
+        });
+      });
+    }
+  });
   for (final version in ['v2', 'v3_0', 'v3_1', 'v3_2']) {
     test(
       '$version preserves recursive maps and nested collection types',

@@ -1,0 +1,52 @@
+openapi: 3.0.0
+info:
+  title: Buildings
+  version: '1'
+paths:
+  /building:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Building'
+components:
+  schemas:
+    AddressRequest:
+      type: object
+      required:
+        - street
+      properties:
+        street:
+          type: string
+    Address:
+      type: object
+      required:
+        - street
+        - timezone
+      properties:
+        street:
+          type: string
+        timezone:
+          type: string
+    BuildingRequest:
+      type: object
+      required:
+        - address
+      properties:
+        address:
+          $ref: '#/components/schemas/AddressRequest'
+    Building:
+      allOf:
+        - $ref: '#/components/schemas/BuildingRequest'
+        - type: object
+          required:
+            - address
+            - id
+          properties:
+            address:
+              $ref: '#/components/schemas/Address'
+            id:
+              type: string
