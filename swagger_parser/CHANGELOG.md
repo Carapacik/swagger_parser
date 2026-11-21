@@ -3,7 +3,8 @@
 ## Unreleased
 
 * Generates the narrower object type for compatible property declarations
-  in `allOf`, regardless of branch order.
+  in `allOf`, regardless of branch order. This also applies to array items
+  and to objects whose string fields share a length limit or format.
 
 * Reports recoverable validation errors as warnings during generation and
   `--check`. Warnings identify the affected field. The `validate` command

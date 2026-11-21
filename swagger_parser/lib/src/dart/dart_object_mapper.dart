@@ -228,7 +228,8 @@ extension on _Mapping {
         ),
       );
     }
-    if (a.types.contains('object') && b.types.contains('object')) {
+    if ((a.types.contains('object') && b.types.contains('object')) ||
+        (a.types.contains('array') && b.types.contains('array'))) {
       final compared = <(_SchemaUse, _SchemaUse), bool>{};
       if (_propertySubset(left, right, compared)) {
         return left;
@@ -277,6 +278,21 @@ extension on _Mapping {
         compared,
       );
     }
+    if (wide.types.contains('array')) {
+      final _SchemaUse? narrowItem = narrow.items;
+      final _SchemaUse? wideItem = wide.items;
+      return compared[pair] =
+          narrow.types.contains('array') &&
+          wide.types.containsAll(narrow.types) &&
+          narrow.prefixItems.isEmpty &&
+          narrowItem != null &&
+          wideItem != null &&
+          wide.fields.entries.every(
+            (field) =>
+                field.key == 'items' || _preservesConstraint(narrow, field),
+          ) &&
+          _propertySubset(narrowItem, wideItem, compared);
+    }
     if (!wide.types.contains('object')) {
       return compared[pair] =
           wide.definition.value != false && _isScalarSubset(narrow, wide);
@@ -289,20 +305,10 @@ extension on _Mapping {
         ) ||
         !wide.fields.keys.every(
           const {
-            'type',
+            ..._subsetTypeAndAnnotations,
             'properties',
             'required',
             'additionalProperties',
-            'nullable',
-            'x-nullable',
-            'title',
-            'description',
-            'example',
-            'examples',
-            'readOnly',
-            'writeOnly',
-            'deprecated',
-            'default',
           }.contains,
         )) {
       return false;
@@ -332,20 +338,11 @@ extension on _Mapping {
   bool _isScalarSubset(_SchemaUse narrowId, _SchemaUse wideId) {
     final _SchemaUse narrow = _schema(narrowId);
     final _SchemaUse wide = _schema(wideId);
-    if (wide.fields.keys.any(
-      (key) => !const {
-        'type',
-        'enum',
-        'const',
-        'nullable',
-        'x-nullable',
-        'description',
-        'title',
-        'example',
-        'examples',
-        'readOnly',
-        'writeOnly',
-      }.contains(key),
+    if (!wide.fields.entries.every(
+      (field) =>
+          field.key == 'enum' ||
+          field.key == 'const' ||
+          _preservesConstraint(narrow, field),
     )) {
       return false;
     }
@@ -373,6 +370,31 @@ extension on _Mapping {
                   (type == 'integer' && wide.types.contains('number'))),
         );
   }
+}
+
+const _subsetTypeAndAnnotations = {
+  'type',
+  'nullable',
+  'x-nullable',
+  'title',
+  'description',
+  'example',
+  'examples',
+  'readOnly',
+  'writeOnly',
+  'deprecated',
+  'default',
+};
+
+bool _preservesConstraint(_SchemaUse narrow, MapEntry<String, Object?> wide) {
+  final Object? value = narrow.fields[wide.key];
+  return switch ((wide.key, value, wide.value)) {
+    ('minLength' || 'minItems', int a, int b) => a >= b,
+    ('maxLength' || 'maxItems', int a, int b) => a <= b,
+    ('uniqueItems', _, bool required) => !required || value == true,
+    ('pattern' || 'format', _, String constraint) => value == constraint,
+    _ => _subsetTypeAndAnnotations.contains(wide.key),
+  };
 }
 
 final class const _ObjectShape(
