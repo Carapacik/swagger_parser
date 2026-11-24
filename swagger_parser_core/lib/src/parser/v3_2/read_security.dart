@@ -32,7 +32,7 @@ extension _SecurityReader on OpenApiV32DocumentParser {
     });
     if (reader.fields.containsKey('bearerFormat') &&
         reader.required('scheme', context.string).toLowerCase() != 'bearer') {
-      failField(reader, 'bearerFormat', 'Expected a bearer scheme.');
+      reader.discard('bearerFormat', 'Expected a bearer scheme.');
     }
     return OpenApiV32HttpSecurityScheme(
       deprecated: reader.optional('deprecated', context.boolean),

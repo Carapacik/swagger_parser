@@ -5,6 +5,7 @@ final class _File(
   final OpenApiFamily family,
   final Object? root, {
   required final bool complete,
+  final ReadContext? fragmentContext,
 }) {
   final nodes = <String, _Entry>{};
   bool get modern => family == OpenApiFamily.v31 || family == OpenApiFamily.v32;
@@ -124,8 +125,15 @@ final class _ReferenceIndex(
     Uri? uri,
     OpenApiFamily family, {
     required bool complete,
+    ReadContext? fragmentContext,
   }) {
-    final file = _File(uri, family, JsonValue(data).value, complete: complete);
+    final file = _File(
+      uri,
+      family,
+      JsonValue(data).value,
+      complete: complete,
+      fragmentContext: fragmentContext,
+    );
     final Uri retrieval = uri ?? Uri();
     _register(retrieval, file, '', '');
     if (complete) {
@@ -175,6 +183,23 @@ final class _ReferenceIndex(
       return previous;
     }
     final Map<String, Object?> fields = node.fields;
+    if (file.fragmentContext case final context?) {
+      if (file.family != OpenApiFamily.swaggerV2 &&
+          (node.kind == NodeKind.parameter || node.kind == NodeKind.header) &&
+          !fields.containsKey(r'$ref')) {
+        for (final key in const ['allowEmptyValue', 'allowReserved']) {
+          final String? message = parameterFlagError(
+            key,
+            fields,
+            file.family,
+            header: node.kind == NodeKind.header,
+          );
+          if (message != null) {
+            context.recover(message, appendPointer(node.pointer, key));
+          }
+        }
+      }
+    }
     final bool schema = file.modern && node.kind == NodeKind.schema;
     if (schema && fields[r'$schema'] is String) {
       dialect = fields[r'$schema']! as String;
@@ -410,16 +435,30 @@ final class _ReferenceIndex(
     if (!resources.containsKey(actual)) {
       try {
         final DecodedDocument decoded = const SourceDecoder().decode(
-          source,
+          SchemaSource(source.content, format: source.format, uri: actual),
           config,
         );
         final Object? value = decoded.value;
         if (value is Map<String, Object?> &&
             (value.containsKey('swagger') || value.containsKey('openapi'))) {
           final OpenApiDocument doc = readDocument(decoded, config);
-          _add(value, actual, doc.version.family, complete: true);
+          _add(
+            parseWarningHandler == null ? value : doc.toJson(),
+            actual,
+            doc.version.family,
+            complete: true,
+          );
         } else {
-          _add(value, actual, edge.source.file.family, complete: false);
+          _add(
+            value,
+            actual,
+            edge.source.file.family,
+            complete: false,
+            fragmentContext: ReadContext(
+              DecodedDocument(null, decoded.locations, actual),
+              config,
+            ),
+          );
         }
       } on OpenApiException catch (error) {
         if (error is ReferenceResolutionException) {

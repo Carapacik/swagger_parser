@@ -29,7 +29,7 @@ extension _SecurityReader on OpenApiV31DocumentParser {
     });
     if (reader.fields.containsKey('bearerFormat') &&
         reader.required('scheme', context.string).toLowerCase() != 'bearer') {
-      failField(reader, 'bearerFormat', 'Expected a bearer scheme.');
+      reader.discard('bearerFormat', 'Expected a bearer scheme.');
     }
     return OpenApiV31HttpSecurityScheme(
       scheme: reader.required('scheme', context.string),

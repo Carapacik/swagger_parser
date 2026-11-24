@@ -58,6 +58,53 @@ void main() {
     addTearDown(() => root.delete(recursive: true));
   });
 
+  test('reports recoverable fields during generation and check', () async {
+    await copy('parameter_styles/path_allow_reserved.yaml', 'api.yaml');
+    final File input = file('api.yaml');
+    final String yaml = (await input.readAsString()).replaceFirst(
+      '3.0.0',
+      '3.1.2',
+    );
+    await input.writeAsString(yaml);
+    const field =
+        'api.yaml:13:26#/paths/~1items~1{id}/get/parameters/0/allowReserved';
+    final ProcessResult invalid = await run(['validate', 'api.yaml']);
+    expect(invalid.exitCode, 1);
+    expect(invalid.stderr.toString(), contains('$field error:'));
+    await input.writeAsString(
+      yaml.replaceFirst('required: true', 'required: false'),
+    );
+    for (final check in [false, true]) {
+      final ProcessResult result = await run([
+        if (check) '--check',
+        'api.yaml',
+        '-o',
+        'out',
+      ]);
+      expect(result.exitCode, 0, reason: result.stderr.toString());
+      expect(
+        result.stderr.toString(),
+        contains('$field warning [invalidField]'),
+      );
+      expect(
+        result.stderr.toString(),
+        contains('/required warning [invalidField]'),
+      );
+    }
+    expect(Directory(p.join(root.path, 'out')).existsSync(), isTrue);
+    await input.writeAsString(yaml.replaceFirst('name: id', 'name: other'));
+    final ProcessResult fatal = await run(['api.yaml', '-o', 'broken']);
+    expect(fatal.exitCode, 1);
+    final output = fatal.stderr.toString();
+    expect(output, contains('missingPathParameter'));
+    expect('warning [invalidField]'.allMatches(output), hasLength(1));
+    expect(
+      output.indexOf('warning [invalidField]'),
+      lessThan(output.indexOf('validation failed')),
+    );
+    expect(Directory(p.join(root.path, 'broken')).existsSync(), isFalse);
+  });
+
   Future<void> copyInputs() async {
     final source = Directory.fromUri(fixtures.resolve('inputs/'));
     await for (final FileSystemEntity entity in source.list()) {
@@ -72,6 +119,47 @@ void main() {
       if (entity is File && entity.path.endsWith('.dart'))
         p.relative(entity.path, from: root.path): await entity.readAsString(),
   };
+
+  test(
+    'generates clients without warnings for unused valid components',
+    () async {
+      await copy('references/unused_component.yaml', 'api.yaml');
+      final ProcessResult result = await run(['api.yaml', '-o', 'out']);
+      expect(result.exitCode, 0, reason: result.stderr.toString());
+      expect(result.stderr, isEmpty);
+      final String generated = (await generatedSnapshot()).values.join('\n');
+      expect(generated, contains('checkHealth('));
+      expect(generated, contains('getItems('));
+    },
+  );
+
+  test('stops generation for a missing reference target', () async {
+    await copy('references/unused_component.yaml', 'api.yaml');
+    final File input = file('api.yaml');
+    final String valid = await input.readAsString();
+    for (final (target, pointer) in [
+      ('responses/Items', r'/paths/~1items/get/responses/200/$ref'),
+      ('schemas/Item', r'/components/schemas/UnusedItem/$ref'),
+    ]) {
+      await input.writeAsString(
+        valid.replaceFirst(
+          "#/components/$target'",
+          "#/components/${target}Missing'",
+        ),
+      );
+      final ProcessResult result = await run(['api.yaml', '-o', 'out']);
+      expect(result.exitCode, 1);
+      expect(
+        result.stderr.toString(),
+        contains('#$pointer error [missingTarget]'),
+      );
+      expect(
+        result.stderr.toString(),
+        contains('#/components/${target}Missing'),
+      );
+      expect(await generatedSnapshot(), isEmpty);
+    }
+  });
 
   test('reads explicit inputs without scanning neighboring files', () async {
     for (final ext in ['json', 'yaml']) {

@@ -8,6 +8,45 @@ import 'package:test/test.dart';
 const _base = 'test/fixtures/parameter_styles';
 
 void main() {
+  test('applies path allowReserved only from OpenAPI 3.2', () async {
+    final SchemaSource source = await const FileSchemaSourceLoader().loadPath(
+      '$_base/path_allow_reserved.yaml',
+    );
+    for (final version in ['3.0.0', '3.1.2', '3.2.1']) {
+      final String yaml = source.content.replaceFirst('3.0.0', version);
+      Future<String> client(String input) async {
+        final GenerationResult result = await const SwaggerParserRunner()
+            .generate(
+              SchemaSource.yaml(input),
+              config: const GenerationConfig(
+                httpClient: HttpClientBackend.http,
+              ),
+            );
+        if (version == '3.1.2' && input.contains('allowReserved:')) {
+          final Diagnostic warning = result.diagnostics.single;
+          expect(warning.severity, DiagnosticSeverity.warning);
+          expect(
+            warning.documentPath,
+            '/paths/~1items~1{id}/get/parameters/0/allowReserved',
+          );
+          expect(warning.location?.line, 13);
+        } else {
+          expect(result.diagnostics, isEmpty);
+        }
+        return result.files
+            .singleWhere((f) => f.relativePath.endsWith('_client.dart'))
+            .content;
+      }
+
+      final String withFlag = await client(yaml);
+      final String withoutFlag = await client(
+        yaml.replaceFirst('          allowReserved: true\n', ''),
+      );
+      expect(withFlag, contains('getItem('));
+      expect(withFlag == withoutFlag, version != '3.2.1', reason: version);
+    }
+  });
+
   test(
     'defaults to rejection and supports per-input compatibility modes',
     () async {

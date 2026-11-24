@@ -30,6 +30,166 @@ Map<String, Object?> _schemas(Map<String, Object?> doc) =>
         as Map<String, Object?>;
 
 void main() {
+  group('object property narrowing', () {
+    late Map<String, Object?> document;
+    late Map<String, Object?> addressRequest;
+    late Map<String, Object?> address;
+    late Map<String, Object?> buildingRequest;
+    late Map<String, Object?> buildingFields;
+    late Map<String, Object?> building;
+    late Uri? uri;
+
+    setUp(() async {
+      final SchemaSource source = await _source(
+        'composition/all_of/object_narrowing.yaml',
+      );
+      document = const OpenApiParser().parse(source).toJson();
+      final Map<String, Object?> schemas = _schemas(document);
+      addressRequest = schemas['AddressRequest']! as Map<String, Object?>;
+      address = schemas['Address']! as Map<String, Object?>;
+      buildingRequest = schemas['BuildingRequest']! as Map<String, Object?>;
+      building = schemas['Building']! as Map<String, Object?>;
+      buildingFields =
+          (building['allOf']! as List<Object?>).last! as Map<String, Object?>;
+      uri = source.uri;
+    });
+
+    Future<Map<String, String>> generate() =>
+        _generate(SchemaSource.json(jsonEncode(document), uri: uri));
+
+    Map<String, Object?> properties(Map<String, Object?> schema) =>
+        schema['properties']! as Map<String, Object?>;
+
+    Map<String, Object?> property(Map<String, Object?> schema, String name) =>
+        properties(schema)[name]! as Map<String, Object?>;
+
+    void useAddressLists() {
+      addressRequest.remove('required');
+      address['required'] = ['timezone'];
+      buildingRequest.remove('required');
+      buildingFields['required'] = ['id'];
+      for (final schema in [buildingRequest, buildingFields]) {
+        final Map<String, Object?> fields = properties(schema);
+        fields['addresses'] = {
+          'type': 'array',
+          'items': fields.remove('address'),
+        };
+      }
+    }
+
+    for (final reversed in [false, true]) {
+      group(reversed ? 'narrower branch first' : 'wider branch first', () {
+        setUp(() {
+          if (reversed) {
+            final branches = building['allOf']! as List<Object?>;
+            building['allOf'] = branches.reversed.toList();
+          }
+        });
+
+        test(
+          'uses Address for Building and AddressRequest for BuildingRequest',
+          () async {
+            final Map<String, String> files = await generate();
+            expect(
+              files['default_client/models/building.dart'],
+              contains('final Address address;'),
+            );
+            expect(
+              files['default_client/models/building_request.dart'],
+              contains('final AddressRequest address;'),
+            );
+          },
+        );
+
+        final Matcher conflict = throwsA(
+          isA<GenerationException>().having(
+            (e) => e.diagnostics.single.message,
+            'diagnostic',
+            'Conflicting allOf property: address.',
+          ),
+        );
+
+        for (final (keyword, value) in [
+          ('maxLength', 120),
+          ('format', 'uuid'),
+        ]) {
+          test('selects Address with matching $keyword constraints', () async {
+            for (final schema in [addressRequest, address]) {
+              for (final String name in properties(schema).keys) {
+                property(schema, name)[keyword] = value;
+              }
+            }
+            final Map<String, String> files = await generate();
+            expect(
+              files['default_client/models/building.dart'],
+              contains('final Address address;'),
+            );
+          });
+        }
+
+        test(
+          'rejects Address when its street exceeds the inherited length limit',
+          () async {
+            property(addressRequest, 'street')['maxLength'] = 120;
+            property(address, 'street')['maxLength'] = 200;
+            await expectLater(generate(), conflict);
+          },
+        );
+
+        test('rejects Address when its street drops the UUID format', () async {
+          property(addressRequest, 'street')['format'] = 'uuid';
+          await expectLater(generate(), conflict);
+        });
+
+        test(
+          'selects the narrower item type for an optional address list',
+          () async {
+            useAddressLists();
+            final Map<String, String> files = await generate();
+            expect(
+              files['default_client/models/building.dart'],
+              contains('final List<Address>? addresses;'),
+            );
+            expect(
+              files['default_client/models/building_request.dart'],
+              contains('final List<AddressRequest>? addresses;'),
+            );
+          },
+        );
+
+        test(
+          'rejects an address list that drops an inherited size limit',
+          () async {
+            useAddressLists();
+            property(buildingRequest, 'addresses')['maxItems'] = 1;
+            await expectLater(
+              generate(),
+              throwsA(
+                isA<GenerationException>().having(
+                  (e) => e.diagnostics.single.message,
+                  'diagnostic',
+                  'Conflicting allOf property: addresses.',
+                ),
+              ),
+            );
+          },
+        );
+
+        test(
+          'rejects a required property forbidden by a closed branch',
+          () async {
+            addressRequest['additionalProperties'] = false;
+            await expectLater(generate(), conflict);
+          },
+        );
+
+        test('rejects incompatible types for a shared property', () async {
+          property(addressRequest, 'street')['type'] = 'integer';
+          await expectLater(generate(), conflict);
+        });
+      });
+    }
+  });
   for (final version in ['v2', 'v3_0', 'v3_1', 'v3_2']) {
     test(
       '$version preserves recursive maps and nested collection types',

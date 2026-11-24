@@ -146,7 +146,7 @@ final class ApiParameter({
   /// Whether the source parameter is deprecated.
   final bool deprecated = false,
 
-  /// Whether reserved URI characters can appear in a query value.
+  /// Whether the parameter permits reserved characters during URI expansion.
   final bool allowReserved = false,
 
   /// Schema in the API registry.

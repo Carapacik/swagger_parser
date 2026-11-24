@@ -47,6 +47,78 @@ void main() {
     );
   });
 
+  test('locates recoverable flags in referenced parameters', () async {
+    final Uri uri = Uri.parse('file:///api.yaml');
+    final Uri external = uri.resolve('params.yaml');
+    const runner = SwaggerParserRunner();
+    final SchemaSource fixture = await const FileSchemaSourceLoader().loadPath(
+      'test/fixtures/parameter_styles/path_allow_reserved.yaml',
+    );
+    final String input = fixture.content.replaceFirst('3.0.0', '3.1.2');
+    final int start = input.indexOf('        - name:');
+    final int end = input.indexOf('      responses:', start);
+    for (final complete in [false, true]) {
+      final pointer = complete ? '/components/parameters/Item' : '/Item';
+      final source = SchemaSource.yaml(
+        input.replaceRange(
+          start,
+          end,
+          "        - \$ref: 'params.yaml#$pointer'\n",
+        ),
+        uri: uri,
+      );
+      const parameter =
+          'name: id\nin: path\nrequired: true\nallowReserved: true\nschema:\n  type: string';
+      final indent = complete ? '      ' : '  ';
+      final String text = [
+        if (complete) ...[
+          'openapi: 3.1.2',
+          'info:',
+          '  title: Items',
+          "  version: '1'",
+          'paths: {}',
+          'components:',
+          '  parameters:',
+          '    Item:',
+        ] else
+          'Item:',
+        for (final line in parameter.split('\n')) '$indent$line',
+      ].join('\n');
+      final loader = _ParameterLoader(text);
+      final GenerationResult result = await runner.generate(
+        source,
+        loader: loader,
+      );
+      final Diagnostic warning = result.diagnostics.single;
+      expect(warning.severity, DiagnosticSeverity.warning);
+      expect(warning.documentPath, '$pointer/allowReserved');
+      expect(warning.sourceUri, external);
+      expect(warning.location?.line, complete ? 12 : 5);
+      expect(
+        result.files.any((file) => file.content.contains('getItem(')),
+        isTrue,
+      );
+      final TypeMatcher<SchemaParseException> invalid =
+          isA<SchemaParseException>().having(
+            (e) => e.documentPath,
+            'field',
+            '$pointer/allowReserved',
+          );
+      await expectLater(
+        runner.validate(source, loader: loader),
+        throwsA(
+          complete
+              ? isA<ReferenceResolutionException>().having(
+                  (e) => e.cause,
+                  'external error',
+                  invalid,
+                )
+              : invalid,
+        ),
+      );
+    }
+  });
+
   test('stops before extraction on an invalid external Path Item', () async {
     final Uri? library = await Isolate.resolvePackageUri(
       Uri.parse('package:swagger_parser_core/swagger_parser_core.dart'),
@@ -86,4 +158,9 @@ final class _UnexpectedStages()
   @override
   DartGenerationModel map(ApiDefinition api, GenerationConfig config) =>
       fail('Mapping ran after a validation error.');
+}
+
+final class _ParameterLoader(final String text) implements DocumentLoader {
+  @override
+  Future<SchemaSource> load(Uri uri) async => SchemaSource.yaml(text);
 }

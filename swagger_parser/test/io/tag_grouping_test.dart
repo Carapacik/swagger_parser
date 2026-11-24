@@ -254,11 +254,24 @@ void main() {
     },
   );
 
-  test('rejects duplicate source operation IDs before grouping', () async {
+  test('warns once and generates both operations for a duplicate ID', () async {
     for (final ext in ['json', 'yaml']) {
-      await expectLater(
-        _generate('duplicate_ids', ext, const GenerationConfig(), _Mapper()),
-        throwsA(isA<GenerationException>()),
+      final mapper = _Mapper();
+      final GenerationResult result = await _generate(
+        'duplicate_ids',
+        ext,
+        const GenerationConfig(),
+        mapper,
+      );
+      final Diagnostic warning = result.diagnostics.singleWhere(
+        (d) => d.code == 'duplicateOperationId',
+      );
+      expect(warning.severity, DiagnosticSeverity.warning);
+      final Iterable<DartClientOperation> methods = _clients(mapper)
+          .expand((client) => client.operations);
+      expect(
+        methods.map((op) => op.path),
+        containsAll(['/stations/{id}', '/codes/{code}']),
       );
     }
   });

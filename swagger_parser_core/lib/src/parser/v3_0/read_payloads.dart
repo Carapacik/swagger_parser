@@ -17,7 +17,7 @@ extension _PayloadsReader on OpenApiV30DocumentParser {
       'examples',
       'content',
     });
-    checkParameter(reader, header: false);
+    checkParameter(reader, OpenApiFamily.v30, header: false);
     return OpenApiV30Parameter(
       name: reader.required('name', context.string),
       location: reader.required(
@@ -45,6 +45,8 @@ extension _PayloadsReader on OpenApiV30DocumentParser {
       'description',
       'required',
       'deprecated',
+      'allowEmptyValue',
+      'allowReserved',
       'style',
       'explode',
       'schema',
@@ -52,7 +54,7 @@ extension _PayloadsReader on OpenApiV30DocumentParser {
       'examples',
       'content',
     });
-    checkParameter(reader, header: true);
+    checkParameter(reader, OpenApiFamily.v30, header: true);
     return OpenApiV30Header(
       description: reader.optional('description', context.string),
       isRequired: reader.optional('required', context.boolean),
@@ -64,7 +66,12 @@ extension _PayloadsReader on OpenApiV30DocumentParser {
       examples: reader.optional('examples', mapOf(_refOr(_example))),
       content: reader.optional('content', mapOf(_mediaType)),
       extensions: reader.extensions,
-      extraFields: reader.extras,
+      extraFields: {
+        ...reader.extras,
+        for (final key in const ['allowEmptyValue', 'allowReserved'])
+          if (reader.fields.containsKey(key))
+            key: JsonValue(reader.fields[key]),
+      },
     );
   }
 
@@ -129,7 +136,7 @@ extension _PayloadsReader on OpenApiV30DocumentParser {
       'links',
     });
     return OpenApiV30Response(
-      description: reader.required('description', context.string),
+      description: reader.required('description', context.string, fallback: ''),
       headers: reader.optional('headers', mapOf(_refOr(_header))),
       content: reader.optional('content', mapOf(_mediaType)),
       links: reader.optional('links', mapOf(_refOr(_link))),

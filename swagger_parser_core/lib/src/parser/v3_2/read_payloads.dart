@@ -53,18 +53,14 @@ extension _PayloadsReader on OpenApiV32DocumentParser {
     final Map<String, Object?> fields = reader.fields;
     exclusiveFields(reader, 'example', 'examples');
     exclusiveFields(reader, 'schema', 'content');
-    if (location == OpenApiV32ParameterLocation.path &&
-        fields['required'] != true) {
-      failField(reader, 'required', 'Path parameters require required: true.');
+    if (location == OpenApiV32ParameterLocation.path) {
+      reader.requirePathParameter();
     }
-    if (fields.containsKey('allowEmptyValue') &&
-        location != OpenApiV32ParameterLocation.query) {
-      failField(
-        reader,
-        'allowEmptyValue',
-        'allowEmptyValue requires a query parameter.',
-      );
-    }
+    checkParameterFlags(
+      reader,
+      OpenApiFamily.v32,
+      header: location == OpenApiV32ParameterLocation.header,
+    );
     if (fields.containsKey('content')) {
       final Map<String, Object?> content = objectFields(
         fields['content'],
@@ -73,9 +69,9 @@ extension _PayloadsReader on OpenApiV32DocumentParser {
       if (content.length != 1) {
         failField(reader, 'content', 'Expected one media type.');
       }
-      for (final key in const ['style', 'explode', 'allowReserved']) {
+      for (final key in const ['style', 'explode']) {
         if (fields.containsKey(key)) {
-          failField(reader, key, '$key requires schema.');
+          reader.discard(key, '$key requires schema.');
         }
       }
       return;
@@ -93,16 +89,6 @@ extension _PayloadsReader on OpenApiV32DocumentParser {
         reader,
         'explode',
         'Cookie parameters cannot set explode to false.',
-      );
-    }
-    if (fields.containsKey('allowReserved') &&
-        (location == OpenApiV32ParameterLocation.header ||
-            (location == OpenApiV32ParameterLocation.cookie &&
-                fields['style'] == 'cookie'))) {
-      failField(
-        reader,
-        'allowReserved',
-        'allowReserved requires a percent-encoded style.',
       );
     }
   }
@@ -144,6 +130,8 @@ extension _PayloadsReader on OpenApiV32DocumentParser {
       'description',
       'required',
       'deprecated',
+      'allowEmptyValue',
+      'allowReserved',
       'style',
       'explode',
       'schema',
@@ -151,14 +139,9 @@ extension _PayloadsReader on OpenApiV32DocumentParser {
       'examples',
       'content',
     });
-    for (final key in const [
-      'name',
-      'in',
-      'allowEmptyValue',
-      'allowReserved',
-    ]) {
+    for (final key in const ['name', 'in']) {
       if (reader.fields.containsKey(key)) {
-        failField(reader, key, 'Header objects cannot set $key.');
+        reader.discard(key, 'Header objects cannot set $key.');
       }
     }
     _checkParameter(reader, OpenApiV32ParameterLocation.header);

@@ -16,6 +16,7 @@ export 'src/model/v3_0/open_api_v3_0_objects.dart';
 export 'src/model/v3_1/open_api_v3_1_objects.dart';
 export 'src/model/v3_2/open_api_v3_2_objects.dart';
 export 'src/parser/open_api_parser.dart';
+export 'src/parser/parse_warnings.dart' show withParseWarnings;
 export 'src/parser/schema_dialect.dart';
 export 'src/references/open_api_reference_resolver.dart';
 export 'src/source/schema_source.dart';
