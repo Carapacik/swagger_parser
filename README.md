@@ -7,7 +7,7 @@
 
 Parse Swagger 2.0 and OpenAPI 3.0–3.2 from JSON or YAML. Generate Dart models
 and clients for Retrofit + Dio, Dio, or package:http. Use the CLI, Dart API,
-or browser editor.
+or [browser editor](https://carapacik.github.io/swagger_parser/).
 
 ## Projects
 
