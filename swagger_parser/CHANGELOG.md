@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.4.0
 
 * Generates the narrower object type for compatible `allOf` properties in either
   branch order. This also applies to array items and to objects with compatible
@@ -19,6 +19,7 @@
 * Applies `allowReserved` when encoding schema-based query parameters in
   OpenAPI 3.0 and 3.1. OpenAPI 3.2 also supports path and form-style cookie
   parameters.
+* Updates the minimum `swagger_parser_core` version to 1.1.0.
 
 ## 2.3.0
 

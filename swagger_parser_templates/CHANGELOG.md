@@ -1,9 +1,9 @@
 # Changelog
 
-## Unreleased
+## 1.1.4
 
-* The next release will require the version of `swagger_parser` that reports
-  recoverable validation warnings and selects narrower `allOf` property types.
+* Updates the minimum `swagger_parser` version to 2.4.0 for recoverable
+  validation warnings and narrower `allOf` property types.
 
 ## 1.1.3
 

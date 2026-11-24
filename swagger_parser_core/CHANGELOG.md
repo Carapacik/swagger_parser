@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.1.0
 
 * Checks `allowEmptyValue` and `allowReserved` against the JSON Schema for each
   OpenAPI version and preserves accepted boolean values on export. In 3.0,
