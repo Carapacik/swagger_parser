@@ -2,15 +2,23 @@
 
 ## Unreleased
 
-* Generates the narrower object type for compatible property declarations
-  in `allOf`, regardless of branch order. This also applies to array items
-  and to objects whose string fields share a length limit or format.
-
-* Reports recoverable validation errors as warnings during generation and
-  `--check`. Warnings identify the affected field. The `validate` command
-  keeps strict validation.
-* Applies `allowReserved` only to query parameters in OpenAPI 3.0 and 3.1.
-  OpenAPI 3.2 also supports path and form-style cookie parameters.
+* Generates the narrower object type for compatible `allOf` properties in either
+  branch order. This also applies to array items and to objects with compatible
+  string length limits, patterns, or formats. Generation reports a conflict if
+  the narrower object requires a property that the other branch forbids
+  ([#501](https://github.com/Carapacik/swagger_parser/issues/501)).
+* Prints recoverable validation warnings to stderr during generation and
+  `--check`. For example, generation makes path parameters required and warns
+  about duplicate operation IDs or invalid tag hierarchies. Warnings alone give
+  exit code 0. Unresolved `$ref` targets still stop generation, even in unused
+  components. Valid unused components produce no warnings. The `validate`
+  command keeps strict validation.
+* Adds `onValidationWarning` to `SwaggerParserRunner.generate`. The callback
+  receives each warning as it occurs. The result also includes the warnings in
+  `GenerationResult.diagnostics`.
+* Applies `allowReserved` when encoding schema-based query parameters in
+  OpenAPI 3.0 and 3.1. OpenAPI 3.2 also supports path and form-style cookie
+  parameters.
 
 ## 2.3.0
 

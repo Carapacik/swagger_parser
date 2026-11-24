@@ -2,10 +2,19 @@
 
 ## Unreleased
 
-* Checks `allowEmptyValue` and `allowReserved` against the official OpenAPI
-  3.0, 3.1, and 3.2 JSON Schemas. Preserves accepted boolean values on export.
+* Checks `allowEmptyValue` and `allowReserved` against the JSON Schema for each
+  OpenAPI version and preserves accepted boolean values on export. In 3.0,
+  parameters and Header Objects can declare either flag. In 3.1 and 3.2,
+  `allowEmptyValue` requires a query parameter. In 3.1, `allowReserved` also
+  requires a query parameter. In 3.2, path and form-style cookie parameters
+  can also use `allowReserved`. In all three versions, `allowReserved` requires
+  `schema`.
+  The same checks apply to referenced parameters and headers in external files.
 * Adds `withParseWarnings` to collect recoverable errors in a parse scope.
-  Parsing remains strict by default.
+  For example, the parser can discard invalid optional metadata and remove
+  duplicate entries from a schema's `required` list. Parsing is strict by default.
+* Adds `Diagnostic.location` for the source line and column when available.
+  Warnings for referenced fields identify the external file and JSON Pointer.
 
 ## 1.0.4
 
