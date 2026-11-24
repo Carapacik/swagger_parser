@@ -30,11 +30,10 @@ Ratio ratioFromJson(num value) => Ratio(value);
 /// Writes a Ratio wire value.
 num ratioToJson(Ratio value) => value.value;
 
-/// Reads a Enabled wire value.
-// ignore: avoid_positional_boolean_parameters
+/// Reads an Enabled wire value.
 Enabled enabledFromJson(bool value) => Enabled(value: value);
 
-/// Writes a Enabled wire value.
+/// Writes an Enabled wire value.
 bool enabledToJson(Enabled value) => value.value;
 
 /// Reads the prefixed identifier.
