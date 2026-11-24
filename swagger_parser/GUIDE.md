@@ -707,7 +707,7 @@ dependencies:
   retrofit: ^4.10.0
 
 dev_dependencies:
-  build_runner: ^2.16.2
+  build_runner: ^2.17.1
   retrofit_generator: ^10.3.3
   swagger_parser: ^2.3.0
 ```
@@ -723,7 +723,7 @@ dependencies:
   retrofit: ^4.10.0
 
 dev_dependencies:
-  build_runner: ^2.16.2
+  build_runner: ^2.17.1
   json_serializable: ^6.15.2
   retrofit_generator: ^10.3.3
   swagger_parser: ^2.3.0
@@ -741,7 +741,7 @@ dependencies:
   retrofit: ^4.10.0
 
 dev_dependencies:
-  build_runner: ^2.16.2
+  build_runner: ^2.17.1
   freezed: ^4.0.3
   json_serializable: ^6.15.2
   retrofit_generator: ^10.3.3
@@ -759,8 +759,8 @@ dependencies:
   retrofit: ^4.10.0
 
 dev_dependencies:
-  build_runner: ^2.16.2
-  dart_mappable_builder: ^4.10.0
+  build_runner: ^2.17.1
+  dart_mappable_builder: ^4.10.1
   retrofit_generator: ^10.3.3
   swagger_parser: ^2.3.0
 ```
