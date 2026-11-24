@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+* The next release will require the version of `swagger_parser` that reports
+  recoverable validation warnings and selects narrower `allOf` property types.
+
 ## 1.1.3
 
 * Exposes `delimitedQueryArrayExplode` in the template options context.
